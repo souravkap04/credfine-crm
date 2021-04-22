@@ -1,0 +1,32 @@
+@media all {
+    .Login {
+      padding: 60px 0;
+      background-color:#535AD1;
+      height: 100vh;
+    }
+  
+    .Login form {
+      margin: 0 auto;
+      max-width: 320px;
+    }
+    .Login button{
+      border-radius:15px ;
+      background-color: #13B980;
+      font-size: 15px;
+    font-family: Lato;
+    margin: 20px 36px 0
+    }
+    .Card {
+      background-color:#FFFFFF!important;
+      border-radius: 16px!important;
+      padding: 40px;
+      opacity: 1;
+      box-shadow: -6px 6px 30px #0000004D;
+    }
+    .TextLogin {
+      font-weight: bold;
+      color: #183365;
+      text-decoration: underline  #FDA770 ;
+      font-family: Lato;
+    }
+  }

@@ -1,0 +1,9 @@
+@media all {
+    .CreateUser {
+        padding: 60px 0;
+    }
+    .CreateUser form {
+        margin: 0 auto;
+        max-width: 320px;
+    }
+}
