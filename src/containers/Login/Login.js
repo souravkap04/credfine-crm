@@ -19,7 +19,7 @@ export default function Login() {
         <Card className="Card">
           <Form.Group>
             <Form.Label >
-              <img src={crmLogo} style={{height:'10vh',marginBottom:'20px'}}/>
+              <img src={crmLogo} alt="CRM Logo"style={{height:'10vh',marginBottom:'20px'}}/>
             </Form.Label>
             <Form.Label className="TextLogin">
               Login
@@ -50,7 +50,7 @@ export default function Login() {
           >
             LOGIN
           </Button>
-          {/* <Link to="/userCreate">Create User</Link> */}
+          <Link to="/userCreate">Create User</Link>
         </Card>
       </Form>
     </div>
