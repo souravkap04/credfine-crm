@@ -10,14 +10,21 @@ export default function BlForm() {
   const [date,setDate] = useState(new Date());
   const [pancard,setPancard] = useState('');
   const [pincode,setPincode] = useState('');
-  function businessLoanSubmitHandler(event){
+  const [validated, setValidated] = useState(false);
+
+  const businessLoanSubmitHandler = (event)=>{
+    const form = event.currentTarget;
+    if (form.checkValidity() === false) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    setValidated(true);
     
-    console.log("working :"+employmentType);
-    console.log("loanAmount:"+loanAmount)
   }
     return (
         <div className="BlLoan">
-      <Form onSubmit={()=>businessLoanSubmitHandler()}>
+      <Form noValidate validated={validated} onSubmit={businessLoanSubmitHandler}>
         <Card className="Card">
           <Form.Label className="Heading">Business Loan</Form.Label>
           <Form.Row>
@@ -25,17 +32,19 @@ export default function BlForm() {
               <Form.Group>
                 <Form.Label>Loan Amount</Form.Label>
                 <Form.Control 
+                required
                  type="number"
                  value={loanAmount}
                  onChange={(e)=>setLoanAmount(e.target.value)}/>
+                  <Form.Control.Feedback type="invalid"> This field is required</Form.Control.Feedback>
               </Form.Group>
             </Col>
             <Col>
               <Form.Group>
                 <Form.Label>Gross Annual Turnover</Form.Label>
-                <Form.Control as="select" defaultValue="Select One"
+                <Form.Control required as="select" defaultValue="Select One"
                 value={anualTurnover} onChange={(e)=>setAnualTurnover(e.target.value)}>
-                    <option>Select One</option>
+                    <option value=''>Select One</option>
                 <option value="upto 5lacs">Upto 5Lacs</option>
                 <option value="5-10lacs">5-10 Lacs</option>
                 <option value="10-25lacs">10-25 Lacs</option>
@@ -46,6 +55,7 @@ export default function BlForm() {
                <option value="3-5cr">3-5 Cr</option>
                <option value="5+cr">5+ Cr</option>
                 </Form.Control>
+                <Form.Control.Feedback type="invalid"> Select at least one</Form.Control.Feedback>
               </Form.Group>
             </Col>
           </Form.Row>
@@ -54,18 +64,22 @@ export default function BlForm() {
               <Form.Group>
                 <Form.Label>Net Annual Profit</Form.Label>
                 <Form.Control 
+                required
                  type="number"
                  value={anualProfit}
                  onChange={(e)=>setAnualProfit(e.target.value)}/>
+                  <Form.Control.Feedback type="invalid"> This field is required</Form.Control.Feedback>
               </Form.Group>
             </Col>
             <Col>
               <Form.Group>
                 <Form.Label>Mobile Number</Form.Label>
                 <Form.Control 
+                required
                  type="number"
                  value={mobileNo}
                  onChange={(e)=>setMobileNo(e.target.value)}/>
+                  <Form.Control.Feedback type="invalid"> This field is required</Form.Control.Feedback>
               </Form.Group>
             </Col>
           </Form.Row>
@@ -73,21 +87,23 @@ export default function BlForm() {
             <Col>
               <Form.Group>
                 <Form.Label>Employment Type</Form.Label>
-                <Form.Control as="select" defaultValue="Select One"
+                <Form.Control required as="select" defaultValue="Select One"
                 value={employmentType} onChange={(e)=>setEmploymentType(e.target.value)}>
-                <option >Select One</option>
+                <option value=''>Select One</option>
                 <option value="salaried">Salaried</option>
                 <option value="self-employed">Self-Employed</option>
                <option value="self-employes professional">Self-Employed Professional</option>
                 </Form.Control>
+                <Form.Control.Feedback type="invalid"> Select at least one</Form.Control.Feedback>
               </Form.Group>
             </Col>
             <Col>
               <Form.Group>
                 <Form.Label>Date of Birth</Form.Label>
-                 <Form.Control type="date" name="dob" placeholder="Date of Birth"
+                 <Form.Control required type="date" name="dob" placeholder="Date of Birth"
                   value={date}
                   onChange={(e)=>setDate(e.target.value)}/>
+                   <Form.Control.Feedback type="invalid"> Invalid Date of Birth</Form.Control.Feedback>
               </Form.Group>
             </Col>
           </Form.Row>
@@ -105,9 +121,11 @@ export default function BlForm() {
               <Form.Group>
                 <Form.Label>Current Residence Pincode</Form.Label>
                 <Form.Control 
+                required
                  type="number"
                  value={pincode}
                  onChange={(e)=>setPincode(e.target.value)}/>
+                  <Form.Control.Feedback type="invalid"> This field is required</Form.Control.Feedback>
               </Form.Group>
             </Col>
           </Form.Row>

@@ -12,8 +12,6 @@ import {
 } from "react-router-dom";
 import PlForm from './containers/PlData/PlForm';
 import BlForm from './containers/BlData/BlForm';
-import Test from './Test';
-
 
 function App() {
   const [isTimeout, setIsTimeout] = useState(false);
@@ -52,9 +50,7 @@ function App() {
         <Route path="/blform">
           <BlForm/>
         </Route>
-        <Route path="/test">
-          <Test/>
-        </Route>
+        
       </Switch>
     </div>
     </Router>
