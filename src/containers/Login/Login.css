@@ -26,7 +26,10 @@
     .TextLogin {
       font-weight: bold;
       color: #183365;
-      text-decoration: underline  #FDA770 ;
       font-family: Lato;
+    }
+    .HorizontlaBar{
+      border: 1px solid #FDA770 !important ;
+      margin-top: 0!important;
     }
   }

@@ -23,6 +23,7 @@ export default function Login() {
             </Form.Label>
             <Form.Label className="TextLogin">
               Login
+              <hr className="HorizontlaBar"/>
             </Form.Label>
           </Form.Group>
           <Form.Group size="lg" controlId="email">

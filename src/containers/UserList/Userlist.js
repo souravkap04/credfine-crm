@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState ,useEffect} from 'react';
 import PlLeads from './PlLeads';
 import PropTypes from 'prop-types';
 import {fade, makeStyles } from '@material-ui/core/styles';
@@ -13,9 +13,10 @@ import crmLogo from "../../images/loginImage.svg";
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
+import { Typography } from '@material-ui/core';
 const useStyles = makeStyles((theme) => ({
   root: {
-    flexGrow: 1,
+    flexGrow: 0,
   },
   varticalTabRoot:{
     flexGrow: 1,
@@ -33,6 +34,11 @@ const useStyles = makeStyles((theme) => ({
   menuButton: {
     marginRight: theme.spacing(2),
   },
+
+  title:{
+    flexGrow:1,
+   
+  },
   button:{
       marginLeft:theme.spacing(1),
        
@@ -44,8 +50,7 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: fade(theme.palette.common.white, 0.25),
     },
-    marginLeft: theme.spacing(1),
-    width: 'auto%',
+    width: 'auto',
     
   },
   searchIcon: {
@@ -64,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1, 1, 1, 0),
     // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-    transition: theme.transitions.create('width'),
+    //transition: theme.transitions.create('width'),
     width: '100%',
     [theme.breakpoints.up('sm')]: {
       width: '12ch',
@@ -82,7 +87,11 @@ export default function Userlist() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
+  useEffect(() => {
+    document.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+    });
+  }, [])
   return (
     <div className={classes.root}>
         <div>
@@ -91,7 +100,9 @@ export default function Userlist() {
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
             <MenuIcon />
           </IconButton>
-          <img src={crmLogo} alt="CRM Logo" style={{height:"5vh",marginRight:"840px"}}/>
+         <Typography className={classes.title}>
+           <img src={crmLogo} alt="CRM Logo" style={{ height:'5vh'}}/>
+           </Typography> 
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
