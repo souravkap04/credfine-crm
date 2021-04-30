@@ -14,6 +14,9 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
 import { Typography } from '@material-ui/core';
+import UploadLeads from '../UploadLeads/UploadLeads';
+import PlForm from '../PlData/PlForm';
+import BlForm from '../BlData/BlForm';
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 0,
@@ -82,16 +85,16 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Userlist() {
   const classes = useStyles();
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  useEffect(() => {
-    document.addEventListener('contextmenu', (e) => {
-      e.preventDefault();
-    });
-  }, [])
+  // useEffect(() => {
+  //   document.addEventListener('contextmenu', (e) => {
+  //     e.preventDefault();
+  //   });
+  // }, [])
   return (
     <div className={classes.root}>
         <div>
@@ -130,9 +133,9 @@ export default function Userlist() {
         className={classes.tabs}
       >
         <Tab label="PL Leads"  />
-        <Tab label="Item Two"  />
-        <Tab label="Item Three" />
-        <Tab label="Item Four"  />
+        <Tab label="Personal Loan"  />
+        <Tab label="Business Loan" />
+        <Tab label="Upload Leads"  />
         <Tab label="Item Five"  />
         <Tab label="Item Six"  />
         <Tab label="Item Seven"  />
@@ -141,13 +144,13 @@ export default function Userlist() {
        <div><PlLeads/></div>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Item Two
+        <div><PlForm/></div>
       </TabPanel>
       <TabPanel value={value} index={2}>
-        Item Three
+        <div><BlForm/></div>
       </TabPanel>
       <TabPanel value={value} index={3}>
-        Item Four
+        <div ><UploadLeads/></div>
       </TabPanel>
       <TabPanel value={value} index={4}>
         Item Five

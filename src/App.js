@@ -10,8 +10,8 @@ import {
   Route,
   Link
 } from "react-router-dom";
-import PlForm from './containers/PlData/PlForm';
-import BlForm from './containers/BlData/BlForm';
+
+
 
 function App() {
   const [isTimeout, setIsTimeout] = useState(false);
@@ -43,12 +43,6 @@ function App() {
         </Route>
         <Route path="/userlist">
           <Userlist/>
-        </Route>
-        <Route path="/plform">
-          <PlForm/>
-        </Route>
-        <Route path="/blform">
-          <BlForm/>
         </Route>
         
       </Switch>
