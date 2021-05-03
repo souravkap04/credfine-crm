@@ -13,9 +13,13 @@ export default function UserCreate() {
   return (
     <div className="CreateUser">
       <Form onSubmit={submitHandler}>
-        <Form.Label>User Create</Form.Label>
+        <Card className="UserCreateCard">
+        <Form.Label className="UserCreateText">
+          User Create
+          <hr className="UserCreateBar"/>
+          </Form.Label>
         <Form.Group size="lg" controlId="name">
-         <Form.Label>Name</Form.Label>
+         <Form.Label  style={{color:"#313F80",fontFamily: "Lato"}}>Name</Form.Label>
          <Form.Control 
          autoFocus
          type="text"
@@ -23,7 +27,7 @@ export default function UserCreate() {
          onChange={(e)=>setName(e.target.value)}/>
         </Form.Group>
         <Form.Group size="lg" controlId="email">
-          <Form.Label>Email Id</Form.Label>
+          <Form.Label  style={{color:"#313F80",fontFamily: "Lato"}}>Email Id</Form.Label>
           <Form.Control
             type="email"
             value={email}
@@ -31,7 +35,7 @@ export default function UserCreate() {
           />
         </Form.Group>
         <Form.Group size="lg" controlId="phoneNo">
-          <Form.Label>Phone No</Form.Label>
+          <Form.Label  style={{color:"#313F80",fontFamily: "Lato"}}>Phone No</Form.Label>
           <Form.Control
             type="number"
             value={phoneNo}
@@ -39,21 +43,22 @@ export default function UserCreate() {
           />
         </Form.Group>
         <Form.Group size="lg" controlId="password">
-      <Form.Label>Password</Form.Label>
+      <Form.Label  style={{color:"#313F80",fontFamily: "Lato"}}>Password</Form.Label>
       <Form.Control 
       type="password"
       value={password}
       onChange={(e)=> setPassword(e.target.value)}/>
       </Form.Group>
       <Form.Group  controlId="role">
-      <Form.Label>Role</Form.Label>
+      <Form.Label  style={{color:"#313F80",fontFamily: "Lato"}}>Role</Form.Label>
       <Form.Control as="select" defaultValue="Caller">
       <option>Caller</option>
         <option>Admin</option>
         <option>Manager</option>
       </Form.Control>
     </Form.Group>
-    <Button variant="success" block size="md" type="submit" >CREATE</Button>
+    <Button variant="success"  type="submit" >CREATE</Button>
+    </Card>
       </Form>
       
     </div>

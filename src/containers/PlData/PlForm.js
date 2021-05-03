@@ -23,7 +23,7 @@ export default function PlForm() {
     setValidated(true);
   }
   return (
-    <div className="PlLoan">
+    <div >
       <Form noValidate validated={validated} onSubmit={personalLoanSubmitHandle}>
         <Card className="Card">
           <Form.Label className="Heading">Personal Loan</Form.Label>
@@ -126,9 +126,8 @@ export default function PlForm() {
               </Form.Group>
             </Col>
           </Form.Row>
-          
-              <Button 
-              variant="success" size="sm" type="submit">Save</Button>
+          <Button className="Button"
+              variant="success"  type="submit">Save</Button>
           
         </Card>
       </Form>

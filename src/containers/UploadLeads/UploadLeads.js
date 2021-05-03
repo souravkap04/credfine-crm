@@ -15,10 +15,11 @@ export default function UploadLeads() {
     setValidated(true);
   }
     return (
-      <div className="UploadLeads">
+      <div >
         <Form noValidate validated={validated} onSubmit={leadsSubmitHandler}>
           <Card className="Card">
             <Form.Group>
+              <Form.Label>Loan Type</Form.Label>
               <Form.Control required as="select" defaultValue="Select One"
               value={loanType} onChange={(e)=>setLoanType(e.target.value)}>
                 <option value=''>Select One</option>
@@ -31,6 +32,7 @@ export default function UploadLeads() {
               <Form.File
                 id="exampleFormControlFile1"
                 label="Upload Leads"
+                accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
               />
             </Form.Group>
             <Form.Group>

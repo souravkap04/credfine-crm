@@ -1,13 +1,5 @@
 @media all {
-    .BlLoan {
-    padding: 60px 0;
-    background-color: #f3efff;
-    /* height: 100vh; */
-    }
-    .BlLoan form {
-        margin: 0 auto;
-        max-width: 768px;
-      }
+   
     .Card{
         background-color: #FFFFFF!important;
         border:  4px solid #535ad1;
@@ -23,7 +15,7 @@
         border: 1px solid #FDA770 !important ;
         margin-top: 0!important;
       }
-      .BlLoan button{
+      .Button{
         border-radius:15px ;
         background-color: #13B980;
         font-size: 15px;

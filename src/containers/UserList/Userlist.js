@@ -2,21 +2,14 @@ import React,{useState ,useEffect} from 'react';
 import PlLeads from './PlLeads';
 import PropTypes from 'prop-types';
 import {fade, makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import crmLogo from "../../images/loginImage.svg";
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Box from '@material-ui/core/Box';
-import { Typography } from '@material-ui/core';
+import {AppBar, Toolbar, Button, IconButton,InputBase, Tabs,Tab,Box,Typography, Grid } from '@material-ui/core';
 import UploadLeads from '../UploadLeads/UploadLeads';
 import PlForm from '../PlData/PlForm';
 import BlForm from '../BlData/BlForm';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 0,
@@ -31,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     borderRight: `1px solid ${theme.palette.divider}`,
   },
   appBar:{
-    backgroundColor:"#46b53f",
+    backgroundColor:"#D3D3D3",
     position:"static"
   },
   menuButton: {
@@ -97,7 +90,8 @@ export default function Userlist() {
   // }, [])
   return (
     <div className={classes.root}>
-        <div>
+     <Grid container>
+       <Grid item lg={12}>
       <AppBar className={classes.appBar}>
         <Toolbar>
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
@@ -122,8 +116,9 @@ export default function Userlist() {
           <Button className={classes.button} variant="outlined" color="inherit">Search</Button>
         </Toolbar>
       </AppBar>
-      </div>
-      <div className={classes.varticalTabRoot}>
+      </Grid>
+
+      <Grid item lg={2}>
       <Tabs
         orientation="vertical"
         variant="scrollable"
@@ -140,6 +135,8 @@ export default function Userlist() {
         <Tab label="Item Six"  />
         <Tab label="Item Seven"  />
       </Tabs>
+      </Grid>
+      <Grid item lg={10}> 
       <TabPanel value={value} index={0}>
        <div><PlLeads/></div>
       </TabPanel>
@@ -161,7 +158,8 @@ export default function Userlist() {
       <TabPanel value={value} index={6}>
         Item Seven
       </TabPanel>
-    </div>
+      </Grid>
+      </Grid>
     </div>
   );
 }

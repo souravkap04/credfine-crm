@@ -23,7 +23,7 @@ export default function BlForm() {
     
   }
     return (
-        <div className="BlLoan">
+        <div >
       <Form noValidate validated={validated} onSubmit={businessLoanSubmitHandler}>
         <Card className="Card">
           <Form.Label className="Heading">Business Loan</Form.Label>
@@ -129,8 +129,8 @@ export default function BlForm() {
               </Form.Group>
             </Col>
           </Form.Row>
-              <Button 
-              variant="success" size="sm" type="submit">Save</Button>
+              <Button className="Button"
+              variant="success" type="submit">Save</Button>
           
         </Card>
       </Form>

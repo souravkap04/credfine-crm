@@ -34,7 +34,7 @@ var dataSet2 = [
  export default function SampleData({loanType}) {
    console.log(loanType);
         return (
-            <ExcelFile element={<button disabled={!loanType} >Download </button>}>
+            <ExcelFile  element={<button disabled={!loanType} >Download </button>}>
                 {loanType === 'personal loan' ? 
                 <ExcelSheet data={dataSet1} name="Personal Loan">
                     <ExcelColumn label="Loan Amount" value="loanAmount"/>
