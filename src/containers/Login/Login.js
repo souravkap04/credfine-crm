@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from 'axios'
 import "./Login.css";
 import { Form, Card, Button, Image } from "react-bootstrap";
 import { Link } from "react-router-dom";
@@ -10,12 +11,15 @@ export default function Login() {
   function validateForm() {
     return email.length > 0 && password.length > 0;
   }
-  function submitHandler(event) {
+  const loginFormSubmitHandler = (event) =>{
     event.preventDefault();
+    let item ={email,password};
+    console.log(item);
+    
   }
   return (
     <div className="Login">
-      <Form onSubmit={submitHandler}>
+      <Form onSubmit={loginFormSubmitHandler}>
         <Card className="Card">
           <Form.Group>
             <Form.Label >
@@ -32,7 +36,7 @@ export default function Login() {
               autoFocus
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e)=>setEmail(e.target.value)}
             />
           </Form.Group>
           <Form.Group size="lg" controlId="password">
@@ -40,14 +44,13 @@ export default function Login() {
             <Form.Control
               type="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e)=>setPassword(e.target.value)}
             />
           </Form.Group>
           <Button
             variant="success"
-            size="sm"
             type="submit"
-            disabled={!validateForm}
+             disabled={!validateForm}
           >
             LOGIN
           </Button>
