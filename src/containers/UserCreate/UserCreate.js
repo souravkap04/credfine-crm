@@ -15,7 +15,7 @@ export default function UserCreate() {
   const [gender, setGender] = useState("");
   const [validated, setValidated] = useState(false);
 
-  const userCteateHandler = async (event)=>{
+  const userCteateHandler =  (event)=>{
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
       event.preventDefault();
@@ -23,16 +23,18 @@ export default function UserCreate() {
     }
    setValidated(true);
     event.preventDefault();
-    let item = {userName,firstName,lastName,email,role,productType,phoneNo,gender};
+    let item = { username:userName,first_name:firstName,last_name:lastName,email,role,
+      product_type:productType,phone_no:phoneNo,gender};
     console.log(item);
-    let header={'Content-type': 'application/json; charset=UTF-8',}
-    try{
-     const response = await axios.post(`${baseUrl}/user/userRegistration/`,item ,header);
-    console.log(response.data);
-    }catch(error){
+    
+    axios.post(`${baseUrl}/user/userRegistration/`,item)
+    .then((response)=>{
+      console.log(response.data)
+    }).catch((error)=>{
       console.error(error);
-    }
-   
+    })
+    
+    
   }
   return (
     <div className="CreateUser">

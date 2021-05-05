@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import axios from 'axios'
+import baseUrl from '../../global/api'
 import "./Login.css";
 import { Form, Card, Button, Image } from "react-bootstrap";
 import { Link } from "react-router-dom";
@@ -7,19 +9,38 @@ import crmLogo from "../../images/loginImage.svg";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  function validateForm() {
-    return email.length > 0 && password.length > 0;
-  }
-  const loginFormSubmitHandler = (event) =>{
+  const [validated, setValidated] = useState(false);
+  let history = useHistory();
+  
+  const loginFormSubmitHandler = async (event) =>{
+    const form = event.currentTarget;
+    if (form.checkValidity() === false) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+   setValidated(true);
     event.preventDefault();
-    let item ={email,password};
+    let item ={username:email,password};
     console.log(item);
+  //  axios.post(`${baseUrl}/user/login/`,item)
+  //   .then((response)=>{
+  //     console.log(response.data);
+  //    localStorage.setItem("user_info",JSON.stringify(response.data));
+  //   }).catch((error)=>{
+  //     console.error(error);
+  //   })
+    
+  let response = await axios.post(`${baseUrl}/user/login/`,item);
+  console.log(response.data);
+  localStorage.setItem('user_info',JSON.stringify(response.data));
+    if(localStorage.getItem('user_info')){
+      history.push("/userlist")
+    }
     
   }
   return (
     <div className="Login">
-      <Form onSubmit={loginFormSubmitHandler}>
+      <Form noValidate validated={validated} onSubmit={loginFormSubmitHandler}>
         <Card className="Card">
           <Form.Group>
             <Form.Label >
@@ -34,24 +55,26 @@ export default function Login() {
             <Form.Label style={{color:"#313F80",fontFamily: "Lato"}}>Email Id / Emp Code</Form.Label>
             <Form.Control
               autoFocus
-              type="email"
+              required
+              type="text"
               value={email}
               onChange={(e)=>setEmail(e.target.value)}
             />
+            <Form.Control.Feedback type="invalid"> This field is required</Form.Control.Feedback>
           </Form.Group>
           <Form.Group size="lg" controlId="password">
             <Form.Label style={{color:"#313F80",fontFamily: "Lato"}}>Password</Form.Label>
             <Form.Control
+            required
               type="password"
               value={password}
               onChange={(e)=>setPassword(e.target.value)}
             />
+            <Form.Control.Feedback type="invalid"> This field is required</Form.Control.Feedback>
           </Form.Group>
           <Button
             variant="success"
-            type="submit"
-             disabled={!validateForm}
-          >
+            type="submit" >
             LOGIN
           </Button>
           <Link to="/userCreate">Create User</Link>
