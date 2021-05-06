@@ -9,6 +9,7 @@ import {AppBar, Toolbar, Button, IconButton,InputBase, Tabs,Tab,Box,Typography, 
 import UploadLeads from '../UploadLeads/UploadLeads';
 import PlForm from '../PlData/PlForm';
 import BlForm from '../BlData/BlForm';
+import VerifyUsers from './VerifyUsers';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -131,7 +132,7 @@ export default function Userlist() {
         <Tab label="Personal Loan"  />
         <Tab label="Business Loan" />
         <Tab label="Upload Leads"  />
-        <Tab label="Item Five"  />
+        <Tab label="Verify Users"  />
         <Tab label="Item Six"  />
         <Tab label="Item Seven"  />
       </Tabs>
@@ -150,7 +151,7 @@ export default function Userlist() {
         <div ><UploadLeads/></div>
       </TabPanel>
       <TabPanel value={value} index={4}>
-        Item Five
+        <div><VerifyUsers/></div>
       </TabPanel>
       <TabPanel value={value} index={5}>
         Item Six
