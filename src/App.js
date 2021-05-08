@@ -10,7 +10,7 @@ import {
   Route,
   Link
 } from "react-router-dom";
-
+import Profile from './containers/UserList/Profile/Profile';
 
 
 function App() {
@@ -43,6 +43,9 @@ function App() {
         </Route>
         <Route path="/userlist">
           <Userlist/>
+        </Route>
+        <Route path="/profile">
+         <Profile/>
         </Route>
         
       </Switch>

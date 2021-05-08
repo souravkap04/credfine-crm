@@ -3,9 +3,12 @@ import PlLeads from './PlLeads';
 import PropTypes from 'prop-types';
 import {fade, makeStyles } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
+import AccountCircle from '@material-ui/icons/AccountCircle';
 import SearchIcon from '@material-ui/icons/Search';
 import crmLogo from "../../images/loginImage.svg";
-import {AppBar, Toolbar, Button, IconButton,InputBase, Tabs,Tab,Box,Typography, Grid } from '@material-ui/core';
+import { Link } from "react-router-dom";
+import {AppBar, Toolbar, Button, IconButton,InputBase, Tabs,Tab,Box,
+  Typography, Grid, Menu, MenuItem, Chip } from '@material-ui/core';
 import UploadLeads from '../UploadLeads/UploadLeads';
 import PlForm from '../PlData/PlForm';
 import BlForm from '../BlData/BlForm';
@@ -37,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
    
   },
   button:{
-      marginLeft:theme.spacing(1),
+      margin:theme.spacing(0,1),
        
   },
   search: {
@@ -80,10 +83,29 @@ const useStyles = makeStyles((theme) => ({
 export default function Userlist() {
   const classes = useStyles();
   const [value, setValue] = useState(0);
-
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  let profileData = JSON.parse(localStorage.getItem('user_info'));
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+  const handleMenu = (event) =>{
+    setAnchorEl(event.currentTarget);
+    
+  }
+  const handleClose = () =>{
+    setAnchorEl(null)
+  }
+  const capitalLetter = (str)=>{
+    str = str.split(" ");
+
+    for (var i = 0; i < str.length; i++) {
+        str[i] = str[i][0].toUpperCase() + str[i].substr(1);
+    }
+
+    return str.join(" ");
+  }
+  
   // useEffect(() => {
   //   document.addEventListener('contextmenu', (e) => {
   //     e.preventDefault();
@@ -115,6 +137,26 @@ export default function Userlist() {
             />
           </div>
           <Button className={classes.button} variant="outlined" color="inherit">Search</Button>
+          <Chip 
+          icon={<AccountCircle/>}
+          label={capitalLetter(profileData.username)} 
+          onClick={handleMenu}/>
+             <Menu 
+             anchorEl={anchorEl}
+             anchorOrigin={{
+               vertical: 'top',
+               horizontal: 'right',
+             }}
+             keepMounted
+             transformOrigin={{
+               vertical: 'top',
+               horizontal: 'right',
+             }}
+            open={open}
+            onClose={handleClose}>
+              <MenuItem><Link to="/profile" style={{ textDecoration: 'none',color:'#080707'}} >Profile</Link></MenuItem>
+              <MenuItem>Logout</MenuItem>
+            </Menu>
         </Toolbar>
       </AppBar>
       </Grid>
