@@ -6,6 +6,7 @@ import axios from 'axios';
 import baseUrl from '../../global/api';
 
 const useStyles = makeStyles({
+    
     table: {
       Width: '100%',
     },  
@@ -52,7 +53,7 @@ export default function VerifyUsers() {
                 })
             }
     return (
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} >
             <Table className={classes.table} aria-label="user table">
                 <TableHead>
                     <TableRow>

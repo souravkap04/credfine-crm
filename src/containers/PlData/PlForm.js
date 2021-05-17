@@ -39,15 +39,16 @@ export default function PlForm() {
         setAlertMessage(response.data.message);
         setIsDisplay(true);
       }).catch((error)=>{
-        alertMessage("error")
+        alertMessage("Something wrong");
+        isDisplay(true)
       })
 
   }
   return (
     <div >
-       {isDisplay ?<Alert variant="primary">{alertMessage}</Alert>:null}
-      <Form noValidate validated={validated} onSubmit={personalLoanSubmitHandler}>
+       <Form noValidate validated={validated} onSubmit={personalLoanSubmitHandler}>
         <Card className="Card">
+        {isDisplay ?<Alert variant="primary">{alertMessage}</Alert>:null}
           <Form.Label className="Heading">Personal Loan</Form.Label>
           <Form.Row>
             <Col>

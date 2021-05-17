@@ -11,6 +11,7 @@ import {
   Link
 } from "react-router-dom";
 import Profile from './containers/UserList/Profile/Profile';
+import LeadDetails from './containers/Leads/LeadDetails';
 
 
 function App() {
@@ -47,7 +48,9 @@ function App() {
         <Route path="/profile">
          <Profile/>
         </Route>
-        
+        <Route path="/leadDetails">
+         <LeadDetails/>
+        </Route>
       </Switch>
     </div>
     </Router>

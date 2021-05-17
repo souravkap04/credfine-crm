@@ -5,55 +5,61 @@ const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 
-const dataSet1 = [
+const PLData = [
   {
-    loanAmount: 100000,
-    employmentType: "salaried",
-    monthlyIncome: 30000,
-    dob: "12/05/1972",
-    mobileNo: 7589856589,
-    pincode: 580068,
-    fullName: "Josef Martin",
-    companyName: "xyz pvt ltd",
+    loanAmount:100000,
+    employmentType: "Salaried",
+    loanType:"PL",
+    monthlyIncome: 100000,
+    dob: "18-11-1991",
+    mobileNo: 9999999999,
+    pincode: 122001,
+    name: "Naveen",
+    companyName: "TCS",
   },
 ];
 
-var dataSet2 = [
+var BLData = [
   {
-    loanAmount: 100000,
-    annualTurnover: 2500000,
-    annualProfit: 500000,
-    mobileNo: 7425898658,
-    employmentType: "salaried",
-    dob: "18/10/1955",
-    fullName: "Anthony Gonsalves",
-    pincode: 580068,
+    loanAmount: 1000000,
+    loanType:"BL",
+    annualTurnover: 10000000,
+    annualProfit: 10000000,
+    mobileNo: 7042359090,
+    employmentType: "Business",
+    dob: "18-11-1991",
+    name: "Naveen",
+    pincode: 122001,
   },
 ];
  
  export default function SampleData({loanType}) {
-   console.log(loanType);
         return (
-            <ExcelFile  element={<button disabled={!loanType} >Download </button>}>
+            <ExcelFile  element={<button disabled={!loanType} >Download_Sample </button>}>
                 {loanType === 'personal loan' ? 
-                <ExcelSheet data={dataSet1} name="Personal Loan">
+                <ExcelSheet data={PLData} name="Personal Loan">
+                  <ExcelColumn label="Name" value="name"/>
                     <ExcelColumn label="Loan Amount" value="loanAmount"/>
+                    <ExcelColumn label="Phone No" value="mobileNo"/>
+                    <ExcelColumn label="Loan Type" value="loanType"/>
                     <ExcelColumn label="Employment Type" value="employmentType"/>
+                    <ExcelColumn label="MonthLy Income" value="monthlyIncome"/>
                     <ExcelColumn label="DOB" value="dob"/>
-                    <ExcelColumn label="Mobile No" value="mobileNo"/>
-                    <ExcelColumn label="Pincode" value="pincode"/>
-                    <ExcelColumn label="Full Name" value="fullName"/>
+                    <ExcelColumn label="Res Pincode" value="pincode"/>
                     <ExcelColumn label="Company Name" value="companyName"/>
                 </ExcelSheet> :
-                <ExcelSheet data={dataSet2} name="Business Loan">
+                <ExcelSheet data={BLData} name="Business Loan">
+                  <ExcelColumn label="Full Name" value="name"/>
                     <ExcelColumn label="Loan Amount" value="loanAmount"/>
-                    <ExcelColumn label="Annual Turnover" value="annualTurnover"/>
-                    <ExcelColumn label="Annual Profit" value="annualProfit"/>
-                    <ExcelColumn label="Mobile No" value="mobileNo"/>
+                    <ExcelColumn label="Phone no" value="mobileNo"/>
+                    <ExcelColumn label="Loan Type" value="loanType"/>
                     <ExcelColumn label="Employment Type" value="employmentType"/>
+                    <ExcelColumn label="Gross Annual Turnover" value="annualTurnover"/>
+                    <ExcelColumn label="Net Annual Profit" value="annualProfit"/>
+                    <ExcelColumn label="Res Pincode" value="pincode"/>
                     <ExcelColumn label="DOB" value="dob"/>
-                    <ExcelColumn label="Full Name" value="fullName"/>
-                    <ExcelColumn label="Pincode" value="pincode"/>
+                    
+                    
                 </ExcelSheet>}
             </ExcelFile>
         );

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from 'axios';
 import baseUrl from '../../global/api';
-import { Form ,Button, Card} from "react-bootstrap";
+import { Form ,Button, Card,Alert} from "react-bootstrap";
 import "./UserCreate.css";
 
 export default function UserCreate() {
@@ -14,6 +14,8 @@ export default function UserCreate() {
   const [phoneNo, setPhoneNo] = useState("");
   const [gender, setGender] = useState("");
   const [validated, setValidated] = useState(false);
+  const [alertMessage,setAlertMessage] = useState('');
+  const [isDisplay,setIsDisplay] = useState(false);
 
   const userCteateHandler =  (event)=>{
     const form = event.currentTarget;
@@ -30,8 +32,12 @@ export default function UserCreate() {
     axios.post(`${baseUrl}/user/userRegistration/`,item)
     .then((response)=>{
       console.log(response.data)
+      setAlertMessage('User Create successfully');
+      setIsDisplay(true);
     }).catch((error)=>{
       console.error(error);
+      setAlertMessage('something wrong');
+      setIsDisplay(true);
     })
     
     
@@ -40,6 +46,7 @@ export default function UserCreate() {
     <div className="CreateUser">
       <Form noValidate validated={validated} onSubmit={userCteateHandler}>
         <Card className="UserCreateCard">
+        {isDisplay ? <Alert variant="primary">{alertMessage}</Alert> : null}
         <Form.Label className="UserCreateText">
           User Create
           <hr className="UserCreateBar"/>

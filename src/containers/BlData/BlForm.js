@@ -39,14 +39,15 @@ export default function BlForm() {
         setAlertMessage(response.data.message);
         setIsDisplay(true);
       }).catch((error)=>{
-        setAlertMessage("error")
+        setAlertMessage("Something Wrong");
+        setIsDisplay(true);
       })
   }
     return (
         <div >
-          {isDisplay ?<Alert variant="primary">{alertMessage}</Alert>:null}
            <Form noValidate validated={validated} onSubmit={businessLoanSubmitHandler}>
         <Card className="Card">
+        {isDisplay ?<Alert variant="primary">{alertMessage}</Alert>:null}
           <Form.Label className="Heading">Business Loan</Form.Label>
           <Form.Row>
             <Col>

@@ -1,5 +1,5 @@
 import React,{useState ,useEffect} from 'react';
-import PlLeads from './PlLeads';
+import PlLeads from '../Leads/Leads';
 import PropTypes from 'prop-types';
 import {fade, makeStyles } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -8,11 +8,13 @@ import SearchIcon from '@material-ui/icons/Search';
 import crmLogo from "../../images/loginImage.svg";
 import { Link } from "react-router-dom";
 import {AppBar, Toolbar, Button, IconButton,InputBase, Tabs,Tab,Box,
-  Typography, Grid, Menu, MenuItem, Chip } from '@material-ui/core';
+  Typography, Grid, Menu, MenuItem, Chip, Drawer } from '@material-ui/core';
 import UploadLeads from '../UploadLeads/UploadLeads';
 import PlForm from '../PlData/PlForm';
 import BlForm from '../BlData/BlForm';
 import VerifyUsers from './VerifyUsers';
+import ResetPassword from '../Users/ResetPassword';
+import Leads from '../Leads/Leads';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,6 +28,9 @@ const useStyles = makeStyles((theme) => ({
   },
   tabs: {
     borderRight: `1px solid ${theme.palette.divider}`,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   appBar:{
     backgroundColor:"#D3D3D3",
@@ -33,6 +38,11 @@ const useStyles = makeStyles((theme) => ({
   },
   menuButton: {
     marginRight: theme.spacing(2),
+  },
+  sideBarMenu:{
+    position:'fixed',
+    top:'64px',
+    // backgroundColor:'blue'
   },
 
   title:{
@@ -84,6 +94,7 @@ export default function Userlist() {
   const classes = useStyles();
   const [value, setValue] = useState(0);
   const [anchorEl, setAnchorEl] = useState(null);
+  // const[drawerOpen,setDrawerOpen] = useState(false);
   const open = Boolean(anchorEl);
   let profileData = JSON.parse(localStorage.getItem('user_info'));
   const handleChange = (event, newValue) => {
@@ -96,6 +107,13 @@ export default function Userlist() {
   const handleClose = () =>{
     setAnchorEl(null)
   }
+  // const drawerHandler = ()=>{
+  //   setDrawerOpen(true);
+  //   console.log("draweropen");
+  // }
+  // const drawerCloseHandler = ()=>{
+  //   setDrawerOpen(false);
+  // }
   const capitalLetter = (str)=>{
     str = str.split(" ");
 
@@ -161,45 +179,47 @@ export default function Userlist() {
       </AppBar>
       </Grid>
 
-      <Grid item lg={2}>
+      <Grid item lg={1.5}>
+        {/* <Drawer 
+        variant="temporary" 
+        classes={{paper:classes.sideBarMenu}}
+        open={drawerOpen} 
+        onClose={drawerCloseHandler}  > */}
       <Tabs
         orientation="vertical"
-        variant="scrollable"
+        // variant="scrollable"
         value={value}
         onChange={handleChange}
         aria-label="Vertical tabs example"
-        className={classes.tabs}
-      >
-        <Tab label="PL Leads"  />
+        className={classes.tabs} > 
         <Tab label="Personal Loan"  />
         <Tab label="Business Loan" />
         <Tab label="Upload Leads"  />
         <Tab label="Verify Users"  />
-        <Tab label="Item Six"  />
-        <Tab label="Item Seven"  />
+        <Tab label="Users"  />
+        <Tab label="Leads"  />
       </Tabs>
+      {/* </Drawer> */}
       </Grid>
       <Grid item lg={10}> 
+      
       <TabPanel value={value} index={0}>
-       <div><PlLeads/></div>
-      </TabPanel>
-      <TabPanel value={value} index={1}>
         <div><PlForm/></div>
       </TabPanel>
-      <TabPanel value={value} index={2}>
+      <TabPanel value={value} index={1}>
         <div><BlForm/></div>
       </TabPanel>
-      <TabPanel value={value} index={3}>
+      <TabPanel value={value} index={2}>
         <div ><UploadLeads/></div>
       </TabPanel>
-      <TabPanel value={value} index={4}>
+      <TabPanel value={value} index={3}>
         <div><VerifyUsers/></div>
       </TabPanel>
-      <TabPanel value={value} index={5}>
-        Item Six
+      <TabPanel value={value} index={4}>
+        <div><ResetPassword/></div>
       </TabPanel>
-      <TabPanel value={value} index={6}>
-        Item Seven
+      <TabPanel value={value} index={5}>
+       <div><Leads/></div>
       </TabPanel>
       </Grid>
       </Grid>
