@@ -89,7 +89,7 @@ export default function Login() {
             type="submit" >
             LOGIN
           </Button>
-          <Link to="/userCreate">Create User</Link>
+          {/* <Link to="/userCreate">Create User</Link> */}
         </Card>
       </Form>
     </div>

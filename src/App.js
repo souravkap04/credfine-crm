@@ -12,6 +12,7 @@ import {
 } from "react-router-dom";
 import Profile from './containers/UserList/Profile/Profile';
 import LeadDetails from './containers/Leads/LeadDetails';
+import Leads from './containers/Leads/Leads';
 
 
 function App() {

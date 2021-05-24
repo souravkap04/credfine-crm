@@ -17,7 +17,8 @@ import {
 } from "../../global/leadsGlobalData";
 import style from "./LeadDetails.module.css";
 import baseUrl from "../../global/api";
-function LeadDetails() {
+import RemarkForm from "./Remarks/RemarkForm";
+function LeadDetails(props) {
   const banks = getBank();
   const residentType = getResidentType();
   const salaryMode = getSalaryModeType();
@@ -41,6 +42,7 @@ function LeadDetails() {
   const [currentResidentType, setCurrentResidentType] = useState("");
   const [yearsInCurrentCity, setYearsInCurrentCity] = useState("");
   const [isEditable,setIsEditable] = useState(false);
+  
   useEffect(() => {
     const fetchLeadDetaile = async () => {
       try {
@@ -79,13 +81,14 @@ function LeadDetails() {
   const updateLeadDetails = ()=>{
      const item = {loanAmount,monthlyIncome,date,mobileNo,pincode,name,companyName,pancardNo,totalWorkExp,
     currentWorkExp,email,designation,currentEMI,creditCardOutstanding,salaryCreditMode,salaryBankAcc,
-  setCurrentResidentType,yearsInCurrentCity};
+    currentResidentType,yearsInCurrentCity};
      console.log(item);
   }
+  
 
   return (
     <div>
-      <Navbar bg="primary" variant="dark">
+      {/* <Navbar bg="primary" variant="dark">
         <Row>
           <Col md={8}>
             <Navbar.Brand>Lead Details</Navbar.Brand>
@@ -96,15 +99,13 @@ function LeadDetails() {
             </Form>
           </Col>
         </Row>
-      </Navbar>
+      </Navbar> */}
       <div className={style.LeadDetails}>
         <div>
           <Form>
             <Card className={style.Card}>
               <Form.Row>
-                <Col>
-                  <Button disabled={isEditable} onClick={editControlHandler}>Edit</Button>
-                </Col>
+               
                 <Col>
                   <Form.Group>
                     <Form.Label>Status</Form.Label>
@@ -383,23 +384,19 @@ function LeadDetails() {
                   </Form.Group>
                 </Col>
               </Form.Row>
+              <Form.Row>
+              <Col>
+                  <Button disabled={isEditable} onClick={editControlHandler}>Edit</Button>
+                </Col>
+                <Col>
+                <Button>Submit</Button>
+                </Col>
+              </Form.Row>
             </Card>
           </Form>
         </div>
         <div>
-          <Row>
-            <Col md={11}>
-              <InputGroup className={style.Remarks}>
-                <InputGroup.Prepend>
-                  <InputGroup.Text>Add Remarks</InputGroup.Text>
-                </InputGroup.Prepend>
-                <FormControl as="textarea" aria-label="With textarea" />
-              </InputGroup>
-            </Col>
-            <Col md={1}>
-            <Button>Submit</Button>
-            </Col>
-          </Row>
+          <RemarkForm/>
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import React,{useState ,useEffect} from 'react';
+import React,{useState ,useEffect,useRef} from 'react';
 import PlLeads from '../Leads/Leads';
 import PropTypes from 'prop-types';
 import {fade, makeStyles } from '@material-ui/core/styles';
@@ -6,7 +6,9 @@ import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import SearchIcon from '@material-ui/icons/Search';
 import crmLogo from "../../images/loginImage.svg";
-import { Link } from "react-router-dom";
+import {BrowserRouter as Router,
+  Switch,
+  Route, Link } from "react-router-dom";
 import {AppBar, Toolbar, Button, IconButton,InputBase, Tabs,Tab,Box,
   Typography, Grid, Menu, MenuItem, Chip, Drawer } from '@material-ui/core';
 import UploadLeads from '../UploadLeads/UploadLeads';
@@ -15,6 +17,7 @@ import BlForm from '../BlData/BlForm';
 import VerifyUsers from './VerifyUsers';
 import ResetPassword from '../Users/ResetPassword';
 import Leads from '../Leads/Leads';
+import LeadDetails from '../Leads/LeadDetails';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -51,16 +54,18 @@ const useStyles = makeStyles((theme) => ({
   },
   button:{
       margin:theme.spacing(0,1),
+      color:'#000000'
        
   },
   search: {
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
+    backgroundColor: fade(theme.palette.common.white, 1),
     '&:hover': {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
+      backgroundColor: fade(theme.palette.common.white, 0.5),
     },
     width: 'auto',
+    color:'#000000'
     
   },
   searchIcon: {
@@ -71,6 +76,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    color:'#000000'
   },
   inputRoot: {
     color: 'inherit',
@@ -94,11 +100,19 @@ export default function Userlist() {
   const classes = useStyles();
   const [value, setValue] = useState(0);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [searchInput,setSearchInput] = useState('');
+  const [viewLeadDetails,setViewLeadDetails] = useState(false);
   // const[drawerOpen,setDrawerOpen] = useState(false);
   const open = Boolean(anchorEl);
+  const leadRef = useRef(null);
+  //const history = useHistory();
   let profileData = JSON.parse(localStorage.getItem('user_info'));
+  const routes = ["/personalLoan","/businessLoan","/uploadLeads","/verifyUsers","/usersResetPassword","/leads"];
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    if (value===5) {
+      setViewLeadDetails(false);
+    }
   };
   const handleMenu = (event) =>{
     setAnchorEl(event.currentTarget);
@@ -129,6 +143,26 @@ export default function Userlist() {
   //     e.preventDefault();
   //   });
   // }, [])
+
+  const searchHandler = ()=>{
+    if (searchInput !== '' && searchValidation(searchInput)) {
+      console.log("successfull");
+     // history.push("/leads");
+     // leadRef.current.fetchSearchInput(searchInput);
+    }
+    
+  }
+  const leadDetailsHandler = (leadDetailsData)=>{
+     setViewLeadDetails(leadDetailsData);
+  }
+  const searchValidation = (search)=>{
+    if(/^[0-9]{10}$/.test(search )|| /^[L][D][0-9]{8}$/.test(search)){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
   return (
     <div className={classes.root}>
      <Grid container>
@@ -152,9 +186,14 @@ export default function Userlist() {
                 input: classes.inputInput,
               }}
               inputProps={{ 'aria-label': 'search' }}
+              value={searchInput}
+              onChange={(e)=>setSearchInput(e.target.value)}
             />
           </div>
-          <Button className={classes.button} variant="outlined" color="inherit">Search</Button>
+          <Button className={classes.button} 
+          variant="outlined"
+          onClick={()=>searchHandler()} 
+          >Search</Button>
           <Chip 
           icon={<AccountCircle/>}
           label={capitalLetter(profileData.username)} 
@@ -179,15 +218,76 @@ export default function Userlist() {
       </AppBar>
       </Grid>
 
-      <Grid item lg={1.5}>
+        <Router>
+          <Grid item lg={1.5}>
+          <Route 
+          render={(history)=>(
+           <Tabs 
+           orientation="vertical"
+           value={history.location.pathname}>
+             <Tab
+                  value={routes[0]}
+                  label="Personal Loan"
+                  component={Link}
+                  to={routes[0]}
+                />
+                <Tab
+                  value={routes[1]}
+                  label="Business Loan"
+                  component={Link}
+                  to={routes[1]}
+                />
+                <Tab
+                  value={routes[2]}
+                  label="Upload Leads"
+                  component={Link}
+                  to={routes[2]}
+                />
+                <Tab
+                  value={routes[3]}
+                  label="Verify Users"
+                  component={Link}
+                  to={routes[3]}
+                />
+                <Tab
+                  value={routes[4]}
+                  label="Users"
+                  component={Link}
+                  to={routes[4]}
+                />
+                <Tab
+                  value={routes[5]}
+                  label="Leads"
+                  component={Link}
+                  to={routes[5]}
+                />
+                </Tabs>
+                
+          )}
+          />
+          </Grid>
+           <Switch>
+          <Grid item lg={10}>
+          <Route path="/personalLoan" component={PlForm} />
+          <Route path="/businessLoan" component={BlForm} />
+          <Route path="/uploadLeads" component={UploadLeads} />
+          <Route path="/verifyUsers" component={VerifyUsers} />
+          <Route path="/usersResetPassword" component={ResetPassword} />
+          <Route path="/leads" component={Leads}/>
+          <Route path="/leadDetails" component={LeadDetails}/>
+          </Grid>
+        </Switch>
+        </Router>
+
+        {/* /****************************** */ }
         {/* <Drawer 
         variant="temporary" 
         classes={{paper:classes.sideBarMenu}}
         open={drawerOpen} 
         onClose={drawerCloseHandler}  > */}
-      <Tabs
+      {/* <Tabs
         orientation="vertical"
-        // variant="scrollable"
+        variant="scrollable"
         value={value}
         onChange={handleChange}
         aria-label="Vertical tabs example"
@@ -198,12 +298,13 @@ export default function Userlist() {
         <Tab label="Verify Users"  />
         <Tab label="Users"  />
         <Tab label="Leads"  />
-      </Tabs>
+      </Tabs> */}
       {/* </Drawer> */}
-      </Grid>
-      <Grid item lg={10}> 
-      
-      <TabPanel value={value} index={0}>
+     
+     
+
+      {/* /***************************************** */ }
+      {/* <TabPanel value={value} index={0}>
         <div><PlForm/></div>
       </TabPanel>
       <TabPanel value={value} index={1}>
@@ -219,39 +320,47 @@ export default function Userlist() {
         <div><ResetPassword/></div>
       </TabPanel>
       <TabPanel value={value} index={5}>
-       <div><Leads/></div>
-      </TabPanel>
-      </Grid>
+       {viewLeadDetails ? <div>
+         <LeadDetails/>
+       </div>
+       :<div>
+       <Leads 
+       ref={leadRef}
+       searchInput={searchInput}
+       leadDetailsCallBack={leadDetailsHandler}/>
+       </div>}
+      </TabPanel> */}
+      
       </Grid>
     </div>
   );
 }
 
-function TabPanel(props) {
-    const { children, value, index, ...other } = props;
+// function TabPanel(props) {
+//     const { children, value, index, ...other } = props;
   
-    return (
-      <div
-        role="tabpanel"
-        hidden={value !== index}
-        id={`vertical-tabpanel-${index}`}
-        aria-labelledby={`vertical-tab-${index}`}
-        {...other}
-      >
-        {value === index && (
-          <Box p={3}>
-            <div>{children}</div>
-          </Box>
-        )}
-      </div>
-    );
-  }
+//     return (
+//       <div
+//         role="tabpanel"
+//         hidden={value !== index}
+//         id={`vertical-tabpanel-${index}`}
+//         aria-labelledby={`vertical-tab-${index}`}
+//         {...other}
+//       >
+//         {value === index && (
+//           <Box p={3}>
+//             <div>{children}</div>
+//           </Box>
+//         )}
+//       </div>
+//     );
+//   }
   
-  TabPanel.propTypes = {
-    children: PropTypes.node,
-    index: PropTypes.any.isRequired,
-    value: PropTypes.any.isRequired,
-  };
+//   TabPanel.propTypes = {
+//     children: PropTypes.node,
+//     index: PropTypes.any.isRequired,
+//     value: PropTypes.any.isRequired,
+//   };
   
   
   

@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react';
+import React,{useState,useEffect, useImperativeHandle, forwardRef  } from 'react';
 import { useHistory ,Link} from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -21,11 +21,12 @@ const useStyles = makeStyles({
   }
   
 });
-export default function Leads() {
+ const Leads = ((props , ref) => {
   const classes = useStyles();
   const [leadData,setLeadData] = useState({});
+  const [searchData,setSearchData] = useState([]);
   const history = useHistory();
-
+console.log("search:"+props.searchInput);
   useEffect(()=>{
      const fetchLeadsData = async ()=>{
       const headers = {
@@ -44,8 +45,22 @@ export default function Leads() {
      fetchLeadsData();
   },[])
   const routeChangeHAndler = ()=>{
-    history.push("/leadDetails")
+   history.push("/leadDetails");
+   //props.leadDetailsCallBack(true);
   }
+useImperativeHandle(ref,()=>({
+  async fetchSearchInput(key){
+    console.log("fetchSearchInput:"+key)
+    let headers = {'Authorization':'Token e9f8746ae94a00aa6526122f2db67e081ca10f54'}
+    await axios.get(`${baseUrl}/leads/search/LD00000034?q=`+key,{headers})
+    .then((response)=>{
+       console.log(response.data);
+       setSearchData(response.data);
+    }).catch((error)=>{
+      console.log(error);
+    })
+  }
+}))  
 
   return (
       <TableContainer component={Paper}>
@@ -66,9 +81,7 @@ export default function Leads() {
         </TableHead>
         <TableBody>
         <TableRow>
-            <TableCell component="th" scope="row">
-              {leadData.lead_crm_id}
-            </TableCell>
+            <TableCell >{leadData.lead_crm_id} </TableCell>
             <TableCell align="center">{leadData.name}</TableCell>
             <TableCell align="center">{leadData.phone_no}</TableCell>
             <TableCell align="center">{leadData.loan_amount}</TableCell>
@@ -89,4 +102,5 @@ export default function Leads() {
     </TableContainer>
      
   );
-}
+});
+export default forwardRef(Leads);
