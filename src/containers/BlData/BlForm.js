@@ -112,9 +112,9 @@ export default function BlForm() {
                 <Form.Control required as="select" 
                 value={employmentType} onChange={(e)=>setEmploymentType(e.target.value)}>
                 <option value=''>Select One</option>
-                <option value="1">Salaried</option>
-                <option value="2">Self-Employed</option>
-               <option value="3">Self-Employed Professional</option>
+                <option value="Salaried">Salaried</option>
+                <option value="Self-Employment Business">Self-Employment Business</option>
+               <option value="Self-Employment Profetional">Self-Employment Profetional</option>
                 </Form.Control>
                 <Form.Control.Feedback type="invalid"> Select at least one</Form.Control.Feedback>
               </Form.Group>

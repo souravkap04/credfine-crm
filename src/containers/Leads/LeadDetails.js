@@ -9,6 +9,7 @@ import {
   Col,
   Card,
   Alert,
+  ListGroup,
 } from "react-bootstrap";
 import {
   getBank,
@@ -32,6 +33,7 @@ function LeadDetails(props) {
   const [pincode, setPincode] = useState("");
   const [name, setname] = useState("");
   const [companyName, setCompanyName] = useState("");
+  const [searchCompany, setSearchCompany] = useState([]);
   const [pancardNo, setPancardNo] = useState("");
   const [totalWorkExp, setTotalWorkExp] = useState("");
   const [currentWorkExp, setCurrentWorkExp] = useState("");
@@ -52,6 +54,7 @@ function LeadDetails(props) {
   const [source,setSource] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
   const [isDisplay, setIsDisplay] = useState(false);
+  const [showCompany, setShowCompany] = useState(false);
   let statusData = JSON.parse(localStorage.getItem('status_info'));
   
   
@@ -139,6 +142,29 @@ const statusUpdateHandler = async (id)=>{
   })
   }
 }
+
+const searchCompanyHandler = async (e)=>{
+  setCompanyName(e.target.value);
+  setShowCompany(true);
+  const searchCompanyUrl = "https://backend.credfine.com/common/search_company";
+  let item = {company:companyName};
+  const header = {'Content-Type':'application/json'}
+  if(companyName.length >=2){
+   await axios.post(`${searchCompanyUrl}`,item , {header})
+   .then((response)=>{
+     console.log(response.data);
+     setSearchCompany(response.data);
+   }).catch((error)=>{
+     console.log(error)
+   })
+
+  }
+}
+const selectCompany = (company)=>{
+  setCompanyName(company);
+  setShowCompany(false);
+}
+
   return (
     <div>
       {/* <Navbar bg="primary" variant="dark">
@@ -300,12 +326,20 @@ const statusUpdateHandler = async (id)=>{
                     disabled={false}
                       type="text"
                       value={companyName}
-                      onChange={(e) => setCompanyName(e.target.value)}
-                    /> : <Form.Control
+                      onChange={(e)=>searchCompanyHandler(e)}
+                    /> 
+                    : <Form.Control
                     type="text"
                     value={companyName}
                     disabled={true}
                   />}
+                  <ListGroup>
+                    {showCompany ? searchCompany.map((company)=>(
+                      <ListGroup.Item key={company.id}
+                      onClick={()=>selectCompany(company.name)}
+                      >{company.name}</ListGroup.Item>
+                    )) : null}
+                  </ListGroup>
                   </Form.Group>
                   <Form.Group>
                     <Form.Label>Status</Form.Label>
