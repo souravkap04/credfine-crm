@@ -17,21 +17,17 @@ export default function RemarkForm(props) {
   const [remarks, setRemarks] = useState([]);
   const [alertMessage, setAlertMessage] = useState("");
   const [isDisplay, setIsDisplay] = useState(false);
-  const remarksHandler = async (event) => {
+  console.log("tttttttttt:"+props.leadId)
+  const remarksHandler = async (event,id) => {
     event.preventDefault();
-    // props.onSubmit({
-    //   id:Math.floor(Math.random()*1000),
-    //   text:input
-    // });
-    // setInput('');
-    console.log(input);
+    console.log(id);
     let item = { remark: input };
     let headers = {
       Authorization: "Token e9f8746ae94a00aa6526122f2db67e081ca10f54",
     };
     if (input !== "") {
       await axios
-        .post(`${baseUrl}/leads/lead_remark/LD00000034`, item, { headers })
+        .post(`${baseUrl}/leads/lead_remark/${id}`, item, { headers })
         .then((response) => {
           console.log(response.data);
           setAlertMessage(response.data.msg);
@@ -45,11 +41,13 @@ export default function RemarkForm(props) {
   };
   useEffect(() => {
     const fetchRemarks = async () => {
+      console.log("fetchremarks:"+props.leadId)
+      console.log("fetchremarks:"+`${baseUrl}/leads/lead_remark/${props.leadId}`)
       let headers = {
         Authorization: "Token e9f8746ae94a00aa6526122f2db67e081ca10f54",
       };
       await axios
-        .get(`${baseUrl}/leads/lead_remark/LD00000034`, { headers })
+        .get(`${baseUrl}/leads/lead_remark/${props.leadId}`, { headers })
         .then((response) => {
           console.log(response.data);
           setRemarks(response.data.remarks);
@@ -62,7 +60,7 @@ export default function RemarkForm(props) {
     fetchRemarks();
   }, []);
   return (
-    <Form onSubmit={remarksHandler}>
+    <Form onSubmit={()=>remarksHandler(props.leadId)}>
       <Card className={style.RemarksCard}>
         <Row>
           {isDisplay ? <Alert variant="primary">{alertMessage}</Alert> : null}

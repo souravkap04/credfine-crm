@@ -8,7 +8,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import crmLogo from "../../images/loginImage.svg";
 import {BrowserRouter as Router,
   Switch,
-  Route, Link } from "react-router-dom";
+  Route, Link ,useHistory} from "react-router-dom";
 import {AppBar, Toolbar, Button, IconButton,InputBase, Tabs,Tab,Box,
   Typography, Grid, Menu, MenuItem, Chip, Drawer } from '@material-ui/core';
 import UploadLeads from '../UploadLeads/UploadLeads';
@@ -101,11 +101,12 @@ export default function Userlist() {
   const [value, setValue] = useState(0);
   const [anchorEl, setAnchorEl] = useState(null);
   const [searchInput,setSearchInput] = useState('');
+  const [isSearchData,setIsSearchData]= useState(false);
   const [viewLeadDetails,setViewLeadDetails] = useState(false);
+  const [leadId,setLeadId] = useState(null);
   // const[drawerOpen,setDrawerOpen] = useState(false);
   const open = Boolean(anchorEl);
-  const leadRef = useRef(null);
-  //const history = useHistory();
+  const history = useHistory();
   let profileData = JSON.parse(localStorage.getItem('user_info'));
   const routes = ["/personalLoan","/businessLoan","/uploadLeads","/verifyUsers","/usersResetPassword","/leads"];
   const handleChange = (event, newValue) => {
@@ -146,14 +147,18 @@ export default function Userlist() {
 
   const searchHandler = ()=>{
     if (searchInput !== '' && searchValidation(searchInput)) {
-      console.log("successfull");
+      console.log("successfull"+searchInput);
      // history.push("/leads");
      // leadRef.current.fetchSearchInput(searchInput);
+     setIsSearchData(true);
     }
     
   }
   const leadDetailsHandler = (leadDetailsData)=>{
      setViewLeadDetails(leadDetailsData);
+  }
+  const leadIdHandler = (leadId)=>{
+   setLeadId(leadId);
   }
   const searchValidation = (search)=>{
     if(/^[0-9]{10}$/.test(search )|| /^[L][D][0-9]{8}$/.test(search)){
@@ -273,8 +278,16 @@ export default function Userlist() {
           <Route path="/uploadLeads" component={UploadLeads} />
           <Route path="/verifyUsers" component={VerifyUsers} />
           <Route path="/usersResetPassword" component={ResetPassword} />
-          <Route path="/leads" component={Leads}/>
-          <Route path="/leadDetails" component={LeadDetails}/>
+          <Route path="/leads" >
+            <Leads
+            searchInput={searchInput}
+            isSearchData={isSearchData}
+            userListCallback={leadIdHandler}/>
+          </Route>
+          <Route path={`/leadDetails/${leadId}`} >
+            <LeadDetails 
+            leadId={leadId}/>
+          </Route>
           </Grid>
         </Switch>
         </Router>

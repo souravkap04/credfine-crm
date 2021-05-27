@@ -20,7 +20,8 @@ import baseUrl from '../../global/api';
 const useStyles = makeStyles({
   container:{
     overflow: 'auto',
-    maxHeight: '550px'
+    maxHeight: '550px',
+    margin:'25px'
 },
 header:{
   position: 'sticky',

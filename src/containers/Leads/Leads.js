@@ -1,4 +1,4 @@
-import React,{useState,useEffect, useImperativeHandle, forwardRef  } from 'react';
+import React,{useState,useEffect } from 'react';
 import { useHistory ,Link} from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -13,6 +13,9 @@ import baseUrl from '../../global/api';
 import { Button } from '@material-ui/core';
 
 const useStyles = makeStyles({
+  container:{
+    margin:'25px'
+  },
   table: {
     Width: '100%',
   },
@@ -26,33 +29,12 @@ const useStyles = makeStyles({
   const [leadData,setLeadData] = useState({});
   const [searchData,setSearchData] = useState([]);
   const history = useHistory();
-console.log("search:"+props.searchInput);
   useEffect(()=>{
-     const fetchLeadsData = async ()=>{
-      const headers = {
-        'Authorization':'Token 0cf9265a842c788ffaf98cdb9279d82b290bdb45',
-        'userRoleHash': 'd059e2f4-b30a-11eb-a945-000000000018',
-    };
-     try{
-      const response = await axios.get(`${baseUrl}/leads/lead_allocate/`,{headers});
-      console.log(response.data.data);
-      setLeadData(response.data);
-     }catch(error){
-       console.log(error);
-     }
-     
-     };
-     fetchLeadsData();
+      props.isSearchData ? fetchSearchData(props.searchInput) : fetchLeadsData()
   },[])
-  const routeChangeHAndler = ()=>{
-   history.push("/leadDetails");
-   //props.leadDetailsCallBack(true);
-  }
-useImperativeHandle(ref,()=>({
-  async fetchSearchInput(key){
-    console.log("fetchSearchInput:"+key)
+  const fetchSearchData = async (key)=>{
     let headers = {'Authorization':'Token e9f8746ae94a00aa6526122f2db67e081ca10f54'}
-    await axios.get(`${baseUrl}/leads/search/LD00000034?q=`+key,{headers})
+    await axios.get(`${baseUrl}/leads/search/${key}`,{headers})
     .then((response)=>{
        console.log(response.data);
        setSearchData(response.data);
@@ -60,10 +42,28 @@ useImperativeHandle(ref,()=>({
       console.log(error);
     })
   }
-}))  
+  const fetchLeadsData = async ()=>{
+    const headers = {
+      'Authorization':'Token 0cf9265a842c788ffaf98cdb9279d82b290bdb45',
+      'userRoleHash': 'd059e2f4-b30a-11eb-a945-000000000018',
+  };
+   try{
+    const response = await axios.get(`${baseUrl}/leads/lead_allocate/`,{headers});
+    console.log(response.data.data);
+    setLeadData(response.data);
+   }catch(error){
+     console.log(error);
+   }
+   
+   };
+  const routeChangeHAndler = (leadId)=>{
+    props.userListCallback(leadId);
+   history.push(`/leadDetails/${leadId}`);
+   //props.leadDetailsCallBack(true);
+  }
 
   return (
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} className={classes.container}>
       <Table className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow>
@@ -77,25 +77,53 @@ useImperativeHandle(ref,()=>({
             <TableCell className={classes.tableheading} align="right">Pin Code</TableCell>
             <TableCell className={classes.tableheading} align="right">Company Name</TableCell>
             <TableCell className={classes.tableheading} align="right">Loan Type</TableCell>
+            <TableCell className={classes.tableheading} align="right">Status</TableCell>
+            <TableCell className={classes.tableheading} align="right">Sub Status</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
         <TableRow>
-            <TableCell >{leadData.lead_crm_id} </TableCell>
+          {props.isSearchData ? 
+           searchData.map((search,index)=>(
+            <div>
+            <TableCell >{search.lead_crm_id} </TableCell>
+           <TableCell align="center">{search.name}</TableCell>
+           <TableCell align="center">{search.phone_no}</TableCell>
+           <TableCell align="center">{search.loan_amount}</TableCell>
+           {/* <TableCell align="center">{search.data.dob}</TableCell>
+           <TableCell align="center">{search.data.monthly_income}</TableCell>
+           <TableCell align="center">{search.data.residential_pincode}</TableCell>
+           <TableCell align="center">{search.data.current_company}</TableCell>
+           <TableCell align="center">{search.data.current_company_name}</TableCell>    */}
+           <TableCell align="center">{search.loan_type}</TableCell>
+           <TableCell align="center">{search.status}</TableCell>
+           <TableCell align="center">{search.sub_status}</TableCell>
+           <TableCell >
+             <Button variant="outlined" color="secondary"
+             onClick={()=>routeChangeHAndler(search.lead_crm_id)}
+             >View</Button>
+           </TableCell>
+          </div>
+           ))
+            :<div>
+              <TableCell >{leadData.lead_crm_id} </TableCell>
             <TableCell align="center">{leadData.name}</TableCell>
             <TableCell align="center">{leadData.phone_no}</TableCell>
             <TableCell align="center">{leadData.loan_amount}</TableCell>
-              <TableCell align="center">1991-01-01</TableCell>
-            <TableCell align="center">10000</TableCell>
-            <TableCell align="center">3</TableCell>
-            <TableCell align="center">122001</TableCell>
-            <TableCell align="center">xyz</TableCell>   
+              <TableCell align="center"></TableCell>
+            <TableCell align="center"></TableCell>
+            <TableCell align="center"></TableCell>
+            <TableCell align="center"></TableCell>
+            <TableCell align="center"></TableCell>   
             <TableCell align="center">{leadData.loan_type}</TableCell>
+            <TableCell align="center">{leadData.status}</TableCell>
+            <TableCell align="center">{leadData.sub_status}</TableCell>
             <TableCell >
               <Button variant="outlined" color="secondary"
-              onClick={routeChangeHAndler}
+              onClick={()=>routeChangeHAndler(leadData.lead_crm_id)}
               >View</Button>
             </TableCell>
+              </div>}
           </TableRow>
         </TableBody>
       </Table>
@@ -103,4 +131,4 @@ useImperativeHandle(ref,()=>({
      
   );
 });
-export default forwardRef(Leads);
+export default Leads;

@@ -8,7 +8,7 @@ import {
   Row,
   Col,
   Card,
-  InputGroup,
+  Alert,
 } from "react-bootstrap";
 import {
   getBank,
@@ -23,8 +23,10 @@ function LeadDetails(props) {
   const residentType = getResidentType();
   const salaryMode = getSalaryModeType();
   const [loanAmount, setLoanAmount] = useState("");
+  const [leadId,setLeadId] = useState("");
   const [employmentType, setEmploymentType] = useState("");
   const [monthlyIncome, setMonthlyIncome] = useState("");
+  const [ currentCompany , setCurrentCompany] = useState("");
   const [date, setDate] = useState(new Date());
   const [mobileNo, setMobileNo] = useState("");
   const [pincode, setPincode] = useState("");
@@ -42,21 +44,37 @@ function LeadDetails(props) {
   const [currentResidentType, setCurrentResidentType] = useState("");
   const [yearsInCurrentCity, setYearsInCurrentCity] = useState("");
   const [isEditable,setIsEditable] = useState(false);
+  const [status,setStatus] = useState('');
+  const [subStatus,setSubStatus] = useState([]);
+  const [leadStatus,setLeadStatus] = useState("");
+  const [leadSubStatus,setLeadSubStatus] = useState("");
+  const [loanType,setLoanType] = useState("");
+  const [source,setSource] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
+  const [isDisplay, setIsDisplay] = useState(false);
+  let statusData = JSON.parse(localStorage.getItem('status_info'));
+  
   
   useEffect(() => {
-    const fetchLeadDetaile = async () => {
+    const fetchLeadDetaile = async (leadId) => {
+      let headers = {'Authorization':'Token e9f8746ae94a00aa6526122f2db67e081ca10f54'}
       try {
         await axios
-          .get(`${baseUrl}/leads/lead_detail/LD00000001`)
+          .get(`${baseUrl}/leads/lead_detail/${leadId}`,{headers})
           .then((response) => {
             console.log(response.data.eligibility_data);
+            setLeadId(response.data.lead_data.lead_crm_id);
             setLoanAmount(response.data.lead_data.loan_amount);
             setMonthlyIncome(response.data.lead_data["data"].monthly_income);
+            setCurrentCompany(response.data.lead_data['data'].current_company);
             setDate(response.data.lead_data["data"].dob);
             setMobileNo(response.data.lead_data.phone_no);
             setPincode(response.data.lead_data["data"].residential_pincode);
             setname(response.data.lead_data.name);
             setCompanyName(response.data.lead_data["data"].current_company_name);
+            setLeadStatus(response.data.lead_data.status);
+            setLoanType(response.data.lead_data.loan_type);
+            setSource(response.data.lead_data.source);
             setPancardNo(response.data.eligibility_data.pan_no);
             setTotalWorkExp(response.data.eligibility_data.total_work_exp);
             setCurrentWorkExp(response.data.eligibility_data.current_work_exp);
@@ -73,19 +91,54 @@ function LeadDetails(props) {
         console.log(error);
       }
     };
-    fetchLeadDetaile();
+    fetchLeadDetaile(props.leadId);
   }, []);
   const editControlHandler = ()=>{
     setIsEditable(true);
   }
-  const updateLeadDetails = ()=>{
-     const item = {loanAmount,monthlyIncome,date,mobileNo,pincode,name,companyName,pancardNo,totalWorkExp,
-    currentWorkExp,email,designation,currentEMI,creditCardOutstanding,salaryCreditMode,salaryBankAcc,
-    currentResidentType,yearsInCurrentCity};
-     console.log(item);
+  const updateLeadDetails = async (id)=>{
+     let items = {lead_crm_id:leadId,loan_amount:loanAmount,monthly_income:monthlyIncome,
+      current_company:currentCompany, dob:date,phone_no:mobileNo,residential_pincode:pincode,name:name,
+      current_company_name:companyName,status:leadStatus,loan_type:loanType,source:source,
+      pan_no:pancardNo,total_work_exp:JSON.parse(totalWorkExp),current_work_exp:JSON.parse(currentWorkExp),email_id:email,
+      designation:designation,current_emi:JSON.parse(currentEMI),credit_card_outstanding:JSON.parse(creditCardOutstanding),
+      salary_mode:JSON.parse(salaryCreditMode),salary_bank:JSON.parse(salaryBankAcc),residence_type:JSON.parse(currentResidentType),
+      no_of_years_current_city:JSON.parse(yearsInCurrentCity)};
+     console.log(items);
+     let headers = {'Authorization':'Token e9f8746ae94a00aa6526122f2db67e081ca10f54'}
+     await axios.put(`${baseUrl}/leads/lead_detail/${id}`,items,{headers})
+     .then((response)=>{
+       console.log(response)
+     }).catch((error)=>{
+       console.log(error)
+     })
   }
-  
-
+  const subStatusHandler = ()=>{
+    let subStatusoptions = [];
+    statusData.forEach((item,index)=>{
+      if(item.status === status){
+        subStatusoptions.push(item.sub_status);
+      }
+    })
+    return subStatusoptions;
+  }
+const options = subStatusHandler();
+const statusUpdateHandler = async (id)=>{
+  let items = {status:status,sub_status:subStatus}
+  console.log("uuu:"+items)
+  let headers = {'Authorization':'Token e9f8746ae94a00aa6526122f2db67e081ca10f54'}
+  if(status!== '' && subStatus.length>0){
+    await axios.put(`${baseUrl}/leads/lead_status/${id}`,items,{headers})
+  .then((response)=>{
+    console.log(response)
+    setAlertMessage(response.data['data'])
+    setIsDisplay(true);
+  }).catch((error)=>{
+    setAlertMessage('Something Wrong');
+    setIsDisplay(true);
+  })
+  }
+}
   return (
     <div>
       {/* <Navbar bg="primary" variant="dark">
@@ -104,24 +157,53 @@ function LeadDetails(props) {
         <div>
           <Form>
             <Card className={style.Card}>
+            {isDisplay ? <Alert variant="primary">{alertMessage}</Alert> : null}
               <Form.Row>
-               
                 <Col>
                   <Form.Group>
                     <Form.Label>Status</Form.Label>
-                    <Form.Control as="select">
+                    <Form.Control as="select"
+                    value={status}
+                    onChange={(e)=>setStatus(e.target.value)}>
                       <option value="">Select One</option>
-                      <option>Open</option>
-                    </Form.Control>
+                      {statusData.map((item,index)=>(
+                        <option key={index} value={item.status}>{item.status}</option>
+                      ))}
+                       </Form.Control>
                   </Form.Group>
                 </Col>
                 <Col>
-                  <Button disabled={!isEditable} onClick={updateLeadDetails} >Submit</Button>
+                  <Form.Group>
+                    <Form.Label>Sub Status</Form.Label>
+                    <Form.Control as="select"
+                    value={subStatus}
+                    onChange={(e)=>{setSubStatus(e.target.value)}}>
+                    <option value="">Select One</option>
+                      {options.map((item,index)=>(
+                        <option key={index} value={item}>{item}</option>
+                      ))}
+                       </Form.Control>
+                  </Form.Group>
+                </Col>
+                <Col>
+                  <Button onClick={()=>statusUpdateHandler(props.leadId)} >Submit</Button>
                 </Col>
               </Form.Row>
               <Form.Row>
                 <Col>
                   <Form.Label>Lead View</Form.Label>
+                  <Form.Group>
+                    <Form.Label>Lead Id</Form.Label>
+                    {isEditable ? <Form.Control
+                    disabled={false}
+                    type="text"
+                    value={leadId}
+                    onChange={(e)=>setLeadId(e.target.value)}
+                    /> : <Form.Control
+                    disabled={true}
+                    type="text"
+                    value={leadId}/>}
+                  </Form.Group>
                   <Form.Group>
                     <Form.Label>Name</Form.Label>
                     {isEditable ? <Form.Control
@@ -190,7 +272,14 @@ function LeadDetails(props) {
                   </Form.Group>
                   <Form.Group>
                     <Form.Label>Current Company</Form.Label>
-                    <Form.Control />
+                    {isEditable ? <Form.Control 
+                    disabled={false}
+                    type="number"
+                    value={currentCompany}
+                    onChange={(e)=>setCurrentCompany(e.target.value)}/> : <Form.Control 
+                    type="number"
+                    value={currentCompany}
+                    disabled={true}/>}
                   </Form.Group>
                   <Form.Group>
                     <Form.Label>Pin Code</Form.Label>
@@ -217,6 +306,44 @@ function LeadDetails(props) {
                     value={companyName}
                     disabled={true}
                   />}
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Label>Status</Form.Label>
+                    {isEditable ? <Form.Control as="select"
+                    disabled={false}
+                    value={leadStatus}
+                    onChange={(e)=>setLeadStatus(e.target.value)}>
+                      <option value="">select One</option>
+                      <option value="open">Open</option>
+                    </Form.Control> : <Form.Control as="select"
+                    value={leadStatus}
+                    disabled={true}/>
+                      }
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Label>Loan Type</Form.Label>
+                    {isEditable ? <Form.Control as="select"
+                    disabled={false}
+                    value={loanType}
+                    onChange={(e)=>setLoanType(e.target.value)}>
+                      <option value="">select One</option>
+                      <option value="PL">Personal Loan </option>
+                      <option value="BL">Business Loan </option>
+                    </Form.Control> : <Form.Control as="select"
+                    value={loanType}
+                    disabled={true}/>}
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Label>Source</Form.Label>
+                    {isEditable ? <Form.Control
+                    disabled={false}
+                    type="number"
+                    value={source}
+                    onChange={(e)=>setSource(e.target.value)}/> :<Form.Control
+                    type="number"
+                    value={source}
+                    disabled={true}
+                    />}
                   </Form.Group>
                 </Col>
                 <Col>
@@ -322,7 +449,7 @@ function LeadDetails(props) {
                     >
                       <option value="">Select One</option>
                       {salaryMode.map((mode, index) => (
-                        <option value={index}>{mode}</option>
+                        <option value={index+1}>{mode}</option>
                       ))}
                     </Form.Control> : <Form.Control
                       as="select"
@@ -341,7 +468,7 @@ function LeadDetails(props) {
                     >
                       <option value="">Select One</option>
                       {banks.map((bank, index) => (
-                        <option value={index}>{bank}</option>
+                        <option value={1}>{bank}</option>
                       ))}
                     </Form.Control> : <Form.Control
                       as="select"
@@ -360,7 +487,7 @@ function LeadDetails(props) {
                     >
                       <option value="">Select One</option>
                       {residentType.map((resident, index) => (
-                        <option value={index}>{resident}</option>
+                        <option value={1}>{resident}</option>
                       ))}
                     </Form.Control> :  <Form.Control
                       as="select"
@@ -389,14 +516,15 @@ function LeadDetails(props) {
                   <Button disabled={isEditable} onClick={editControlHandler}>Edit</Button>
                 </Col>
                 <Col>
-                <Button>Submit</Button>
+                <Button disabled={!isEditable} onClick={()=>updateLeadDetails(props.leadId)} >Submit</Button>
                 </Col>
               </Form.Row>
             </Card>
           </Form>
         </div>
         <div>
-          <RemarkForm/>
+          <RemarkForm 
+          leadId={props.leadId}/>
         </div>
       </div>
     </div>

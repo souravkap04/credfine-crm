@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from 'axios';
 import baseUrl from '../../global/api';
 import { Form ,Button, Card,Alert} from "react-bootstrap";
-import "./UserCreate.css";
+import style from "./UserCreate.module.css";
 
 export default function UserCreate() {
   const [userName, setUserName] = useState("");
@@ -43,13 +43,13 @@ export default function UserCreate() {
     
   }
   return (
-    <div className="CreateUser">
+    <div className={style.CreateUser}>
       <Form noValidate validated={validated} onSubmit={userCteateHandler}>
-        <Card className="UserCreateCard">
+        <Card className={style.UserCreateCard}>
         {isDisplay ? <Alert variant="primary">{alertMessage}</Alert> : null}
-        <Form.Label className="UserCreateText">
+        <Form.Label className={style.UserCreateText}>
           User Create
-          <hr className="UserCreateBar"/>
+          <hr className={style.UserCreateBar}/>
           </Form.Label>
         <Form.Group size="lg" controlId="userName">
          <Form.Label  style={{color:"#313F80",fontFamily: "Lato"}}>User Name</Form.Label>

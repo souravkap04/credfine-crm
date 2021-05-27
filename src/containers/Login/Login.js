@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import axios from 'axios'
 import baseUrl from '../../global/api'
-import "./Login.css";
+import style from "./Login.module.css";
 import { Form, Card, Button, Image ,Alert} from "react-bootstrap";
 import { Link } from "react-router-dom";
 import crmLogo from "../../images/loginImage.svg";
@@ -24,43 +24,41 @@ export default function Login() {
     event.preventDefault();
     let item ={username:email,password};
     console.log(item);
-  //  axios.post(`${baseUrl}/user/login/`,item)
-  //   .then((response)=>{
-  //     console.log(response.data);
-  //    localStorage.setItem("user_info",JSON.stringify(response.data));
-  //   }).catch((error)=>{
-  //     console.error(error);
-  //   })
-    
-  // let response = await axios.post(`${baseUrl}/user/login/`,item);
-  // console.log(response.data);
   await axios.post(`${baseUrl}/user/login/`,item)
   .then((response)=>{
     console.log(response.data);
     localStorage.setItem('user_info',JSON.stringify(response.data));
     if(localStorage.getItem('user_info')){
-      history.push("/userlist")
+      history.push("/userlist");
+      let headers = {'Authorization':'Token e9f8746ae94a00aa6526122f2db67e081ca10f54'};
+       axios.get(`${baseUrl}/leads/fetchAllLeads/`,{headers})
+      .then((response)=>{
+        console.log(response.data);
+        localStorage.setItem('status_info',JSON.stringify(response.data))
+      }).catch((error)=>{
+        console.log(error);
+      })
     }
   }).catch(error=>{
     console.log(error);
-       setAlertMessage('something wrong')
+       setAlertMessage('Wrong Password')
        setIsDisplay(true);
   })
   
     
   }
   return (
-    <div className="Login">
+    <div className={style.Login}>
       <Form noValidate validated={validated} onSubmit={loginFormSubmitHandler}>
-        <Card className="Card">
+        <Card className={style.Card}>
           {isDisplay ? <Alert variant="primary">{alertMessage}</Alert>:null}
           <Form.Group>
             <Form.Label >
               <img src={crmLogo} alt="CRM Logo"style={{height:'10vh',marginBottom:'20px'}}/>
             </Form.Label>
-            <Form.Label className="TextLogin">
+            <Form.Label className={style.TextLogin}>
               Login
-              <hr className="HorizontlaBar"/>
+              <hr className={style.HorizontlaBar}/>
             </Form.Label>
           </Form.Group>
           <Form.Group size="lg" controlId="email">
