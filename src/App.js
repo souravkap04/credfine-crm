@@ -1,7 +1,6 @@
 import React ,{useState , useEffect} from 'react';
 import Login from "./containers/Login/Login";
 import "bootstrap/dist/css/bootstrap.min.css";
-import UserCreate from "./containers/UserCreate/UserCreate";
 import Userlist from "./containers/UserList/Userlist";
 import IdleTimer from './timer/IdelTimer';
 import {
@@ -37,9 +36,6 @@ function App() {
       <Switch>
         <Route exact path="/">
           <Login/>
-        </Route>
-        <Route path="/usercreate">
-          <UserCreate/>
         </Route>
         <Route path="/userlist">
           <Userlist/>

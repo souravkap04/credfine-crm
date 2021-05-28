@@ -1,7 +1,7 @@
 import React,{useState}from "react";
 import axios from 'axios';
 import './PlForm.css';
-import { Form, Card, Button, Row, Col,Alert } from "react-bootstrap";
+import { Form, Card, Button, Row, Col,Alert,ListGroup} from "react-bootstrap";
 import baseUrl from "../../global/api";
 export default function PlForm() {
   const [loanAmount,setLoanAmount] = useState('');
@@ -12,6 +12,8 @@ export default function PlForm() {
   const [pincode,setPincode] = useState('');
   const [fullName,setFullName] = useState('');
   const [companyName,setCompanyName] = useState('');
+  const [searchCompany,setSearchCompany] = useState([]);
+  const [showCompany,setShowCompany] = useState(false);
   const [validated, setValidated] = useState(false);
   const [alertMessage,setAlertMessage] = useState('');
   const [isDisplay,setIsDisplay] = useState(false);
@@ -43,6 +45,27 @@ export default function PlForm() {
         isDisplay(true)
       })
 
+  }
+  const searchCompanyHandler = async (e)=>{
+    setCompanyName(e.target.value);
+    setShowCompany(true);
+    const searchCompanyUrl = "https://backend.credfine.com/common/search_company";
+    let item = {company:companyName};
+    const header = {'Content-Type':'application/json'}
+    if(companyName.length >=2){
+     await axios.post(`${searchCompanyUrl}`,item , {header})
+     .then((response)=>{
+       console.log(response.data);
+       setSearchCompany(response.data);
+     }).catch((error)=>{
+       console.log(error)
+     })
+  
+    }
+  }
+  const selectCompany = (company)=>{
+    setCompanyName(company);
+    setShowCompany(false);
   }
   return (
     <div >
@@ -143,8 +166,15 @@ export default function PlForm() {
                 required
                 type="text"
                 value={companyName}
-                onChange={(e)=>setCompanyName(e.target.value)}/>
+                onChange={(e)=>searchCompanyHandler(e)}/>
                 <Form.Control.Feedback type="invalid"> This field is required</Form.Control.Feedback>
+                <ListGroup>
+                    {showCompany ? searchCompany.map((company)=>(
+                      <ListGroup.Item key={company.id}
+                      onClick={()=>selectCompany(company.name)}
+                      >{company.name}</ListGroup.Item>
+                    )) : null}
+                  </ListGroup>
               </Form.Group>
             </Col>
           </Form.Row>

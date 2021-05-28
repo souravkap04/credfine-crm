@@ -25,7 +25,9 @@ export default function RemarkForm(props) {
     let headers = {
       Authorization: "Token e9f8746ae94a00aa6526122f2db67e081ca10f54",
     };
-    if (input !== "") {
+    if (input.length !== 0) {
+      const post = `${baseUrl}/leads/lead_remark/${id}`;
+      console.log("remark post:"+post)
       await axios
         .post(`${baseUrl}/leads/lead_remark/${id}`, item, { headers })
         .then((response) => {
@@ -40,14 +42,14 @@ export default function RemarkForm(props) {
     }
   };
   useEffect(() => {
-    const fetchRemarks = async () => {
+    const fetchRemarks = async (id) => {
       console.log("fetchremarks:"+props.leadId)
-      console.log("fetchremarks:"+`${baseUrl}/leads/lead_remark/${props.leadId}`)
+      console.log("fetchremarks:"+`${baseUrl}/leads/lead_remark/${id}`)
       let headers = {
         Authorization: "Token e9f8746ae94a00aa6526122f2db67e081ca10f54",
       };
       await axios
-        .get(`${baseUrl}/leads/lead_remark/${props.leadId}`, { headers })
+        .get(`${baseUrl}/leads/lead_remark/${id}`, { headers })
         .then((response) => {
           console.log(response.data);
           setRemarks(response.data.remarks);
@@ -57,14 +59,14 @@ export default function RemarkForm(props) {
         });
     };
 
-    fetchRemarks();
+    fetchRemarks(props.leadId);
   }, []);
   return (
-    <Form onSubmit={()=>remarksHandler(props.leadId)}>
+    <Form onSubmit={(event)=>remarksHandler(event,props.leadId)}>
       <Card className={style.RemarksCard}>
         <Row>
           {isDisplay ? <Alert variant="primary">{alertMessage}</Alert> : null}
-          <Col md={11}>
+          <Col md={10}>
             <InputGroup className={style.Remarks}>
               <InputGroup.Prepend>
                 <InputGroup.Text>Add Remarks</InputGroup.Text>
@@ -77,8 +79,9 @@ export default function RemarkForm(props) {
               />
             </InputGroup>
           </Col>
-          <Col md={1}>
-            <Button type="submit">Submit</Button>
+          <Col md={2}>
+            <Button className={style.RemarkSubmit}
+            type="submit">Submit</Button>
           </Col>
         </Row>
         <div className={style.RemarksContainer}>

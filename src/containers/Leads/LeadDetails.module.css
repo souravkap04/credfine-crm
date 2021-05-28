@@ -8,3 +8,8 @@
     padding: 1rem 2rem;
     margin: 10px 0;
 }
+.StatusSubmit{
+    position: relative;
+    top: 32px;
+    left: 70px;
+}

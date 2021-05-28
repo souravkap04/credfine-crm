@@ -20,3 +20,8 @@
     overflow: auto;
     max-height: 300px;
 }
+.RemarkSubmit{
+    position: relative;
+    top: 10px;
+    left: 50px;
+}

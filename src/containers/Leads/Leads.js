@@ -24,7 +24,7 @@ const useStyles = makeStyles({
   }
   
 });
- const Leads = ((props , ref) => {
+ const Leads = ((props) => {
   const classes = useStyles();
   const [leadData,setLeadData] = useState({});
   const [searchData,setSearchData] = useState([]);
@@ -47,13 +47,16 @@ const useStyles = makeStyles({
       'Authorization':'Token 0cf9265a842c788ffaf98cdb9279d82b290bdb45',
       'userRoleHash': 'd059e2f4-b30a-11eb-a945-000000000018',
   };
-   try{
-    const response = await axios.get(`${baseUrl}/leads/lead_allocate/`,{headers});
-    console.log(response.data.data);
-    setLeadData(response.data);
-   }catch(error){
-     console.log(error);
-   }
+
+     await axios.get(`${baseUrl}/leads/lead_allocate/`,{headers})
+     .then((response)=>{
+      console.log(response.data.data.dob);
+      setLeadData(response.data);
+      console.log("leadData:"+leadData.data.dob);
+     }).catch((error)=>{
+       console.log(error);
+     })
+   
    
    };
   const routeChangeHAndler = (leadId)=>{
@@ -85,16 +88,16 @@ const useStyles = makeStyles({
         <TableRow>
           {props.isSearchData ? 
            searchData.map((search,index)=>(
-            <div>
-            <TableCell >{search.lead_crm_id} </TableCell>
+            <>
+            <TableCell align="center">{search.lead_crm_id} </TableCell>
            <TableCell align="center">{search.name}</TableCell>
            <TableCell align="center">{search.phone_no}</TableCell>
            <TableCell align="center">{search.loan_amount}</TableCell>
-           {/* <TableCell align="center">{search.data.dob}</TableCell>
+            <TableCell align="center">{search.data.dob}</TableCell>
            <TableCell align="center">{search.data.monthly_income}</TableCell>
            <TableCell align="center">{search.data.residential_pincode}</TableCell>
            <TableCell align="center">{search.data.current_company}</TableCell>
-           <TableCell align="center">{search.data.current_company_name}</TableCell>    */}
+           <TableCell align="center">{search.data.current_company_name}</TableCell>    
            <TableCell align="center">{search.loan_type}</TableCell>
            <TableCell align="center">{search.status}</TableCell>
            <TableCell align="center">{search.sub_status}</TableCell>
@@ -103,18 +106,18 @@ const useStyles = makeStyles({
              onClick={()=>routeChangeHAndler(search.lead_crm_id)}
              >View</Button>
            </TableCell>
-          </div>
+          </>
            ))
-            :<div>
-              <TableCell >{leadData.lead_crm_id} </TableCell>
+            :<>
+              <TableCell align="center" >{leadData.lead_crm_id} </TableCell>
             <TableCell align="center">{leadData.name}</TableCell>
             <TableCell align="center">{leadData.phone_no}</TableCell>
             <TableCell align="center">{leadData.loan_amount}</TableCell>
-              <TableCell align="center"></TableCell>
-            <TableCell align="center"></TableCell>
-            <TableCell align="center"></TableCell>
-            <TableCell align="center"></TableCell>
-            <TableCell align="center"></TableCell>   
+             {/* <TableCell align="center">{leadData.data.dob}</TableCell>
+             <TableCell align="center">{leadData.data['monthly_income']}</TableCell>
+            <TableCell align="center">{leadData.data['current_company']}</TableCell>
+            <TableCell align="center">{leadData.data['residential_pincode']}</TableCell>
+            <TableCell align="center">{leadData.data['current_company_name']}</TableCell>     */}
             <TableCell align="center">{leadData.loan_type}</TableCell>
             <TableCell align="center">{leadData.status}</TableCell>
             <TableCell align="center">{leadData.sub_status}</TableCell>
@@ -123,7 +126,7 @@ const useStyles = makeStyles({
               onClick={()=>routeChangeHAndler(leadData.lead_crm_id)}
               >View</Button>
             </TableCell>
-              </div>}
+              </>}
           </TableRow>
         </TableBody>
       </Table>

@@ -11,6 +11,7 @@ import {BrowserRouter as Router,
   Route, Link ,useHistory} from "react-router-dom";
 import {AppBar, Toolbar, Button, IconButton,InputBase, Tabs,Tab,Box,
   Typography, Grid, Menu, MenuItem, Chip, Drawer } from '@material-ui/core';
+  import UserCreate from "../UserCreate/UserCreate";
 import UploadLeads from '../UploadLeads/UploadLeads';
 import PlForm from '../PlData/PlForm';
 import BlForm from '../BlData/BlForm';
@@ -98,7 +99,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Userlist() {
   const classes = useStyles();
-  const [value, setValue] = useState(0);
+  const routes = ["/usercreate","/personalLoan","/businessLoan","/uploadLeads","/verifyUsers","/usersResetPassword","/leads"];
+  const [value, setValue] = useState(routes[1]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [searchInput,setSearchInput] = useState('');
   const [isSearchData,setIsSearchData]= useState(false);
@@ -108,12 +110,11 @@ export default function Userlist() {
   const open = Boolean(anchorEl);
   const history = useHistory();
   let profileData = JSON.parse(localStorage.getItem('user_info'));
-  const routes = ["/personalLoan","/businessLoan","/uploadLeads","/verifyUsers","/usersResetPassword","/leads"];
   const handleChange = (event, newValue) => {
     setValue(newValue);
-    if (value===5) {
-      setViewLeadDetails(false);
-    }
+    // if (value===5) {
+    //   setViewLeadDetails(false);
+    // }
   };
   const handleMenu = (event) =>{
     setAnchorEl(event.currentTarget);
@@ -151,8 +152,10 @@ export default function Userlist() {
      // history.push("/leads");
      // leadRef.current.fetchSearchInput(searchInput);
      setIsSearchData(true);
+    } else if (searchInput.length === 0) {
+      console.log("search is empty");
+      setIsSearchData(false);
     }
-    
   }
   const leadDetailsHandler = (leadDetailsData)=>{
      setViewLeadDetails(leadDetailsData);
@@ -192,7 +195,7 @@ export default function Userlist() {
               }}
               inputProps={{ 'aria-label': 'search' }}
               value={searchInput}
-              onChange={(e)=>setSearchInput(e.target.value)}
+              onChange={(e)=>setSearchInput(e.target.value.toUpperCase())}
             />
           </div>
           <Button className={classes.button} 
@@ -225,54 +228,59 @@ export default function Userlist() {
 
         <Router>
           <Grid item lg={1.5}>
-          <Route 
-          render={(history)=>(
+          <Route >
            <Tabs 
            orientation="vertical"
-           value={history.location.pathname}>
+           value={value}
+           onChange={handleChange}>
              <Tab
                   value={routes[0]}
-                  label="Personal Loan"
+                  label="User Create"
                   component={Link}
                   to={routes[0]}
                 />
-                <Tab
+             <Tab
                   value={routes[1]}
-                  label="Business Loan"
+                  label="Personal Loan"
                   component={Link}
                   to={routes[1]}
                 />
                 <Tab
                   value={routes[2]}
-                  label="Upload Leads"
+                  label="Business Loan"
                   component={Link}
                   to={routes[2]}
                 />
                 <Tab
                   value={routes[3]}
-                  label="Verify Users"
+                  label="Upload Leads"
                   component={Link}
                   to={routes[3]}
                 />
                 <Tab
                   value={routes[4]}
-                  label="Users"
+                  label="Verify Users"
                   component={Link}
                   to={routes[4]}
                 />
                 <Tab
                   value={routes[5]}
-                  label="Leads"
+                  label="Users"
                   component={Link}
                   to={routes[5]}
                 />
+                <Tab
+                  value={routes[6]}
+                  label="Leads"
+                  component={Link}
+                  to={routes[6]}
+                />
                 </Tabs>
-                
-          )}
-          />
+          </Route>
           </Grid>
            <Switch>
           <Grid item lg={10}>
+          <Route path="/usercreate" component={UserCreate} />
           <Route path="/personalLoan" component={PlForm} />
           <Route path="/businessLoan" component={BlForm} />
           <Route path="/uploadLeads" component={UploadLeads} />

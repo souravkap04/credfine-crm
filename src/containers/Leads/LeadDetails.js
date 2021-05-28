@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
-  Navbar,
   Form,
-  FormControl,
   Button,
   Row,
   Col,
@@ -52,8 +50,9 @@ function LeadDetails(props) {
   const [leadSubStatus,setLeadSubStatus] = useState("");
   const [loanType,setLoanType] = useState("");
   const [source,setSource] = useState("");
-  const [alertMessage, setAlertMessage] = useState("");
-  const [isDisplay, setIsDisplay] = useState(false);
+  const [alertMessage, setAlertMessage] = useState({leadDetails:'',status:'',error:''});
+  const [isStatus, setIsStatus] = useState(false);
+  const [isLeadDetails, setIsLeadDetails] = useState(false);
   const [showCompany, setShowCompany] = useState(false);
   let statusData = JSON.parse(localStorage.getItem('status_info'));
   
@@ -100,20 +99,26 @@ function LeadDetails(props) {
     setIsEditable(true);
   }
   const updateLeadDetails = async (id)=>{
-     let items = {lead_crm_id:leadId,loan_amount:loanAmount,monthly_income:monthlyIncome,
-      current_company:currentCompany, dob:date,phone_no:mobileNo,residential_pincode:pincode,name:name,
-      current_company_name:companyName,status:leadStatus,loan_type:loanType,source:source,
-      pan_no:pancardNo,total_work_exp:JSON.parse(totalWorkExp),current_work_exp:JSON.parse(currentWorkExp),email_id:email,
+    let data = {dob:date,monthly_income:monthlyIncome,current_company_name:companyName,
+      residential_pincode:pincode,current_company:currentCompany};
+    let lead_data = {lead_crm_id:leadId,loan_amount:loanAmount,
+      phone_no:mobileNo,name:name,data,status:leadStatus,loan_type:loanType,source:source,};
+    let eligibility_data = {pan_no:pancardNo,total_work_exp:JSON.parse(totalWorkExp),current_work_exp:JSON.parse(currentWorkExp),email_id:email,
       designation:designation,current_emi:JSON.parse(currentEMI),credit_card_outstanding:JSON.parse(creditCardOutstanding),
       salary_mode:JSON.parse(salaryCreditMode),salary_bank:JSON.parse(salaryBankAcc),residence_type:JSON.parse(currentResidentType),
-      no_of_years_current_city:JSON.parse(yearsInCurrentCity)};
+      no_of_years_current_city:JSON.parse(yearsInCurrentCity)} 
+     let items = {lead_data,eligibility_data };
      console.log(items);
      let headers = {'Authorization':'Token e9f8746ae94a00aa6526122f2db67e081ca10f54'}
      await axios.put(`${baseUrl}/leads/lead_detail/${id}`,items,{headers})
      .then((response)=>{
-       console.log(response)
+       console.log(response);
+       setAlertMessage({leadDetails:'Lead Data Successfully Updated'})
+       setIsLeadDetails(true);
      }).catch((error)=>{
-       console.log(error)
+       console.log(error);
+       setAlertMessage({error:'Something Wrong'})
+       setIsLeadDetails(true);
      })
   }
   const subStatusHandler = ()=>{
@@ -134,11 +139,11 @@ const statusUpdateHandler = async (id)=>{
     await axios.put(`${baseUrl}/leads/lead_status/${id}`,items,{headers})
   .then((response)=>{
     console.log(response)
-    setAlertMessage(response.data['data'])
-    setIsDisplay(true);
+    setAlertMessage({status:response.data['data']})
+    setIsStatus(true);
   }).catch((error)=>{
-    setAlertMessage('Something Wrong');
-    setIsDisplay(true);
+    setAlertMessage({error:'Something Wrong'});
+    setIsStatus(true);
   })
   }
 }
@@ -166,26 +171,14 @@ const selectCompany = (company)=>{
 }
 
   return (
-    <div>
-      {/* <Navbar bg="primary" variant="dark">
-        <Row>
-          <Col md={8}>
-            <Navbar.Brand>Lead Details</Navbar.Brand>
-          </Col>
-          <Col md={4}>
-            <Form>
-              <FormControl type="text" placeholder="Search" />
-            </Form>
-          </Col>
-        </Row>
-      </Navbar> */}
       <div className={style.LeadDetails}>
         <div>
           <Form>
             <Card className={style.Card}>
-            {isDisplay ? <Alert variant="primary">{alertMessage}</Alert> : null}
+            {isStatus ? <Alert variant="primary">{alertMessage.status}</Alert> : null}
+            {isLeadDetails? <Alert variant="primary">{alertMessage.leadDetails}</Alert> : null}
               <Form.Row>
-                <Col>
+                <Col lg={5}>
                   <Form.Group>
                     <Form.Label>Status</Form.Label>
                     <Form.Control as="select"
@@ -198,7 +191,7 @@ const selectCompany = (company)=>{
                        </Form.Control>
                   </Form.Group>
                 </Col>
-                <Col>
+                <Col lg={5}>
                   <Form.Group>
                     <Form.Label>Sub Status</Form.Label>
                     <Form.Control as="select"
@@ -211,8 +204,9 @@ const selectCompany = (company)=>{
                        </Form.Control>
                   </Form.Group>
                 </Col>
-                <Col>
-                  <Button onClick={()=>statusUpdateHandler(props.leadId)} >Submit</Button>
+                <Col lg={2}>
+                  <Button className={style.StatusSubmit}
+                  onClick={()=>statusUpdateHandler(props.leadId)} >Submit</Button>
                 </Col>
               </Form.Row>
               <Form.Row>
@@ -388,7 +382,7 @@ const selectCompany = (company)=>{
                     disabled={false}
                       type="text"
                       value={pancardNo}
-                      onChange={(e) => setPancardNo(e.target.value)}
+                      onChange={(e) => setPancardNo(e.target.value.toUpperCase())}
                     /> : <Form.Control
                     type="test"
                     value={pancardNo}
@@ -561,7 +555,6 @@ const selectCompany = (company)=>{
           leadId={props.leadId}/>
         </div>
       </div>
-    </div>
   );
 }
 
