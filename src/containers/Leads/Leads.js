@@ -50,7 +50,7 @@ const useStyles = makeStyles({
 
      await axios.get(`${baseUrl}/leads/lead_allocate/`,{headers})
      .then((response)=>{
-      console.log(response.data.data.dob);
+      console.log(response.data);
       setLeadData(response.data);
       console.log("leadData:"+leadData.data.dob);
      }).catch((error)=>{
@@ -85,10 +85,9 @@ const useStyles = makeStyles({
           </TableRow>
         </TableHead>
         <TableBody>
-        <TableRow>
           {props.isSearchData ? 
            searchData.map((search,index)=>(
-            <>
+            <TableRow>
             <TableCell align="center">{search.lead_crm_id} </TableCell>
            <TableCell align="center">{search.name}</TableCell>
            <TableCell align="center">{search.phone_no}</TableCell>
@@ -106,14 +105,14 @@ const useStyles = makeStyles({
              onClick={()=>routeChangeHAndler(search.lead_crm_id)}
              >View</Button>
            </TableCell>
-          </>
+          </TableRow>
            ))
-            :<>
+            :<TableRow>
               <TableCell align="center" >{leadData.lead_crm_id} </TableCell>
             <TableCell align="center">{leadData.name}</TableCell>
             <TableCell align="center">{leadData.phone_no}</TableCell>
             <TableCell align="center">{leadData.loan_amount}</TableCell>
-             {/* <TableCell align="center">{leadData.data.dob}</TableCell>
+             {/* <TableCell align="center">{leadData.data['dob']}</TableCell>
              <TableCell align="center">{leadData.data['monthly_income']}</TableCell>
             <TableCell align="center">{leadData.data['current_company']}</TableCell>
             <TableCell align="center">{leadData.data['residential_pincode']}</TableCell>
@@ -126,8 +125,7 @@ const useStyles = makeStyles({
               onClick={()=>routeChangeHAndler(leadData.lead_crm_id)}
               >View</Button>
             </TableCell>
-              </>}
-          </TableRow>
+              </TableRow>}
         </TableBody>
       </Table>
     </TableContainer>
