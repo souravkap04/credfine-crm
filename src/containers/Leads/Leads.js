@@ -26,7 +26,7 @@ const useStyles = makeStyles({
 });
  const Leads = ((props) => {
   const classes = useStyles();
-  const [leadData,setLeadData] = useState({});
+  const [leadData,setLeadData] = useState([]);
   const [searchData,setSearchData] = useState([]);
   const history = useHistory();
   useEffect(()=>{
@@ -51,8 +51,8 @@ const useStyles = makeStyles({
      await axios.get(`${baseUrl}/leads/lead_allocate/`,{headers})
      .then((response)=>{
       console.log(response.data);
-      setLeadData(response.data);
-      console.log("leadData:"+leadData.data.dob);
+      setLeadData([response.data]);
+      console.log("leadData:"+leadData);
      }).catch((error)=>{
        console.log(error);
      })
@@ -107,25 +107,28 @@ const useStyles = makeStyles({
            </TableCell>
           </TableRow>
            ))
-            :<TableRow>
-              <TableCell align="center" >{leadData.lead_crm_id} </TableCell>
-            <TableCell align="center">{leadData.name}</TableCell>
-            <TableCell align="center">{leadData.phone_no}</TableCell>
-            <TableCell align="center">{leadData.loan_amount}</TableCell>
-             {/* <TableCell align="center">{leadData.data['dob']}</TableCell>
-             <TableCell align="center">{leadData.data['monthly_income']}</TableCell>
-            <TableCell align="center">{leadData.data['current_company']}</TableCell>
-            <TableCell align="center">{leadData.data['residential_pincode']}</TableCell>
-            <TableCell align="center">{leadData.data['current_company_name']}</TableCell>     */}
-            <TableCell align="center">{leadData.loan_type}</TableCell>
-            <TableCell align="center">{leadData.status}</TableCell>
-            <TableCell align="center">{leadData.sub_status}</TableCell>
+            : leadData.map((lead)=>(
+              <TableRow>
+              <TableCell align="center" >{lead.lead_crm_id} </TableCell>
+            <TableCell align="center">{lead.name}</TableCell>
+            <TableCell align="center">{lead.phone_no}</TableCell>
+            <TableCell align="center">{lead.loan_amount}</TableCell>
+             <TableCell align="center">{lead.data['dob']}</TableCell>
+             <TableCell align="center">{lead.data['monthly_income']}</TableCell>
+            <TableCell align="center">{lead.data['current_company']}</TableCell>
+            <TableCell align="center">{lead.data['residential_pincode']}</TableCell>
+            <TableCell align="center">{lead.data['current_company_name']}</TableCell>    
+            <TableCell align="center">{lead.loan_type}</TableCell>
+            <TableCell align="center">{lead.status}</TableCell>
+            <TableCell align="center">{lead.sub_status}</TableCell>
             <TableCell >
               <Button variant="outlined" color="secondary"
-              onClick={()=>routeChangeHAndler(leadData.lead_crm_id)}
+              onClick={()=>routeChangeHAndler(lead.lead_crm_id)}
               >View</Button>
             </TableCell>
-              </TableRow>}
+              </TableRow>
+            ))
+            }
         </TableBody>
       </Table>
     </TableContainer>
