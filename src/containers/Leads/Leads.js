@@ -10,7 +10,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import axios from 'axios';
 import baseUrl from '../../global/api';
-import { Button } from '@material-ui/core';
+
 
 const useStyles = makeStyles({
   container:{
@@ -29,6 +29,7 @@ const useStyles = makeStyles({
   const [leadData,setLeadData] = useState([]);
   const [searchData,setSearchData] = useState([]);
   const history = useHistory();
+  console.log("leads invoke1:"+props.isSearchData);
   useEffect(()=>{
       props.isSearchData ? fetchSearchData(props.searchInput) : fetchLeadsData()
   },[])
@@ -88,7 +89,11 @@ const useStyles = makeStyles({
           {props.isSearchData ? 
            searchData.map((search,index)=>(
             <TableRow>
-            <TableCell align="center">{search.lead_crm_id} </TableCell>
+            <TableCell align="center"
+            style={{cursor:'pointer',color:'blue'}}
+            onClick={()=>routeChangeHAndler(search.lead_crm_id)}
+            >{search.lead_crm_id} 
+            </TableCell>
            <TableCell align="center">{search.name}</TableCell>
            <TableCell align="center">{search.phone_no}</TableCell>
            <TableCell align="center">{search.loan_amount}</TableCell>
@@ -100,16 +105,19 @@ const useStyles = makeStyles({
            <TableCell align="center">{search.loan_type}</TableCell>
            <TableCell align="center">{search.status}</TableCell>
            <TableCell align="center">{search.sub_status}</TableCell>
-           <TableCell >
+           {/* <TableCell >
              <Button variant="outlined" color="secondary"
              onClick={()=>routeChangeHAndler(search.lead_crm_id)}
              >View</Button>
-           </TableCell>
+           </TableCell> */}
           </TableRow>
            ))
             : leadData.map((lead)=>(
               <TableRow>
-              <TableCell align="center" >{lead.lead_crm_id} </TableCell>
+              <TableCell align="center" 
+              style={{cursor:'pointer',color:'blue'}}
+              onClick={()=>routeChangeHAndler(lead.lead_crm_id)}
+              >{lead.lead_crm_id} </TableCell>
             <TableCell align="center">{lead.name}</TableCell>
             <TableCell align="center">{lead.phone_no}</TableCell>
             <TableCell align="center">{lead.loan_amount}</TableCell>
@@ -121,11 +129,11 @@ const useStyles = makeStyles({
             <TableCell align="center">{lead.loan_type}</TableCell>
             <TableCell align="center">{lead.status}</TableCell>
             <TableCell align="center">{lead.sub_status}</TableCell>
-            <TableCell >
+            {/* <TableCell >
               <Button variant="outlined" color="secondary"
               onClick={()=>routeChangeHAndler(lead.lead_crm_id)}
               >View</Button>
-            </TableCell>
+            </TableCell> */}
               </TableRow>
             ))
             }

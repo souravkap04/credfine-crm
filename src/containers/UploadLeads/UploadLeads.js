@@ -74,7 +74,7 @@ export default function UploadLeads() {
               disabled={!loanType}
                 id="exampleFormControlFile1"
                 label="Upload Leads"
-                accept=" application/vnd.ms-excel , application/vnd.openxmlformats-officedocument.spreadsheetml.sheet "
+                accept="application/vnd.ms-excel"
                 onChange={(e)=>setFile(e.target.files[0])}
               />
             </Form.Group>
