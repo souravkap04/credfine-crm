@@ -60,9 +60,9 @@ const useStyles = makeStyles({
    
    };
   const routeChangeHAndler = (leadId)=>{
-    props.userListCallback(leadId);
-   history.push(`/leadDetails/${leadId}`);
-   //props.leadDetailsCallBack(true);
+   // props.userListCallback(leadId);
+  // history.push(`/leadDetails/${leadId}`);
+   props.mainMenuCallBack(true,leadId);
   }
 
   return (

@@ -29,7 +29,7 @@ export default function Login() {
     console.log(response.data);
     localStorage.setItem('user_info',JSON.stringify(response.data));
     if(localStorage.getItem('user_info')){
-      history.push("/userlist");
+      history.push("/mainmenu");
       let headers = {'Authorization':'Token e9f8746ae94a00aa6526122f2db67e081ca10f54'};
        axios.get(`${baseUrl}/leads/fetchAllLeads/`,{headers})
       .then((response)=>{
@@ -87,7 +87,6 @@ export default function Login() {
             type="submit" >
             LOGIN
           </Button>
-          {/* <Link to="/userCreate">Create User</Link> */}
         </Card>
       </Form>
     </div>

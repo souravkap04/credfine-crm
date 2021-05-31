@@ -1,14 +1,14 @@
 import React ,{useState , useEffect} from 'react';
 import Login from "./containers/Login/Login";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Userlist from "./containers/UserList/Userlist";
 import IdleTimer from './timer/IdelTimer';
 import {
-  BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Link,
+  Redirect
 } from "react-router-dom";
+import MainMenu from './containers/UserList/MainMenu';
 import Profile from './containers/UserList/Profile/Profile';
 
 
@@ -31,21 +31,15 @@ function App() {
     };
   }, [])
   return (
-    <Router>
-      <div>
       <Switch>
         <Route exact path="/">
           <Login/>
         </Route>
-        <Route path="/userlist">
-          <Userlist/>
-        </Route>
-        <Route path="/profile">
-         <Profile/>
-        </Route>
+        <Route path="/profile"> <Profile/></Route>
+        <Redirect exact from="/mainmenu" to="/mainmenu/leads"/>
+        <Route exact path="/mainmenu/:page?" render={props => <MainMenu {...props}/>} />
+        
       </Switch>
-    </div>
-    </Router>
     
   );
 }

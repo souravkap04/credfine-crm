@@ -19,7 +19,7 @@ export default function RemarkForm(props) {
   const [isDisplay, setIsDisplay] = useState(false);
   console.log("tttttttttt:"+props.leadId)
   const remarksHandler = async (event,id) => {
-    event.preventDefault();
+   // event.preventDefault();
     console.log(id);
     let item = { remark: input };
     let headers = {
