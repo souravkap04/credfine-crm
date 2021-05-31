@@ -13,7 +13,6 @@ import {
   InputBase,
   Tabs,
   Tab,
-  Box,
   Typography,
   Grid,
   Menu,
@@ -129,6 +128,7 @@ export default function MainMenu(props) {
       };
   const classes = useStyles();
   const [selectedTab, setSelectedTab] = useState(indexToTabName[page]);
+  const [isRenderLeads,setIsRenderLeads] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [searchInput, setSearchInput] = useState("");
   const [isSearchData, setIsSearchData] = useState(false);
@@ -140,7 +140,7 @@ export default function MainMenu(props) {
   let profileData = JSON.parse(localStorage.getItem("user_info"));
  
   const handleChange = (event, newValue) => {
-   history.push(`/mainmenu/${tabNameToIndex[newValue]}`);
+   history.push(`/dashboard/${tabNameToIndex[newValue]}`);
     setSelectedTab(newValue);
   };
   const handleMenu = (event) => {
@@ -166,20 +166,31 @@ export default function MainMenu(props) {
     return str.join(" ");
   };
 
-  // useEffect(() => {
+  useEffect(() => {
   //   document.addEventListener('contextmenu', (e) => {
   //     e.preventDefault();
   //   });
-  // }, [])
+    if(match.url === `/dashboard/${page}`){
+      window.history.pushState(null, document.title, window.location.href);
+      window.addEventListener('popstate', function (event){
+          window.history.pushState(null, document.title,  window.location.href);
+      });
+  }
+  }, [selectedTab])
 
   const searchHandler = () => {
     if (searchInput !== "" && searchValidation(searchInput)) {
       console.log("successfull" + searchInput);
+      if (selectedTab === indexToTabName['leads']) {
+        console.log("is render leads");
+        setIsRenderLeads(true);
+      }
        history.push(setSelectedTab(indexToTabName["leads"]));
-      // leadRef.current.fetchSearchInput(searchInput);
       setIsSearchData(true);
+
     } else if (searchInput.length === 0) {
       console.log("search is empty");
+      history.push(setSelectedTab(indexToTabName["leads"]));
       setIsSearchData(false);
     }
   };
@@ -273,7 +284,7 @@ export default function MainMenu(props) {
             value={selectedTab}
             onChange={handleChange}
           >
-              <Tab label="Leads"  />
+            <Tab label="Leads"  />
             <Tab label="Personal Loan" />
             <Tab label="Business Loan"  />
             <Tab label="Upload Leads"  />
@@ -284,7 +295,7 @@ export default function MainMenu(props) {
           </Tabs>
           </Grid>
           <Grid item lg={10}>
-          {selectedTab === 0 && (viewLeadDetails ?
+          {(selectedTab === 0 || isRenderLeads === true ) && (viewLeadDetails ?
           <LeadDetails
           leadId={leadId}/> :
           <Leads

@@ -64,7 +64,7 @@ function LeadDetails(props) {
         await axios
           .get(`${baseUrl}/leads/lead_detail/${leadId}`,{headers})
           .then((response) => {
-            console.log(response.data.eligibility_data);
+            console.log(response.data);
             setLeadId(response.data.lead_data.lead_crm_id);
             setLoanAmount(response.data.lead_data.loan_amount);
             setMonthlyIncome(response.data.lead_data["data"].monthly_income);

@@ -36,8 +36,8 @@ function App() {
           <Login/>
         </Route>
         <Route path="/profile"> <Profile/></Route>
-        <Redirect exact from="/mainmenu" to="/mainmenu/leads"/>
-        <Route exact path="/mainmenu/:page?" render={props => <MainMenu {...props}/>} />
+        <Redirect exact from="/dashboard" to="/dashboard/leads"/>
+        <Route exact path="/dashboard/:page?" render={props => <MainMenu {...props}/>} />
         
       </Switch>
     
