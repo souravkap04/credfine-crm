@@ -3,7 +3,9 @@ import axios from 'axios';
 import './PlForm.css';
 import { Form, Card, Button, Row, Col,Alert,ListGroup} from "react-bootstrap";
 import baseUrl from "../../global/api";
+import {getProfileData} from '../../global/leadsGlobalData'
 export default function PlForm() {
+  const profileData = getProfileData();
   const [loanAmount,setLoanAmount] = useState('');
   const [employmentType,setEmploymentType] = useState('');
   const [monthlyIncome,setMonthlyIncome] = useState('');
@@ -32,7 +34,7 @@ export default function PlForm() {
       current_company:employmentType,loan_type:"PL"};
       console.log(item);
     let headers = {
-      'Authorization': 'Token e9f8746ae94a00aa6526122f2db67e081ca10f54',
+      'Authorization': `Token ${profileData.token}` ,
       'Content-Type' : 'application/json'
     }  
       await axios.post(`${baseUrl}/leads/lead_create/`,item,{headers})

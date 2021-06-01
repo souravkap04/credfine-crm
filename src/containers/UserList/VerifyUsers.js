@@ -4,7 +4,7 @@ import { Table, TableCell, TableContainer, TableHead, TableRow ,Paper, TableBody
 import * as ReactBootstrap from 'react-bootstrap';
 import axios from 'axios';
 import baseUrl from '../../global/api';
-
+import {getProfileData} from '../../global/leadsGlobalData'
 const useStyles = makeStyles({
     container:{
         overflow: 'auto',
@@ -23,6 +23,7 @@ const useStyles = makeStyles({
  
 export default function VerifyUsers() {
     const classes = useStyles();
+    const profileData = getProfileData();
     const [verifyUsers,setVerifyUsers] = useState([]);
     const [loading,setLoading] = useState(false);
     

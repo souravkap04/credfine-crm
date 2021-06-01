@@ -13,11 +13,13 @@ import {
   getBank,
   getResidentType,
   getSalaryModeType,
+  getProfileData
 } from "../../global/leadsGlobalData";
 import style from "./LeadDetails.module.css";
 import baseUrl from "../../global/api";
 import RemarkForm from "./Remarks/RemarkForm";
 function LeadDetails(props) {
+  const profileData = getProfileData();
   const banks = getBank();
   const residentType = getResidentType();
   const salaryMode = getSalaryModeType();
@@ -59,12 +61,14 @@ function LeadDetails(props) {
   
   useEffect(() => {
     const fetchLeadDetaile = async (leadId) => {
-      let headers = {'Authorization':'Token e9f8746ae94a00aa6526122f2db67e081ca10f54'}
+      let headers = {'Authorization':`Token ${profileData.token}`}
       try {
         await axios
           .get(`${baseUrl}/leads/lead_detail/${leadId}`,{headers})
           .then((response) => {
             console.log(response.data);
+            setStatus(response.data.lead_data.status);
+            setSubStatus(response.data.lead_data.sub_status);
             setLeadId(response.data.lead_data.lead_crm_id);
             setLoanAmount(response.data.lead_data.loan_amount);
             setMonthlyIncome(response.data.lead_data["data"].monthly_income);
@@ -109,7 +113,7 @@ function LeadDetails(props) {
       no_of_years_current_city:JSON.parse(yearsInCurrentCity)} 
      let items = {lead_data,eligibility_data };
      console.log(items);
-     let headers = {'Authorization':'Token e9f8746ae94a00aa6526122f2db67e081ca10f54'}
+     let headers = {'Authorization':`Token ${profileData.token}`}
      await axios.put(`${baseUrl}/leads/lead_detail/${id}`,items,{headers})
      .then((response)=>{
        console.log(response);
@@ -134,7 +138,7 @@ const options = subStatusHandler();
 const statusUpdateHandler = async (id)=>{
   let items = {status:status,sub_status:subStatus}
   console.log("uuu:"+items)
-  let headers = {'Authorization':'Token e9f8746ae94a00aa6526122f2db67e081ca10f54'}
+  let headers = {'Authorization':`Token ${profileData.token}`}
   if(status!== '' && subStatus.length>0){
     await axios.put(`${baseUrl}/leads/lead_status/${id}`,items,{headers})
   .then((response)=>{

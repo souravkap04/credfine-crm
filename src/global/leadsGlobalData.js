@@ -14,3 +14,8 @@ export const getSalaryModeType = ()=>{
    const salaryMode = ["Bank Transfer","Cheque Transfer","Cash Salary"];
    return salaryMode;
 }
+export const getProfileData = ()=>{
+    const profileData = JSON.parse(localStorage.getItem("user_info"));
+    return profileData;
+}
+

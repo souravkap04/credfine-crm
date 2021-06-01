@@ -6,7 +6,9 @@ import style from "./Login.module.css";
 import { Form, Card, Button, Image ,Alert} from "react-bootstrap";
 import { Link } from "react-router-dom";
 import crmLogo from "../../images/loginImage.svg";
+import {getProfileData} from '../../global/leadsGlobalData'
 export default function Login() {
+  const profileData = getProfileData();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [validated, setValidated] = useState(false);
@@ -30,7 +32,7 @@ export default function Login() {
     localStorage.setItem('user_info',JSON.stringify(response.data));
     if(localStorage.getItem('user_info')){
       history.push("/dashboard");
-      let headers = {'Authorization':'Token e9f8746ae94a00aa6526122f2db67e081ca10f54'};
+      let headers = {'Authorization':`Token ${profileData.token}`};
        axios.get(`${baseUrl}/leads/fetchAllLeads/`,{headers})
       .then((response)=>{
         console.log(response.data);

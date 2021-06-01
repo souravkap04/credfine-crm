@@ -189,9 +189,12 @@ export default function MainMenu(props) {
       if (selectedTab === indexToTabName['leads']) {
         console.log("is render leads");
         setIsRenderLeads(true);
+        setIsSearchData(true);
+      }else if (selectedTab !== indexToTabName['leads']) {
+        history.push(setSelectedTab(indexToTabName["leads"]));
+       setIsSearchData(true);
       }
-       history.push(setSelectedTab(indexToTabName["leads"]));
-      setIsSearchData(true);
+       
 
     } else if (searchInput.length === 0) {
       console.log("search is empty");
@@ -278,7 +281,14 @@ export default function MainMenu(props) {
                     Profile
                   </Link>
                 </MenuItem>
-                <MenuItem>Logout</MenuItem>
+                <MenuItem>
+                <Link
+                    to="/"
+                    style={{ textDecoration: "none", color: "#080707" }}
+                  >
+                    Logout
+                  </Link>
+                  </MenuItem>
               </Menu>
             </Toolbar>
           </AppBar>
@@ -295,11 +305,13 @@ export default function MainMenu(props) {
             <Tab label="Upload Leads"  hidden={isHiddenTab} />
             <Tab label="Verify Users" hidden={isHiddenTab} />
             <Tab label="Users" hidden={isHiddenTab} />
-            <Tab label="User Create"  hidden={isHiddenTab} />
+            <Tab label="User Create"  hidden={isHiddenTab}/>
             
           </Tabs>
           </Grid>
           <Grid item lg={10}>
+            {console.log(isRenderLeads)}
+            {console.log("menusearch:"+isSearchData)}
           {(selectedTab === 0 || isRenderLeads === true ) && (viewLeadDetails ?
           <LeadDetails
           leadId={leadId}/> :
