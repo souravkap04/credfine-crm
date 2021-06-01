@@ -32,7 +32,7 @@ export default function UploadLeads() {
      await axios.post(`${baseUrl}/leads/lead_bulk_upload/PL`,fromData,{headers})
      .then((response)=>{
        console.log(response.data);
-       setAlertMessage('File Successfully uploaded')
+       setAlertMessage(`${response.data.count} Leads Successfully uploaded`)
        setIsDisplay(true);
      }).catch(error =>{
        console.log(error);

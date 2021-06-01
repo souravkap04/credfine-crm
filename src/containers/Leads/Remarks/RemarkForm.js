@@ -12,7 +12,9 @@ import {
 } from "react-bootstrap";
 import style from "./Remarks.module.css";
 import baseUrl from "../../../global/api";
+import {getProfileData} from "../../../global/leadsGlobalData"
 export default function RemarkForm(props) {
+  const profileData = getProfileData();
   const [input, setInput] = useState("");
   const [remarks, setRemarks] = useState([]);
   const [alertMessage, setAlertMessage] = useState("");
@@ -22,7 +24,7 @@ export default function RemarkForm(props) {
     console.log(id);
     let item = { remark: input };
     let headers = {
-      Authorization: "Token e9f8746ae94a00aa6526122f2db67e081ca10f54",
+      'Authorization': `Token ${profileData.token}` ,
     };
     if (input.length !== 0) {
       const post = `${baseUrl}/leads/lead_remark/${id}`;
@@ -45,7 +47,7 @@ export default function RemarkForm(props) {
       console.log("fetchremarks:"+props.leadId)
       console.log("fetchremarks:"+`${baseUrl}/leads/lead_remark/${id}`)
       let headers = {
-        Authorization: "Token e9f8746ae94a00aa6526122f2db67e081ca10f54",
+        'Authorization': `Token ${profileData.token}` ,
       };
       await axios
         .get(`${baseUrl}/leads/lead_remark/${id}`, { headers })

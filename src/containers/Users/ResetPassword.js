@@ -17,6 +17,7 @@ import {Form } from 'react-bootstrap';
 import * as ReactBootstrap from "react-bootstrap";
 import axios from 'axios';
 import baseUrl from '../../global/api';
+import {getProfileData} from '../../global/leadsGlobalData'
 const useStyles = makeStyles({
   container:{
     overflow: 'auto',
@@ -51,6 +52,7 @@ header:{
 });
 export default function Users() {
   const classes = useStyles();
+  const profileData = getProfileData();
   const [open,setOpen] = useState(false);
   const [password,setPassword] = useState('');
   const [confirmPassword,setConfirmPassword] = useState('');
@@ -91,10 +93,6 @@ export default function Users() {
     const newErrors = findErrors();
     setErrors(newErrors);
     event.preventDefault();
-    console.log("password:"+ password);
-    console.log("Cpassword:"+ confirmPassword);
-    console.log("rodata:"+rowData);
-    console.log(newErrors);
     if(Object.keys(newErrors).length === 0){
       const headers = {
         'userRoleHash': 'f63e2d14-b15a-11eb-bc7e-000000000013',

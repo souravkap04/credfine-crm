@@ -10,7 +10,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import axios from 'axios';
 import baseUrl from '../../global/api';
-
+import {getProfileData} from '../../global/leadsGlobalData'
 
 const useStyles = makeStyles({
   container:{
@@ -26,15 +26,19 @@ const useStyles = makeStyles({
 });
  const Leads = ((props) => {
   const classes = useStyles();
+  const profileData = getProfileData();
   const [leadData,setLeadData] = useState([]);
   const [searchData,setSearchData] = useState([]);
-  const history = useHistory();
   console.log("leads invoke1:"+props.isSearchData);
+  console.log("leads invoke2:"+props.searchInput);
+  console.log(profileData.user_roles[0].user_role_hash)
   useEffect(()=>{
+    console.log("calling useEffect")
       props.isSearchData ? fetchSearchData(props.searchInput) : fetchLeadsData()
   },[])
   const fetchSearchData = async (key)=>{
-    let headers = {'Authorization':'Token e9f8746ae94a00aa6526122f2db67e081ca10f54'}
+    console.log("fetch search");
+    let headers = {'Authorization':`Token ${profileData.token}` }
     await axios.get(`${baseUrl}/leads/search/${key}`,{headers})
     .then((response)=>{
        console.log(response.data);
@@ -45,15 +49,14 @@ const useStyles = makeStyles({
   }
   const fetchLeadsData = async ()=>{
     const headers = {
-      'Authorization':'Token 0cf9265a842c788ffaf98cdb9279d82b290bdb45',
-      'userRoleHash': 'd059e2f4-b30a-11eb-a945-000000000018',
+      'Authorization':`Token ${profileData.token}` ,
+      'userRoleHash': profileData.user_roles[0].user_role_hash,
   };
 
      await axios.get(`${baseUrl}/leads/lead_allocate/`,{headers})
      .then((response)=>{
       console.log(response.data);
       setLeadData([response.data]);
-      console.log("leadData:"+leadData);
      }).catch((error)=>{
        console.log(error);
      })
@@ -86,7 +89,7 @@ const useStyles = makeStyles({
           </TableRow>
         </TableHead>
         <TableBody>
-          {props.isSearchData ? 
+          {props.isSearchData? 
            searchData.map((search,index)=>(
             <TableRow>
             <TableCell align="center"
