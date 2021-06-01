@@ -35,8 +35,8 @@ var BLData = [
  
  export default function SampleData({loanType}) {
         return (
-            <ExcelFile  element={<button disabled={!loanType} >Download_Sample </button>}
-            fileExtension="xls">
+            <ExcelFile fileExtension="xls"
+             element={<button disabled={!loanType} >Download_Sample </button>}>
                 {loanType === 'personal loan' ? 
                 <ExcelSheet data={PLData} name="Personal Loan">
                   <ExcelColumn label="Name" value="name"/>

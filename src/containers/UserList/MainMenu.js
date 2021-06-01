@@ -134,6 +134,7 @@ export default function MainMenu(props) {
   const [isSearchData, setIsSearchData] = useState(false);
   const [viewLeadDetails, setViewLeadDetails] = useState(false);
   const [leadId, setLeadId] = useState(null);
+  const [isHiddenTab,setIsHiddenTab] = useState(false)
   // const[drawerOpen,setDrawerOpen] = useState(false);
   const open = Boolean(anchorEl);
  // const history = useHistory();
@@ -170,6 +171,10 @@ export default function MainMenu(props) {
   //   document.addEventListener('contextmenu', (e) => {
   //     e.preventDefault();
   //   });
+  
+  if(profileData.user_roles[0].user_type === 3){
+   setIsHiddenTab(true);
+  }
     if(match.url === `/dashboard/${page}`){
       window.history.pushState(null, document.title, window.location.href);
       window.addEventListener('popstate', function (event){
@@ -285,12 +290,12 @@ export default function MainMenu(props) {
             onChange={handleChange}
           >
             <Tab label="Leads"  />
-            <Tab label="Personal Loan" />
-            <Tab label="Business Loan"  />
-            <Tab label="Upload Leads"  />
-            <Tab label="Verify Users" />
-            <Tab label="Users" />
-            <Tab label="User Create"  />
+            <Tab label="Personal Loan" hidden={isHiddenTab}/>
+            <Tab label="Business Loan" hidden={isHiddenTab} />
+            <Tab label="Upload Leads"  hidden={isHiddenTab} />
+            <Tab label="Verify Users" hidden={isHiddenTab} />
+            <Tab label="Users" hidden={isHiddenTab} />
+            <Tab label="User Create"  hidden={isHiddenTab} />
             
           </Tabs>
           </Grid>
