@@ -5,7 +5,6 @@ import IdleTimer from './timer/IdelTimer';
 import {
   Switch,
   Route,
-  Link,
   Redirect
 } from "react-router-dom";
 import MainMenu from './containers/UserList/MainMenu';
