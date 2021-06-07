@@ -26,14 +26,11 @@ const useStyles = makeStyles({
 });
  const Leads = ((props) => {
   const classes = useStyles();
+  let history = useHistory();
   const profileData = getProfileData();
   const [leadData,setLeadData] = useState([]);
   const [searchData,setSearchData] = useState([]);
-  console.log("leads invoke1:"+props.isSearchData);
-  console.log("leads invoke2:"+props.searchInput);
-  console.log(profileData.user_roles[0].user_role_hash)
   useEffect(()=>{
-    console.log("calling useEffect")
       props.isSearchData ? fetchSearchData(props.searchInput) : fetchLeadsData()
   },[])
   const fetchSearchData = async (key)=>{
@@ -57,16 +54,19 @@ const useStyles = makeStyles({
      .then((response)=>{
       console.log(response.data);
       setLeadData([response.data]);
+    // localStorage.setItem('lead_allocate',JSON.stringify(response.data))
      }).catch((error)=>{
        console.log(error);
      })
    
    
    };
+  
   const routeChangeHAndler = (leadId)=>{
    // props.userListCallback(leadId);
-  // history.push(`/leadDetails/${leadId}`);
+   //history.push(`/leadDetails/${leadId}`);
    props.mainMenuCallBack(true,leadId);
+  
   }
 
   return (
@@ -92,7 +92,7 @@ const useStyles = makeStyles({
           {props.isSearchData? 
            searchData.map((search,index)=>(
             <TableRow>
-            <TableCell align="center"
+            <TableCell align="center" 
             style={{cursor:'pointer',color:'blue'}}
             onClick={()=>routeChangeHAndler(search.lead_crm_id)}
             >{search.lead_crm_id} 
@@ -115,7 +115,8 @@ const useStyles = makeStyles({
            </TableCell> */}
           </TableRow>
            ))
-            : leadData.map((lead)=>(
+            : 
+            leadData.map((lead)=>(
               <TableRow>
               <TableCell align="center" 
               style={{cursor:'pointer',color:'blue'}}

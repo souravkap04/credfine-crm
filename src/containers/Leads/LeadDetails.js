@@ -48,11 +48,11 @@ function LeadDetails(props) {
   const [isEditable,setIsEditable] = useState(false);
   const [status,setStatus] = useState('');
   const [subStatus,setSubStatus] = useState([]);
-  const [leadStatus,setLeadStatus] = useState("");
-  const [leadSubStatus,setLeadSubStatus] = useState("");
+  // const [leadStatus,setLeadStatus] = useState("");
+  // const [leadSubStatus,setLeadSubStatus] = useState("");
   const [loanType,setLoanType] = useState("");
   const [source,setSource] = useState("");
-  const [alertMessage, setAlertMessage] = useState({leadDetails:'',status:'',error:''});
+  const [alertMessage, setAlertMessage] = useState('');
   const [isStatus, setIsStatus] = useState(false);
   const [isLeadDetails, setIsLeadDetails] = useState(false);
   const [showCompany, setShowCompany] = useState(false);
@@ -78,7 +78,7 @@ function LeadDetails(props) {
             setPincode(response.data.lead_data["data"].residential_pincode);
             setname(response.data.lead_data.name);
             setCompanyName(response.data.lead_data["data"].current_company_name);
-            setLeadStatus(response.data.lead_data.status);
+            // setLeadStatus(response.data.lead_data.status);
             setLoanType(response.data.lead_data.loan_type);
             setSource(response.data.lead_data.source);
             setPancardNo(response.data.eligibility_data.pan_no);
@@ -106,25 +106,37 @@ function LeadDetails(props) {
     let data = {dob:date,monthly_income:monthlyIncome,current_company_name:companyName,
       residential_pincode:pincode,current_company:currentCompany};
     let lead_data = {lead_crm_id:leadId,loan_amount:loanAmount,
-      phone_no:mobileNo,name:name,data,status:leadStatus,loan_type:loanType,source:source,};
-    let eligibility_data = {pan_no:pancardNo,total_work_exp:JSON.parse(totalWorkExp),current_work_exp:JSON.parse(currentWorkExp),email_id:email,
-      designation:designation,current_emi:JSON.parse(currentEMI),credit_card_outstanding:JSON.parse(creditCardOutstanding),
-      salary_mode:JSON.parse(salaryCreditMode),salary_bank:JSON.parse(salaryBankAcc),residence_type:JSON.parse(currentResidentType),
-      no_of_years_current_city:JSON.parse(yearsInCurrentCity)} 
+      phone_no:mobileNo,name:name,data,
+       status:status,
+      loan_type:loanType,source:source,};
+    let eligibility_data = {pan_no:pancardNo,total_work_exp:totalWorkExp,current_work_exp:currentWorkExp,email_id:email,
+      designation:designation,current_emi:currentEMI,credit_card_outstanding:creditCardOutstanding,
+      salary_mode:salaryCreditMode,salary_bank:salaryBankAcc,residence_type:currentResidentType,
+      no_of_years_current_city:yearsInCurrentCity} 
      let items = {lead_data,eligibility_data };
      console.log(items);
      let headers = {'Authorization':`Token ${profileData.token}`}
      await axios.put(`${baseUrl}/leads/lead_detail/${id}`,items,{headers})
      .then((response)=>{
        console.log(response);
-       setAlertMessage({leadDetails:'Lead Data Successfully Updated'})
+       setAlertMessage('Lead Data Successfully Updated')
        setIsLeadDetails(true);
      }).catch((error)=>{
        console.log(error);
-       setAlertMessage({error:'Something Wrong'})
+       setAlertMessage('Something Wrong')
        setIsLeadDetails(true);
      })
   }
+  const removeDuplicateStatus = (data)=>{
+    let unique = [];
+    data.forEach((element)=>{
+      if(!unique.includes(element.status)){
+        unique.push(element.status)
+      }
+    })
+    return unique;
+  }
+  const uniqueStatus = removeDuplicateStatus(statusData);
   const subStatusHandler = ()=>{
     let subStatusoptions = [];
     statusData.forEach((item,index)=>{
@@ -135,6 +147,7 @@ function LeadDetails(props) {
     return subStatusoptions;
   }
 const options = subStatusHandler();
+
 const statusUpdateHandler = async (id)=>{
   let items = {status:status,sub_status:subStatus}
   console.log("uuu:"+items)
@@ -143,10 +156,13 @@ const statusUpdateHandler = async (id)=>{
     await axios.put(`${baseUrl}/leads/lead_status/${id}`,items,{headers})
   .then((response)=>{
     console.log(response)
-    setAlertMessage({status:response.data['data']})
+    setAlertMessage(response.data['data'])
     setIsStatus(true);
+    props.mainMenuCallBack(false);
+  // localStorage.removeItem('lead_allocate');
+  // props.setIsFreshLead(false);
   }).catch((error)=>{
-    setAlertMessage({error:'Something Wrong'});
+    setAlertMessage('Something Wrong');
     setIsStatus(true);
   })
   }
@@ -179,8 +195,8 @@ const selectCompany = (company)=>{
         <div>
           <Form>
             <Card className={style.Card}>
-            {isStatus ? <Alert variant="primary">{alertMessage.status}</Alert> : null}
-            {isLeadDetails? <Alert variant="primary">{alertMessage.leadDetails}</Alert> : null}
+            {isStatus ? <Alert variant="primary">{alertMessage}</Alert> : null}
+            {isLeadDetails? <Alert variant="primary">{alertMessage}</Alert> : null}
               <Form.Row>
                 <Col lg={5}>
                   <Form.Group>
@@ -189,8 +205,8 @@ const selectCompany = (company)=>{
                     value={status}
                     onChange={(e)=>setStatus(e.target.value)}>
                       <option value="">Select One</option>
-                      {statusData.map((item,index)=>(
-                        <option key={index} value={item.status}>{item.status}</option>
+                      {uniqueStatus.map((item,index)=>(
+                        <option key={index} value={item}>{item}</option>
                       ))}
                        </Form.Control>
                   </Form.Group>
@@ -339,7 +355,7 @@ const selectCompany = (company)=>{
                     )) : null}
                   </ListGroup>
                   </Form.Group>
-                  <Form.Group>
+                  {/* <Form.Group>
                     <Form.Label>Status</Form.Label>
                     {isEditable ? <Form.Control as="select"
                     disabled={false}
@@ -351,7 +367,7 @@ const selectCompany = (company)=>{
                     value={leadStatus}
                     disabled={true}/>
                       }
-                  </Form.Group>
+                  </Form.Group> */}
                   <Form.Group>
                     <Form.Label>Loan Type</Form.Label>
                     {isEditable ? <Form.Control as="select"

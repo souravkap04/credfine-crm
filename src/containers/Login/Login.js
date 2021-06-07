@@ -25,17 +25,14 @@ export default function Login() {
    setValidated(true);
     event.preventDefault();
     let item ={username:email,password};
-    console.log(item);
   await axios.post(`${baseUrl}/user/login/`,item)
   .then((response)=>{
-    console.log(response.data);
     localStorage.setItem('user_info',JSON.stringify(response.data));
     if(localStorage.getItem('user_info')){
       history.push("/dashboard");
       let headers = {'Authorization':`Token ${profileData.token}`};
        axios.get(`${baseUrl}/leads/fetchAllLeads/`,{headers})
       .then((response)=>{
-        console.log(response.data);
         localStorage.setItem('status_info',JSON.stringify(response.data))
       }).catch((error)=>{
         console.log(error);

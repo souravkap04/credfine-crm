@@ -18,4 +18,8 @@ export const getProfileData = ()=>{
     const profileData = JSON.parse(localStorage.getItem("user_info"));
     return profileData;
 }
+// export const getLeadAllocate = ()=>{
+//     const leadAllocate = JSON.parse(localStorage.getItem('lead_allocate'));
+//     return leadAllocate;
+// }
 
