@@ -4,7 +4,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import SearchIcon from "@material-ui/icons/Search";
 import crmLogo from "../../images/loginImage.svg";
-import {Link} from "react-router-dom";
+import {Redirect,Link} from "react-router-dom";
 import {
   AppBar,
   Toolbar,
@@ -134,12 +134,12 @@ export default function MainMenu(props) {
   const [isSearchData, setIsSearchData] = useState(false);
   const [viewLeadDetails, setViewLeadDetails] = useState(false);
   const [leadId, setLeadId] = useState(null);
-  const [isHiddenTab,setIsHiddenTab] = useState(false)
+  const [isHiddenTab,setIsHiddenTab] = useState(false);
+  // const [isFreshLead,setIsFreshLead] = useState(false);
   // const[drawerOpen,setDrawerOpen] = useState(false);
   const open = Boolean(anchorEl);
  // const history = useHistory();
   let profileData = JSON.parse(localStorage.getItem("user_info"));
- 
   const handleChange = (event, newValue) => {
    history.push(`/dashboard/${tabNameToIndex[newValue]}`);
     setSelectedTab(newValue);
@@ -175,6 +175,7 @@ export default function MainMenu(props) {
   if(profileData.user_roles[0].user_type === 3){
    setIsHiddenTab(true);
   }
+  // stop back button functionality
     if(match.url === `/dashboard/${page}`){
       window.history.pushState(null, document.title, window.location.href);
       window.addEventListener('popstate', function (event){
@@ -281,7 +282,7 @@ export default function MainMenu(props) {
                     Profile
                   </Link>
                 </MenuItem>
-                <MenuItem>
+                <MenuItem >
                 <Link
                     to="/"
                     style={{ textDecoration: "none", color: "#080707" }}
@@ -310,15 +311,18 @@ export default function MainMenu(props) {
           </Tabs>
           </Grid>
           <Grid item lg={10}>
-            {console.log(isRenderLeads)}
-            {console.log("menusearch:"+isSearchData)}
           {(selectedTab === 0 || isRenderLeads === true ) && (viewLeadDetails ?
           <LeadDetails
-          leadId={leadId}/> :
+          leadId={leadId}
+          // setIsFreshLead={setIsFreshLead}
+          mainMenuCallBack={leadDetailsHandler}/>
+           :
           <Leads
           searchInput={searchInput}
             isSearchData={isSearchData}
             mainMenuCallBack={leadDetailsHandler}
+            // isFreshLead={isFreshLead}
+            
              /> ) }
           {selectedTab === 1 && <PlForm/>}
           {selectedTab === 2 && <BlForm/>}
@@ -326,7 +330,6 @@ export default function MainMenu(props) {
           {selectedTab === 4 && <VerifyUsers/>}
           {selectedTab === 5 && <ResetPassword/>}
           {selectedTab === 6 && <UserCreate/>}
-          
         </Grid>
       </Grid>
     </div>
