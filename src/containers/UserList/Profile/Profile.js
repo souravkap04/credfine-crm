@@ -1,8 +1,9 @@
 import React from 'react'
  import { Card,Table,Row,Col} from 'react-bootstrap'
 import style from './Profile.module.css'
+import {getProfileData} from '../../../global/leadsGlobalData'
 export default function Profile() {
-    const profileData = JSON.parse(localStorage.getItem('user_info'));
+    const profileData = getProfileData();
     const capitalLetter = (str)=>{
         str = str.split(" ");
     
@@ -53,12 +54,12 @@ export default function Profile() {
                                         <td>{profileData.user_roles[0].allowed_products}</td>
                                     </tr>
                                     <tr>
-                                        <th>UserType</th>
-                                        <td>{profileData.user_roles[0].user_access_type}</td>
+                                        <th>User Type</th>
+                                        <td>{profileData.user_roles[0].user_type}</td>
                                     </tr>
                                     <tr>
-                                        <th>Allowed Product</th>
-                                        <td>{profileData.user_roles[0].user_type}</td>
+                                        <th>User Access Type</th>
+                                        <td>{profileData.user_roles[0].user_access_type}</td>
                                     </tr>
                                 </tbody>
                             </table>
