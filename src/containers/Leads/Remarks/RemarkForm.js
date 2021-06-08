@@ -27,8 +27,6 @@ export default function RemarkForm(props) {
       'Authorization': `Token ${profileData.token}` ,
     };
     if (input.length !== 0) {
-      const post = `${baseUrl}/leads/lead_remark/${id}`;
-      console.log("remark post:"+post)
       await axios
         .post(`${baseUrl}/leads/lead_remark/${id}`, item, { headers })
         .then((response) => {
@@ -44,8 +42,6 @@ export default function RemarkForm(props) {
   };
   useEffect(() => {
     const fetchRemarks = async (id) => {
-      console.log("fetchremarks:"+props.leadId)
-      console.log("fetchremarks:"+`${baseUrl}/leads/lead_remark/${id}`)
       let headers = {
         'Authorization': `Token ${profileData.token}` ,
       };
@@ -61,7 +57,7 @@ export default function RemarkForm(props) {
     };
 
     fetchRemarks(props.leadId);
-  }, []);
+  }, [remarks]);
   return (
     <Form onSubmit={(event)=>remarksHandler(event,props.leadId)}>
       <Card className={style.RemarksCard}>

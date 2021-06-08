@@ -95,7 +95,7 @@ export default function Users() {
     event.preventDefault();
     if(Object.keys(newErrors).length === 0){
       const headers = {
-        'userRoleHash': 'f63e2d14-b15a-11eb-bc7e-000000000013',
+        'userRoleHash': profileData.user_roles[0].user_role_hash,
     };
    let item = {username:rowData, password:password};
        try{
@@ -116,7 +116,7 @@ export default function Users() {
   useEffect(()=>{
     const fetchUserData = async ()=>{
       const headers = {
-        'userRoleHash': 'f63e2d14-b15a-11eb-bc7e-000000000013',
+        'userRoleHash': profileData.user_roles[0].user_role_hash,
     };
      try{
      const response = await axios.get(`${baseUrl}/user/fetchUsers/`,{headers});
