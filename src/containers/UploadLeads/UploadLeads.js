@@ -3,9 +3,11 @@ import axios from 'axios';
 import baseUrl from '../../global/api';
 import style from './UploadLeads.module.css';
 import { Form, Card, Button, Row, Col ,Alert} from "react-bootstrap";
+import {getProfileData} from '../../global/leadsGlobalData'
 // import * as ReactBootstrap from "react-bootstrap";
 import SampleData from './SampleData';
 export default function UploadLeads() {
+  const profileData = getProfileData();
   const [loanType,setLoanType] = useState('');
   const [errors,setErrors] = useState({});
   const [validated, setValidated] = useState(false);
@@ -23,9 +25,9 @@ export default function UploadLeads() {
     
     const fromData= new FormData();
     fromData.append('file',file);
-    console.log("file:"+file)
+    console.log("file:"+ `Token ${profileData.token}`)
     let headers = {
-      'Authorization': 'Token 0cf9265a842c788ffaf98cdb9279d82b290bdb45',
+      'Authorization': `Token ${profileData.token}`,
       'Content-Type': 'multipart/form-data'
     }
     
