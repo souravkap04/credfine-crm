@@ -17,6 +17,7 @@ export default function RemarkForm(props) {
   const profileData = getProfileData();
   const [input, setInput] = useState("");
   const [remarks, setRemarks] = useState([]);
+  const [loadingRemarks,setLoadingRemarks] = useState(0);
   const [alertMessage, setAlertMessage] = useState("");
   const [isDisplay, setIsDisplay] = useState(false);
   const remarksHandler = async (event,id) => {
@@ -31,8 +32,10 @@ export default function RemarkForm(props) {
         .post(`${baseUrl}/leads/lead_remark/${id}`, item, { headers })
         .then((response) => {
           console.log(response.data);
-          setAlertMessage(response.data.msg);
-          setIsDisplay(true);
+          // setAlertMessage(response.data.msg);
+          // setIsDisplay(true);
+          setLoadingRemarks(loadingRemarks+1);
+          setInput("");
         })
         .catch((error) => {
           setAlertMessage("Something Wrong ");
@@ -42,6 +45,7 @@ export default function RemarkForm(props) {
   };
   useEffect(() => {
     const fetchRemarks = async (id) => {
+      setIsDisplay(false);
       let headers = {
         'Authorization': `Token ${profileData.token}` ,
       };
@@ -57,7 +61,7 @@ export default function RemarkForm(props) {
     };
 
     fetchRemarks(props.leadId);
-  }, [remarks]);
+  }, [loadingRemarks]);
   return (
     <Form onSubmit={(event)=>remarksHandler(event,props.leadId)}>
       <Card className={style.RemarksCard}>

@@ -13,7 +13,8 @@ import {
   getBank,
   getResidentType,
   getSalaryModeType,
-  getProfileData
+  getProfileData,
+  getStatusData
 } from "../../global/leadsGlobalData";
 import style from "./LeadDetails.module.css";
 import baseUrl from "../../global/api";
@@ -56,7 +57,7 @@ function LeadDetails(props) {
   const [isStatus, setIsStatus] = useState(false);
   const [isLeadDetails, setIsLeadDetails] = useState(false);
   const [showCompany, setShowCompany] = useState(false);
-  let statusData = JSON.parse(localStorage.getItem('status_info'));
+  let statusData = getStatusData();
   
   
   useEffect(() => {
