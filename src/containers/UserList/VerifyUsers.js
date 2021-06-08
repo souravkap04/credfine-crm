@@ -30,7 +30,7 @@ export default function VerifyUsers() {
     useEffect(()=>{
         const fetchData = async ()=>{
         const headers = {
-            'userRoleHash': '8b5741a4-ada9-11eb-a717-000000000008',
+            'userRoleHash': profileData.user_roles[0].user_role_hash,
         };
         try{
         const response = await axios.get(`${baseUrl}/user/userVerifiedByAdmin/`,{headers});
