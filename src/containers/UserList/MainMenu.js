@@ -128,7 +128,6 @@ export default function MainMenu(props) {
       };
   const classes = useStyles();
   const [selectedTab, setSelectedTab] = useState(indexToTabName[page]);
-  const [isRenderLeads,setIsRenderLeads] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [searchInput, setSearchInput] = useState("");
   const [isSearchData, setIsSearchData] = useState(false);
@@ -188,8 +187,6 @@ export default function MainMenu(props) {
     if (searchInput !== "" && searchValidation(searchInput)) {
       console.log("successfull" + searchInput);
       if (selectedTab === indexToTabName['leads']) {
-        console.log("is render leads");
-        setIsRenderLeads(true);
         setIsSearchData(true);
       }else if (selectedTab !== indexToTabName['leads']) {
         history.push(setSelectedTab(indexToTabName["leads"]));
@@ -311,7 +308,7 @@ export default function MainMenu(props) {
           </Tabs>
           </Grid>
           <Grid item lg={10}>
-          {(selectedTab === 0 || isRenderLeads === true ) && (viewLeadDetails ?
+          {(selectedTab === 0  ) && (viewLeadDetails ?
           <LeadDetails
           leadId={leadId}
           // setIsFreshLead={setIsFreshLead}

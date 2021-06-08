@@ -32,7 +32,7 @@ const useStyles = makeStyles({
   const [searchData,setSearchData] = useState([]);
   useEffect(()=>{
       props.isSearchData ? fetchSearchData(props.searchInput) : fetchLeadsData()
-  },[])
+  },[props.isSearchData])
   const fetchSearchData = async (key)=>{
     console.log("fetch search");
     let headers = {'Authorization':`Token ${profileData.token}` }
