@@ -139,6 +139,7 @@ export default function MainMenu(props) {
   const open = Boolean(anchorEl);
  // const history = useHistory();
   let profileData = JSON.parse(localStorage.getItem("user_info"));
+  let userName = profileData.username.toLowerCase();
   const handleChange = (event, newValue) => {
    history.push(`/dashboard/${tabNameToIndex[newValue]}`);
     setSelectedTab(newValue);
@@ -213,6 +214,12 @@ export default function MainMenu(props) {
     setViewLeadDetails(childData);
     setLeadId(leadId)
  }
+ const logoutHandler = ()=>{
+   console.log("logout");
+   localStorage.removeItem('user_info');
+   localStorage.removeItem('status_info');
+   localStorage.removeItem('_expiredTime');
+ }
   return (
     <div className={classes.root}>
       <Grid container>
@@ -254,7 +261,7 @@ export default function MainMenu(props) {
               </Button>
               <Chip
                 icon={<AccountCircle />}
-                label={capitalLetter(profileData.username)}
+                label={capitalLetter(userName)}
                 onClick={handleMenu}
               />
               <Menu
@@ -279,7 +286,7 @@ export default function MainMenu(props) {
                     Profile
                   </Link>
                 </MenuItem>
-                <MenuItem >
+                <MenuItem onClick={logoutHandler}>
                 <Link
                     to="/"
                     style={{ textDecoration: "none", color: "#080707" }}
