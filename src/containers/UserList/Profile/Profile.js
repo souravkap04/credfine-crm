@@ -4,6 +4,7 @@ import style from './Profile.module.css'
 import {getProfileData} from '../../../global/leadsGlobalData'
 export default function Profile() {
     const profileData = getProfileData();
+    let userName = profileData.username.toLowerCase();
     const capitalLetter = (str)=>{
         str = str.split(" ");
     
@@ -35,7 +36,7 @@ export default function Profile() {
                                 <tbody>
                                     <tr>
                                         <th>Name</th>
-                                        <td>{capitalLetter(profileData.username)}</td>
+                                        <td>{capitalLetter(userName)}</td>
                                     </tr>
                                     <tr>
                                         <th>Email</th>

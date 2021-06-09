@@ -139,6 +139,7 @@ export default function MainMenu(props) {
   const open = Boolean(anchorEl);
  // const history = useHistory();
   let profileData = JSON.parse(localStorage.getItem("user_info"));
+  let userName = profileData.username.toLowerCase();
   const handleChange = (event, newValue) => {
    history.push(`/dashboard/${tabNameToIndex[newValue]}`);
     setSelectedTab(newValue);
@@ -260,7 +261,7 @@ export default function MainMenu(props) {
               </Button>
               <Chip
                 icon={<AccountCircle />}
-                label={capitalLetter(profileData.username)}
+                label={capitalLetter(userName)}
                 onClick={handleMenu}
               />
               <Menu
