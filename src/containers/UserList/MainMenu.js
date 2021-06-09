@@ -213,6 +213,12 @@ export default function MainMenu(props) {
     setViewLeadDetails(childData);
     setLeadId(leadId)
  }
+ const logoutHandler = ()=>{
+   console.log("logout");
+   localStorage.removeItem('user_info');
+   localStorage.removeItem('status_info');
+   localStorage.removeItem('_expiredTime');
+ }
   return (
     <div className={classes.root}>
       <Grid container>
@@ -279,7 +285,7 @@ export default function MainMenu(props) {
                     Profile
                   </Link>
                 </MenuItem>
-                <MenuItem >
+                <MenuItem onClick={logoutHandler}>
                 <Link
                     to="/"
                     style={{ textDecoration: "none", color: "#080707" }}

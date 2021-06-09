@@ -52,45 +52,45 @@ export default function UserCreate() {
           <hr className={style.UserCreateBar}/>
           </Form.Label>
         <Form.Group size="lg" controlId="userName">
-         <Form.Label  style={{color:"#313F80",fontFamily: "Lato"}}>User Name</Form.Label>
+         <Form.Label  className={style.InputBox}>User Name</Form.Label>
          <Form.Control 
          required
          autoFocus
          type="text"
          value={userName}
-         onChange={(e)=>setUserName(e.target.value)}/>
+         onChange={(e)=>setUserName((e.target.value).toLowerCase())}/>
          <Form.Control.Feedback type="invalid"> This field is required</Form.Control.Feedback>
         </Form.Group>
         <Form.Group size="lg" controlId="firstName">
-      <Form.Label  style={{color:"#313F80",fontFamily: "Lato"}}>First Name</Form.Label>
+      <Form.Label className={style.InputBox}>First Name</Form.Label>
       <Form.Control 
       required
       type="text"
       value={firstName}
-      onChange={(e)=> setFirstName(e.target.value)}/>
+      onChange={(e)=> setFirstName((e.target.value).toLowerCase())}/>
       <Form.Control.Feedback type="invalid"> This field is required</Form.Control.Feedback>
       </Form.Group>
       <Form.Group size="lg" controlId="lastName">
-      <Form.Label  style={{color:"#313F80",fontFamily: "Lato"}}>Last Name</Form.Label>
+      <Form.Label  className={style.InputBox}>Last Name</Form.Label>
       <Form.Control 
       required
       type="text"
       value={lastName}
-      onChange={(e)=> setLastName(e.target.value)}/>
+      onChange={(e)=> setLastName((e.target.value).toLowerCase())}/>
       <Form.Control.Feedback type="invalid"> This field is required</Form.Control.Feedback>
       </Form.Group>
         <Form.Group size="lg" controlId="email">
-          <Form.Label  style={{color:"#313F80",fontFamily: "Lato"}}>Email Id</Form.Label>
+          <Form.Label  className={style.InputBox}>Email Id</Form.Label>
           <Form.Control
           required
             type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => setEmail((e.target.value.toLowerCase()))}
           />
           <Form.Control.Feedback type="invalid"> This field is required</Form.Control.Feedback>
         </Form.Group>
         <Form.Group  controlId="role">
-      <Form.Label  style={{color:"#313F80",fontFamily: "Lato"}}>Role</Form.Label>
+      <Form.Label  className={style.InputBox}>Role</Form.Label>
       <Form.Control required as="select" 
       value={role} onChange={(e)=>setRole(e.target.value)}>
       <option value=''>Select One</option>
@@ -101,7 +101,7 @@ export default function UserCreate() {
       <Form.Control.Feedback type="invalid"> Select at least one</Form.Control.Feedback>
     </Form.Group>
     <Form.Group  controlId="productType">
-      <Form.Label  style={{color:"#313F80",fontFamily: "Lato"}}>Product Type</Form.Label>
+      <Form.Label  className={style.InputBox}>Product Type</Form.Label>
       <Form.Control required as="select" 
       value={productType} onChange={(e)=>setProductType(e.target.value)}>
       <option value=''>Select One</option>
@@ -111,7 +111,7 @@ export default function UserCreate() {
       <Form.Control.Feedback type="invalid"> Select at least one</Form.Control.Feedback>
     </Form.Group>
     <Form.Group size="lg" controlId="phoneNo">
-          <Form.Label  style={{color:"#313F80",fontFamily: "Lato"}}>Phone No</Form.Label>
+          <Form.Label  className={style.InputBox}>Phone No</Form.Label>
           <Form.Control
           required
             type="number"
@@ -121,7 +121,7 @@ export default function UserCreate() {
           <Form.Control.Feedback type="invalid"> This field is required</Form.Control.Feedback>
         </Form.Group>
         <Form.Group  controlId="gender">
-      <Form.Label  style={{color:"#313F80",fontFamily: "Lato"}}>Gender</Form.Label>
+      <Form.Label  className={style.InputBox}>Gender</Form.Label>
       <Form.Control required as="select" 
       value={gender} onChange={(e)=>setGender(e.target.value)}>
       <option value=''>Select One</option>

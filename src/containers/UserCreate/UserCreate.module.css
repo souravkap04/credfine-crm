@@ -25,6 +25,10 @@
         color: #183365;
         font-family: Lato;
     }
+    .InputBox{
+        color:#313F80;
+        font-family: Lato;
+    }
     .UserCreateBar{
         border: 1px solid #FDA770 !important ;
         margin-top: 0!important;
