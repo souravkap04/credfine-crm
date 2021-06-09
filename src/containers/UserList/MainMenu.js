@@ -140,6 +140,8 @@ export default function MainMenu(props) {
  // const history = useHistory();
   let profileData = JSON.parse(localStorage.getItem("user_info"));
   let userName = profileData.username.toLowerCase();
+   userName = userName.replace(/^\s+|\s+$/g, "");
+   userName = userName.replace(/\s+/g, " ");
   const handleChange = (event, newValue) => {
    history.push(`/dashboard/${tabNameToIndex[newValue]}`);
     setSelectedTab(newValue);
