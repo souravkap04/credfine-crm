@@ -5,6 +5,8 @@ import {getProfileData} from '../../../global/leadsGlobalData'
 export default function Profile() {
     const profileData = getProfileData();
     let userName = profileData.username.toLowerCase();
+    userName = userName.replace(/^\s+|\s+$/g, "");
+   userName = userName.replace(/\s+/g, " ");
     const capitalLetter = (str)=>{
         str = str.split(" ");
     

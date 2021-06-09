@@ -58,7 +58,7 @@ export default function UserCreate() {
          autoFocus
          type="text"
          value={userName}
-         onChange={(e)=>setUserName((e.target.value).toLowerCase())}/>
+         onChange={(e)=>setUserName((e.target.value).toLowerCase().trim())}/>
          <Form.Control.Feedback type="invalid"> This field is required</Form.Control.Feedback>
         </Form.Group>
         <Form.Group size="lg" controlId="firstName">
@@ -67,7 +67,7 @@ export default function UserCreate() {
       required
       type="text"
       value={firstName}
-      onChange={(e)=> setFirstName((e.target.value).toLowerCase())}/>
+      onChange={(e)=> setFirstName((e.target.value).toLowerCase().trim())}/>
       <Form.Control.Feedback type="invalid"> This field is required</Form.Control.Feedback>
       </Form.Group>
       <Form.Group size="lg" controlId="lastName">
@@ -76,7 +76,7 @@ export default function UserCreate() {
       required
       type="text"
       value={lastName}
-      onChange={(e)=> setLastName((e.target.value).toLowerCase())}/>
+      onChange={(e)=> setLastName((e.target.value).toLowerCase().trim())}/>
       <Form.Control.Feedback type="invalid"> This field is required</Form.Control.Feedback>
       </Form.Group>
         <Form.Group size="lg" controlId="email">
@@ -85,7 +85,7 @@ export default function UserCreate() {
           required
             type="email"
             value={email}
-            onChange={(e) => setEmail((e.target.value.toLowerCase()))}
+            onChange={(e) => setEmail((e.target.value).toLowerCase())}
           />
           <Form.Control.Feedback type="invalid"> This field is required</Form.Control.Feedback>
         </Form.Group>
