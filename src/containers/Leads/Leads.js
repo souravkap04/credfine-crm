@@ -21,7 +21,7 @@ const useStyles = makeStyles({
   },
   tableheading:{
     padding:'0 25px'
-  }
+  },
   
 });
  const Leads = ((props) => {
@@ -30,15 +30,14 @@ const useStyles = makeStyles({
   const profileData = getProfileData();
   const [leadData,setLeadData] = useState([]);
   const [searchData,setSearchData] = useState([]);
+  
   useEffect(()=>{
       props.isSearchData ? fetchSearchData(props.searchInput) : fetchLeadsData()
   },[props.isSearchData])
   const fetchSearchData = async (key)=>{
-    console.log("fetch search");
     let headers = {'Authorization':`Token ${profileData.token}` }
     await axios.get(`${baseUrl}/leads/search/${key}`,{headers})
     .then((response)=>{
-       console.log(response.data);
        setSearchData(response.data);
     }).catch((error)=>{
       console.log(error);
@@ -52,7 +51,6 @@ const useStyles = makeStyles({
 
      await axios.get(`${baseUrl}/leads/lead_allocate/`,{headers})
      .then((response)=>{
-      console.log(response.data);
       setLeadData([response.data]);
     // localStorage.setItem('lead_allocate',JSON.stringify(response.data))
      }).catch((error)=>{
@@ -89,7 +87,8 @@ const useStyles = makeStyles({
           </TableRow>
         </TableHead>
         <TableBody>
-          {props.isSearchData? 
+          { 
+          props.isSearchData? 
            searchData.map((search,index)=>(
             <TableRow>
             <TableCell align="center" 
@@ -108,11 +107,6 @@ const useStyles = makeStyles({
            <TableCell align="center">{search.loan_type}</TableCell>
            <TableCell align="center">{search.status}</TableCell>
            <TableCell align="center">{search.sub_status}</TableCell>
-           {/* <TableCell >
-             <Button variant="outlined" color="secondary"
-             onClick={()=>routeChangeHAndler(search.lead_crm_id)}
-             >View</Button>
-           </TableCell> */}
           </TableRow>
            ))
             : 
@@ -133,13 +127,8 @@ const useStyles = makeStyles({
             <TableCell align="center">{lead.loan_type}</TableCell>
             <TableCell align="center">{lead.status}</TableCell>
             <TableCell align="center">{lead.sub_status}</TableCell>
-            {/* <TableCell >
-              <Button variant="outlined" color="secondary"
-              onClick={()=>routeChangeHAndler(lead.lead_crm_id)}
-              >View</Button>
-            </TableCell> */}
               </TableRow>
-            ))
+            )) 
             }
         </TableBody>
       </Table>
