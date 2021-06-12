@@ -75,6 +75,7 @@ const useStyles = makeStyles((theme) => ({
     },
     width: "auto",
     color: "#000000",
+    marginRight:'16px',
   },
   searchIcon: {
     padding: theme.spacing(0, 2),
@@ -186,22 +187,23 @@ export default function MainMenu(props) {
   }
   }, [selectedTab])
 
-  const searchHandler = () => {
-    if (searchInput !== "" && searchValidation(searchInput)) {
-      console.log("successfull" + searchInput);
-      if (selectedTab === indexToTabName['leads']) {
-        setIsSearchData(true);
-      }else if (selectedTab !== indexToTabName['leads']) {
+  const searchHandler = (e) => {
+    if(e.key === 'Enter'){
+      if (searchInput !== "" && searchValidation(searchInput)) {
+        console.log("successfull" + searchInput);
+        if (selectedTab === indexToTabName['leads']) {
+          setIsSearchData(true);
+        }else if (selectedTab !== indexToTabName['leads']) {
+          history.push(setSelectedTab(indexToTabName["leads"]));
+         setIsSearchData(true);
+        }
+          } else if (searchInput.length === 0) {
+        console.log("search is empty");
         history.push(setSelectedTab(indexToTabName["leads"]));
-       setIsSearchData(true);
+        setIsSearchData(false);
       }
-       
-
-    } else if (searchInput.length === 0) {
-      console.log("search is empty");
-      history.push(setSelectedTab(indexToTabName["leads"]));
-      setIsSearchData(false);
     }
+    
   };
 
 
@@ -251,16 +253,17 @@ export default function MainMenu(props) {
                   }}
                   inputProps={{ "aria-label": "search" }}
                   value={searchInput}
-                  onChange={(e) => setSearchInput(e.target.value.toUpperCase())}
+                  onChange={(e) => setSearchInput((e.target.value).toUpperCase().trim())}
+                  onKeyPress={(e)=>searchHandler(e)}
                 />
               </div>
-              <Button
+              {/* <Button
                 className={classes.button}
                 variant="outlined"
                 onClick={() => searchHandler()}
               >
                 Search
-              </Button>
+              </Button> */}
               <Chip
                 icon={<AccountCircle />}
                 label={capitalLetter(userName)}
@@ -324,7 +327,7 @@ export default function MainMenu(props) {
           mainMenuCallBack={leadDetailsHandler}/>
            :
           <Leads
-          searchInput={searchInput}
+            searchInput={searchInput}
             isSearchData={isSearchData}
             mainMenuCallBack={leadDetailsHandler}
             // isFreshLead={isFreshLead}
