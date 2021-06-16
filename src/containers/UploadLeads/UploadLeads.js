@@ -25,7 +25,6 @@ export default function UploadLeads() {
     
     const fromData= new FormData();
     fromData.append('file',file);
-    console.log("file:"+ `Token ${profileData.token}`)
     let headers = {
       'Authorization': `Token ${profileData.token}`,
       'Content-Type': 'multipart/form-data'
@@ -33,11 +32,9 @@ export default function UploadLeads() {
     
      await axios.post(`${baseUrl}/leads/lead_bulk_upload/PL`,fromData,{headers})
      .then((response)=>{
-       console.log(response.data);
        setAlertMessage(`${response.data.count} Leads Successfully uploaded`)
        setIsDisplay(true);
      }).catch(error =>{
-       console.log(error);
        setAlertMessage('wrong File Was choosen')
        setIsDisplay(true);
      })

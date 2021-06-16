@@ -20,8 +20,20 @@ const useStyles = makeStyles({
     Width: '100%',
   },
   tableheading:{
-    padding:'0 25px'
+    padding:'0 8px',
+    fontSize:'12px',
+    textAlign:'center'
   },
+  tabledata:{
+    padding:'0 8px',
+    fontSize:'12px',
+    textAlign:'center'
+  },
+  emptydata:{
+    position:'relative',
+    left:'30rem',
+    fontSize:'12px'
+  }
   
 });
  const Leads = ((props) => {
@@ -51,7 +63,7 @@ const useStyles = makeStyles({
 
      await axios.get(`${baseUrl}/leads/lead_allocate/`,{headers})
      .then((response)=>{
-      setLeadData([response.data]);
+     setLeadData([response.data]);
     // localStorage.setItem('lead_allocate',JSON.stringify(response.data))
      }).catch((error)=>{
        console.log(error);
@@ -73,22 +85,23 @@ const useStyles = makeStyles({
         <TableHead>
           <TableRow>
             <TableCell className={classes.tableheading}>Lead Id</TableCell>
-            <TableCell className={classes.tableheading} align="right">Name</TableCell>
-            <TableCell className={classes.tableheading} align="right">Phone No</TableCell>
-            <TableCell className={classes.tableheading} align="right">Loan Amount</TableCell>
-            <TableCell className={classes.tableheading} align="right">Date of Birth</TableCell>
-            <TableCell  className={classes.tableheading}align="right">Monthly Income</TableCell>
-            <TableCell className={classes.tableheading} align="right">Current Company</TableCell>
-            <TableCell className={classes.tableheading} align="right">Pin Code</TableCell>
-            <TableCell className={classes.tableheading} align="right">Company Name</TableCell>
-            <TableCell className={classes.tableheading} align="right">Loan Type</TableCell>
-            <TableCell className={classes.tableheading} align="right">Status</TableCell>
-            <TableCell className={classes.tableheading} align="right">Sub Status</TableCell>
+            <TableCell className={classes.tableheading} >Name</TableCell>
+            <TableCell className={classes.tableheading} >Phone No</TableCell>
+            <TableCell className={classes.tableheading} >Loan Amount</TableCell>
+            <TableCell className={classes.tableheading} >Date of Birth</TableCell>
+            <TableCell className={classes.tableheading}>Monthly Income</TableCell>
+            <TableCell className={classes.tableheading} >Current Company</TableCell>
+            <TableCell className={classes.tableheading} >Pin Code</TableCell>
+            <TableCell className={classes.tableheading} >Company Name</TableCell>
+            <TableCell className={classes.tableheading} >Loan Type</TableCell>
+            <TableCell className={classes.tableheading} >Status</TableCell>
+            <TableCell className={classes.tableheading} >Sub Status</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           { 
-          props.isSearchData? 
+          props.isSearchData? (
+          searchData.length !== 0 ?
            searchData.map((search,index)=>(
             <TableRow>
             <TableCell align="center" 
@@ -96,39 +109,40 @@ const useStyles = makeStyles({
             onClick={()=>routeChangeHAndler(search.lead_crm_id)}
             >{search.lead_crm_id} 
             </TableCell>
-           <TableCell align="center">{search.name}</TableCell>
-           <TableCell align="center">{search.phone_no}</TableCell>
-           <TableCell align="center">{search.loan_amount}</TableCell>
-            <TableCell align="center">{search.data.dob}</TableCell>
-           <TableCell align="center">{search.data.monthly_income}</TableCell>
-           <TableCell align="center">{search.data.residential_pincode}</TableCell>
-           <TableCell align="center">{search.data.current_company}</TableCell>
-           <TableCell align="center">{search.data.current_company_name}</TableCell>    
-           <TableCell align="center">{search.loan_type}</TableCell>
-           <TableCell align="center">{search.status}</TableCell>
-           <TableCell align="center">{search.sub_status}</TableCell>
+           <TableCell className={classes.tabledata}>{search.name}</TableCell>
+           <TableCell className={classes.tabledata}>{search.phone_no}</TableCell>
+           <TableCell className={classes.tabledata}>{search.loan_amount}</TableCell>
+          <TableCell className={classes.tabledata}>{search.data.dob}</TableCell>
+           <TableCell className={classes.tabledata}>{search.data.monthly_income}</TableCell>
+           <TableCell className={classes.tabledata}>{search.data.residential_pincode}</TableCell>
+           <TableCell className={classes.tabledata}>{search.data.current_company}</TableCell>
+           <TableCell className={classes.tabledata}>{search.data.current_company_name}</TableCell>    
+           <TableCell className={classes.tabledata}>{search.loan_type}</TableCell>
+           <TableCell className={classes.tabledata}>{search.status}</TableCell>
+           <TableCell className={classes.tabledata}>{search.sub_status}</TableCell>
           </TableRow>
-           ))
-            : 
+           )) : <span className={classes.emptydata}> No Data Found </span> )
+           
+            : (leadData.length !== 0 ?
             leadData.map((lead)=>(
               <TableRow>
               <TableCell align="center" 
               style={{cursor:'pointer',color:'blue'}}
               onClick={()=>routeChangeHAndler(lead.lead_crm_id)}
               >{lead.lead_crm_id} </TableCell>
-            <TableCell align="center">{lead.name}</TableCell>
-            <TableCell align="center">{lead.phone_no}</TableCell>
-            <TableCell align="center">{lead.loan_amount}</TableCell>
-             <TableCell align="center">{lead.data['dob']}</TableCell>
-             <TableCell align="center">{lead.data['monthly_income']}</TableCell>
-            <TableCell align="center">{lead.data['current_company']}</TableCell>
-            <TableCell align="center">{lead.data['residential_pincode']}</TableCell>
-            <TableCell align="center">{lead.data['current_company_name']}</TableCell>    
-            <TableCell align="center">{lead.loan_type}</TableCell>
-            <TableCell align="center">{lead.status}</TableCell>
-            <TableCell align="center">{lead.sub_status}</TableCell>
+            <TableCell className={classes.tabledata}>{lead.name}</TableCell>
+            <TableCell className={classes.tabledata}>{lead.phone_no}</TableCell>
+            <TableCell className={classes.tabledata}>{lead.loan_amount}</TableCell>
+             <TableCell className={classes.tabledata}>{lead.data['dob']}</TableCell>
+             <TableCell className={classes.tabledata}>{lead.data['monthly_income']}</TableCell>
+            <TableCell className={classes.tabledata}>{lead.data['current_company']}</TableCell>
+            <TableCell className={classes.tabledata}>{lead.data['residential_pincode']}</TableCell>
+            <TableCell className={classes.tabledata}>{lead.data['current_company_name']}</TableCell>    
+            <TableCell className={classes.tabledata}>{lead.loan_type}</TableCell>
+            <TableCell className={classes.tabledata}>{lead.status}</TableCell>
+            <TableCell className={classes.tabledata}>{lead.sub_status}</TableCell>
               </TableRow>
-            )) 
+            )) : <span className={classes.emptydata}> No Data Found </span>)
             }
         </TableBody>
       </Table>

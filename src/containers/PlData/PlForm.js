@@ -32,14 +32,12 @@ export default function PlForm() {
     let item = {loan_amount:loanAmount,monthly_income:monthlyIncome,dob:date,phone_no:mobileNo,
       residential_pincode:pincode,current_company_name:companyName,name:fullName,
       current_company:employmentType,loan_type:"PL"};
-      console.log(item);
     let headers = {
       'Authorization': `Token ${profileData.token}` ,
       'Content-Type' : 'application/json'
     }  
       await axios.post(`${baseUrl}/leads/lead_create/`,item,{headers})
       .then((response)=>{
-        console.log(response.data);
         setAlertMessage(response.data.message);
         setIsDisplay(true);
       }).catch((error)=>{
@@ -57,7 +55,6 @@ export default function PlForm() {
     if(companyName.length >=2){
      await axios.post(`${searchCompanyUrl}`,item , {header})
      .then((response)=>{
-       console.log(response.data);
        setSearchCompany(response.data);
      }).catch((error)=>{
        console.log(error)

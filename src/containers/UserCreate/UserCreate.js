@@ -27,15 +27,12 @@ export default function UserCreate() {
     event.preventDefault();
     let item = { username:userName,first_name:firstName,last_name:lastName,email,role,
       product_type:productType,phone_no:phoneNo,gender};
-    console.log(item);
     
     axios.post(`${baseUrl}/user/userRegistration/`,item)
     .then((response)=>{
-      console.log(response.data)
       setAlertMessage('User Create successfully');
       setIsDisplay(true);
     }).catch((error)=>{
-      console.error(error);
       setAlertMessage('something wrong');
       setIsDisplay(true);
     })

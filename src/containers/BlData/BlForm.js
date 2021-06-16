@@ -30,14 +30,12 @@ export default function BlForm() {
     let item = {loan_amount:loanAmount,monthly_income:anualProfit,dob:date,phone_no:mobileNo,
       residential_pincode:pincode,name:fullName,
       current_company:employmentType,loan_type:"BL"};
-      console.log(item);
     let headers = {
       'Authorization': `Token ${profileData.token}`,
       'Content-Type' : 'application/json'
     }  
       await axios.post(`${baseUrl}/leads/lead_create/`,item,{headers})
       .then((response)=>{
-        console.log("payload:"+response.data.message);
         setAlertMessage(response.data.message);
         setIsDisplay(true);
       }).catch((error)=>{

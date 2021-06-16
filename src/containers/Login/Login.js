@@ -29,22 +29,17 @@ export default function Login() {
   .then((response)=>{
     localStorage.setItem('user_info',JSON.stringify(response.data));
     const profileData = JSON.parse(localStorage.getItem('user_info'));
-    console.log('userInfo:'+profileData);
-    console.log('token'+profileData.token);
     if(profileData.is_admin_verified){
       history.push("/dashboard");
-      console.log("status_info:"+`Token ${profileData.token}`);
       let headers = {'Authorization':`Token ${profileData.token}`};
        axios.get(`${baseUrl}/leads/fetchAllLeads/`,{headers})
       .then((response)=>{
         localStorage.setItem('status_info',JSON.stringify(response.data));
-        console.log('statusinfo');
       }).catch((error)=>{
         console.log(error);
       })
     }
   }).catch(error=>{
-    console.log(error);
        setAlertMessage('Wrong Password')
        setIsDisplay(true);
   })

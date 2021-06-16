@@ -22,7 +22,6 @@ export default function RemarkForm(props) {
   const [isDisplay, setIsDisplay] = useState(false);
   const remarksHandler = async (event,id) => {
     event.preventDefault();
-    console.log(id);
     let item = { remark: input };
     let headers = {
       'Authorization': `Token ${profileData.token}` ,
@@ -31,7 +30,6 @@ export default function RemarkForm(props) {
       await axios
         .post(`${baseUrl}/leads/lead_remark/${id}`, item, { headers })
         .then((response) => {
-          console.log(response.data);
           // setAlertMessage(response.data.msg);
           // setIsDisplay(true);
           setLoadingRemarks(loadingRemarks+1);
@@ -52,7 +50,6 @@ export default function RemarkForm(props) {
       await axios
         .get(`${baseUrl}/leads/lead_remark/${id}`, { headers })
         .then((response) => {
-          console.log(response.data);
           setRemarks(response.data.remarks);
         })
         .catch((error) => {

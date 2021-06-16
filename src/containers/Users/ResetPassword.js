@@ -65,7 +65,6 @@ export default function Users() {
   const handleClickOpen = (userName,index)=>{
     setOpen(true);
     setRowData(userName);
-    console.log(userName,index);
     
   }
   const handleClose = ()=>{
@@ -75,7 +74,6 @@ export default function Users() {
     const newErrors = {};
     if(!password || password === '' ){
       newErrors.password = 'This is required field'
-      console.log(password.length);
     }
     else if(password.length < 6){
       
@@ -101,12 +99,10 @@ export default function Users() {
        try{
         await axios.post(`${baseUrl}/user/changePassword/`,item,{headers})
         .then((response)=>{
-          console.log(response);
           setAlertMessage(response.data.message);
           setIsDisplay(true);
         })
        }catch(error){
-         console.log(error);
          setAlertMessage("something wrong");
           setIsDisplay(true);
        }
@@ -120,7 +116,6 @@ export default function Users() {
     };
      try{
      const response = await axios.get(`${baseUrl}/user/fetchUsers/`,{headers});
-     console.log(response.data);
      setUsers(response.data);
      setLoading(true);
      }catch(error){
