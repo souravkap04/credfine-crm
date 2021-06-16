@@ -46,14 +46,10 @@ export default function VerifyUsers() {
     };
     fetchData();
         },[])
-       // console.log("data:"+verifyUsers);
        const usersVerifyHandler = async (userName,index)=>{
-           
-        console.log(userName,index);
         const userList = [...verifyUsers];
         await axios.post(`${baseUrl}/user/userVerifiedByAdmin/`,{username:userName})
                 .then((response)=>{
-                    console.log(response.data);
                     userList[index].disabled = true;
                     setVerifyUsers(userList);
                 })

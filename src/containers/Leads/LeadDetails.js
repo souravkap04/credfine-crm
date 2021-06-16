@@ -67,7 +67,6 @@ function LeadDetails(props) {
         await axios
           .get(`${baseUrl}/leads/lead_detail/${leadId}`,{headers})
           .then((response) => {
-            console.log(response.data);
             setStatus(response.data.lead_data.status);
             setSubStatus(response.data.lead_data.sub_status);
             setLeadId(response.data.lead_data.lead_crm_id);
@@ -115,15 +114,12 @@ function LeadDetails(props) {
       salary_mode:salaryCreditMode,salary_bank:salaryBankAcc,residence_type:currentResidentType,
       no_of_years_current_city:yearsInCurrentCity} 
      let items = {lead_data,eligibility_data };
-     console.log(items);
      let headers = {'Authorization':`Token ${profileData.token}`}
      await axios.put(`${baseUrl}/leads/lead_detail/${id}`,items,{headers})
      .then((response)=>{
-       console.log(response);
        setAlertMessage('Lead Data Successfully Updated')
        setIsLeadDetails(true);
      }).catch((error)=>{
-       console.log(error);
        setAlertMessage('Something Wrong')
        setIsLeadDetails(true);
      })
@@ -151,12 +147,10 @@ const options = subStatusHandler();
 
 const statusUpdateHandler = async (id)=>{
   let items = {status:status,sub_status:subStatus}
-  console.log("uuu:"+items)
   let headers = {'Authorization':`Token ${profileData.token}`}
   if(status!== '' && subStatus.length>0){
     await axios.put(`${baseUrl}/leads/lead_status/${id}`,items,{headers})
   .then((response)=>{
-    console.log(response)
     setAlertMessage(response.data['data'])
     setIsStatus(true);
     props.mainMenuCallBack(false);
@@ -178,7 +172,6 @@ const searchCompanyHandler = async (e)=>{
   if(companyName.length >=2){
    await axios.post(`${searchCompanyUrl}`,item , {header})
    .then((response)=>{
-     console.log(response.data);
      setSearchCompany(response.data);
    }).catch((error)=>{
      console.log(error)

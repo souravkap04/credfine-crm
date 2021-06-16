@@ -198,7 +198,6 @@ export default function MainMenu(props) {
          setIsSearchData(true);
         }
           } else if (searchInput.length === 0) {
-        console.log("search is empty");
         history.push(setSelectedTab(indexToTabName["leads"]));
         setIsSearchData(false);
       }
@@ -219,7 +218,6 @@ export default function MainMenu(props) {
     setLeadId(leadId)
  }
  const logoutHandler = ()=>{
-   console.log("logout");
    localStorage.removeItem('user_info');
    localStorage.removeItem('status_info');
    localStorage.removeItem('_expiredTime');
