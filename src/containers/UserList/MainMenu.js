@@ -29,6 +29,8 @@ import ResetPassword from "../Users/ResetPassword";
 import Leads from "../Leads/Leads";
 import LeadDetails from "../Leads/LeadDetails";
 import Profile from "../UserList/Profile/Profile";
+import Report from "../Report/Report";
+import MyLeads from "../MyLeads/MyLeads";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -116,7 +118,9 @@ export default function MainMenu(props) {
         3: "uploadleads",
         4: "verifyusers",
         5: "users",
-        6:"usercreate"
+        6:"usercreate",
+        7: "report",
+        8: "myleads"
      };
     const indexToTabName = {
         "leads" : 0,
@@ -126,6 +130,8 @@ export default function MainMenu(props) {
          "verifyusers" : 4,
          "users" : 5,
         "usercreate" : 6,
+        "report" : 7,
+        "myleads" : 8
       };
   const classes = useStyles();
   const [selectedTab, setSelectedTab] = useState(indexToTabName[page]);
@@ -314,7 +320,9 @@ export default function MainMenu(props) {
             <Tab label="Verify Users" hidden={isHiddenTab} />
             <Tab label="Users" hidden={isHiddenTab} />
             <Tab label="User Create"  hidden={isHiddenTab}/>
-            
+            <Tab label="Report" hidden={isHiddenTab}/>
+            <Tab  label="My Leads" hidden={isHiddenTab}/>
+             
           </Tabs>
           </Grid>
           <Grid item lg={10}>
@@ -337,6 +345,8 @@ export default function MainMenu(props) {
           {selectedTab === 4 && <VerifyUsers/>}
           {selectedTab === 5 && <ResetPassword/>}
           {selectedTab === 6 && <UserCreate/>}
+          {selectedTab === 7 && <Report/>}
+          {selectedTab === 8 && <MyLeads/>}
         </Grid>
       </Grid>
     </div>
