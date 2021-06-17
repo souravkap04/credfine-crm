@@ -321,7 +321,7 @@ export default function MainMenu(props) {
             <Tab label="Users" hidden={isHiddenTab} />
             <Tab label="User Create"  hidden={isHiddenTab}/>
             <Tab label="Report" hidden={isHiddenTab}/>
-            <Tab  label="My Leads" hidden={isHiddenTab}/>
+            <Tab  label="My Leads" />
              
           </Tabs>
           </Grid>
