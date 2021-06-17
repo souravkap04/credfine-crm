@@ -337,8 +337,7 @@ export default function MainMenu(props) {
             isSearchData={isSearchData}
             mainMenuCallBack={leadDetailsHandler}
             // isFreshLead={isFreshLead}
-            
-             /> ) }
+            /> ) }
           {selectedTab === 1 && <PlForm/>}
           {selectedTab === 2 && <BlForm/>}
           {selectedTab === 3 && <UploadLeads/>}
@@ -346,7 +345,12 @@ export default function MainMenu(props) {
           {selectedTab === 5 && <ResetPassword/>}
           {selectedTab === 6 && <UserCreate/>}
           {selectedTab === 7 && <Report/>}
-          {selectedTab === 8 && <MyLeads/>}
+          {selectedTab === 8 && ( viewLeadDetails ?
+          <LeadDetails 
+          leadId={leadId}
+          mainMenuCallBack={leadDetailsHandler}/> 
+          : <MyLeads
+          mainMenuCallBack={leadDetailsHandler}/>)}
         </Grid>
       </Grid>
     </div>

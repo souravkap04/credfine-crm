@@ -1,13 +1,13 @@
 import React,{useState} from 'react'
 import style from './Report.module.css';
+import moment from 'moment';
 import { Form, Card, Button, Row, Col, FormControl} from "react-bootstrap";
 export default function Report() {
-    const [startDate , setStartDate] = useState("");
+    const [startDate , setStartDate] = useState(new Date());
     const [endDate , setEndDate] = useState("");
     const [status , setStatus] = useState("");
     const [productType , setProductType] = useState("");
     const [errors,setErrors] = useState({});
-    
     
     const findErrors = ()=>{
       let newErrors = {};
@@ -25,11 +25,11 @@ export default function Report() {
       }
       return newErrors;
     }
+    
     const reportSubmit = (event)=>{
       const newErrors = findErrors();
       setErrors(newErrors);
       event.preventDefault()
-      console.log(startDate,endDate,status,productType);
   }
     return (
         <div>
@@ -41,7 +41,7 @@ export default function Report() {
                        <Form.Label>Start Date</Form.Label>
                        <FormControl
                        type="date"
-                       value={startDate}
+                       max={moment().format('YYYY-MM-DD')}
                        onChange={(e)=>setStartDate(e.target.value)}
                        isInvalid={!!errors.startDate}/>
                        <Form.Control.Feedback type="invalid"> {errors.startDate}</Form.Control.Feedback>
@@ -50,13 +50,12 @@ export default function Report() {
                      <Col>
                      <Form.Group>
                        <Form.Label>End Date</Form.Label>
-                       {/* <FormControl
+                       <FormControl
                        type="date"
                        min={startDate}
-                       max={new Date().setDate(startDate+30)}
+                       max={moment().format('YYYY-MM-DD')}
                        onChange={(e)=>setEndDate(e.target.value)}
-                       isInvalid={!!errors.endDate}/> */}
-                       
+                       isInvalid={!!errors.endDate}/> 
                        <Form.Control.Feedback type="invalid"> {errors.endDate}</Form.Control.Feedback>
                        </Form.Group>
                      </Col>
