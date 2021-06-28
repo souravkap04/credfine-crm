@@ -53,7 +53,7 @@ export default function MyLeads(props) {
         await axios.get(`${baseUrl}/leads/fetchUpdatedLeadsUserWise/`,{headers})
         .then((response)=>{
              console.log(response.data);
-            setMyLeads(response.data)
+            setMyLeads(response.data.results)
         }).catch((error)=>{
             console.log(error);
         })

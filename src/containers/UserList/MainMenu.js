@@ -321,7 +321,7 @@ export default function MainMenu(props) {
             <Tab label="Users" hidden={isHiddenTab} />
             <Tab label="User Create"  hidden={isHiddenTab}/>
             <Tab label="Report" hidden={isHiddenTab}/>
-            <Tab  label="My Leads" />
+            {/* <Tab  label="My Leads" /> */}
              
           </Tabs>
           </Grid>
@@ -345,12 +345,12 @@ export default function MainMenu(props) {
           {selectedTab === 5 && <ResetPassword/>}
           {selectedTab === 6 && <UserCreate/>}
           {selectedTab === 7 && <Report/>}
-          {selectedTab === 8 && ( viewLeadDetails ?
+          {/* {selectedTab === 8 && ( viewLeadDetails ?
           <LeadDetails 
           leadId={leadId}
           mainMenuCallBack={leadDetailsHandler}/> 
           : <MyLeads
-          mainMenuCallBack={leadDetailsHandler}/>)}
+          mainMenuCallBack={leadDetailsHandler}/>)} */}
         </Grid>
       </Grid>
     </div>
