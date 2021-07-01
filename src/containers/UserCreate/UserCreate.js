@@ -30,7 +30,7 @@ export default function UserCreate() {
     
     axios.post(`${baseUrl}/user/userRegistration/`,item)
     .then((response)=>{
-      setAlertMessage('User Create successfully');
+      setAlertMessage(response.data['data']);
       setIsDisplay(true);
     }).catch((error)=>{
       setAlertMessage('something wrong');

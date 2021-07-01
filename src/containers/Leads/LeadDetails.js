@@ -228,15 +228,11 @@ const selectCompany = (company)=>{
                   <Form.Label>Lead View</Form.Label>
                   <Form.Group>
                     <Form.Label>Lead Id</Form.Label>
-                    {isEditable ? <Form.Control
-                    disabled={false}
-                    type="text"
-                    value={leadId}
-                    onChange={(e)=>setLeadId(e.target.value)}
-                    /> : <Form.Control
+                    <Form.Control
                     disabled={true}
                     type="text"
-                    value={leadId}/>}
+                    value={leadId}
+                    />
                   </Form.Group>
                   <Form.Group>
                     <Form.Label>Name</Form.Label>
@@ -253,16 +249,11 @@ const selectCompany = (company)=>{
                   </Form.Group>
                   <Form.Group>
                     <Form.Label>Phone No</Form.Label>
-                    {isEditable ? <Form.Control
-                    disabled={false}
-                      type="number"
-                      value={mobileNo}
-                      onChange={(e) => setMobileNo(e.target.value)}
-                    /> : <Form.Control
+                    <Form.Control
                     disabled={true}
                       type="number"
                       value={mobileNo}
-                    />}
+                    /> 
                   </Form.Group>
                   <Form.Group>
                     <Form.Label>Loan Amount</Form.Label>
@@ -349,19 +340,6 @@ const selectCompany = (company)=>{
                     )) : null}
                   </ListGroup>
                   </Form.Group>
-                  {/* <Form.Group>
-                    <Form.Label>Status</Form.Label>
-                    {isEditable ? <Form.Control as="select"
-                    disabled={false}
-                    value={leadStatus}
-                    onChange={(e)=>setLeadStatus(e.target.value)}>
-                      <option value="">select One</option>
-                      <option value="open">Open</option>
-                    </Form.Control> : <Form.Control as="select"
-                    value={leadStatus}
-                    disabled={true}/>
-                      }
-                  </Form.Group> */}
                   <Form.Group>
                     <Form.Label>Loan Type</Form.Label>
                     {isEditable ? <Form.Control as="select"
@@ -377,15 +355,11 @@ const selectCompany = (company)=>{
                   </Form.Group>
                   <Form.Group>
                     <Form.Label>Source</Form.Label>
-                    {isEditable ? <Form.Control
-                    disabled={false}
-                    type="number"
-                    value={source}
-                    onChange={(e)=>setSource(e.target.value)}/> :<Form.Control
-                    type="number"
-                    value={source}
+                     <Form.Control
                     disabled={true}
-                    />}
+                    type="number"
+                    value={source}
+                    /> 
                   </Form.Group>
                 </Col>
                 <Col>

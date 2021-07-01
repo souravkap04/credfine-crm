@@ -1,6 +1,6 @@
 import React,{useState}from "react";
 import axios from 'axios';
-import './PlForm.css';
+import style from './PlForm.module.css';
 import { Form, Card, Button, Row, Col,Alert,ListGroup} from "react-bootstrap";
 import baseUrl from "../../global/api";
 import {getProfileData} from '../../global/leadsGlobalData'
@@ -69,9 +69,9 @@ export default function PlForm() {
   return (
     <div >
        <Form noValidate validated={validated} onSubmit={personalLoanSubmitHandler}>
-        <Card className="Card">
+        <Card className={style.Card}>
         {isDisplay ?<Alert variant="primary">{alertMessage}</Alert>:null}
-          <Form.Label className="Heading">Personal Loan</Form.Label>
+          <Form.Label className={style.Heading}>Personal Loan</Form.Label>
           <Form.Row>
             <Col>
               <Form.Group>
@@ -177,7 +177,7 @@ export default function PlForm() {
               </Form.Group>
             </Col>
           </Form.Row>
-          <Button className="Button"
+          <Button className={style.Button}
               variant="success"  type="submit">CONTINUE</Button>
           
         </Card>

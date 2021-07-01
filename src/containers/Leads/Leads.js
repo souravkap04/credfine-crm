@@ -130,17 +130,17 @@ const useStyles = makeStyles({
               style={{cursor:'pointer',color:'blue'}}
               onClick={()=>routeChangeHAndler(lead.lead_crm_id)}
               >{lead.lead_crm_id} </TableCell>
-            <TableCell className={classes.tabledata}>{lead.name}</TableCell>
-            <TableCell className={classes.tabledata}>{lead.phone_no}</TableCell>
-            <TableCell className={classes.tabledata}>{lead.loan_amount}</TableCell>
-             <TableCell className={classes.tabledata}>{lead.data['dob']}</TableCell>
-             <TableCell className={classes.tabledata}>{lead.data['monthly_income']}</TableCell>
-            <TableCell className={classes.tabledata}>{lead.data['current_company']}</TableCell>
-            <TableCell className={classes.tabledata}>{lead.data['residential_pincode']}</TableCell>
-            <TableCell className={classes.tabledata}>{lead.data['current_company_name']}</TableCell>    
-            <TableCell className={classes.tabledata}>{lead.loan_type}</TableCell>
-            <TableCell className={classes.tabledata}>{lead.status}</TableCell>
-            <TableCell className={classes.tabledata}>{lead.sub_status}</TableCell>
+              <TableCell className={classes.tabledata}>{lead.name}</TableCell>
+              <TableCell className={classes.tabledata}>{lead.phone_no}</TableCell>
+              <TableCell className={classes.tabledata}>{lead.loan_amount}</TableCell>
+              <TableCell className={classes.tabledata}>{lead.data['dob']}</TableCell>
+              <TableCell className={classes.tabledata}>{lead.data['monthly_income']}</TableCell>
+              <TableCell className={classes.tabledata}>{lead.data['current_company']}</TableCell>
+              <TableCell className={classes.tabledata}>{lead.data['residential_pincode']}</TableCell>
+              <TableCell className={classes.tabledata}>{lead.data['current_company_name']}</TableCell>    
+              <TableCell className={classes.tabledata}>{lead.loan_type}</TableCell>
+              <TableCell className={classes.tabledata}>{lead.status}</TableCell>
+              <TableCell className={classes.tabledata}>{lead.sub_status}</TableCell>
               </TableRow>
             )) : <span className={classes.emptydata}> No Data Found </span>)
             }

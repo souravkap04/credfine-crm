@@ -1,6 +1,6 @@
 import React,{useState} from 'react'
 import axios from 'axios';
-import './BlForm.css';
+import style from './BlForm.module.css';
 import { Form, Card, Button, Row, Col, Alert } from "react-bootstrap";
 import baseUrl from '../../global/api';
 import {getProfileData} from "../../global/leadsGlobalData"
@@ -46,9 +46,9 @@ export default function BlForm() {
     return (
         <div >
            <Form noValidate validated={validated} onSubmit={businessLoanSubmitHandler}>
-        <Card className="Card">
+        <Card className={style.Card}>
         {isDisplay ?<Alert variant="primary">{alertMessage}</Alert>:null}
-          <Form.Label className="Heading">Business Loan</Form.Label>
+          <Form.Label className={style.Heading}>Business Loan</Form.Label>
           <Form.Row>
             <Col>
               <Form.Group>
@@ -151,7 +151,7 @@ export default function BlForm() {
               </Form.Group>
             </Col>
           </Form.Row>
-              <Button className="Button"
+              <Button className={style.Button}
               variant="success" type="submit">CONTINUE</Button>
           
         </Card>
