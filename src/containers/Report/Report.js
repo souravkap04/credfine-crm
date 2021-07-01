@@ -17,6 +17,7 @@ export default function Report() {
 
     const findErrors = ()=>{
       let newErrors = {};
+      
       if(!startDate || startDate === ''){
         newErrors.startDate = 'This is requires field'
       }
@@ -31,6 +32,22 @@ export default function Report() {
       }
       return newErrors;
     }
+  // const endDateHandler = (date)=>{
+  //    let today = moment().format('YYYY-MM-DD');
+  //    today = moment(today,"YYYY-MM-DD");
+  //    let selectedDate = moment(date,'YYYY-DD-MM');
+  //    let dateDiff = today.diff(selectedDate , 'days')
+  //    console.log('today:'+today);
+  //    console.log('selectedDate:'+selectedDate);
+  //    console.log('dateDiff:'+dateDiff);
+  //    let nextDate = moment(date).add(1,'M'); 
+  //    if(dateDiff<30){
+  //      return today.format('YYYY-MM-DD');
+  //    }else{
+  //      return nextDate.format('YYYY-MM-DD');
+  //    }
+  // }
+  // console.log(endDateHandler());
     
     const reportSubmit = async (event)=>{
       const newErrors = findErrors();
@@ -49,6 +66,14 @@ export default function Report() {
         })
       }
   }
+  // let toDate = moment().format('YYYY.MM.DD');
+  //  toDate=moment(toDate,"YYYY-MM-DD");
+  //  let newstartDate = moment(startDate,"YYYY-MM-DD")
+  // let diff = toDate.diff(newstartDate,'days')
+  // console.log(toDate);
+  // console.log(moment(startDate).date());
+  // console.log(diff);
+
     return (
         <div>
             <Form onSubmit={reportSubmit}>
@@ -73,6 +98,7 @@ export default function Report() {
                        type="date"
                        min={startDate}
                        max={moment().format('YYYY-MM-DD')}
+                     // max={()=>endDateHandler(startDate)}
                        onChange={(e)=>setEndDate(e.target.value)}
                        isInvalid={!!errors.endDate}/> 
                        <Form.Control.Feedback type="invalid"> {errors.endDate}</Form.Control.Feedback>

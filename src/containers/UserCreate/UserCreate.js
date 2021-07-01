@@ -13,6 +13,7 @@ export default function UserCreate() {
   const [productType,setProductType] = useState("");
   const [phoneNo, setPhoneNo] = useState("");
   const [gender, setGender] = useState("");
+  const [dialerPass,setDialerPass] = useState("");
   const [validated, setValidated] = useState(false);
   const [alertMessage,setAlertMessage] = useState('');
   const [isDisplay,setIsDisplay] = useState(false);
@@ -26,11 +27,11 @@ export default function UserCreate() {
    setValidated(true);
     event.preventDefault();
     let item = { username:userName,first_name:firstName,last_name:lastName,email,role,
-      product_type:productType,phone_no:phoneNo,gender};
+      product_type:productType,phone_no:phoneNo,gender , dialer_pass:dialerPass};
     
     axios.post(`${baseUrl}/user/userRegistration/`,item)
     .then((response)=>{
-      setAlertMessage('User Create successfully');
+      setAlertMessage(response.data['data']);
       setIsDisplay(true);
     }).catch((error)=>{
       setAlertMessage('something wrong');

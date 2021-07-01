@@ -8,21 +8,25 @@ import {
   TableRow,
   Paper,
   TableBody,
-  Button,
   Dialog,
   DialogTitle,
   DialogContent,
 } from "@material-ui/core";
-import {Form } from 'react-bootstrap';
+import {Form ,Row,Col,Button} from 'react-bootstrap';
 import * as ReactBootstrap from "react-bootstrap";
 import axios from 'axios';
 import baseUrl from '../../global/api';
 import {getProfileData} from '../../global/leadsGlobalData'
+import LockIcon from '@material-ui/icons/Lock';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 const useStyles = makeStyles({
   container:{
     overflow: 'auto',
     maxHeight: '550px',
-    margin:'25px'
+    marginTop:'10px'
 },
 header:{
   position: 'sticky',
@@ -40,36 +44,61 @@ header:{
     backgroundColor: '#13B980',
     fontSize: '15px',
     fontFamily: 'Lato',
-    margin: '0 55px',
-     padding: 0,
+    margin: '0 56px',
+     padding: '5px',
      width: '50%',
      color:'white',
      '&:hover':{
        backgroundColor:'#447d40'
      }
+  },
+  editUserBtn:{
+    borderRadius:'15px' ,
+    backgroundColor: '#13B980',
+    fontSize: '15px',
+    fontFamily: 'Lato',
+    margin: '12px 121px',
+     padding: '5px',
+     width: '50%',
+     color:'white',
+     '&:hover':{
+       backgroundColor:'#447d40'
+  }   
   }
   
 });
 export default function Users() {
   const classes = useStyles();
   const profileData = getProfileData();
-  const [open,setOpen] = useState(false);
+  const [isResetPassword,setIsResetPassword] = useState(false);
+  const [isEditUser,setIsEditUser] = useState(false);
   const [password,setPassword] = useState('');
   const [confirmPassword,setConfirmPassword] = useState('');
   const [users,setUsers] = useState([]);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [role,setRole] = useState("");
+  const [productType,setProductType] = useState("");
+  const [phoneNo, setPhoneNo] = useState("");
+  const [gender, setGender] = useState("");
+  const [dialerApiKey,setDialerApiKey] = useState("");
   const [loading,setLoading] = useState(false);
   const [errors,setErrors] = useState({});
   const [rowData,setRowData] = useState({});
   const [alertMessage,setAlertMessage] = useState('');
   const [isDisplay,setIsDisplay] = useState(false);
-  const handleClickOpen = (userName,index)=>{
-    setOpen(true);
+  const [deleteCount,setDeleteCount] = useState(0);
+  const [selectedUserName,setSelectedUserName] = useState('');
+  const resetPasswordHandler = (userName,index)=>{
+    setIsResetPassword(true);
     setRowData(userName);
     
   }
-  const handleClose = ()=>{
-    setOpen(false);
+  const closeResetPassword = ()=>{
+    setIsResetPassword(false);
   }
+  
   const findErrors = ()=>{
     const newErrors = {};
     if(!password || password === '' ){
@@ -93,7 +122,9 @@ export default function Users() {
     event.preventDefault();
     if(Object.keys(newErrors).length === 0){
       const headers = {
-        'userRoleHash': profileData.user_roles[0].user_role_hash,
+       'userRoleHash': profileData.user_roles[0].user_role_hash,
+      // 'userRoleHash' : 'f63e2d14-b15a-11eb-bc7e-000000000013'
+       
     };
    let item = {username:rowData, password:password};
        try{
@@ -103,7 +134,7 @@ export default function Users() {
           setIsDisplay(true);
         })
        }catch(error){
-         setAlertMessage("something wrong");
+          setAlertMessage("something wrong");
           setIsDisplay(true);
        }
     }
@@ -113,6 +144,7 @@ export default function Users() {
     const fetchUserData = async ()=>{
       const headers = {
         'userRoleHash': profileData.user_roles[0].user_role_hash,
+        // 'userRoleHash' : 'f63e2d14-b15a-11eb-bc7e-000000000013'
     };
      try{
      const response = await axios.get(`${baseUrl}/user/fetchUsers/`,{headers});
@@ -123,8 +155,56 @@ export default function Users() {
      }
     };
     fetchUserData();
-  },[])
-  
+  },[deleteCount])
+  const deleteUser = async (userName,index)=>{
+    console.log(`${baseUrl}/user/deleteUser/${userName}`);
+    const headers = {
+     'userRoleHash': profileData.user_roles[0].user_role_hash,
+    // 'userRoleHash' : 'f63e2d14-b15a-11eb-bc7e-000000000013'
+   };
+   let item = null;
+      await axios.post(`${baseUrl}/user/deleteUser/${userName}`,item ,{headers})
+      .then((response)=>{
+        console.log(response.data.message);
+        setDeleteCount(deleteCount+1);
+      }).catch((error)=>{
+        console.log(error);
+      })
+  }
+  const editUser = (userName,firstName,lastName,email,role,gender,phoneNo,productType,dialerPass)=>{
+    setIsEditUser(true);
+    setSelectedUserName(userName);
+    setFirstName(firstName);
+    setLastName(lastName);
+    setEmail(email);
+    setRole(role);
+    setGender(gender);
+    setPhoneNo(phoneNo);
+    setProductType(productType);
+    setDialerApiKey(dialerPass);
+    
+  }
+  const closeEditUser = ()=>{
+    setIsEditUser(false);
+  }
+  const updateUserData = async (e)=>{
+    e.preventDefault();
+    let item ={first_name:firstName,last_name:lastName,email,role,gender,phone_no:phoneNo,
+      product_type:productType,dialer_pass:dialerApiKey};
+    const headers = {
+      'userRoleHash': profileData.user_roles[0].user_role_hash,
+      //'userRoleHash':'f63e2d14-b15a-11eb-bc7e-000000000013'
+    };
+    await axios.put(`${baseUrl}/user/updateUser/${selectedUserName}`,item,{headers})
+    .then((response)=>{
+      setAlertMessage(response.data.message);
+      setIsDisplay(true);
+    }).catch((error)=>{
+      setAlertMessage("something wrong");
+      setIsDisplay(true);
+    })
+
+  }
   return (
     <TableContainer component={Paper} className={classes.container}>
       <Table>
@@ -134,32 +214,45 @@ export default function Users() {
             <TableCell>FIRST NAME</TableCell>
             <TableCell>LAST NAME</TableCell>
             <TableCell>EMAIL</TableCell>
-            <TableCell>DIALER ID</TableCell>
-            <TableCell>DIALER PASS</TableCell>
+            <TableCell>DIALER API Key</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
             {loading ? users.map((user,index)=>(
               <TableRow key={index}>
-              <TableCell>{user.username}</TableCell>
-              <TableCell>{user.first_name}</TableCell>
-              <TableCell>{user.last_name}</TableCell>
-              <TableCell>{user.email}</TableCell>
-              <TableCell>{user.dialer_id}</TableCell>
-              <TableCell>{user.dialer_pass}</TableCell>
+              <TableCell>{user.myuser.username}</TableCell>
+              <TableCell>{user.myuser.first_name}</TableCell>
+              <TableCell>{user.myuser.last_name}</TableCell>
+              <TableCell>{user.myuser.email}</TableCell>
+              <TableCell>{user.myuser.dialer_id}</TableCell>
               <TableCell>
-                  <Button variant="outlined" color="secondary" onClick={()=>handleClickOpen(user.username,index)}>
-                      Reset Password
-                  </Button>
-                  </TableCell>
+                  <Tooltip title="Reset Password">
+                  <IconButton onClick={()=>resetPasswordHandler(user.myuser.username,index)}>
+                      <LockIcon/>
+                  </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Edit">
+                    <IconButton 
+                    onClick={()=>editUser(user.myuser.username,user.myuser.first_name,
+                      user.myuser.last_name,user.myuser.email,user.role,user.gender,user.phone_no,
+                      user.product_type,user.myuser.dialer_pass)}>
+                      <EditIcon/>
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Delete User">
+                  <IconButton onClick={()=>deleteUser(user.myuser.username,index)}>
+                  <DeleteIcon/>
+                </IconButton>
+                  </Tooltip>
+                  </TableCell>  
           </TableRow>
             )) : 
               <div className={classes.loader}>
                     <ReactBootstrap.Spinner animation="border" />
               </div>
             }
-            
-              <Dialog open={open} onClose={handleClose}>
+            <>
+              <Dialog open={isResetPassword} onClose={closeResetPassword}>
               <DialogTitle id="form-dialog-title">Reset Password</DialogTitle>
               <DialogContent>
                  <Form  onSubmit={confirmPasswordHandler}>
@@ -188,6 +281,112 @@ export default function Users() {
                  </Form>
               </DialogContent>
               </Dialog> 
+              </>
+              <>
+              <Dialog open={isEditUser} onClose={closeEditUser}>
+                <DialogTitle>Edit User</DialogTitle>
+                <DialogContent>
+                     <Form onSubmit={updateUserData}>
+                     {isDisplay ? <ReactBootstrap.Alert variant="primary">{alertMessage}</ReactBootstrap.Alert> : null}
+                       <Row>
+                         <Col>
+                           <Form.Group>
+                             <Form.Label>First Name</Form.Label>
+                             <Form.Control
+                             type="text"
+                             value={firstName}
+                             onChange={(e)=>setFirstName((e.target.value).toLowerCase().trim())}/>
+                           </Form.Group>
+                         </Col>
+                         <Col>
+                           <Form.Group>
+                             <Form.Label>Last Name</Form.Label>
+                             <Form.Control
+                             type="text"
+                             value={lastName}
+                             onChange={(e)=>setLastName((e.target.value).toLowerCase().trim())}/>
+                           </Form.Group>
+                         </Col>
+                       </Row>
+                       <Row>
+                         <Col>
+                           <Form.Group>
+                             <Form.Label>EmailId</Form.Label>
+                             <Form.Control
+                             type="email"
+                             value={email}
+                             onChange={(e)=>setEmail((e.target.value).toLowerCase().trim())}/>
+                           </Form.Group>
+                         </Col>
+                         <Col>
+                           <Form.Group>
+                             <Form.Label>Role</Form.Label>
+                             <Form.Control 
+                             as="select"
+                             value={role}
+                             onChange={(e)=>setRole(e.target.value)}>
+                                  <option>Select One</option>
+                                  <option value="1">Admin</option>
+                                  <option value="2">Manager</option>
+                                  <option value="3">Agent</option>
+                             </Form.Control>
+                           </Form.Group>
+                         </Col>
+                       </Row>
+                       <Row>
+                         <Col>
+                           <Form.Group>
+                             <Form.Label>Product Type</Form.Label>
+                             <Form.Control 
+                             as="select"
+                             value={productType}
+                             onChange={(e)=>setProductType(e.target.value)}>
+                                 <option value="">Select One</option>
+                                 <option value="PL">Personal Loan</option>
+                                 <option value="BL">Business Loan</option>
+                             </Form.Control>
+                           </Form.Group>
+                         </Col>
+                         <Col>
+                           <Form.Group>
+                             <Form.Label>Phone No</Form.Label>
+                             <Form.Control
+                             type="number"
+                             value={phoneNo}
+                             onChange={(e)=>setPhoneNo((e.target.value).trim())}/>
+                           </Form.Group>
+                         </Col>
+                       </Row>
+                       <Row>
+                         <Col>
+                           <Form.Group>
+                             <Form.Label>Gender</Form.Label>
+                             <Form.Control 
+                             as="select"
+                             value={gender}
+                             onChange={(e)=>setGender(e.target.value)}>
+                                 <option value="">Select One</option>
+                                 <option value="M">Male</option>
+                                 <option value="F">Female</option>
+                             </Form.Control>
+                           </Form.Group>
+                         </Col>
+                         <Col>
+                           <Form.Group>
+                             <Form.Label>Dialer Api Key</Form.Label>
+                             <Form.Control
+                             type="text"
+                             value={dialerApiKey}
+                             onChange={(e)=>setDialerApiKey((e.target.value).trim())}/>
+                           </Form.Group>
+                         </Col>
+                       </Row>
+                       <Button type="submit"  className={classes.editUserBtn}>
+                     Update</Button>
+                     </Form>
+                </DialogContent>
+              </Dialog>
+              </>
         </TableBody>
       </Table>
     </TableContainer>
