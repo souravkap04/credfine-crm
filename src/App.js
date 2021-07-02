@@ -1,6 +1,5 @@
 import React ,{useState , useEffect} from 'react';
 import Login from "./containers/Login/Login";
-import "bootstrap/dist/css/bootstrap.min.css";
 import IdleTimer from './timer/IdelTimer';
 import {
   BrowserRouter as Router,
