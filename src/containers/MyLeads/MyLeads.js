@@ -7,6 +7,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button'
 import axios from 'axios';
 import baseUrl from '../../global/api';
 import {getProfileData} from '../../global/leadsGlobalData'
@@ -38,6 +39,14 @@ const useStyles = makeStyles({
     leadid:{
         cursor:'pointer',
         color:'blue'
+    },
+    buttonContainer:{
+      display:'flex',
+      justifyContent:'flex-end',
+      margin:'10px'
+    },
+    prevBtn:{
+      marginRight:'8px'
     }
     
   });
@@ -45,7 +54,9 @@ const useStyles = makeStyles({
 export default function MyLeads(props) {
     const classes = useStyles();
     const profileData = getProfileData();
-    const [myLeads , setMyLeads] = useState([])
+    const [myLeads , setMyLeads] = useState([]);
+    const [prevPage,setPrevPage] = useState(null);
+    const [nextPage,setNextPage] = useState(null);
 
     useEffect(()=>{
       const fetchMyLeads = async()=>{
@@ -53,7 +64,9 @@ export default function MyLeads(props) {
         await axios.get(`${baseUrl}/leads/fetchUpdatedLeadsUserWise/`,{headers})
         .then((response)=>{
              console.log(response.data);
-            setMyLeads(response.data.results)
+            setPrevPage(response.data.previous);
+            setNextPage(response.data.next);
+            setMyLeads(response.data.results);
         }).catch((error)=>{
             console.log(error);
         })
@@ -63,6 +76,28 @@ export default function MyLeads(props) {
     const leadDetailsHandler = (leadId)=>{
        props.mainMenuCallBack(true,leadId);
     }
+    const prevPageHandler = async ()=>{
+      const headers = {'Authorization':`Token ${profileData.token}`}
+      await axios.get(prevPage,{headers})
+      .then((response)=>{
+          setPrevPage(response.data.previous);
+          setNextPage(response.data.next);
+          setMyLeads(response.data.results);
+      }).catch((error)=>{
+        console.log(error)
+      })
+  }
+  const nextPageHandler = async ()=>{
+    const headers = {'Authorization':`Token ${profileData.token}`}
+    await axios.get(nextPage,{headers})
+    .then((response)=>{
+        setPrevPage(response.data.previous);
+        setNextPage(response.data.next);
+        setMyLeads(response.data.results);
+    }).catch((error)=>{
+      console.log(error)
+    })
+  }
     return (
       <TableContainer component={Paper} className={classes.container}>
         <Table className={classes.table} aria-label="simple table">
@@ -104,6 +139,14 @@ export default function MyLeads(props) {
                   )) : <span className={classes.emptydata}>No Data Found</span>}
           </TableBody>
         </Table>
+        <div className={classes.buttonContainer}>
+      <Button variant="outlined" className={classes.prevBtn} onClick={prevPageHandler} >
+                <span  className="fa fa-angle-left" aria-hidden="true"></span>
+            </Button>
+            <Button variant="outlined"  onClick={nextPageHandler}>
+                <span  className="fa fa-angle-right" aria-hidden="true"></span>
+            </Button>
+      </div>
       </TableContainer>
     );
 }

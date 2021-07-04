@@ -3,7 +3,7 @@ import style from './Report.module.css';
 import moment from 'moment';
 import axios from 'axios';
 import baseUrl from '../../global/api'
-import {getProfileData} from '../../global/leadsGlobalData';
+import {getProfileData,getStatusData} from '../../global/leadsGlobalData';
 import { Form, Card, Button, Row, Col, FormControl,Alert} from "react-bootstrap";
 export default function Report() {
     const [startDate , setStartDate] = useState("");
@@ -14,7 +14,8 @@ export default function Report() {
     const [isDisplay,setIsDisplay] = useState(false);
     const [errors,setErrors] = useState({});
     const profileData = getProfileData();
-
+    const statusData = getStatusData();
+    
     const findErrors = ()=>{
       let newErrors = {};
       
@@ -24,36 +25,43 @@ export default function Report() {
       if(!endDate || endDate === ''){
         newErrors.endDate = 'This is required field'
       }
-      if(!status || status === ''){
-        newErrors.status = 'This is required field'
-      }
-      if(!productType || productType === ''){
-        newErrors.productType = 'This is required field'
-      }
+      
       return newErrors;
     }
+    const removeDuplicateStatus = (data)=>{
+      let unique = [];
+      data.forEach((element)=>{
+        if(!unique.includes(element.status)){
+          unique.push(element.status)
+        }
+      })
+      return unique;
+    }
+    const uniqueStatus = removeDuplicateStatus(statusData);
   // const endDateHandler = (date)=>{
   //    let today = moment().format('YYYY-MM-DD');
   //    today = moment(today,"YYYY-MM-DD");
+  //    console.log(today);
   //    let selectedDate = moment(date,'YYYY-DD-MM');
+  //    console.log(selectedDate);
   //    let dateDiff = today.diff(selectedDate , 'days')
   //    console.log('today:'+today);
   //    console.log('selectedDate:'+selectedDate);
   //    console.log('dateDiff:'+dateDiff);
   //    let nextDate = moment(date).add(1,'M'); 
   //    if(dateDiff<30){
-  //      return today.format('YYYY-MM-DD');
+  //      return "hello"
   //    }else{
   //      return nextDate.format('YYYY-MM-DD');
   //    }
   // }
-  // console.log(endDateHandler());
+  //console.log(endDateHandler(startDate));
     
     const reportSubmit = async (event)=>{
       const newErrors = findErrors();
       setErrors(newErrors);
       event.preventDefault()
-      if(Object.keys(errors).length === 0){
+      if(Object.keys(newErrors).length === 0){
         const headers = {'Authorization':`Token ${profileData.token}`}
         let item = {start_date:startDate,end_date:endDate}
         await axios.post(`${baseUrl}/leads/lead_report/`,item ,{headers})
@@ -79,6 +87,7 @@ export default function Report() {
             <Form onSubmit={reportSubmit}>
               <Card className={style.card}>
               {isDisplay ?<Alert variant="primary">{alertMessage}</Alert>:null}
+              <Form.Label className={style.Heading}>Report</Form.Label>
                  <Row>
                      <Col>
                      <Form.Group>
@@ -98,7 +107,7 @@ export default function Report() {
                        type="date"
                        min={startDate}
                        max={moment().format('YYYY-MM-DD')}
-                     // max={()=>endDateHandler(startDate)}
+                       //  max={()=>endDateHandler(startDate)}
                        onChange={(e)=>setEndDate(e.target.value)}
                        isInvalid={!!errors.endDate}/> 
                        <Form.Control.Feedback type="invalid"> {errors.endDate}</Form.Control.Feedback>
@@ -113,11 +122,12 @@ export default function Report() {
                        as="select"
                        value={status}
                        onChange={(e)=>setStatus(e.target.value)}
-                       isInvalid={!!errors.status}>
+                       >
                           <option value="">Select One</option> 
-                          <option value="open">Open</option>
+                          {uniqueStatus.map((item,index)=>(
+                            <option key={index} value={item}>{item}</option>
+                          ))}
                        </FormControl>
-                       <Form.Control.Feedback type="invalid"> {errors.status}</Form.Control.Feedback>
                        </Form.Group>
                      </Col>
                      <Col>
@@ -127,12 +137,11 @@ export default function Report() {
                        as="select"
                        value={productType}
                        onChange={(e)=>setProductType(e.target.value)}
-                       isInvalid={!!errors.productType}>
+                       >
                          <option value="">Select One</option>
                          <option value="PL">Personal Loan</option>
                          <option value="BL">Business Loan</option>
                        </FormControl>
-                       <Form.Control.Feedback type="invalid"> {errors.productType}</Form.Control.Feedback>
                        </Form.Group>
                      </Col>
                  </Row>
