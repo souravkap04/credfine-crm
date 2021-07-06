@@ -47,7 +47,7 @@ export default function BlForm() {
         <div >
            <Form noValidate validated={validated} onSubmit={businessLoanSubmitHandler}>
         <Card className={style.Card}>
-        {isDisplay ?<Alert variant="primary">{alertMessage}</Alert>:null}
+        {isDisplay ?<Alert className={style.alertBox}>{alertMessage}</Alert>:null}
           <Form.Label className={style.Heading}>Business Loan</Form.Label>
           <Form.Row>
             <Col>

@@ -43,7 +43,7 @@ export default function UserCreate() {
     <div className={style.CreateUser}>
       <Form noValidate validated={validated} onSubmit={userCteateHandler}>
         <Card className={style.UserCreateCard}>
-        {isDisplay ? <Alert variant="primary">{alertMessage}</Alert> : null}
+        {isDisplay ? <Alert className={style.alertBox}>{alertMessage}</Alert> : null}
         <Form.Label className={style.UserCreateText}>
           User Create
           <hr className={style.UserCreateBar}/>
