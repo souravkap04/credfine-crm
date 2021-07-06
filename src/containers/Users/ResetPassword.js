@@ -12,7 +12,7 @@ import {
   DialogTitle,
   DialogContent,
 } from "@material-ui/core";
-import {Form ,Row,Col,Button} from 'react-bootstrap';
+import {Form ,Row,Col,Button ,InputGroup,FormControl} from 'react-bootstrap';
 import * as ReactBootstrap from "react-bootstrap";
 import axios from 'axios';
 import baseUrl from '../../global/api';
@@ -24,9 +24,15 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 const useStyles = makeStyles({
   container:{
-    overflow: 'auto',
-    maxHeight: '550px',
     marginTop:'10px'
+},
+scroller:{
+    overflow: 'auto',
+    maxHeight: '500px',
+},
+searchInput:{
+  margin:'0px 200px',
+  padding:'20px'
 },
 header:{
   position: 'sticky',
@@ -63,8 +69,18 @@ header:{
      color:'white',
      '&:hover':{
        backgroundColor:'#447d40'
-  }   
   }
+  },
+  tableheading:{
+    padding:'0 8px',
+    fontSize:'12px',
+    textAlign:'center'
+  },
+  tabledata:{
+    padding:'0 8px',
+    fontSize:'12px',
+    textAlign:'center'
+  },
   
 });
 export default function Users() {
@@ -90,6 +106,7 @@ export default function Users() {
   const [isDisplay,setIsDisplay] = useState(false);
   const [deleteCount,setDeleteCount] = useState(0);
   const [selectedUserName,setSelectedUserName] = useState('');
+  const [searchTerm,setSearchTerm] = useState('');
   const resetPasswordHandler = (userName,index)=>{
     setIsResetPassword(true);
     setRowData(userName);
@@ -143,7 +160,7 @@ export default function Users() {
   useEffect(()=>{
     const fetchUserData = async ()=>{
       const headers = {
-        'userRoleHash': profileData.user_roles[0].user_role_hash,
+           'userRoleHash': profileData.user_roles[0].user_role_hash,
         // 'userRoleHash' : 'f63e2d14-b15a-11eb-bc7e-000000000013'
     };
      try{
@@ -203,29 +220,56 @@ export default function Users() {
       setAlertMessage("something wrong");
       setIsDisplay(true);
     })
+}
 
-  }
   return (
-    <TableContainer component={Paper} className={classes.container}>
+    <div  className={classes.container}>
+    <Paper>
+      <div className={classes.searchInput}>
+       <InputGroup>
+       <FormControl type="text" placeholder="Search..."
+       value={searchTerm}
+       onChange={(e)=>setSearchTerm((e.target.value).toLowerCase().trim())}/>
+       </InputGroup>
+      </div>
+    <TableContainer className={classes.scroller}>
       <Table>
         <TableHead className={classes.header}>
           <TableRow>
-            <TableCell>USER NAME</TableCell>
-            <TableCell>FIRST NAME</TableCell>
-            <TableCell>LAST NAME</TableCell>
-            <TableCell>EMAIL</TableCell>
-            <TableCell>DIALER API Key</TableCell>
+            <TableCell className={classes.tableheading}>USER NAME</TableCell>
+            <TableCell className={classes.tableheading}>FIRST NAME</TableCell>
+            <TableCell className={classes.tableheading}>LAST NAME</TableCell>
+            <TableCell className={classes.tableheading}>EMAIL</TableCell>
+            <TableCell className={classes.tableheading}>Role</TableCell>
+            <TableCell className={classes.tableheading}>Product Type</TableCell>
+            <TableCell className={classes.tableheading}>Phone No</TableCell>
+            <TableCell className={classes.tableheading}>Gender</TableCell>
+            <TableCell className={classes.tableheading}>DIALER API Key</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-            {loading ? users.map((user,index)=>(
-              <TableRow key={index}>
-              <TableCell>{user.myuser.username}</TableCell>
-              <TableCell>{user.myuser.first_name}</TableCell>
-              <TableCell>{user.myuser.last_name}</TableCell>
-              <TableCell>{user.myuser.email}</TableCell>
-              <TableCell>{user.myuser.dialer_id}</TableCell>
-              <TableCell>
+            {loading ? users.filter((user)=>{
+              if(searchTerm === ""){
+                return user;
+              }else if(user.phone_no.toLowerCase().includes(searchTerm.toLowerCase())){
+                return user;
+              }else if(user.myuser.first_name.toLowerCase().includes(searchTerm.toLowerCase())){
+                return user;
+              }else if(user.myuser.username.toLowerCase().includes(searchTerm.toLowerCase())){
+                return user;
+              }
+            }).map((user,index)=>(
+              <TableRow key={index} >
+              <TableCell className={classes.tabledata}>{user.myuser.username}</TableCell>
+              <TableCell className={classes.tabledata}>{user.myuser.first_name}</TableCell>
+              <TableCell className={classes.tabledata}>{user.myuser.last_name}</TableCell>
+              <TableCell className={classes.tabledata}>{user.myuser.email}</TableCell>
+              <TableCell className={classes.tabledata}>{user.role}</TableCell>
+              <TableCell className={classes.tabledata}>{user.product_type}</TableCell>
+              <TableCell className={classes.tabledata}>{user.phone_no}</TableCell>
+              <TableCell className={classes.tabledata}>{user.gender}</TableCell>
+              <TableCell className={classes.tabledata}>{user.myuser.dialer_id}</TableCell>
+              <TableCell className={classes.tabledata}>
                   <Tooltip title="Reset Password">
                   <IconButton onClick={()=>resetPasswordHandler(user.myuser.username,index)}>
                       <LockIcon/>
@@ -390,5 +434,8 @@ export default function Users() {
         </TableBody>
       </Table>
     </TableContainer>
+    </Paper>
+    </div>
+    
   );
 }

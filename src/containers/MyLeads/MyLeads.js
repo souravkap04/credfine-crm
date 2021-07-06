@@ -11,6 +11,7 @@ import Button from '@material-ui/core/Button'
 import axios from 'axios';
 import baseUrl from '../../global/api';
 import {getProfileData} from '../../global/leadsGlobalData'
+import { Typography } from '@material-ui/core';
 
 const useStyles = makeStyles({
     container:{
@@ -43,10 +44,15 @@ const useStyles = makeStyles({
     buttonContainer:{
       display:'flex',
       justifyContent:'flex-end',
-      margin:'10px'
+      alignItems:'center',
+      margin:'5px'
     },
     prevBtn:{
-      marginRight:'8px'
+      margin:'0px 8px',
+      
+    },
+    count:{
+      fontSize:'0.85em',
     }
     
   });
@@ -57,16 +63,17 @@ export default function MyLeads(props) {
     const [myLeads , setMyLeads] = useState([]);
     const [prevPage,setPrevPage] = useState(null);
     const [nextPage,setNextPage] = useState(null);
+    const [totalLeads,setTotalLeads] = useState(null);
 
     useEffect(()=>{
       const fetchMyLeads = async()=>{
         const headers = {'Authorization':`Token ${profileData.token}`}
         await axios.get(`${baseUrl}/leads/fetchUpdatedLeadsUserWise/`,{headers})
         .then((response)=>{
-             console.log(response.data);
             setPrevPage(response.data.previous);
             setNextPage(response.data.next);
             setMyLeads(response.data.results);
+            setTotalLeads(response.data.count);
         }).catch((error)=>{
             console.log(error);
         })
@@ -98,6 +105,7 @@ export default function MyLeads(props) {
       console.log(error)
     })
   }
+  console.log(myLeads)
     return (
       <TableContainer component={Paper} className={classes.container}>
         <Table className={classes.table} aria-label="simple table">
@@ -140,6 +148,7 @@ export default function MyLeads(props) {
           </TableBody>
         </Table>
         <div className={classes.buttonContainer}>
+          <Typography className={classes.count}>Total Lead:{totalLeads}</Typography>
       <Button variant="outlined" className={classes.prevBtn} onClick={prevPageHandler} >
                 <span  className="fa fa-angle-left" aria-hidden="true"></span>
             </Button>

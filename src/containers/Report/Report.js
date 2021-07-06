@@ -16,8 +16,13 @@ export default function Report() {
     const profileData = getProfileData();
     const statusData = getStatusData();
     
-    const findErrors = ()=>{
+    const findErrors = (sDate,eDate)=>{
       let newErrors = {};
+      let selectedStartDate = moment(sDate,'YYYY-MM-DD');
+      let selectedEndDate = moment(eDate,'YYYY-MM-DD');
+      console.log(selectedStartDate);
+      console.log(selectedEndDate);
+      let dateDiff = selectedEndDate.diff(selectedStartDate , 'days')
       
       if(!startDate || startDate === ''){
         newErrors.startDate = 'This is requires field'
@@ -25,7 +30,9 @@ export default function Report() {
       if(!endDate || endDate === ''){
         newErrors.endDate = 'This is required field'
       }
-      
+      if(dateDiff>30){
+        newErrors.endDate = 'Start Date and End Date should be with in 30 days'
+      }
       return newErrors;
     }
     const removeDuplicateStatus = (data)=>{
@@ -38,27 +45,9 @@ export default function Report() {
       return unique;
     }
     const uniqueStatus = removeDuplicateStatus(statusData);
-  // const endDateHandler = (date)=>{
-  //    let today = moment().format('YYYY-MM-DD');
-  //    today = moment(today,"YYYY-MM-DD");
-  //    console.log(today);
-  //    let selectedDate = moment(date,'YYYY-DD-MM');
-  //    console.log(selectedDate);
-  //    let dateDiff = today.diff(selectedDate , 'days')
-  //    console.log('today:'+today);
-  //    console.log('selectedDate:'+selectedDate);
-  //    console.log('dateDiff:'+dateDiff);
-  //    let nextDate = moment(date).add(1,'M'); 
-  //    if(dateDiff<30){
-  //      return "hello"
-  //    }else{
-  //      return nextDate.format('YYYY-MM-DD');
-  //    }
-  // }
-  //console.log(endDateHandler(startDate));
     
     const reportSubmit = async (event)=>{
-      const newErrors = findErrors();
+      const newErrors = findErrors(startDate,endDate);
       setErrors(newErrors);
       event.preventDefault()
       if(Object.keys(newErrors).length === 0){
@@ -74,19 +63,12 @@ export default function Report() {
         })
       }
   }
-  // let toDate = moment().format('YYYY.MM.DD');
-  //  toDate=moment(toDate,"YYYY-MM-DD");
-  //  let newstartDate = moment(startDate,"YYYY-MM-DD")
-  // let diff = toDate.diff(newstartDate,'days')
-  // console.log(toDate);
-  // console.log(moment(startDate).date());
-  // console.log(diff);
 
     return (
         <div>
             <Form onSubmit={reportSubmit}>
               <Card className={style.card}>
-              {isDisplay ?<Alert variant="primary">{alertMessage}</Alert>:null}
+              {isDisplay ?<Alert className={style.alertBox}>{alertMessage}</Alert>:null}
               <Form.Label className={style.Heading}>Report</Form.Label>
                  <Row>
                      <Col>
@@ -107,7 +89,6 @@ export default function Report() {
                        type="date"
                        min={startDate}
                        max={moment().format('YYYY-MM-DD')}
-                       //  max={()=>endDateHandler(startDate)}
                        onChange={(e)=>setEndDate(e.target.value)}
                        isInvalid={!!errors.endDate}/> 
                        <Form.Control.Feedback type="invalid"> {errors.endDate}</Form.Control.Feedback>

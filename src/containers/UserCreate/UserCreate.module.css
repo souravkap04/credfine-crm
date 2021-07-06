@@ -33,4 +33,11 @@
         border: 1px solid #FDA770 !important ;
         margin-top: 0!important;
     }
+    .alertBox{
+        color: #004085;
+        background-color: #cce5ff;
+        border-color: #b8daff;
+        text-align: center;
+        margin: 0 auto;
+       } 
 }

@@ -20,3 +20,10 @@
     color: #183365;
     font-family: Lato;
     }
+   .alertBox{
+    color: #004085;
+    background-color: #cce5ff;
+    border-color: #b8daff;
+    text-align: center;
+    margin: 0 auto;
+   } 
