@@ -20,8 +20,6 @@ export default function Report() {
       let newErrors = {};
       let selectedStartDate = moment(sDate,'YYYY-MM-DD');
       let selectedEndDate = moment(eDate,'YYYY-MM-DD');
-      console.log(selectedStartDate);
-      console.log(selectedEndDate);
       let dateDiff = selectedEndDate.diff(selectedStartDate , 'days')
       
       if(!startDate || startDate === ''){

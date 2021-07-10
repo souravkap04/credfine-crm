@@ -49,8 +49,6 @@ function LeadDetails(props) {
   const [isEditable,setIsEditable] = useState(false);
   const [status,setStatus] = useState('');
   const [subStatus,setSubStatus] = useState([]);
-  // const [leadStatus,setLeadStatus] = useState("");
-  // const [leadSubStatus,setLeadSubStatus] = useState("");
   const [loanType,setLoanType] = useState("");
   const [source,setSource] = useState("");
   const [alertMessage, setAlertMessage] = useState('');
@@ -59,7 +57,6 @@ function LeadDetails(props) {
   const [showCompany, setShowCompany] = useState(false);
   let statusData = getStatusData();
   
-  
   useEffect(() => {
     const fetchLeadDetaile = async (leadId) => {
       let headers = {'Authorization':`Token ${profileData.token}`}
@@ -67,31 +64,30 @@ function LeadDetails(props) {
         await axios
           .get(`${baseUrl}/leads/lead_detail/${leadId}`,{headers})
           .then((response) => {
-            setStatus(response.data.lead_data.status);
-            setSubStatus(response.data.lead_data.sub_status);
-            setLeadId(response.data.lead_data.lead_crm_id);
-            setLoanAmount(response.data.lead_data.loan_amount);
-            setMonthlyIncome(response.data.lead_data["data"].monthly_income);
-            setCurrentCompany(response.data.lead_data['data'].current_company);
-            setDate(response.data.lead_data["data"].dob);
-            setMobileNo(response.data.lead_data.phone_no);
-            setPincode(response.data.lead_data["data"].residential_pincode);
-            setname(response.data.lead_data.name);
-            setCompanyName(response.data.lead_data["data"].current_company_name);
-            // setLeadStatus(response.data.lead_data.status);
-            setLoanType(response.data.lead_data.loan_type);
-            setSource(response.data.lead_data.source);
-            setPancardNo(response.data.eligibility_data.pan_no);
-            setTotalWorkExp(response.data.eligibility_data.total_work_exp);
-            setCurrentWorkExp(response.data.eligibility_data.current_work_exp);
-            setEmail(response.data.eligibility_data.email_id);
-            setDesignation(response.data.eligibility_data.designation);
-            setCurrentEMI(response.data.eligibility_data.current_emi);
-            setCreditCardOutstanding(response.data.eligibility_data.credit_card_outstanding);
-            setSalaryCreditMode(response.data.eligibility_data.salary_mode);
-            setSalaryBankAcc(response.data.eligibility_data.salary_bank);
-            setCurrentResidentType(response.data.eligibility_data.residence_type);
-            setYearsInCurrentCity(response.data.eligibility_data.no_of_years_current_city);
+              setMobileNo(response.data.lead_data.phone_no);
+              setStatus(response.data.lead_data.status);
+              setSubStatus(response.data.lead_data.sub_status);
+              setLeadId(response.data.lead_data.lead_crm_id);
+              setLoanAmount(response.data.lead_data.loan_amount);
+              setMonthlyIncome(response.data.lead_data["data"].monthly_income);
+              setCurrentCompany(response.data.lead_data['data'].current_company);
+              setDate(response.data.lead_data["data"].dob);
+              setPincode(response.data.lead_data["data"].residential_pincode);
+              setname(response.data.lead_data.name);
+              setCompanyName(response.data.lead_data["data"].current_company_name);
+              setLoanType(response.data.lead_data.loan_type);
+              setSource(response.data.lead_data.source);
+              setPancardNo(response.data.eligibility_data.pan_no);
+              setTotalWorkExp(response.data.eligibility_data.total_work_exp);
+              setCurrentWorkExp(response.data.eligibility_data.current_work_exp);
+              setEmail(response.data.eligibility_data.email_id);
+              setDesignation(response.data.eligibility_data.designation);
+              setCurrentEMI(response.data.eligibility_data.current_emi);
+              setCreditCardOutstanding(response.data.eligibility_data.credit_card_outstanding);
+              setSalaryCreditMode(response.data.eligibility_data.salary_mode);
+              setSalaryBankAcc(response.data.eligibility_data.salary_bank);
+              setCurrentResidentType(response.data.eligibility_data.residence_type);
+              setYearsInCurrentCity(response.data.eligibility_data.no_of_years_current_city);
           });
       } catch (error) {
         console.log(error);
@@ -250,7 +246,7 @@ const selectCompany = (company)=>{
                   <Form.Group>
                     <Form.Label>Phone No</Form.Label>
                     <Form.Control
-                    disabled={true}
+                      disabled={true}
                       type="number"
                       value={mobileNo}
                     /> 

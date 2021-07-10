@@ -50,7 +50,7 @@ export default function Login() {
     <div className={style.Login}>
       <Form noValidate validated={validated} onSubmit={loginFormSubmitHandler}>
         <Card className={style.Card}>
-          {isDisplay ? <Alert variant="primary">{alertMessage}</Alert>:null}
+          {isDisplay ? <Alert className={style.alertBox}>{alertMessage}</Alert>:null}
           <Form.Group>
             <Form.Label >
               <img src={crmLogo} alt="CRM Logo"style={{height:'10vh',marginBottom:'20px'}}/>

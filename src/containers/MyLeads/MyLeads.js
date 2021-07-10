@@ -127,13 +127,25 @@ export default function MyLeads(props) {
           </TableHead>
           <TableBody>
                   {myLeads.length !== 0 ?
-                  myLeads.map((my_leads,index)=>(
+                  myLeads.map((my_leads,index)=>{
+                    let data = my_leads.lead.phone_no;
+                    let unMaskdata = data.slice(-4);
+                    let maskData = '';
+                    for(let i =(data.length)-4;i>0;i--){
+                      if(profileData.user_roles[0].user_type === 3){
+                        maskData  += 'x';
+                       }else{
+                         maskData += data[i]
+                       }
+                      }
+                    let leadPhoneNo = maskData+unMaskdata;
+                    return(
                      <TableRow key={index}>
                             <TableCell className={classes.tabledata,classes.leadid}
                             onClick={()=>leadDetailsHandler(my_leads.lead.lead_crm_id)}
                             >{my_leads.lead.lead_crm_id}</TableCell>
                             <TableCell className={classes.tabledata}>{my_leads.lead.name}</TableCell>
-                            <TableCell className={classes.tabledata}>{my_leads.lead.phone_no}</TableCell>
+                            <TableCell className={classes.tabledata}>{leadPhoneNo}</TableCell>
                             <TableCell className={classes.tabledata}>{my_leads.lead.loan_amount}</TableCell>
                             <TableCell className={classes.tabledata}>{my_leads.lead.data.dob}</TableCell>
                             <TableCell className={classes.tabledata}>{my_leads.lead.data.monthly_income}</TableCell>
@@ -144,7 +156,7 @@ export default function MyLeads(props) {
                             <TableCell className={classes.tabledata}>{my_leads.lead.status}</TableCell>
                             <TableCell className={classes.tabledata}>{my_leads.lead.sub_status}</TableCell>
                      </TableRow> 
-                  )) : <span className={classes.emptydata}>No Data Found</span>}
+                  )}) : <span className={classes.emptydata}>No Data Found</span>}
           </TableBody>
         </Table>
         <div className={classes.buttonContainer}>

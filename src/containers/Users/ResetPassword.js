@@ -11,6 +11,7 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
+  Typography,
 } from "@material-ui/core";
 import {Form ,Row,Col,Button ,InputGroup,FormControl} from 'react-bootstrap';
 import * as ReactBootstrap from "react-bootstrap";
@@ -160,8 +161,8 @@ export default function Users() {
   useEffect(()=>{
     const fetchUserData = async ()=>{
       const headers = {
-           'userRoleHash': profileData.user_roles[0].user_role_hash,
-        // 'userRoleHash' : 'f63e2d14-b15a-11eb-bc7e-000000000013'
+        'userRoleHash': profileData.user_roles[0].user_role_hash,
+        //'userRoleHash' : 'f63e2d14-b15a-11eb-bc7e-000000000013'
     };
      try{
      const response = await axios.get(`${baseUrl}/user/fetchUsers/`,{headers});
@@ -174,7 +175,6 @@ export default function Users() {
     fetchUserData();
   },[deleteCount])
   const deleteUser = async (userName,index)=>{
-    console.log(`${baseUrl}/user/deleteUser/${userName}`);
     const headers = {
      'userRoleHash': profileData.user_roles[0].user_role_hash,
     // 'userRoleHash' : 'f63e2d14-b15a-11eb-bc7e-000000000013'
@@ -182,7 +182,6 @@ export default function Users() {
    let item = null;
       await axios.post(`${baseUrl}/user/deleteUser/${userName}`,item ,{headers})
       .then((response)=>{
-        console.log(response.data.message);
         setDeleteCount(deleteCount+1);
       }).catch((error)=>{
         console.log(error);

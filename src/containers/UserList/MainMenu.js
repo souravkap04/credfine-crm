@@ -196,7 +196,6 @@ export default function MainMenu(props) {
   const searchHandler = (e) => {
     if(e.key === 'Enter'){
       if (searchInput !== "" && searchValidation(searchInput)) {
-        console.log("successfull" + searchInput);
         if (selectedTab === indexToTabName['leads']) {
           setIsSearchData(true);
         }else if (selectedTab !== indexToTabName['leads']) {
