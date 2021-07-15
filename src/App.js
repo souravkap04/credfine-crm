@@ -1,6 +1,5 @@
-import React ,{useState , useEffect} from 'react';
+import React from 'react';
 import Login from "./containers/Login/Login";
-import IdleTimer from './timer/IdelTimer';
 import {
   BrowserRouter as Router,
   Switch,
@@ -11,23 +10,6 @@ import MainMenu from './containers/UserList/MainMenu';
 import Profile from './containers/UserList/Profile/Profile';
 
 function App() {
-  const [isTimeout, setIsTimeout] = useState(false);
-  useEffect(() => {
-    const timer = new IdleTimer({
-      timeout: 10, //expire after 10 seconds
-      onTimeout: () => {
-        setIsTimeout(true);
-      },
-      onExpired: () => {
-        //do something if expired on load
-        setIsTimeout(true);
-      }
-    });
-    return () => {
-      timer.cleanUp();
-    
-    };
-  }, [])
   return (
     <Router>
       <Switch>

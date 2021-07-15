@@ -76,7 +76,7 @@ const useStyles = makeStyles({
       'userRoleHash': profileData.user_roles[0].user_role_hash,
   };
 
-     await axios.get(`${baseUrl}/leads/lead_allocate/`,{headers})
+     await axios.get(`${baseUrl}/leads/lead_allocate/Low_credit`,{headers})
      .then((response)=>{
      setLeadData([response.data]);
     // localStorage.setItem('lead_allocate',JSON.stringify(response.data))
@@ -143,6 +143,20 @@ const callConnectHandler = ()=>{
   setIsCallConnect(false);
   setIsCallNotConnected(false)
 }
+const maskPhoneNo = (phoneNo)=>{
+  let data = phoneNo;
+  let unMaskdata = data.slice(-4);
+  let maskData = '';
+  for(let i =(data.length)-4;i>0;i--){
+    if(profileData.user_roles[0].user_type === 3){
+      maskData  += 'x';
+     }else{
+       maskData += data[i]
+     }
+  }
+  let leadPhoneNo = maskData+unMaskdata;
+  return leadPhoneNo;
+}
 
   return (
       <TableContainer component={Paper} className={classes.container}>
@@ -161,6 +175,7 @@ const callConnectHandler = ()=>{
             <TableCell className={classes.tableheading} >Loan Type</TableCell>
             <TableCell className={classes.tableheading} >Status</TableCell>
             <TableCell className={classes.tableheading} >Sub Status</TableCell>
+            <TableCell className={classes.tableheading} >Campaign</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -168,17 +183,7 @@ const callConnectHandler = ()=>{
           props.isSearchData? (
           searchData.length !== 0 ?
            searchData.map((search,index)=>{
-            let data = search.phone_no;
-            let unMaskdata = data.slice(-4);
-            let maskData = '';
-            for(let i =(data.length)-4;i>0;i--){
-              if(profileData.user_roles[0].user_type === 3){
-                maskData  += 'x';
-               }else{
-                 maskData += data[i]
-               }
-            }
-            let leadPhoneNo = maskData+unMaskdata;
+            let leadPhoneNo = maskPhoneNo(search.phone_no);
              return(
             <TableRow key={index}>
             <TableCell className={classes.tabledata,classes.click}
@@ -196,6 +201,7 @@ const callConnectHandler = ()=>{
            <TableCell className={classes.tabledata}>{search.loan_type}</TableCell>
            <TableCell className={classes.tabledata}>{search.status}</TableCell>
            <TableCell className={classes.tabledata}>{search.sub_status}</TableCell>
+           <TableCell className={classes.tabledata}>{search.campaign_category}</TableCell>
            <TableCell>
              <Tooltip title="Call Customer">
              <IconButton onClick={()=>clickToCall(search.phone_no)}>
@@ -208,17 +214,7 @@ const callConnectHandler = ()=>{
            
             : (leadData.length !== 0 ?
             leadData.map((lead,index)=>{
-                let data = lead.phone_no;
-                let unMaskdata = data.slice(-4);
-                let maskData = '';
-                for(let i =(data.length)-4;i>0;i--){
-                  if(profileData.user_roles[0].user_type === 3){
-                    maskData  += 'x';
-                   }else{
-                     maskData += data[i]
-                   }
-                }
-                let leadPhoneNo = maskData+unMaskdata;
+               let leadPhoneNo = maskPhoneNo(lead.phone_no);
               return (
               <TableRow key={index}>
               <TableCell className={classes.tabledata,classes.click}
@@ -235,6 +231,7 @@ const callConnectHandler = ()=>{
               <TableCell className={classes.tabledata}>{lead.loan_type}</TableCell>
               <TableCell className={classes.tabledata}>{lead.status}</TableCell>
               <TableCell className={classes.tabledata}>{lead.sub_status}</TableCell>
+              <TableCell className={classes.tabledata}>{lead.campaign_category}</TableCell>
               <TableCell>
              <Tooltip title="Call Customer">
              <IconButton onClick={()=>clickToCall(lead.phone_no)}>

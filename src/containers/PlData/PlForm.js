@@ -41,8 +41,8 @@ export default function PlForm() {
         setAlertMessage(response.data.message);
         setIsDisplay(true);
       }).catch((error)=>{
-        alertMessage("Something wrong");
-        isDisplay(true)
+        setAlertMessage("Something wrong");
+        setIsDisplay('true');
       })
 
   }

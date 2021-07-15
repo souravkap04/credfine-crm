@@ -105,7 +105,20 @@ export default function MyLeads(props) {
       console.log(error)
     })
   }
-  console.log(myLeads)
+  const maskPhoneNo = (phoneNo)=>{
+      let data = phoneNo;
+      let unMaskdata = data.slice(-4);
+      let maskData = '';
+      for(let i =(data.length)-4;i>0;i--){
+        if(profileData.user_roles[0].user_type === 3){
+          maskData  += 'x';
+        }else{
+          maskData += data[i]
+        }
+        }
+      let leadPhoneNo = maskData+unMaskdata;
+      return leadPhoneNo;
+  }
     return (
       <TableContainer component={Paper} className={classes.container}>
         <Table className={classes.table} aria-label="simple table">
@@ -128,17 +141,7 @@ export default function MyLeads(props) {
           <TableBody>
                   {myLeads.length !== 0 ?
                   myLeads.map((my_leads,index)=>{
-                    let data = my_leads.lead.phone_no;
-                    let unMaskdata = data.slice(-4);
-                    let maskData = '';
-                    for(let i =(data.length)-4;i>0;i--){
-                      if(profileData.user_roles[0].user_type === 3){
-                        maskData  += 'x';
-                       }else{
-                         maskData += data[i]
-                       }
-                      }
-                    let leadPhoneNo = maskData+unMaskdata;
+                    let leadPhoneNo = maskPhoneNo(my_leads.lead.phone_no)
                     return(
                      <TableRow key={index}>
                             <TableCell className={classes.tabledata,classes.leadid}
