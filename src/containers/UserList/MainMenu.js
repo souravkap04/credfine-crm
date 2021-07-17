@@ -20,6 +20,7 @@ import {
   Chip,
   Drawer,
 } from "@material-ui/core";
+import {useIdleTimer} from 'react-idle-timer';
 import UserCreate from "../UserCreate/UserCreate";
 import UploadLeads from "../UploadLeads/UploadLeads";
 import PlForm from "../PlData/PlForm";
@@ -141,14 +142,38 @@ export default function MainMenu(props) {
   const [viewLeadDetails, setViewLeadDetails] = useState(false);
   const [leadId, setLeadId] = useState(null);
   const [isHiddenTab,setIsHiddenTab] = useState(false);
-  // const [isFreshLead,setIsFreshLead] = useState(false);
   // const[drawerOpen,setDrawerOpen] = useState(false);
   const open = Boolean(anchorEl);
- // const history = useHistory();
   let profileData = JSON.parse(localStorage.getItem("user_info"));
   let userName = profileData.username.toLowerCase();
    userName = userName.replace(/^\s+|\s+$/g, "");
    userName = userName.replace(/\s+/g, " ");
+   const timeout = 1000*60*30;
+  const [userLoggedIn,setUserLoggedIn] = useState(false);
+  const [istimeOut,setIsTimeOut] = useState(false);
+  const onAction = (e)=>{
+    setIsTimeOut(false)
+  }
+  const onActive = (e)=>{
+    setIsTimeOut(false)
+  }
+  const onIdle = (e)=>{
+    console.log('user is idle',e)
+    if(istimeOut){
+      props.history.push("/");
+      localStorage.removeItem('user_info');
+      localStorage.removeItem('status_info');
+     }else{
+       reset();
+       setIsTimeOut(true);
+     }
+  }
+  const {reset} = useIdleTimer({
+    timeout,
+    onActive: onActive,
+    onAction: onAction,
+    onIdle: onIdle
+  })
   const handleChange = (event, newValue) => {
    history.push(`/dashboard/${tabNameToIndex[newValue]}`);
     setSelectedTab(newValue);
@@ -225,7 +250,6 @@ export default function MainMenu(props) {
  const logoutHandler = ()=>{
    localStorage.removeItem('user_info');
    localStorage.removeItem('status_info');
-   localStorage.removeItem('_expiredTime');
  }
   return (
     <div className={classes.root}>
@@ -328,14 +352,12 @@ export default function MainMenu(props) {
           {(selectedTab === 0  ) && (viewLeadDetails ?
           <LeadDetails
           leadId={leadId}
-          // setIsFreshLead={setIsFreshLead}
           mainMenuCallBack={leadDetailsHandler}/>
            :
           <Leads
             searchInput={searchInput}
             isSearchData={isSearchData}
             mainMenuCallBack={leadDetailsHandler}
-            // isFreshLead={isFreshLead}
             /> ) }
           {selectedTab === 1 && <PlForm/>}
           {selectedTab === 2 && <BlForm/>}

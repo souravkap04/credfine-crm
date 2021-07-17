@@ -6,7 +6,6 @@ import style from "./Login.module.css";
 import { Form, Card, Button,Alert} from "react-bootstrap";
 import { Link } from "react-router-dom";
 import crmLogo from "../../images/loginImage.svg";
-import IdleTimer from '../../timer/IdelTimer';
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState(""); 
@@ -18,49 +17,35 @@ export default function Login() {
   const [isTimeout, setIsTimeout] = useState(false);
   let history = useHistory();
 
-  const timeOutHandler = ()=>{
-    const timer = new IdleTimer({
-      timeout: 10, //expire after 10 seconds
-      onTimeout: () => {
-        setIsTimeout(true);
-      },
-      onExpired: () => {
-        //do something if expired on load
-        setIsTimeout(true);
-      }
-    });
-    return () => {
-      timer.cleanUp();
-     };
-  }
   const loginFormSubmitHandler = async (event) =>{
     const form = event.currentTarget;
-    if (form.checkValidity() === false) {
+    if (form.checkValidity() === true) {
       event.preventDefault();
       event.stopPropagation();
-    }
-   setValidated(true);
-    event.preventDefault();
-    let item ={username:email, password ,campaign_category:campaign };
-  await axios.post(`${baseUrl}/user/login/`,item)
-  .then((response)=>{
-    localStorage.setItem('user_info',JSON.stringify(response.data));
-    const profileData = JSON.parse(localStorage.getItem('user_info'));
-    if(profileData.is_admin_verified){
-      history.push("/dashboard");
-     // timeOutHandler();
-      let headers = {'Authorization':`Token ${profileData.token}`};
-       axios.get(`${baseUrl}/leads/fetchAllLeads/`,{headers})
+      let item ={username:email, password ,campaign_category:campaign };
+      await axios.post(`${baseUrl}/user/login/`,item)
       .then((response)=>{
-        localStorage.setItem('status_info',JSON.stringify(response.data));
-      }).catch((error)=>{
-        console.log(error);
+        localStorage.setItem('user_info',JSON.stringify(response.data));
+        const profileData = JSON.parse(localStorage.getItem('user_info'));
+        if(profileData.is_admin_verified){
+          history.push("/dashboard");
+          let headers = {'Authorization':`Token ${profileData.token}`};
+           axios.get(`${baseUrl}/leads/fetchAllLeads/`,{headers})
+          .then((response)=>{
+            localStorage.setItem('status_info',JSON.stringify(response.data));
+          }).catch((error)=>{
+            console.log(error);
+          })
+        }
+      }).catch(error=>{
+           setAlertMessage('Wrong Password')
+           setIsDisplay(true);
       })
+    }else{
+      event.preventDefault();
+      setValidated(true);
     }
-  }).catch(error=>{
-       setAlertMessage('Wrong Password')
-       setIsDisplay(true);
-  })
+  
 }
     
   return (
@@ -107,7 +92,13 @@ export default function Login() {
             onChange={(e)=>setCampaign(e.target.value)}
             >
               <option value=''>Select One</option>
-              <option value='low_credit'>Low Credit</option>
+              <option value='Fresh_pl_od'>Fresh PL/OD</option>
+              <option value='Bt_pl_od'>BT PL/OD</option>
+              <option value='Pl_od_top_up'>PL/OD Top Up</option>
+              <option value='Pre_approved'>Pre Approved</option>
+              <option value='Hot_lead'>Hot Lead</option>
+              <option value='WebSite_lead'>WebSite Lead</option>
+              {/* <option value='Low_credit'>Low Credit</option> */}
             </Form.Control>
             <Form.Control.Feedback type='invalid'> This field is required </Form.Control.Feedback>
           </Form.Group>

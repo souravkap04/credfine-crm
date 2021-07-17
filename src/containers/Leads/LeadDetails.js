@@ -57,6 +57,20 @@ function LeadDetails(props) {
   const [showCompany, setShowCompany] = useState(false);
   let statusData = getStatusData();
   
+  const maskPhoneNo = (phoneNo)=>{
+    let data = phoneNo;
+    let unMaskdata = data.slice(-4);
+    let maskData = '';
+    for(let i =(data.length)-4;i>0;i--){
+      if(profileData.user_roles[0].user_type === 3){
+        maskData  += 'x';
+       }else{
+         maskData += data[i]
+       }
+    }
+    let leadPhoneNo = maskData+unMaskdata;
+    return leadPhoneNo;
+  }
   useEffect(() => {
     const fetchLeadDetaile = async (leadId) => {
       let headers = {'Authorization':`Token ${profileData.token}`}
@@ -64,7 +78,7 @@ function LeadDetails(props) {
         await axios
           .get(`${baseUrl}/leads/lead_detail/${leadId}`,{headers})
           .then((response) => {
-              setMobileNo(response.data.lead_data.phone_no);
+              setMobileNo(maskPhoneNo(response.data.lead_data.phone_no));
               setStatus(response.data.lead_data.status);
               setSubStatus(response.data.lead_data.sub_status);
               setLeadId(response.data.lead_data.lead_crm_id);
@@ -247,7 +261,7 @@ const selectCompany = (company)=>{
                     <Form.Label>Phone No</Form.Label>
                     <Form.Control
                       disabled={true}
-                      type="number"
+                      type="text"
                       value={mobileNo}
                     /> 
                   </Form.Group>

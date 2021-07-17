@@ -22,29 +22,28 @@ export default function PlForm() {
  
   const personalLoanSubmitHandler = async (event) =>{
     const form = event.currentTarget;
-    if (form.checkValidity() === false) {
+    if (form.checkValidity() === true) {
       event.preventDefault();
       event.stopPropagation();
+      let item = {loan_amount:loanAmount,monthly_income:monthlyIncome,dob:date,phone_no:mobileNo,
+        residential_pincode:pincode,current_company_name:companyName,name:fullName,
+        current_company:employmentType,loan_type:"PL"};
+      let headers = {
+        'Authorization': `Token ${profileData.token}` ,
+        'Content-Type' : 'application/json'
+      }  
+        await axios.post(`${baseUrl}/leads/lead_create/`,item,{headers})
+        .then((response)=>{
+          setAlertMessage(response.data.message);
+          setIsDisplay(true);
+        }).catch((error)=>{
+          setAlertMessage("Something wrong");
+          setIsDisplay('true');
+        })
+    }else{
+      setValidated(true);
+      event.preventDefault();
     }
-
-    setValidated(true);
-    event.preventDefault();
-    let item = {loan_amount:loanAmount,monthly_income:monthlyIncome,dob:date,phone_no:mobileNo,
-      residential_pincode:pincode,current_company_name:companyName,name:fullName,
-      current_company:employmentType,loan_type:"PL"};
-    let headers = {
-      'Authorization': `Token ${profileData.token}` ,
-      'Content-Type' : 'application/json'
-    }  
-      await axios.post(`${baseUrl}/leads/lead_create/`,item,{headers})
-      .then((response)=>{
-        setAlertMessage(response.data.message);
-        setIsDisplay(true);
-      }).catch((error)=>{
-        setAlertMessage("Something wrong");
-        setIsDisplay('true');
-      })
-
   }
   const searchCompanyHandler = async (e)=>{
     setCompanyName(e.target.value);
@@ -93,10 +92,10 @@ export default function PlForm() {
                 required
                 as="select" 
                 value={employmentType} onChange={(e)=>setEmploymentType(e.target.value)}>
-                  <option value='' >Select One</option>
-                <option value="1">Salaried</option>
-                <option value="2">Self-Employed</option>
-               <option value="3">Self-Employed Professional</option>
+                      <option value='' >Select One</option>
+                      <option value="1">Salaried</option>
+                      <option value="2">Self-Employed</option>
+                      <option value="3">Self-Employed Professional</option>
                 </Form.Control>
                 <Form.Control.Feedback type="invalid"> Select at least one</Form.Control.Feedback>
               </Form.Group>
@@ -153,9 +152,11 @@ export default function PlForm() {
               <Form.Group>
                 <Form.Label>Full Name As Per Pancard</Form.Label>
                 <Form.Control 
+                required
                 type="text"
                 value={fullName}
                 onChange={(e)=>setFullName(e.target.value)}/>
+                <Form.Control.Feedback type="invalid"> This field is required</Form.Control.Feedback>
               </Form.Group>
             </Col>
             <Col>

@@ -1,17 +1,18 @@
-import React from 'react';
+import React,{useState} from 'react';
 import Login from "./containers/Login/Login";
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Redirect
+  Redirect,useHistory
 } from "react-router-dom";
 import MainMenu from './containers/UserList/MainMenu';
 import Profile from './containers/UserList/Profile/Profile';
 
 function App() {
   return (
-    <Router>
+    <div>
+       <Router>
       <Switch>
         <Route exact path="/">
           <Login/>
@@ -21,7 +22,7 @@ function App() {
         <Route exact path="/dashboard/:page?" render={props => <MainMenu {...props}/>} />
       </Switch>
       </Router>
-    
+     </div>
   );
 }
 

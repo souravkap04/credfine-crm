@@ -50,7 +50,7 @@ const useStyles = makeStyles({
   const CancelToken = axios.CancelToken;
   let history = useHistory();
   const profileData = getProfileData();
-  const [leadData,setLeadData] = useState([]);
+  const [leadData,setLeadData] = useState({});
   const [searchData,setSearchData] = useState([]);
   const [callingResponse,setCallingResponse] = useState('')
   const [isCalling,setIsCalling] = useState(false);
@@ -76,9 +76,9 @@ const useStyles = makeStyles({
       'userRoleHash': profileData.user_roles[0].user_role_hash,
   };
 
-     await axios.get(`${baseUrl}/leads/lead_allocate/Low_credit`,{headers})
+     await axios.get(`${baseUrl}/leads/lead_allocate/${profileData.campaign_category}`,{headers})
      .then((response)=>{
-     setLeadData([response.data]);
+     setLeadData(response.data);
     // localStorage.setItem('lead_allocate',JSON.stringify(response.data))
      }).catch((error)=>{
        console.log(error);
@@ -212,35 +212,32 @@ const maskPhoneNo = (phoneNo)=>{
           </TableRow>
            )}) : <span className={classes.emptydata}> No Data Found </span> )
            
-            : (leadData.length !== 0 ?
-            leadData.map((lead,index)=>{
-               let leadPhoneNo = maskPhoneNo(lead.phone_no);
-              return (
-              <TableRow key={index}>
-              <TableCell className={classes.tabledata,classes.click}
-              onClick={()=>routeChangeHAndler(lead.lead_crm_id)}
-              >{lead.lead_crm_id} </TableCell>
-              <TableCell className={classes.tabledata}>{lead.name}</TableCell>
-              <TableCell className={classes.tabledata}>{leadPhoneNo}</TableCell>
-              <TableCell className={classes.tabledata}>{lead.loan_amount}</TableCell>
-              <TableCell className={classes.tabledata}>{lead.data['dob']}</TableCell>
-              <TableCell className={classes.tabledata}>{lead.data['monthly_income']}</TableCell>
-              <TableCell className={classes.tabledata}>{lead.data['current_company']}</TableCell>
-              <TableCell className={classes.tabledata}>{lead.data['residential_pincode']}</TableCell>
-              <TableCell className={classes.tabledata}>{lead.data['current_company_name']}</TableCell>    
-              <TableCell className={classes.tabledata}>{lead.loan_type}</TableCell>
-              <TableCell className={classes.tabledata}>{lead.status}</TableCell>
-              <TableCell className={classes.tabledata}>{lead.sub_status}</TableCell>
-              <TableCell className={classes.tabledata}>{lead.campaign_category}</TableCell>
+            : (Object.keys(leadData).length !== 0 ?
+              <TableRow >
+               <TableCell className={classes.tabledata,classes.click}
+              onClick={()=>routeChangeHAndler(leadData.lead_crm_id)}
+              >{leadData.lead_crm_id} </TableCell>
+             <TableCell className={classes.tabledata}>{leadData.name}</TableCell>
+              <TableCell className={classes.tabledata}>{maskPhoneNo(leadData.phone_no)}</TableCell>
+              <TableCell className={classes.tabledata}>{leadData.loan_amount}</TableCell>
+              <TableCell className={classes.tabledata}>{leadData.data['dob']}</TableCell>
+              <TableCell className={classes.tabledata}>{leadData.data['monthly_income']}</TableCell>
+              <TableCell className={classes.tabledata}>{leadData.data['current_company']}</TableCell>
+              <TableCell className={classes.tabledata}>{leadData.data['residential_pincode']}</TableCell>
+              <TableCell className={classes.tabledata}>{leadData.data['current_company_name']}</TableCell>    
+              <TableCell className={classes.tabledata}>{leadData.loan_type}</TableCell>
+              <TableCell className={classes.tabledata}>{leadData.status}</TableCell>
+              <TableCell className={classes.tabledata}>{leadData.sub_status}</TableCell>
+              <TableCell className={classes.tabledata}>{leadData.campaign_category}</TableCell>
               <TableCell>
              <Tooltip title="Call Customer">
-             <IconButton onClick={()=>clickToCall(lead.phone_no)}>
+             <IconButton onClick={()=>clickToCall(leadData.phone_no)}>
                <CallIcon/>
              </IconButton>
              </Tooltip>
-           </TableCell>
+           </TableCell> 
               </TableRow>
-            )}) : <span className={classes.emptydata}> No Data Found </span>)
+            : <span className={classes.emptydata}> No Data Found </span>)
             }
             <>
             <Dialog open={onGoingCall}>
