@@ -20,28 +20,28 @@ export default function BlForm() {
 
   const businessLoanSubmitHandler = async (event)=>{
     const form = event.currentTarget;
-    if (form.checkValidity() === false) {
+    if (form.checkValidity() === true) {
       event.preventDefault();
       event.stopPropagation();
+      let item = {loan_amount:loanAmount,monthly_income:anualProfit,dob:date,phone_no:mobileNo,
+        residential_pincode:pincode,name:fullName,
+        current_company:employmentType,loan_type:"BL"};
+      let headers = {
+        'Authorization': `Token ${profileData.token}`,
+        'Content-Type' : 'application/json'
+      }  
+        await axios.post(`${baseUrl}/leads/lead_create/`,item,{headers})
+        .then((response)=>{
+          setAlertMessage(response.data.message);
+          setIsDisplay(true);
+        }).catch((error)=>{
+          setAlertMessage("Something Wrong");
+          setIsDisplay(true);
+        })
+    }else{
+      setValidated(true);
+      event.preventDefault();
     }
-
-    setValidated(true);
-    event.preventDefault();
-    let item = {loan_amount:loanAmount,monthly_income:anualProfit,dob:date,phone_no:mobileNo,
-      residential_pincode:pincode,name:fullName,
-      current_company:employmentType,loan_type:"BL"};
-    let headers = {
-      'Authorization': `Token ${profileData.token}`,
-      'Content-Type' : 'application/json'
-    }  
-      await axios.post(`${baseUrl}/leads/lead_create/`,item,{headers})
-      .then((response)=>{
-        setAlertMessage(response.data.message);
-        setIsDisplay(true);
-      }).catch((error)=>{
-        setAlertMessage("Something Wrong");
-        setIsDisplay(true);
-      })
   }
     return (
         <div >
@@ -54,7 +54,7 @@ export default function BlForm() {
               <Form.Group>
                 <Form.Label>Loan Amount</Form.Label>
                 <Form.Control 
-                required
+                 required
                  type="number"
                  value={loanAmount}
                  onChange={(e)=>setLoanAmount(e.target.value)}/>
@@ -67,15 +67,15 @@ export default function BlForm() {
                 <Form.Control required as="select"
                 value={anualTurnover} onChange={(e)=>setAnualTurnover(e.target.value)}>
                     <option value=''>Select One</option>
-                <option value="upto 5lacs">Upto 5Lacs</option>
-                <option value="5-10lacs">5-10 Lacs</option>
-                <option value="10-25lacs">10-25 Lacs</option>
-               <option value="25-50lacs">25-50 Lacs</option>
-               <option value="50-75lacs">50-75 Lacs</option>
-               <option value="75-1cr">75-1 Cr</option>
-               <option value="1-3cr">1-3 Cr</option>
-               <option value="3-5cr">3-5 Cr</option>
-               <option value="5+cr">5+ Cr</option>
+                    <option value="upto 5lacs">Upto 5Lacs</option>
+                    <option value="5-10lacs">5-10 Lacs</option>
+                    <option value="10-25lacs">10-25 Lacs</option>
+                    <option value="25-50lacs">25-50 Lacs</option>
+                    <option value="50-75lacs">50-75 Lacs</option>
+                    <option value="75-1cr">75-1 Cr</option>
+                    <option value="1-3cr">1-3 Cr</option>
+                    <option value="3-5cr">3-5 Cr</option>
+                    <option value="5+cr">5+ Cr</option>
                 </Form.Control>
                 <Form.Control.Feedback type="invalid"> Select at least one</Form.Control.Feedback>
               </Form.Group>
@@ -111,10 +111,10 @@ export default function BlForm() {
                 <Form.Label>Employment Type</Form.Label>
                 <Form.Control required as="select" 
                 value={employmentType} onChange={(e)=>setEmploymentType(e.target.value)}>
-                <option value=''>Select One</option>
-                <option value="Salaried">Salaried</option>
-                <option value="Self-Employment Business">Self-Employment Business</option>
-               <option value="Self-Employment Profetional">Self-Employment Profetional</option>
+                  <option value=''>Select One</option>
+                  <option value="Salaried">Salaried</option>
+                  <option value="Self-Employment Business">Self-Employment Business</option>
+                  <option value="Self-Employment Profetional">Self-Employment Profetional</option>
                 </Form.Control>
                 <Form.Control.Feedback type="invalid"> Select at least one</Form.Control.Feedback>
               </Form.Group>

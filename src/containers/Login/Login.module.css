@@ -1,8 +1,8 @@
 @media all {
     .Login {
-      padding: 60px 0;
+      padding: 56px 0;
       background-color:#535AD1;
-      height: 100vh;
+      height: 100%;
     }
   
     .Login form {

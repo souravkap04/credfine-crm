@@ -16,6 +16,7 @@ const PLData = [
     pincode: 122001,
     name: "Naveen",
     companyName: "TCS",
+    campaignCategory: "Low_credit"
   },
 ];
 
@@ -30,6 +31,7 @@ var BLData = [
     dob: "18-11-1991",
     name: "Naveen",
     pincode: 122001,
+    campaignCategory: "Low_credit"
   },
 ];
  
@@ -48,6 +50,7 @@ var BLData = [
                     <ExcelColumn label="DOB" value="dob"/>
                     <ExcelColumn label="Res Pincode" value="pincode"/>
                     <ExcelColumn label="Company Name" value="companyName"/>
+                    <ExcelColumn label="Campaign Category" value="campaignCategory"/>
                 </ExcelSheet> :
                 <ExcelSheet data={BLData} name="Business Loan">
                   <ExcelColumn label="Full Name" value="name"/>
@@ -59,6 +62,7 @@ var BLData = [
                     <ExcelColumn label="Net Annual Profit" value="annualProfit"/>
                     <ExcelColumn label="Res Pincode" value="pincode"/>
                     <ExcelColumn label="DOB" value="dob"/>
+                    <ExcelColumn label="Campaign Category" value="campaignCategory"/>
                     
                     
                 </ExcelSheet>}
