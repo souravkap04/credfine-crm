@@ -92,12 +92,13 @@ export default function Login() {
             onChange={(e)=>setCampaign(e.target.value)}
             >
               <option value=''>Select One</option>
-              <option value='Fresh_pl_od'>Fresh PL/OD</option>
-              <option value='Bt_pl_od'>BT PL/OD</option>
-              <option value='Pl_od_top_up'>PL/OD Top Up</option>
-              <option value='Pre_approved'>Pre Approved</option>
-              <option value='Hot_lead'>Hot Lead</option>
-              <option value='WebSite_lead'>WebSite Lead</option>
+              <option value='Fresh_PL_OD'>Fresh_PL_OD</option>
+              <option value='BT_PL_OD'>BT_PL_OD</option>
+              <option value='PL_OD_Top_Up'>PL_OD_Top_Up</option>
+              <option value='PRE_APPROVED'>PRE_APPROVED</option>
+              <option value='HOT_LEAD'>HOT_LEAD</option>
+              <option value='WEBSITE_LEAD'>WEBSITE_LEAD</option>
+              <option value='OTHER'>OTHER</option>
               {/* <option value='Low_credit'>Low Credit</option> */}
             </Form.Control>
             <Form.Control.Feedback type='invalid'> This field is required </Form.Control.Feedback>
