@@ -92,9 +92,9 @@ export default function Login() {
             onChange={(e)=>setCampaign(e.target.value)}
             >
               <option value=''>Select One</option>
-              <option value='Fresh_PL_OD'>Fresh_PL_OD</option>
+              <option value='FRESH_PL_OD'>FRESH_PL_OD</option>
               <option value='BT_PL_OD'>BT_PL_OD</option>
-              <option value='PL_OD_Top_Up'>PL_OD_Top_Up</option>
+              <option value='PL_OD_TOP_UP'>PL_OD_TOP_UP</option>
               <option value='PRE_APPROVED'>PRE_APPROVED</option>
               <option value='HOT_LEAD'>HOT_LEAD</option>
               <option value='WEBSITE_LEAD'>WEBSITE_LEAD</option>
