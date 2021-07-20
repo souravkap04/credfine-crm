@@ -79,7 +79,7 @@ function LeadDetails(props) {
         await axios
           .get(`${baseUrl}/leads/lead_detail/${leadId}`,{headers})
           .then((response) => {
-              setMobileNo(maskPhoneNo(response.data.lead_data.phone_no));
+              setMobileNo(response.data.lead_data.phone_no);
               setStatus(response.data.lead_data.status);
               setSubStatus(response.data.lead_data.sub_status);
               setLeadId(response.data.lead_data.lead_crm_id);
@@ -263,7 +263,7 @@ const selectCompany = (company)=>{
                     <Form.Control
                       disabled={true}
                       type="text"
-                      value={mobileNo}
+                      value={maskPhoneNo(mobileNo)}
                     /> 
                   </Form.Group>
                   <Form.Group>
