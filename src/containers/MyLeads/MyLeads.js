@@ -11,7 +11,13 @@ import Button from '@material-ui/core/Button'
 import axios from 'axios';
 import baseUrl from '../../global/api';
 import {getProfileData} from '../../global/leadsGlobalData'
+import clickToCallApi from '../../global/callApi';
 import { Typography } from '@material-ui/core';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
+import CallIcon from '@material-ui/icons/Call';
+import CallerDialogBox from '../Leads/CallerDialog/CallerDialogBox';
+
 
 const useStyles = makeStyles({
     container:{
@@ -64,6 +70,10 @@ export default function MyLeads(props) {
     const [prevPage,setPrevPage] = useState(null);
     const [nextPage,setNextPage] = useState(null);
     const [totalLeads,setTotalLeads] = useState(null);
+    const [isCalling,setIsCalling] = useState(false);
+    const [isCallConnect,setIsCallConnect] = useState(false);
+    const [onGoingCall,setOnGoingCall] = useState(false);
+    const [isCallNotConnected,setIsCallNotConnected] = useState(false)
 
     useEffect(()=>{
       const fetchMyLeads = async()=>{
@@ -110,14 +120,46 @@ export default function MyLeads(props) {
       let unMaskdata = data.slice(-4);
       let maskData = '';
       for(let i =(data.length)-4;i>0;i--){
-        if(profileData.user_roles[0].user_type === 3){
           maskData  += 'x';
-        }else{
-          maskData += data[i]
-        }
         }
       let leadPhoneNo = maskData+unMaskdata;
+      if(profileData.user_roles[0].user_type === 3){
       return leadPhoneNo;
+      }else{
+        return data;
+      }
+  }
+  const clickToCall = async (customerNo)=>{
+    console.log(customerNo)
+    const headers = {
+      'accept':'application/json',
+      'content-type':'application/json'
+    };
+    //const item ={customer_number:customerNo,api_key:profileData.dialer_pass};
+    const item ={customer_number:customerNo,api_key:'6148e57e-4c9f-4378-8508-9cc0f00f79c7'};
+    axios.interceptors.request.use((request)=>{
+      setIsCalling(true);
+      return request;
+    })
+    await axios.post(clickToCallApi, item , {headers})
+     .then((response)=>{
+      if(response.data.success){
+        setIsCalling(false);
+        setOnGoingCall(true);
+      }else{
+        setIsCallNotConnected(true)
+      }
+     }).catch((error)=>{
+       console.log(error)
+       if(error.message){
+        setIsCallConnect(true);
+        setIsCalling(false);
+       }
+     })
+  }
+  const callConnectHandler = ()=>{
+    setIsCallConnect(false);
+    setIsCallNotConnected(false)
   }
     return (
       <TableContainer component={Paper} className={classes.container}>
@@ -158,6 +200,13 @@ export default function MyLeads(props) {
                             <TableCell className={classes.tabledata}>{my_leads.lead.loan_type}</TableCell>
                             <TableCell className={classes.tabledata}>{my_leads.lead.status}</TableCell>
                             <TableCell className={classes.tabledata}>{my_leads.lead.sub_status}</TableCell>
+                            <TableCell className={classes.tabledata}>
+                            <Tooltip title="Call Customer">
+                                <IconButton onClick={()=>clickToCall(my_leads.lead.phone_no)}>
+                                  <CallIcon/>
+                                </IconButton>
+                                </Tooltip>
+                            </TableCell>
                      </TableRow> 
                   )}) : <span className={classes.emptydata}>No Data Found</span>}
           </TableBody>
@@ -170,6 +219,15 @@ export default function MyLeads(props) {
             <Button variant="outlined"  onClick={nextPageHandler}>
                 <span  className="fa fa-angle-right" aria-hidden="true"></span>
             </Button>
+      </div>
+      <div>
+        <CallerDialogBox
+        onGoingCall={onGoingCall}
+        isCalling={isCalling}
+        isCallConnect={isCallConnect}
+        isCallNotConnected={isCallNotConnected}
+        callConnectHandler={callConnectHandler}
+        />
       </div>
       </TableContainer>
     );

@@ -19,6 +19,7 @@ import {
 import style from "./LeadDetails.module.css";
 import baseUrl from "../../global/api";
 import RemarkForm from "./Remarks/RemarkForm";
+
 function LeadDetails(props) {
   const profileData = getProfileData();
   const banks = getBank();
@@ -62,14 +63,14 @@ function LeadDetails(props) {
     let unMaskdata = data.slice(-4);
     let maskData = '';
     for(let i =(data.length)-4;i>0;i--){
-      if(profileData.user_roles[0].user_type === 3){
         maskData  += 'x';
-       }else{
-         maskData += data[i]
-       }
     }
     let leadPhoneNo = maskData+unMaskdata;
+    if(profileData.user_roles[0].user_type === 3){
     return leadPhoneNo;
+    }else{
+      return data;
+    }
   }
   useEffect(() => {
     const fetchLeadDetaile = async (leadId) => {
