@@ -7,7 +7,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import {Dialog,DialogTitle,DialogContent} from '@material-ui/core'
+import {Dialog,DialogContent} from '@material-ui/core'
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -16,6 +16,7 @@ import axios from 'axios';
 import baseUrl from '../../global/api';
 import clickToCallApi from '../../global/callApi'
 import {getProfileData} from '../../global/leadsGlobalData'
+import CallerDialogBox from './CallerDialog/CallerDialogBox';
 
 const useStyles = makeStyles({
   container:{
@@ -52,7 +53,6 @@ const useStyles = makeStyles({
   const profileData = getProfileData();
   const [leadData,setLeadData] = useState({});
   const [searchData,setSearchData] = useState([]);
-  const [callingResponse,setCallingResponse] = useState('')
   const [isCalling,setIsCalling] = useState(false);
   const [isCallConnect,setIsCallConnect] = useState(false);
   const [onGoingCall,setOnGoingCall] = useState(false);
@@ -79,7 +79,6 @@ const useStyles = makeStyles({
      await axios.get(`${baseUrl}/leads/lead_allocate/${profileData.campaign_category}`,{headers})
      .then((response)=>{
      setLeadData(response.data);
-    // localStorage.setItem('lead_allocate',JSON.stringify(response.data))
      }).catch((error)=>{
        console.log(error);
      })
@@ -91,13 +90,11 @@ const useStyles = makeStyles({
    props.mainMenuCallBack(true,leadId);
   }
   const clickToCall = async (customerNo)=>{
-    //  setIsCalling(true);
     const headers = {
       'accept':'application/json',
       'content-type':'application/json'
     };
     const item ={customer_number:customerNo,api_key:profileData.dialer_pass};
-   // const item ={customer_number:customerNo,api_key:'6148e57e-4c9f-4378-8508-9cc0f00f79c7'};
     axios.interceptors.request.use((request)=>{
       setIsCalling(true);
       return request;
@@ -148,14 +145,14 @@ const maskPhoneNo = (phoneNo)=>{
   let unMaskdata = data.slice(-4);
   let maskData = '';
   for(let i =(data.length)-4;i>0;i--){
-    if(profileData.user_roles[0].user_type === 3){
       maskData  += 'x';
-     }else{
-       maskData += data[i]
-     }
   }
   let leadPhoneNo = maskData+unMaskdata;
-  return leadPhoneNo;
+  if(profileData.user_roles[0].user_type === 3){
+    return leadPhoneNo;
+  }else{
+    return data;
+    }
 }
 
   return (
@@ -239,34 +236,15 @@ const maskPhoneNo = (phoneNo)=>{
               </TableRow>
             : <span className={classes.emptydata}> No Data Found </span>)
             }
-            <>
-            <Dialog open={onGoingCall}>
-              <DialogContent>
-                <p>On going call...</p>
-              </DialogContent>
-            </Dialog>
-            </>
-            <>
-            <Dialog open={isCalling}>
-              <DialogContent>
-                <p>Call in progress...</p>
-              </DialogContent>
-            </Dialog>
-            </>
-            <>
-            <Dialog open={isCallConnect} onClose={callConnectHandler}>
-              <DialogContent>
-                <p>Call rejected/missed call</p>
-              </DialogContent>
-            </Dialog>
-            </>
-            <>
-            <Dialog open={isCallNotConnected} onClose={callConnectHandler}>
-              <DialogContent>
-                <p>Call not connected</p>
-              </DialogContent>
-            </Dialog>
-            </>
+            <div>
+              <CallerDialogBox
+              onGoingCall={onGoingCall}
+              isCalling={isCalling}
+              isCallConnect={isCallConnect}
+              isCallNotConnected={isCallNotConnected}
+              callConnectHandler={callConnectHandler}
+              />
+            </div>
         </TableBody>
       </Table>
     </TableContainer>

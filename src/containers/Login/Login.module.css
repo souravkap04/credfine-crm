@@ -1,6 +1,6 @@
 @media all {
     .Login {
-      padding: 56px 0;
+      padding: 68px 0;
       background-color:#535AD1;
       height: 100%;
     }
@@ -13,8 +13,8 @@
       border-radius:15px ;
       background-color: #13B980;
       font-size: 15px;
-    font-family: Lato;
-    margin: 20px 36px 0
+      font-family: Lato;
+      margin: 20px 36px 0
     }
     .Card {
       background-color:#FFFFFF!important;
@@ -30,7 +30,7 @@
     }
     .HorizontlaBar{
       border: 1px solid #FDA770 !important ;
-      margin-top: 0!important;
+      margin: 0!important;
     }
     .alertBox{
       color: #004085;

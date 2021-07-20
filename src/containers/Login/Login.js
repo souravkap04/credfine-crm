@@ -54,9 +54,7 @@ export default function Login() {
         <Card className={style.Card}>
           {isDisplay ? <Alert className={style.alertBox}>{alertMessage}</Alert>:null}
           <Form.Group>
-            <Form.Label >
-              <img src={crmLogo} alt="CRM Logo"style={{height:'10vh',marginBottom:'20px'}}/>
-            </Form.Label>
+            <img src={crmLogo} alt="CRM Logo"style={{height:'10vh',marginBottom:'20px'}}/>
             <Form.Label className={style.TextLogin}>
               Login
               <hr className={style.HorizontlaBar}/>
