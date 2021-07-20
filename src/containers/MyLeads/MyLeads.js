@@ -135,8 +135,7 @@ export default function MyLeads(props) {
       'accept':'application/json',
       'content-type':'application/json'
     };
-    //const item ={customer_number:customerNo,api_key:profileData.dialer_pass};
-    const item ={customer_number:customerNo,api_key:'6148e57e-4c9f-4378-8508-9cc0f00f79c7'};
+    const item ={customer_number:customerNo,api_key:profileData.dialer_pass};
     axios.interceptors.request.use((request)=>{
       setIsCalling(true);
       return request;

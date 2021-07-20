@@ -16,6 +16,7 @@ import axios from 'axios';
 import baseUrl from '../../global/api';
 import clickToCallApi from '../../global/callApi'
 import {getProfileData} from '../../global/leadsGlobalData'
+import CallerDialogBox from './CallerDialog/CallerDialogBox';
 
 const useStyles = makeStyles({
   container:{
@@ -93,8 +94,7 @@ const useStyles = makeStyles({
       'accept':'application/json',
       'content-type':'application/json'
     };
-    //const item ={customer_number:customerNo,api_key:profileData.dialer_pass};
-    const item ={customer_number:customerNo,api_key:'6148e57e-4c9f-4378-8508-9cc0f00f79c7'};
+    const item ={customer_number:customerNo,api_key:profileData.dialer_pass};
     axios.interceptors.request.use((request)=>{
       setIsCalling(true);
       return request;
@@ -236,34 +236,15 @@ const maskPhoneNo = (phoneNo)=>{
               </TableRow>
             : <span className={classes.emptydata}> No Data Found </span>)
             }
-            <>
-            <Dialog open={onGoingCall}>
-              <DialogContent>
-                <p>On going call...</p>
-              </DialogContent>
-            </Dialog>
-            </>
-            <>
-            <Dialog open={isCalling}>
-              <DialogContent>
-                <p>Call in progress...</p>
-              </DialogContent>
-            </Dialog>
-            </>
-            <>
-            <Dialog open={isCallConnect} onClose={callConnectHandler}>
-              <DialogContent>
-                <p>Call rejected/missed call</p>
-              </DialogContent>
-            </Dialog>
-            </>
-            <>
-            <Dialog open={isCallNotConnected} onClose={callConnectHandler}>
-              <DialogContent>
-                <p>Call not connected</p>
-              </DialogContent>
-            </Dialog>
-            </>
+            <div>
+              <CallerDialogBox
+              onGoingCall={onGoingCall}
+              isCalling={isCalling}
+              isCallConnect={isCallConnect}
+              isCallNotConnected={isCallNotConnected}
+              callConnectHandler={callConnectHandler}
+              />
+            </div>
         </TableBody>
       </Table>
     </TableContainer>
