@@ -32,6 +32,7 @@ import LeadDetails from "../Leads/LeadDetails";
 import Profile from "../UserList/Profile/Profile";
 import Report from "../Report/Report";
 import MyLeads from "../MyLeads/MyLeads";
+import FreshLead from "../FreshLead/FreshLeads";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -121,7 +122,8 @@ export default function MainMenu(props) {
         5: "users",
         6:"usercreate",
         7: "report",
-        8: "myleads"
+        8: "myleads",
+        9: "freshlead"
      };
     const indexToTabName = {
         "leads" : 0,
@@ -132,7 +134,8 @@ export default function MainMenu(props) {
          "users" : 5,
         "usercreate" : 6,
         "report" : 7,
-        "myleads" : 8
+        "myleads" : 8,
+        "freshlead" : 9
       };
   const classes = useStyles();
   const [selectedTab, setSelectedTab] = useState(indexToTabName[page]);
@@ -344,7 +347,8 @@ export default function MainMenu(props) {
             <Tab label="Users" hidden={isHiddenTab} />
             <Tab label="User Create"  hidden={isHiddenTab}/>
             <Tab label="Report" hidden={isHiddenTab}/>
-            <Tab  label="My Leads" />
+            <Tab label="My Leads" />
+            <Tab label="Fresh Leads" hidden={isHiddenTab} />
              
           </Tabs>
           </Grid>
@@ -372,6 +376,7 @@ export default function MainMenu(props) {
           mainMenuCallBack={leadDetailsHandler}/> 
           : <MyLeads
           mainMenuCallBack={leadDetailsHandler}/>)}
+          {selectedTab === 9 && <FreshLead/>}
         </Grid>
       </Grid>
     </div>
