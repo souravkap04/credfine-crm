@@ -52,8 +52,15 @@ const useStyles = makeStyles({
     },
     prevBtn:{
       margin:'0px 8px',
-      
-    },
+      backgroundColor : '#13B980',
+      border : '1px solid black',
+      cursor: 'pointer',
+      },
+      nextBtn:{
+        backgroundColor : '#13B980',
+        border : '1px solid black',
+        cursor: 'pointer',
+        },
     count:{
       fontSize:'0.85em',
     }
@@ -68,54 +75,61 @@ export default function FreshLead() {
     const [nextPage,setNextPage] = useState(null);
     const [totalUploadLeads,setTotalUploadLeads] = useState(null);
     const [deleteCount,setDeleteCount] = useState(0);
+    const splitUrl = (data)=>{
+      if(data !== null){
+      const [url , pager] = data.split('?');
+      return pager;
+      }
+    }
     useEffect(()=>{
       const fetchFreshLeads = async()=>{
         const headers = {
           'Authorization':`Token ${profileData.token}`,
            'userRoleHash':`${profileData.user_roles[0].user_role_hash}`
           };
-        await axios.get(`${baseUrl}/leads/freshLeads`,{headers})
+        await axios.get(`${baseUrl}/leads/freshLeads/`,{headers})
         .then((response)=>{
           setFreshLeads(response.data.results);
           setPrevPage(response.data.previous);
           setNextPage(response.data.next);
-          setTotalUploadLeads(response.data.count)
+          setTotalUploadLeads(response.data.count);
         }).catch((error)=>{
           console.log(error);
         })
       };
       fetchFreshLeads();
     },[deleteCount])
-    const prevPageHandler = async()=>{
-      const headers = {
-        'Authorization':`Token ${profileData.token}`,
-         'userRoleHash':`${profileData.user_roles[0].user_role_hash}`
-        }
-      await axios.get(prevPage , {headers})
-      .then((response)=>{
-        setFreshLeads(response.data.results);
-        setPrevPage(response.data.previous);
-        setNextPage(response.data.next);
-        setTotalUploadLeads(response.data.count)
-      }).catch((error)=>{
-        console.log(error);
-      })
-    }
     const nextPageHandler = async()=>{
       const headers = {
         'Authorization':`Token ${profileData.token}`,
          'userRoleHash':`${profileData.user_roles[0].user_role_hash}`
         };
-      await axios.get(nextPage , {headers})
+      await axios.get(`${baseUrl}/leads/freshLeads/?${splitUrl(nextPage)}` , {headers})
       .then((response)=>{
         setFreshLeads(response.data.results);
         setPrevPage(response.data.previous);
         setNextPage(response.data.next);
-        setTotalUploadLeads(response.data.count)
+        setTotalUploadLeads(response.data.count);
       }).catch((error)=>{
         console.log(error);
       })
     }
+    const prevPageHandler = async()=>{
+      const headers = {
+        'Authorization':`Token ${profileData.token}`,
+         'userRoleHash':`${profileData.user_roles[0].user_role_hash}`
+        }
+      await axios.get(`${baseUrl}/leads/freshLeads/?${splitUrl(prevPage)}`, {headers})
+      .then((response)=>{
+        setFreshLeads(response.data.results);
+        setPrevPage(response.data.previous);
+        setNextPage(response.data.next);
+        setTotalUploadLeads(response.data.count);
+      }).catch((error)=>{
+        console.log(error);
+      })
+    }
+    
     const deleteFreshLead = async (leadId)=>{
       console.log(leadId);
       const data = {lead_crm_id:leadId};
@@ -130,6 +144,7 @@ export default function FreshLead() {
         console.log(error);
       })
     }
+   
     return (
         <TableContainer component={Paper} className={classes.container}>
         <Table className={classes.table} aria-label="simple table">
@@ -184,10 +199,16 @@ export default function FreshLead() {
             </Table>
             <div className={classes.buttonContainer}>
                 <Typography className={classes.count}>Total Lead:{totalUploadLeads}</Typography>
-                <Button variant="outlined" className={classes.prevBtn} onClick={prevPageHandler} >
+                <Button 
+                className={classes.prevBtn} 
+                onClick={prevPageHandler} 
+                >
                       <span  className="fa fa-angle-left" aria-hidden="true"></span>
                 </Button>
-                <Button variant="outlined"  onClick={nextPageHandler}>
+                <Button 
+                className={classes.nextBtn}
+                 onClick={nextPageHandler}
+                 >
                     <span  className="fa fa-angle-right" aria-hidden="true"></span>
                 </Button>
           </div>

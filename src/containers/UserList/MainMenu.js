@@ -340,8 +340,8 @@ export default function MainMenu(props) {
             onChange={handleChange}
           >
             <Tab label="Leads"  />
-            <Tab label="Personal Loan" hidden={isHiddenTab}/>
-            <Tab label="Business Loan" hidden={isHiddenTab} />
+            <Tab label="Personal Loan" />
+            <Tab label="Business Loan"/>
             <Tab label="Upload Leads"  hidden={isHiddenTab} />
             <Tab label="Verify Users" hidden={isHiddenTab} />
             <Tab label="Users" hidden={isHiddenTab} />

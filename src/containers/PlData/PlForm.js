@@ -14,6 +14,7 @@ export default function PlForm() {
   const [pincode,setPincode] = useState('');
   const [fullName,setFullName] = useState('');
   const [companyName,setCompanyName] = useState('');
+  const [campaign,setCampaign] = useState("");
   const [searchCompany,setSearchCompany] = useState([]);
   const [showCompany,setShowCompany] = useState(false);
   const [validated, setValidated] = useState(false);
@@ -27,7 +28,7 @@ export default function PlForm() {
       event.stopPropagation();
       let item = {loan_amount:loanAmount,monthly_income:monthlyIncome,dob:date,phone_no:mobileNo,
         residential_pincode:pincode,current_company_name:companyName,name:fullName,
-        current_company:employmentType,loan_type:"PL"};
+        current_company:employmentType,loan_type:"PL",campaign_category:campaign};
       let headers = {
         'Authorization': `Token ${profileData.token}` ,
         'Content-Type' : 'application/json'
@@ -176,6 +177,27 @@ export default function PlForm() {
                     )) : null}
                   </ListGroup>
               </Form.Group>
+            </Col>
+            <Col>
+            <Form.Group controlId="campaign">
+            <Form.Label className={style.Input_lable}>Campaign</Form.Label>
+            <Form.Control
+            required
+            as="select"
+            value={campaign}
+            onChange={(e)=>setCampaign(e.target.value)}
+            >
+              <option value=''>Select One</option>
+              <option value='FRESH_PL_OD'>FRESH_PL_OD</option>
+              <option value='BT_PL_OD'>BT_PL_OD</option>
+              <option value='PL_OD_TOP_UP'>PL_OD_TOP_UP</option>
+              <option value='PRE_APPROVED'>PRE_APPROVED</option>
+              <option value='HOT_LEAD'>HOT_LEAD</option>
+              <option value='WEBSITE_LEAD'>WEBSITE_LEAD</option>
+              <option value='OTHER'>OTHER</option>
+            </Form.Control>
+            <Form.Control.Feedback type='invalid'> This field is required </Form.Control.Feedback>
+          </Form.Group>
             </Col>
           </Form.Row>
           <Button className={style.Button}
