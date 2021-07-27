@@ -341,7 +341,7 @@ export default function MainMenu(props) {
           >
             <Tab label="Leads"  />
             <Tab label="Personal Loan" />
-            <Tab label="Business Loan"/>
+            <Tab label="Business Loan" hidden={isHiddenTab} />
             <Tab label="Upload Leads"  hidden={isHiddenTab} />
             <Tab label="Verify Users" hidden={isHiddenTab} />
             <Tab label="Users" hidden={isHiddenTab} />
