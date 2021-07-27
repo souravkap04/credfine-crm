@@ -14,6 +14,7 @@ export default function BlForm() {
   const [date,setDate] = useState(new Date());
   const [fullName,setFullName] = useState('');
   const [pincode,setPincode] = useState('');
+  const [campaign,setCampaign] = useState("");
   const [validated, setValidated] = useState(false);
   const [alertMessage,setAlertMessage] = useState('');
   const [isDisplay,setIsDisplay] = useState(false);
@@ -25,7 +26,7 @@ export default function BlForm() {
       event.stopPropagation();
       let item = {loan_amount:loanAmount,monthly_income:anualProfit,dob:date,phone_no:mobileNo,
         residential_pincode:pincode,name:fullName,
-        current_company:employmentType,loan_type:"BL"};
+        current_company:employmentType,loan_type:"BL",campaign_category:campaign};
       let headers = {
         'Authorization': `Token ${profileData.token}`,
         'Content-Type' : 'application/json'
@@ -112,9 +113,9 @@ export default function BlForm() {
                 <Form.Control required as="select" 
                 value={employmentType} onChange={(e)=>setEmploymentType(e.target.value)}>
                   <option value=''>Select One</option>
-                  <option value="Salaried">Salaried</option>
-                  <option value="Self-Employment Business">Self-Employment Business</option>
-                  <option value="Self-Employment Profetional">Self-Employment Profetional</option>
+                  <option value="1">Salaried</option>
+                  <option value="2">Self-Employment Business</option>
+                  <option value="3">Self-Employment Profetional</option>
                 </Form.Control>
                 <Form.Control.Feedback type="invalid"> Select at least one</Form.Control.Feedback>
               </Form.Group>
@@ -149,6 +150,27 @@ export default function BlForm() {
                  onChange={(e)=>setPincode(e.target.value)}/>
                   <Form.Control.Feedback type="invalid"> This field is required</Form.Control.Feedback>
               </Form.Group>
+            </Col>
+            <Col>
+            <Form.Group controlId="campaign">
+            <Form.Label className={style.Input_lable}>Campaign</Form.Label>
+            <Form.Control
+            required
+            as="select"
+            value={campaign}
+            onChange={(e)=>setCampaign(e.target.value)}
+            >
+              <option value=''>Select One</option>
+              <option value='FRESH_PL_OD'>FRESH_PL_OD</option>
+              <option value='BT_PL_OD'>BT_PL_OD</option>
+              <option value='PL_OD_TOP_UP'>PL_OD_TOP_UP</option>
+              <option value='PRE_APPROVED'>PRE_APPROVED</option>
+              <option value='HOT_LEAD'>HOT_LEAD</option>
+              <option value='WEBSITE_LEAD'>WEBSITE_LEAD</option>
+              <option value='OTHER'>OTHER</option>
+            </Form.Control>
+            <Form.Control.Feedback type='invalid'> This field is required </Form.Control.Feedback>
+          </Form.Group>
             </Col>
           </Form.Row>
               <Button className={style.Button}
