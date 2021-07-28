@@ -4,7 +4,6 @@ import axios from 'axios'
 import baseUrl from '../../global/api'
 import style from "./Login.module.css";
 import { Form, Card, Button,Alert} from "react-bootstrap";
-import { Link } from "react-router-dom";
 import crmLogo from "../../images/loginImage.svg";
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -13,8 +12,7 @@ export default function Login() {
   const [validated, setValidated] = useState(false);
   const [alertMessage,setAlertMessage] = useState('');
   const [isDisplay,setIsDisplay] = useState(false);
-  const [errors,setErrors] = useState({});
-  const [isTimeout, setIsTimeout] = useState(false);
+  // const [dialer,setDialer] = useState(false);
   let history = useHistory();
 
   const loginFormSubmitHandler = async (event) =>{
@@ -22,7 +20,8 @@ export default function Login() {
     if (form.checkValidity() === true) {
       event.preventDefault();
       event.stopPropagation();
-      let item ={username:email, password ,campaign_category:campaign };
+      // let item ={username:email, password ,campaign_category:campaign, dialer:dialer };
+      let item ={username:email, password ,campaign_category:campaign};
       await axios.post(`${baseUrl}/user/login/`,item)
       .then((response)=>{
         localStorage.setItem('user_info',JSON.stringify(response.data));
@@ -52,7 +51,7 @@ export default function Login() {
     <div className={style.Login}>
       <Form noValidate validated={validated}  onSubmit={loginFormSubmitHandler}>
         <Card className={style.Card}>
-          {isDisplay ? <Alert className={style.alertBox}>{alertMessage}</Alert>:null}
+          {isDisplay && <Alert className={style.alertBox}>{alertMessage}</Alert>}
           <Form.Group>
             <img src={crmLogo} alt="CRM Logo"style={{height:'10vh',marginBottom:'20px'}}/>
             <Form.Label className={style.TextLogin}>
@@ -61,7 +60,7 @@ export default function Login() {
             </Form.Label>
           </Form.Group>
           <Form.Group size="lg" controlId="email">
-            <Form.Label style={{color:"#313F80",fontFamily: "Lato"}}>Email Id / Emp Code</Form.Label>
+            <Form.Label className={style.Input_lable}>Email Id / Emp Code</Form.Label>
             <Form.Control
             required
               autoFocus
@@ -72,17 +71,31 @@ export default function Login() {
             <Form.Control.Feedback type="invalid"> This field is required </Form.Control.Feedback>
           </Form.Group>
           <Form.Group size="lg" controlId="password">
-            <Form.Label style={{color:"#313F80",fontFamily: "Lato"}}>Password</Form.Label>
+            <Form.Label className={style.Input_lable}>Password</Form.Label>
             <Form.Control
-            required
+              required
               type="password"
               value={password}
               onChange={(e)=>setPassword(e.target.value)}
             />
             <Form.Control.Feedback type="invalid"> This field is required</Form.Control.Feedback>
           </Form.Group>
+          {/* <Form.Group controlId="dialer">
+            <Form.Label className={style.Input_lable}>Dialer</Form.Label>
+            <Form.Control
+              required
+              as="select"
+              value={dialer}
+              onChange={(e)=>setDialer(e.target.value)}
+            >
+              <option value="">Select One</option>
+              <option value="tata">Tata</option>
+              <option value="vertage">Vertage</option>
+            </Form.Control>
+            <Form.Control.Feedback type='invalid'>This field is required</Form.Control.Feedback>
+          </Form.Group> */}
           <Form.Group controlId="campaign">
-            <Form.Label style={{color:"#313F80",fontFamily: "Lato"}}>Campaign</Form.Label>
+            <Form.Label className={style.Input_lable}>Campaign</Form.Label>
             <Form.Control
             required
             as="select"
@@ -97,7 +110,6 @@ export default function Login() {
               <option value='HOT_LEAD'>HOT_LEAD</option>
               <option value='WEBSITE_LEAD'>WEBSITE_LEAD</option>
               <option value='OTHER'>OTHER</option>
-              {/* <option value='Low_credit'>Low Credit</option> */}
             </Form.Control>
             <Form.Control.Feedback type='invalid'> This field is required </Form.Control.Feedback>
           </Form.Group>

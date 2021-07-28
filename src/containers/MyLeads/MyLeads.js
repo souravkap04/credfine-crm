@@ -55,8 +55,15 @@ const useStyles = makeStyles({
     },
     prevBtn:{
       margin:'0px 8px',
-      
-    },
+      backgroundColor : '#13B980',
+      border : '1px solid black',
+      cursor: 'pointer',
+      },
+      nextBtn:{
+        backgroundColor : '#13B980',
+        border : '1px solid black',
+        cursor: 'pointer',
+        },
     count:{
       fontSize:'0.85em',
     }
@@ -74,6 +81,13 @@ export default function MyLeads(props) {
     const [isCallConnect,setIsCallConnect] = useState(false);
     const [onGoingCall,setOnGoingCall] = useState(false);
     const [isCallNotConnected,setIsCallNotConnected] = useState(false)
+
+    const splitUrl = (data)=>{
+      if(data !== null){
+      const [url , pager] = data.split('?');
+      return pager;
+      }
+    }
 
     useEffect(()=>{
       const fetchMyLeads = async()=>{
@@ -93,9 +107,20 @@ export default function MyLeads(props) {
     const leadDetailsHandler = (leadId)=>{
        props.mainMenuCallBack(true,leadId);
     }
+    const nextPageHandler = async ()=>{
+      const headers = {'Authorization':`Token ${profileData.token}`}
+      await axios.get(`${baseUrl}/leads/fetchUpdatedLeadsUserWise/?${splitUrl(nextPage)}`,{headers})
+      .then((response)=>{
+          setPrevPage(response.data.previous);
+          setNextPage(response.data.next);
+          setMyLeads(response.data.results);
+      }).catch((error)=>{
+        console.log(error)
+      })
+    }
     const prevPageHandler = async ()=>{
       const headers = {'Authorization':`Token ${profileData.token}`}
-      await axios.get(prevPage,{headers})
+      await axios.get(`${baseUrl}/leads/fetchUpdatedLeadsUserWise/?${splitUrl(prevPage)}`,{headers})
       .then((response)=>{
           setPrevPage(response.data.previous);
           setNextPage(response.data.next);
@@ -104,17 +129,7 @@ export default function MyLeads(props) {
         console.log(error)
       })
   }
-  const nextPageHandler = async ()=>{
-    const headers = {'Authorization':`Token ${profileData.token}`}
-    await axios.get(nextPage,{headers})
-    .then((response)=>{
-        setPrevPage(response.data.previous);
-        setNextPage(response.data.next);
-        setMyLeads(response.data.results);
-    }).catch((error)=>{
-      console.log(error)
-    })
-  }
+ 
   const maskPhoneNo = (phoneNo)=>{
       let data = phoneNo;
       let unMaskdata = data.slice(-4);
@@ -212,10 +227,16 @@ export default function MyLeads(props) {
         </Table>
         <div className={classes.buttonContainer}>
           <Typography className={classes.count}>Total Lead:{totalLeads}</Typography>
-      <Button variant="outlined" className={classes.prevBtn} onClick={prevPageHandler} >
+      <Button 
+      className={classes.prevBtn} 
+      onClick={prevPageHandler} 
+      >
                 <span  className="fa fa-angle-left" aria-hidden="true"></span>
             </Button>
-            <Button variant="outlined"  onClick={nextPageHandler}>
+            <Button 
+            className={classes.nextBtn} 
+            onClick={nextPageHandler}
+            >
                 <span  className="fa fa-angle-right" aria-hidden="true"></span>
             </Button>
       </div>

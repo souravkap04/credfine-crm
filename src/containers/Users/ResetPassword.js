@@ -161,8 +161,7 @@ export default function Users() {
   useEffect(()=>{
     const fetchUserData = async ()=>{
       const headers = {
-        'userRoleHash': profileData.user_roles[0].user_role_hash,
-        //'userRoleHash' : 'f63e2d14-b15a-11eb-bc7e-000000000013'
+       'userRoleHash': profileData.user_roles[0].user_role_hash,
     };
      try{
      const response = await axios.get(`${baseUrl}/user/fetchUsers/`,{headers});
@@ -243,7 +242,7 @@ export default function Users() {
             <TableCell className={classes.tableheading}>Product Type</TableCell>
             <TableCell className={classes.tableheading}>Phone No</TableCell>
             <TableCell className={classes.tableheading}>Gender</TableCell>
-            <TableCell className={classes.tableheading}>DIALER API Key</TableCell>
+            {/* <TableCell className={classes.tableheading}>DIALER API Key</TableCell> */}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -267,7 +266,7 @@ export default function Users() {
               <TableCell className={classes.tabledata}>{user.product_type}</TableCell>
               <TableCell className={classes.tabledata}>{user.phone_no}</TableCell>
               <TableCell className={classes.tabledata}>{user.gender}</TableCell>
-              <TableCell className={classes.tabledata}>{user.myuser.dialer_id}</TableCell>
+              {/* <TableCell className={classes.tabledata}>{user.myuser.dialer_pass}</TableCell> */}
               <TableCell className={classes.tabledata}>
                   <Tooltip title="Reset Password">
                   <IconButton onClick={()=>resetPasswordHandler(user.myuser.username,index)}>
