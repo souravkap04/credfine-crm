@@ -1,27 +1,75 @@
 import React, { useState } from "react";
-import { useHistory ,Redirect} from "react-router-dom";
+import { makeStyles } from "@material-ui/core/styles";
+import { useHistory} from "react-router-dom";
+import { useForm , Controller} from "react-hook-form";
 import axios from 'axios'
 import baseUrl from '../../global/api'
-import style from "./Login.module.css";
-import { Form, Card, Button,Alert} from "react-bootstrap";
-import crmLogo from "../../images/loginImage.svg";
-export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState(""); 
-  const [campaign,setCampaign] = useState("");
-  const [validated, setValidated] = useState(false);
-  const [alertMessage,setAlertMessage] = useState('');
-  const [isDisplay,setIsDisplay] = useState(false);
-  // const [dialer,setDialer] = useState(false);
-  let history = useHistory();
+import crmLogo from "../../images/crmLogo.svg";
+import loinImage from "../../images/loginImage.png"
+import { Button, Container, FormControl, Grid, InputAdornment, InputLabel,
+    Select, MenuItem, TextField, Typography, FormHelperText } from "@material-ui/core";
+import {getCampaign} from '../../global/leadsGlobalData';
+import EmailOutlinedIcon from '@material-ui/icons/EmailOutlined';
+import HttpsOutlinedIcon from '@material-ui/icons/HttpsOutlined';
+import Alert from '@material-ui/lab/Alert';
 
-  const loginFormSubmitHandler = async (event) =>{
-    const form = event.currentTarget;
-    if (form.checkValidity() === true) {
-      event.preventDefault();
-      event.stopPropagation();
-      // let item ={username:email, password ,campaign_category:campaign, dialer:dialer };
-      let item ={username:email, password ,campaign_category:campaign};
+const useStyles = makeStyles((theme) => ({
+    root: {
+        flexGrow: 0,
+        display:'flex',
+        backgroundColor:'#ffffff'
+      },
+      login_image:{
+          maxWidth:'100%',
+          maxHeight:'100vh'
+      },
+      login_form:{
+        width: '50%',
+        margin: 'auto',
+        padding: theme.spacing(0,16),
+      },
+      input_field:{
+          margin:theme.spacing(1,0),
+          '&:hover': {
+            borderRadius:'1px solid #535ad1',
+          }
+      },
+      login_btn:{
+        margin:theme.spacing(1,0),
+        padding:theme.spacing(2),
+        borderRadius:'5px',
+      },
+      welcome_back:{
+        fontFamily:'Lato',  
+        fontSize: '20px',
+        color: '#393939',
+      },
+      login_account:{
+        fontFamily:'Lato',  
+        fontSize: '32px',
+        fontWeight: '900',
+        color: '#393939',
+        marginBottom:theme.spacing(3),
+      },
+      crm_logo:{
+          height:'10vh',
+          margin:theme.spacing(0,0,3,1),
+      },
+      alert_box:{
+        margin:theme.spacing(0,0,2,0),
+      }
+}))
+
+export default function Login() {
+    const classes = useStyles();
+    const campaignData = getCampaign();
+    let history = useHistory();
+    const [alertMessage,setAlertMessage] = useState('');
+    const [isDisplay,setIsDisplay] = useState(false);
+    const { register, handleSubmit,control, errors} = useForm();
+    const onSubmit = async (data) =>{
+        const {email,password,campaign} = data;
+        let item ={username:email, password ,campaign_category:campaign};
       await axios.post(`${baseUrl}/user/login/`,item)
       .then((response)=>{
         localStorage.setItem('user_info',JSON.stringify(response.data));
@@ -37,89 +85,117 @@ export default function Login() {
           })
         }
       }).catch(error=>{
-           setAlertMessage('Wrong Password')
+           setAlertMessage('This is an error alert — check it out!')
            setIsDisplay(true);
       })
-    }else{
-      event.preventDefault();
-      setValidated(true);
     }
-  
-}
-    
-  return (
-    <div className={style.Login}>
-      <Form noValidate validated={validated}  onSubmit={loginFormSubmitHandler}>
-        <Card className={style.Card}>
-          {isDisplay && <Alert className={style.alertBox}>{alertMessage}</Alert>}
-          <Form.Group>
-            <img src={crmLogo} alt="CRM Logo"style={{height:'10vh',marginBottom:'20px'}}/>
-            <Form.Label className={style.TextLogin}>
-              Login
-              <hr className={style.HorizontlaBar}/>
-            </Form.Label>
-          </Form.Group>
-          <Form.Group size="lg" controlId="email">
-            <Form.Label className={style.Input_lable}>Email Id / Emp Code</Form.Label>
-            <Form.Control
-            required
-              autoFocus
-              type="text"
-              value={email}
-              onChange={(e)=>setEmail(e.target.value)}
-            />
-            <Form.Control.Feedback type="invalid"> This field is required </Form.Control.Feedback>
-          </Form.Group>
-          <Form.Group size="lg" controlId="password">
-            <Form.Label className={style.Input_lable}>Password</Form.Label>
-            <Form.Control
-              required
-              type="password"
-              value={password}
-              onChange={(e)=>setPassword(e.target.value)}
-            />
-            <Form.Control.Feedback type="invalid"> This field is required</Form.Control.Feedback>
-          </Form.Group>
-          {/* <Form.Group controlId="dialer">
-            <Form.Label className={style.Input_lable}>Dialer</Form.Label>
-            <Form.Control
-              required
-              as="select"
-              value={dialer}
-              onChange={(e)=>setDialer(e.target.value)}
-            >
-              <option value="">Select One</option>
-              <option value="tata">Tata</option>
-              <option value="vertage">Vertage</option>
-            </Form.Control>
-            <Form.Control.Feedback type='invalid'>This field is required</Form.Control.Feedback>
-          </Form.Group> */}
-          <Form.Group controlId="campaign">
-            <Form.Label className={style.Input_lable}>Campaign</Form.Label>
-            <Form.Control
-            required
-            as="select"
-            value={campaign}
-            onChange={(e)=>setCampaign(e.target.value)}
-            >
-              <option value=''>Select One</option>
-              <option value='FRESH_PL_OD'>FRESH_PL_OD</option>
-              <option value='BT_PL_OD'>BT_PL_OD</option>
-              <option value='PL_OD_TOP_UP'>PL_OD_TOP_UP</option>
-              <option value='PRE_APPROVED'>PRE_APPROVED</option>
-              <option value='HOT_LEAD'>HOT_LEAD</option>
-              <option value='WEBSITE_LEAD'>WEBSITE_LEAD</option>
-              <option value='OTHER'>OTHER</option>
-            </Form.Control>
-            <Form.Control.Feedback type='invalid'> This field is required </Form.Control.Feedback>
-          </Form.Group>
-          <Button
-            variant="success"
-            type="submit" >
-            LOGIN
-          </Button>
-        </Card>
-      </Form>
-    </div>
-  );
+    console.log(errors)
+    return (
+        <div className={classes.root}>
+            <div>
+                <img src={loinImage} alt="login image" className={classes.login_image}/>
+            </div>
+            <Container className={classes.login_form}>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                {isDisplay && 
+                <Alert className={classes.alert_box}
+                severity="error"
+                >{alertMessage}</Alert>}
+            <Grid>
+                <Grid>
+                    <img src={crmLogo} alt="CRM Logo" className={classes.crm_logo}/>      
+                </Grid>
+                <Grid>
+                    <Typography className={classes.welcome_back}>
+                         Welcome back
+                    </Typography>
+                    <Typography className={classes.login_account}>
+                         Login to your account
+                    </Typography>
+                </Grid>
+                <Grid item lg={12}>
+                    <Typography>Email</Typography>
+                    <TextField 
+                        className={classes.input_field}
+                        placeholder="xyz@credfine.com" 
+                        variant="filled" 
+                        fullWidth
+                        name="email"
+                        inputRef={register({
+                            required:'E-mail is required'
+                        })}
+                        error={Boolean(errors.email)}
+                        helperText={errors.email?.message}
+                        InputProps={{
+                            startAdornment:(
+                                <InputAdornment position="start">
+                                    <EmailOutlinedIcon/>
+                                </InputAdornment>
+                            )
+                        }}/>
+                </Grid>
+                <Grid item lg={12}>
+                    <Typography>Password</Typography>
+                    <TextField 
+                        className={classes.input_field}
+                        variant="filled" 
+                        fullWidth
+                        type="password"
+                        name="password"
+                        inputRef={register({
+                            required:'Password is required'
+                        })}
+                        error={Boolean(errors.password)}
+                        helperText={errors.password?.message}
+                        InputProps={{
+                            startAdornment:(
+                                <InputAdornment position="start">
+                                    <HttpsOutlinedIcon/>
+                                </InputAdornment>
+                            )
+                        }}/>
+                </Grid>
+                <Grid item lg={12}>
+                    <Typography>Campaign</Typography>
+                        <FormControl 
+                        className={classes.input_field}
+                        fullWidth 
+                        variant="filled"
+                        error={Boolean(errors.campaign)}>
+                            <InputLabel>Select</InputLabel>
+                            <Controller
+                                render={(props) => (
+                                <Select value={props.value} onChange={props.onChange}>
+                                   {campaignData.map((option)=>(
+                                        <MenuItem key={option} value={option}>
+                                        {option}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                                )}
+                                defaultValue=""
+                                name="campaign"
+                                control={control}
+                                rules={{
+                                    required:'Please choose your campaign'
+                                }}
+                            />
+                            <FormHelperText>{errors.campaign?.message}</FormHelperText>
+                        </FormControl>
+                </Grid>
+                <Grid item lg={12}>
+                    <Button 
+                    className={classes.login_btn}
+                    type="submit"
+                    variant='contained' 
+                    color='primary'
+                    fullWidth>
+                        Login Now
+                    </Button>
+                </Grid>
+            </Grid>
+            </form>
+            </Container>
+        </div>
+    )
 }
