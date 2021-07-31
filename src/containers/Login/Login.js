@@ -8,7 +8,7 @@ import crmLogo from "../../images/crmLogo.svg";
 import loinImage from "../../images/loginImage.png"
 import { Button, Container, FormControl, Grid, InputAdornment, InputLabel,
     Select, MenuItem, TextField, Typography, FormHelperText } from "@material-ui/core";
-import {getCampaign} from '../../global/leadsGlobalData';
+import { getCampaign , getDialer } from '../../global/leadsGlobalData';
 import EmailOutlinedIcon from '@material-ui/icons/EmailOutlined';
 import HttpsOutlinedIcon from '@material-ui/icons/HttpsOutlined';
 import Alert from '@material-ui/lab/Alert';
@@ -18,10 +18,6 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 0,
         display:'flex',
         backgroundColor:'#ffffff'
-      },
-      login_image:{
-          maxWidth:'100%',
-          maxHeight:'100vh'
       },
       login_form:{
         width: '50%',
@@ -57,12 +53,14 @@ const useStyles = makeStyles((theme) => ({
       },
       alert_box:{
         margin:theme.spacing(0,0,2,0),
-      }
+      },
+  
 }))
 
 export default function Login() {
     const classes = useStyles();
     const campaignData = getCampaign();
+    const dialerData = getDialer();
     let history = useHistory();
     const [alertMessage,setAlertMessage] = useState('');
     const [isDisplay,setIsDisplay] = useState(false);
@@ -91,8 +89,8 @@ export default function Login() {
     }
     return (
         <div className={classes.root}>
-            <div>
-                <img src={loinImage} alt="login image" className={classes.login_image}/>
+            <div >
+                <img src={loinImage} alt="login image" width='100%'  height='669px'/>
             </div>
             <Container className={classes.login_form}>
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -154,6 +152,34 @@ export default function Login() {
                             )
                         }}/>
                 </Grid>
+                 {/* <Grid item lg={12}>
+                    <Typography>Dialer</Typography>
+                        <FormControl 
+                        className={classes.input_field}
+                        fullWidth 
+                        variant="filled"
+                        error={Boolean(errors.dialer)}>
+                            <InputLabel>Select</InputLabel>
+                            <Controller
+                                render={(props) => (
+                                <Select value={props.value} onChange={props.onChange}>
+                                   {dialerData.map((option)=>(
+                                        <MenuItem key={option} value={option}>
+                                        {option}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                                )}
+                                defaultValue=""
+                                name="dialer"
+                                control={control}
+                                rules={{
+                                    required:'Please choose your dialer'
+                                }}
+                            />
+                            <FormHelperText>{errors.dialer?.message}</FormHelperText>
+                        </FormControl>
+                        </Grid>  */}
                 <Grid item lg={12}>
                     <Typography>Campaign</Typography>
                         <FormControl 
