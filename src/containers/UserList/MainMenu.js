@@ -3,7 +3,7 @@ import { fade, makeStyles } from "@material-ui/core/styles";
 import MenuIcon from "@material-ui/icons/Menu";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import SearchIcon from "@material-ui/icons/Search";
-import crmLogo from "../../images/loginImage.svg";
+import crmLogo from "../../images/crmLogo.svg";
 import {Redirect,Link} from "react-router-dom";
 import {
   AppBar,

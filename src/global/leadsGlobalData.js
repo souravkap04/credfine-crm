@@ -26,4 +26,9 @@ export const getStatusData = ()=>{
 //     const leadAllocate = JSON.parse(localStorage.getItem('lead_allocate'));
 //     return leadAllocate;
 // }
+export const getCampaign = ()=>{
+    const campaign = ['FRESH_PL_OD','BT_PL_OD','PL_OD_TOP_UP','PRE_APPROVED','HOT_LEAD',
+    'WEBSITE_LEAD','OTHER'];
+    return campaign;
+}
 

@@ -1,10 +1,10 @@
 import React,{useState} from 'react';
-import Login from "./containers/Login/Login";
+import Login from './containers/Login/Login'
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Redirect,useHistory
+  Redirect
 } from "react-router-dom";
 import MainMenu from './containers/UserList/MainMenu';
 import Profile from './containers/UserList/Profile/Profile';
