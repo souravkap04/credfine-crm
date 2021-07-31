@@ -89,7 +89,6 @@ export default function Login() {
            setIsDisplay(true);
       })
     }
-    console.log(errors)
     return (
         <div className={classes.root}>
             <div>
