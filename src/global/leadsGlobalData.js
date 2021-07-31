@@ -31,4 +31,8 @@ export const getCampaign = ()=>{
     'WEBSITE_LEAD','OTHER'];
     return campaign;
 }
+export const getDialer = ()=>{
+    const dialer = ['TATA','VERTAGE'];
+    return dialer;
+}
 
