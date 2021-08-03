@@ -1,0 +1,15 @@
+.pageAdjustSection {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.pageAdjustSection .leftSection {
+  width: 17.70833vw;
+}
+
+.pageAdjustSection .rightSection {
+  width: 78.81944vw;
+}
+/*# sourceMappingURL=pageLayerSection.css.map */

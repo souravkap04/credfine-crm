@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AACA,AAAA,kBAAkB,CAAC;EACf,QAAQ,EAAE,QAAQ;EAClB,OAAO,EAAE,IAAI;CAQhB;;AAVD,AAGI,kBAHc,CAGd,YAAY,CAAC;EACT,KAAK,EAAE,UAAgB;CAC1B;;AALL,AAMI,kBANc,CAMd,aAAa,CAAC;EACV,KAAK,EAAE,UAAiB;CAC3B",
+    "sources": [
+        "pageLayerSection.scss"
+    ],
+    "names": [],
+    "file": "pageLayerSection.css"
+}

@@ -1,0 +1,12 @@
+$desk: 100 / 1440;
+.pageAdjustSection {
+    position: relative;
+    display: flex;
+    .leftSection {
+        width: 255 * $desk + vw;
+    }
+    .rightSection {
+        width: 1135 * $desk + vw;
+    }
+    
+}
