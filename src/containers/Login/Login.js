@@ -66,8 +66,8 @@ export default function Login() {
     const [isDisplay,setIsDisplay] = useState(false);
     const { register, handleSubmit,control, errors} = useForm();
     const onSubmit = async (data) =>{
-        const {email,password,campaign} = data;
-        let item ={username:email, password ,campaign_category:campaign};
+        const {email,password,campaign,dialer} = data;
+        let item ={username:email, password ,campaign_category:campaign ,dialer};
       await axios.post(`${baseUrl}/user/login/`,item)
       .then((response)=>{
         localStorage.setItem('user_info',JSON.stringify(response.data));
@@ -152,7 +152,7 @@ export default function Login() {
                             )
                         }}/>
                 </Grid>
-                 {/* <Grid item lg={12}>
+                 <Grid item lg={12}>
                     <Typography>Dialer</Typography>
                         <FormControl 
                         className={classes.input_field}
@@ -179,7 +179,7 @@ export default function Login() {
                             />
                             <FormHelperText>{errors.dialer?.message}</FormHelperText>
                         </FormControl>
-                        </Grid>  */}
+                        </Grid> 
                 <Grid item lg={12}>
                     <Typography>Campaign</Typography>
                         <FormControl 
