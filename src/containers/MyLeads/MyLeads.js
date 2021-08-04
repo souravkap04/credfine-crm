@@ -18,12 +18,13 @@ import Tooltip from '@material-ui/core/Tooltip';
 import CallIcon from '@material-ui/icons/Call';
 import CallerDialogBox from '../Leads/CallerDialog/CallerDialogBox';
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
-
+import { useHistory } from "react-router-dom";
 const useStyles = makeStyles({
   container: {
     // margin: '25px',
     overflow: 'auto',
-    maxHeight: '550px',
+    // maxHeight: '550px',
+    marginBottom: '25px'
   },
   table: {
     Width: '100%',
@@ -88,7 +89,7 @@ export default function MyLeads(props) {
       return pager;
     }
   }
-
+  let history = useHistory();
   useEffect(() => {
     const fetchMyLeads = async () => {
       const headers = { 'Authorization': `Token ${profileData.token}` }
@@ -105,7 +106,8 @@ export default function MyLeads(props) {
     fetchMyLeads();
   }, [])
   const leadDetailsHandler = (leadId) => {
-    props.mainMenuCallBack(true, leadId);
+    history.push(`/dashboards/leads/edit/${leadId}`);
+    // props.mainMenuCallBack(true, leadId);
   }
   const nextPageHandler = async () => {
     const headers = { 'Authorization': `Token ${profileData.token}` }

@@ -9,6 +9,7 @@ import {
 // import MainMenu from './containers/UserList/MainMenu';
 import Profile from './containers/UserList/Profile/Profile';
 import Leads from './containers/Leads/Leads';
+import LeadDetails from './containers/Leads/LeadDetails';
 import Dashboard from './containers/Dashboard/Dashboard';
 import FreshLeads from './containers/FreshLead/FreshLeads';
 import MyLeads from './containers/MyLeads/MyLeads';
@@ -19,6 +20,12 @@ import Reports from './containers/Report/Report';
 import BulkUploads from './containers/UploadLeads/UploadLeads';
 import AddUsers from './containers/UserCreate/UserCreate';
 function App() {
+  // const [viewLeadDetails, setViewLeadDetails] = useState(false);
+  // const [leadId, setLeadId] = useState(null);
+  // const leadDetailsHandler = (childData, leadId) => {
+  //   setViewLeadDetails(childData);
+  //   setLeadId(leadId)
+  // }
   return (
     <div>
       <Router>
@@ -36,6 +43,9 @@ function App() {
           </Route>
           <Route exact path="/dashboards/leads">
             <Leads />
+          </Route>
+          <Route exact path="/dashboards/leads/edit/:leadid">
+            <LeadDetails />
           </Route>
           <Route exact path="/dashboards/freshlead">
             <FreshLeads />

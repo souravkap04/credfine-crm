@@ -88,7 +88,8 @@ const Leads = ((props) => {
   const routeChangeHAndler = (leadId) => {
     // props.userListCallback(leadId);
     //history.push(`/leadDetails/${leadId}`);
-    props.mainMenuCallBack(true, leadId);
+    history.push(`/dashboards/leads/edit/${leadId}`);
+    // props.mainMenuCallBack(true, leadId);
   }
   const clickToCall = async (customerNo) => {
     const headers = {
