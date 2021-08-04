@@ -10,6 +10,14 @@ import {
 import Profile from './containers/UserList/Profile/Profile';
 import Leads from './containers/Leads/Leads';
 import Dashboard from './containers/Dashboard/Dashboard';
+import FreshLeads from './containers/FreshLead/FreshLeads';
+import MyLeads from './containers/MyLeads/MyLeads';
+import Users from './containers/Users/ResetPassword';
+import VerifyUsers from './containers/UserList/VerifyUsers';
+import AddLeads from './containers/PlData/PlForm';
+import Reports from './containers/Report/Report';
+import BulkUploads from './containers/UploadLeads/UploadLeads';
+import AddUsers from './containers/UserCreate/UserCreate';
 function App() {
   return (
     <div>
@@ -28,6 +36,30 @@ function App() {
           </Route>
           <Route exact path="/dashboards/leads">
             <Leads />
+          </Route>
+          <Route exact path="/dashboards/freshlead">
+            <FreshLeads />
+          </Route>
+          <Route exact path="/dashboards/myleads">
+            <MyLeads />
+          </Route>
+          <Route exact path="/dashboards/users">
+            <Users />
+          </Route>
+          <Route exact path="/dashboards/verifyusers">
+            <VerifyUsers />
+          </Route>
+          <Route exact path="/dashboards/addleads">
+            <AddLeads />
+          </Route>
+          <Route exact path="/dashboards/reports">
+            <Reports />
+          </Route>
+          <Route exact path="/dashboards/bulkuploads">
+            <BulkUploads />
+          </Route>
+          <Route exact path="/dashboards/addusers">
+            <AddUsers />
           </Route>
         </Switch>
       </Router>

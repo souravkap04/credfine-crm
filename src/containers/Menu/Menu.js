@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { fade, makeStyles } from "@material-ui/core/styles";
 import { NavLink } from "react-router-dom";
+import './menu.css';
 // List menu item
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -19,8 +20,9 @@ import PublishOutlinedIcon from '@material-ui/icons/PublishOutlined';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 const useStyles = makeStyles((theme) => ({
     rooter: {
+        position: 'fixed',
         width: '100%',
-        height: '100vh',
+        height: '130vh',
         maxWidth: 255,
         backgroundColor: '#535ad1',
         padding: theme.spacing(1, 0, 32),
@@ -33,11 +35,8 @@ const useStyles = makeStyles((theme) => ({
     color: {
         color: '#f2f2f2'
     },
-    selected: {
-        backgroundColor: '#4046b2'
-    }
 }));
-export default function TestMenu(props) {
+export default function Menu(props) {
     const classes = useStyles()
     const [openen, setOpen] = React.useState(true);
     const [uploadOpen, setuploadOpen] = useState(true);
@@ -59,34 +58,38 @@ export default function TestMenu(props) {
             // }
             className={classes.rooter}
         >
-            <NavLink to="/dashboard" activeClassName={classes.selected}>
-                <ListItem button>
+            <NavLink to="/dashboard" activeClassName="active">
+                <ListItem className="selected" button>
                     <ListItemIcon>
                         <DashboardOutlinedIcon className={classes.color} />
                     </ListItemIcon>
                     <ListItemText className={classes.color} primary="Dashboard" />
                 </ListItem>
             </NavLink>
-            <NavLink to="/dashboards/leads" activeClassName={classes.selected}>
-                <ListItem button>
+            <NavLink to="/dashboards/leads" activeClassName="active">
+                <ListItem className="selected" button>
                     <ListItemIcon>
                         <AccountCircleOutlinedIcon className={classes.color} />
                     </ListItemIcon>
                     <ListItemText className={classes.color} primary="New Leads" />
                 </ListItem>
             </NavLink>
-            <ListItem button>
-                <ListItemIcon>
-                    <AddCircleOutlineOutlinedIcon className={classes.color} />
-                </ListItemIcon>
-                <ListItemText className={classes.color} primary="Add Leads" />
-            </ListItem>
-            <ListItem button>
-                <ListItemIcon>
-                    <VerifiedUserOutlinedIcon className={classes.color} />
-                </ListItemIcon>
-                <ListItemText className={classes.color} primary="My Leads" />
-            </ListItem>
+            <NavLink to="/dashboards/addleads" activeClassName="active">
+                <ListItem className="selected" button>
+                    <ListItemIcon>
+                        <AddCircleOutlineOutlinedIcon className={classes.color} />
+                    </ListItemIcon>
+                    <ListItemText className={classes.color} primary="Add Leads" />
+                </ListItem>
+            </NavLink>
+            <NavLink to="/dashboards/myleads" activeClassName="active">
+                <ListItem className="selected" button>
+                    <ListItemIcon>
+                        <VerifiedUserOutlinedIcon className={classes.color} />
+                    </ListItemIcon>
+                    <ListItemText className={classes.color} primary="My Leads" />
+                </ListItem>
+            </NavLink>
             <ListItem button className={classes.color} onClick={handleClick}>
                 <ListItemIcon>
                     <PeopleAltOutlinedIcon className={classes.color} />
@@ -96,15 +99,21 @@ export default function TestMenu(props) {
             </ListItem>
             <Collapse in={openen} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
-                    <ListItem button className={classes.nested}>
-                        <ListItemText primary="Add Users" />
-                    </ListItem>
-                    <ListItem button className={classes.nested}>
-                        <ListItemText primary="Verify Users" />
-                    </ListItem>
-                    <ListItem button className={classes.nested}>
-                        <ListItemText primary="All Users" />
-                    </ListItem>
+                    <NavLink to="/dashboards/addusers" activeClassName="active">
+                        <ListItem button className={classes.nested + " selected"}>
+                            <ListItemText primary="Add Users" />
+                        </ListItem>
+                    </NavLink>
+                    <NavLink to="/dashboards/verifyusers" activeClassName="active">
+                        <ListItem button className={classes.nested + " selected"}>
+                            <ListItemText primary="Verify Users" />
+                        </ListItem>
+                    </NavLink>
+                    <NavLink to="/dashboards/users" activeClassName="active">
+                        <ListItem button className={classes.nested + " selected"}>
+                            <ListItemText primary="All Users" />
+                        </ListItem>
+                    </NavLink>
                 </List>
             </Collapse>
             <ListItem button className={classes.color} onClick={uploadHandleClick}>
@@ -116,20 +125,26 @@ export default function TestMenu(props) {
             </ListItem>
             <Collapse in={uploadOpen} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
-                    <ListItem button className={classes.nested}>
-                        <ListItemText primary="Bulk Uploads" />
-                    </ListItem>
-                    <ListItem button className={classes.nested}>
-                        <ListItemText primary="Fresh Leads" />
-                    </ListItem>
+                    <NavLink to="/dashboards/bulkuploads" activeClassName="active">
+                        <ListItem button className={classes.nested + " selected"}>
+                            <ListItemText primary="Bulk Uploads" />
+                        </ListItem>
+                    </NavLink>
+                    <NavLink to="/dashboards/freshlead" activeClassName="active">
+                        <ListItem button className={classes.nested + " selected"}>
+                            <ListItemText primary="Fresh Leads" />
+                        </ListItem>
+                    </NavLink>
                 </List>
             </Collapse>
-            <ListItem button>
-                <ListItemIcon>
-                    <FileCopyOutlinedIcon className={classes.color} />
-                </ListItemIcon>
-                <ListItemText className={classes.color} primary="Reports" />
-            </ListItem>
+            <NavLink to="/dashboards/reports" activeClassName="active">
+                <ListItem className="selected" button>
+                    <ListItemIcon>
+                        <FileCopyOutlinedIcon className={classes.color} />
+                    </ListItemIcon>
+                    <ListItemText className={classes.color} primary="Reports" />
+                </ListItem>
+            </NavLink>
         </List>
     );
 }

@@ -21,7 +21,7 @@ import PageLayerSection from '../PageLayerSection/PageLayerSection';
 
 const useStyles = makeStyles({
   container: {
-    margin: '25px'
+    // margin: '25px'
   },
   table: {
     width: '100%',

@@ -6,10 +6,12 @@
 }
 
 .pageAdjustSection .leftSection {
-  width: 17.70833vw;
+  width: 18.75vw;
 }
 
 .pageAdjustSection .rightSection {
   width: 78.81944vw;
+  margin: auto;
+  margin-top: 1.73611vw;
 }
 /*# sourceMappingURL=pageLayerSection.css.map */

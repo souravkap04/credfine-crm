@@ -3,10 +3,11 @@ $desk: 100 / 1440;
     position: relative;
     display: flex;
     .leftSection {
-        width: 255 * $desk + vw;
+        width: 270 * $desk + vw;
     }
     .rightSection {
         width: 1135 * $desk + vw;
+        margin: auto;
+        margin-top: 25 * $desk + vw;
     }
-    
 }
