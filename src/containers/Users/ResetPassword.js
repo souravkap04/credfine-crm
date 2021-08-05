@@ -108,6 +108,8 @@ export default function Users() {
   const [deleteCount,setDeleteCount] = useState(0);
   const [selectedUserName,setSelectedUserName] = useState('');
   const [searchTerm,setSearchTerm] = useState('');
+  const [vertageId,setVertageId] = useState("");
+  const [vertagePass,setVertagePass] = useState("");
   const resetPasswordHandler = (userName,index)=>{
     setIsResetPassword(true);
     setRowData(userName);
@@ -186,7 +188,7 @@ export default function Users() {
         console.log(error);
       })
   }
-  const editUser = (userName,firstName,lastName,email,role,gender,phoneNo,productType,dialerPass)=>{
+  const editUser = (userName,firstName,lastName,email,role,gender,phoneNo,productType,dialerPass,vertageId,vertagePass)=>{
     setIsEditUser(true);
     setSelectedUserName(userName);
     setFirstName(firstName);
@@ -197,18 +199,18 @@ export default function Users() {
     setPhoneNo(phoneNo);
     setProductType(productType);
     setDialerApiKey(dialerPass);
-    
-  }
+    setVertageId(vertageId);
+    setVertagePass(vertagePass);
+}
   const closeEditUser = ()=>{
     setIsEditUser(false);
   }
   const updateUserData = async (e)=>{
     e.preventDefault();
     let item ={first_name:firstName,last_name:lastName,email,role,gender,phone_no:phoneNo,
-      product_type:productType,dialer_pass:dialerApiKey};
+      product_type:productType,dialer_pass:dialerApiKey,vertage_id:vertageId,vertage_pass:vertagePass};
     const headers = {
       'userRoleHash': profileData.user_roles[0].user_role_hash,
-      //'userRoleHash':'f63e2d14-b15a-11eb-bc7e-000000000013'
     };
     await axios.put(`${baseUrl}/user/updateUser/${selectedUserName}`,item,{headers})
     .then((response)=>{
@@ -420,6 +422,26 @@ export default function Users() {
                              type="text"
                              value={dialerApiKey}
                              onChange={(e)=>setDialerApiKey((e.target.value).trim())}/>
+                           </Form.Group>
+                         </Col>
+                       </Row>
+                       <Row>
+                         <Col>
+                         <Form.Group>
+                             <Form.Label>Vertage Id</Form.Label>
+                             <Form.Control
+                             type="text"
+                             value={vertageId}
+                             onChange={(e)=>setVertageId((e.target.value).trim())}/>
+                           </Form.Group>
+                         </Col>
+                         <Col>
+                         <Form.Group>
+                             <Form.Label>Vertage Pass</Form.Label>
+                             <Form.Control
+                             type="text"
+                             value={vertagePass}
+                             onChange={(e)=>setVertagePass((e.target.value).trim())}/>
                            </Form.Group>
                          </Col>
                        </Row>
