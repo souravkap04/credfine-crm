@@ -78,14 +78,26 @@ export default function Login() {
                 localStorage.setItem('user_info', JSON.stringify(response.data));
                 const profileData = JSON.parse(localStorage.getItem('user_info'));
                 if (profileData.is_admin_verified) {
-                    history.push("/dashboard");
-                    let headers = { 'Authorization': `Token ${profileData.token}` };
-                    axios.get(`${baseUrl}/leads/fetchAllLeads/`, { headers })
-                        .then((response) => {
-                            localStorage.setItem('status_info', JSON.stringify(response.data));
-                        }).catch((error) => {
-                            console.log(error);
-                        })
+                    if (profileData.user_roles[0].user_type === 3) {
+                        history.push("/dashboards/leads");
+                        let headers = { 'Authorization': `Token ${profileData.token}` };
+                        axios.get(`${baseUrl}/leads/fetchAllLeads/`, { headers })
+                            .then((response) => {
+                                localStorage.setItem('status_info', JSON.stringify(response.data));
+                            }).catch((error) => {
+                                console.log(error);
+                            })
+                    }
+                    else {
+                        history.push("/dashboard");
+                        let headers = { 'Authorization': `Token ${profileData.token}` };
+                        axios.get(`${baseUrl}/leads/fetchAllLeads/`, { headers })
+                            .then((response) => {
+                                localStorage.setItem('status_info', JSON.stringify(response.data));
+                            }).catch((error) => {
+                                console.log(error);
+                            })
+                    }
                 }
             }).catch(error => {
                 setAlertMessage('This is an error alert — check it out!')
@@ -95,7 +107,7 @@ export default function Login() {
     return (
         <div className={classes.root}>
             <div className="leftSectionImage">
-                <img src={loinImage} alt="login image"  />
+                <img src={loinImage} alt="login image" />
             </div>
             <Container className={classes.login_form}>
                 <form onSubmit={handleSubmit(onSubmit)}>

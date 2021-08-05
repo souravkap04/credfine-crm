@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { fade, makeStyles } from "@material-ui/core/styles";
 import { NavLink } from "react-router-dom";
 import './menu.css';
@@ -46,7 +46,13 @@ export default function Menu(props) {
     const uploadHandleClick = () => {
         setuploadOpen(!uploadOpen);
     }
-
+    const [isHiddenTab, setIsHiddenTab] = useState(false);
+    let profileData = JSON.parse(localStorage.getItem("user_info"));
+    useEffect(() => {
+        if (profileData.user_roles[0].user_type === 3) {
+            setIsHiddenTab(true);
+        }
+    }, []);
     return (
         <List
             component="nav"
@@ -58,14 +64,14 @@ export default function Menu(props) {
             // }
             className={classes.rooter}
         >
-            <NavLink to="/dashboard" activeClassName="active">
+            {isHiddenTab ? null : <NavLink to="/dashboard" activeClassName="active">
                 <ListItem className="selected" button>
                     <ListItemIcon>
                         <DashboardOutlinedIcon className={classes.color} />
                     </ListItemIcon>
                     <ListItemText className={classes.color} primary="Dashboard" />
                 </ListItem>
-            </NavLink>
+            </NavLink>}
             <NavLink to="/dashboards/leads" activeClassName="active">
                 <ListItem className="selected" button>
                     <ListItemIcon>
@@ -90,61 +96,61 @@ export default function Menu(props) {
                     <ListItemText className={classes.color} primary="My Leads" />
                 </ListItem>
             </NavLink>
-            <ListItem button className={classes.color} onClick={handleClick}>
+            {isHiddenTab ? null : <React.Fragment><ListItem button className={classes.color} onClick={handleClick}>
                 <ListItemIcon>
                     <PeopleAltOutlinedIcon className={classes.color} />
                 </ListItemIcon>
                 <ListItemText primary="Users" />
                 {openen ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
-            <Collapse in={openen} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                    <NavLink to="/dashboards/addusers" activeClassName="active">
-                        <ListItem button className={classes.nested + " selected"}>
-                            <ListItemText primary="Add Users" />
-                        </ListItem>
-                    </NavLink>
-                    <NavLink to="/dashboards/verifyusers" activeClassName="active">
-                        <ListItem button className={classes.nested + " selected"}>
-                            <ListItemText primary="Verify Users" />
-                        </ListItem>
-                    </NavLink>
-                    <NavLink to="/dashboards/users" activeClassName="active">
-                        <ListItem button className={classes.nested + " selected"}>
-                            <ListItemText primary="All Users" />
-                        </ListItem>
-                    </NavLink>
-                </List>
-            </Collapse>
-            <ListItem button className={classes.color} onClick={uploadHandleClick}>
-                <ListItemIcon>
-                    <PublishOutlinedIcon className={classes.color} />
-                </ListItemIcon>
-                <ListItemText primary="Upload Leads" />
-                {uploadOpen ? <ExpandLess /> : <ExpandMore />}
-            </ListItem>
-            <Collapse in={uploadOpen} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                    <NavLink to="/dashboards/bulkuploads" activeClassName="active">
-                        <ListItem button className={classes.nested + " selected"}>
-                            <ListItemText primary="Bulk Uploads" />
-                        </ListItem>
-                    </NavLink>
-                    <NavLink to="/dashboards/freshlead" activeClassName="active">
-                        <ListItem button className={classes.nested + " selected"}>
-                            <ListItemText primary="Fresh Leads" />
-                        </ListItem>
-                    </NavLink>
-                </List>
-            </Collapse>
-            <NavLink to="/dashboards/reports" activeClassName="active">
-                <ListItem className="selected" button>
+                <Collapse in={openen} timeout="auto" unmountOnExit>
+                    <List component="div" disablePadding>
+                        <NavLink to="/dashboards/addusers" activeClassName="active">
+                            <ListItem button className={classes.nested + " selected"}>
+                                <ListItemText primary="Add Users" />
+                            </ListItem>
+                        </NavLink>
+                        <NavLink to="/dashboards/verifyusers" activeClassName="active">
+                            <ListItem button className={classes.nested + " selected"}>
+                                <ListItemText primary="Verify Users" />
+                            </ListItem>
+                        </NavLink>
+                        <NavLink to="/dashboards/users" activeClassName="active">
+                            <ListItem button className={classes.nested + " selected"}>
+                                <ListItemText primary="All Users" />
+                            </ListItem>
+                        </NavLink>
+                    </List>
+                </Collapse>
+                <ListItem button className={classes.color} onClick={uploadHandleClick}>
                     <ListItemIcon>
-                        <FileCopyOutlinedIcon className={classes.color} />
+                        <PublishOutlinedIcon className={classes.color} />
                     </ListItemIcon>
-                    <ListItemText className={classes.color} primary="Reports" />
+                    <ListItemText primary="Upload Leads" />
+                    {uploadOpen ? <ExpandLess /> : <ExpandMore />}
                 </ListItem>
-            </NavLink>
+                <Collapse in={uploadOpen} timeout="auto" unmountOnExit>
+                    <List component="div" disablePadding>
+                        <NavLink to="/dashboards/bulkuploads" activeClassName="active">
+                            <ListItem button className={classes.nested + " selected"}>
+                                <ListItemText primary="Bulk Uploads" />
+                            </ListItem>
+                        </NavLink>
+                        <NavLink to="/dashboards/freshlead" activeClassName="active">
+                            <ListItem button className={classes.nested + " selected"}>
+                                <ListItemText primary="Fresh Leads" />
+                            </ListItem>
+                        </NavLink>
+                    </List>
+                </Collapse>
+                <NavLink to="/dashboards/reports" activeClassName="active">
+                    <ListItem className="selected" button>
+                        <ListItemIcon>
+                            <FileCopyOutlinedIcon className={classes.color} />
+                        </ListItemIcon>
+                        <ListItemText className={classes.color} primary="Reports" />
+                    </ListItem>
+                </NavLink></React.Fragment>}
         </List>
     );
 }

@@ -37,7 +37,6 @@ function App() {
           <Route path="/profile"> <Profile /></Route>
           {/* <Redirect exact from="/dashboard" to="/dashboard/leads" /> */}
           {/* <Route exact path="/dashboard/:page?" render={props => <TestMenu {...props} />} /> */}
-          {/* <Route exact path="/test/:page?" render={props => <TestMenu {...props} />} /> */}
           <Route path="/dashboard">
             <Dashboard />
           </Route>
@@ -52,6 +51,9 @@ function App() {
           </Route>
           <Route exact path="/dashboards/myleads">
             <MyLeads />
+          </Route>
+          <Route exact path="/dashboards/myleads/edit/:leadid">
+            <LeadDetails />
           </Route>
           <Route exact path="/dashboards/users">
             <Users />
