@@ -245,6 +245,8 @@ export default function Users() {
             <TableCell className={classes.tableheading}>Phone No</TableCell>
             <TableCell className={classes.tableheading}>Gender</TableCell>
             {/* <TableCell className={classes.tableheading}>DIALER API Key</TableCell> */}
+            <TableCell className={classes.tableheading}>Vertage Id</TableCell>
+            <TableCell className={classes.tableheading}>Vertage Pass</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -269,6 +271,8 @@ export default function Users() {
               <TableCell className={classes.tabledata}>{user.phone_no}</TableCell>
               <TableCell className={classes.tabledata}>{user.gender}</TableCell>
               {/* <TableCell className={classes.tabledata}>{user.myuser.dialer_pass}</TableCell> */}
+              <TableCell className={classes.tabledata}>{user.myuser.vertage_id}</TableCell>
+              <TableCell className={classes.tabledata}>{user.myuser.vertage_pass}</TableCell>
               <TableCell className={classes.tabledata}>
                   <Tooltip title="Reset Password">
                   <IconButton onClick={()=>resetPasswordHandler(user.myuser.username,index)}>
@@ -279,7 +283,8 @@ export default function Users() {
                     <IconButton 
                     onClick={()=>editUser(user.myuser.username,user.myuser.first_name,
                       user.myuser.last_name,user.myuser.email,user.role,user.gender,user.phone_no,
-                      user.product_type,user.myuser.dialer_pass)}>
+                      user.product_type,user.myuser.dialer_pass,user.myuser.vertage_id,
+                      user.myuser.vertage_pass)}>
                       <EditIcon/>
                     </IconButton>
                   </Tooltip>
