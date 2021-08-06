@@ -12,6 +12,103 @@
 .pageAdjustSection .rightSection {
   width: 78.81944vw;
   margin: auto;
-  margin-top: 1.73611vw;
+}
+
+.pageAdjustSection .rightSection .appBarContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 100%;
+  height: 6.59722vw;
+}
+
+.pageAdjustSection .rightSection .appBarContainer .searchContainer {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 18.05556vw;
+  height: 3.33333vw;
+  border-radius: 0.55556vw;
+  border: solid 1px #e4e9f2;
+  background-color: #fff;
+}
+
+.pageAdjustSection .rightSection .appBarContainer .searchContainer .searchIconContainer {
+  margin-right: 0.55556vw;
+  margin-left: 0.55556vw;
+}
+
+.pageAdjustSection .rightSection .appBarContainer .searchContainer .searchIconContainer .searchIcon {
+  font-size: 2.43056vw;
+  color: #8f9bb3;
+}
+
+.pageAdjustSection .rightSection .appBarContainer .searchContainer .inputContainer input {
+  width: 95% !important;
+  color: #8f9bb3;
+}
+
+.pageAdjustSection .rightSection .appBarContainer .searchContainer .inputContainer::-webkit-input-placeholder {
+  color: #8f9bb3;
+}
+
+.pageAdjustSection .rightSection .appBarContainer .searchContainer .inputContainer:-ms-input-placeholder {
+  color: #8f9bb3;
+}
+
+.pageAdjustSection .rightSection .appBarContainer .searchContainer .inputContainer::-ms-input-placeholder {
+  color: #8f9bb3;
+}
+
+.pageAdjustSection .rightSection .appBarContainer .searchContainer .inputContainer::placeholder {
+  color: #8f9bb3;
+}
+
+.pageAdjustSection .rightSection .appBarContainer .rightAppBarSection {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.pageAdjustSection .rightSection .appBarContainer .rightAppBarSection .nameContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  cursor: pointer;
+}
+
+.pageAdjustSection .rightSection .appBarContainer .rightAppBarSection .nameContainer .nameText {
+  color: #8f9bb3;
+  font-size: 1.18056vw;
+}
+
+.pageAdjustSection .rightSection .appBarContainer .rightAppBarSection .nameContainer .arrowDown {
+  color: #8f9bb3;
+}
+
+.pageAdjustSection .rightSection .appBarContainer .rightAppBarSection .avatar {
+  width: 3.47222vw;
+  height: 3.47222vw;
+  border-radius: 4.44444vw;
+  margin-left: 0.69444vw;
 }
 /*# sourceMappingURL=pageLayerSection.css.map */
