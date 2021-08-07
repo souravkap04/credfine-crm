@@ -17,6 +17,7 @@ import axios from 'axios';
 import baseUrl from '../../global/api';
 import clickToCallApi from '../../global/callApi'
 import { getProfileData } from '../../global/leadsGlobalData'
+import { useQueryy } from '../../global/query';
 import CallerDialogBox from './CallerDialog/CallerDialogBox';
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
 import clsx from 'clsx';
@@ -87,12 +88,15 @@ const useStyles = makeStyles({
   loanButtonText: {
     fontSize: '13px',
     textAlign: 'center',
-    color: '#fff'
+    color: '#fff',
+    width: '75px'
   }
 });
 const Leads = ((props) => {
   const classes = useStyles();
   const CancelToken = axios.CancelToken;
+  const queryy = useQueryy();
+  const leadQuery = queryy.get("query") || "";
   let history = useHistory();
   const profileData = getProfileData();
   const [leadData, setLeadData] = useState({});
@@ -103,8 +107,8 @@ const Leads = ((props) => {
   const [isCallNotConnected, setIsCallNotConnected] = useState(false)
   const [isSearchData, setisSearchData] = useState(false);
   useEffect(() => {
-    fetchLeadsData()
-  }, [])
+    leadQuery ? fetchSearchData(leadQuery) : fetchLeadsData();
+  }, [leadQuery])
   const fetchSearchData = async (key) => {
     setisSearchData(true)
     let headers = { 'Authorization': `Token ${profileData.token}` }
@@ -200,9 +204,9 @@ const Leads = ((props) => {
       return data;
     }
   }
-  
+
   return (
-    <PageLayerSection isSearchBox={true} searchHandler={(key) => fetchSearchData(key)}>
+    <PageLayerSection>
       <TableContainer className={classes.container}>
         <Table className={classes.table} aria-label="simple table">
           <TableHead className={classes.tableheading}>

@@ -120,7 +120,8 @@ const useStyles = makeStyles({
   loanButtonText: {
     fontSize: '13px',
     textAlign: 'center',
-    color: '#fff'
+    color: '#fff',
+    width: '75px'
   }
 });
 function descendingComparator(a, b, orderBy) {

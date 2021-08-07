@@ -26,53 +26,39 @@ function App() {
   //   setViewLeadDetails(childData);
   //   setLeadId(leadId)
   // }
+  const PrivateRoute = ({ component: Component, ...rest }) => {
+    return (
+      // Show the component only when the user is logged in
+      // Otherwise, redirect the user to /signin page
+      <Route {...rest} render={props => (
+        localStorage.getItem('user_info') ?
+          <Component {...props} />
+          : <Redirect to="/" />
+      )} />
+    );
+  };
   return (
     <div>
       <Router>
         <Switch>
-
           <Route exact path="/">
             <Login />
           </Route>
-          <Route path="/profile"> <Profile /></Route>
+          <PrivateRoute exact path="/profile" component={Profile} />
           {/* <Redirect exact from="/dashboard" to="/dashboard/leads" /> */}
           {/* <Route exact path="/dashboard/:page?" render={props => <TestMenu {...props} />} /> */}
-          <Route path="/dashboard">
-            <Dashboard />
-          </Route>
-          <Route exact path="/dashboards/leads">
-            <Leads />
-          </Route>
-          <Route exact path="/dashboards/leads/edit/:leadid">
-            <LeadDetails />
-          </Route>
-          <Route exact path="/dashboards/freshlead">
-            <FreshLeads />
-          </Route>
-          <Route exact path="/dashboards/myleads">
-            <MyLeads />
-          </Route>
-          <Route exact path="/dashboards/myleads/edit/:leadid">
-            <LeadDetails />
-          </Route>
-          <Route exact path="/dashboards/users">
-            <Users />
-          </Route>
-          <Route exact path="/dashboards/verifyusers">
-            <VerifyUsers />
-          </Route>
-          <Route exact path="/dashboards/addleads">
-            <AddLeads />
-          </Route>
-          <Route exact path="/dashboards/reports">
-            <Reports />
-          </Route>
-          <Route exact path="/dashboards/bulkuploads">
-            <BulkUploads />
-          </Route>
-          <Route exact path="/dashboards/addusers">
-            <AddUsers />
-          </Route>
+          <PrivateRoute exact path="/dashboard" component={Dashboard} />
+          <PrivateRoute exact path="/dashboards/leads" component={Leads} />
+          <PrivateRoute exact path="/dashboards/leads/edit/:leadid" component={LeadDetails} />
+          <PrivateRoute exact path="/dashboards/freshlead" component={FreshLeads} />
+          <PrivateRoute exact path="/dashboards/myleads" component={MyLeads} />
+          <PrivateRoute exact path="/dashboards/myleads/edit/:leadid" component={LeadDetails} />
+          <PrivateRoute exact path="/dashboards/users" component={Users} />
+          <PrivateRoute exact path="/dashboards/verifyusers" component={VerifyUsers} />
+          <PrivateRoute exact path="/dashboards/addleads" component={AddLeads} />
+          <PrivateRoute exact path="/dashboards/reports" component={Reports} />
+          <PrivateRoute exact path="/dashboards/bulkuploads" component={BulkUploads} />
+          <PrivateRoute exact path="/dashboards/addusers" component={AddUsers} />
         </Switch>
       </Router>
     </div>

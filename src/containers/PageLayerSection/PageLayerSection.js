@@ -74,8 +74,8 @@ export default function PageLayerSection(props) {
                 <MenuMain />
             </div>
             <div className="rightSection">
-                <div className={props.isSearchBox ? "appBarContainer" : "appBarContainerEnd"} >
-                    {props.isSearchBox ? <div className="searchContainer">
+                <div className="appBarContainer">
+                    <div className="searchContainer">
                         <div className="searchIconContainer">
                             <SearchIcon className="searchIcon" />
                         </div>
@@ -88,12 +88,12 @@ export default function PageLayerSection(props) {
                             onKeyPress={(event) => {
                                 if (event.key === "Enter") {
                                     if (searchInput !== "" && searchValidation(searchInput)) {
-                                        props.searchHandler(searchInput);
+                                        history.push("/dashboards/leads?query=" + searchInput);
                                     }
                                 }
                             }}
                         />
-                    </div> : null}
+                    </div>
                     <div className="rightAppBarSection">
                         <div className="nameContainer" onClick={handleMenu}>
                             <div className="nameText">{userName}</div>
