@@ -26,10 +26,6 @@ function App() {
   //   setViewLeadDetails(childData);
   //   setLeadId(leadId)
   // }
-  const searchInput = localStorage.getItem('searchInput')
-  const isSearchData = localStorage.getItem('isSearchData')
-  console.log(searchInput)
-  console.log(isSearchData)
   return (
     <div>
       <Router>
@@ -45,8 +41,7 @@ function App() {
             <Dashboard />
           </Route>
           <Route exact path="/dashboards/leads">
-            <Leads searchInput={searchInput}
-              isSearchData={isSearchData} />
+            <Leads />
           </Route>
           <Route exact path="/dashboards/leads/edit/:leadid">
             <LeadDetails />

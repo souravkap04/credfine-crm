@@ -10,7 +10,7 @@ import { NavLink, useHistory } from 'react-router-dom';
 export default function PageLayerSection(props) {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [searchInput, setSearchInput] = useState("");
-    const [isSearchData, setIsSearchData] = useState(false);
+    // const [isSearchData, setIsSearchData] = useState(false);
     let history = useHistory()
     let profileData = JSON.parse(localStorage.getItem("user_info"));
     let userName = profileData.username.toLowerCase();
@@ -47,25 +47,15 @@ export default function PageLayerSection(props) {
     const handleClose = () => {
         setAnchorEl(null);
     };
-
-    const searchHandler = (e) => {
-        if (e.key === 'Enter') {
-            if (searchInput !== "" && searchValidation(searchInput)) {
-                if (window.location.pathname === '/dashboards/leads') {
-                    localStorage.setItem('searchInput', searchInput)
-                    localStorage.setItem('isSearchData', true)
-                } else if (window.location.pathname !== '/dashboards/leads') {
-                    history.push('/dashboards/leads');
-                    localStorage.setItem('searchInput', searchInput)
-                    localStorage.setItem('isSearchData', true)
-                }
-            } else if (searchInput.length === 0) {
-                history.push('/dashboards/leads');
-                localStorage.setItem('searchInput', searchInput)
-                localStorage.setItem('isSearchData', false)
-            }
-        }
-    };
+    // const searchHandler = (e) => {
+    //     if (e.key === 'Enter') {
+    //         if (searchInput !== "" && searchValidation(searchInput)) {
+    //             setIsSearchData(true)
+    //         } else if (searchInput.length === 0) {
+    //             setIsSearchData(false)
+    //         }
+    //     }
+    // };
     const searchValidation = (search) => {
         if (/^[0-9]{10}$/.test(search) || /^[L][D][0-9]{8}$/.test(search)) {
             return true;
@@ -84,8 +74,8 @@ export default function PageLayerSection(props) {
                 <MenuMain />
             </div>
             <div className="rightSection">
-                <div className="appBarContainer">
-                    <div className="searchContainer">
+                <div className={props.isSearchBox ? "appBarContainer" : "appBarContainerEnd"} >
+                    {props.isSearchBox ? <div className="searchContainer">
                         <div className="searchIconContainer">
                             <SearchIcon className="searchIcon" />
                         </div>
@@ -95,9 +85,15 @@ export default function PageLayerSection(props) {
                             inputProps={{ "aria-label": "search" }}
                             value={searchInput}
                             onChange={(e) => setSearchInput((e.target.value).toUpperCase().trim())}
-                            onKeyPress={(e) => searchHandler(e)}
+                            onKeyPress={(event) => {
+                                if (event.key === "Enter") {
+                                    if (searchInput !== "" && searchValidation(searchInput)) {
+                                        props.searchHandler(searchInput);
+                                    }
+                                }
+                            }}
                         />
-                    </div>
+                    </div> : null}
                     <div className="rightAppBarSection">
                         <div className="nameContainer" onClick={handleMenu}>
                             <div className="nameText">{userName}</div>

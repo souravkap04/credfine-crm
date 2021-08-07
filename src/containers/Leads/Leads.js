@@ -101,11 +101,12 @@ const Leads = ((props) => {
   const [isCallConnect, setIsCallConnect] = useState(false);
   const [onGoingCall, setOnGoingCall] = useState(false);
   const [isCallNotConnected, setIsCallNotConnected] = useState(false)
-
+  const [isSearchData, setisSearchData] = useState(false);
   useEffect(() => {
-    props.isSearchData ? fetchSearchData(props.searchInput) : fetchLeadsData()
-  }, [props.isSearchData])
+    fetchLeadsData()
+  }, [])
   const fetchSearchData = async (key) => {
+    setisSearchData(true)
     let headers = { 'Authorization': `Token ${profileData.token}` }
     await axios.get(`${baseUrl}/leads/search/${key}`, { headers })
       .then((response) => {
@@ -199,9 +200,9 @@ const Leads = ((props) => {
       return data;
     }
   }
-
+  
   return (
-    <PageLayerSection>
+    <PageLayerSection isSearchBox={true} searchHandler={(key) => fetchSearchData(key)}>
       <TableContainer className={classes.container}>
         <Table className={classes.table} aria-label="simple table">
           <TableHead className={classes.tableheading}>
@@ -227,7 +228,7 @@ const Leads = ((props) => {
           </TableHead>
           <TableBody>
             {
-              props.isSearchData ? (
+              isSearchData ? (
                 searchData.length !== 0 ?
                   searchData.map((search, index) => {
                     let leadPhoneNo = maskPhoneNo(search.phone_no);

@@ -64,5 +64,34 @@ $desk: 100 / 1440;
                 }
             }
         }
+        .appBarContainerEnd {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            width: 100%;
+            height: 95 * $desk + vw;
+            .rightAppBarSection {
+                display: flex;
+                align-items: center;
+                .nameContainer {
+                    display: flex;
+                    align-items: center;
+                    cursor: pointer;
+                    .nameText {
+                        color: #8f9bb3;
+                        font-size: 17 * $desk + vw;
+                    }
+                    .arrowDown {
+                        color: #8f9bb3;
+                    }
+                }
+                .avatar {
+                    width: 50 * $desk + vw;
+                    height: 50 * $desk + vw;
+                    border-radius: 64 * $desk + vw;
+                    margin-left: 10 * $desk + vw;
+                }
+            }
+        }
     }
 }
