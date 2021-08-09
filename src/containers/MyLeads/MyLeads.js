@@ -14,7 +14,8 @@ import baseUrl from '../../global/api';
 import { getProfileData } from '../../global/leadsGlobalData'
 import clickToCallApi from '../../global/callApi';
 import { Typography } from '@material-ui/core';
-import TablePagination from '@material-ui/core/TablePagination';
+import ChevronLeftOutlinedIcon from '@material-ui/icons/ChevronLeftOutlined';
+import ChevronRightOutlinedIcon from '@material-ui/icons/ChevronRightOutlined';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import CallIcon from '@material-ui/icons/Call';
@@ -42,7 +43,31 @@ const useStyles = makeStyles({
     fontSize: '14px',
   },
   tablePagination: {
-    backgroundColor: '#ffffff'
+    backgroundColor: '#ffffff',
+    width: '100%',
+    height: '64px',
+    marginTop: '8px',
+    marginBottom: '25px',
+    display: 'flex',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  numberOfTotalCount: {
+    marginRight: '25px'
+  },
+  rowsPerPageContainer: {
+    marginRight: '70px',
+    display: 'flex',
+    alignItems: 'center'
+  },
+  rowsText: {
+    marginRight: '8px'
+  },
+  buttonsContainer: {
+    marginRight: '15px'
+  },
+  activeColor: {
+    color: '#000'
   },
   statusHeading: {
     textAlign: 'center'
@@ -55,7 +80,7 @@ const useStyles = makeStyles({
   },
   tabledata: {
     // padding: '0 8px',
-    fontSize: '13px',
+    fontSize: '12px',
   },
   emptydata: {
     position: 'relative',
@@ -112,8 +137,8 @@ const useStyles = makeStyles({
     height: 'auto',
     paddingTop: '5px',
     paddingBottom: '5px',
-    paddingLeft: '10px',
-    paddingRight: '10px',
+    paddingLeft: '5px',
+    paddingRight: '5px',
     borderRadius: '35px',
     backgroundColor: '#3ec68c'
   },
@@ -124,29 +149,6 @@ const useStyles = makeStyles({
     width: '75px'
   }
 });
-function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-function getComparator(order, orderBy) {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
-}
 export default function MyLeads(props) {
   const classes = useStyles();
   const profileData = getProfileData();
@@ -158,8 +160,8 @@ export default function MyLeads(props) {
   const [isCallConnect, setIsCallConnect] = useState(false);
   const [onGoingCall, setOnGoingCall] = useState(false);
   const [isCallNotConnected, setIsCallNotConnected] = useState(false)
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(100);
+  const [totalDataPerPage, settotalDataPerPage] = useState(0);
   const splitUrl = (data) => {
     if (data !== null) {
       const [url, pager] = data.split('?');
@@ -172,6 +174,8 @@ export default function MyLeads(props) {
       const headers = { 'Authorization': `Token ${profileData.token}` }
       await axios.get(`${baseUrl}/leads/fetchUpdatedLeadsUserWise/`, { headers })
         .then((response) => {
+          setRowsPerPage(response.data.results.length)
+          settotalDataPerPage(response.data.results.length)
           setPrevPage(response.data.previous);
           setNextPage(response.data.next);
           setMyLeads(response.data.results);
@@ -186,28 +190,34 @@ export default function MyLeads(props) {
     history.push(`/dashboards/myleads/edit/${leadId}`);
     // props.mainMenuCallBack(true, leadId);
   }
-  // const nextPageHandler = async () => {
-  //   const headers = { 'Authorization': `Token ${profileData.token}` }
-  //   await axios.get(`${baseUrl}/leads/fetchUpdatedLeadsUserWise/?${splitUrl(nextPage)}`, { headers })
-  //     .then((response) => {
-  //       setPrevPage(response.data.previous);
-  //       setNextPage(response.data.next);
-  //       setMyLeads(response.data.results);
-  //     }).catch((error) => {
-  //       console.log(error)
-  //     })
-  // }
-  // const prevPageHandler = async () => {
-  //   const headers = { 'Authorization': `Token ${profileData.token}` }
-  //   await axios.get(`${baseUrl}/leads/fetchUpdatedLeadsUserWise/?${splitUrl(prevPage)}`, { headers })
-  //     .then((response) => {
-  //       setPrevPage(response.data.previous);
-  //       setNextPage(response.data.next);
-  //       setMyLeads(response.data.results);
-  //     }).catch((error) => {
-  //       console.log(error)
-  //     })
-  // }
+  const nextPageHandler = async () => {
+    const headers = { 'Authorization': `Token ${profileData.token}` }
+    await axios.get(`${baseUrl}/leads/fetchUpdatedLeadsUserWise/?${splitUrl(nextPage)}`, { headers })
+      .then((response) => {
+        let nextCount = totalDataPerPage + response.data.results.length
+        settotalDataPerPage(nextCount)
+        setRowsPerPage(response.data.results.length)
+        setPrevPage(response.data.previous);
+        setNextPage(response.data.next);
+        setMyLeads(response.data.results);
+      }).catch((error) => {
+        console.log(error)
+      })
+  }
+  const prevPageHandler = async () => {
+    const headers = { 'Authorization': `Token ${profileData.token}` }
+    await axios.get(`${baseUrl}/leads/fetchUpdatedLeadsUserWise/?${splitUrl(prevPage)}`, { headers })
+      .then((response) => {
+        let prevCount = totalDataPerPage - response.data.results.length
+        settotalDataPerPage(prevCount)
+        setRowsPerPage(response.data.results.length)
+        setPrevPage(response.data.previous);
+        setNextPage(response.data.next);
+        setMyLeads(response.data.results);
+      }).catch((error) => {
+        console.log(error)
+      })
+  }
 
   const maskPhoneNo = (phoneNo) => {
     let data = phoneNo;
@@ -254,15 +264,6 @@ export default function MyLeads(props) {
     setIsCallConnect(false);
     setIsCallNotConnected(false)
   }
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, totalLeads - page * rowsPerPage);
   return (
     <PageLayerSection>
       <TableContainer className={classes.container}>
@@ -289,9 +290,8 @@ export default function MyLeads(props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {myLeads.length !== 0 ? stableSort(myLeads, getComparator())
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((my_leads, index) => {
+            {myLeads.length !== 0 ?
+              myLeads.map((my_leads, index) => {
                 let leadPhoneNo = maskPhoneNo(my_leads.lead.phone_no)
                 return (
                   <TableRow className={classes.oddEvenRow} key={index}>
@@ -354,15 +354,32 @@ export default function MyLeads(props) {
           />
         </div>
       </TableContainer>
-      <TablePagination className={classes.tablePagination}
-        rowsPerPageOptions={[5, 10, 25]}
-        component="div"
-        count={totalLeads}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
+      <div className={classes.tablePagination}>
+        <div className={classes.rowsPerPageContainer}>
+          <div className={classes.rowsText}>Rows Per Page: {rowsPerPage}</div>
+        </div>
+        <div className={classes.numberOfTotalCount}>{totalDataPerPage} of {totalLeads}</div>
+        <div className={classes.buttonsContainer}>
+          {prevPage === null ? <IconButton disabled
+            onClick={prevPageHandler}
+          >
+            <ChevronLeftOutlinedIcon />
+          </IconButton> : <IconButton
+            onClick={prevPageHandler}
+          >
+            <ChevronLeftOutlinedIcon className={prevPage !== null ? classes.activeColor : ''} />
+          </IconButton>}
+          {nextPage === null ? <IconButton disabled
+            onClick={nextPageHandler}
+          >
+            <ChevronRightOutlinedIcon />
+          </IconButton> : <IconButton
+            onClick={nextPageHandler}
+          >
+            <ChevronRightOutlinedIcon className={nextPage !== null ? classes.activeColor : ''} />
+          </IconButton>}
+        </div>
+      </div>
     </PageLayerSection>
   );
 }

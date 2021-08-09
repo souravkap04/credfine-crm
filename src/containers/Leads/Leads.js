@@ -43,7 +43,7 @@ const useStyles = makeStyles({
   },
   tabledata: {
     // padding: '0 8px',
-    fontSize: '13px'
+    fontSize: '12px'
   },
   emptydata: {
     position: 'relative',
@@ -80,8 +80,8 @@ const useStyles = makeStyles({
     height: 'auto',
     paddingTop: '5px',
     paddingBottom: '5px',
-    paddingLeft: '10px',
-    paddingRight: '10px',
+    paddingLeft: '5px',
+    paddingRight: '5px',
     borderRadius: '35px',
     backgroundColor: '#3ec68c'
   },
