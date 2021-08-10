@@ -61,7 +61,7 @@ const useStyles = makeStyles({
   const [onGoingCall,setOnGoingCall] = useState(false);
   const [isCallNotConnected,setIsCallNotConnected] = useState(false);
   const [vertageCall,setVertageCall] = useState(false);
-  const [disableDisposeBtn,setDisableDisposeBtn] = useState(true);
+  const [disableHangupBtn,setDisableHangupBtn] = useState(true);
   
   useEffect(()=>{
       props.isSearchData ? fetchSearchData(props.searchInput) : fetchLeadsData()
@@ -90,8 +90,6 @@ const useStyles = makeStyles({
     };
   
   const routeChangeHAndler = (leadId)=>{
-   // props.userListCallback(leadId);
-   //history.push(`/leadDetails/${leadId}`);
    props.mainMenuCallBack(true,leadId);
   }
   const clickToCall = async (customerNo)=>{
@@ -124,32 +122,11 @@ const useStyles = makeStyles({
       await axios.post(`${vertageDialerApi}&user=${profileData.vertage_id}&pass=${profileData.vertage_pass}&agent_user=${profileData.vertage_id}&function=external_dial&value=${customerNo}&phone_code=+91&search=YES&preview=NO&focus=YES`)
        .then((response)=>{
           setVertageCall(true);
+          setDisableHangupBtn(false);
        }).catch((error)=>{
          console.log('error');
        })
     }
-    
-  //  const source = CancelToken.source();
-  // const timeout = setTimeout(() => {
-  //   source.cancel();
-  //  // setIsCalling(true);
-  // }, 2000);
-  
-  //  await axios.post(clickToCallApi,item, {cancelToken: source.token},{headers}).then((response) => {
-  //   // Clear The Timeout
-  //   clearTimeout(timeout);
-  //   if(response.data.success){
-  //         setIsCalling(false);
-  //         setOnGoingCall(true);
-  //       }else{
-  //         setIsCallNotConnected(true)
-  //       }
-  //      }).catch((error)=>{
-  //        console.log(error.message);
-  //        setIsCallConnect(true);
-  //        setIsCalling(false);
-  //      });
-
 }
 const callConnectHandler = ()=>{
   setIsCallConnect(false);
@@ -169,22 +146,10 @@ const maskPhoneNo = (phoneNo)=>{
     return data;
     }
 }
-const hangupCallHandler = async ()=>{
- await axios.post(`${vertageDialerApi}&user=${profileData.vertage_id}&pass=${profileData.vertage_pass}&agent_user=${profileData.vertage_id}&function=external_hangup&value=1`)
- .then((response)=>{
-  setDisableDisposeBtn(false);
- }).catch((error)=>{
-   console.log(error);
- })
-}
-const disposeCallHandler = async()=>{
- await axios.post(`${vertageDialerApi}&user=${profileData.vertage_id}&pass=${profileData.vertage_pass}&agent_user=${profileData.vertage_id}&function=external_status&value=A`)
- .then((response)=>{
-   setVertageCall(false);
-   setDisableDisposeBtn(true);
- }).catch((error)=>{
-   console.log(error);
- })
+
+const disableDialerPopUp = ()=>{
+  setVertageCall(false)
+  props.dialerHandler(disableHangupBtn)
 }
 
   return (
@@ -278,21 +243,9 @@ const disposeCallHandler = async()=>{
               />
             </div>
             <div>
-                <Dialog open={vertageCall}>
+                <Dialog open={vertageCall} onClose={disableDialerPopUp}>
                   <DialogContent>
                     <p>Calling...</p>
-                    <div className={classes.callingBtn}>
-                    <Button 
-                    variant="contained" 
-                    color="secondary"
-                    style={{marginRight:'20px'}}
-                    onClick={hangupCallHandler}>Hang up</Button>
-                    <Button 
-                    disabled={disableDisposeBtn}
-                    variant="contained" 
-                    color="secondary"
-                    onClick={disposeCallHandler}>Call Dispose</Button>
-                    </div>
                   </DialogContent>
                 </Dialog>
             </div>
