@@ -144,6 +144,7 @@ export default function MainMenu(props) {
   const [isSearchData, setIsSearchData] = useState(false);
   const [viewLeadDetails, setViewLeadDetails] = useState(false);
   const [leadId, setLeadId] = useState(null);
+  const [disableHangupBtn,setDisableHangupBtn] = useState(true);
   const [isHiddenTab,setIsHiddenTab] = useState(false);
   // const[drawerOpen,setDrawerOpen] = useState(false);
   const open = Boolean(anchorEl);
@@ -152,7 +153,6 @@ export default function MainMenu(props) {
    userName = userName.replace(/^\s+|\s+$/g, "");
    userName = userName.replace(/\s+/g, " ");
    const timeout = 1000*60*30;
-  const [userLoggedIn,setUserLoggedIn] = useState(false);
   const [istimeOut,setIsTimeOut] = useState(false);
   const onAction = (e)=>{
     setIsTimeOut(false)
@@ -249,6 +249,9 @@ export default function MainMenu(props) {
   const leadDetailsHandler = (childData,leadId)=>{
     setViewLeadDetails(childData);
     setLeadId(leadId)
+ }
+ const hangUpBtnHandler = (childData)=>{
+  setDisableHangupBtn(childData);
  }
  const logoutHandler = ()=>{
    localStorage.removeItem('user_info');
@@ -356,12 +359,14 @@ export default function MainMenu(props) {
           {(selectedTab === 0  ) && (viewLeadDetails ?
           <LeadDetails
           leadId={leadId}
-          mainMenuCallBack={leadDetailsHandler}/>
+          mainMenuCallBack={leadDetailsHandler}
+          hangUpBtn={disableHangupBtn}/>
            :
           <Leads
             searchInput={searchInput}
             isSearchData={isSearchData}
             mainMenuCallBack={leadDetailsHandler}
+            dialerHandler={hangUpBtnHandler}
             /> ) }
           {selectedTab === 1 && <PlForm/>}
           {selectedTab === 2 && <BlForm/>}
@@ -373,9 +378,12 @@ export default function MainMenu(props) {
           {selectedTab === 8 && ( viewLeadDetails ?
           <LeadDetails 
           leadId={leadId}
-          mainMenuCallBack={leadDetailsHandler}/> 
+          mainMenuCallBack={leadDetailsHandler}
+          hangUpBtn={disableHangupBtn}/> 
           : <MyLeads
-          mainMenuCallBack={leadDetailsHandler}/>)}
+          mainMenuCallBack={leadDetailsHandler}
+          dialerHandler={hangUpBtnHandler}
+          />)}
           {selectedTab === 9 && <FreshLead/>}
         </Grid>
       </Grid>

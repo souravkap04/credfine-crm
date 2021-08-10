@@ -86,7 +86,7 @@ export default function MyLeads(props) {
     const [onGoingCall,setOnGoingCall] = useState(false);
     const [isCallNotConnected,setIsCallNotConnected] = useState(false);
     const [vertageCall,setVertageCall] = useState(false);
-    const [disableDisposeBtn,setDisableDisposeBtn] = useState(true);
+    const [disableHangupBtn,setDisableHangupBtn] = useState(true);
 
     const splitUrl = (data)=>{
       if(data !== null){
@@ -180,6 +180,7 @@ export default function MyLeads(props) {
       await axios.post(`${vertageDialerApi}&user=${profileData.vertage_id}&pass=${profileData.vertage_pass}&agent_user=${profileData.vertage_id}&function=external_dial&value=${customerNo}&phone_code=+91&search=YES&preview=NO&focus=YES`)
        .then((response)=>{
           setVertageCall(true);
+          setDisableHangupBtn(false);
        }).catch((error)=>{
          console.log('error');
        })
@@ -189,23 +190,11 @@ export default function MyLeads(props) {
     setIsCallConnect(false);
     setIsCallNotConnected(false)
   }
-  const hangupCallHandler = async ()=>{
-    await axios.post(`${vertageDialerApi}&user=${profileData.vertage_id}&pass=${profileData.vertage_pass}&agent_user=${profileData.vertage_id}&function=external_hangup&value=1`)
-    .then((response)=>{
-     setDisableDisposeBtn(false);
-    }).catch((error)=>{
-      console.log(error);
-    })
-   }
-   const disposeCallHandler = async()=>{
-    await axios.post(`${vertageDialerApi}&user=${profileData.vertage_id}&pass=${profileData.vertage_pass}&agent_user=${profileData.vertage_id}&function=external_status&value=A`)
-    .then((response)=>{
-      setVertageCall(false);
-      setDisableDisposeBtn(true);
-    }).catch((error)=>{
-      console.log(error);
-    })
-   }
+  const disableDialerPopUp = ()=>{
+    setVertageCall(false)
+    props.dialerHandler(disableHangupBtn);
+  }
+  
     return (
       <TableContainer component={Paper} className={classes.container}>
         <Table className={classes.table} aria-label="simple table">
@@ -281,21 +270,9 @@ export default function MyLeads(props) {
         />
       </div>
       <div>
-                <Dialog open={vertageCall}>
+                <Dialog open={vertageCall} onClose={disableDialerPopUp}>
                   <DialogContent>
                     <p>Calling...</p>
-                    <div className={classes.callingBtn}>
-                    <Button 
-                    variant="contained" 
-                    color="secondary"
-                    style={{marginRight:'20px'}}
-                    onClick={hangupCallHandler}>Hang up</Button>
-                    <Button 
-                    disabled={disableDisposeBtn}
-                    variant="contained" 
-                    color="secondary"
-                    onClick={disposeCallHandler}>Call Dispose</Button>
-                    </div>
                   </DialogContent>
                 </Dialog>
             </div>
