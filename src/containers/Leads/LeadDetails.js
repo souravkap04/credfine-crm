@@ -19,7 +19,7 @@ import {
 import style from "./LeadDetails.module.css";
 import baseUrl from "../../global/api";
 import RemarkForm from "./Remarks/RemarkForm";
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
 function LeadDetails(props) {
   const profileData = getProfileData();
@@ -59,6 +59,7 @@ function LeadDetails(props) {
   const [showCompany, setShowCompany] = useState(false);
   let statusData = getStatusData();
   let { leadid } = useParams();
+  let history = useHistory();
   const maskPhoneNo = (phoneNo) => {
     let data = phoneNo;
     let unMaskdata = data.slice(-4);
@@ -171,14 +172,21 @@ function LeadDetails(props) {
         .then((response) => {
           setAlertMessage(response.data['data'])
           setIsStatus(true);
-          props.mainMenuCallBack(false);
+          setTimeout(() => {
+            history.push('/dashboards/leads')
+          },3000)
+          // props.mainMenuCallBack(false);
           // localStorage.removeItem('lead_allocate');
           // props.setIsFreshLead(false);
         }).catch((error) => {
-          setAlertMessage('Something Wrong');
+          // console.log(error.response.data.error)
+          setAlertMessage(error.response.data.error);
           setIsStatus(true);
         })
     }
+    setTimeout(() => {
+      setIsStatus(false)
+    },3000)
   }
 
   const searchCompanyHandler = async (e) => {
