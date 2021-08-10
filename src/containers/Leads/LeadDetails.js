@@ -21,6 +21,8 @@ import baseUrl from "../../global/api";
 import RemarkForm from "./Remarks/RemarkForm";
 import { useParams, useHistory } from 'react-router-dom';
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
+import { vertageDialerApi } from "../../global/callApi"
+
 function LeadDetails(props) {
   const profileData = getProfileData();
   const banks = getBank();
@@ -57,6 +59,7 @@ function LeadDetails(props) {
   const [isStatus, setIsStatus] = useState(false);
   const [isLeadDetails, setIsLeadDetails] = useState(false);
   const [showCompany, setShowCompany] = useState(false);
+  const [disableDisposeBtn, setDisableDisposeBtn] = useState(true);
   let statusData = getStatusData();
   let { leadid } = useParams();
   let history = useHistory();
@@ -205,11 +208,28 @@ function LeadDetails(props) {
 
     }
   }
+
   const selectCompany = (company) => {
     setCompanyName(company);
     setShowCompany(false);
   }
-
+  const hangupCallHandler = async () => {
+    await axios.post(`${vertageDialerApi}&user=${profileData.vertage_id}&pass=${profileData.vertage_pass}&agent_user=${profileData.vertage_id}&function=external_hangup&value=1`)
+      .then((response) => {
+        setDisableDisposeBtn(false);
+      }).catch((error) => {
+        console.log(error);
+      })
+  }
+  const disposeCallHandler = async () => {
+    await axios.post(`${vertageDialerApi}&user=${profileData.vertage_id}&pass=${profileData.vertage_pass}&agent_user=${profileData.vertage_id}&function=external_status&value=A`)
+      .then((response) => {
+        setDisableDisposeBtn(true);
+      }).catch((error) => {
+        console.log(error);
+      })
+  }
+  console.log("gggg:" + props.hangUpBtn);
   return (
     <PageLayerSection>
       <div className={style.LeadDetails}>
@@ -219,7 +239,7 @@ function LeadDetails(props) {
               {isStatus ? <Alert variant="primary">{alertMessage}</Alert> : null}
               {isLeadDetails ? <Alert variant="primary">{alertMessage}</Alert> : null}
               <Form.Row>
-                <Col lg={5}>
+                <Col lg={3}>
                   <Form.Group>
                     <Form.Label>Status</Form.Label>
                     <Form.Control as="select"
@@ -232,7 +252,7 @@ function LeadDetails(props) {
                     </Form.Control>
                   </Form.Group>
                 </Col>
-                <Col lg={5}>
+                <Col lg={3}>
                   <Form.Group>
                     <Form.Label>Sub Status</Form.Label>
                     <Form.Control as="select"
@@ -248,6 +268,14 @@ function LeadDetails(props) {
                 <Col lg={2}>
                   <Button className={style.StatusSubmit}
                     onClick={() => statusUpdateHandler(leadid)} >Submit</Button>
+                </Col>
+                <Col lg={2}>
+                  <Button className={style.StatusSubmit} disabled={props.hangUpBtn}
+                    onClick={hangupCallHandler}>Hang Up</Button>
+                </Col>
+                <Col lg={2}>
+                  <Button className={style.StatusSubmit} disabled={disableDisposeBtn}
+                    onClick={disposeCallHandler} >Dispose</Button>
                 </Col>
               </Form.Row>
               <Form.Row>
@@ -573,5 +601,4 @@ function LeadDetails(props) {
     </PageLayerSection>
   );
 }
-
 export default LeadDetails;

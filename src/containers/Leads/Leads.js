@@ -110,7 +110,7 @@ const Leads = ((props) => {
   const [isCallNotConnected, setIsCallNotConnected] = useState(false)
   const [isSearchData, setisSearchData] = useState(false);
   const [vertageCall, setVertageCall] = useState(false);
-  const [disableDisposeBtn, setDisableDisposeBtn] = useState(true);
+  const [disableHangupBtn, setDisableHangupBtn] = useState(true);
 
   useEffect(() => {
     leadQuery ? fetchSearchData(leadQuery) : fetchLeadsData();
@@ -138,13 +138,12 @@ const Leads = ((props) => {
         console.log(error);
       })
   };
-
   const routeChangeHAndler = (leadId) => {
     // props.userListCallback(leadId);
     //history.push(`/leadDetails/${leadId}`);
     history.push(`/dashboards/leads/edit/${leadId}`);
     // props.mainMenuCallBack(true, leadId);
-  }
+  };
   const clickToCall = async (customerNo) => {
     if (profileData.dialer === 'TATA') {
       const headers = {
@@ -175,32 +174,11 @@ const Leads = ((props) => {
       await axios.post(`${vertageDialerApi}&user=${profileData.vertage_id}&pass=${profileData.vertage_pass}&agent_user=${profileData.vertage_id}&function=external_dial&value=${customerNo}&phone_code=+91&search=YES&preview=NO&focus=YES`)
         .then((response) => {
           setVertageCall(true);
+          setDisableHangupBtn(false);
         }).catch((error) => {
           console.log('error');
         })
     }
-
-    //  const source = CancelToken.source();
-    // const timeout = setTimeout(() => {
-    //   source.cancel();
-    //  // setIsCalling(true);
-    // }, 2000);
-
-    //  await axios.post(clickToCallApi,item, {cancelToken: source.token},{headers}).then((response) => {
-    //   // Clear The Timeout
-    //   clearTimeout(timeout);
-    //   if(response.data.success){
-    //         setIsCalling(false);
-    //         setOnGoingCall(true);
-    //       }else{
-    //         setIsCallNotConnected(true)
-    //       }
-    //      }).catch((error)=>{
-    //        console.log(error.message);
-    //        setIsCallConnect(true);
-    //        setIsCalling(false);
-    //      });
-
   }
   const callConnectHandler = () => {
     setIsCallConnect(false);
@@ -220,22 +198,9 @@ const Leads = ((props) => {
       return data;
     }
   }
-  const hangupCallHandler = async () => {
-    await axios.post(`${vertageDialerApi}&user=${profileData.vertage_id}&pass=${profileData.vertage_pass}&agent_user=${profileData.vertage_id}&function=external_hangup&value=1`)
-      .then((response) => {
-        setDisableDisposeBtn(false);
-      }).catch((error) => {
-        console.log(error);
-      })
-  }
-  const disposeCallHandler = async () => {
-    await axios.post(`${vertageDialerApi}&user=${profileData.vertage_id}&pass=${profileData.vertage_pass}&agent_user=${profileData.vertage_id}&function=external_status&value=A`)
-      .then((response) => {
-        setVertageCall(false);
-        setDisableDisposeBtn(true);
-      }).catch((error) => {
-        console.log(error);
-      })
+  const disableDialerPopUp = () => {
+    setVertageCall(false)
+    props.dialerHandler(disableHangupBtn)
   }
   return (
     <PageLayerSection>
@@ -348,28 +313,16 @@ const Leads = ((props) => {
               />
             </div>
             <div>
-              <Dialog open={vertageCall}>
+              <Dialog open={vertageCall} onClose={disableDialerPopUp}>
                 <DialogContent>
                   <p>Calling...</p>
-                  <div className={classes.callingBtn}>
-                    <Button
-                      variant="contained"
-                      color="secondary"
-                      style={{ marginRight: '20px' }}
-                      onClick={hangupCallHandler}>Hang up</Button>
-                    <Button
-                      disabled={disableDisposeBtn}
-                      variant="contained"
-                      color="secondary"
-                      onClick={disposeCallHandler}>Call Dispose</Button>
-                  </div>
                 </DialogContent>
               </Dialog>
             </div>
           </TableBody>
         </Table>
       </TableContainer>
-    </PageLayerSection>
+    </PageLayerSection >
   );
 });
 export default Leads;
