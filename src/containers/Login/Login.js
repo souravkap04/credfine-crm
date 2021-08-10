@@ -71,33 +71,21 @@ export default function Login() {
     const [isDisplay, setIsDisplay] = useState(false);
     const { register, handleSubmit, control, errors } = useForm();
     const onSubmit = async (data) => {
-        const { email, password, campaign } = data;
-        let item = { username: email, password, campaign_category: campaign };
+        const { email, password, campaign, dialer } = data;
+        let item = { username: email, password, campaign_category: campaign, dialer };
         await axios.post(`${baseUrl}/user/login/`, item)
             .then((response) => {
                 localStorage.setItem('user_info', JSON.stringify(response.data));
                 const profileData = JSON.parse(localStorage.getItem('user_info'));
                 if (profileData.is_admin_verified) {
-                    if (profileData.user_roles[0].user_type === 3) {
-                        history.push("/dashboards/leads");
-                        let headers = { 'Authorization': `Token ${profileData.token}` };
-                        axios.get(`${baseUrl}/leads/fetchAllLeads/`, { headers })
-                            .then((response) => {
-                                localStorage.setItem('status_info', JSON.stringify(response.data));
-                            }).catch((error) => {
-                                console.log(error);
-                            })
-                    }
-                    else {
-                        history.push("/dashboard");
-                        let headers = { 'Authorization': `Token ${profileData.token}` };
-                        axios.get(`${baseUrl}/leads/fetchAllLeads/`, { headers })
-                            .then((response) => {
-                                localStorage.setItem('status_info', JSON.stringify(response.data));
-                            }).catch((error) => {
-                                console.log(error);
-                            })
-                    }
+                    history.push("/dashboard");
+                    let headers = { 'Authorization': `Token ${profileData.token}` };
+                    axios.get(`${baseUrl}/leads/fetchAllLeads/`, { headers })
+                        .then((response) => {
+                            localStorage.setItem('status_info', JSON.stringify(response.data));
+                        }).catch((error) => {
+                            console.log(error);
+                        })
                 }
             }).catch(error => {
                 setAlertMessage('This is an error alert — check it out!')
@@ -169,34 +157,34 @@ export default function Login() {
                                     )
                                 }} />
                         </Grid>
-                        {/* <Grid item lg={12}>
-                    <Typography>Dialer</Typography>
-                        <FormControl 
-                        className={classes.input_field}
-                        fullWidth 
-                        variant="filled"
-                        error={Boolean(errors.dialer)}>
-                            <InputLabel>Select</InputLabel>
-                            <Controller
-                                render={(props) => (
-                                <Select value={props.value} onChange={props.onChange}>
-                                   {dialerData.map((option)=>(
-                                        <MenuItem key={option} value={option}>
-                                        {option}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                                )}
-                                defaultValue=""
-                                name="dialer"
-                                control={control}
-                                rules={{
-                                    required:'Please choose your dialer'
-                                }}
-                            />
-                            <FormHelperText>{errors.dialer?.message}</FormHelperText>
-                        </FormControl>
-                        </Grid>  */}
+                        <Grid item lg={12}>
+                            <Typography>Dialer</Typography>
+                            <FormControl
+                                className={classes.input_field}
+                                fullWidth
+                                variant="filled"
+                                error={Boolean(errors.dialer)}>
+                                <InputLabel>Select</InputLabel>
+                                <Controller
+                                    render={(props) => (
+                                        <Select value={props.value} onChange={props.onChange}>
+                                            {dialerData.map((option) => (
+                                                <MenuItem key={option} value={option}>
+                                                    {option}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    )}
+                                    defaultValue=""
+                                    name="dialer"
+                                    control={control}
+                                    rules={{
+                                        required: 'Please choose your dialer'
+                                    }}
+                                />
+                                <FormHelperText>{errors.dialer?.message}</FormHelperText>
+                            </FormControl>
+                        </Grid>
                         <Grid item lg={12}>
                             <Typography>Campaign</Typography>
                             <FormControl

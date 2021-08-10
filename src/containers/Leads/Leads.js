@@ -7,7 +7,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { Dialog, DialogContent } from '@material-ui/core'
+import { Button, Dialog, DialogContent } from '@material-ui/core'
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -15,7 +15,7 @@ import CallIcon from '@material-ui/icons/Call';
 import Checkbox from '@material-ui/core/Checkbox';
 import axios from 'axios';
 import baseUrl from '../../global/api';
-import clickToCallApi from '../../global/callApi'
+import { clickToCallApi, vertageDialerApi } from '../../global/callApi'
 import { getProfileData } from '../../global/leadsGlobalData'
 import { useQueryy } from '../../global/query';
 import CallerDialogBox from './CallerDialog/CallerDialogBox';
@@ -64,6 +64,9 @@ const useStyles = makeStyles({
     color: '#ffffff',
     fontSize: '17px'
   },
+  callingBtn: {
+    margin: '20px'
+  },
   oddEvenRow: {
     '&:nth-of-type(odd)': {
       backgroundColor: '#f7f9fc',
@@ -106,6 +109,9 @@ const Leads = ((props) => {
   const [onGoingCall, setOnGoingCall] = useState(false);
   const [isCallNotConnected, setIsCallNotConnected] = useState(false)
   const [isSearchData, setisSearchData] = useState(false);
+  const [vertageCall, setVertageCall] = useState(false);
+  const [disableDisposeBtn, setDisableDisposeBtn] = useState(true);
+
   useEffect(() => {
     leadQuery ? fetchSearchData(leadQuery) : fetchLeadsData();
   }, [leadQuery])
@@ -140,30 +146,40 @@ const Leads = ((props) => {
     // props.mainMenuCallBack(true, leadId);
   }
   const clickToCall = async (customerNo) => {
-    const headers = {
-      'accept': 'application/json',
-      'content-type': 'application/json'
-    };
-    const item = { customer_number: customerNo, api_key: profileData.dialer_pass };
-    axios.interceptors.request.use((request) => {
-      setIsCalling(true);
-      return request;
-    })
-    await axios.post(clickToCallApi, item, { headers })
-      .then((response) => {
-        if (response.data.success) {
-          setIsCalling(false);
-          setOnGoingCall(true);
-        } else {
-          setIsCallNotConnected(true)
-        }
-      }).catch((error) => {
-        console.log(error)
-        if (error.message) {
-          setIsCallConnect(true);
-          setIsCalling(false);
-        }
+    if (profileData.dialer === 'TATA') {
+      const headers = {
+        'accept': 'application/json',
+        'content-type': 'application/json'
+      };
+      const item = { customer_number: customerNo, api_key: profileData.dialer_pass };
+      axios.interceptors.request.use((request) => {
+        setIsCalling(true);
+        return request;
       })
+      await axios.post(clickToCallApi, item, { headers })
+        .then((response) => {
+          if (response.data.success) {
+            setIsCalling(false);
+            setOnGoingCall(true);
+          } else {
+            setIsCallNotConnected(true)
+          }
+        }).catch((error) => {
+          console.log(error)
+          if (error.message) {
+            setIsCallConnect(true);
+            setIsCalling(false);
+          }
+        })
+    } else if (profileData.dialer === 'VERTAGE') {
+      await axios.post(`${vertageDialerApi}&user=${profileData.vertage_id}&pass=${profileData.vertage_pass}&agent_user=${profileData.vertage_id}&function=external_dial&value=${customerNo}&phone_code=+91&search=YES&preview=NO&focus=YES`)
+        .then((response) => {
+          setVertageCall(true);
+        }).catch((error) => {
+          console.log('error');
+        })
+    }
+
     //  const source = CancelToken.source();
     // const timeout = setTimeout(() => {
     //   source.cancel();
@@ -204,7 +220,23 @@ const Leads = ((props) => {
       return data;
     }
   }
-
+  const hangupCallHandler = async () => {
+    await axios.post(`${vertageDialerApi}&user=${profileData.vertage_id}&pass=${profileData.vertage_pass}&agent_user=${profileData.vertage_id}&function=external_hangup&value=1`)
+      .then((response) => {
+        setDisableDisposeBtn(false);
+      }).catch((error) => {
+        console.log(error);
+      })
+  }
+  const disposeCallHandler = async () => {
+    await axios.post(`${vertageDialerApi}&user=${profileData.vertage_id}&pass=${profileData.vertage_pass}&agent_user=${profileData.vertage_id}&function=external_status&value=A`)
+      .then((response) => {
+        setVertageCall(false);
+        setDisableDisposeBtn(true);
+      }).catch((error) => {
+        console.log(error);
+      })
+  }
   return (
     <PageLayerSection>
       <TableContainer className={classes.container}>
@@ -314,6 +346,25 @@ const Leads = ((props) => {
                 isCallNotConnected={isCallNotConnected}
                 callConnectHandler={callConnectHandler}
               />
+            </div>
+            <div>
+              <Dialog open={vertageCall}>
+                <DialogContent>
+                  <p>Calling...</p>
+                  <div className={classes.callingBtn}>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      style={{ marginRight: '20px' }}
+                      onClick={hangupCallHandler}>Hang up</Button>
+                    <Button
+                      disabled={disableDisposeBtn}
+                      variant="contained"
+                      color="secondary"
+                      onClick={disposeCallHandler}>Call Dispose</Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
             </div>
           </TableBody>
         </Table>

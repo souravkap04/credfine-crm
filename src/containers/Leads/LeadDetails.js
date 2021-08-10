@@ -174,7 +174,7 @@ function LeadDetails(props) {
           setIsStatus(true);
           setTimeout(() => {
             history.push('/dashboards/leads')
-          },3000)
+          }, 3000)
           // props.mainMenuCallBack(false);
           // localStorage.removeItem('lead_allocate');
           // props.setIsFreshLead(false);
@@ -186,7 +186,7 @@ function LeadDetails(props) {
     }
     setTimeout(() => {
       setIsStatus(false)
-    },3000)
+    }, 3000)
   }
 
   const searchCompanyHandler = async (e) => {
