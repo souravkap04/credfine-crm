@@ -30,7 +30,8 @@ const useStyles = makeStyles({
   },
   scroller: {
     overflow: 'auto',
-    maxHeight: '500px',
+    // maxHeight: '500px',
+    marginBottom: '25px'
   },
   searchInput: {
     margin: '0px 200px',
@@ -79,7 +80,7 @@ const useStyles = makeStyles({
     textAlign: 'center'
   },
   tabledata: {
-    padding: '0 8px',
+    padding: '0 4px',
     fontSize: '12px',
     textAlign: 'center'
   },
@@ -251,6 +252,7 @@ export default function Users() {
                   {/* <TableCell className={classes.tableheading}>DIALER API Key</TableCell> */}
                   <TableCell className={classes.tableheading}>Vertage Id</TableCell>
                   <TableCell className={classes.tableheading}>Vertage Pass</TableCell>
+                  <TableCell className={classes.tableheading}></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>

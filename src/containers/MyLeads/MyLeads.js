@@ -147,10 +147,11 @@ const useStyles = makeStyles({
     backgroundColor: '#3ec68c'
   },
   loanButtonText: {
-    fontSize: '13px',
+    fontSize: '12px',
     textAlign: 'center',
     color: '#fff',
-    width: '75px'
+    width: '75px',
+    wordBreak: 'break-word'
   }
 });
 export default function MyLeads(props) {
@@ -281,7 +282,7 @@ export default function MyLeads(props) {
   }
   const disableDialerPopUp = () => {
     setVertageCall(false)
-    props.dialerHandler(disableHangupBtn);
+    setDisableHangupBtn(false)
   }
 
   return (

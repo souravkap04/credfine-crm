@@ -89,10 +89,11 @@ const useStyles = makeStyles({
     backgroundColor: '#3ec68c'
   },
   loanButtonText: {
-    fontSize: '13px',
+    fontSize: '12px',
     textAlign: 'center',
     color: '#fff',
-    width: '75px'
+    width: '75px',
+    wordBreak: 'break-word'
   }
 });
 const Leads = ((props) => {
@@ -200,7 +201,7 @@ const Leads = ((props) => {
   }
   const disableDialerPopUp = () => {
     setVertageCall(false)
-    props.dialerHandler(disableHangupBtn)
+    setDisableHangupBtn(false)
   }
   return (
     <PageLayerSection>

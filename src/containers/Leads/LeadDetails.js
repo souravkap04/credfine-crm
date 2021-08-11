@@ -22,6 +22,7 @@ import RemarkForm from "./Remarks/RemarkForm";
 import { useParams, useHistory } from 'react-router-dom';
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
 import { vertageDialerApi } from "../../global/callApi"
+import { tsNullKeyword } from "@babel/types";
 
 function LeadDetails(props) {
   const profileData = getProfileData();
@@ -229,7 +230,6 @@ function LeadDetails(props) {
         console.log(error);
       })
   }
-  console.log("gggg:" + props.hangUpBtn);
   return (
     <PageLayerSection>
       <div className={style.LeadDetails}>
@@ -239,7 +239,7 @@ function LeadDetails(props) {
               {isStatus ? <Alert variant="primary">{alertMessage}</Alert> : null}
               {isLeadDetails ? <Alert variant="primary">{alertMessage}</Alert> : null}
               <Form.Row>
-                <Col lg={3}>
+                <Col lg={profileData.dialer === 'TATA' ? 5 : 3}>
                   <Form.Group>
                     <Form.Label>Status</Form.Label>
                     <Form.Control as="select"
@@ -252,7 +252,7 @@ function LeadDetails(props) {
                     </Form.Control>
                   </Form.Group>
                 </Col>
-                <Col lg={3}>
+                <Col lg={profileData.dialer === 'TATA' ? 5 : 3}>
                   <Form.Group>
                     <Form.Label>Sub Status</Form.Label>
                     <Form.Control as="select"
@@ -269,14 +269,14 @@ function LeadDetails(props) {
                   <Button className={style.StatusSubmit}
                     onClick={() => statusUpdateHandler(leadid)} >Submit</Button>
                 </Col>
-                <Col lg={2}>
+                {profileData.dialer === 'TATA' ? tsNullKeyword : <React.Fragment><Col lg={2}>
                   <Button className={style.StatusSubmit} disabled={props.hangUpBtn}
                     onClick={hangupCallHandler}>Hang Up</Button>
                 </Col>
-                <Col lg={2}>
-                  <Button className={style.StatusSubmit} disabled={disableDisposeBtn}
-                    onClick={disposeCallHandler} >Dispose</Button>
-                </Col>
+                  <Col lg={2}>
+                    <Button className={style.StatusSubmit} disabled={disableDisposeBtn}
+                      onClick={disposeCallHandler} >Dispose</Button>
+                  </Col></React.Fragment>}
               </Form.Row>
               <Form.Row>
                 <Col>
