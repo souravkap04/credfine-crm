@@ -10,7 +10,7 @@ export default function PlForm() {
   const [loanAmount,setLoanAmount] = useState('');
   const [employmentType,setEmploymentType] = useState('');
   const [monthlyIncome,setMonthlyIncome] = useState('');
-  const [date,setDate] = useState(new Date());
+  const [date,setDate] = useState("");
   const [mobileNo,setMobileNo] = useState('');
   const [pincode,setPincode] = useState('');
   const [fullName,setFullName] = useState('');
@@ -40,6 +40,7 @@ export default function PlForm() {
           setAlertMessage(response.data.message);
           setIsDisplay(true);
         }).catch((error)=>{
+          console.log(error);
           setAlertMessage("Something wrong");
           setIsDisplay('true');
         })
@@ -49,7 +50,7 @@ export default function PlForm() {
     }
   }
   const searchCompanyHandler = async (e)=>{
-    setCompanyName((e.target.value).trim());
+    setCompanyName(e.target.value);
     setShowCompany(true);
     const searchCompanyUrl = "https://backend.credfine.com/common/search_company";
     let item = {company:companyName};
@@ -79,25 +80,20 @@ export default function PlForm() {
               <Form.Group>
                 <Form.Label>Loan Amount</Form.Label>
                 <Form.Control
-                required
                 type="number"
                 value={loanAmount}
                 onChange={(e)=>setLoanAmount(e.target.value)}
               />
-              <Form.Control.Feedback type="invalid"> This field is required</Form.Control.Feedback>
               </Form.Group>
-             
-            </Col>
+             </Col>
             <Col>
               <Form.Group>
                 <Form.Label>Employment Type</Form.Label>
                 <Form.Control 
-                required
                 as="select" 
                 value={employmentType} onChange={(e)=>setEmploymentType(e.target.value)}>
                       <option value='Salaried' >Salaried</option>
                 </Form.Control>
-                <Form.Control.Feedback type="invalid"> Select at least one</Form.Control.Feedback>
               </Form.Group>
             </Col>
           </Form.Row>
@@ -116,10 +112,12 @@ export default function PlForm() {
             <Col>
               <Form.Group>
                 <Form.Label>Date of Birth</Form.Label>
-                <Form.Control required type="date" name="dob" placeholder="Date of Birth"
+                <Form.Control  
+                type="date" 
+                name="dob" 
+                placeholder="Date of Birth"
                 value={date}
                 onChange={(e)=>setDate(e.target.value)}/>
-                <Form.Control.Feedback type="invalid"> Invalid Date of Birth</Form.Control.Feedback>
               </Form.Group>
             </Col>
           </Form.Row>
@@ -139,11 +137,9 @@ export default function PlForm() {
               <Form.Group>
                 <Form.Label>Current Residence Pincode</Form.Label>
                 <Form.Control 
-                required
                 type="number"
                 value={pincode}
                 onChange={(e)=>setPincode(e.target.value)}/>
-                <Form.Control.Feedback type="invalid"> This field is required</Form.Control.Feedback>
               </Form.Group>
             </Col>
           </Form.Row>
@@ -155,7 +151,7 @@ export default function PlForm() {
                 required
                 type="text"
                 value={fullName}
-                onChange={(e)=>setFullName((e.target.value).trim())}/>
+                onChange={(e)=>setFullName(e.target.value)}/>
                 <Form.Control.Feedback type="invalid"> This field is required</Form.Control.Feedback>
               </Form.Group>
             </Col>
@@ -163,11 +159,9 @@ export default function PlForm() {
               <Form.Group>
                 <Form.Label>Company Name</Form.Label>
                 <Form.Control 
-                required
                 type="text"
                 value={companyName}
                 onChange={(e)=>searchCompanyHandler(e)}/>
-                <Form.Control.Feedback type="invalid"> This field is required</Form.Control.Feedback>
                 <ListGroup>
                     {showCompany ? searchCompany.map((company)=>(
                       <ListGroup.Item key={company.id}
@@ -183,7 +177,6 @@ export default function PlForm() {
             <Form.Group controlId="campaign">
             <Form.Label className={style.Input_lable}>Campaign</Form.Label>
             <Form.Control
-            required
             as="select"
             value={campaign}
             onChange={(e)=>setCampaign(e.target.value)}
@@ -197,7 +190,6 @@ export default function PlForm() {
               <option value='WEBSITE_LEAD'>WEBSITE_LEAD</option>
               <option value='OTHER'>OTHER</option>
             </Form.Control>
-            <Form.Control.Feedback type='invalid'> This field is required </Form.Control.Feedback>
           </Form.Group>
             </Col>
             <Col>

@@ -212,7 +212,7 @@ const hangupCallHandler = async ()=>{
     console.log(error);
   })
  }
-console.log("gggg:"+props.hangUpBtn);
+
   return (
       <div className={style.LeadDetails}>
         <div>
@@ -388,7 +388,11 @@ console.log("gggg:"+props.hangUpBtn);
                       <option value="BL">Business Loan </option>
                     </Form.Control> : <Form.Control as="select"
                     value={loanType}
-                    disabled={true}/>}
+                    disabled={true}>
+                      <option value="">select One</option>
+                      <option value="PL">Personal Loan </option>
+                      <option value="BL">Business Loan </option>
+                      </Form.Control>}
                   </Form.Group>
                   <Form.Group>
                     <Form.Label>Source</Form.Label>
@@ -502,13 +506,17 @@ console.log("gggg:"+props.hangUpBtn);
                     >
                       <option value="">Select One</option>
                       {salaryMode.map((mode, index) => (
-                        <option value={index+1}>{mode}</option>
+                        <option value={mode}>{mode}</option>
                       ))}
                     </Form.Control> : <Form.Control
                       as="select"
                       value={salaryCreditMode}
                       disabled={true}
                     >
+                      <option value="">Select One</option>
+                      {salaryMode.map((mode, index) => (
+                        <option value={mode}>{mode}</option>
+                      ))}
                     </Form.Control>}
                   </Form.Group>
                   <Form.Group>
@@ -521,13 +529,17 @@ console.log("gggg:"+props.hangUpBtn);
                     >
                       <option value="">Select One</option>
                       {banks.map((bank, index) => (
-                        <option value={1}>{bank}</option>
+                        <option value={bank}>{bank}</option>
                       ))}
                     </Form.Control> : <Form.Control
                       as="select"
                       value={salaryBankAcc}
                       disabled={true}
                     >
+                      <option value="">Select One</option>
+                      {banks.map((bank, index) => (
+                        <option value={bank}>{bank}</option>
+                      ))}
                       </Form.Control>}
                   </Form.Group>
                   <Form.Group>
@@ -540,13 +552,17 @@ console.log("gggg:"+props.hangUpBtn);
                     >
                       <option value="">Select One</option>
                       {residentType.map((resident, index) => (
-                        <option value={1}>{resident}</option>
+                        <option value={resident}>{resident}</option>
                       ))}
                     </Form.Control> :  <Form.Control
                       as="select"
                       value={currentResidentType}
                       disabled={true}
                     >
+                      <option value="">Select One</option>
+                      {residentType.map((resident, index) => (
+                        <option value={resident}>{resident}</option>
+                      ))}
                     </Form.Control>}
                   </Form.Group>
                   <Form.Group>
