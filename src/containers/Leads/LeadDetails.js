@@ -147,6 +147,9 @@ function LeadDetails(props) {
         setAlertMessage('Something Wrong')
         setIsLeadDetails(true);
       })
+    setTimeout(() => {
+      setIsLeadDetails(false)
+    }, 2000)
   }
   const removeDuplicateStatus = (data) => {
     let unique = [];
@@ -179,7 +182,7 @@ function LeadDetails(props) {
           setIsStatus(true);
           setTimeout(() => {
             history.push('/dashboards/leads')
-          }, 3000)
+          }, 1000)
           // props.mainMenuCallBack(false);
           // localStorage.removeItem('lead_allocate');
           // props.setIsFreshLead(false);
@@ -191,7 +194,7 @@ function LeadDetails(props) {
     }
     setTimeout(() => {
       setIsStatus(false)
-    }, 3000)
+    }, 2000)
   }
 
   const searchCompanyHandler = async (e) => {
@@ -528,8 +531,8 @@ function LeadDetails(props) {
                       onChange={(e) => setSalaryCreditMode(e.target.value)}
                     >
                       <option value="">Select One</option>
-                      {salaryMode.map((mode, index) => (
-                        <option value={index}>{mode}</option>
+                      {salaryMode.map((mode) => (
+                        <option value={mode}>{mode}</option>
                       ))}
                     </Form.Control> : <Form.Control
                       as="select"
@@ -537,8 +540,8 @@ function LeadDetails(props) {
                       disabled={true}
                     >
                       <option value="">Select One</option>
-                      {salaryMode.map((mode, index) => (
-                        <option value={index}>{mode}</option>
+                      {salaryMode.map((mode) => (
+                        <option value={mode}>{mode}</option>
                       ))}
                     </Form.Control>}
                   </Form.Group>
@@ -551,8 +554,8 @@ function LeadDetails(props) {
                       onChange={(e) => setSalaryBankAcc(e.target.value)}
                     >
                       <option value="">Select One</option>
-                      {banks.map((bank, index) => (
-                        <option value={index}>{bank}</option>
+                      {banks.map((bank) => (
+                        <option value={bank}>{bank}</option>
                       ))}
                     </Form.Control> : <Form.Control
                       as="select"
@@ -560,8 +563,8 @@ function LeadDetails(props) {
                       disabled={true}
                     >
                       <option value="">Select One</option>
-                      {banks.map((bank, index) => (
-                        <option value={index}>{bank}</option>
+                      {banks.map((bank) => (
+                        <option value={bank}>{bank}</option>
                       ))}
                     </Form.Control>}
                   </Form.Group>
@@ -574,8 +577,8 @@ function LeadDetails(props) {
                       onChange={(e) => setCurrentResidentType(e.target.value)}
                     >
                       <option value="">Select One</option>
-                      {residentType.map((resident, index) => (
-                        <option value={index}>{resident}</option>
+                      {residentType.map((resident) => (
+                        <option value={resident}>{resident}</option>
                       ))}
                     </Form.Control> : <Form.Control
                       as="select"
@@ -583,8 +586,8 @@ function LeadDetails(props) {
                       disabled={true}
                     >
                       <option value="">Select One</option>
-                      {residentType.map((resident, index) => (
-                        <option value={index}>{resident}</option>
+                      {residentType.map((resident) => (
+                        <option value={resident}>{resident}</option>
                       ))}
                     </Form.Control>}
                   </Form.Group>

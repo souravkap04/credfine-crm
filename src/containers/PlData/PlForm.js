@@ -159,7 +159,7 @@ export default function PlForm() {
                     required
                     type="text"
                     value={fullName}
-                    onChange={(e) => setFullName((e.target.value).trim())} />
+                    onChange={(e) => setFullName((e.target.value))} />
                   <Form.Control.Feedback type="invalid"> This field is required</Form.Control.Feedback>
                 </Form.Group>
               </Col>
@@ -174,7 +174,7 @@ export default function PlForm() {
                   <Form.Control.Feedback type="invalid"> This field is required</Form.Control.Feedback>
                   <ListGroup>
                     {showCompany ? searchCompany.map((company) => (
-                      <ListGroup.Item key={company.id}
+                      <ListGroup.Item style={{ cursor: 'pointer' }} key={company.id}
                         onClick={() => selectCompany(company.name)}
                       >{company.name}</ListGroup.Item>
                     )) : null}
@@ -206,7 +206,7 @@ export default function PlForm() {
               </Col>
               <Col>
                 <Form.Group>
-                  <Form.Label>Current Company</Form.Label>
+                  <Form.Label>Current Work Experience</Form.Label>
                   <Form.Control
                     type="number"
                     value={currentCompany}

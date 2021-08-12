@@ -114,6 +114,7 @@ const useStyles = makeStyles({
   },
   callButton: {
     backgroundColor: '#14cc9e',
+    padding: '9px',
     '&:hover': {
       backgroundColor: 'rgba(0,0,0,0.4)'
     }
@@ -147,10 +148,11 @@ const useStyles = makeStyles({
     backgroundColor: '#3ec68c'
   },
   loanButtonText: {
-    fontSize: '12px',
+    fontSize: '0.8vw',
     textAlign: 'center',
     color: '#fff',
-    width: '75px',
+    // width: '75px',
+    whiteSpace: 'nowrap',
     wordBreak: 'break-word'
   }
 });
@@ -294,9 +296,9 @@ export default function MyLeads(props) {
         <Table className={classes.table} aria-label="simple table">
           <TableHead className={classes.tableheading}>
             <TableRow>
-              <TableCell padding="checkbox">
+              {/* <TableCell padding="checkbox">
                 <Checkbox className={classes.checkboxFix} />
-              </TableCell>
+              </TableCell> */}
               <TableCell className={classes.tableheading}>Lead ID</TableCell>
               <TableCell className={classes.tableheading}>Name</TableCell>
               <TableCell className={classes.tableheading}>Mobile</TableCell>
@@ -319,9 +321,9 @@ export default function MyLeads(props) {
                 let leadPhoneNo = maskPhoneNo(my_leads.lead.phone_no)
                 return (
                   <TableRow className={classes.oddEvenRow} key={index}>
-                    <TableCell padding="checkbox">
+                    {/* <TableCell padding="checkbox">
                       <Checkbox className={classes.checkboxFixData} />
-                    </TableCell>
+                    </TableCell> */}
                     <TableCell className={classes.tabledata, classes.leadid}
                       onClick={() => leadDetailsHandler(my_leads.lead.lead_crm_id)}
                     >{my_leads.lead.lead_crm_id}</TableCell>

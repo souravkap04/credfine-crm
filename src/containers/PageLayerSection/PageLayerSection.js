@@ -89,6 +89,9 @@ export default function PageLayerSection(props) {
                                 if (event.key === "Enter") {
                                     if (searchInput !== "" && searchValidation(searchInput)) {
                                         history.push("/dashboards/leads?query=" + searchInput);
+                                    } else if (searchInput === "") {
+                                        history.push("/dashboards/leads");
+                                        window.location.reload();
                                     }
                                 }
                             }}

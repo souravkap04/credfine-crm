@@ -39,8 +39,8 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  width: 18.05556vw;
-  height: 3.33333vw;
+  width: 16.66667vw;
+  height: 2.91667vw;
   border-radius: 0.55556vw;
   border: solid 1px #e4e9f2;
   background-color: #fff;
@@ -52,12 +52,13 @@
 }
 
 .pageAdjustSection .rightSection .appBarContainer .searchContainer .searchIconContainer .searchIcon {
-  font-size: 2.43056vw;
+  font-size: 1.94444vw;
   color: #8f9bb3;
 }
 
 .pageAdjustSection .rightSection .appBarContainer .searchContainer .inputContainer input {
   width: 95% !important;
+  font-size: 1.11111vw;
   color: #8f9bb3;
 }
 
