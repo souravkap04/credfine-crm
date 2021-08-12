@@ -271,6 +271,9 @@ export default function MyLeads(props) {
         .then((response) => {
           setVertageCall(true);
           setDisableHangupBtn(false);
+          if (response.status === 200) {
+            localStorage.setItem('callHangUp', true)
+          }
         }).catch((error) => {
           console.log('error');
         })

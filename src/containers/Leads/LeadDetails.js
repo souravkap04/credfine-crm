@@ -21,8 +21,7 @@ import baseUrl from "../../global/api";
 import RemarkForm from "./Remarks/RemarkForm";
 import { useParams, useHistory } from 'react-router-dom';
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
-import { vertageDialerApi } from "../../global/callApi"
-import { tsNullKeyword } from "@babel/types";
+import { vertageDialerApi } from "../../global/callApi";
 
 function LeadDetails(props) {
   const profileData = getProfileData();
@@ -61,6 +60,7 @@ function LeadDetails(props) {
   const [isLeadDetails, setIsLeadDetails] = useState(false);
   const [showCompany, setShowCompany] = useState(false);
   const [disableDisposeBtn, setDisableDisposeBtn] = useState(true);
+  const [callHangUpState, setcallHangUpState] = useState(true);
   let statusData = getStatusData();
   let { leadid } = useParams();
   let history = useHistory();
@@ -142,6 +142,7 @@ function LeadDetails(props) {
       .then((response) => {
         setAlertMessage('Lead Data Successfully Updated')
         setIsLeadDetails(true);
+        setIsEditable(false);
       }).catch((error) => {
         setAlertMessage('Something Wrong')
         setIsLeadDetails(true);
@@ -218,6 +219,9 @@ function LeadDetails(props) {
     await axios.post(`${vertageDialerApi}&user=${profileData.vertage_id}&pass=${profileData.vertage_pass}&agent_user=${profileData.vertage_id}&function=external_hangup&value=1`)
       .then((response) => {
         setDisableDisposeBtn(false);
+        if (response.status === 200) {
+          localStorage.removeItem('callHangUp')
+        }
       }).catch((error) => {
         console.log(error);
       })
@@ -226,6 +230,7 @@ function LeadDetails(props) {
     await axios.post(`${vertageDialerApi}&user=${profileData.vertage_id}&pass=${profileData.vertage_pass}&agent_user=${profileData.vertage_id}&function=external_status&value=A`)
       .then((response) => {
         setDisableDisposeBtn(true);
+        setcallHangUpState(true);
       }).catch((error) => {
         console.log(error);
       })
@@ -269,8 +274,8 @@ function LeadDetails(props) {
                   <Button className={style.StatusSubmit}
                     onClick={() => statusUpdateHandler(leadid)} >Submit</Button>
                 </Col>
-                {profileData.dialer === 'TATA' ? tsNullKeyword : <React.Fragment><Col lg={2}>
-                  <Button className={style.StatusSubmit} disabled={props.hangUpBtn}
+                {profileData.dialer === 'TATA' ? null : <React.Fragment><Col lg={2}>
+                  <Button className={style.StatusSubmit} disabled={localStorage.getItem("callHangUp") && localStorage.getItem("callHangUp") !== null ? false : callHangUpState}
                     onClick={hangupCallHandler}>Hang Up</Button>
                 </Col>
                   <Col lg={2}>
@@ -406,7 +411,11 @@ function LeadDetails(props) {
                       <option value="BL">Business Loan </option>
                     </Form.Control> : <Form.Control as="select"
                       value={loanType}
-                      disabled={true} />}
+                      disabled={true}>
+                      <option value="">select One</option>
+                      <option value="PL">Personal Loan </option>
+                      <option value="BL">Business Loan </option>
+                    </Form.Control>}
                   </Form.Group>
                   <Form.Group>
                     <Form.Label>Source</Form.Label>
@@ -520,13 +529,17 @@ function LeadDetails(props) {
                     >
                       <option value="">Select One</option>
                       {salaryMode.map((mode, index) => (
-                        <option value={index + 1}>{mode}</option>
+                        <option value={index}>{mode}</option>
                       ))}
                     </Form.Control> : <Form.Control
                       as="select"
                       value={salaryCreditMode}
                       disabled={true}
                     >
+                      <option value="">Select One</option>
+                      {salaryMode.map((mode, index) => (
+                        <option value={index}>{mode}</option>
+                      ))}
                     </Form.Control>}
                   </Form.Group>
                   <Form.Group>
@@ -539,13 +552,17 @@ function LeadDetails(props) {
                     >
                       <option value="">Select One</option>
                       {banks.map((bank, index) => (
-                        <option value={1}>{bank}</option>
+                        <option value={index}>{bank}</option>
                       ))}
                     </Form.Control> : <Form.Control
                       as="select"
                       value={salaryBankAcc}
                       disabled={true}
                     >
+                      <option value="">Select One</option>
+                      {banks.map((bank, index) => (
+                        <option value={index}>{bank}</option>
+                      ))}
                     </Form.Control>}
                   </Form.Group>
                   <Form.Group>
@@ -558,13 +575,17 @@ function LeadDetails(props) {
                     >
                       <option value="">Select One</option>
                       {residentType.map((resident, index) => (
-                        <option value={1}>{resident}</option>
+                        <option value={index}>{resident}</option>
                       ))}
                     </Form.Control> : <Form.Control
                       as="select"
                       value={currentResidentType}
                       disabled={true}
                     >
+                      <option value="">Select One</option>
+                      {residentType.map((resident, index) => (
+                        <option value={index}>{resident}</option>
+                      ))}
                     </Form.Control>}
                   </Form.Group>
                   <Form.Group>
