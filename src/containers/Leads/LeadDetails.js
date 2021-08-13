@@ -22,7 +22,9 @@ import RemarkForm from "./Remarks/RemarkForm";
 import { useParams, useHistory } from 'react-router-dom';
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
 import { vertageDialerApi } from "../../global/callApi";
-
+import { ToastContainer, toast, Slide } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import './leadDetailsAdjust.css';
 function LeadDetails(props) {
   const profileData = getProfileData();
   const banks = getBank();
@@ -60,7 +62,7 @@ function LeadDetails(props) {
   const [isLeadDetails, setIsLeadDetails] = useState(false);
   const [showCompany, setShowCompany] = useState(false);
   const [disableDisposeBtn, setDisableDisposeBtn] = useState(true);
-  const [callHangUpState, setcallHangUpState] = useState(true);
+  const [callHangUpState, setCallHangUpState] = useState(true);
   let statusData = getStatusData();
   let { leadid } = useParams();
   let history = useHistory();
@@ -140,16 +142,39 @@ function LeadDetails(props) {
     let headers = { 'Authorization': `Token ${profileData.token}` }
     await axios.put(`${baseUrl}/leads/lead_detail/${id}`, items, { headers })
       .then((response) => {
-        setAlertMessage('Lead Data Successfully Updated')
-        setIsLeadDetails(true);
+        console.log(response.status)
+        if (response.status === 200) {
+          toast("Lead Data Successfully Updated", {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 2000,
+            transition: Slide,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: false,
+            progress: undefined
+          });
+        }
+        // setAlertMessage('Lead Data Successfully Updated')
+        // setIsLeadDetails(true);
         setIsEditable(false);
       }).catch((error) => {
-        setAlertMessage('Something Wrong')
-        setIsLeadDetails(true);
+        toast.error("Something Wrong", {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 2000,
+          transition: Slide,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: false,
+          progress: undefined
+        });
+        // setAlertMessage('Something Wrong')
+        // setIsLeadDetails(true);
       })
-    setTimeout(() => {
-      setIsLeadDetails(false)
-    }, 2000)
+    // setTimeout(() => {
+    //   setIsLeadDetails(false)
+    // }, 2000)
   }
   const removeDuplicateStatus = (data) => {
     let unique = [];
@@ -178,23 +203,45 @@ function LeadDetails(props) {
     if (status !== '' && subStatus.length > 0) {
       await axios.put(`${baseUrl}/leads/lead_status/${id}`, items, { headers })
         .then((response) => {
-          setAlertMessage(response.data['data'])
-          setIsStatus(true);
+          // setAlertMessage(response.data['data'])
+          // setIsStatus(true);
+          if (response.status === 200) {
+            toast("Status Successfully Updated", {
+              position: toast.POSITION.TOP_RIGHT,
+              autoClose: 1500,
+              transition: Slide,
+              hideProgressBar: false,
+              closeOnClick: false,
+              pauseOnHover: true,
+              draggable: false,
+              progress: undefined
+            });
+          }
           setTimeout(() => {
             history.push('/dashboards/leads')
-          }, 1000)
+          }, 1500)
           // props.mainMenuCallBack(false);
           // localStorage.removeItem('lead_allocate');
           // props.setIsFreshLead(false);
         }).catch((error) => {
-          // console.log(error.response.data.error)
-          setAlertMessage(error.response.data.error);
-          setIsStatus(true);
+          console.log(error.response.data.error)
+          toast.error(error.response.data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 2000,
+            transition: Slide,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: false,
+            progress: undefined
+          });
+          // setAlertMessage(error.response.data.error);
+          // setIsStatus(true);
         })
     }
-    setTimeout(() => {
-      setIsStatus(false)
-    }, 2000)
+    // setTimeout(() => {
+    //   setIsStatus(false)
+    // }, 2000)
   }
 
   const searchCompanyHandler = async (e) => {
@@ -218,13 +265,17 @@ function LeadDetails(props) {
     setCompanyName(company);
     setShowCompany(false);
   }
+
   const hangupCallHandler = async () => {
     await axios.post(`${vertageDialerApi}&user=${profileData.vertage_id}&pass=${profileData.vertage_pass}&agent_user=${profileData.vertage_id}&function=external_hangup&value=1`)
       .then((response) => {
-        setDisableDisposeBtn(false);
+        // setDisableDisposeBtn(false);
+        setCallHangUpState(false);
         if (response.status === 200) {
           localStorage.removeItem('callHangUp')
+          return disposeCallHandler()
         }
+        // setCallHangUpState(true);
       }).catch((error) => {
         console.log(error);
       })
@@ -232,21 +283,26 @@ function LeadDetails(props) {
   const disposeCallHandler = async () => {
     await axios.post(`${vertageDialerApi}&user=${profileData.vertage_id}&pass=${profileData.vertage_pass}&agent_user=${profileData.vertage_id}&function=external_status&value=A`)
       .then((response) => {
-        setDisableDisposeBtn(true);
-        setcallHangUpState(true);
+        // setDisableDisposeBtn(true);
+        setCallHangUpState(true);
       }).catch((error) => {
         console.log(error);
       })
   }
   return (
     <PageLayerSection>
+      <ToastContainer />
       <div className={style.LeadDetails}>
         <div>
           <Form>
             <Card className={style.Card}>
-              {isStatus ? <Alert variant="primary">{alertMessage}</Alert> : null}
-              {isLeadDetails ? <Alert variant="primary">{alertMessage}</Alert> : null}
+              {/* {isStatus ? <Alert variant="primary">{alertMessage}</Alert> : null}
+              {isLeadDetails ? <Alert variant="primary">{alertMessage}</Alert> : null} */}
               <Form.Row>
+                {profileData.dialer === 'TATA' ? null : <Col lg={3}>
+                  <Button className={style.StatusSubmit} disabled={localStorage.getItem("callHangUp") && localStorage.getItem("callHangUp") !== null ? false : callHangUpState}
+                    onClick={hangupCallHandler}>Hang Up</Button>
+                </Col>}
                 <Col lg={profileData.dialer === 'TATA' ? 5 : 3}>
                   <Form.Group>
                     <Form.Label>Status</Form.Label>
@@ -273,18 +329,17 @@ function LeadDetails(props) {
                     </Form.Control>
                   </Form.Group>
                 </Col>
+
                 <Col lg={2}>
                   <Button className={style.StatusSubmit}
                     onClick={() => statusUpdateHandler(leadid)} >Submit</Button>
                 </Col>
-                {profileData.dialer === 'TATA' ? null : <React.Fragment><Col lg={2}>
-                  <Button className={style.StatusSubmit} disabled={localStorage.getItem("callHangUp") && localStorage.getItem("callHangUp") !== null ? false : callHangUpState}
-                    onClick={hangupCallHandler}>Hang Up</Button>
-                </Col>
-                  <Col lg={2}>
+
+                {/* <Col lg={2}>
                     <Button className={style.StatusSubmit} disabled={disableDisposeBtn}
                       onClick={disposeCallHandler} >Dispose</Button>
-                  </Col></React.Fragment>}
+                  </Col> */}
+
               </Form.Row>
               <Form.Row>
                 <Col>
