@@ -125,10 +125,11 @@ const useStyles = makeStyles({
     backgroundColor: '#3ec68c'
   },
   loanButtonText: {
-    fontSize: '12px',
+    fontSize: '0.8vw',
     textAlign: 'center',
     color: '#fff',
-    width: '75px',
+    // width: '75px',
+    whiteSpace: 'nowrap',
     wordBreak: 'break-word'
   }
 });

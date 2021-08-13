@@ -56,6 +56,7 @@ const useStyles = makeStyles({
   },
   callButton: {
     backgroundColor: '#14cc9e',
+    padding: '9px',
     '&:hover': {
       backgroundColor: 'rgba(0,0,0,0.4)'
     }
@@ -89,10 +90,11 @@ const useStyles = makeStyles({
     backgroundColor: '#3ec68c'
   },
   loanButtonText: {
-    fontSize: '12px',
+    fontSize: '0.8vw',
     textAlign: 'center',
     color: '#fff',
-    width: '75px',
+    // width: '75px',
+    whiteSpace: 'nowrap',
     wordBreak: 'break-word'
   }
 });
@@ -212,9 +214,9 @@ const Leads = ((props) => {
         <Table className={classes.table} aria-label="simple table">
           <TableHead className={classes.tableheading}>
             <TableRow>
-              <TableCell padding="checkbox">
+              {/* <TableCell padding="checkbox">
                 <Checkbox className={classes.checkboxFix} />
-              </TableCell>
+              </TableCell> */}
               <TableCell className={classes.tableheading}>Lead ID</TableCell>
               <TableCell className={classes.tableheading} >Name</TableCell>
               <TableCell className={classes.tableheading} >Mobile</TableCell>
@@ -239,9 +241,9 @@ const Leads = ((props) => {
                     let leadPhoneNo = maskPhoneNo(search.phone_no);
                     return (
                       <TableRow className={classes.oddEvenRow} key={index}>
-                        <TableCell padding="checkbox">
+                        {/* <TableCell padding="checkbox">
                           <Checkbox />
-                        </TableCell>
+                        </TableCell> */}
                         <TableCell className={classes.tabledata, classes.click}
                           onClick={() => routeChangeHAndler(search.lead_crm_id)}
                         >{search.lead_crm_id}
@@ -275,9 +277,9 @@ const Leads = ((props) => {
 
                 : (Object.keys(leadData).length !== 0 ?
                   <TableRow className={classes.oddEvenRow}>
-                    <TableCell padding="checkbox">
+                    {/* <TableCell padding="checkbox">
                       <Checkbox />
-                    </TableCell>
+                    </TableCell> */}
                     <TableCell className={classes.tabledata, classes.click}
                       onClick={() => routeChangeHAndler(leadData.lead_crm_id)}
                     >{leadData.lead_crm_id} </TableCell>

@@ -21,9 +21,9 @@ import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 const useStyles = makeStyles((theme) => ({
     rooter: {
         position: 'fixed',
-        width: '100%',
+        width: '18.75vw',
         height: '130vh',
-        maxWidth: 255,
+        maxWidth: 270,
         backgroundColor: '#535ad1',
         padding: theme.spacing(1, 0, 32),
         paddingTop: '76px'

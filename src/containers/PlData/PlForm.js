@@ -6,6 +6,10 @@ import baseUrl from "../../global/api";
 import { getProfileData } from '../../global/leadsGlobalData'
 import { RemoveFromQueue } from "@material-ui/icons";
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
+import { useHistory } from 'react-router-dom';
+import { ToastContainer, toast, Slide } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import '../Leads/leadDetailsAdjust.css';
 export default function PlForm() {
   const profileData = getProfileData();
   const [loanAmount, setLoanAmount] = useState('');
@@ -23,7 +27,7 @@ export default function PlForm() {
   const [validated, setValidated] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [isDisplay, setIsDisplay] = useState(false);
-
+  let history = useHistory();
   const personalLoanSubmitHandler = async (event) => {
     const form = event.currentTarget;
     if (form.checkValidity() === true) {
@@ -40,11 +44,36 @@ export default function PlForm() {
       }
       await axios.post(`${baseUrl}/leads/lead_create/`, item, { headers })
         .then((response) => {
-          setAlertMessage(response.data.message);
-          setIsDisplay(true);
+          // setAlertMessage(response.data.message);
+          // setIsDisplay(true);
+          if (response.status === 201) {
+            toast(response.data.message, {
+              position: toast.POSITION.TOP_RIGHT,
+              autoClose: 1500,
+              transition: Slide,
+              hideProgressBar: false,
+              closeOnClick: false,
+              pauseOnHover: true,
+              draggable: false,
+              progress: undefined
+            });
+          }
+          setTimeout(() => {
+            history.push('/dashboards/leads')
+          }, 1500)
         }).catch((error) => {
-          setAlertMessage("Something wrong");
-          setIsDisplay('true');
+          toast.error("Something Wrong", {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 1500,
+            transition: Slide,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: false,
+            progress: undefined
+          });
+          // setAlertMessage("Something wrong");
+          // setIsDisplay('true');
         })
     } else {
       setValidated(true);
@@ -73,154 +102,142 @@ export default function PlForm() {
   }
   return (
     <PageLayerSection>
-      <div >
-        <Form noValidate validated={validated} onSubmit={personalLoanSubmitHandler}>
-          <Card className={style.Card}>
-            {isDisplay ? <Alert className={style.alertBox}>{alertMessage}</Alert> : null}
-            <Form.Label className={style.Heading}>Personal Loan</Form.Label>
-            <Form.Row>
-              <Col>
-                <Form.Group>
-                  <Form.Label>Loan Amount</Form.Label>
-                  <Form.Control
-                    required
-                    type="number"
-                    value={loanAmount}
-                    onChange={(e) => setLoanAmount(e.target.value)}
-                  />
-                  <Form.Control.Feedback type="invalid"> This field is required</Form.Control.Feedback>
-                </Form.Group>
+      <ToastContainer />
+      <Form noValidate validated={validated} onSubmit={personalLoanSubmitHandler}>
+        <Card className={style.Card}>
+          {/* {isDisplay ? <Alert className={style.alertBox}>{alertMessage}</Alert> : null} */}
+          <Form.Label className={style.Heading}>Personal Loan</Form.Label>
+          <Form.Row>
+            <Col>
+              <Form.Group>
+                <Form.Label>Full Name As Per Pancard<span style={{ color: 'red' }}>*</span></Form.Label>
+                <Form.Control
+                  required
+                  type="text"
+                  value={fullName}
+                  onChange={(e) => setFullName((e.target.value))} />
+                <Form.Control.Feedback type="invalid"> This field is required</Form.Control.Feedback>
+              </Form.Group>
+            </Col>
+            <Col>
+              <Form.Group>
+                <Form.Label>Mobile Number<span style={{ color: 'red' }}>*</span></Form.Label>
+                <Form.Control
+                  required
+                  type="number"
+                  value={mobileNo}
+                  onChange={(e) => setMobileNo(e.target.value)} />
+                <Form.Control.Feedback type="invalid"> This field is required</Form.Control.Feedback>
+              </Form.Group>
+            </Col>
+          </Form.Row>
+          <Form.Row>
+            <Col>
+              <Form.Group>
+                <Form.Label>Net Monthly Income<span style={{ color: 'red' }}>*</span></Form.Label>
+                <Form.Control
+                  required
+                  type="number"
+                  value={monthlyIncome}
+                  onChange={(e) => setMonthlyIncome(e.target.value)} />
+                <Form.Control.Feedback type="invalid"> This field is required</Form.Control.Feedback>
+              </Form.Group>
+            </Col>
+            <Col>
+              <Form.Group>
+                <Form.Label>Date of Birth</Form.Label>
+                <Form.Control type="date" name="dob" placeholder="Date of Birth"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)} />
+              </Form.Group>
+            </Col>
+          </Form.Row>
+          <Form.Row>
+            <Col>
+              <Form.Group>
+                <Form.Label>Employment Type</Form.Label>
+                <Form.Control
+                  as="select"
+                  value={employmentType} onChange={(e) => setEmploymentType(e.target.value)}>
+                  <option value='Salaried' >Salaried</option>
+                </Form.Control>
+              </Form.Group>
+            </Col>
+            <Col>
+              <Form.Group>
+                <Form.Label>Current Residence Pincode</Form.Label>
+                <Form.Control
+                  type="number"
+                  value={pincode}
+                  onChange={(e) => setPincode(e.target.value)} />
+              </Form.Group>
+            </Col>
+          </Form.Row>
+          <Form.Row>
+            <Col>
+              <Form.Group>
+                <Form.Label>Loan Amount</Form.Label>
+                <Form.Control
+                  type="number"
+                  value={loanAmount}
+                  onChange={(e) => setLoanAmount(e.target.value)}
+                />
+              </Form.Group>
 
-              </Col>
-              <Col>
-                <Form.Group>
-                  <Form.Label>Employment Type</Form.Label>
-                  <Form.Control
-                    required
-                    as="select"
-                    value={employmentType} onChange={(e) => setEmploymentType(e.target.value)}>
-                    <option value='Salaried' >Salaried</option>
-                  </Form.Control>
-                  <Form.Control.Feedback type="invalid"> Select at least one</Form.Control.Feedback>
-                </Form.Group>
-              </Col>
-            </Form.Row>
-            <Form.Row>
-              <Col>
-                <Form.Group>
-                  <Form.Label>Net Monthly Income</Form.Label>
-                  <Form.Control
-                    required
-                    type="number"
-                    value={monthlyIncome}
-                    onChange={(e) => setMonthlyIncome(e.target.value)} />
-                  <Form.Control.Feedback type="invalid"> This field is required</Form.Control.Feedback>
-                </Form.Group>
-              </Col>
-              <Col>
-                <Form.Group>
-                  <Form.Label>Date of Birth</Form.Label>
-                  <Form.Control required type="date" name="dob" placeholder="Date of Birth"
-                    value={date}
-                    onChange={(e) => setDate(e.target.value)} />
-                  <Form.Control.Feedback type="invalid"> Invalid Date of Birth</Form.Control.Feedback>
-                </Form.Group>
-              </Col>
-            </Form.Row>
-            <Form.Row>
-              <Col>
-                <Form.Group>
-                  <Form.Label>Mobile Number</Form.Label>
-                  <Form.Control
-                    required
-                    type="number"
-                    value={mobileNo}
-                    onChange={(e) => setMobileNo(e.target.value)} />
-                  <Form.Control.Feedback type="invalid"> This field is required</Form.Control.Feedback>
-                </Form.Group>
-              </Col>
-              <Col>
-                <Form.Group>
-                  <Form.Label>Current Residence Pincode</Form.Label>
-                  <Form.Control
-                    required
-                    type="number"
-                    value={pincode}
-                    onChange={(e) => setPincode(e.target.value)} />
-                  <Form.Control.Feedback type="invalid"> This field is required</Form.Control.Feedback>
-                </Form.Group>
-              </Col>
-            </Form.Row>
-            <Form.Row>
-              <Col>
-                <Form.Group>
-                  <Form.Label>Full Name As Per Pancard</Form.Label>
-                  <Form.Control
-                    required
-                    type="text"
-                    value={fullName}
-                    onChange={(e) => setFullName((e.target.value).trim())} />
-                  <Form.Control.Feedback type="invalid"> This field is required</Form.Control.Feedback>
-                </Form.Group>
-              </Col>
-              <Col>
-                <Form.Group>
-                  <Form.Label>Company Name</Form.Label>
-                  <Form.Control
-                    required
-                    type="text"
-                    value={companyName}
-                    onChange={(e) => searchCompanyHandler(e)} />
-                  <Form.Control.Feedback type="invalid"> This field is required</Form.Control.Feedback>
-                  <ListGroup>
-                    {showCompany ? searchCompany.map((company) => (
-                      <ListGroup.Item key={company.id}
-                        onClick={() => selectCompany(company.name)}
-                      >{company.name}</ListGroup.Item>
-                    )) : null}
-                  </ListGroup>
-                </Form.Group>
-              </Col>
-            </Form.Row>
-            <Form.Row>
-              <Col>
-                <Form.Group controlId="campaign">
-                  <Form.Label className={style.Input_lable}>Campaign</Form.Label>
-                  <Form.Control
-                    required
-                    as="select"
-                    value={campaign}
-                    onChange={(e) => setCampaign(e.target.value)}
-                  >
-                    <option value=''>Select One</option>
-                    <option value='FRESH_PL_OD'>FRESH_PL_OD</option>
-                    <option value='BT_PL_OD'>BT_PL_OD</option>
-                    <option value='PL_OD_TOP_UP'>PL_OD_TOP_UP</option>
-                    <option value='PRE_APPROVED'>PRE_APPROVED</option>
-                    <option value='HOT_LEAD'>HOT_LEAD</option>
-                    <option value='WEBSITE_LEAD'>WEBSITE_LEAD</option>
-                    <option value='OTHER'>OTHER</option>
-                  </Form.Control>
-                  <Form.Control.Feedback type='invalid'> This field is required </Form.Control.Feedback>
-                </Form.Group>
-              </Col>
-              <Col>
-                <Form.Group>
-                  <Form.Label>Current Company</Form.Label>
-                  <Form.Control
-                    type="number"
-                    value={currentCompany}
-                    onChange={(e) => setCurrentCompany(e.target.value)}
-                  />
-                </Form.Group>
-              </Col>
-            </Form.Row>
-            <Button className={style.Button}
-              variant="success" type="submit">CONTINUE</Button>
+            </Col>
+            <Col>
+              <Form.Group>
+                <Form.Label>Company Name</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={companyName}
+                  onChange={(e) => searchCompanyHandler(e)} />
+                <ListGroup>
+                  {showCompany ? searchCompany.map((company) => (
+                    <ListGroup.Item style={{ cursor: 'pointer' }} key={company.id}
+                      onClick={() => selectCompany(company.name)}
+                    >{company.name}</ListGroup.Item>
+                  )) : null}
+                </ListGroup>
+              </Form.Group>
+            </Col>
+          </Form.Row>
+          <Form.Row>
+            <Col>
+              <Form.Group controlId="campaign">
+                <Form.Label className={style.Input_lable}>Campaign</Form.Label>
+                <Form.Control
+                  as="select"
+                  value={campaign}
+                  onChange={(e) => setCampaign(e.target.value)}
+                >
+                  <option value=''>Select One</option>
+                  <option value='FRESH_PL_OD'>FRESH_PL_OD</option>
+                  <option value='BT_PL_OD'>BT_PL_OD</option>
+                  <option value='PL_OD_TOP_UP'>PL_OD_TOP_UP</option>
+                  <option value='PRE_APPROVED'>PRE_APPROVED</option>
+                  <option value='HOT_LEAD'>HOT_LEAD</option>
+                  <option value='WEBSITE_LEAD'>WEBSITE_LEAD</option>
+                  <option value='OTHER'>OTHER</option>
+                </Form.Control>
+              </Form.Group>
+            </Col>
+            <Col>
+              <Form.Group>
+                <Form.Label>Current Work Experience</Form.Label>
+                <Form.Control
+                  type="number"
+                  value={currentCompany}
+                  onChange={(e) => setCurrentCompany(e.target.value)}
+                />
+              </Form.Group>
+            </Col>
+          </Form.Row>
+          <Button className={style.Button}
+            variant="success" type="submit">CONTINUE</Button>
 
-          </Card>
-        </Form>
-      </div>
+        </Card>
+      </Form>
     </PageLayerSection>
   );
 }
