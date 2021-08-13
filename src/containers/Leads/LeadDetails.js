@@ -142,7 +142,6 @@ function LeadDetails(props) {
     let headers = { 'Authorization': `Token ${profileData.token}` }
     await axios.put(`${baseUrl}/leads/lead_detail/${id}`, items, { headers })
       .then((response) => {
-        console.log(response.status)
         if (response.status === 200) {
           toast("Lead Data Successfully Updated", {
             position: toast.POSITION.TOP_RIGHT,
