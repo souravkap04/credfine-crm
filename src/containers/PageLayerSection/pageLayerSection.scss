@@ -1,0 +1,69 @@
+$desk: 100 / 1440;
+.pageAdjustSection {
+    position: relative;
+    display: flex;
+    .leftSection {
+        width: 270 * $desk + vw;
+    }
+    .rightSection {
+        width: 1135 * $desk + vw;
+        margin: auto;
+        // margin-top: 25 * $desk + vw;
+        .appBarContainer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            height: 95 * $desk + vw;
+            .searchContainer {
+                position: relative;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 240 * $desk + vw;
+                height: 42 * $desk + vw;
+                border-radius: 8 * $desk + vw;
+                border: solid 1px #e4e9f2;
+                background-color: #fff;
+                .searchIconContainer {
+                    margin-right: 8 * $desk + vw;
+                    margin-left: 8 * $desk + vw;
+                    .searchIcon {
+                        font-size: 28 * $desk + vw;
+                        color: #8f9bb3;
+                    }
+                }
+                .inputContainer input {
+                    width: 95% !important;
+                    font-size: 16 * $desk + vw;
+                    color: #8f9bb3;
+                }
+                .inputContainer::placeholder {
+                    color: #8f9bb3;
+                }
+            }
+            .rightAppBarSection {
+                display: flex;
+                align-items: center;
+                .nameContainer {
+                    display: flex;
+                    align-items: center;
+                    cursor: pointer;
+                    .nameText {
+                        color: #8f9bb3;
+                        font-size: 17 * $desk + vw;
+                    }
+                    .arrowDown {
+                        color: #8f9bb3;
+                    }
+                }
+                .avatar {
+                    width: 50 * $desk + vw;
+                    height: 50 * $desk + vw;
+                    border-radius: 64 * $desk + vw;
+                    margin-left: 10 * $desk + vw;
+                }
+            }
+        }
+    }
+}

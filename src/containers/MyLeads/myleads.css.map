@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AACA,AAAA,kBAAkB,CAAC;EACf,aAAa,EAAE,eAAe;CACjC",
+    "sources": [
+        "myleads.scss"
+    ],
+    "names": [],
+    "file": "myleads.css"
+}
