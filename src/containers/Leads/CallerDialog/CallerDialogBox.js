@@ -2,18 +2,18 @@ import React, { useState } from 'react'
 import { Dialog, DialogContent } from '@material-ui/core'
 
 export default function CallerDialogBox(props) {
-  const { onGoingCall, isCalling, isCallConnect, isCallNotConnected, callConnectHandler } = props;
+  const { onGoingCall, isCalling, isCallConnect, isCallNotConnected, callConnectHandler, disablePopup } = props;
   return (
     <div>
       <>
-        <Dialog open={onGoingCall}>
+        <Dialog open={onGoingCall} onClose={disablePopup}>
           <DialogContent>
             <p>On going call...</p>
           </DialogContent>
         </Dialog>
       </>
       <>
-        <Dialog open={isCalling}>
+        <Dialog open={isCalling} onClose={disablePopup}>
           <DialogContent>
             <p>Call in progress...</p>
           </DialogContent>

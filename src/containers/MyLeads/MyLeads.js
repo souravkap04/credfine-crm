@@ -281,6 +281,10 @@ export default function MyLeads(props) {
         })
     }
   }
+  const disablePopup = () => {
+    setIsCalling(false);
+    setOnGoingCall(false);
+  }
   const callConnectHandler = () => {
     setIsCallConnect(false);
     setIsCallNotConnected(false)
@@ -362,6 +366,7 @@ export default function MyLeads(props) {
             isCallConnect={isCallConnect}
             isCallNotConnected={isCallNotConnected}
             callConnectHandler={callConnectHandler}
+            disablePopup={disablePopup}
           />
         </div>
         <div>

@@ -80,7 +80,7 @@ export default function PageLayerSection(props) {
                             <SearchIcon className="searchIcon" />
                         </div>
                         <InputBase
-                            placeholder="Search…"
+                            placeholder="Lead ID / Mobile"
                             className="inputContainer"
                             inputProps={{ "aria-label": "search" }}
                             value={searchInput}

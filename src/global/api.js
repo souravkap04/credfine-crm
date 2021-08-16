@@ -1,3 +1,3 @@
-const baseUrl = "http://35.154.120.200:8081";
+const baseUrl = "https://crmbackend.credfine.com";
 export default baseUrl;
 
