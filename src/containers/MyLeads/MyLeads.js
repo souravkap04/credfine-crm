@@ -242,7 +242,7 @@ export default function MyLeads(props) {
       return data;
     }
   }
-  const clickToCall = async (customerNo) => {
+  const clickToCall = async (customerNo, leadID) => {
     if (profileData.dialer === 'TATA') {
       const headers = {
         'accept': 'application/json',
@@ -268,6 +268,9 @@ export default function MyLeads(props) {
             setIsCalling(false);
           }
         })
+      setTimeout(() => {
+        history.push(`/dashboards/myleads/edit/${leadID}`)
+      }, 3000)
     } else if (profileData.dialer === 'VERTAGE') {
       await axios.post(`${vertageDialerApi}&user=${profileData.vertage_id}&pass=${profileData.vertage_pass}&agent_user=${profileData.vertage_id}&function=external_dial&value=${customerNo}&phone_code=+91&search=YES&preview=NO&focus=YES`)
         .then((response) => {
@@ -279,6 +282,9 @@ export default function MyLeads(props) {
         }).catch((error) => {
           console.log('error');
         })
+      setTimeout(() => {
+        history.push(`/dashboards/myleads/edit/${leadID}`)
+      }, 3000)
     }
   }
   const disablePopup = () => {
@@ -349,7 +355,7 @@ export default function MyLeads(props) {
                     <TableCell className={classes.tabledata}>{my_leads.lead.campaign_category}</TableCell>
                     <TableCell className={classes.tabledata}>
                       <Tooltip title="Call Customer">
-                        <IconButton className={classes.callButton} onClick={() => clickToCall(my_leads.lead.phone_no)}>
+                        <IconButton className={classes.callButton} onClick={() => clickToCall(my_leads.lead.phone_no, my_leads.lead.lead_crm_id)}>
                           <CallIcon className={classes.callIcon} />
                         </IconButton>
                       </Tooltip>
