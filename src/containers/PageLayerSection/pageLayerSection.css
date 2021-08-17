@@ -6,12 +6,13 @@
 }
 
 .pageAdjustSection .leftSection {
-  width: 18.75vw;
+  width: auto;
 }
 
 .pageAdjustSection .rightSection {
-  width: 78.81944vw;
-  margin: auto;
+  width: 100%;
+  margin-left: 0.69444vw;
+  margin-right: 0.69444vw;
 }
 
 .pageAdjustSection .rightSection .appBarContainer {

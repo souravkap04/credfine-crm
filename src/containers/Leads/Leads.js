@@ -21,6 +21,11 @@ import { useQueryy } from '../../global/query';
 import CallerDialogBox from './CallerDialog/CallerDialogBox';
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
 import clsx from 'clsx';
+import MuiAlert from '@material-ui/lab/Alert';
+import Snackbar from '@material-ui/core/Snackbar';
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 const useStyles = makeStyles({
   container: {
     // margin: '25px'
@@ -114,7 +119,7 @@ const Leads = ((props) => {
   const [isSearchData, setisSearchData] = useState(false);
   const [vertageCall, setVertageCall] = useState(false);
   const [disableHangupBtn, setDisableHangupBtn] = useState(true);
-
+  const [storeLeadID, setstoreLeadID] = useState('')
   useEffect(() => {
     leadQuery ? fetchSearchData(leadQuery) : fetchLeadsData();
   }, [leadQuery])
@@ -147,7 +152,7 @@ const Leads = ((props) => {
     history.push(`/dashboards/leads/edit/${leadId}`);
     // props.mainMenuCallBack(true, leadId);
   };
-  const clickToCall = async (customerNo) => {
+  const clickToCall = async (customerNo, leadID) => {
     if (profileData.dialer === 'TATA') {
       const headers = {
         'accept': 'application/json',
@@ -173,6 +178,9 @@ const Leads = ((props) => {
             setIsCalling(false);
           }
         })
+      setTimeout(() => {
+        history.push(`/dashboards/leads/edit/${leadID}`)
+      }, 3000)
     } else if (profileData.dialer === 'VERTAGE') {
       await axios.post(`${vertageDialerApi}&user=${profileData.vertage_id}&pass=${profileData.vertage_pass}&agent_user=${profileData.vertage_id}&function=external_dial&value=${customerNo}&phone_code=+91&search=YES&preview=NO&focus=YES`)
         .then((response) => {
@@ -184,7 +192,14 @@ const Leads = ((props) => {
         }).catch((error) => {
           console.log('error');
         })
+      setTimeout(() => {
+        history.push(`/dashboards/leads/edit/${leadID}`)
+      }, 3000)
     }
+  }
+  const disablePopup = () => {
+    setIsCalling(false);
+    setOnGoingCall(false);
   }
   const callConnectHandler = () => {
     setIsCallConnect(false);
@@ -266,7 +281,7 @@ const Leads = ((props) => {
                         <TableCell className={classes.tabledata}>{search.campaign_category}</TableCell>
                         <TableCell>
                           <Tooltip title="Call Customer">
-                            <IconButton className={classes.callButton} onClick={() => clickToCall(search.phone_no)}>
+                            <IconButton className={classes.callButton} onClick={() => clickToCall(search.phone_no, search.lead_crm_id)}>
                               <CallIcon className={classes.callIcon} />
                             </IconButton>
                           </Tooltip>
@@ -301,7 +316,7 @@ const Leads = ((props) => {
                     <TableCell className={classes.tabledata}>{leadData.campaign_category}</TableCell>
                     <TableCell>
                       <Tooltip title="Call Customer">
-                        <IconButton className={classes.callButton} onClick={() => clickToCall(leadData.phone_no)}>
+                        <IconButton className={classes.callButton} onClick={() => clickToCall(leadData.phone_no, leadData.lead_crm_id)}>
                           <CallIcon className={classes.callIcon} />
                         </IconButton>
                       </Tooltip>
@@ -316,14 +331,20 @@ const Leads = ((props) => {
                 isCallConnect={isCallConnect}
                 isCallNotConnected={isCallNotConnected}
                 callConnectHandler={callConnectHandler}
+                disablePopup={disablePopup}
               />
             </div>
             <div>
-              <Dialog open={vertageCall} onClose={disableDialerPopUp}>
+              {/* <Dialog open={vertageCall} onClose={disableDialerPopUp}>
                 <DialogContent>
                   <p>Calling...</p>
                 </DialogContent>
-              </Dialog>
+              </Dialog> */}
+              <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={vertageCall} autoHideDuration={1500} onClose={disableDialerPopUp}>
+                <Alert onClose={disableDialerPopUp} severity="info">
+                  Calling...
+                </Alert>
+              </Snackbar>
             </div>
           </TableBody>
         </Table>
