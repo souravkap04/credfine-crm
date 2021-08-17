@@ -140,7 +140,6 @@ export default function Menu(props) {
                     color="inherit"
                     aria-label="open drawer"
                     onClick={handleDrawerOpen}
-                    edge="start"
                 >
                     <MenuIcon className={classes.color} />
                 </IconButton>}

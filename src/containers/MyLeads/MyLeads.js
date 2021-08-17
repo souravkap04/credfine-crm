@@ -25,6 +25,11 @@ import PageLayerSection from '../PageLayerSection/PageLayerSection';
 import { useHistory } from "react-router-dom";
 import clsx from 'clsx';
 import './myleads.css';
+import MuiAlert from '@material-ui/lab/Alert';
+import Snackbar from '@material-ui/core/Snackbar';
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 const useStyles = makeStyles({
   container: {
     // margin: '25px',
@@ -376,11 +381,16 @@ export default function MyLeads(props) {
           />
         </div>
         <div>
-          <Dialog open={vertageCall} onClose={disableDialerPopUp}>
+          {/* <Dialog open={vertageCall} onClose={disableDialerPopUp}>
             <DialogContent>
               <p>Calling...</p>
             </DialogContent>
-          </Dialog>
+          </Dialog> */}
+          <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={vertageCall} autoHideDuration={1500} onClose={disableDialerPopUp}>
+            <Alert onClose={disableDialerPopUp} severity="info">
+              Calling...
+            </Alert>
+          </Snackbar>
         </div>
       </TableContainer>
       <div className={classes.tablePagination}>

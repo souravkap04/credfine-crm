@@ -1,37 +1,41 @@
-import React, { useState } from 'react'
-import { Dialog, DialogContent } from '@material-ui/core'
+import React, { useState } from 'react';
+import MuiAlert from '@material-ui/lab/Alert';
+import Snackbar from '@material-ui/core/Snackbar';
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 export default function CallerDialogBox(props) {
   const { onGoingCall, isCalling, isCallConnect, isCallNotConnected, callConnectHandler, disablePopup } = props;
   return (
     <div>
       <>
-        <Dialog open={onGoingCall} onClose={disablePopup}>
-          <DialogContent>
-            <p>On going call...</p>
-          </DialogContent>
-        </Dialog>
+        <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={onGoingCall} autoHideDuration={6000} onClose={disablePopup}>
+          <Alert onClose={disablePopup} severity="success">
+            On going call...
+          </Alert>
+        </Snackbar>
       </>
       <>
-        <Dialog open={isCalling} onClose={disablePopup}>
-          <DialogContent>
-            <p>Call in progress...</p>
-          </DialogContent>
-        </Dialog>
+        <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isCalling} autoHideDuration={6000} onClose={disablePopup}>
+          <Alert onClose={disablePopup} severity="info">
+            Call in progress...
+          </Alert>
+        </Snackbar>
       </>
       <>
-        <Dialog open={isCallConnect} onClose={callConnectHandler}>
-          <DialogContent>
-            <p>Call rejected/missed call</p>
-          </DialogContent>
-        </Dialog>
+        <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isCallConnect} autoHideDuration={6000} onClose={callConnectHandler}>
+          <Alert onClose={callConnectHandler} severity="warning">
+            Call rejected/missed call
+          </Alert>
+        </Snackbar>
       </>
       <>
-        <Dialog open={isCallNotConnected} onClose={callConnectHandler}>
-          <DialogContent>
-            <p>Call not connected</p>
-          </DialogContent>
-        </Dialog>
+        <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isCallNotConnected} autoHideDuration={6000} onClose={callConnectHandler}>
+          <Alert onClose={callConnectHandler} severity="warning">
+            Call not connected
+          </Alert>
+        </Snackbar>
       </>
     </div>
   )

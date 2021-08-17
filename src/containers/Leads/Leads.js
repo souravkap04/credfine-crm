@@ -21,6 +21,11 @@ import { useQueryy } from '../../global/query';
 import CallerDialogBox from './CallerDialog/CallerDialogBox';
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
 import clsx from 'clsx';
+import MuiAlert from '@material-ui/lab/Alert';
+import Snackbar from '@material-ui/core/Snackbar';
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 const useStyles = makeStyles({
   container: {
     // margin: '25px'
@@ -330,11 +335,16 @@ const Leads = ((props) => {
               />
             </div>
             <div>
-              <Dialog open={vertageCall} onClose={disableDialerPopUp}>
+              {/* <Dialog open={vertageCall} onClose={disableDialerPopUp}>
                 <DialogContent>
                   <p>Calling...</p>
                 </DialogContent>
-              </Dialog>
+              </Dialog> */}
+              <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={vertageCall} autoHideDuration={1500} onClose={disableDialerPopUp}>
+                <Alert onClose={disableDialerPopUp} severity="info">
+                  Calling...
+                </Alert>
+              </Snackbar>
             </div>
           </TableBody>
         </Table>
