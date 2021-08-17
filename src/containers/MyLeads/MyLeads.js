@@ -299,14 +299,12 @@ export default function MyLeads(props) {
               {/* <TableCell padding="checkbox">
                 <Checkbox className={classes.checkboxFix} />
               </TableCell> */}
+              <TableCell className={classes.tableheading}>Sl No</TableCell>
               <TableCell className={classes.tableheading}>Lead ID</TableCell>
               <TableCell className={classes.tableheading}>Name</TableCell>
               <TableCell className={classes.tableheading}>Mobile</TableCell>
               <TableCell className={classes.tableheading}>Loan Amt</TableCell>
-              {/* <TableCell className={classes.tableheading}> Date of Birth</TableCell> */}
               <TableCell className={classes.tableheading}>Income</TableCell>
-              {/* <TableCell className={classes.tableheading}>Current Company</TableCell> */}
-              {/* <TableCell className={classes.tableheading}>Pin Code</TableCell> */}
               <TableCell className={classes.tableheading}>Company</TableCell>
               <TableCell className={classes.tableheading}>Loan Type</TableCell>
               <TableCell className={clsx(classes.tableheading, classes.statusHeading)}>Status</TableCell>
@@ -324,16 +322,14 @@ export default function MyLeads(props) {
                     {/* <TableCell padding="checkbox">
                       <Checkbox className={classes.checkboxFixData} />
                     </TableCell> */}
+                    <TableCell className={classes.tabledata}>{index+1}</TableCell>
                     <TableCell className={classes.tabledata, classes.leadid}
                       onClick={() => leadDetailsHandler(my_leads.lead.lead_crm_id)}
                     >{my_leads.lead.lead_crm_id}</TableCell>
                     <TableCell className={classes.tabledata}>{my_leads.lead.name}</TableCell>
                     <TableCell className={classes.tabledata}>{leadPhoneNo}</TableCell>
                     <TableCell className={classes.tabledata}>{my_leads.lead.loan_amount}</TableCell>
-                    {/* <TableCell className={classes.tabledata}>{my_leads.lead.data.dob}</TableCell> */}
                     <TableCell className={classes.tabledata}>{my_leads.lead.data.monthly_income}</TableCell>
-                    {/* <TableCell className={classes.tabledata}>{my_leads.lead.data.current_company}</TableCell> */}
-                    {/* <TableCell className={classes.tabledata}>{my_leads.lead.data.residential_pincode}</TableCell> */}
                     <TableCell className={classes.tabledata}>{my_leads.lead.data.current_company_name}</TableCell>
                     <TableCell className={classes.tabledata}>{my_leads.lead.loan_type}</TableCell>
                     <TableCell className={classes.tabledata}>

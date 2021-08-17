@@ -229,14 +229,12 @@ export default function FreshLead() {
               {/* <TableCell padding="checkbox">
                 <Checkbox className={classes.checkboxFix} />
               </TableCell> */}
+              <TableCell className={classes.tableheading}>Sl No</TableCell>
               <TableCell className={classes.tableheading}>Lead ID</TableCell>
               <TableCell className={classes.tableheading}>Name</TableCell>
               <TableCell className={classes.tableheading}>Mobile</TableCell>
               <TableCell className={classes.tableheading}>Loan Amt</TableCell>
-              {/* <TableCell className={classes.tableheading}> Date of Birth</TableCell> */}
               <TableCell className={classes.tableheading}>Income</TableCell>
-              {/* <TableCell className={classes.tableheading}>Current Company</TableCell>
-              <TableCell className={classes.tableheading}>Pin Code</TableCell> */}
               <TableCell className={classes.tableheading}>Company</TableCell>
               <TableCell className={classes.tableheading}>Loan Type</TableCell>
               <TableCell className={clsx(classes.tableheading, classes.statusHeading)}>Status</TableCell>
@@ -254,15 +252,12 @@ export default function FreshLead() {
                     {/* <TableCell padding="checkbox">
                       <Checkbox className={classes.checkboxFixData} />
                     </TableCell> */}
-                    <TableCell className={classes.tabledata}
-                    >{lead.lead_crm_id}</TableCell>
+                    <TableCell className={classes.tabledata}>{index+1}</TableCell>
+                    <TableCell className={classes.tabledata}>{lead.lead_crm_id}</TableCell>
                     <TableCell className={classes.tabledata}>{lead.name}</TableCell>
                     <TableCell className={classes.tabledata}>{lead.phone_no}</TableCell>
                     <TableCell className={classes.tabledata}>{lead.loan_amount}</TableCell>
-                    {/* <TableCell className={classes.tabledata}>{lead.data.dob}</TableCell> */}
                     <TableCell className={classes.tabledata}>{lead.data.monthly_income}</TableCell>
-                    {/* <TableCell className={classes.tabledata}>{lead.data.current_company}</TableCell>
-                    <TableCell className={classes.tabledata}>{lead.data.residential_pincode}</TableCell> */}
                     <TableCell className={classes.tabledata}>{lead.data.current_company_name}</TableCell>
                     <TableCell className={classes.tabledata}>{lead.loan_type}</TableCell>
                     <TableCell className={classes.tabledata}>
@@ -285,21 +280,6 @@ export default function FreshLead() {
               : <span className={classes.emptydata}>No Data Found</span>}
           </TableBody>
         </Table>
-        {/* <div className={classes.buttonContainer}>
-          <Typography className={classes.count}>Total Lead:{totalUploadLeads}</Typography>
-          <Button
-            className={classes.prevBtn}
-            onClick={prevPageHandler}
-          >
-            <span className="fa fa-angle-left" aria-hidden="true"></span>
-          </Button>
-          <Button
-            className={classes.nextBtn}
-            onClick={nextPageHandler}
-          >
-            <span className="fa fa-angle-right" aria-hidden="true"></span>
-          </Button>
-        </div> */}
       </TableContainer>
       <div className={classes.tablePagination}>
         <div className={classes.rowsPerPageContainer}>
