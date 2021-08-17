@@ -180,7 +180,7 @@ const Leads = ((props) => {
         })
       setTimeout(() => {
         history.push(`/dashboards/leads/edit/${leadID}`)
-      }, 3000)
+      }, 1500)
     } else if (profileData.dialer === 'VERTAGE') {
       await axios.post(`${vertageDialerApi}&user=${profileData.vertage_id}&pass=${profileData.vertage_pass}&agent_user=${profileData.vertage_id}&function=external_dial&value=${customerNo}&phone_code=+91&search=YES&preview=NO&focus=YES`)
         .then((response) => {
@@ -194,7 +194,7 @@ const Leads = ((props) => {
         })
       setTimeout(() => {
         history.push(`/dashboards/leads/edit/${leadID}`)
-      }, 3000)
+      }, 1500)
     }
   }
   const disablePopup = () => {
@@ -340,7 +340,7 @@ const Leads = ((props) => {
                   <p>Calling...</p>
                 </DialogContent>
               </Dialog> */}
-              <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={vertageCall} autoHideDuration={1500} onClose={disableDialerPopUp}>
+              <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={vertageCall} autoHideDuration={3000} onClose={disableDialerPopUp}>
                 <Alert onClose={disableDialerPopUp} severity="info">
                   Calling...
                 </Alert>

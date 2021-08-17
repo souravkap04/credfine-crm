@@ -10,28 +10,28 @@ export default function CallerDialogBox(props) {
   return (
     <div>
       <>
-        <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={onGoingCall} autoHideDuration={6000} onClose={disablePopup}>
+        <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={onGoingCall} autoHideDuration={1500} onClose={disablePopup}>
           <Alert onClose={disablePopup} severity="success">
             On going call...
           </Alert>
         </Snackbar>
       </>
       <>
-        <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isCalling} autoHideDuration={6000} onClose={disablePopup}>
+        <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isCalling} autoHideDuration={1500} onClose={disablePopup}>
           <Alert onClose={disablePopup} severity="info">
             Call in progress...
           </Alert>
         </Snackbar>
       </>
       <>
-        <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isCallConnect} autoHideDuration={6000} onClose={callConnectHandler}>
+        <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isCallConnect} autoHideDuration={1500} onClose={callConnectHandler}>
           <Alert onClose={callConnectHandler} severity="warning">
             Call rejected/missed call
           </Alert>
         </Snackbar>
       </>
       <>
-        <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isCallNotConnected} autoHideDuration={6000} onClose={callConnectHandler}>
+        <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isCallNotConnected} autoHideDuration={1500} onClose={callConnectHandler}>
           <Alert onClose={callConnectHandler} severity="warning">
             Call not connected
           </Alert>
