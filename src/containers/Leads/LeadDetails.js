@@ -65,6 +65,7 @@ function LeadDetails(props) {
   const [showCompany, setShowCompany] = useState(false);
   const [hangUpSnacks, sethangUpSnacks] = useState(false);
   const [callHangUpState, setCallHangUpState] = useState(true);
+  const [callInProgress, setcallInProgress] = useState(false);
   let statusData = getStatusData();
   let { leadid } = useParams();
   let history = useHistory();
@@ -252,6 +253,11 @@ function LeadDetails(props) {
         <div>
           <Form>
             <Card className={style.Card}>
+              {profileData.dialer === 'VERTAGE' ? <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={localStorage.getItem("callHangUp") && localStorage.getItem("callHangUp") !== null ? true : callInProgress} autoHideDuration={1500} onClose={disableHangUpSnacks}>
+                <Alert onClose={disableHangUpSnacks} severity="info">
+                  Call in progress....
+                </Alert>
+              </Snackbar> : ""}
               <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isLeadDetails} autoHideDuration={1500} onClose={disableHangUpSnacks}>
                 <Alert onClose={disableHangUpSnacks} severity="success">
                   Lead Data Successfully Updated
