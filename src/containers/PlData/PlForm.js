@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 import axios from 'axios';
 import style from './PlForm.module.css';
-import { Form, Card, Button, Row, Col, Alert, ListGroup } from "react-bootstrap";
+import { Form, Card, Button, Row, Col, ListGroup } from "react-bootstrap";
 import baseUrl from "../../global/api";
 import { getProfileData } from '../../global/leadsGlobalData'
 import { RemoveFromQueue } from "@material-ui/icons";
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
 import { useHistory } from 'react-router-dom';
-import { ToastContainer, toast, Slide } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import '../Leads/leadDetailsAdjust.css';
+import MuiAlert from '@material-ui/lab/Alert';
+import Snackbar from '@material-ui/core/Snackbar';
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 export default function PlForm() {
   const profileData = getProfileData();
   const [loanAmount, setLoanAmount] = useState('');
@@ -27,6 +29,7 @@ export default function PlForm() {
   const [validated, setValidated] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [isDisplay, setIsDisplay] = useState(false);
+  const [isError, setIsError] = useState(false);
   let history = useHistory();
   const personalLoanSubmitHandler = async (event) => {
     const form = event.currentTarget;
@@ -44,36 +47,21 @@ export default function PlForm() {
       }
       await axios.post(`${baseUrl}/leads/lead_create/`, item, { headers })
         .then((response) => {
-          // setAlertMessage(response.data.message);
-          // setIsDisplay(true);
           if (response.status === 201) {
-            toast(response.data.message, {
-              position: toast.POSITION.TOP_RIGHT,
-              autoClose: 1500,
-              transition: Slide,
-              hideProgressBar: false,
-              closeOnClick: false,
-              pauseOnHover: true,
-              draggable: false,
-              progress: undefined
-            });
+            setAlertMessage(response.data.message)
+            setIsDisplay(true);
           }
           setTimeout(() => {
             history.push('/dashboards/leads')
           }, 1500)
         }).catch((error) => {
-          toast.error("Something Wrong", {
-            position: toast.POSITION.TOP_RIGHT,
-            autoClose: 1500,
-            transition: Slide,
-            hideProgressBar: false,
-            closeOnClick: false,
-            pauseOnHover: true,
-            draggable: false,
-            progress: undefined
-          });
-          // setAlertMessage("Something wrong");
-          // setIsDisplay('true');
+          if (error.response.status === 400) {
+            setAlertMessage("Mobile Number Already Exist")
+            setIsError(true);
+          } else {
+            setAlertMessage("Something wrong")
+            setIsError(true);
+          }
         })
     } else {
       setValidated(true);
@@ -100,9 +88,22 @@ export default function PlForm() {
     setCompanyName(company);
     setShowCompany(false);
   }
+  const closeSnankBar = () => {
+    setIsDisplay(false);
+    setIsError(false);
+  }
   return (
     <PageLayerSection>
-      <ToastContainer />
+      <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isDisplay} autoHideDuration={1500} onClose={closeSnankBar}>
+        <Alert onClose={closeSnankBar} severity="success">
+          {alertMessage}
+        </Alert>
+      </Snackbar>
+      <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isError} autoHideDuration={1500} onClose={closeSnankBar}>
+        <Alert onClose={closeSnankBar} severity="error">
+          {alertMessage}
+        </Alert>
+      </Snackbar>
       <Form noValidate validated={validated} onSubmit={personalLoanSubmitHandler}>
         <Card className={style.Card}>
           {/* {isDisplay ? <Alert className={style.alertBox}>{alertMessage}</Alert> : null} */}
