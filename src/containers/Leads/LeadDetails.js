@@ -66,6 +66,7 @@ function LeadDetails(props) {
   const [hangUpSnacks, sethangUpSnacks] = useState(false);
   const [callHangUpState, setCallHangUpState] = useState(true);
   const [callInProgress, setcallInProgress] = useState(false);
+  const [submitFalse, setsubmitFalse] = useState(true);
   let statusData = getStatusData();
   let { leadid } = useParams();
   let history = useHistory();
@@ -140,6 +141,12 @@ function LeadDetails(props) {
       designation: designation, current_emi: currentEMI, credit_card_outstanding: creditCardOutstanding,
       salary_mode: salaryCreditMode, salary_bank: salaryBankAcc, residence_type: currentResidentType,
       no_of_years_current_city: yearsInCurrentCity
+    }
+    let regex = /[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(eligibility_data.pan_no);
+    if (eligibility_data.pan_no !== '' && !regex) {
+      setAlertMessage('Inavlid PAN Number')
+      setIsLeadError(true);
+      return;
     }
     let items = { lead_data, eligibility_data };
     let headers = { 'Authorization': `Token ${profileData.token}` }
@@ -253,6 +260,7 @@ function LeadDetails(props) {
         <div>
           <Form>
             <Card className={style.Card}>
+              {/* Errors SnackBars Start */}
               {profileData.dialer === 'VERTAGE' ? <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={localStorage.getItem("callHangUp") && localStorage.getItem("callHangUp") !== null ? true : callInProgress} autoHideDuration={1500} onClose={disableHangUpSnacks}>
                 <Alert onClose={disableHangUpSnacks} severity="info">
                   Call in progress....
@@ -273,12 +281,14 @@ function LeadDetails(props) {
                   Status Successfully Updated
                 </Alert>
               </Snackbar>
+              <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isLeadError} autoHideDuration={1500} onClose={disableHangUpSnacks}>
+                <Alert onClose={disableHangUpSnacks} severity="error">
+                  {alertMessage}
+                </Alert>
+              </Snackbar>
+              {/* Errors SnackBars End */}
               <Form.Row>
-                {profileData.dialer === 'TATA' ? null : <Col lg={3}>
-                  <Button className={style.StatusSubmit} disabled={localStorage.getItem("callHangUp") && localStorage.getItem("callHangUp") !== null ? false : callHangUpState}
-                    onClick={hangupCallHandler}>Hang Up</Button>
-                </Col>}
-                <Col lg={profileData.dialer === 'TATA' ? 5 : 3}>
+                <Col lg={profileData.dialer === 'TATA' ? 5 : 4}>
                   <Form.Group>
                     <Form.Label>Status</Form.Label>
                     <Form.Control as="select"
@@ -291,7 +301,7 @@ function LeadDetails(props) {
                     </Form.Control>
                   </Form.Group>
                 </Col>
-                <Col lg={profileData.dialer === 'TATA' ? 5 : 3}>
+                <Col lg={profileData.dialer === 'TATA' ? 5 : 4}>
                   <Form.Group>
                     <Form.Label>Sub Status</Form.Label>
                     <Form.Control as="select"
@@ -304,10 +314,13 @@ function LeadDetails(props) {
                     </Form.Control>
                   </Form.Group>
                 </Col>
-
+                {profileData.dialer === 'TATA' ? null : <Col lg={2}>
+                  <Button className={style.StatusSubmit} disabled={localStorage.getItem("callHangUp") && localStorage.getItem("callHangUp") !== null ? false : callHangUpState}
+                    onClick={hangupCallHandler}>Hang Up</Button>
+                </Col>}
                 <Col lg={2}>
                   <Button className={style.StatusSubmit}
-                    onClick={() => statusUpdateHandler(leadid)} >Submit</Button>
+                    onClick={() => statusUpdateHandler(leadid)} disabled={localStorage.getItem("callHangUp") && localStorage.getItem("callHangUp") !== null ? submitFalse : false}>Submit</Button>
                 </Col>
 
                 {/* <Col lg={2}>
@@ -466,6 +479,7 @@ function LeadDetails(props) {
                     {isEditable ? <Form.Control
                       disabled={false}
                       type="text"
+                      maxLength="10"
                       value={pancardNo}
                       onChange={(e) => setPancardNo(e.target.value.toUpperCase())}
                     /> : <Form.Control
