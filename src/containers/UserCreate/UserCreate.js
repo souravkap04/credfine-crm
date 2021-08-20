@@ -1,9 +1,14 @@
 import React, { useState } from "react";
 import axios from 'axios';
 import baseUrl from '../../global/api';
-import { Form, Button, Card, Alert } from "react-bootstrap";
+import { Form, Button, Card } from "react-bootstrap";
 import style from "./UserCreate.module.css";
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
+import MuiAlert from '@material-ui/lab/Alert';
+import Snackbar from '@material-ui/core/Snackbar';
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 export default function UserCreate() {
   const [userName, setUserName] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -16,7 +21,7 @@ export default function UserCreate() {
   const [validated, setValidated] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [isDisplay, setIsDisplay] = useState(false);
-
+  const [isError, setIsError] = useState(false);
   const userCteateHandler = (event) => {
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
@@ -29,24 +34,46 @@ export default function UserCreate() {
       username: userName, first_name: firstName, last_name: lastName, email, role,
       product_type: productType, phone_no: phoneNo, gender
     };
-
+    let emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)
+    if (!emailRegex) {
+      setAlertMessage('Invalid Email Address');
+      setIsError(true);
+      return;
+    }
     axios.post(`${baseUrl}/user/userRegistration/`, item)
       .then((response) => {
         setAlertMessage(response.data['data']);
         setIsDisplay(true);
       }).catch((error) => {
-        setAlertMessage('something wrong');
-        setIsDisplay(true);
+        if (error.response.status === 409) {
+          setAlertMessage(error.response.data.error);
+          setIsError(true);
+        } else {
+          setAlertMessage('Something wrong');
+          setIsError(true);
+        }
       })
-
-
+  }
+  const disableSnacksBar = () => {
+    setIsDisplay(false);
+    setIsError(false);
   }
   return (
     <PageLayerSection>
+      <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isDisplay} autoHideDuration={1500} onClose={disableSnacksBar}>
+        <Alert onClose={disableSnacksBar} severity="success">
+          {alertMessage}
+        </Alert>
+      </Snackbar>
+      <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isError} autoHideDuration={1500} onClose={disableSnacksBar}>
+        <Alert onClose={disableSnacksBar} severity="error">
+          {alertMessage}
+        </Alert>
+      </Snackbar>
       <div className={style.CreateUser}>
         <Form noValidate validated={validated} onSubmit={userCteateHandler}>
           <Card className={style.UserCreateCard}>
-            {isDisplay ? <Alert className={style.alertBox}>{alertMessage}</Alert> : null}
+            {/* {isDisplay ? <Alert className={style.alertBox}>{alertMessage}</Alert> : null} */}
             <Form.Label className={style.UserCreateText}>
               User Create
               <hr className={style.UserCreateBar} />
@@ -67,7 +94,7 @@ export default function UserCreate() {
                 required
                 type="text"
                 value={firstName}
-                onChange={(e) => setFirstName((e.target.value).toLowerCase().trim())} />
+                onChange={(e) => setFirstName(e.target.value)} />
               <Form.Control.Feedback type="invalid"> This field is required</Form.Control.Feedback>
             </Form.Group>
             <Form.Group size="lg" controlId="lastName">
@@ -76,7 +103,7 @@ export default function UserCreate() {
                 required
                 type="text"
                 value={lastName}
-                onChange={(e) => setLastName((e.target.value).toLowerCase().trim())} />
+                onChange={(e) => setLastName(e.target.value)} />
               <Form.Control.Feedback type="invalid"> This field is required</Form.Control.Feedback>
             </Form.Group>
             <Form.Group size="lg" controlId="email">
@@ -87,7 +114,7 @@ export default function UserCreate() {
                 value={email}
                 onChange={(e) => setEmail((e.target.value).toLowerCase())}
               />
-              <Form.Control.Feedback type="invalid"> This field is required</Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">Please enter a valid email address</Form.Control.Feedback>
             </Form.Group>
             <Form.Group controlId="role">
               <Form.Label className={style.InputBox}>Role</Form.Label>
