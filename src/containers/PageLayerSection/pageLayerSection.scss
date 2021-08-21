@@ -3,11 +3,12 @@ $desk: 100 / 1440;
     position: relative;
     display: flex;
     .leftSection {
-        width: 270 * $desk + vw;
+        width: auto;
     }
     .rightSection {
-        width: 1135 * $desk + vw;
-        margin: auto;
+        width: 100%;
+        margin-left: 10 * $desk + vw;
+        margin-right: 10 * $desk + vw;
         // margin-top: 25 * $desk + vw;
         .appBarContainer {
             display: flex;

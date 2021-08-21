@@ -75,7 +75,7 @@ const useStyles = makeStyles({
     }
   },
   tableheading: {
-    padding: '0 8px',
+    padding: '0 4px',
     fontSize: '12px',
     textAlign: 'center'
   },

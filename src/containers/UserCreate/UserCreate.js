@@ -7,8 +7,8 @@ import {
   Button, Container, FormControl, Grid, InputAdornment, InputLabel,
   Select, MenuItem, TextField, Typography, FormHelperText,Card
 } from "@material-ui/core";
-import Alert from '@material-ui/lab/Alert';
-import style from "./UserCreate.module.css";
+import MuiAlert from '@material-ui/lab/Alert';
+import Snackbar from '@material-ui/core/Snackbar';
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
 
 const useStyles = makeStyles((theme) => ({
@@ -50,10 +50,14 @@ UserCreateCard:{
         boxShadow: '-6px 6px 30px #0000004D'
   },
 }));
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 export default function UserCreate() {
   const classes = useStyles();
   const [alertMessage, setAlertMessage] = useState('');
   const [isDisplay, setIsDisplay] = useState(false);
+  const [isError, setIsError] = useState(false);
   const { register, handleSubmit, control, errors } = useForm();
   const onSubmit = async(data) => {
     const {userName,firstName,lastName,email,role,productType,phoneNo,gender} = data;
@@ -61,24 +65,39 @@ export default function UserCreate() {
       username: userName, first_name: firstName, last_name: lastName, email, role,
       product_type: productType, phone_no: phoneNo, gender
     };
-
     await axios.post(`${baseUrl}/user/userRegistration/`, item)
       .then((response) => {
         setAlertMessage(response.data['data']);
         setIsDisplay(true);
       }).catch((error) => {
-        setAlertMessage('something wrong');
-        setIsDisplay(true);
+        if (error.response?.status === 409) {
+          setAlertMessage(error.response.data.error);
+          setIsError(true);
+        } else {
+          setAlertMessage('Something wrong');
+          setIsError(true);
+        }
       })
+    }
+    const disableSnacksBar = () => {
+      setIsDisplay(false);
+      setIsError(false);
     }
   return (
     <PageLayerSection>
+      <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isDisplay} autoHideDuration={1500} onClose={disableSnacksBar}>
+        <Alert onClose={disableSnacksBar} severity="success">
+          {alertMessage}
+        </Alert>
+      </Snackbar>
+      <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isError} autoHideDuration={1500} onClose={disableSnacksBar}>
+        <Alert onClose={disableSnacksBar} severity="error">
+          {alertMessage}
+        </Alert>
+      </Snackbar>
       <Container className={classes.CreateUser}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Card className={classes.UserCreateCard}> 
-            {isDisplay && <Alert className={classes.alertBox} 
-            severity="error"
-            >{alertMessage}</Alert>}
             <Grid>
               <Grid>
             <Typography className={classes.UserCreateText}>

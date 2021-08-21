@@ -1,7 +1,14 @@
 $desk: 100 / 1440;
-a{ 
+a {
     text-decoration: none !important;
 }
 .active .selected {
     background-color: #4046b2 !important;
+}
+.list::-webkit-scrollbar {
+    width: 8 * $desk + vw;
+}
+.list::-webkit-scrollbar-thumb {
+    background-color: rgba(143, 155, 179, 0.4);
+    border-radius: 8 * $desk + vw;
 }

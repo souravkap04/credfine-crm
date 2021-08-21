@@ -6,7 +6,6 @@ import {
   Row,
   Col,
   Card,
-  Alert,
   ListGroup,
 } from "react-bootstrap";
 import {
@@ -22,9 +21,11 @@ import RemarkForm from "./Remarks/RemarkForm";
 import { useParams, useHistory } from 'react-router-dom';
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
 import { vertageDialerApi } from "../../global/callApi";
-import { ToastContainer, toast, Slide } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import './leadDetailsAdjust.css';
+import MuiAlert from '@material-ui/lab/Alert';
+import Snackbar from '@material-ui/core/Snackbar';
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 function LeadDetails(props) {
   const profileData = getProfileData();
   const banks = getBank();
@@ -60,9 +61,12 @@ function LeadDetails(props) {
   const [alertMessage, setAlertMessage] = useState('');
   const [isStatus, setIsStatus] = useState(false);
   const [isLeadDetails, setIsLeadDetails] = useState(false);
+  const [isLeadError, setIsLeadError] = useState(false);
   const [showCompany, setShowCompany] = useState(false);
-  const [disableDisposeBtn, setDisableDisposeBtn] = useState(true);
+  const [hangUpSnacks, sethangUpSnacks] = useState(false);
   const [callHangUpState, setCallHangUpState] = useState(true);
+  const [callInProgress, setcallInProgress] = useState(false);
+  const [submitFalse, setsubmitFalse] = useState(true);
   let statusData = getStatusData();
   let { leadid } = useParams();
   let history = useHistory();
@@ -138,42 +142,23 @@ function LeadDetails(props) {
       salary_mode: salaryCreditMode, salary_bank: salaryBankAcc, residence_type: currentResidentType,
       no_of_years_current_city: yearsInCurrentCity
     }
+    let regex = /[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(eligibility_data.pan_no);
+    if (eligibility_data.pan_no !== '' && !regex) {
+      setAlertMessage('Inavlid PAN Number')
+      setIsLeadError(true);
+      return;
+    }
     let items = { lead_data, eligibility_data };
     let headers = { 'Authorization': `Token ${profileData.token}` }
     await axios.put(`${baseUrl}/leads/lead_detail/${id}`, items, { headers })
       .then((response) => {
         if (response.status === 200) {
-          toast("Lead Data Successfully Updated", {
-            position: toast.POSITION.TOP_RIGHT,
-            autoClose: 2000,
-            transition: Slide,
-            hideProgressBar: false,
-            closeOnClick: false,
-            pauseOnHover: true,
-            draggable: false,
-            progress: undefined
-          });
+          setIsLeadDetails(true);
         }
-        // setAlertMessage('Lead Data Successfully Updated')
-        // setIsLeadDetails(true);
         setIsEditable(false);
       }).catch((error) => {
-        toast.error("Something Wrong", {
-          position: toast.POSITION.TOP_RIGHT,
-          autoClose: 2000,
-          transition: Slide,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: false,
-          progress: undefined
-        });
-        // setAlertMessage('Something Wrong')
-        // setIsLeadDetails(true);
+        setIsLeadError(true);
       })
-    // setTimeout(() => {
-    //   setIsLeadDetails(false)
-    // }, 2000)
   }
   const removeDuplicateStatus = (data) => {
     let unique = [];
@@ -203,44 +188,16 @@ function LeadDetails(props) {
       await axios.put(`${baseUrl}/leads/lead_status/${id}`, items, { headers })
         .then((response) => {
           // setAlertMessage(response.data['data'])
-          // setIsStatus(true);
           if (response.status === 200) {
-            toast("Status Successfully Updated", {
-              position: toast.POSITION.TOP_RIGHT,
-              autoClose: 1500,
-              transition: Slide,
-              hideProgressBar: false,
-              closeOnClick: false,
-              pauseOnHover: true,
-              draggable: false,
-              progress: undefined
-            });
+            setIsStatus(true)
           }
           setTimeout(() => {
             history.push('/dashboards/leads')
           }, 1500)
-          // props.mainMenuCallBack(false);
-          // localStorage.removeItem('lead_allocate');
-          // props.setIsFreshLead(false);
         }).catch((error) => {
-          console.log(error.response.data.error)
-          toast.error(error.response.data.error, {
-            position: toast.POSITION.TOP_RIGHT,
-            autoClose: 2000,
-            transition: Slide,
-            hideProgressBar: false,
-            closeOnClick: false,
-            pauseOnHover: true,
-            draggable: false,
-            progress: undefined
-          });
-          // setAlertMessage(error.response.data.error);
-          // setIsStatus(true);
+          setIsLeadError(true)
         })
     }
-    // setTimeout(() => {
-    //   setIsStatus(false)
-    // }, 2000)
   }
 
   const searchCompanyHandler = async (e) => {
@@ -264,7 +221,11 @@ function LeadDetails(props) {
     setCompanyName(company);
     setShowCompany(false);
   }
-
+  const disableHangUpSnacks = () => {
+    sethangUpSnacks(false);
+    setIsLeadError(false);
+    setIsLeadDetails(false);
+  }
   const hangupCallHandler = async () => {
     await axios.post(`${vertageDialerApi}&user=${profileData.vertage_id}&pass=${profileData.vertage_pass}&agent_user=${profileData.vertage_id}&function=external_hangup&value=1`)
       .then((response) => {
@@ -282,7 +243,7 @@ function LeadDetails(props) {
   const disposeCallHandler = async () => {
     await axios.post(`${vertageDialerApi}&user=${profileData.vertage_id}&pass=${profileData.vertage_pass}&agent_user=${profileData.vertage_id}&function=external_status&value=A`)
       .then((response) => {
-        // setDisableDisposeBtn(true);
+        sethangUpSnacks(true);
         setCallHangUpState(true);
       }).catch((error) => {
         console.log(error);
@@ -290,19 +251,44 @@ function LeadDetails(props) {
   }
   return (
     <PageLayerSection>
-      <ToastContainer />
+      <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={hangUpSnacks} autoHideDuration={1500} onClose={disableHangUpSnacks}>
+        <Alert onClose={disableHangUpSnacks} severity="success">
+          Hang Up Successfully...
+        </Alert>
+      </Snackbar>
       <div className={style.LeadDetails}>
         <div>
           <Form>
             <Card className={style.Card}>
-              {/* {isStatus ? <Alert variant="primary">{alertMessage}</Alert> : null}
-              {isLeadDetails ? <Alert variant="primary">{alertMessage}</Alert> : null} */}
+              {/* Errors SnackBars Start */}
+              {profileData.dialer === 'VERTAGE' ? <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={localStorage.getItem("callHangUp") && localStorage.getItem("callHangUp") !== null ? true : callInProgress} autoHideDuration={1500} onClose={disableHangUpSnacks}>
+                <Alert onClose={disableHangUpSnacks} severity="info">
+                  Call in progress....
+                </Alert>
+              </Snackbar> : ""}
+              <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isLeadDetails} autoHideDuration={1500} onClose={disableHangUpSnacks}>
+                <Alert onClose={disableHangUpSnacks} severity="success">
+                  Lead Data Successfully Updated
+                </Alert>
+              </Snackbar>
+              <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isLeadError} autoHideDuration={1500} onClose={disableHangUpSnacks}>
+                <Alert onClose={disableHangUpSnacks} severity="error">
+                  Something Wrong
+                </Alert>
+              </Snackbar>
+              <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isStatus} autoHideDuration={1500} onClose={disableHangUpSnacks}>
+                <Alert onClose={disableHangUpSnacks} severity="success">
+                  Status Successfully Updated
+                </Alert>
+              </Snackbar>
+              <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isLeadError} autoHideDuration={1500} onClose={disableHangUpSnacks}>
+                <Alert onClose={disableHangUpSnacks} severity="error">
+                  {alertMessage}
+                </Alert>
+              </Snackbar>
+              {/* Errors SnackBars End */}
               <Form.Row>
-                {profileData.dialer === 'TATA' ? null : <Col lg={3}>
-                  <Button className={style.StatusSubmit} disabled={localStorage.getItem("callHangUp") && localStorage.getItem("callHangUp") !== null ? false : callHangUpState}
-                    onClick={hangupCallHandler}>Hang Up</Button>
-                </Col>}
-                <Col lg={profileData.dialer === 'TATA' ? 5 : 3}>
+                <Col lg={profileData.dialer === 'TATA' ? 5 : 4}>
                   <Form.Group>
                     <Form.Label>Status</Form.Label>
                     <Form.Control as="select"
@@ -315,7 +301,7 @@ function LeadDetails(props) {
                     </Form.Control>
                   </Form.Group>
                 </Col>
-                <Col lg={profileData.dialer === 'TATA' ? 5 : 3}>
+                <Col lg={profileData.dialer === 'TATA' ? 5 : 4}>
                   <Form.Group>
                     <Form.Label>Sub Status</Form.Label>
                     <Form.Control as="select"
@@ -328,10 +314,13 @@ function LeadDetails(props) {
                     </Form.Control>
                   </Form.Group>
                 </Col>
-
+                {profileData.dialer === 'TATA' ? null : <Col lg={2}>
+                  <Button className={style.StatusSubmit} disabled={localStorage.getItem("callHangUp") && localStorage.getItem("callHangUp") !== null ? false : callHangUpState}
+                    onClick={hangupCallHandler}>Hang Up</Button>
+                </Col>}
                 <Col lg={2}>
                   <Button className={style.StatusSubmit}
-                    onClick={() => statusUpdateHandler(leadid)} >Submit</Button>
+                    onClick={() => statusUpdateHandler(leadid)} disabled={localStorage.getItem("callHangUp") && localStorage.getItem("callHangUp") !== null ? submitFalse : false}>Submit</Button>
                 </Col>
 
                 {/* <Col lg={2}>
@@ -490,6 +479,7 @@ function LeadDetails(props) {
                     {isEditable ? <Form.Control
                       disabled={false}
                       type="text"
+                      maxLength="10"
                       value={pancardNo}
                       onChange={(e) => setPancardNo(e.target.value.toUpperCase())}
                     /> : <Form.Control
