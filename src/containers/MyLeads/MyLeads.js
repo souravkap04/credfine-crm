@@ -27,6 +27,7 @@ import clsx from 'clsx';
 import './myleads.css';
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
+import filter from '../../images/filter.png';
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -307,6 +308,15 @@ export default function MyLeads(props) {
 
   return (
     <PageLayerSection>
+      <div className="filterMainContainer">
+        <h3>My Leads ({totalLeads})</h3>
+        <div className="filterButtonContainer">
+          <div className="filterImage">
+            <img src={filter} alt="" />
+          </div>
+          <div className="filterText">FILTER</div>
+        </div>
+      </div>
       <TableContainer className={classes.container}>
         <Table className={classes.table} aria-label="simple table">
           <TableHead className={classes.tableheading}>
@@ -381,11 +391,6 @@ export default function MyLeads(props) {
           />
         </div>
         <div>
-          {/* <Dialog open={vertageCall} onClose={disableDialerPopUp}>
-            <DialogContent>
-              <p>Calling...</p>
-            </DialogContent>
-          </Dialog> */}
           <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={vertageCall} autoHideDuration={1500} onClose={disableDialerPopUp}>
             <Alert onClose={disableDialerPopUp} severity="info">
               Calling...

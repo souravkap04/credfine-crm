@@ -12,6 +12,7 @@ import Leads from './containers/Leads/Leads';
 import LeadDetails from './containers/Leads/LeadDetails';
 import Dashboard from './containers/Dashboard/Dashboard';
 import FreshLeads from './containers/FreshLead/FreshLeads';
+import FollowUp from './containers/FollowUp/FollowUp';
 import MyLeads from './containers/MyLeads/MyLeads';
 import Users from './containers/Users/ResetPassword';
 import VerifyUsers from './containers/UserList/VerifyUsers';
@@ -51,6 +52,8 @@ function App() {
           <PrivateRoute exact path="/dashboards/leads" component={Leads} />
           <PrivateRoute exact path="/dashboards/leads/edit/:leadid" component={LeadDetails} />
           <PrivateRoute exact path="/dashboards/freshlead" component={FreshLeads} />
+          <PrivateRoute exact path="/dashboards/followup" component={FollowUp} />
+          <PrivateRoute exact path="/dashboards/followup/edit/:leadid" component={LeadDetails} />
           <PrivateRoute exact path="/dashboards/myleads" component={MyLeads} />
           <PrivateRoute exact path="/dashboards/myleads/edit/:leadid" component={LeadDetails} />
           <PrivateRoute exact path="/dashboards/users" component={Users} />
