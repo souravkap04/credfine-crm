@@ -14,18 +14,18 @@ function Alert(props) {
 }
 export default function PlForm() {
   const profileData = getProfileData();
-  const [loanAmount, setLoanAmount] = useState('');
-  const [employmentType, setEmploymentType] = useState('');
-  const [monthlyIncome, setMonthlyIncome] = useState('');
-  const [date, setDate] = useState(new Date());
-  const [mobileNo, setMobileNo] = useState('');
-  const [pincode, setPincode] = useState('');
-  const [fullName, setFullName] = useState('');
-  const [companyName, setCompanyName] = useState('');
-  const [currentCompany, setCurrentCompany] = useState('');
-  const [campaign, setCampaign] = useState("");
-  const [searchCompany, setSearchCompany] = useState([]);
-  const [showCompany, setShowCompany] = useState(false);
+  const [loanAmount,setLoanAmount] = useState('');
+  const [employmentType,setEmploymentType] = useState('');
+  const [monthlyIncome,setMonthlyIncome] = useState('');
+  const [date,setDate] = useState("");
+  const [mobileNo,setMobileNo] = useState('');
+  const [pincode,setPincode] = useState('');
+  const [fullName,setFullName] = useState('');
+  const [companyName,setCompanyName] = useState('');
+  const [currentCompany,setCurrentCompany] =useState('');
+  const [campaign,setCampaign] = useState("");
+  const [searchCompany,setSearchCompany] = useState([]);
+  const [showCompany,setShowCompany] = useState(false);
   const [validated, setValidated] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [isDisplay, setIsDisplay] = useState(false);
@@ -68,8 +68,8 @@ export default function PlForm() {
       event.preventDefault();
     }
   }
-  const searchCompanyHandler = async (e) => {
-    setCompanyName((e.target.value).trim());
+  const searchCompanyHandler = async (e)=>{
+    setCompanyName(e.target.value);
     setShowCompany(true);
     const searchCompanyUrl = "https://backend.credfine.com/common/search_company";
     let item = { company: companyName };
