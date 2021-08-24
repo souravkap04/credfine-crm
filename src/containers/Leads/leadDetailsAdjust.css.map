@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AACA,AAAA,yBAAyB,CAAC;EACtB,KAAK,EAAE,OAAO;CACjB;;AACD,AAAA,gCAAgC,CAAC;EAC7B,UAAU,EAAE,OAAO;CACtB",
+    "sources": [
+        "leadDetailsAdjust.scss"
+    ],
+    "names": [],
+    "file": "leadDetailsAdjust.css"
+}

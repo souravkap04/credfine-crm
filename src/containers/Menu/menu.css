@@ -1,0 +1,17 @@
+a {
+  text-decoration: none !important;
+}
+
+.active .selected {
+  background-color: #4046b2 !important;
+}
+
+.list::-webkit-scrollbar {
+  width: 0.55556vw;
+}
+
+.list::-webkit-scrollbar-thumb {
+  background-color: rgba(143, 155, 179, 0.4);
+  border-radius: 0.55556vw;
+}
+/*# sourceMappingURL=menu.css.map */

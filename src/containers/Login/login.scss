@@ -1,0 +1,9 @@
+$desk: 100 / 1440;
+.leftSectionImage {
+    width: 850 * $desk + vw; 
+    height: 950 * $desk + vw;
+    img {
+        width: 100%;
+        height: 100%;
+    }
+}
