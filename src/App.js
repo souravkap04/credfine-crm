@@ -20,13 +20,8 @@ import AddLeads from './containers/PlData/PlForm';
 import Reports from './containers/Report/Report';
 import BulkUploads from './containers/UploadLeads/UploadLeads';
 import AddUsers from './containers/UserCreate/UserCreate';
+import LeadDetailsNew from './containers/LeadDetailsNew/LeadDetailsNew';
 function App() {
-  // const [viewLeadDetails, setViewLeadDetails] = useState(false);
-  // const [leadId, setLeadId] = useState(null);
-  // const leadDetailsHandler = (childData, leadId) => {
-  //   setViewLeadDetails(childData);
-  //   setLeadId(leadId)
-  // }
   const PrivateRoute = ({ component: Component, ...rest }) => {
     return (
       // Show the component only when the user is logged in
@@ -46,8 +41,7 @@ function App() {
             <Login />
           </Route>
           <PrivateRoute exact path="/profile" component={Profile} />
-          {/* <Redirect exact from="/dashboard" to="/dashboard/leads" /> */}
-          {/* <Route exact path="/dashboard/:page?" render={props => <TestMenu {...props} />} /> */}
+          <PrivateRoute exact path="/test" component={LeadDetailsNew} />
           <PrivateRoute exact path="/dashboard" component={Dashboard} />
           <PrivateRoute exact path="/dashboards/leads" component={Leads} />
           <PrivateRoute exact path="/dashboards/leads/edit/:leadid" component={LeadDetails} />

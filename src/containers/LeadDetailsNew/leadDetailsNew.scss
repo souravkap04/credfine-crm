@@ -1,0 +1,45 @@
+$desk: 100 / 1440;
+.headerSection {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 21 * $desk + vw;
+    h3 {
+        font-size: 22 * $desk + vw;
+        color: #4046b2;
+        font-weight: 600;
+        margin-bottom: 0;
+    }
+}
+.accordianContainer {
+    margin-bottom: 25 * $desk + vw;
+}
+.textField {
+    width: 230 * $desk + vw;
+    margin-top: 14 * $desk + vw !important;
+    margin-bottom: 14 * $desk + vw !important;
+    label {
+        color: #535ad1;
+        letter-spacing: 0.4px;
+        font-size: 15.5px;
+    }
+    .MuiOutlinedInput-root {
+        height: 48 * $desk + vw;
+    }
+    .MuiOutlinedInput-notchedOutline {
+        border: 2px solid #c5cee0;
+    }
+    .MuiInputAdornment-root {
+        opacity: 0.6;
+    }
+    // .MuiInputBase-root:hover .MuiOutlinedInput-notchedOutline {
+    //     border: 2px solid #c5cee0;
+    // }
+}
+.saveAndNextBtn {
+    width: 140px;
+    height: 48px;
+    background-color: #535ad1;
+    margin-left: 90 * $desk + vw;
+}
