@@ -241,10 +241,11 @@ export default function Users() {
             <Table>
               <TableHead className={classes.header}>
                 <TableRow>
-                  <TableCell className={classes.tableheading}>USER NAME</TableCell>
-                  <TableCell className={classes.tableheading}>FIRST NAME</TableCell>
-                  <TableCell className={classes.tableheading}>LAST NAME</TableCell>
-                  <TableCell className={classes.tableheading}>EMAIL</TableCell>
+                <TableCell className={classes.tableheading}>Sl No</TableCell>
+                  <TableCell className={classes.tableheading}>User Name</TableCell>
+                  <TableCell className={classes.tableheading}>First Name</TableCell>
+                  <TableCell className={classes.tableheading}>Last Name</TableCell>
+                  <TableCell className={classes.tableheading}>Email</TableCell>
                   <TableCell className={classes.tableheading}>Role</TableCell>
                   <TableCell className={classes.tableheading}>Product Type</TableCell>
                   <TableCell className={classes.tableheading}>Phone No</TableCell>
@@ -268,6 +269,7 @@ export default function Users() {
                   }
                 }).map((user, index) => (
                   <TableRow key={index} >
+                    <TableCell className={classes.tabledata}>{index+1}</TableCell>
                     <TableCell className={classes.tabledata}>{user.myuser.username}</TableCell>
                     <TableCell className={classes.tabledata}>{user.myuser.first_name}</TableCell>
                     <TableCell className={classes.tabledata}>{user.myuser.last_name}</TableCell>

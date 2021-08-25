@@ -61,18 +61,20 @@ export default function VerifyUsers() {
                 <Table className={classes.table} aria-label="user table">
                     <TableHead>
                         <TableRow>
-                            <TableCell>USER NAME</TableCell>
-                            <TableCell>FIRST NAME</TableCell>
-                            <TableCell>LAST NAME</TableCell>
-                            <TableCell>EMAIL</TableCell>
-                            <TableCell>DIALER ID</TableCell>
-                            <TableCell>DIALER PASS</TableCell>
+                            <TableCell>Sl No</TableCell>
+                            <TableCell>User Name</TableCell>
+                            <TableCell>First Name</TableCell>
+                            <TableCell>Last Name</TableCell>
+                            <TableCell>Email</TableCell>
+                            <TableCell>Dialer ID</TableCell>
+                            <TableCell>Dialer PASS</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {loading ? verifyUsers.map((row, index) => (
                             <TableRow key={index}>
-                                <TableCell component="th" scope="row">{row.username}</TableCell>
+                                <TableCell>{index+1}</TableCell>
+                                <TableCell>{row.username}</TableCell>
                                 <TableCell>{row.first_name}</TableCell>
                                 <TableCell>{row.last_name}</TableCell>
                                 <TableCell>{row.email}</TableCell>
