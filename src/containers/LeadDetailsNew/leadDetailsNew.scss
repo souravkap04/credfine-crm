@@ -14,32 +14,204 @@ $desk: 100 / 1440;
 }
 .accordianContainer {
     margin-bottom: 25 * $desk + vw;
-}
-.textField {
-    width: 230 * $desk + vw;
-    margin-top: 14 * $desk + vw !important;
-    margin-bottom: 14 * $desk + vw !important;
-    label {
-        color: #535ad1;
-        letter-spacing: 0.4px;
-        font-size: 15.5px;
+    margin-right: 5 * $desk + vw;
+    .textField {
+        width: 230 * $desk + vw;
+        margin-top: 14 * $desk + vw !important;
+        margin-bottom: 14 * $desk + vw !important;
+        label {
+            color: #535ad1;
+            letter-spacing: 0.4px;
+            font-size: 15.5px;
+        }
+        .MuiOutlinedInput-root {
+            height: 48 * $desk + vw;
+        }
+        .MuiOutlinedInput-notchedOutline {
+            border: 2px solid #c5cee0;
+        }
+        .MuiInputAdornment-root {
+            opacity: 0.6;
+        }
+        // .MuiInputBase-root:hover .MuiOutlinedInput-notchedOutline {
+        //     border: 2px solid #c5cee0;
+        // }
     }
-    .MuiOutlinedInput-root {
+    .saveAndNextBtn {
+        width: 140px;
+        height: 48px;
+        background-color: #4046b2;
+        margin-left: 90 * $desk + vw;
+    }
+    .completeJourneyContainer {
+        width: 100%;
+        height: 115 * $desk + vw;
+        margin-top: 10 * $desk + vw;
+        box-shadow: 0 3px 4.7px 0 rgba(0, 0, 0, 0.27);
+        background-color: #e4e9f2;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        .journeyBtn {
+            width: 176 * $desk + vw;
+            height: 40 * $desk + vw;
+            color: #535ad1;
+            border-radius: 5 * $desk + vw;
+            border: solid 1px #535ad1;
+            background-color: #fff;
+            font-size: 12 * $desk + vw;
+            margin: 7 * $desk + vw;
+            box-shadow: none;
+            // font-weight: 600;
+        }
+    }
+}
+.MuiGrid-grid-lg-9 {
+    max-width: 74% !important;
+    flex-basis: 74% !important;
+}
+.callConatiner {
+    position: relative;
+    height: auto;
+    border-radius: 6px;
+    box-shadow: 0 3px 4.7px 0 rgba(0, 0, 0, 0.27);
+    background-color: #fff;
+    margin-left: 5 * $desk + vw;
+    margin-bottom: 50 * $desk + vw;
+    padding-top: 18 * $desk + vw;
+    padding-left: 28 * $desk + vw;
+    padding-right: 28 * $desk + vw;
+    .callBtn {
+        width: 98 * $desk + vw;
+        height: 36 * $desk + vw;
+        background-color: #14cc9e;
+        margin-right: 6 * $desk + vw;
+        margin-bottom: 3 * $desk + vw;
+        box-shadow: none;
+    }
+    .callBtn:hover {
+        background-color: rgba(20, 204, 158, 0.8);
+    }
+    .callIcon {
+        font-size: 24 * $desk + vw !important;
+    }
+    .endBtn {
+        width: 98 * $desk + vw;
+        height: 36 * $desk + vw;
+        background-color: #eb5757;
+        margin-left: 6 * $desk + vw;
+        margin-bottom: 3 * $desk + vw;
+        box-shadow: none;
+    }
+    .endBtn:hover {
+        background-color: rgba(235, 87, 87, 0.8);
+    }
+    .textField {
+        width: 230 * $desk + vw;
+        margin-top: 20 * $desk + vw !important;
+        label {
+            color: #535ad1;
+            letter-spacing: 0.4px;
+            font-size: 15.5px;
+        }
+        .MuiOutlinedInput-root {
+            height: 48 * $desk + vw;
+        }
+        .MuiOutlinedInput-notchedOutline {
+            border: 2px solid #c5cee0;
+        }
+        .MuiInputAdornment-root {
+            opacity: 0.6;
+        }
+    }
+    .addRemarkContainer {
+        margin-top: 12 * $desk + vw;
+        h4 {
+            font-size: 18 * $desk + vw;
+            letter-spacing: 0.15 * $desk + vw;
+            color: #535ad1;
+        }
+        .remarks {
+            width: 235 * $desk + vw;
+            height: 130 * $desk + vw;
+            border-radius: 8 * $desk + vw;
+            border: solid 2px #c5cee0;
+            background-color: #fff;
+            padding-top: 14 * $desk + vw;
+            padding-left: 16 * $desk + vw;
+            textarea {
+                width: 200 * $desk + vw;
+                height: 70 * $desk + vw;
+                resize: none;
+                border: none;
+                font-size: 15 * $desk + vw;
+                color: #808080;
+                outline: none;
+            }
+            .remarkSend {
+                cursor: pointer;
+                float: right;
+                margin-top: 5 * $desk + vw;
+                margin-right: 12 * $desk + vw;
+            }
+        }
+    }
+    .submitBtn {
+        width: 140 * $desk + vw;
         height: 48 * $desk + vw;
+        background-color: #535ad1;
+        margin-top: 10 * $desk + vw;
     }
-    .MuiOutlinedInput-notchedOutline {
-        border: 2px solid #c5cee0;
+    .allremarksContainer {
+        margin-top: 30 * $desk + vw;
+        h4 {
+            font-size: 18 * $desk + vw;
+            letter-spacing: 0.15 * $desk + vw;
+            color: #535ad1;
+            margin-bottom: 12 * $desk + vw;
+            span {
+                color: #fda770;
+                margin-left: 10 * $desk + vw;
+                border-bottom: 1px solid #fda770;
+            }
+        }
+        .RemarksCard {
+            width: 235 * $desk + vw;
+            height: auto;
+            padding: 16 * $desk + vw;
+            border-radius: 8 * $desk + vw;
+            background-color: #f7f9fc;
+            margin-top: 12 * $desk + vw;
+            margin-bottom: 12 * $desk + vw;
+            p {
+                font-size: 14 * $desk + vw;
+                color: #393939;
+                letter-spacing: 0.15 * $desk + vw;
+            }
+            .updatedBy {
+                margin-top: 15 * $desk + vw;
+                font-size: 12 * $desk + vw;
+                font-weight: 600;
+                color: #535ad1;
+            }
+            .updatedDate {
+                font-size: 11 * $desk + vw;
+                font-weight: 500;
+                color: #393939;
+            }
+        }
+        .autoScroll {
+            width: 252 * $desk + vw;
+            overflow-y: scroll;
+            max-height: 500 * $desk + vw;
+        }
+        .autoScroll::-webkit-scrollbar {
+            width: 8 * $desk + vw;
+        }
+        .autoScroll::-webkit-scrollbar-thumb {
+            background-color: #f7f9fc;
+            border-radius: 8 * $desk + vw;
+        }
     }
-    .MuiInputAdornment-root {
-        opacity: 0.6;
-    }
-    // .MuiInputBase-root:hover .MuiOutlinedInput-notchedOutline {
-    //     border: 2px solid #c5cee0;
-    // }
-}
-.saveAndNextBtn {
-    width: 140px;
-    height: 48px;
-    background-color: #535ad1;
-    margin-left: 90 * $desk + vw;
 }

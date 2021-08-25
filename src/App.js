@@ -41,7 +41,7 @@ function App() {
             <Login />
           </Route>
           <PrivateRoute exact path="/profile" component={Profile} />
-          <PrivateRoute exact path="/test" component={LeadDetailsNew} />
+          <PrivateRoute exact path="/test/edit/:leadid" component={LeadDetailsNew} />
           <PrivateRoute exact path="/dashboard" component={Dashboard} />
           <PrivateRoute exact path="/dashboards/leads" component={Leads} />
           <PrivateRoute exact path="/dashboards/leads/edit/:leadid" component={LeadDetails} />
