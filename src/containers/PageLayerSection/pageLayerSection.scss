@@ -16,31 +16,44 @@ $desk: 100 / 1440;
             align-items: center;
             width: 100%;
             height: 95 * $desk + vw;
-            .searchContainer {
-                position: relative;
+            .searchMainContainer {
                 display: flex;
-                justify-content: center;
                 align-items: center;
-                width: 240 * $desk + vw;
-                height: 42 * $desk + vw;
-                border-radius: 8 * $desk + vw;
-                border: solid 1px #e4e9f2;
-                background-color: #fff;
-                .searchIconContainer {
-                    margin-right: 8 * $desk + vw;
-                    margin-left: 8 * $desk + vw;
-                    .searchIcon {
-                        font-size: 28 * $desk + vw;
+                .searchContainer {
+                    position: relative;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 240 * $desk + vw;
+                    height: 42 * $desk + vw;
+                    border-radius: 8 * $desk + vw;
+                    border: solid 1px #e4e9f2;
+                    background-color: #fff;
+                    .searchIconContainer {
+                        margin-right: 8 * $desk + vw;
+                        margin-left: 8 * $desk + vw;
+                        .searchIcon {
+                            font-size: 28 * $desk + vw;
+                            color: #8f9bb3;
+                        }
+                    }
+                    .inputContainer input {
+                        width: 95% !important;
+                        font-size: 16 * $desk + vw;
+                        color: #8f9bb3;
+                    }
+                    .inputContainer::placeholder {
                         color: #8f9bb3;
                     }
                 }
-                .inputContainer input {
-                    width: 95% !important;
-                    font-size: 16 * $desk + vw;
-                    color: #8f9bb3;
-                }
-                .inputContainer::placeholder {
-                    color: #8f9bb3;
+                .headerSection {
+                    margin-left: 20 * $desk + vw;
+                    h3 {
+                        font-size: 22 * $desk + vw;
+                        color: #4046b2;
+                        font-weight: 600;
+                        margin-bottom: 0;
+                    }
                 }
             }
             .rightAppBarSection {

@@ -75,27 +75,32 @@ export default function PageLayerSection(props) {
             </div>
             <div className="rightSection">
                 <div className="appBarContainer">
-                    <div className="searchContainer">
-                        <div className="searchIconContainer">
-                            <SearchIcon className="searchIcon" />
-                        </div>
-                        <InputBase
-                            placeholder="Lead ID / Mobile"
-                            className="inputContainer"
-                            inputProps={{ "aria-label": "search" }}
-                            value={searchInput}
-                            onChange={(e) => setSearchInput((e.target.value).toUpperCase().trim())}
-                            onKeyPress={(event) => {
-                                if (event.key === "Enter") {
-                                    if (searchInput !== "" && searchValidation(searchInput)) {
-                                        history.push("/dashboards/leads?query=" + searchInput);
-                                    } else if (searchInput === "") {
-                                        history.push("/dashboards/leads");
-                                        window.location.reload();
+                    <div className="searchMainContainer">
+                        <div className="searchContainer">
+                            <div className="searchIconContainer">
+                                <SearchIcon className="searchIcon" />
+                            </div>
+                            <InputBase
+                                placeholder="Lead ID / Mobile"
+                                className="inputContainer"
+                                inputProps={{ "aria-label": "search" }}
+                                value={searchInput}
+                                onChange={(e) => setSearchInput((e.target.value).toUpperCase().trim())}
+                                onKeyPress={(event) => {
+                                    if (event.key === "Enter") {
+                                        if (searchInput !== "" && searchValidation(searchInput)) {
+                                            history.push("/dashboards/leads?query=" + searchInput);
+                                        } else if (searchInput === "") {
+                                            history.push("/dashboards/leads");
+                                            window.location.reload();
+                                        }
                                     }
-                                }
-                            }}
-                        />
+                                }}
+                            />
+                        </div>
+                        <div className="headerSection">
+                            <h3>{props.pageTitle}</h3>
+                        </div>
                     </div>
                     <div className="rightAppBarSection">
                         <div className="nameContainer" onClick={handleMenu}>

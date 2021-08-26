@@ -29,7 +29,16 @@
   height: 6.59722vw;
 }
 
-.pageAdjustSection .rightSection .appBarContainer .searchContainer {
+.pageAdjustSection .rightSection .appBarContainer .searchMainContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.pageAdjustSection .rightSection .appBarContainer .searchMainContainer .searchContainer {
   position: relative;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -47,36 +56,47 @@
   background-color: #fff;
 }
 
-.pageAdjustSection .rightSection .appBarContainer .searchContainer .searchIconContainer {
+.pageAdjustSection .rightSection .appBarContainer .searchMainContainer .searchContainer .searchIconContainer {
   margin-right: 0.55556vw;
   margin-left: 0.55556vw;
 }
 
-.pageAdjustSection .rightSection .appBarContainer .searchContainer .searchIconContainer .searchIcon {
+.pageAdjustSection .rightSection .appBarContainer .searchMainContainer .searchContainer .searchIconContainer .searchIcon {
   font-size: 1.94444vw;
   color: #8f9bb3;
 }
 
-.pageAdjustSection .rightSection .appBarContainer .searchContainer .inputContainer input {
+.pageAdjustSection .rightSection .appBarContainer .searchMainContainer .searchContainer .inputContainer input {
   width: 95% !important;
   font-size: 1.11111vw;
   color: #8f9bb3;
 }
 
-.pageAdjustSection .rightSection .appBarContainer .searchContainer .inputContainer::-webkit-input-placeholder {
+.pageAdjustSection .rightSection .appBarContainer .searchMainContainer .searchContainer .inputContainer::-webkit-input-placeholder {
   color: #8f9bb3;
 }
 
-.pageAdjustSection .rightSection .appBarContainer .searchContainer .inputContainer:-ms-input-placeholder {
+.pageAdjustSection .rightSection .appBarContainer .searchMainContainer .searchContainer .inputContainer:-ms-input-placeholder {
   color: #8f9bb3;
 }
 
-.pageAdjustSection .rightSection .appBarContainer .searchContainer .inputContainer::-ms-input-placeholder {
+.pageAdjustSection .rightSection .appBarContainer .searchMainContainer .searchContainer .inputContainer::-ms-input-placeholder {
   color: #8f9bb3;
 }
 
-.pageAdjustSection .rightSection .appBarContainer .searchContainer .inputContainer::placeholder {
+.pageAdjustSection .rightSection .appBarContainer .searchMainContainer .searchContainer .inputContainer::placeholder {
   color: #8f9bb3;
+}
+
+.pageAdjustSection .rightSection .appBarContainer .searchMainContainer .headerSection {
+  margin-left: 1.38889vw;
+}
+
+.pageAdjustSection .rightSection .appBarContainer .searchMainContainer .headerSection h3 {
+  font-size: 1.52778vw;
+  color: #4046b2;
+  font-weight: 600;
+  margin-bottom: 0;
 }
 
 .pageAdjustSection .rightSection .appBarContainer .rightAppBarSection {

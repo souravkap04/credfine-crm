@@ -1,17 +1,4 @@
 $desk: 100 / 1440;
-.headerSection {
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 21 * $desk + vw;
-    h3 {
-        font-size: 22 * $desk + vw;
-        color: #4046b2;
-        font-weight: 600;
-        margin-bottom: 0;
-    }
-}
 .accordianContainer {
     margin-bottom: 25 * $desk + vw;
     margin-right: 5 * $desk + vw;
@@ -19,10 +6,12 @@ $desk: 100 / 1440;
         width: 230 * $desk + vw;
         margin-top: 14 * $desk + vw !important;
         margin-bottom: 14 * $desk + vw !important;
+        font-family: "Lato";
         label {
             color: #535ad1;
             letter-spacing: 0.4px;
             font-size: 15.5px;
+            font-family: 'Lato';
         }
         .MuiOutlinedInput-root {
             height: 48 * $desk + vw;
@@ -33,15 +22,24 @@ $desk: 100 / 1440;
         .MuiInputAdornment-root {
             opacity: 0.6;
         }
+        .MuiInputBase-input {
+            font-size: 16 * $desk + vw;
+        }
         // .MuiInputBase-root:hover .MuiOutlinedInput-notchedOutline {
         //     border: 2px solid #c5cee0;
         // }
+    }
+    .fullName .MuiInputBase-input {
+        font-size: 12 * $desk + vw;
+        font-family: "Lato";
     }
     .saveAndNextBtn {
         width: 140px;
         height: 48px;
         background-color: #4046b2;
         margin-left: 90 * $desk + vw;
+        box-shadow: none;
+        font-family: "Lato";
     }
     .completeJourneyContainer {
         width: 100%;
@@ -63,6 +61,7 @@ $desk: 100 / 1440;
             font-size: 12 * $desk + vw;
             margin: 7 * $desk + vw;
             box-shadow: none;
+            font-family: "Lato";
             // font-weight: 600;
         }
     }
@@ -89,6 +88,7 @@ $desk: 100 / 1440;
         margin-right: 6 * $desk + vw;
         margin-bottom: 3 * $desk + vw;
         box-shadow: none;
+        font-family: "Lato";
     }
     .callBtn:hover {
         background-color: rgba(20, 204, 158, 0.8);
@@ -103,6 +103,7 @@ $desk: 100 / 1440;
         margin-left: 6 * $desk + vw;
         margin-bottom: 3 * $desk + vw;
         box-shadow: none;
+        font-family: "Lato";
     }
     .endBtn:hover {
         background-color: rgba(235, 87, 87, 0.8);
@@ -114,6 +115,7 @@ $desk: 100 / 1440;
             color: #535ad1;
             letter-spacing: 0.4px;
             font-size: 15.5px;
+            font-family: 'Lato';
         }
         .MuiOutlinedInput-root {
             height: 48 * $desk + vw;
@@ -124,6 +126,39 @@ $desk: 100 / 1440;
         .MuiInputAdornment-root {
             opacity: 0.6;
         }
+        .MuiInputBase-input {
+            font-size: 16 * $desk + vw;
+            font-family: "Lato";
+        }
+    }
+    .textField2 {
+        width: 110 * $desk + vw;
+        margin-top: 20 * $desk + vw !important;
+        label {
+            color: #535ad1;
+            letter-spacing: 0.4px;
+            font-size: 15.5px;
+            font-family: 'Lato';
+        }
+        .MuiOutlinedInput-root {
+            height: 48 * $desk + vw;
+        }
+        .MuiOutlinedInput-notchedOutline {
+            border: 2px solid #c5cee0;
+        }
+        .MuiInputAdornment-root {
+            opacity: 0.6;
+        }
+        .MuiInputBase-input {
+            font-size: 16 * $desk + vw;
+            font-family: "Lato";
+        }
+    }
+    .textLeft {
+        margin-right: 5 * $desk + vw;
+    }
+    .textRight {
+        margin-left: 5 * $desk + vw;
     }
     .addRemarkContainer {
         margin-top: 12 * $desk + vw;
@@ -131,6 +166,9 @@ $desk: 100 / 1440;
             font-size: 18 * $desk + vw;
             letter-spacing: 0.15 * $desk + vw;
             color: #535ad1;
+            margin-right: 120 * $desk + vw;
+            white-space: nowrap;
+            font-family: "Lato";
         }
         .remarks {
             width: 235 * $desk + vw;
@@ -148,6 +186,7 @@ $desk: 100 / 1440;
                 font-size: 15 * $desk + vw;
                 color: #808080;
                 outline: none;
+                font-family: "Lato";
             }
             .remarkSend {
                 cursor: pointer;
@@ -162,18 +201,24 @@ $desk: 100 / 1440;
         height: 48 * $desk + vw;
         background-color: #535ad1;
         margin-top: 10 * $desk + vw;
+        font-family: "Lato";
     }
     .allremarksContainer {
         margin-top: 30 * $desk + vw;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         h4 {
             font-size: 18 * $desk + vw;
             letter-spacing: 0.15 * $desk + vw;
             color: #535ad1;
             margin-bottom: 12 * $desk + vw;
+            font-family: "Lato";
             span {
                 color: #fda770;
                 margin-left: 10 * $desk + vw;
                 border-bottom: 1px solid #fda770;
+                font-family: "Lato";
             }
         }
         .RemarksCard {
@@ -184,21 +229,25 @@ $desk: 100 / 1440;
             background-color: #f7f9fc;
             margin-top: 12 * $desk + vw;
             margin-bottom: 12 * $desk + vw;
+            margin-right: 12 * $desk + vw;
             p {
                 font-size: 14 * $desk + vw;
                 color: #393939;
                 letter-spacing: 0.15 * $desk + vw;
+                font-family: "Lato";
             }
             .updatedBy {
                 margin-top: 15 * $desk + vw;
                 font-size: 12 * $desk + vw;
                 font-weight: 600;
                 color: #535ad1;
+                font-family: "Lato";
             }
             .updatedDate {
                 font-size: 11 * $desk + vw;
                 font-weight: 500;
                 color: #393939;
+                font-family: "Lato";
             }
         }
         .autoScroll {
