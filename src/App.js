@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Login from './containers/Login/Login'
 import {
   BrowserRouter as Router,
@@ -12,6 +12,7 @@ import Leads from './containers/Leads/Leads';
 import LeadDetails from './containers/Leads/LeadDetails';
 import Dashboard from './containers/Dashboard/Dashboard';
 import FreshLeads from './containers/FreshLead/FreshLeads';
+import FollowUp from './containers/FollowUp/FollowUp';
 import MyLeads from './containers/MyLeads/MyLeads';
 import Users from './containers/Users/ResetPassword';
 import VerifyUsers from './containers/UserList/VerifyUsers';
@@ -19,13 +20,33 @@ import AddLeads from './containers/PlData/PlForm';
 import Reports from './containers/Report/Report';
 import BulkUploads from './containers/UploadLeads/UploadLeads';
 import AddUsers from './containers/UserCreate/UserCreate';
+import LeadDetailsNew from './containers/LeadDetailsNew/LeadDetailsNew';
+import MuiAlert from '@material-ui/lab/Alert';
+import Snackbar from '@material-ui/core/Snackbar';
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 function App() {
-  // const [viewLeadDetails, setViewLeadDetails] = useState(false);
-  // const [leadId, setLeadId] = useState(null);
-  // const leadDetailsHandler = (childData, leadId) => {
-  //   setViewLeadDetails(childData);
-  //   setLeadId(leadId)
-  // }
+  const [showStatus, setshowStatus] = useState(false)
+  const [showStatusOnline, setshowStatusOnline] = useState(false)
+  const [showStatusMessage, setshowStatusMessage] = useState('')
+  useEffect(() => {
+    // now we listen for network status changes
+    window.addEventListener('online', () => {
+      setshowStatusMessage("Back to Online")
+      setshowStatus(false);
+      setshowStatusOnline(true);
+    });
+
+    window.addEventListener('offline', () => {
+      setshowStatusMessage("Please Check your internet connection!")
+      setshowStatus(true);
+    });
+  }, []);
+  const disableConnection = () => {
+    setshowStatus(false)
+    setshowStatusOnline(false)
+  }
   const PrivateRoute = ({ component: Component, ...rest }) => {
     return (
       // Show the component only when the user is logged in
@@ -39,18 +60,29 @@ function App() {
   };
   return (
     <div>
+      <Snackbar anchorOrigin={{ vertical: "top", horizontal: "center" }} open={showStatusOnline} autoHideDuration={2000} onClose={disableConnection}>
+        <Alert onClose={disableConnection} severity="success">
+          {showStatusMessage}
+        </Alert>
+      </Snackbar>
+      <Snackbar anchorOrigin={{ vertical: "top", horizontal: "center" }} open={showStatus} onClose={disableConnection}>
+        <Alert onClose={disableConnection} severity="error">
+          {showStatusMessage}
+        </Alert>
+      </Snackbar>
       <Router>
         <Switch>
           <Route exact path="/">
             <Login />
           </Route>
           <PrivateRoute exact path="/profile" component={Profile} />
-          {/* <Redirect exact from="/dashboard" to="/dashboard/leads" /> */}
-          {/* <Route exact path="/dashboard/:page?" render={props => <TestMenu {...props} />} /> */}
+          <PrivateRoute exact path="/test/edit/:leadid" component={LeadDetailsNew} />
           <PrivateRoute exact path="/dashboard" component={Dashboard} />
           <PrivateRoute exact path="/dashboards/leads" component={Leads} />
           <PrivateRoute exact path="/dashboards/leads/edit/:leadid" component={LeadDetails} />
           <PrivateRoute exact path="/dashboards/freshlead" component={FreshLeads} />
+          <PrivateRoute exact path="/dashboards/followup" component={FollowUp} />
+          <PrivateRoute exact path="/dashboards/followup/edit/:leadid" component={LeadDetails} />
           <PrivateRoute exact path="/dashboards/myleads" component={MyLeads} />
           <PrivateRoute exact path="/dashboards/myleads/edit/:leadid" component={LeadDetails} />
           <PrivateRoute exact path="/dashboards/users" component={Users} />

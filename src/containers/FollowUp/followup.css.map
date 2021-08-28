@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AACA,AAAA,qBAAqB,CAAC;EAClB,OAAO,EAAE,IAAI;EACb,eAAe,EAAE,QAAQ;EACzB,aAAa,EAAE,SAAe;CAWjC;;AAdD,AAII,qBAJiB,CAIjB,UAAU,CAAC;EACP,YAAY,EAAE,SAAe;EAC7B,WAAW,EAAE,SAAe;CAC/B;;AAPL,AAQI,qBARiB,CAQjB,UAAU,CAAC,MAAM,CAAC;EACd,gBAAgB,EAAE,OAAO;CAI5B;;AAbL,AAUQ,qBAVa,CAQjB,UAAU,CAAC,MAAM,CAEb,IAAI,CAAC;EACD,KAAK,EAAE,IAAI;CACd",
+    "sources": [
+        "followup.scss"
+    ],
+    "names": [],
+    "file": "followup.css"
+}

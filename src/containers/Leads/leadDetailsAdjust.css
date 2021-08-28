@@ -5,4 +5,75 @@
 .Toastify__progress-bar--default {
   background: #14cc9e;
 }
+
+.rightContainerForm {
+  width: 23vw;
+  background-color: #fff;
+  padding-top: 2.08333vw;
+}
+
+.rightContainerForm form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.rightContainerForm h4 {
+  margin-left: 2.77778vw;
+  font-size: 1.52778vw;
+  font-weight: bold;
+  letter-spacing: 0.01042vw;
+  color: #535ad1;
+  margin-bottom: 0.83333vw;
+  font-family: "Lato";
+}
+
+.rightContainerForm .textField {
+  width: 18.05556vw;
+  margin-top: 0.97222vw !important;
+  margin-bottom: 0.97222vw !important;
+  font-family: "Lato";
+}
+
+.rightContainerForm .textField label {
+  color: #535ad1;
+  letter-spacing: 0.4px;
+  font-size: 15.5px;
+  font-family: "Lato";
+}
+
+.rightContainerForm .textField label span {
+  color: red;
+}
+
+.rightContainerForm .textField .MuiOutlinedInput-root {
+  height: 3.33333vw;
+}
+
+.rightContainerForm .textField .MuiOutlinedInput-notchedOutline {
+  border: 2px solid #c5cee0;
+}
+
+.rightContainerForm .textField .MuiInputAdornment-root {
+  opacity: 0.6;
+}
+
+.rightContainerForm .textField .MuiInputBase-input {
+  font-size: 1.11111vw;
+}
+
+.rightContainerForm .submitBtn {
+  width: 9.72222vw;
+  height: 3.33333vw;
+  background-color: #535ad1;
+  margin-top: 0.69444vw;
+  font-family: "Lato";
+}
 /*# sourceMappingURL=leadDetailsAdjust.css.map */
