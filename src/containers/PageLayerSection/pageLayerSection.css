@@ -108,6 +108,13 @@
           align-items: center;
 }
 
+.pageAdjustSection .rightSection .appBarContainer .rightAppBarSection .addBtn {
+  background-color: #535ad1;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+  margin-right: 1.38889vw;
+}
+
 .pageAdjustSection .rightSection .appBarContainer .rightAppBarSection .nameContainer {
   display: -webkit-box;
   display: -ms-flexbox;

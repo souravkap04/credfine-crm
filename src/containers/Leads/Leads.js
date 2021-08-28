@@ -7,7 +7,6 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { Button, Dialog, DialogContent } from '@material-ui/core'
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -20,6 +19,13 @@ import { getProfileData } from '../../global/leadsGlobalData'
 import { useQueryy } from '../../global/query';
 import CallerDialogBox from './CallerDialog/CallerDialogBox';
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
+import { Drawer } from '@material-ui/core';
+import Grid from '@material-ui/core/Grid';
+import TextField from '@material-ui/core/TextField';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import { Button } from '@material-ui/core';
+import { useForm } from "react-hook-form";
+import './leadDetailsAdjust.css';
 import clsx from 'clsx';
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -103,7 +109,7 @@ const useStyles = makeStyles({
     wordBreak: 'break-word'
   }
 });
-const Leads = ((props) => {
+export default function Leads() {
   const classes = useStyles();
   const CancelToken = axios.CancelToken;
   const queryy = useQueryy();
@@ -120,6 +126,21 @@ const Leads = ((props) => {
   const [vertageCall, setVertageCall] = useState(false);
   const [disableHangupBtn, setDisableHangupBtn] = useState(true);
   const [storeLeadID, setstoreLeadID] = useState('')
+  const [state, setState] = useState(false);
+  const [fullName, setFullName] = useState('');
+  const [mobileNo, setMobileNo] = useState('');
+  const [monthlyIncome, setMonthlyIncome] = useState('');
+  const [loanAmount, setLoanAmount] = useState('');
+  const [employmentType, setEmploymentType] = useState('');
+  const [date, setDate] = useState("");
+  const [pincode, setPincode] = useState('');
+  const [companyName, setCompanyName] = useState('');
+  const [currentCompany, setCurrentCompany] = useState('');
+  const [campaign, setCampaign] = useState("");
+  const [validated, setValidated] = useState(false);
+  const [isDisplay, setIsDisplay] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
   useEffect(() => {
     leadQuery ? fetchSearchData(leadQuery) : fetchLeadsData();
   }, [leadQuery])
@@ -223,8 +244,149 @@ const Leads = ((props) => {
     setVertageCall(false)
     setDisableHangupBtn(false)
   }
+  const { register, handleSubmit, errors } = useForm();
+  const personalLoanSubmitHandler = async (data) => {
+    const { fullName, mobileNo, monthlyIncome } = data;
+    let item = {
+      loan_amount: loanAmount, monthly_income: monthlyIncome, dob: date, phone_no: mobileNo,
+      residential_pincode: pincode, current_company_name: companyName, name: fullName, loan_type: "PL",
+      current_company: currentCompany, employment_type: employmentType, campaign_category: campaign
+    };
+    let headers = {
+      'Authorization': `Token ${profileData.token}`,
+      'Content-Type': 'application/json'
+    }
+    await axios.post(`${baseUrl}/leads/lead_create/`, item, { headers })
+      .then((response) => {
+        if (response.status === 201) {
+          setAlertMessage(response.data.message)
+          setIsDisplay(true);
+        }
+        setTimeout(() => {
+          setState(false)
+          fetchLeadsData()
+        }, 1500)
+      }).catch((error) => {
+        if (error.response.status === 400) {
+          setAlertMessage("Mobile Number Already Exist")
+          setIsError(true);
+        } else {
+          setAlertMessage("Something wrong")
+          setIsError(true);
+        }
+      })
+  }
+  const openDrawer = () => {
+    setState(true)
+  }
+  const closeDrawer = () => {
+    setState(false)
+  };
+  const closeSnankBar = () => {
+    setIsDisplay(false);
+    setIsError(false);
+  }
   return (
-    <PageLayerSection>
+    <PageLayerSection addLeadButton={true} onClick={() => openDrawer()}>
+      <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isDisplay} autoHideDuration={1500} onClose={closeSnankBar}>
+        <Alert onClose={closeSnankBar} severity="success">
+          {alertMessage}
+        </Alert>
+      </Snackbar>
+      <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isError} autoHideDuration={1500} onClose={closeSnankBar}>
+        <Alert onClose={closeSnankBar} severity="error">
+          {alertMessage}
+        </Alert>
+      </Snackbar>
+      <Drawer anchor='right' open={state} onClose={closeDrawer}>
+        <div className="rightContainerForm">
+          <form onSubmit={handleSubmit(personalLoanSubmitHandler)}>
+            <Grid container justifyContent="flex-start"><h4>Add Leads</h4></Grid>
+            <Grid>
+              <TextField
+                className="textField"
+                id="outlined-full-width"
+                label="Full Name As Per Pancard"
+                style={{ margin: 8 }}
+                margin="normal"
+                InputLabelProps={{
+                  shrink: true,
+                  required: true
+                }}
+                variant="outlined"
+                size="small"
+                name="fullName"
+                value={fullName}
+                onChange={(e) => setFullName((e.target.value))}
+                inputRef={register({
+                  required: 'Full name is required',
+                  pattern: {
+                    value: /^([a-zA-Z ]){2,30}$/,
+                    message: 'please enter a valid full name'
+                  }
+                })}
+                error={Boolean(errors.fullName)}
+                helperText={errors.fullName?.type === "required" ? errors.fullName?.message : errors.fullName?.message}
+              />
+            </Grid>
+            <Grid>
+              <TextField
+                type="number"
+                className="textField"
+                id="outlined-full-width"
+                label="Mobile Number"
+                style={{ margin: 8 }}
+                margin="normal"
+                InputLabelProps={{
+                  shrink: true,
+                  required: true
+                }}
+                variant="outlined"
+                size="small"
+                name="mobileNo"
+                value={mobileNo}
+                onChange={(e) => setMobileNo(e.target.value)}
+                inputRef={register({
+                  required: 'Phone no is required',
+                  pattern: {
+                    value: /^[0-9]{10}$/,
+                    message: 'Phone no should be 10 digits'
+                  }
+                })}
+                error={Boolean(errors.mobileNo)}
+                helperText={errors.mobileNo?.type === "required" ? errors.mobileNo?.message : errors.mobileNo?.message}
+              />
+            </Grid>
+            <Grid>
+              <TextField
+                type="number"
+                className="textField"
+                id="outlined-full-width"
+                label="Net Monthly Income"
+                style={{ margin: 8 }}
+                margin="normal"
+                InputLabelProps={{
+                  shrink: true,
+                  required: true
+                }}
+                variant="outlined"
+                size="small"
+                name="monthlyIncome"
+                value={monthlyIncome}
+                onChange={(e) => setMonthlyIncome(e.target.value)}
+                inputRef={register({
+                  required: 'Net monthly income is required',
+                })}
+                error={Boolean(errors.monthlyIncome)}
+                helperText={errors.monthlyIncome?.type === "required" ? errors.monthlyIncome?.message : errors.monthlyIncome?.message}
+              />
+            </Grid>
+            <Grid>
+              <Button type="submit" className="submitBtn" color='primary' variant='contained'>Submit</Button>
+            </Grid>
+          </form>
+        </div>
+      </Drawer>
       <TableContainer className={classes.container}>
         <Table className={classes.table} aria-label="simple table">
           <TableHead className={classes.tableheading}>
@@ -351,5 +513,4 @@ const Leads = ((props) => {
       </TableContainer>
     </PageLayerSection >
   );
-});
-export default Leads;
+}

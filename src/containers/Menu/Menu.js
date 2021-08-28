@@ -166,14 +166,14 @@ export default function Menu(props) {
                         <ListItemText className={classes.color} primary="New Leads" />
                     </ListItem>
                 </NavLink>
-                <NavLink to="/dashboards/addleads" activeClassName="active">
+                {/* <NavLink to="/dashboards/addleads" activeClassName="active">
                     <ListItem className="selected" button>
                         <ListItemIcon>
                             <AddCircleOutlineOutlinedIcon className={classes.color} />
                         </ListItemIcon>
                         <ListItemText className={classes.color} primary="Add Leads" />
                     </ListItem>
-                </NavLink>
+                </NavLink> */}
                 <NavLink to="/dashboards/followup" activeClassName="active">
                     <ListItem className="selected" button>
                         <ListItemIcon>

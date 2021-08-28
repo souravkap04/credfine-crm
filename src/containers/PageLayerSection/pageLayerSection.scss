@@ -59,6 +59,11 @@ $desk: 100 / 1440;
             .rightAppBarSection {
                 display: flex;
                 align-items: center;
+                .addBtn {
+                    background-color: #535ad1;
+                    box-shadow: none;
+                    margin-right: 20 * $desk + vw;
+                }
                 .nameContainer {
                     display: flex;
                     align-items: center;

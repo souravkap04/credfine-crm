@@ -14,7 +14,7 @@
   color: #535ad1;
   letter-spacing: 0.4px;
   font-size: 15.5px;
-  font-family: 'Lato';
+  font-family: "Lato";
 }
 
 .accordianContainer .textField .MuiOutlinedInput-root {
@@ -31,6 +31,27 @@
 
 .accordianContainer .textField .MuiInputBase-input {
   font-size: 1.11111vw;
+}
+
+.accordianContainer .listGroup {
+  position: absolute;
+  z-index: 100;
+  max-width: 17.36111vw;
+  max-height: 11.80556vw;
+  overflow-y: scroll;
+}
+
+.accordianContainer .listGroup .list-group-item {
+  cursor: pointer;
+}
+
+.accordianContainer .listGroup::-webkit-scrollbar {
+  width: 0.55556vw;
+}
+
+.accordianContainer .listGroup::-webkit-scrollbar-thumb {
+  background-color: #f7f9fc;
+  border-radius: 0.55556vw;
 }
 
 .accordianContainer .fullName .MuiInputBase-input {
@@ -145,7 +166,7 @@
   color: #535ad1;
   letter-spacing: 0.4px;
   font-size: 15.5px;
-  font-family: 'Lato';
+  font-family: "Lato";
 }
 
 .callConatiner .textField .MuiOutlinedInput-root {
@@ -174,7 +195,7 @@
   color: #535ad1;
   letter-spacing: 0.4px;
   font-size: 15.5px;
-  font-family: 'Lato';
+  font-family: "Lato";
 }
 
 .callConatiner .textField2 .MuiOutlinedInput-root {

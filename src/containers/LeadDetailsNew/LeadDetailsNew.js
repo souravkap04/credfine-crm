@@ -18,7 +18,8 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import { Button } from '@material-ui/core';
 import CallIcon from '@material-ui/icons/Call';
 import SendIcon from '@material-ui/icons/Send';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+// import Autocomplete from '@material-ui/lab/Autocomplete';
+import { ListGroup } from 'react-bootstrap';
 import {
     getBank,
     getResidentType,
@@ -37,7 +38,7 @@ const useStyles = makeStyles({
         opacity: '0.4'
     },
     headerText: {
-        fontFamily: 'Lato',
+        // fontFamily: 'Lato',
         fontSize: '17px',
         fontWeight: '400',
         letterSpacing: '0.4px'
@@ -335,6 +336,7 @@ export default function LeadDetailsNew(props) {
 
         }
     }
+
     const selectCompany = (company) => {
         setCompanyName(company);
         setShowCompany(false);
@@ -746,27 +748,35 @@ export default function LeadDetailsNew(props) {
                                     </TextField>
                                 </Grid>
                                 <Grid lg={4}>
-                                    <Autocomplete
+                                    <TextField
+                                        className="textField"
+                                        id="outlined-full-width"
+                                        label="Company Name"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={companyName}
+                                        onChange={(e) => searchCompanyHandler(e)}
+                                    />
+                                    <ListGroup className="listGroup">
+                                        {showCompany ? searchCompany.map((company) => (
+                                            <ListGroup.Item key={company.id}
+                                                onClick={() => selectCompany(company.name)}
+                                            >{company.name}</ListGroup.Item>
+                                        )) : null}
+                                    </ListGroup>
+                                    {/* <Autocomplete
                                         id="combo-box-demo"
                                         options={searchCompany}
-                                        getOptionLabel={(option) => option.name}
+                                        getOptionSelected={(option, value) => option.name === value.name}
+                                        getOptionLabel={(option) => selectCompany(option.name)}
                                         style={{ width: 300 }}
-                                        renderInput={(params) => <TextField
-                                            {...params}
-                                            className="textField"
-                                            id="outlined-full-width"
-                                            label="Company Name"
-                                            style={{ margin: 8 }}
-                                            margin="normal"
-                                            InputLabelProps={{
-                                                shrink: true,
-                                            }}
-                                            variant="outlined"
-                                            size="small"
-                                            value={companyName}
-                                            onChange={(e) => searchCompanyHandler(e)}
-                                        />}
-                                    />
+                                        renderInput={(params) => }
+                                    /> */}
                                 </Grid>
                                 <Grid lg={4}>
                                     <TextField
@@ -883,7 +893,7 @@ export default function LeadDetailsNew(props) {
                                     </TextField>
                                 </Grid>
                                 <Grid lg={4} style={{ display: 'flex', alignItems: 'center' }}>
-                                    <Button className="saveAndNextBtn" color='primary' variant='contained'>SAVE &amp; NEXT</Button>
+                                    <Button className="saveAndNextBtn" color='primary' variant='contained' onClick={() => updateLeadDetails(leadid)}>SAVE &amp; NEXT</Button>
                                 </Grid>
                             </Grid>
                         </AccordionDetails>

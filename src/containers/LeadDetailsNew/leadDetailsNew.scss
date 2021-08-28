@@ -11,7 +11,7 @@ $desk: 100 / 1440;
             color: #535ad1;
             letter-spacing: 0.4px;
             font-size: 15.5px;
-            font-family: 'Lato';
+            font-family: "Lato";
         }
         .MuiOutlinedInput-root {
             height: 48 * $desk + vw;
@@ -28,6 +28,23 @@ $desk: 100 / 1440;
         // .MuiInputBase-root:hover .MuiOutlinedInput-notchedOutline {
         //     border: 2px solid #c5cee0;
         // }
+    }
+    .listGroup {
+        position: absolute;
+        z-index: 100;
+        max-width: 250 * $desk + vw;
+        max-height: 170 * $desk + vw;
+        overflow-y: scroll;
+        .list-group-item {
+            cursor: pointer;
+        }
+    }
+    .listGroup::-webkit-scrollbar {
+        width: 8 * $desk + vw;
+    }
+    .listGroup::-webkit-scrollbar-thumb {
+        background-color: #f7f9fc;
+        border-radius: 8 * $desk + vw;
     }
     .fullName .MuiInputBase-input {
         font-size: 12 * $desk + vw;
@@ -115,7 +132,7 @@ $desk: 100 / 1440;
             color: #535ad1;
             letter-spacing: 0.4px;
             font-size: 15.5px;
-            font-family: 'Lato';
+            font-family: "Lato";
         }
         .MuiOutlinedInput-root {
             height: 48 * $desk + vw;
@@ -138,7 +155,7 @@ $desk: 100 / 1440;
             color: #535ad1;
             letter-spacing: 0.4px;
             font-size: 15.5px;
-            font-family: 'Lato';
+            font-family: "Lato";
         }
         .MuiOutlinedInput-root {
             height: 48 * $desk + vw;
