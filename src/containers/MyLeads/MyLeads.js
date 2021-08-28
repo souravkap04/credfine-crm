@@ -422,9 +422,6 @@ export default function MyLeads(props) {
         <Table className={classes.table} aria-label="simple table">
           <TableHead className={classes.tableheading}>
             <TableRow>
-              {/* <TableCell padding="checkbox">
-                <Checkbox className={classes.checkboxFix} />
-              </TableCell> */}
               <TableCell className={classes.tableheading}>Sl No</TableCell>
               <TableCell className={classes.tableheading}>Lead ID</TableCell>
               <TableCell className={classes.tableheading}>Name</TableCell>
@@ -445,26 +442,23 @@ export default function MyLeads(props) {
                 let leadPhoneNo = maskPhoneNo(my_leads.lead.phone_no)
                 return (
                   <TableRow className={classes.oddEvenRow} key={index}>
-                    {/* <TableCell padding="checkbox">
-                      <Checkbox className={classes.checkboxFixData} />
-                    </TableCell> */}
                     <TableCell className={classes.tabledata}>{index + 1}</TableCell>
                     <TableCell className={classes.tabledata, classes.leadid}
                       onClick={() => leadDetailsHandler(my_leads.lead.lead_crm_id)}
                     >{my_leads.lead.lead_crm_id}</TableCell>
-                    <TableCell className={classes.tabledata}>{my_leads.lead.name}</TableCell>
-                    <TableCell className={classes.tabledata}>{leadPhoneNo}</TableCell>
-                    <TableCell className={classes.tabledata}>{my_leads.lead.loan_amount}</TableCell>
+                    <TableCell className={classes.tabledata}>{my_leads.lead.name ? my_leads.lead.name : 'NA'}</TableCell>
+                    <TableCell className={classes.tabledata}>{leadPhoneNo ? leadPhoneNo : 'NA'}</TableCell>
+                    <TableCell className={classes.tabledata}>{my_leads.lead.loan_amount ? my_leads.lead.loan_amount : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>{my_leads.lead.data.monthly_income}</TableCell>
-                    <TableCell className={classes.tabledata}>{my_leads.lead.data.current_company_name}</TableCell>
-                    <TableCell className={classes.tabledata}>{my_leads.lead.loan_type}</TableCell>
+                    <TableCell className={classes.tabledata}>{my_leads.lead.data.current_company_name ? my_leads.lead.data.current_company_name : 'NA'}</TableCell>
+                    <TableCell className={classes.tabledata}>{my_leads.lead.loan_type ? my_leads.lead.loan_type : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>
                       <div className={classes.loanTypeButton}>
                         <div className={classes.loanButtonText}>{my_leads.lead.status}</div>
                       </div>
                     </TableCell>
-                    <TableCell className={classes.tabledata}>{my_leads.lead.sub_status}</TableCell>
-                    <TableCell className={classes.tabledata}>{my_leads.lead.campaign_category}</TableCell>
+                    <TableCell className={classes.tabledata}>{my_leads.lead.sub_status ? my_leads.lead.sub_status : 'NA'}</TableCell>
+                    <TableCell className={classes.tabledata}>{my_leads.lead.campaign_category ? my_leads.lead.campaign_category : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>
                       <Tooltip title="Call Customer">
                         <IconButton className={classes.callButton} onClick={() => clickToCall(my_leads.lead.phone_no, my_leads.lead.lead_crm_id)}>

@@ -37,6 +37,10 @@ const useStyles = makeStyles({
     circleTick: {
         opacity: '0.4'
     },
+    activeColorTick: {
+        color: '#14cc9e',
+        opacity: '1'
+    },
     headerText: {
         // fontFamily: 'Lato',
         fontSize: '17px',
@@ -151,6 +155,7 @@ export default function LeadDetailsNew(props) {
     const [isCallNotConnected, setIsCallNotConnected] = useState(false)
     const [disableHangupBtn, setDisableHangupBtn] = useState(true);
     const [vertageCall, setVertageCall] = useState(false);
+    const [colorTick, setcolorTick] = useState(false);
     let statusData = getStatusData();
     let { leadid } = useParams();
     let history = useHistory();
@@ -411,6 +416,16 @@ export default function LeadDetailsNew(props) {
         setVertageCall(false)
         setDisableHangupBtn(false)
     }
+    const checkOpenState = () => {
+        if (expanded === 'panel1') {
+            setExpanded('panel2')
+            if (leadId !== '' || loanType !== '' || loanAmount !== '' || name !== '' || date !== '' || pancardNo !== '' || email !== '' || mobileNo !== '') {
+                setcolorTick(true)
+            } else {
+                setcolorTick(false)
+            }
+        }
+    }
     return (
         <PageLayerSection pageTitle="Lead Details">
             {/* Errors SnackBars Start */}
@@ -450,7 +465,7 @@ export default function LeadDetailsNew(props) {
                     <Accordion square defaultExpanded={true} expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
                         <AccordionSummary expandIcon={<ArrowRightIcon />} aria-controls="panel1d-content" id="panel1d-header">
                             <Typography className={classes.headerText}>Personal Details</Typography>
-                            <CheckCircleIcon className={classes.circleTick} />
+                            <CheckCircleIcon className={colorTick ? classes.activeColorTick : classes.circleTick} />
                         </AccordionSummary>
                         <AccordionDetails>
                             <Grid container
@@ -607,7 +622,7 @@ export default function LeadDetailsNew(props) {
                                     />
                                 </Grid>
                                 <Grid lg={4} style={{ display: 'flex', alignItems: 'center' }}>
-                                    <Button onChange={handleChange('panel2')} className="saveAndNextBtn" color='primary' variant='contained'>SAVE &amp; NEXT</Button>
+                                    <Button onClick={checkOpenState} className="saveAndNextBtn" color='primary' variant='contained'>SAVE &amp; NEXT</Button>
                                 </Grid>
                             </Grid>
                         </AccordionDetails>
