@@ -25,6 +25,10 @@ import PageLayerSection from '../PageLayerSection/PageLayerSection';
 import { useHistory } from "react-router-dom";
 import clsx from 'clsx';
 import './myleads.css';
+import { Drawer } from '@material-ui/core';
+import Grid from '@material-ui/core/Grid';
+import TextField from '@material-ui/core/TextField';
+import { useForm } from "react-hook-form";
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import filter from '../../images/filter.png';
@@ -177,6 +181,8 @@ export default function MyLeads(props) {
   const [totalDataPerPage, settotalDataPerPage] = useState(0);
   const [vertageCall, setVertageCall] = useState(false);
   const [disableHangupBtn, setDisableHangupBtn] = useState(true);
+  const [state, setState] = useState(false);
+  const { register, handleSubmit, errors, clearErrors } = useForm();
   const splitUrl = (data) => {
     if (data !== null) {
       const [url, pager] = data.split('?');
@@ -305,12 +311,107 @@ export default function MyLeads(props) {
     setVertageCall(false)
     setDisableHangupBtn(false)
   }
-
+  const openDrawer = () => {
+    setState(true)
+  }
+  const closeDrawer = () => {
+    setState(false)
+    clearErrors()
+  };
   return (
     <PageLayerSection>
+      <Drawer anchor='right' open={state} onClose={closeDrawer}>
+        <div className="rightContainerForm">
+          <form onSubmit={handleSubmit()}>
+            <Grid container justifyContent="flex-start"><h4>Search Here</h4></Grid>
+            <Grid>
+              <TextField
+                className="textField"
+                type="date"
+                id="outlined-full-width"
+                label="From"
+                style={{ margin: 8 }}
+                margin="normal"
+                InputLabelProps={{
+                  shrink: true,
+                  required: true
+                }}
+                variant="outlined"
+                size="small"
+                name="fromDate"
+              />
+            </Grid>
+            <Grid>
+              <TextField
+                type="date"
+                className="textField"
+                id="outlined-full-width"
+                label="To"
+                defaultValue="12-12-2021"
+                style={{ margin: 8 }}
+                margin="normal"
+                InputLabelProps={{
+                  shrink: true,
+                  required: true
+                }}
+                variant="outlined"
+                size="small"
+                name="toDate"
+              />
+            </Grid>
+            <Grid>
+              <TextField
+                select
+                className="textField"
+                id="outlined-full-width"
+                label="Status"
+                style={{ margin: 8 }}
+                margin="normal"
+                InputLabelProps={{
+                  shrink: true,
+                  required: true
+                }}
+                SelectProps={{
+                  native: true
+                }}
+                variant="outlined"
+                size="small"
+                name="status"
+              >
+                <option value="">Select</option>
+              </TextField>
+            </Grid>
+            <Grid>
+              <TextField
+                className="textField"
+                select
+                id="outlined-full-width"
+                label="Sub Status"
+                style={{ margin: 8 }}
+                margin="normal"
+                InputLabelProps={{
+                  shrink: true,
+                  required: true
+                }}
+                SelectProps={{
+                  native: true
+                }}
+                variant="outlined"
+                size="small"
+                name="substatus"
+              >
+                <option value="">Select</option>
+              </TextField>
+            </Grid>
+            <Grid>
+              <Button className="submitBtn" color='primary' variant='contained'>Submit</Button>
+            </Grid>
+          </form>
+        </div>
+      </Drawer>
       <div className="filterMainContainer">
         <h3>My Leads ({totalLeads})</h3>
-        <div className="filterButtonContainer">
+        <div className="filterButtonContainer" onClick={() => openDrawer()}>
           <div className="filterImage">
             <img src={filter} alt="" />
           </div>
@@ -347,7 +448,7 @@ export default function MyLeads(props) {
                     {/* <TableCell padding="checkbox">
                       <Checkbox className={classes.checkboxFixData} />
                     </TableCell> */}
-                    <TableCell className={classes.tabledata}>{index+1}</TableCell>
+                    <TableCell className={classes.tabledata}>{index + 1}</TableCell>
                     <TableCell className={classes.tabledata, classes.leadid}
                       onClick={() => leadDetailsHandler(my_leads.lead.lead_crm_id)}
                     >{my_leads.lead.lead_crm_id}</TableCell>

@@ -127,9 +127,9 @@ export default function Leads() {
   const [disableHangupBtn, setDisableHangupBtn] = useState(true);
   const [storeLeadID, setstoreLeadID] = useState('')
   const [state, setState] = useState(false);
-  const [fullName, setFullName] = useState('');
-  const [mobileNo, setMobileNo] = useState('');
-  const [monthlyIncome, setMonthlyIncome] = useState('');
+  // const [fullName, setFullName] = useState('');
+  // const [mobileNo, setMobileNo] = useState('');
+  // const [monthlyIncome, setMonthlyIncome] = useState('');
   const [loanAmount, setLoanAmount] = useState('');
   const [employmentType, setEmploymentType] = useState('');
   const [date, setDate] = useState("");
@@ -244,7 +244,7 @@ export default function Leads() {
     setVertageCall(false)
     setDisableHangupBtn(false)
   }
-  const { register, handleSubmit, errors } = useForm();
+  const { register, handleSubmit, errors, clearErrors } = useForm();
   const personalLoanSubmitHandler = async (data) => {
     const { fullName, mobileNo, monthlyIncome } = data;
     let item = {
@@ -263,7 +263,7 @@ export default function Leads() {
           setIsDisplay(true);
         }
         setTimeout(() => {
-          setState(false)
+          closeDrawer()
           fetchLeadsData()
         }, 1500)
       }).catch((error) => {
@@ -281,6 +281,7 @@ export default function Leads() {
   }
   const closeDrawer = () => {
     setState(false)
+    clearErrors()
   };
   const closeSnankBar = () => {
     setIsDisplay(false);
@@ -305,6 +306,7 @@ export default function Leads() {
             <Grid>
               <TextField
                 className="textField"
+                type="text"
                 id="outlined-full-width"
                 label="Full Name As Per Pancard"
                 style={{ margin: 8 }}
@@ -316,12 +318,10 @@ export default function Leads() {
                 variant="outlined"
                 size="small"
                 name="fullName"
-                value={fullName}
-                onChange={(e) => setFullName((e.target.value))}
                 inputRef={register({
                   required: 'Full name is required',
                   pattern: {
-                    value: /^([a-zA-Z ]){2,30}$/,
+                    value: /^([a-zA-Z ]){2,30}$/g,
                     message: 'please enter a valid full name'
                   }
                 })}
@@ -344,12 +344,10 @@ export default function Leads() {
                 variant="outlined"
                 size="small"
                 name="mobileNo"
-                value={mobileNo}
-                onChange={(e) => setMobileNo(e.target.value)}
                 inputRef={register({
                   required: 'Phone no is required',
                   pattern: {
-                    value: /^[0-9]{10}$/,
+                    value: /^[0-9]{10}$/g,
                     message: 'Phone no should be 10 digits'
                   }
                 })}
@@ -372,8 +370,6 @@ export default function Leads() {
                 variant="outlined"
                 size="small"
                 name="monthlyIncome"
-                value={monthlyIncome}
-                onChange={(e) => setMonthlyIncome(e.target.value)}
                 inputRef={register({
                   required: 'Net monthly income is required',
                 })}
