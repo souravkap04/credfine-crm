@@ -6,11 +6,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
-import { Typography } from '@material-ui/core';
-import TablePagination from '@material-ui/core/TablePagination';
-import Checkbox from '@material-ui/core/Checkbox';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import ChevronLeftOutlinedIcon from '@material-ui/icons/ChevronLeftOutlined';
 import ChevronRightOutlinedIcon from '@material-ui/icons/ChevronRightOutlined';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -136,6 +132,7 @@ export default function FreshLead() {
   const [deleteCount, setDeleteCount] = useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(100);
   const [totalDataPerPage, settotalDataPerPage] = useState(0);
+  const [isLoading, setisLoading] = useState(false);
   const splitUrl = (data) => {
     if (data !== null) {
       const [url, pager] = data.split('?');
@@ -144,6 +141,7 @@ export default function FreshLead() {
   }
   useEffect(() => {
     const fetchFreshLeads = async () => {
+      setisLoading(true)
       const headers = {
         'Authorization': `Token ${profileData.token}`,
         'userRoleHash': `${profileData.user_roles[0].user_role_hash}`
@@ -156,13 +154,17 @@ export default function FreshLead() {
           setPrevPage(response.data.previous);
           setNextPage(response.data.next);
           setTotalUploadLeads(response.data.count);
+          setisLoading(false)
         }).catch((error) => {
-          console.log(error);
+          if (error.response.status === 401) {
+            setisLoading(false)
+          }
         })
     };
     fetchFreshLeads();
   }, [deleteCount])
   const nextPageHandler = async () => {
+    setisLoading(true)
     const headers = {
       'Authorization': `Token ${profileData.token}`,
       'userRoleHash': `${profileData.user_roles[0].user_role_hash}`
@@ -176,11 +178,13 @@ export default function FreshLead() {
         setPrevPage(response.data.previous);
         setNextPage(response.data.next);
         setTotalUploadLeads(response.data.count);
+        setisLoading(false)
       }).catch((error) => {
-        console.log(error);
+        setisLoading(false)
       })
   }
   const prevPageHandler = async () => {
+    setisLoading(true)
     const headers = {
       'Authorization': `Token ${profileData.token}`,
       'userRoleHash': `${profileData.user_roles[0].user_role_hash}`
@@ -194,13 +198,14 @@ export default function FreshLead() {
         setPrevPage(response.data.previous);
         setNextPage(response.data.next);
         setTotalUploadLeads(response.data.count);
+        setisLoading(false)
       }).catch((error) => {
-        console.log(error);
+        setisLoading(false)
       })
   }
 
   const deleteFreshLead = async (leadId) => {
-    console.log(leadId);
+    setisLoading(true)
     const data = { lead_crm_id: leadId };
     const headers = {
       'Authorization': `Token ${profileData.token}`,
@@ -209,6 +214,7 @@ export default function FreshLead() {
     await axios.delete(`${baseUrl}/leads/freshLeads/`, { headers, data })
       .then((response) => {
         setDeleteCount(deleteCount + 1);
+        setisLoading(false)
       }).catch((error) => {
         console.log(error);
       })
@@ -234,7 +240,9 @@ export default function FreshLead() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {freshLeads.length !== 0 ?
+            {isLoading ? <div className="loader">
+              <CircularProgress size={100} thickness={3} />
+            </div> : freshLeads.length !== 0 ?
               freshLeads.map((lead, index) => {
                 return (
                   <TableRow className={classes.oddEvenRow} key={index}>
@@ -267,7 +275,7 @@ export default function FreshLead() {
           </TableBody>
         </Table>
       </TableContainer>
-      <div className={classes.tablePagination}>
+      {isLoading ? '' : <div className={classes.tablePagination}>
         <div className={classes.rowsPerPageContainer}>
           <div className={classes.rowsText}>Rows Per Page: {rowsPerPage}</div>
         </div>
@@ -292,7 +300,7 @@ export default function FreshLead() {
             <ChevronRightOutlinedIcon className={nextPage !== null ? classes.activeColor : ''} />
           </IconButton>}
         </div>
-      </div>
+      </div>}
     </PageLayerSection>
   )
 }

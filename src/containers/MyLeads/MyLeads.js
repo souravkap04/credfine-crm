@@ -6,12 +6,9 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import Checkbox from '@material-ui/core/Checkbox';
 import axios from 'axios';
 import baseUrl from '../../global/api';
 import { getCampaign, getProfileData, getStatusData } from '../../global/leadsGlobalData'
-import { Typography } from '@material-ui/core';
 import ChevronLeftOutlinedIcon from '@material-ui/icons/ChevronLeftOutlined';
 import ChevronRightOutlinedIcon from '@material-ui/icons/ChevronRightOutlined';
 import Button from '@material-ui/core/Button'
@@ -20,7 +17,6 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import CallIcon from '@material-ui/icons/Call';
 import CallerDialogBox from '../Leads/CallerDialog/CallerDialogBox';
-import { Dialog, DialogContent } from '@material-ui/core'
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
 import { useHistory } from "react-router-dom";
 import clsx from 'clsx';
@@ -28,11 +24,11 @@ import './myleads.css';
 import { Drawer } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
-import { useForm } from "react-hook-form";
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import filter from '../../images/filter.png';
 import { useQueryy } from '../../global/query';
+import CircularProgress from '@material-ui/core/CircularProgress';
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -202,7 +198,7 @@ export default function MyLeads(props) {
   const [startdate, setstartDate] = useState("");
   const [enddate, setendDate] = useState("");
   const [isError, setisError] = useState(false);
-  const { register, handleSubmit, errors, clearErrors } = useForm();
+  const [isLoading, setisLoading] = useState(false);
   let statusData = getStatusData();
   let campaignData = getCampaign();
   const queryy = useQueryy();
@@ -219,6 +215,7 @@ export default function MyLeads(props) {
   }
   let history = useHistory();
   const fetchMyLeads = async () => {
+    setisLoading(true)
     const headers = { 'Authorization': `Token ${profileData.token}` }
     await axios.get(`${baseUrl}/leads/fetchUpdatedLeadsUserWise/?status=${filterstatus}&start_date=${startDate}&end_date=${endDate}&sub_status=${sub_status}&campaign_category=${campaign_category}`, { headers })
       .then((response) => {
@@ -228,6 +225,7 @@ export default function MyLeads(props) {
         setNextPage(response.data.next);
         setMyLeads(response.data.results);
         setTotalLeads(response.data.count);
+        setisLoading(false)
       }).catch((error) => {
         console.log(error);
       })
@@ -240,6 +238,7 @@ export default function MyLeads(props) {
     // props.mainMenuCallBack(true, leadId);
   }
   const nextPageHandler = async () => {
+    setisLoading(true)
     const headers = { 'Authorization': `Token ${profileData.token}` }
     await axios.get(`${baseUrl}/leads/fetchUpdatedLeadsUserWise/?${splitUrl(nextPage)}`, { headers })
       .then((response) => {
@@ -249,11 +248,13 @@ export default function MyLeads(props) {
         setPrevPage(response.data.previous);
         setNextPage(response.data.next);
         setMyLeads(response.data.results);
+        setisLoading(false)
       }).catch((error) => {
-        console.log(error)
+        setisLoading(false)
       })
   }
   const prevPageHandler = async () => {
+    setisLoading(true)
     const headers = { 'Authorization': `Token ${profileData.token}` }
     await axios.get(`${baseUrl}/leads/fetchUpdatedLeadsUserWise/?${splitUrl(prevPage)}`, { headers })
       .then((response) => {
@@ -263,8 +264,9 @@ export default function MyLeads(props) {
         setPrevPage(response.data.previous);
         setNextPage(response.data.next);
         setMyLeads(response.data.results);
+        setisLoading(false)
       }).catch((error) => {
-        console.log(error)
+        setisLoading(false)
       })
   }
   const removeDuplicateStatus = (data) => {
@@ -383,7 +385,7 @@ export default function MyLeads(props) {
     <PageLayerSection>
       <Drawer anchor='right' open={state} onClose={closeDrawer}>
         <div className="rightContainerForm">
-          <form onSubmit={handleSubmit()}>
+          <form>
             <Grid container justifyContent="flex-start"><h4>Search Here</h4></Grid>
             <Grid>
               <TextField
@@ -542,7 +544,9 @@ export default function MyLeads(props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {myLeads.length !== 0 ?
+            {isLoading ? <div className="loader">
+              <CircularProgress size={100} thickness={3} />
+            </div> : myLeads.length !== 0 ?
               myLeads.map((my_leads, index) => {
                 let leadPhoneNo = maskPhoneNo(my_leads.lead.phone_no)
                 return (
@@ -594,7 +598,7 @@ export default function MyLeads(props) {
           </Snackbar>
         </div>
       </TableContainer>
-      <div className={classes.tablePagination}>
+      {isLoading ? '' : <div className={classes.tablePagination}>
         <div className={classes.rowsPerPageContainer}>
           <div className={classes.rowsText}>Rows Per Page: {rowsPerPage}</div>
         </div>
@@ -619,7 +623,7 @@ export default function MyLeads(props) {
             <ChevronRightOutlinedIcon className={nextPage !== null ? classes.activeColor : ''} />
           </IconButton>}
         </div>
-      </div>
+      </div>}
     </PageLayerSection >
   );
 }
