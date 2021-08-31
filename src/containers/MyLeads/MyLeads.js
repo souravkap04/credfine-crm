@@ -10,7 +10,7 @@ import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
 import axios from 'axios';
 import baseUrl from '../../global/api';
-import { getProfileData } from '../../global/leadsGlobalData'
+import { getCampaign, getProfileData, getStatusData } from '../../global/leadsGlobalData'
 import { Typography } from '@material-ui/core';
 import ChevronLeftOutlinedIcon from '@material-ui/icons/ChevronLeftOutlined';
 import ChevronRightOutlinedIcon from '@material-ui/icons/ChevronRightOutlined';
@@ -32,6 +32,7 @@ import { useForm } from "react-hook-form";
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import filter from '../../images/filter.png';
+import { useQueryy } from '../../global/query';
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -166,6 +167,19 @@ const useStyles = makeStyles({
     wordBreak: 'break-word'
   }
 });
+function formatDate(date) {
+  var d = new Date(date),
+    month = '' + (d.getMonth() + 1),
+    day = '' + d.getDate(),
+    year = d.getFullYear();
+
+  if (month.length < 2)
+    month = '0' + month;
+  if (day.length < 2)
+    day = '0' + day;
+
+  return [year, month, day].join('-');
+}
 export default function MyLeads(props) {
   const classes = useStyles();
   const profileData = getProfileData();
@@ -182,7 +196,21 @@ export default function MyLeads(props) {
   const [vertageCall, setVertageCall] = useState(false);
   const [disableHangupBtn, setDisableHangupBtn] = useState(true);
   const [state, setState] = useState(false);
+  const [status, setStatus] = useState('');
+  const [subStatus, setSubStatus] = useState([]);
+  const [campaign, setCampaign] = useState([]);
+  const [startdate, setstartDate] = useState("");
+  const [enddate, setendDate] = useState("");
+  const [isError, setisError] = useState(false);
   const { register, handleSubmit, errors, clearErrors } = useForm();
+  let statusData = getStatusData();
+  let campaignData = getCampaign();
+  const queryy = useQueryy();
+  const filterstatus = queryy.get("status") || "";
+  const startDate = queryy.get("start_date") || "";
+  const endDate = queryy.get("end_date") || "";
+  const sub_status = queryy.get("sub_status") || "";
+  const campaign_category = queryy.get("campaign_category") || "";
   const splitUrl = (data) => {
     if (data !== null) {
       const [url, pager] = data.split('?');
@@ -190,23 +218,23 @@ export default function MyLeads(props) {
     }
   }
   let history = useHistory();
+  const fetchMyLeads = async () => {
+    const headers = { 'Authorization': `Token ${profileData.token}` }
+    await axios.get(`${baseUrl}/leads/fetchUpdatedLeadsUserWise/?status=${filterstatus}&start_date=${startDate}&end_date=${endDate}&sub_status=${sub_status}&campaign_category=${campaign_category}`, { headers })
+      .then((response) => {
+        setRowsPerPage(response.data.results.length)
+        settotalDataPerPage(response.data.results.length)
+        setPrevPage(response.data.previous);
+        setNextPage(response.data.next);
+        setMyLeads(response.data.results);
+        setTotalLeads(response.data.count);
+      }).catch((error) => {
+        console.log(error);
+      })
+  };
   useEffect(() => {
-    const fetchMyLeads = async () => {
-      const headers = { 'Authorization': `Token ${profileData.token}` }
-      await axios.get(`${baseUrl}/leads/fetchUpdatedLeadsUserWise/`, { headers })
-        .then((response) => {
-          setRowsPerPage(response.data.results.length)
-          settotalDataPerPage(response.data.results.length)
-          setPrevPage(response.data.previous);
-          setNextPage(response.data.next);
-          setMyLeads(response.data.results);
-          setTotalLeads(response.data.count);
-        }).catch((error) => {
-          console.log(error);
-        })
-    };
     fetchMyLeads();
-  }, [])
+  }, [filterstatus, startDate, endDate, subStatus, campaign_category])
   const leadDetailsHandler = (leadId) => {
     history.push(`/dashboards/myleads/edit/${leadId}`);
     // props.mainMenuCallBack(true, leadId);
@@ -239,7 +267,26 @@ export default function MyLeads(props) {
         console.log(error)
       })
   }
-
+  const removeDuplicateStatus = (data) => {
+    let unique = [];
+    data.forEach((element) => {
+      if (!unique.includes(element.status)) {
+        unique.push(element.status)
+      }
+    })
+    return unique;
+  }
+  const uniqueStatus = removeDuplicateStatus(statusData);
+  const subStatusHandler = () => {
+    let subStatusoptions = [];
+    statusData.forEach((item, index) => {
+      if (item.status === status) {
+        subStatusoptions.push(item.sub_status);
+      }
+    })
+    return subStatusoptions;
+  }
+  const options = subStatusHandler();
   const maskPhoneNo = (phoneNo) => {
     let data = phoneNo;
     let unMaskdata = data.slice(-4);
@@ -314,9 +361,23 @@ export default function MyLeads(props) {
   const openDrawer = () => {
     setState(true)
   }
+
+  const filterSubmit = () => {
+    if (startdate !== "" && enddate === "") {
+      setisError(true)
+      return;
+    }
+    history.push(`/dashboards/myleads/?status=${status}&start_date=${startdate}&end_date=${enddate}&sub_status=${subStatus}&campaign_category=${campaign}`)
+    closeDrawer()
+  }
   const closeDrawer = () => {
     setState(false)
-    clearErrors()
+    setisError(false)
+    setStatus('')
+    setstartDate('')
+    setendDate('')
+    setSubStatus('')
+    setCampaign('')
   };
   return (
     <PageLayerSection>
@@ -334,11 +395,15 @@ export default function MyLeads(props) {
                 margin="normal"
                 InputLabelProps={{
                   shrink: true,
-                  required: true
+                }}
+                inputProps={{
+                  max: formatDate(new Date())
                 }}
                 variant="outlined"
                 size="small"
-                name="fromDate"
+                value={startdate}
+                onChange={(e) => setstartDate(e.target.value)}
+
               />
             </Grid>
             <Grid>
@@ -352,11 +417,20 @@ export default function MyLeads(props) {
                 margin="normal"
                 InputLabelProps={{
                   shrink: true,
-                  required: true
+                }}
+                inputProps={{
+                  max: formatDate(new Date())
                 }}
                 variant="outlined"
                 size="small"
-                name="toDate"
+                value={enddate}
+                onChange={(e) => {
+                  setendDate(e.target.value)
+                  setisError(false)
+                }}
+                disabled={startdate !== "" ? false : true}
+                error={Boolean(isError ? true : false)}
+                helperText={isError ? "End Date is requireds" : ""}
               />
             </Grid>
             <Grid>
@@ -369,16 +443,19 @@ export default function MyLeads(props) {
                 margin="normal"
                 InputLabelProps={{
                   shrink: true,
-                  required: true
                 }}
                 SelectProps={{
                   native: true
                 }}
                 variant="outlined"
                 size="small"
-                name="status"
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
               >
                 <option value="">Select</option>
+                {uniqueStatus.map((item, index) => (
+                  <option key={index} value={item}>{item}</option>
+                ))}
               </TextField>
             </Grid>
             <Grid>
@@ -391,20 +468,48 @@ export default function MyLeads(props) {
                 margin="normal"
                 InputLabelProps={{
                   shrink: true,
-                  required: true
                 }}
                 SelectProps={{
                   native: true
                 }}
                 variant="outlined"
                 size="small"
-                name="substatus"
+                value={subStatus}
+                onChange={(e) => { setSubStatus(e.target.value) }}
               >
                 <option value="">Select</option>
+                {options.map((item, index) => (
+                  <option key={index} value={item}>{item}</option>
+                ))}
               </TextField>
             </Grid>
             <Grid>
-              <Button className="submitBtn" color='primary' variant='contained'>Submit</Button>
+              <TextField
+                className="textField"
+                select
+                id="outlined-full-width"
+                label="Select Campaign"
+                style={{ margin: 8 }}
+                margin="normal"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                SelectProps={{
+                  native: true
+                }}
+                variant="outlined"
+                size="small"
+                value={campaign}
+                onChange={(e) => { setCampaign(e.target.value) }}
+              >
+                <option value="">Select</option>
+                {campaignData.map((item, index) => (
+                  <option key={index} value={item}>{item}</option>
+                ))}
+              </TextField>
+            </Grid>
+            <Grid>
+              <Button onClick={() => filterSubmit()} className="submitBtn" color='primary' variant='contained'>Submit</Button>
             </Grid>
           </form>
         </div>
@@ -422,9 +527,6 @@ export default function MyLeads(props) {
         <Table className={classes.table} aria-label="simple table">
           <TableHead className={classes.tableheading}>
             <TableRow>
-              {/* <TableCell padding="checkbox">
-                <Checkbox className={classes.checkboxFix} />
-              </TableCell> */}
               <TableCell className={classes.tableheading}>Sl No</TableCell>
               <TableCell className={classes.tableheading}>Lead ID</TableCell>
               <TableCell className={classes.tableheading}>Name</TableCell>
@@ -445,26 +547,23 @@ export default function MyLeads(props) {
                 let leadPhoneNo = maskPhoneNo(my_leads.lead.phone_no)
                 return (
                   <TableRow className={classes.oddEvenRow} key={index}>
-                    {/* <TableCell padding="checkbox">
-                      <Checkbox className={classes.checkboxFixData} />
-                    </TableCell> */}
                     <TableCell className={classes.tabledata}>{index + 1}</TableCell>
                     <TableCell className={classes.tabledata, classes.leadid}
                       onClick={() => leadDetailsHandler(my_leads.lead.lead_crm_id)}
                     >{my_leads.lead.lead_crm_id}</TableCell>
-                    <TableCell className={classes.tabledata}>{my_leads.lead.name}</TableCell>
-                    <TableCell className={classes.tabledata}>{leadPhoneNo}</TableCell>
-                    <TableCell className={classes.tabledata}>{my_leads.lead.loan_amount}</TableCell>
+                    <TableCell className={classes.tabledata}>{my_leads.lead.name ? my_leads.lead.name : 'NA'}</TableCell>
+                    <TableCell className={classes.tabledata}>{leadPhoneNo ? leadPhoneNo : 'NA'}</TableCell>
+                    <TableCell className={classes.tabledata}>{my_leads.lead.loan_amount ? my_leads.lead.loan_amount : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>{my_leads.lead.data.monthly_income}</TableCell>
-                    <TableCell className={classes.tabledata}>{my_leads.lead.data.current_company_name}</TableCell>
-                    <TableCell className={classes.tabledata}>{my_leads.lead.loan_type}</TableCell>
+                    <TableCell className={classes.tabledata}>{my_leads.lead.data.current_company_name ? my_leads.lead.data.current_company_name : 'NA'}</TableCell>
+                    <TableCell className={classes.tabledata}>{my_leads.lead.loan_type ? my_leads.lead.loan_type : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>
                       <div className={classes.loanTypeButton}>
                         <div className={classes.loanButtonText}>{my_leads.lead.status}</div>
                       </div>
                     </TableCell>
-                    <TableCell className={classes.tabledata}>{my_leads.lead.sub_status}</TableCell>
-                    <TableCell className={classes.tabledata}>{my_leads.lead.campaign_category}</TableCell>
+                    <TableCell className={classes.tabledata}>{my_leads.lead.sub_status ? my_leads.lead.sub_status : 'NA'}</TableCell>
+                    <TableCell className={classes.tabledata}>{my_leads.lead.campaign_category ? my_leads.lead.campaign_category : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>
                       <Tooltip title="Call Customer">
                         <IconButton className={classes.callButton} onClick={() => clickToCall(my_leads.lead.phone_no, my_leads.lead.lead_crm_id)}>

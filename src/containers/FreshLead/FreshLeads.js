@@ -23,26 +23,19 @@ import PageLayerSection from '../PageLayerSection/PageLayerSection';
 import clsx from 'clsx';
 const useStyles = makeStyles({
   container: {
-    // margin: '25px',
     overflow: 'auto',
-    // maxHeight: '550px',
     marginBottom: '10px'
   },
   table: {
     width: '100%',
   },
   tableheading: {
-    // padding: '0 8px',
-    // fontSize: '12px',
-    // textAlign: 'center'
     backgroundColor: '#8f9bb3',
     color: '#ffffff',
     fontSize: '14px',
   },
   tabledata: {
-    // padding: '0 8px',
     fontSize: '12px',
-    // textAlign: 'center'
   },
   tablePagination: {
     backgroundColor: '#ffffff',
@@ -226,9 +219,6 @@ export default function FreshLead() {
         <Table className={classes.table} aria-label="simple table">
           <TableHead className={classes.tableheading}>
             <TableRow>
-              {/* <TableCell padding="checkbox">
-                <Checkbox className={classes.checkboxFix} />
-              </TableCell> */}
               <TableCell className={classes.tableheading}>Sl No</TableCell>
               <TableCell className={classes.tableheading}>Lead ID</TableCell>
               <TableCell className={classes.tableheading}>Name</TableCell>
@@ -248,25 +238,21 @@ export default function FreshLead() {
               freshLeads.map((lead, index) => {
                 return (
                   <TableRow className={classes.oddEvenRow} key={index}>
-                    {/* {settotalDataPerPage(index)} */}
-                    {/* <TableCell padding="checkbox">
-                      <Checkbox className={classes.checkboxFixData} />
-                    </TableCell> */}
-                    <TableCell className={classes.tabledata}>{index+1}</TableCell>
+                    <TableCell className={classes.tabledata}>{index + 1}</TableCell>
                     <TableCell className={classes.tabledata}>{lead.lead_crm_id}</TableCell>
-                    <TableCell className={classes.tabledata}>{lead.name}</TableCell>
-                    <TableCell className={classes.tabledata}>{lead.phone_no}</TableCell>
-                    <TableCell className={classes.tabledata}>{lead.loan_amount}</TableCell>
-                    <TableCell className={classes.tabledata}>{lead.data.monthly_income}</TableCell>
-                    <TableCell className={classes.tabledata}>{lead.data.current_company_name}</TableCell>
-                    <TableCell className={classes.tabledata}>{lead.loan_type}</TableCell>
+                    <TableCell className={classes.tabledata}>{lead.name ? lead.name : 'NA'}</TableCell>
+                    <TableCell className={classes.tabledata}>{lead.phone_no ? lead.phone_no : 'NA'}</TableCell>
+                    <TableCell className={classes.tabledata}>{lead.loan_amount ? lead.loan_amount : 'NA'}</TableCell>
+                    <TableCell className={classes.tabledata}>{lead.data.monthly_income ? lead.data.monthly_income : 'NA'}</TableCell>
+                    <TableCell className={classes.tabledata}>{lead.data.current_company_name ? lead.data.current_company_name : 'NA'}</TableCell>
+                    <TableCell className={classes.tabledata}>{lead.loan_type ? lead.loan_type : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>
                       <div className={classes.loanTypeButton}>
                         <div className={classes.loanButtonText}>{lead.status}</div>
                       </div>
                     </TableCell>
-                    <TableCell className={classes.tabledata}>{lead.sub_status}</TableCell>
-                    <TableCell className={classes.tabledata}>{lead.campaign_category}</TableCell>
+                    <TableCell className={classes.tabledata}>{lead.sub_status ? lead.sub_status : 'NA'}</TableCell>
+                    <TableCell className={classes.tabledata}>{lead.campaign_category ? lead.campaign_category : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>
                       <Tooltip title="Delete Lead">
                         <IconButton onClick={() => deleteFreshLead(lead.lead_crm_id)}>

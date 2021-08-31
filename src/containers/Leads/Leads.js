@@ -387,17 +387,11 @@ export default function Leads() {
         <Table className={classes.table} aria-label="simple table">
           <TableHead className={classes.tableheading}>
             <TableRow>
-              {/* <TableCell padding="checkbox">
-                <Checkbox className={classes.checkboxFix} />
-              </TableCell> */}
               <TableCell className={classes.tableheading}>Lead ID</TableCell>
               <TableCell className={classes.tableheading} >Name</TableCell>
               <TableCell className={classes.tableheading} >Mobile</TableCell>
               <TableCell className={classes.tableheading} >Loan Amt</TableCell>
-              {/* <TableCell className={classes.tableheading} >Date of Birth</TableCell> */}
               <TableCell className={classes.tableheading}>Income</TableCell>
-              {/* <TableCell className={classes.tableheading} >Company</TableCell> */}
-              {/* <TableCell className={classes.tableheading} >Pin Code</TableCell> */}
               <TableCell className={classes.tableheading} >Company</TableCell>
               <TableCell className={classes.tableheading} >Loan Type</TableCell>
               <TableCell className={clsx(classes.tableheading, classes.statusHeading)} >Status</TableCell>
@@ -414,29 +408,23 @@ export default function Leads() {
                     let leadPhoneNo = maskPhoneNo(search.phone_no);
                     return (
                       <TableRow className={classes.oddEvenRow} key={index}>
-                        {/* <TableCell padding="checkbox">
-                          <Checkbox />
-                        </TableCell> */}
                         <TableCell className={classes.tabledata, classes.click}
                           onClick={() => routeChangeHAndler(search.lead_crm_id)}
                         >{search.lead_crm_id}
                         </TableCell>
-                        <TableCell className={classes.tabledata}>{search.name}</TableCell>
-                        <TableCell className={classes.tabledata}>{leadPhoneNo}</TableCell>
-                        <TableCell className={classes.tabledata}>{search.loan_amount}</TableCell>
-                        {/* <TableCell className={classes.tabledata}>{search.data.dob}</TableCell> */}
-                        <TableCell className={classes.tabledata}>{search.data.monthly_income}</TableCell>
-                        {/* <TableCell className={classes.tabledata}>{search.data.residential_pincode}</TableCell> */}
-                        {/* <TableCell className={classes.tabledata}>{search.data.current_company}</TableCell> */}
-                        <TableCell className={classes.tabledata}>{search.data.current_company_name}</TableCell>
+                        <TableCell className={classes.tabledata}>{search.name ? search.name : 'NA'}</TableCell>
+                        <TableCell className={classes.tabledata}>{leadPhoneNo ? leadPhoneNo : 'NA'}</TableCell>
+                        <TableCell className={classes.tabledata}>{search.loan_amount ? search.loan_amount : 'NA'}</TableCell>
+                        <TableCell className={classes.tabledata}>{search.data.monthly_income ? search.data.monthly_income : 'NA'}</TableCell>
+                        <TableCell className={classes.tabledata}>{search.data.current_company_name ? search.data.current_company_name : 'NA'}</TableCell>
                         <TableCell className={classes.tabledata}>{search.loan_type}</TableCell>
                         <TableCell className={classes.tabledata}>
                           <div className={classes.loanTypeButton}>
                             <div className={classes.loanButtonText}>{search.status}</div>
                           </div>
                         </TableCell>
-                        <TableCell className={classes.tabledata}>{search.sub_status}</TableCell>
-                        <TableCell className={classes.tabledata}>{search.campaign_category}</TableCell>
+                        <TableCell className={classes.tabledata}>{search.sub_status ? search.sub_status : 'NA'}</TableCell>
+                        <TableCell className={classes.tabledata}>{search.campaign_category ? search.campaign_category : 'NA'}</TableCell>
                         <TableCell>
                           <Tooltip title="Call Customer">
                             <IconButton className={classes.callButton} onClick={() => clickToCall(search.phone_no, search.lead_crm_id)}>
@@ -450,28 +438,22 @@ export default function Leads() {
 
                 : (Object.keys(leadData).length !== 0 ?
                   <TableRow className={classes.oddEvenRow}>
-                    {/* <TableCell padding="checkbox">
-                      <Checkbox />
-                    </TableCell> */}
                     <TableCell className={classes.tabledata, classes.click}
                       onClick={() => routeChangeHAndler(leadData.lead_crm_id)}
                     >{leadData.lead_crm_id} </TableCell>
-                    <TableCell className={classes.tabledata}>{leadData.name}</TableCell>
-                    <TableCell className={classes.tabledata}>{maskPhoneNo(leadData.phone_no)}</TableCell>
-                    <TableCell className={classes.tabledata}>{leadData.loan_amount}</TableCell>
-                    {/* <TableCell className={classes.tabledata}>{leadData.data['dob']}</TableCell> */}
-                    <TableCell className={classes.tabledata}>{leadData.data['monthly_income']}</TableCell>
-                    {/* <TableCell className={classes.tabledata}>{leadData.data['current_company']}</TableCell> */}
-                    {/* <TableCell className={classes.tabledata}>{leadData.data['residential_pincode']}</TableCell> */}
-                    <TableCell className={classes.tabledata}>{leadData.data['current_company_name']}</TableCell>
-                    <TableCell className={classes.tabledata}>{leadData.loan_type}</TableCell>
+                    <TableCell className={classes.tabledata}>{leadData.name ? leadData.name : 'NA'}</TableCell>
+                    <TableCell className={classes.tabledata}>{maskPhoneNo(leadData.phone_no) ? maskPhoneNo(leadData.phone_no) : 'NA'}</TableCell>
+                    <TableCell className={classes.tabledata}>{leadData.loan_amount ? leadData.loan_amount : 'NA'}</TableCell>
+                    <TableCell className={classes.tabledata}>{leadData.data['monthly_income'] ? leadData.data['monthly_income'] : 'NA'}</TableCell>
+                    <TableCell className={classes.tabledata}>{leadData.data['current_company_name'] ? leadData.data['current_company_name'] : 'NA'}</TableCell>
+                    <TableCell className={classes.tabledata}>{leadData.loan_type ? leadData.loan_type : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>
                       <div className={classes.loanTypeButton}>
                         <div className={classes.loanButtonText}>{leadData.status}</div>
                       </div>
                     </TableCell>
-                    <TableCell className={classes.tabledata}>{leadData.sub_status}</TableCell>
-                    <TableCell className={classes.tabledata}>{leadData.campaign_category}</TableCell>
+                    <TableCell className={classes.tabledata}>{leadData.sub_status ? leadData.sub_status : 'NA'}</TableCell>
+                    <TableCell className={classes.tabledata}>{leadData.campaign_category ? leadData.campaign_category : 'NA'}</TableCell>
                     <TableCell>
                       <Tooltip title="Call Customer">
                         <IconButton className={classes.callButton} onClick={() => clickToCall(leadData.phone_no, leadData.lead_crm_id)}>
@@ -493,11 +475,6 @@ export default function Leads() {
               />
             </div>
             <div>
-              {/* <Dialog open={vertageCall} onClose={disableDialerPopUp}>
-                <DialogContent>
-                  <p>Calling...</p>
-                </DialogContent>
-              </Dialog> */}
               <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={vertageCall} autoHideDuration={3000} onClose={disableDialerPopUp}>
                 <Alert onClose={disableDialerPopUp} severity="info">
                   Calling...
