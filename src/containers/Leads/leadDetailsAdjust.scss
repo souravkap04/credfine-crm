@@ -5,7 +5,17 @@ $desk: 100 / 1440;
 .Toastify__progress-bar--default {
     background: #14cc9e;
 }
-
+.loader {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 45vh;
+    width: 80%;
+    .MuiCircularProgress-colorPrimary {
+        color: #535ad1;
+    }
+}
 // Lead Page CSS
 .rightContainerForm {
     width: 23vw;
@@ -28,17 +38,24 @@ $desk: 100 / 1440;
     .textField {
         width: 260 * $desk + vw;
         margin-top: 14 * $desk + vw !important;
-        margin-bottom: 14 * $desk + vw !important;
+        // margin-bottom: 14 * $desk + vw !important;
         font-family: "Lato";
         label {
             color: #535ad1;
             letter-spacing: 0.4px;
-            font-size: 15.5px;
+            font-size: 15.5;
             font-family: "Lato";
             span {
+                position: absolute;
                 color: red;
+                font-size: 22px;
+                top: -25px;
+                margin-left: 2px;
             }
         }
+        // .MuiInputLabel-outlined.MuiInputLabel-shrink {
+        //     transform: translate(14px, -10px) scale(0.75);
+        // }
         .MuiOutlinedInput-root {
             height: 48 * $desk + vw;
         }

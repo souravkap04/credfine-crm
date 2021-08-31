@@ -65,7 +65,7 @@ function App() {
           {showStatusMessage}
         </Alert>
       </Snackbar>
-      <Snackbar anchorOrigin={{ vertical: "top", horizontal: "center" }} open={showStatus} onClose={disableConnection}>
+      <Snackbar anchorOrigin={{ vertical: "top", horizontal: "center" }} open={showStatus}>
         <Alert onClose={disableConnection} severity="error">
           {showStatusMessage}
         </Alert>
