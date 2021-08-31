@@ -131,8 +131,8 @@ export default function Login() {
                             <Typography>Email</Typography>
                             <TextField
                                 className={classes.input_field}
-                                placeholder="xyz@credfine.com"
-                                variant="filled"
+                                placeholder="info@credfine.com"
+                                variant="standard"
                                 fullWidth
                                 name="email"
                                 inputRef={register({
@@ -152,7 +152,7 @@ export default function Login() {
                             <Typography>Password</Typography>
                             <TextField
                                 className={classes.input_field}
-                                variant="filled"
+                                variant="standard"
                                 fullWidth
                                 type="password"
                                 name="password"
@@ -170,13 +170,13 @@ export default function Login() {
                                 }} />
                         </Grid>
                         <Grid item lg={12}>
-                            <Typography>Dialer</Typography>
+                            {/* <Typography>Dialer</Typography> */}
                             <FormControl
                                 className={classes.input_field}
                                 fullWidth
-                                variant="filled"
+                                variant="standard"
                                 error={Boolean(errors.dialer)}>
-                                <InputLabel>Select</InputLabel>
+                                <InputLabel>Select Dialer</InputLabel>
                                 <Controller
                                     render={(props) => (
                                         <Select value={props.value} onChange={props.onChange}>
@@ -198,13 +198,13 @@ export default function Login() {
                             </FormControl>
                         </Grid>
                         <Grid item lg={12}>
-                            <Typography>Campaign</Typography>
+                            {/* <Typography>Campaign</Typography> */}
                             <FormControl
                                 className={classes.input_field}
                                 fullWidth
-                                variant="filled"
+                                variant="standard"
                                 error={Boolean(errors.campaign)}>
-                                <InputLabel>Select</InputLabel>
+                                <InputLabel>Select Campaign</InputLabel>
                                 <Controller
                                     render={(props) => (
                                         <Select value={props.value} onChange={props.onChange}>

@@ -1,0 +1,16 @@
+$desk: 100 / 1440;
+.followUpBtnContainer {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 16 * $desk + vw;
+    .followbtn {
+        margin-right: 15 * $desk + vw;
+        margin-left: 15 * $desk + vw;
+    }
+    .followbtn button {
+        background-color: #535ad1;
+        span {
+            color: #fff;
+        }
+    }
+}

@@ -7,12 +7,9 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { Button, Dialog, DialogContent } from '@material-ui/core'
-import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import CallIcon from '@material-ui/icons/Call';
-import Checkbox from '@material-ui/core/Checkbox';
 import axios from 'axios';
 import baseUrl from '../../global/api';
 import { clickToCallApi, vertageDialerApi } from '../../global/callApi'
@@ -20,6 +17,13 @@ import { getProfileData } from '../../global/leadsGlobalData'
 import { useQueryy } from '../../global/query';
 import CallerDialogBox from './CallerDialog/CallerDialogBox';
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
+import { Drawer } from '@material-ui/core';
+import Grid from '@material-ui/core/Grid';
+import TextField from '@material-ui/core/TextField';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { Button } from '@material-ui/core';
+import { useForm } from "react-hook-form";
+import './leadDetailsAdjust.css';
 import clsx from 'clsx';
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -103,9 +107,9 @@ const useStyles = makeStyles({
     wordBreak: 'break-word'
   }
 });
-const Leads = ((props) => {
+export default function Leads() {
   const classes = useStyles();
-  const CancelToken = axios.CancelToken;
+  // const CancelToken = axios.CancelToken;
   const queryy = useQueryy();
   const leadQuery = queryy.get("query") || "";
   let history = useHistory();
@@ -119,21 +123,36 @@ const Leads = ((props) => {
   const [isSearchData, setisSearchData] = useState(false);
   const [vertageCall, setVertageCall] = useState(false);
   const [disableHangupBtn, setDisableHangupBtn] = useState(true);
-  const [storeLeadID, setstoreLeadID] = useState('')
+  const [state, setState] = useState(false);
+  const [loanAmount, setLoanAmount] = useState('');
+  const [employmentType, setEmploymentType] = useState('');
+  const [date, setDate] = useState("");
+  const [pincode, setPincode] = useState('');
+  const [companyName, setCompanyName] = useState('');
+  const [currentCompany, setCurrentCompany] = useState('');
+  const [campaign, setCampaign] = useState("");
+  const [validated, setValidated] = useState(false);
+  const [isDisplay, setIsDisplay] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [isLoading, setisLoading] = useState(false);
   useEffect(() => {
     leadQuery ? fetchSearchData(leadQuery) : fetchLeadsData();
   }, [leadQuery])
   const fetchSearchData = async (key) => {
     setisSearchData(true)
+    setisLoading(true)
     let headers = { 'Authorization': `Token ${profileData.token}` }
     await axios.get(`${baseUrl}/leads/search/${key}`, { headers })
       .then((response) => {
         setSearchData(response.data);
+        setisLoading(false)
       }).catch((error) => {
         console.log(error);
       })
   }
   const fetchLeadsData = async () => {
+    setisLoading(true)
     const headers = {
       'Authorization': `Token ${profileData.token}`,
       'userRoleHash': profileData.user_roles[0].user_role_hash,
@@ -142,6 +161,7 @@ const Leads = ((props) => {
     await axios.get(`${baseUrl}/leads/lead_allocate/${profileData.campaign_category}`, { headers })
       .then((response) => {
         setLeadData(response.data);
+        setisLoading(false)
       }).catch((error) => {
         console.log(error);
       })
@@ -223,23 +243,185 @@ const Leads = ((props) => {
     setVertageCall(false)
     setDisableHangupBtn(false)
   }
+  const { register, handleSubmit, errors, clearErrors } = useForm();
+  const personalLoanSubmitHandler = async (data) => {
+    const { fullName, mobileNo, monthlyIncome } = data;
+    let item = {
+      loan_amount: loanAmount, monthly_income: monthlyIncome, dob: date, phone_no: mobileNo,
+      residential_pincode: pincode, current_company_name: companyName, name: fullName, loan_type: "PL",
+      current_company: currentCompany, employment_type: employmentType, campaign_category: campaign
+    };
+    let headers = {
+      'Authorization': `Token ${profileData.token}`,
+      'Content-Type': 'application/json'
+    }
+    await axios.post(`${baseUrl}/leads/lead_create/`, item, { headers })
+      .then((response) => {
+        if (response.status === 201) {
+          setAlertMessage(response.data.message)
+          setIsDisplay(true);
+        }
+        setTimeout(() => {
+          closeDrawer()
+          fetchLeadsData()
+        }, 1500)
+      }).catch((error) => {
+        if (error.response.status === 400) {
+          setAlertMessage("Mobile Number Already Exist")
+          setIsError(true);
+        } else {
+          setAlertMessage("Something wrong")
+          setIsError(true);
+        }
+      })
+  }
+  const openDrawer = () => {
+    setState(true)
+  }
+  const closeDrawer = () => {
+    setState(false)
+    clearErrors()
+    setCampaign('')
+  };
+  const closeSnankBar = () => {
+    setIsDisplay(false);
+    setIsError(false);
+  }
   return (
-    <PageLayerSection>
+    <PageLayerSection addLeadButton={true} onClick={() => openDrawer()}>
+      <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isDisplay} autoHideDuration={1500} onClose={closeSnankBar}>
+        <Alert onClose={closeSnankBar} severity="success">
+          {alertMessage}
+        </Alert>
+      </Snackbar>
+      <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isError} autoHideDuration={1500} onClose={closeSnankBar}>
+        <Alert onClose={closeSnankBar} severity="error">
+          {alertMessage}
+        </Alert>
+      </Snackbar>
+      <Drawer anchor='right' open={state} onClose={closeDrawer}>
+        <div className="rightContainerForm">
+          <form onSubmit={handleSubmit(personalLoanSubmitHandler)}>
+            <Grid container justifyContent="flex-start"><h4>Add Leads</h4></Grid>
+            <Grid>
+              <TextField
+                className="textField"
+                type="text"
+                id="outlined-full-width"
+                label="Full Name As Per Pancard"
+                style={{ margin: 8 }}
+                margin="normal"
+                InputLabelProps={{
+                  shrink: true,
+                  required: true
+                }}
+                variant="outlined"
+                size="small"
+                name="fullName"
+                inputRef={register({
+                  required: 'Full name is required',
+                  pattern: {
+                    value: /^([a-zA-Z ]){2,30}$/g,
+                    message: 'please enter a valid full name'
+                  }
+                })}
+                error={Boolean(errors.fullName)}
+                helperText={errors.fullName?.type === "required" ? errors.fullName?.message : errors.fullName?.message}
+              />
+            </Grid>
+            <Grid>
+              <TextField
+                type="number"
+                className="textField"
+                id="outlined-full-width"
+                label="Mobile Number"
+                style={{ margin: 8 }}
+                margin="normal"
+                InputLabelProps={{
+                  shrink: true,
+                  required: true
+                }}
+                variant="outlined"
+                size="small"
+                name="mobileNo"
+                inputRef={register({
+                  required: 'Phone no is required',
+                  pattern: {
+                    value: /^[0-9]{10}$/g,
+                    message: 'Phone no should be 10 digits'
+                  }
+                })}
+                error={Boolean(errors.mobileNo)}
+                helperText={errors.mobileNo?.type === "required" ? errors.mobileNo?.message : errors.mobileNo?.message}
+              />
+            </Grid>
+            <Grid>
+              <TextField
+                type="number"
+                className="textField"
+                id="outlined-full-width"
+                label="Net Monthly Income"
+                style={{ margin: 8 }}
+                margin="normal"
+                InputLabelProps={{
+                  shrink: true,
+                  required: true
+                }}
+                variant="outlined"
+                size="small"
+                name="monthlyIncome"
+                inputRef={register({
+                  required: 'Net monthly income is required',
+                })}
+                error={Boolean(errors.monthlyIncome)}
+                helperText={errors.monthlyIncome?.type === "required" ? errors.monthlyIncome?.message : errors.monthlyIncome?.message}
+              />
+            </Grid>
+            <Grid>
+              <TextField
+                className="textField"
+                select
+                type="text"
+                // id="outlined-full-width"
+                label="Campaign"
+                style={{ margin: 8 }}
+                margin="normal"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                SelectProps={{
+                  native: true
+                }}
+                variant="outlined"
+                size="small"
+                value={campaign}
+                onChange={(e) => setCampaign(e.target.value)}
+              >
+                <option value=''>Select</option>
+                <option value='FRESH_PL_OD'>FRESH_PL_OD</option>
+                <option value='BT_PL_OD'>BT_PL_OD</option>
+                <option value='PL_OD_TOP_UP'>PL_OD_TOP_UP</option>
+                <option value='PRE_APPROVED'>PRE_APPROVED</option>
+                <option value='HOT_LEAD'>HOT_LEAD</option>
+                <option value='WEBSITE_LEAD'>WEBSITE_LEAD</option>
+                <option value='OTHER'>OTHER</option>
+              </TextField>
+            </Grid>
+            <Grid>
+              <Button type="submit" className="submitBtn" color='primary' variant='contained'>Submit</Button>
+            </Grid>
+          </form>
+        </div>
+      </Drawer>
       <TableContainer className={classes.container}>
         <Table className={classes.table} aria-label="simple table">
           <TableHead className={classes.tableheading}>
             <TableRow>
-              {/* <TableCell padding="checkbox">
-                <Checkbox className={classes.checkboxFix} />
-              </TableCell> */}
               <TableCell className={classes.tableheading}>Lead ID</TableCell>
               <TableCell className={classes.tableheading} >Name</TableCell>
               <TableCell className={classes.tableheading} >Mobile</TableCell>
               <TableCell className={classes.tableheading} >Loan Amt</TableCell>
-              {/* <TableCell className={classes.tableheading} >Date of Birth</TableCell> */}
               <TableCell className={classes.tableheading}>Income</TableCell>
-              {/* <TableCell className={classes.tableheading} >Company</TableCell> */}
-              {/* <TableCell className={classes.tableheading} >Pin Code</TableCell> */}
               <TableCell className={classes.tableheading} >Company</TableCell>
               <TableCell className={classes.tableheading} >Loan Type</TableCell>
               <TableCell className={clsx(classes.tableheading, classes.statusHeading)} >Status</TableCell>
@@ -249,80 +431,69 @@ const Leads = ((props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {
-              isSearchData ? (
-                searchData.length !== 0 ?
-                  searchData.map((search, index) => {
-                    let leadPhoneNo = maskPhoneNo(search.phone_no);
-                    return (
-                      <TableRow className={classes.oddEvenRow} key={index}>
-                        {/* <TableCell padding="checkbox">
-                          <Checkbox />
-                        </TableCell> */}
-                        <TableCell className={classes.tabledata, classes.click}
-                          onClick={() => routeChangeHAndler(search.lead_crm_id)}
-                        >{search.lead_crm_id}
-                        </TableCell>
-                        <TableCell className={classes.tabledata}>{search.name}</TableCell>
-                        <TableCell className={classes.tabledata}>{leadPhoneNo}</TableCell>
-                        <TableCell className={classes.tabledata}>{search.loan_amount}</TableCell>
-                        {/* <TableCell className={classes.tabledata}>{search.data.dob}</TableCell> */}
-                        <TableCell className={classes.tabledata}>{search.data.monthly_income}</TableCell>
-                        {/* <TableCell className={classes.tabledata}>{search.data.residential_pincode}</TableCell> */}
-                        {/* <TableCell className={classes.tabledata}>{search.data.current_company}</TableCell> */}
-                        <TableCell className={classes.tabledata}>{search.data.current_company_name}</TableCell>
-                        <TableCell className={classes.tabledata}>{search.loan_type}</TableCell>
-                        <TableCell className={classes.tabledata}>
-                          <div className={classes.loanTypeButton}>
-                            <div className={classes.loanButtonText}>{search.status}</div>
-                          </div>
-                        </TableCell>
-                        <TableCell className={classes.tabledata}>{search.sub_status}</TableCell>
-                        <TableCell className={classes.tabledata}>{search.campaign_category}</TableCell>
-                        <TableCell>
-                          <Tooltip title="Call Customer">
-                            <IconButton className={classes.callButton} onClick={() => clickToCall(search.phone_no, search.lead_crm_id)}>
-                              <CallIcon className={classes.callIcon} />
-                            </IconButton>
-                          </Tooltip>
-                        </TableCell>
-                      </TableRow>
-                    )
-                  }) : <span className={classes.emptydata}> No Data Found </span>)
+            {isLoading ? <div className="loader">
+              <CircularProgress size={100} thickness={3} />
+            </div> : isSearchData ? (
+              searchData.length !== 0 ?
+                searchData.map((search, index) => {
+                  let leadPhoneNo = maskPhoneNo(search.phone_no);
+                  return (
+                    <TableRow className={classes.oddEvenRow} key={index}>
+                      <TableCell className={classes.tabledata, classes.click}
+                        onClick={() => routeChangeHAndler(search.lead_crm_id)}
+                      >{search.lead_crm_id}
+                      </TableCell>
+                      <TableCell className={classes.tabledata}>{search.name ? search.name : 'NA'}</TableCell>
+                      <TableCell className={classes.tabledata}>{leadPhoneNo ? leadPhoneNo : 'NA'}</TableCell>
+                      <TableCell className={classes.tabledata}>{search.loan_amount ? search.loan_amount : 'NA'}</TableCell>
+                      <TableCell className={classes.tabledata}>{search.data.monthly_income ? search.data.monthly_income : 'NA'}</TableCell>
+                      <TableCell className={classes.tabledata}>{search.data.current_company_name ? search.data.current_company_name : 'NA'}</TableCell>
+                      <TableCell className={classes.tabledata}>{search.loan_type}</TableCell>
+                      <TableCell className={classes.tabledata}>
+                        <div className={classes.loanTypeButton}>
+                          <div className={classes.loanButtonText}>{search.status}</div>
+                        </div>
+                      </TableCell>
+                      <TableCell className={classes.tabledata}>{search.sub_status ? search.sub_status : 'NA'}</TableCell>
+                      <TableCell className={classes.tabledata}>{search.campaign_category ? search.campaign_category : 'NA'}</TableCell>
+                      <TableCell>
+                        <Tooltip title="Call Customer">
+                          <IconButton className={classes.callButton} onClick={() => clickToCall(search.phone_no, search.lead_crm_id)}>
+                            <CallIcon className={classes.callIcon} />
+                          </IconButton>
+                        </Tooltip>
+                      </TableCell>
+                    </TableRow>
+                  )
+                }) : <span className={classes.emptydata}> No Data Found </span>)
 
-                : (Object.keys(leadData).length !== 0 ?
-                  <TableRow className={classes.oddEvenRow}>
-                    {/* <TableCell padding="checkbox">
-                      <Checkbox />
-                    </TableCell> */}
-                    <TableCell className={classes.tabledata, classes.click}
-                      onClick={() => routeChangeHAndler(leadData.lead_crm_id)}
-                    >{leadData.lead_crm_id} </TableCell>
-                    <TableCell className={classes.tabledata}>{leadData.name}</TableCell>
-                    <TableCell className={classes.tabledata}>{maskPhoneNo(leadData.phone_no)}</TableCell>
-                    <TableCell className={classes.tabledata}>{leadData.loan_amount}</TableCell>
-                    {/* <TableCell className={classes.tabledata}>{leadData.data['dob']}</TableCell> */}
-                    <TableCell className={classes.tabledata}>{leadData.data['monthly_income']}</TableCell>
-                    {/* <TableCell className={classes.tabledata}>{leadData.data['current_company']}</TableCell> */}
-                    {/* <TableCell className={classes.tabledata}>{leadData.data['residential_pincode']}</TableCell> */}
-                    <TableCell className={classes.tabledata}>{leadData.data['current_company_name']}</TableCell>
-                    <TableCell className={classes.tabledata}>{leadData.loan_type}</TableCell>
-                    <TableCell className={classes.tabledata}>
-                      <div className={classes.loanTypeButton}>
-                        <div className={classes.loanButtonText}>{leadData.status}</div>
-                      </div>
-                    </TableCell>
-                    <TableCell className={classes.tabledata}>{leadData.sub_status}</TableCell>
-                    <TableCell className={classes.tabledata}>{leadData.campaign_category}</TableCell>
-                    <TableCell>
-                      <Tooltip title="Call Customer">
-                        <IconButton className={classes.callButton} onClick={() => clickToCall(leadData.phone_no, leadData.lead_crm_id)}>
-                          <CallIcon className={classes.callIcon} />
-                        </IconButton>
-                      </Tooltip>
-                    </TableCell>
-                  </TableRow>
-                  : <span className={classes.emptydata}> No Data Found </span>)
+              : (Object.keys(leadData).length !== 0 ?
+                <TableRow className={classes.oddEvenRow}>
+                  <TableCell className={classes.tabledata, classes.click}
+                    onClick={() => routeChangeHAndler(leadData.lead_crm_id)}
+                  >{leadData.lead_crm_id} </TableCell>
+                  <TableCell className={classes.tabledata}>{leadData.name ? leadData.name : 'NA'}</TableCell>
+                  <TableCell className={classes.tabledata}>{maskPhoneNo(leadData.phone_no) ? maskPhoneNo(leadData.phone_no) : 'NA'}</TableCell>
+                  <TableCell className={classes.tabledata}>{leadData.loan_amount ? leadData.loan_amount : 'NA'}</TableCell>
+                  <TableCell className={classes.tabledata}>{leadData.data['monthly_income'] ? leadData.data['monthly_income'] : 'NA'}</TableCell>
+                  <TableCell className={classes.tabledata}>{leadData.data['current_company_name'] ? leadData.data['current_company_name'] : 'NA'}</TableCell>
+                  <TableCell className={classes.tabledata}>{leadData.loan_type ? leadData.loan_type : 'NA'}</TableCell>
+                  <TableCell className={classes.tabledata}>
+                    <div className={classes.loanTypeButton}>
+                      <div className={classes.loanButtonText}>{leadData.status}</div>
+                    </div>
+                  </TableCell>
+                  <TableCell className={classes.tabledata}>{leadData.sub_status ? leadData.sub_status : 'NA'}</TableCell>
+                  <TableCell className={classes.tabledata}>{leadData.campaign_category ? leadData.campaign_category : 'NA'}</TableCell>
+                  <TableCell>
+                    <Tooltip title="Call Customer">
+                      <IconButton className={classes.callButton} onClick={() => clickToCall(leadData.phone_no, leadData.lead_crm_id)}>
+                        <CallIcon className={classes.callIcon} />
+                      </IconButton>
+                    </Tooltip>
+                  </TableCell>
+                </TableRow>
+                : <span className={classes.emptydata}> No Data Found </span>)
             }
             <div>
               <CallerDialogBox
@@ -335,11 +506,6 @@ const Leads = ((props) => {
               />
             </div>
             <div>
-              {/* <Dialog open={vertageCall} onClose={disableDialerPopUp}>
-                <DialogContent>
-                  <p>Calling...</p>
-                </DialogContent>
-              </Dialog> */}
               <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={vertageCall} autoHideDuration={3000} onClose={disableDialerPopUp}>
                 <Alert onClose={disableDialerPopUp} severity="info">
                   Calling...
@@ -351,5 +517,4 @@ const Leads = ((props) => {
       </TableContainer>
     </PageLayerSection >
   );
-});
-export default Leads;
+}
