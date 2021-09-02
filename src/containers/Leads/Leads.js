@@ -172,7 +172,8 @@ export default function Leads() {
     history.push(`/dashboards/leads/edit/${leadId}`);
     // props.mainMenuCallBack(true, leadId);
   };
-  const clickToCall = async (customerNo, leadID) => {
+  const clickToCall = async (encryptData, leadID) => {
+    const customerNo = decodeURIComponent(window.atob(encryptData));
     if (profileData.dialer === 'TATA') {
       const headers = {
         'accept': 'application/json',
@@ -226,7 +227,7 @@ export default function Leads() {
     setIsCallNotConnected(false)
   }
   const maskPhoneNo = (phoneNo) => {
-    let data = phoneNo;
+    let data = decodeURIComponent(window.atob(phoneNo));
     let unMaskdata = data.slice(-4);
     let maskData = '';
     for (let i = (data.length) - 4; i > 0; i--) {
@@ -436,7 +437,7 @@ export default function Leads() {
             </div> : isSearchData ? (
               searchData.length !== 0 ?
                 searchData.map((search, index) => {
-                  let leadPhoneNo = maskPhoneNo(search.phone_no);
+                  let leadPhoneNo = maskPhoneNo(search.phone_no_encrypt);
                   return (
                     <TableRow className={classes.oddEvenRow} key={index}>
                       <TableCell className={classes.tabledata, classes.click}
@@ -458,7 +459,7 @@ export default function Leads() {
                       <TableCell className={classes.tabledata}>{search.campaign_category ? search.campaign_category : 'NA'}</TableCell>
                       <TableCell>
                         <Tooltip title="Call Customer">
-                          <IconButton className={classes.callButton} onClick={() => clickToCall(search.phone_no, search.lead_crm_id)}>
+                          <IconButton className={classes.callButton} onClick={() => clickToCall(search.phone_no_encrypt, search.lead_crm_id)}>
                             <CallIcon className={classes.callIcon} />
                           </IconButton>
                         </Tooltip>
@@ -473,7 +474,7 @@ export default function Leads() {
                     onClick={() => routeChangeHAndler(leadData.lead_crm_id)}
                   >{leadData.lead_crm_id} </TableCell>
                   <TableCell className={classes.tabledata}>{leadData.name ? leadData.name : 'NA'}</TableCell>
-                  <TableCell className={classes.tabledata}>{maskPhoneNo(leadData.phone_no) ? maskPhoneNo(leadData.phone_no) : 'NA'}</TableCell>
+                  <TableCell className={classes.tabledata}>{maskPhoneNo(leadData.phone_no_encrypt) ? maskPhoneNo(leadData.phone_no_encrypt) : 'NA'}</TableCell>
                   <TableCell className={classes.tabledata}>{leadData.loan_amount ? leadData.loan_amount : 'NA'}</TableCell>
                   <TableCell className={classes.tabledata}>{leadData.data['monthly_income'] ? leadData.data['monthly_income'] : 'NA'}</TableCell>
                   <TableCell className={classes.tabledata}>{leadData.data['current_company_name'] ? leadData.data['current_company_name'] : 'NA'}</TableCell>
@@ -487,7 +488,7 @@ export default function Leads() {
                   <TableCell className={classes.tabledata}>{leadData.campaign_category ? leadData.campaign_category : 'NA'}</TableCell>
                   <TableCell>
                     <Tooltip title="Call Customer">
-                      <IconButton className={classes.callButton} onClick={() => clickToCall(leadData.phone_no, leadData.lead_crm_id)}>
+                      <IconButton className={classes.callButton} onClick={() => clickToCall(leadData.phone_no_encrypt, leadData.lead_crm_id)}>
                         <CallIcon className={classes.callIcon} />
                       </IconButton>
                     </Tooltip>

@@ -289,8 +289,8 @@ export default function MyLeads(props) {
     return subStatusoptions;
   }
   const options = subStatusHandler();
-  const maskPhoneNo = (phoneNo) => {
-    let data = phoneNo;
+  const maskPhoneNo = (encryptData) => {
+    let data = decodeURIComponent(window.atob(encryptData));
     let unMaskdata = data.slice(-4);
     let maskData = '';
     for (let i = (data.length) - 4; i > 0; i--) {
@@ -303,7 +303,8 @@ export default function MyLeads(props) {
       return data;
     }
   }
-  const clickToCall = async (customerNo, leadID) => {
+  const clickToCall = async (encryptData, leadID) => {
+    const customerNo = decodeURIComponent(window.atob(encryptData));
     if (profileData.dialer === 'TATA') {
       const headers = {
         'accept': 'application/json',
@@ -548,7 +549,7 @@ export default function MyLeads(props) {
               <CircularProgress size={100} thickness={3} />
             </div> : myLeads.length !== 0 ?
               myLeads.map((my_leads, index) => {
-                let leadPhoneNo = maskPhoneNo(my_leads.lead.phone_no)
+                let leadPhoneNo = maskPhoneNo(my_leads.lead.phone_no_encrypt)
                 return (
                   <TableRow className={classes.oddEvenRow} key={index}>
                     <TableCell className={classes.tabledata}>{index + 1}</TableCell>
@@ -570,7 +571,7 @@ export default function MyLeads(props) {
                     <TableCell className={classes.tabledata}>{my_leads.lead.campaign_category ? my_leads.lead.campaign_category : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>
                       <Tooltip title="Call Customer">
-                        <IconButton className={classes.callButton} onClick={() => clickToCall(my_leads.lead.phone_no, my_leads.lead.lead_crm_id)}>
+                        <IconButton className={classes.callButton} onClick={() => clickToCall(my_leads.lead.phone_no_encrypt, my_leads.lead.lead_crm_id)}>
                           <CallIcon className={classes.callIcon} />
                         </IconButton>
                       </Tooltip>
