@@ -225,7 +225,7 @@ export default function FreshLead() {
         <Table className={classes.table} aria-label="simple table">
           <TableHead className={classes.tableheading}>
             <TableRow>
-              <TableCell className={classes.tableheading}>Sl No</TableCell>
+              <TableCell className={classes.tableheading}>Sr No</TableCell>
               <TableCell className={classes.tableheading}>Lead ID</TableCell>
               <TableCell className={classes.tableheading}>Name</TableCell>
               <TableCell className={classes.tableheading}>Mobile</TableCell>

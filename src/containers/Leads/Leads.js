@@ -302,7 +302,7 @@ export default function Leads() {
       <Drawer anchor='right' open={state} onClose={closeDrawer}>
         <div className="rightContainerForm">
           <form onSubmit={handleSubmit(personalLoanSubmitHandler)}>
-            <Grid container justifyContent="flex-start"><h4>Add Leads</h4></Grid>
+            <Grid container justifyContent="flex-start"><h4>Add New Lead</h4></Grid>
             <Grid>
               <TextField
                 className="textField"
@@ -340,6 +340,9 @@ export default function Leads() {
                 InputLabelProps={{
                   shrink: true,
                   required: true
+                }}
+                inputProps={{
+                  maxLength: 10,
                 }}
                 variant="outlined"
                 size="small"
