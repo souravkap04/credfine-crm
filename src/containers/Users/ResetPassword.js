@@ -241,7 +241,7 @@ export default function Users() {
             <Table>
               <TableHead className={classes.header}>
                 <TableRow>
-                <TableCell className={classes.tableheading}>Sl No</TableCell>
+                <TableCell className={classes.tableheading}>Sr No</TableCell>
                   <TableCell className={classes.tableheading}>User Name</TableCell>
                   <TableCell className={classes.tableheading}>First Name</TableCell>
                   <TableCell className={classes.tableheading}>Last Name</TableCell>

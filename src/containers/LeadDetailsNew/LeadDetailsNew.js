@@ -156,6 +156,12 @@ export default function LeadDetailsNew(props) {
     const [disableHangupBtn, setDisableHangupBtn] = useState(true);
     const [vertageCall, setVertageCall] = useState(false);
     const [colorTick, setcolorTick] = useState(false);
+    const [colorTick2, setcolorTick2] = useState(false);
+    const [colorTick3, setcolorTick3] = useState(false);
+    const [colorTick4, setcolorTick4] = useState(false);
+    const [appID, setappID] = useState('');
+    const [bankNBFC, setbankNBFC] = useState('');
+    const [scheme, setscheme] = useState('');
     let statusData = getStatusData();
     let { leadid } = useParams();
     let history = useHistory();
@@ -204,13 +210,31 @@ export default function LeadDetailsNew(props) {
                         setSalaryBankAcc(response.data.eligibility_data.salary_bank);
                         setCurrentResidentType(response.data.eligibility_data.residence_type);
                         setYearsInCurrentCity(response.data.eligibility_data.no_of_years_current_city);
+                        setappID(response.data.lead_extra_details.app_id);
+                        setbankNBFC(response.data.lead_extra_details.bank);
+                        setscheme(response.data.lead_extra_details.scheme);
                     });
             } catch (error) {
                 console.log(error);
             }
         };
         fetchLeadDetaile(leadid);
+        checkStatus()
     }, []);
+    const checkStatus = async () => {
+        if (leadId !== '' && loanType !== '' && loanAmount !== '' && name !== '' && date !== '' && pancardNo !== '' && email !== '' && mobileNo !== '') {
+            setcolorTick(true)
+        }
+        if (pincode !== '') {
+            setcolorTick2(true)
+        }
+        if (companyName !== '' && designation !== '' && currentWorkExp !== '' && totalWorkExp !== '' && monthlyIncome !== '' && salaryCreditMode !== '' && salaryBankAcc !== '') {
+            setcolorTick3(true)
+        }
+        if (currentEMI !== '' && creditCardOutstanding !== '') {
+            setcolorTick4(true)
+        }
+    }
     const remarksHandler = async (event, id) => {
         event.preventDefault();
         let item = { remark: input };
@@ -253,6 +277,38 @@ export default function LeadDetailsNew(props) {
         setIsEditable(true);
     }
     const updateLeadDetails = async (id) => {
+        if (expanded === 'panel1') {
+            setExpanded('panel2')
+            if (leadId !== '' || loanType !== '' || loanAmount !== '' || name !== '' || date !== '' || pancardNo !== '' || email !== '' || mobileNo !== '') {
+                setcolorTick(true)
+            } else {
+                setcolorTick(false)
+            }
+        }
+        if (expanded === 'panel2') {
+            setExpanded('panel3')
+            if (pincode !== '') {
+                setcolorTick2(true)
+            } else {
+                setcolorTick2(false)
+            }
+        }
+        if (expanded === 'panel3') {
+            setExpanded('panel4')
+            if (companyName !== '' || designation !== '' || currentWorkExp !== '' || totalWorkExp !== '' || monthlyIncome !== '' || salaryCreditMode !== '' || salaryBankAcc !== '') {
+                setcolorTick3(true)
+            } else {
+                setcolorTick3(false)
+            }
+        }
+        if (expanded === 'panel4') {
+            setExpanded('panel1')
+            if (currentEMI !== '' || creditCardOutstanding !== '') {
+                setcolorTick4(true)
+            } else {
+                setcolorTick4(false)
+            }
+        }
         let data = {
             dob: date, monthly_income: monthlyIncome, current_company_name: companyName,
             residential_pincode: pincode, current_company: currentCompany
@@ -269,13 +325,16 @@ export default function LeadDetailsNew(props) {
             salary_mode: salaryCreditMode, salary_bank: salaryBankAcc, residence_type: currentResidentType,
             no_of_years_current_city: yearsInCurrentCity
         }
+        let lead_extra_details = {
+            app_id: appID, bank: bankNBFC, scheme: scheme
+        }
         let regex = /[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(eligibility_data.pan_no);
         if (eligibility_data.pan_no !== '' && !regex) {
             setAlertMessage('Inavlid PAN Number')
             setIsLeadError(true);
             return;
         }
-        let items = { lead_data, eligibility_data };
+        let items = { lead_data, eligibility_data, lead_extra_details };
         let headers = { 'Authorization': `Token ${profileData.token}` }
         await axios.put(`${baseUrl}/leads/lead_detail/${id}`, items, { headers })
             .then((response) => {
@@ -308,7 +367,8 @@ export default function LeadDetailsNew(props) {
     }
     const options = subStatusHandler();
     const statusUpdateHandler = async (id) => {
-        let items = { status: status, sub_status: subStatus }
+        let items = { status: status, sub_status: subStatus, app_id: appID, bank: bankNBFC, scheme: scheme }
+        console.log(items)
         let headers = { 'Authorization': `Token ${profileData.token}` }
         if (status !== '' && subStatus.length > 0) {
             await axios.put(`${baseUrl}/leads/lead_status/${id}`, items, { headers })
@@ -415,16 +475,6 @@ export default function LeadDetailsNew(props) {
     const disableDialerPopUp = () => {
         setVertageCall(false)
         setDisableHangupBtn(false)
-    }
-    const checkOpenState = () => {
-        if (expanded === 'panel1') {
-            setExpanded('panel2')
-            if (leadId !== '' || loanType !== '' || loanAmount !== '' || name !== '' || date !== '' || pancardNo !== '' || email !== '' || mobileNo !== '') {
-                setcolorTick(true)
-            } else {
-                setcolorTick(false)
-            }
-        }
     }
     return (
         <PageLayerSection pageTitle="Lead Details">
@@ -622,7 +672,7 @@ export default function LeadDetailsNew(props) {
                                     />
                                 </Grid>
                                 <Grid lg={4} style={{ display: 'flex', alignItems: 'center' }}>
-                                    <Button onClick={checkOpenState} className="saveAndNextBtn" color='primary' variant='contained'>SAVE &amp; NEXT</Button>
+                                    <Button onClick={() => updateLeadDetails(leadid)} className="saveAndNextBtn" color='primary' variant='contained'>SAVE &amp; NEXT</Button>
                                 </Grid>
                             </Grid>
                         </AccordionDetails>
@@ -630,7 +680,7 @@ export default function LeadDetailsNew(props) {
                     <Accordion square expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
                         <AccordionSummary expandIcon={<ArrowRightIcon />} aria-controls="panel2d-content" id="panel2d-header">
                             <Typography className={classes.headerText}>Current Residential Details</Typography>
-                            <CheckCircleIcon className={classes.circleTick} />
+                            <CheckCircleIcon className={colorTick2 ? classes.activeColorTick : classes.circleTick} />
                         </AccordionSummary>
                         <AccordionDetails>
                             <Grid container direction="row"
@@ -727,7 +777,7 @@ export default function LeadDetailsNew(props) {
                                         </TextField>
                                     </Grid>
                                     <Grid lg={4} style={{ display: 'flex', alignItems: 'center' }}>
-                                        <Button className="saveAndNextBtn" color='primary' variant='contained'>SAVE &amp; NEXT</Button>
+                                        <Button className="saveAndNextBtn" color='primary' variant='contained' onClick={() => updateLeadDetails(leadid)}>SAVE &amp; NEXT</Button>
                                     </Grid>
                                 </Grid>
                             </Grid>
@@ -736,7 +786,7 @@ export default function LeadDetailsNew(props) {
                     <Accordion square expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
                         <AccordionSummary expandIcon={<ArrowRightIcon />} expanded={expanded === 'panel3'} onChange={handleChange('panel3')} aria-controls="panel3d-content" id="panel3d-header">
                             <Typography className={classes.headerText}>Employment &amp; Income Details</Typography>
-                            <CheckCircleIcon className={classes.circleTick} />
+                            <CheckCircleIcon className={colorTick3 ? classes.activeColorTick : classes.circleTick} />
                         </AccordionSummary>
                         <AccordionDetails>
                             <Grid container direction="row" justifyContent="center">
@@ -784,14 +834,6 @@ export default function LeadDetailsNew(props) {
                                             >{company.name}</ListGroup.Item>
                                         )) : null}
                                     </ListGroup>
-                                    {/* <Autocomplete
-                                        id="combo-box-demo"
-                                        options={searchCompany}
-                                        getOptionSelected={(option, value) => option.name === value.name}
-                                        getOptionLabel={(option) => selectCompany(option.name)}
-                                        style={{ width: 300 }}
-                                        renderInput={(params) => }
-                                    /> */}
                                 </Grid>
                                 <Grid lg={4}>
                                     <TextField
@@ -916,7 +958,7 @@ export default function LeadDetailsNew(props) {
                     <Accordion square expanded={expanded === 'panel4'} onChange={handleChange('panel4')}>
                         <AccordionSummary expandIcon={<ArrowRightIcon />} expanded={expanded === 'panel4'} onChange={handleChange('panel4')} aria-controls="panel4d-content" id="panel4-header">
                             <Typography className={classes.headerText}>Obligation Details</Typography>
-                            <CheckCircleIcon className={classes.circleTick} />
+                            <CheckCircleIcon className={colorTick4 ? classes.activeColorTick : classes.circleTick} />
                         </AccordionSummary>
                         <AccordionDetails>
                             <Grid container direction="row" justifyContent="center">
@@ -974,9 +1016,9 @@ export default function LeadDetailsNew(props) {
                                         <option value="No">No</option>
                                     </TextField>
                                 </Grid>
-                                <Grid container direction="row" justifyContent="flex-end" alignItems="center">
+                                <Grid container direction="row" style={{ justifyContent: "flex-end", alignItems: "center" }}>
                                     <Grid lg={4} style={{ display: 'flex', alignItems: 'center' }}>
-                                        <Button className="saveAndNextBtn" color='primary' variant='contained'>SAVE</Button>
+                                        <Button className="saveAndNextBtn" color='primary' variant='contained' onClick={() => updateLeadDetails(leadid)}>SAVE</Button>
                                     </Grid>
                                 </Grid>
                             </Grid>
@@ -1034,8 +1076,8 @@ export default function LeadDetailsNew(props) {
                     </Grid>
                 </Grid>
                 <Grid className="callConatiner" lg={3}>
-                    <Grid container justifyContent="center">
-                        {profileData.dialer === 'TATA' ? null : <React.Fragment><Button
+                    <Grid className="callAdjustContainer">
+                        {profileData.dialer === 'TATA' ? null : <div className="buttonAdjust"><Button
                             className="callBtn"
                             color="primary"
                             variant="contained"
@@ -1051,7 +1093,7 @@ export default function LeadDetailsNew(props) {
                                 disabled={localStorage.getItem("callHangUp") && localStorage.getItem("callHangUp") !== null ? false : callHangUpState}
                                 onClick={hangupCallHandler}>
                                 End
-                            </Button></React.Fragment>}
+                            </Button></div>}
                         <Grid>
                             <TextField
                                 className="textField"
@@ -1123,64 +1165,104 @@ export default function LeadDetailsNew(props) {
                                 InputAdornmentProps={{ position: 'start' }}
                             />
                         </Grid>
-                        <Grid>
-                            <TextField
-                                className="textField"
-                                id="outlined-full-width"
-                                label="App ID"
-                                style={{ margin: 8 }}
-                                margin="normal"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                variant="outlined"
-                                size="small"
-                            />
-                        </Grid>
-                        <Grid container justifyContent="center">
+                        {status === "STB" ? <React.Fragment>
                             <Grid>
                                 <TextField
-                                    className="textField2 textLeft"
+                                    className="textField"
                                     id="outlined-full-width"
-                                    select
-                                    label="Bank/NBFC"
+                                    label="App ID"
+                                    style={{ margin: 8 }}
                                     margin="normal"
                                     InputLabelProps={{
                                         shrink: true,
                                     }}
-                                    SelectProps={{
-                                        native: true,
-                                    }}
                                     variant="outlined"
                                     size="small"
-                                >
-                                    <option key="" value="">
-                                        Select
-                                    </option>
-                                </TextField>
+                                    value={appID}
+                                    onChange={(e) => { setappID((e.target.value).toUpperCase()) }}
+                                />
                             </Grid>
-                            <Grid>
-                                <TextField
-                                    className="textField2 textRight"
-                                    id="outlined-full-width"
-                                    select
-                                    label="Scheme"
-                                    margin="normal"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    SelectProps={{
-                                        native: true,
-                                    }}
-                                    variant="outlined"
-                                    size="small"
-                                >
-                                    <option key="" value="">
-                                        Select
-                                    </option>
-                                </TextField>
+                            <Grid container justifyContent="center">
+                                <Grid>
+                                    <TextField
+                                        className="textField2 textLeft"
+                                        id="outlined-full-width"
+                                        select
+                                        label="Bank/NBFC"
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        SelectProps={{
+                                            native: true,
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={bankNBFC}
+                                        onChange={(e) => { setbankNBFC(e.target.value) }}
+                                    >
+                                        <option key="" value="">Select</option>
+                                        <option value="HDFB_Bank_(Online)">HDFB Bank (Online)</option>
+                                        <option value="HDFC_Bank_(DSA)">HDFC Bank (DSA)</option>
+                                        <option value="Kotak_Bank_(Online)">Kotak Bank (Online)</option>
+                                        <option value="Kotak_Bank_(DSA)">Kotak Bank (DSA)</option>
+                                        <option value="IDFC_Bank_(Online)">IDFC Bank (Online)</option>
+                                        <option value="IDFC_Bank_(DSA)">IDFC Bank (DSA)</option>
+                                        <option value="ICICI_Bank_(Online)">ICICI Bank (Online)</option>
+                                        <option value="ICICI_Bank_(DSA)">ICICI Bank (DSA)</option>
+                                        <option value="Yes_Bank_(Online)">Yes Bank (Online)</option>
+                                        <option value="Yes_Bank_(DSA)">Yes Bank (DSA)</option>
+                                        <option value="SCB_(DSA)">SCB (DSA)</option>
+                                        <option value="AXIS_BANK_(DSA)">AXIS BANK (DSA)</option>
+                                        <option value="INDUSIND_BANK_(DSA)">INDUSIND BANK (DSA)</option>
+                                        <option value="TATA_Capital_(Online)">TATA Capital (Online)</option>
+                                        <option value="TATA_Capital_(DSA)">TATA Capital (DSA)</option>
+                                        <option value="BIZ_DSA">BIZ DSA</option>
+                                        <option value="BIZ_API">BIZ API</option>
+                                        <option value="BIZ_Online">BIZ Online</option>
+                                        <option value="ABFL">ABFL</option>
+                                        <option value="Fullerton">Fullerton</option>
+                                        <option value="INCRED">INCRED</option>
+                                        <option value="HERO_Fincorp">HERO Fincorp</option>
+                                        <option value="Paysense">Paysense</option>
+                                        <option value="Others">Others</option>
+                                    </TextField>
+                                </Grid>
+                                <Grid>
+                                    <TextField
+                                        className="textField2 textRight"
+                                        id="outlined-full-width"
+                                        select
+                                        label="Scheme"
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        SelectProps={{
+                                            native: true,
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={scheme}
+                                        onChange={(e) => { setscheme(e.target.value) }}
+                                    >
+                                        <option key="" value="">Select</option>
+                                        <option value="Fresh-PL">Fresh-PL</option>
+                                        <option value="PL-Topup">PL-Topup</option>
+                                        <option value="PL-BT">PL-BT</option>
+                                        <option value="PL-BT-Topup">PL-BT-Topup</option>
+                                        <option value="Fresh_OD">Fresh OD</option>
+                                        <option value="OD-Topup">OD-Topup</option>
+                                        <option value="OD-BT-Topup">OD-BT-Topup</option>
+                                        <option value="CC-BT">CC-BT</option>
+                                        <option value="CC-BT-Topup">CC-BT-Topup</option>
+                                        <option value="PL-CC-BT">PL-CC-BT</option>
+                                        <option value="PL-CC-BT-Topup">PL-CC-BT-Topup</option>
+                                        <option value="Others">Others</option>
+                                    </TextField>
+                                </Grid>
                             </Grid>
-                        </Grid>
+                        </React.Fragment> : ''}
                     </Grid>
                     <div className="addRemarkContainer">
                         <Grid container justifyContent="center">

@@ -61,7 +61,7 @@ export default function VerifyUsers() {
                 <Table className={classes.table} aria-label="user table">
                     <TableHead>
                         <TableRow>
-                            <TableCell>Sl No</TableCell>
+                            <TableCell>Sr No</TableCell>
                             <TableCell>User Name</TableCell>
                             <TableCell>First Name</TableCell>
                             <TableCell>Last Name</TableCell>
