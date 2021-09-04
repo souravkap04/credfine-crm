@@ -117,9 +117,11 @@ export default function LeadDetailsNew(props) {
     const [date, setDate] = useState(new Date());
     const [mobileNo, setMobileNo] = useState("");
     const [pincode, setPincode] = useState("");
+    const [city, setcity] = useState("");
+    const [states, setstates] = useState("");
     const [name, setname] = useState("");
     const [companyName, setCompanyName] = useState("");
-    const [searchCompany, setSearchCompany] = useState([]);
+    const [searchCompany, setSearchCompany] = useState({});
     const [pancardNo, setPancardNo] = useState("");
     const [totalWorkExp, setTotalWorkExp] = useState("");
     const [currentWorkExp, setCurrentWorkExp] = useState("");
@@ -127,6 +129,7 @@ export default function LeadDetailsNew(props) {
     const [designation, setDesignation] = useState("");
     const [currentEMI, setCurrentEMI] = useState("");
     const [creditCardOutstanding, setCreditCardOutstanding] = useState("");
+    const [creditCardbalanceTransfer, setcreditCardbalanceTransfer] = useState("");
     const [salaryCreditMode, setSalaryCreditMode] = useState("");
     const [salaryBankAcc, setSalaryBankAcc] = useState("");
     const [currentResidentType, setCurrentResidentType] = useState("");
@@ -162,6 +165,7 @@ export default function LeadDetailsNew(props) {
     const [appID, setappID] = useState('');
     const [bankNBFC, setbankNBFC] = useState('');
     const [scheme, setscheme] = useState('');
+    const [followUpDate, setfollowUpDate] = useState('');
     let statusData = getStatusData();
     let { leadid } = useParams();
     let history = useHistory();
@@ -195,11 +199,14 @@ export default function LeadDetailsNew(props) {
                         setCurrentCompany(response.data.lead_data['data'].current_company);
                         setDate(response.data.lead_data["data"].dob);
                         setPincode(response.data.lead_data["data"].residential_pincode);
+                        setcity(response.data.lead_data["data"].city);
+                        setstates(response.data.lead_data["data"].state);
                         setname(response.data.lead_data.name);
                         setCompanyName(response.data.lead_data["data"].current_company_name);
                         setLoanType(response.data.lead_data.loan_type);
                         setSource(response.data.lead_data.source);
                         setPancardNo(response.data.eligibility_data.pan_no);
+                        setEmploymentType(response.data.lead_data)
                         setTotalWorkExp(response.data.eligibility_data.total_work_exp);
                         setCurrentWorkExp(response.data.eligibility_data.current_work_exp);
                         setEmail(response.data.eligibility_data.email_id);
@@ -311,7 +318,7 @@ export default function LeadDetailsNew(props) {
         }
         let data = {
             dob: date, monthly_income: monthlyIncome, current_company_name: companyName,
-            residential_pincode: pincode, current_company: currentCompany
+            residential_pincode: pincode, city: city, state: states, current_company: currentCompany, employment_type: employmentType, credi_card_balance_transfer: creditCardbalanceTransfer
         };
         let lead_data = {
             lead_crm_id: leadId, loan_amount: loanAmount,
@@ -366,8 +373,11 @@ export default function LeadDetailsNew(props) {
         return subStatusoptions;
     }
     const options = subStatusHandler();
+    useEffect(() => {
+        console.log(followUpDate.replace('T',' '))
+    }, [followUpDate]);
     const statusUpdateHandler = async (id) => {
-        let items = { status: status, sub_status: subStatus, app_id: appID, bank: bankNBFC, scheme: scheme }
+        let items = { status: status, sub_status: subStatus, app_id: appID, bank: bankNBFC, scheme: scheme, callback_time: followUpDate.replace('T',' ') }
         console.log(items)
         let headers = { 'Authorization': `Token ${profileData.token}` }
         if (status !== '' && subStatus.length > 0) {
@@ -401,7 +411,22 @@ export default function LeadDetailsNew(props) {
 
         }
     }
-
+    const getPincodeHandler = async (e) => {
+        setPincode(e.target.value)
+        let item = { pincode: e.target.value };
+        const header = { 'Content-Type': 'application/json' }
+        if (e.target.value >= 6) {
+            await axios.post(`${baseUrl}/common/fetchPincode/`, item, { header })
+                .then((response) => {
+                    if (response.data[0].pin === e.target.value) {
+                        setcity(response.data[0].city_name)
+                        setstates(response.data[0].state_name)
+                    }
+                }).catch((error) => {
+                    console.log(error)
+                })
+        }
+    }
     const selectCompany = (company) => {
         setCompanyName(company);
         setShowCompany(false);
@@ -580,7 +605,12 @@ export default function LeadDetailsNew(props) {
                                         variant="outlined"
                                         size="small"
                                         value={loanAmount}
-                                        onChange={(e) => setLoanAmount(e.target.value)}
+                                        onChange={(e) => {
+                                            const re = /^[0-9\b]+$/;
+                                            if (e.target.value === '' || re.test(e.target.value)) {
+                                                setLoanAmount(e.target.value)
+                                            }
+                                        }}
                                     />
                                 </Grid>
                                 <Grid lg={4}>
@@ -695,56 +725,43 @@ export default function LeadDetailsNew(props) {
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
-                                        helperText="Current Residence"
                                         variant="outlined"
                                         size="small"
                                         value={pincode}
-                                        onChange={(e) => setPincode(e.target.value)}
+                                        onChange={(e) => getPincodeHandler(e)}
                                     />
                                 </Grid>
                                 <Grid lg={4}>
                                     <TextField
                                         className="textField"
                                         id="outlined-full-width"
-                                        select
                                         label="City"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
-                                        SelectProps={{
-                                            native: true,
-                                        }}
                                         variant="outlined"
                                         size="small"
-                                    >
-                                        <option key="" value="">
-                                            Select
-                                        </option>
-                                    </TextField>
+                                        value={city}
+                                        disabled
+                                    />
                                 </Grid>
                                 <Grid lg={4}>
                                     <TextField
                                         className="textField"
                                         id="outlined-full-width"
-                                        select
                                         label="State"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
-                                        SelectProps={{
-                                            native: true,
-                                        }}
                                         variant="outlined"
                                         size="small"
-                                    >
-                                        <option key="" value="">
-                                            Select
-                                        </option>
-                                    </TextField>
+                                        value={states}
+                                        disabled
+                                    />
                                 </Grid>
                                 <Grid container direction="row"
                                     justifyContent="space-between"
@@ -806,10 +823,13 @@ export default function LeadDetailsNew(props) {
                                         }}
                                         variant="outlined"
                                         size="small"
+                                        value={employmentType}
+                                        onChange={(e) => setEmploymentType(e.target.value)}
                                     >
-                                        <option key="" value="">
-                                            Select
-                                        </option>
+                                        <option key="" value="">Select</option>
+                                        <option value="salaried">Salaried</option>
+                                        <option value="self_employed">Self Employed</option>
+                                        <option value="self_employed_professional">Self Employed Professional</option>
                                     </TextField>
                                 </Grid>
                                 <Grid lg={4}>
@@ -855,33 +875,61 @@ export default function LeadDetailsNew(props) {
                                     <TextField
                                         className="textField"
                                         id="outlined-full-width"
+                                        select
                                         label="Vintage in Current Company"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
+                                        SelectProps={{
+                                            native: true
+                                        }}
                                         variant="outlined"
                                         size="small"
                                         value={currentWorkExp}
                                         onChange={(e) => setCurrentWorkExp(e.target.value)}
-                                    />
+                                    >
+                                        <option key="" value="">Select</option>
+                                        <option value="0-3 months">0-3 months</option>
+                                        <option value="3-6 months">3-6 months</option>
+                                        <option value="6-12 months">6-12 months</option>
+                                        <option value="1-2 years">1-2 years</option>
+                                        <option value="2-3 years">2-3 years</option>
+                                        <option value="3-5 years">3-5 years</option>
+                                        <option value="5-10 years">5-10 years</option>
+                                        <option value="10+ years">10+ years</option>
+                                    </TextField>
                                 </Grid>
                                 <Grid lg={4}>
                                     <TextField
                                         className="textField"
                                         id="outlined-full-width"
+                                        select
                                         label="Total Work Experience"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
+                                        SelectProps={{
+                                            native: true
+                                        }}
                                         variant="outlined"
                                         size="small"
                                         value={totalWorkExp}
                                         onChange={(e) => setTotalWorkExp(e.target.value)}
-                                    />
+                                    >
+                                        <option key="" value="">Select</option>
+                                        <option value="0-3 months">0-3 months</option>
+                                        <option value="3-6 months">3-6 months</option>
+                                        <option value="6-12 months">6-12 months</option>
+                                        <option value="1-2 years">1-2 years</option>
+                                        <option value="2-3 years">2-3 years</option>
+                                        <option value="3-5 years">3-5 years</option>
+                                        <option value="5-10 years">5-10 years</option>
+                                        <option value="10+ years">10+ years</option>
+                                    </TextField>
                                 </Grid>
                                 <Grid lg={4}>
                                     <TextField
@@ -896,7 +944,12 @@ export default function LeadDetailsNew(props) {
                                         variant="outlined"
                                         size="small"
                                         value={monthlyIncome}
-                                        onChange={(e) => setMonthlyIncome(e.target.value)}
+                                        onChange={(e) => {
+                                            const re = /^[0-9\b]+$/;
+                                            if (e.target.value === '' || re.test(e.target.value)) {
+                                                setMonthlyIncome(e.target.value)
+                                            }
+                                        }}
                                     />
                                 </Grid>
                                 <Grid lg={4}>
@@ -975,7 +1028,16 @@ export default function LeadDetailsNew(props) {
                                         variant="outlined"
                                         size="small"
                                         value={currentEMI}
-                                        onChange={(e) => setCurrentEMI(e.target.value)}
+                                        inputProps={{
+                                            maxLength: "6"
+                                        }}
+                                        onChange={(e) => {
+                                            const re = /^[0-9\b]+$/;
+                                            if (e.target.value === '' || re.test(e.target.value)) {
+                                                setCurrentEMI(e.target.value)
+                                            }
+                                        }
+                                        }
                                     />
                                 </Grid>
                                 <Grid lg={4}>
@@ -990,8 +1052,16 @@ export default function LeadDetailsNew(props) {
                                         }}
                                         variant="outlined"
                                         size="small"
+                                        inputProps={{
+                                            maxLength: "7"
+                                        }}
                                         value={creditCardOutstanding}
-                                        onChange={(e) => setCreditCardOutstanding(e.target.value)}
+                                        onChange={(e) => {
+                                            const re = /^[0-9\b]+$/;
+                                            if (e.target.value === '' || re.test(e.target.value)) {
+                                                setCreditCardOutstanding(e.target.value)
+                                            }
+                                        }}
                                     />
                                 </Grid>
                                 <Grid lg={4}>
@@ -1010,6 +1080,8 @@ export default function LeadDetailsNew(props) {
                                         }}
                                         variant="outlined"
                                         size="small"
+                                        value={creditCardbalanceTransfer}
+                                        onChange={(e) => setcreditCardbalanceTransfer(e.target.value)}
                                     >
                                         <option value="">Select</option>
                                         <option value="Yes">Yes</option>
@@ -1163,6 +1235,8 @@ export default function LeadDetailsNew(props) {
                                 variant="outlined"
                                 size="small"
                                 InputAdornmentProps={{ position: 'start' }}
+                                value={followUpDate}
+                                onChange={(e) => setfollowUpDate(e.target.value)}
                             />
                         </Grid>
                         {status === "STB" ? <React.Fragment>
@@ -1263,6 +1337,23 @@ export default function LeadDetailsNew(props) {
                                 </Grid>
                             </Grid>
                         </React.Fragment> : ''}
+                        {/* {subStatus === 'Disbursed' ? <Grid>
+                            <TextField
+                                className="textField"
+                                id="outlined-full-width"
+                                type="date"
+                                label="Disbursal Date"
+                                defaultValue="2017-05-24"
+                                style={{ margin: 8 }}
+                                margin="normal"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                variant="outlined"
+                                size="small"
+                                InputAdornmentProps={{ position: 'start' }}
+                            />
+                        </Grid> : ''} */}
                     </Grid>
                     <div className="addRemarkContainer">
                         <Grid container justifyContent="center">
