@@ -24,6 +24,11 @@ import EditIcon from '@material-ui/icons/Edit';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
+import MuiAlert from '@material-ui/lab/Alert';
+import Snackbar from '@material-ui/core/Snackbar';
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 const useStyles = makeStyles({
   container: {
     marginTop: '10px'
@@ -108,6 +113,8 @@ export default function Users() {
   const profileData = getProfileData();
   const [isResetPassword, setIsResetPassword] = useState(false);
   const [isEditUser, setIsEditUser] = useState(false);
+  const [isDeleteUser, setIsDeleteUser] = useState(false);
+  const [userName,setUserName] = useState(null);
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [users, setUsers] = useState([]);
@@ -212,7 +219,14 @@ export default function Users() {
       console.log(error);
     }
   }
-  const deleteUser = async (userName, index) => {
+  const deletedUserPopUpHandler = (username)=>{
+    setIsDeleteUser(true);
+    setUserName(username);
+  }
+  const closeDeleteUserPopUp = ()=>{
+    setIsDeleteUser(false);
+  }
+  const deleteUser = async () => {
     const headers = {
       'userRoleHash': profileData.user_roles[0].user_role_hash,
       // 'userRoleHash' : 'f63e2d14-b15a-11eb-bc7e-000000000013'
@@ -220,7 +234,12 @@ export default function Users() {
     let item = null;
     await axios.post(`${baseUrl}/user/deleteUser/${userName}`, item, { headers })
       .then((response) => {
-        setDeleteCount(deleteCount + 1);
+        if(response.status === 200){
+          setIsDisplay(true);
+          setAlertMessage(response.data.message);
+          setIsDeleteUser(false);
+          setDeleteCount(deleteCount + 1);
+        }
       }).catch((error) => {
         console.log(error);
       })
@@ -260,8 +279,16 @@ export default function Users() {
         setIsDisplay(true);
       })
   }
+  const closeSnankBar = ()=>{
+    setIsDisplay(false);
+  }
   return (
     <PageLayerSection>
+      <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isDisplay} autoHideDuration={1500} onClose={closeSnankBar}>
+        <Alert>
+          {alertMessage}
+        </Alert>
+      </Snackbar>
       <div className={classes.container}>
         <Paper>
           <div className={classes.buttonContainer}>
@@ -343,7 +370,8 @@ export default function Users() {
                         </IconButton>
                       </Tooltip>
                       <Tooltip title="Delete User">
-                        <IconButton onClick={() => deleteUser(user.myuser.username, index)}>
+                        {/* <IconButton onClick={() => deleteUser(user.myuser.username, index)}> */}
+                        <IconButton onClick={()=>deletedUserPopUpHandler(user.myuser.username)}>
                           <DeleteIcon />
                         </IconButton>
                       </Tooltip>
@@ -383,6 +411,15 @@ export default function Users() {
                     <ReactBootstrap.Spinner animation="border" />
                   </div>
                 }
+                <>
+                  <Dialog open={isDeleteUser}>
+                    <DialogTitle>Are You Want to Delete User?</DialogTitle>
+                    <DialogContent>
+                      <Button style={{padding:'0 50px',marginRight:'20px'}} onClick={deleteUser}>Yes</Button>
+                      <Button style={{padding:'0 50px'}} onClick={closeDeleteUserPopUp}>No</Button>
+                    </DialogContent>
+                  </Dialog>
+                </>
                 <>
                   <Dialog open={isResetPassword} onClose={closeResetPassword}>
                     <DialogTitle id="form-dialog-title">Reset Password</DialogTitle>
