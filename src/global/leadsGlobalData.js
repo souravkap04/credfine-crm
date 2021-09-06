@@ -1,7 +1,7 @@
 export const getBank = ()=>{
     const banks = ["SBI","HDFC","Canara Bank","ICICI","Kotak Mahindra Bank","SCB","PNB","IDFC",
 "CBI","BOB","Indian Bank","Bank Of India","Yes Bank","City Bank","Bank Of Maharashtra","OBC","Indusind Bank",
-"HSBC","DBS","Uco Bank","Axis Bank"];
+"HSBC","DBS","Uco Bank","Axis Bank","Others"];
 return banks;
 }
 

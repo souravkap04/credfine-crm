@@ -325,6 +325,7 @@
   margin-left: 0.69444vw;
   border-bottom: 1px solid #fda770;
   font-family: "Lato";
+  cursor: pointer;
 }
 
 .callConatiner .allremarksContainer .RemarksCard {

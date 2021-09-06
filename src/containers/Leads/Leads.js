@@ -331,7 +331,7 @@ export default function Leads() {
             </Grid>
             <Grid>
               <TextField
-                type="number"
+                // type="number"
                 className="textField"
                 id="outlined-full-width"
                 label="Mobile Number"
