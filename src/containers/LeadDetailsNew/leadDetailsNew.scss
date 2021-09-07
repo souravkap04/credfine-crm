@@ -233,6 +233,7 @@ $desk: 100 / 1440;
     }
     .allremarksContainer {
         margin-top: 30 * $desk + vw;
+        margin-bottom: 58 * $desk + vw;
         display: flex;
         flex-direction: column;
         align-items: center;
