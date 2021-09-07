@@ -24,6 +24,7 @@ $desk: 100 / 1440;
         }
         .MuiInputBase-input {
             font-size: 16 * $desk + vw;
+            font-family: "Lato";
         }
         // .MuiInputBase-root:hover .MuiOutlinedInput-notchedOutline {
         //     border: 2px solid #c5cee0;
@@ -98,6 +99,16 @@ $desk: 100 / 1440;
     padding-top: 18 * $desk + vw;
     padding-left: 28 * $desk + vw;
     padding-right: 28 * $desk + vw;
+    .callAdjustContainer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        .buttonAdjust {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
     .callBtn {
         width: 98 * $desk + vw;
         height: 36 * $desk + vw;
@@ -236,6 +247,7 @@ $desk: 100 / 1440;
                 margin-left: 10 * $desk + vw;
                 border-bottom: 1px solid #fda770;
                 font-family: "Lato";
+                cursor: pointer;
             }
         }
         .RemarksCard {

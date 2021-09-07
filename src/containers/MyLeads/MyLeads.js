@@ -530,7 +530,7 @@ export default function MyLeads(props) {
         <Table className={classes.table} aria-label="simple table">
           <TableHead className={classes.tableheading}>
             <TableRow>
-              <TableCell className={classes.tableheading}>Sl No</TableCell>
+              <TableCell className={classes.tableheading}>Sr No</TableCell>
               <TableCell className={classes.tableheading}>Lead ID</TableCell>
               <TableCell className={classes.tableheading}>Name</TableCell>
               <TableCell className={classes.tableheading}>Mobile</TableCell>
@@ -559,7 +559,7 @@ export default function MyLeads(props) {
                     <TableCell className={classes.tabledata}>{my_leads.lead.name ? my_leads.lead.name : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>{leadPhoneNo ? leadPhoneNo : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>{my_leads.lead.loan_amount ? my_leads.lead.loan_amount : 'NA'}</TableCell>
-                    <TableCell className={classes.tabledata}>{my_leads.lead.data.monthly_income}</TableCell>
+                    <TableCell className={classes.tabledata}>{my_leads.lead.data.monthly_income ? my_leads.lead.data.monthly_income : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>{my_leads.lead.data.current_company_name ? my_leads.lead.data.current_company_name : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>{my_leads.lead.loan_type ? my_leads.lead.loan_type : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>

@@ -202,6 +202,7 @@ function LeadDetails(props) {
             }, 1500)
           }
         }).catch((error) => {
+          setAlertMessage(error.response.data.error)
           setIsLeadError(true)
         })
     }
@@ -278,11 +279,11 @@ function LeadDetails(props) {
                   Lead Data Successfully Updated
                 </Alert>
               </Snackbar>
-              <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isLeadError} autoHideDuration={1500} onClose={disableHangUpSnacks}>
+              {/* <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isLeadError} autoHideDuration={1500} onClose={disableHangUpSnacks}>
                 <Alert onClose={disableHangUpSnacks} severity="error">
                   Something Wrong
                 </Alert>
-              </Snackbar>
+              </Snackbar> */}
               <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isStatus} autoHideDuration={1500} onClose={disableHangUpSnacks}>
                 <Alert onClose={disableHangUpSnacks} severity="success">
                   Status Successfully Updated

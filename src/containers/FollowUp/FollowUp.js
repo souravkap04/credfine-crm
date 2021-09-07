@@ -13,14 +13,14 @@ import CallIcon from '@material-ui/icons/Call';
 import axios from 'axios';
 import baseUrl from '../../global/api';
 import { clickToCallApi, vertageDialerApi } from '../../global/callApi'
-import { getProfileData } from '../../global/leadsGlobalData'
-import { useQueryy } from '../../global/query';
+import { getProfileData } from '../../global/leadsGlobalData';
 import CallerDialogBox from '../Leads/CallerDialog/CallerDialogBox';
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
 import clsx from 'clsx';
 import './followup.css';
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { Button } from '@material-ui/core';
 import Badge from '@material-ui/core/Badge';
 import NoDataFound from '../NoDataFound/NoDataFound';
@@ -104,45 +104,34 @@ const useStyles = makeStyles({
 export default function FollowUp(props) {
     const classes = useStyles();
     const CancelToken = axios.CancelToken;
-    const queryy = useQueryy();
-    const leadQuery = queryy.get("query") || "";
     let history = useHistory();
     const profileData = getProfileData();
     const [leadData, setLeadData] = useState({});
-    const [searchData, setSearchData] = useState([]);
     const [isCalling, setIsCalling] = useState(false);
     const [isCallConnect, setIsCallConnect] = useState(false);
     const [onGoingCall, setOnGoingCall] = useState(false);
     const [isCallNotConnected, setIsCallNotConnected] = useState(false)
-    const [isSearchData, setisSearchData] = useState(false);
     const [vertageCall, setVertageCall] = useState(false);
     const [disableHangupBtn, setDisableHangupBtn] = useState(true);
-    const [storeLeadID, setstoreLeadID] = useState('')
-    useEffect(() => {
-        leadQuery ? fetchSearchData(leadQuery) : fetchLeadsData();
-    }, [leadQuery])
-    const fetchSearchData = async (key) => {
-        setisSearchData(true)
-        let headers = { 'Authorization': `Token ${profileData.token}` }
-        await axios.get(`${baseUrl}/leads/search/${key}`, { headers })
-            .then((response) => {
-                setSearchData(response.data);
-            }).catch((error) => {
-                console.log(error);
-            })
-    }
+    const [isLoading, setisLoading] = useState(false);
+
     const fetchLeadsData = async () => {
+        setisLoading(true);
         const headers = {
             'Authorization': `Token ${profileData.token}`,
             'userRoleHash': profileData.user_roles[0].user_role_hash,
         };
-        await axios.get(`${baseUrl}/leads/lead_allocate/${profileData.campaign_category}`, { headers })
+        await axios.get(`${baseUrl}/leads/fetchOpenLead/`, { headers })
             .then((response) => {
                 setLeadData(response.data);
+                setisLoading(false);
             }).catch((error) => {
                 console.log(error);
             })
     };
+    useEffect(() => {
+        fetchLeadsData();
+    }, [])
     const routeChangeHAndler = (leadId) => {
         history.push(`/dashboards/followup/edit/${leadId}`);
     };
@@ -173,7 +162,7 @@ export default function FollowUp(props) {
                     }
                 })
             setTimeout(() => {
-                history.push(`/dashboards/leads/edit/${leadID}`)
+                history.push(`/dashboards/followup/edit/${leadID}`)
             }, 1500)
         } else if (profileData.dialer === 'VERTAGE') {
             await axios.post(`${vertageDialerApi}&user=${profileData.vertage_id}&pass=${profileData.vertage_pass}&agent_user=${profileData.vertage_id}&function=external_dial&value=${customerNo}&phone_code=+91&search=YES&preview=NO&focus=YES`)
@@ -187,7 +176,7 @@ export default function FollowUp(props) {
                     console.log('error');
                 })
             setTimeout(() => {
-                history.push(`/dashboards/leads/edit/${leadID}`)
+                history.push(`/dashboards/followup/edit/${leadID}`)
             }, 1500)
         }
     }
@@ -219,14 +208,14 @@ export default function FollowUp(props) {
     }
     return (
         <PageLayerSection>
-            <NoDataFound text="Coming Soon" />
-            {/* <div className="followUpBtnContainer">
-                <Badge className="followbtn" badgeContent={9999} color="secondary">
+            {/* <NoDataFound text="Coming Soon" /> */}
+            <div className="followUpBtnContainer">
+                {/* <Badge className="followbtn" badgeContent={9999} color="secondary">
                     <Button variant="contained">Follow Up</Button>
                 </Badge>
                 <Badge className="followbtn" badgeContent={4} color="secondary">
                     <Button variant="contained">Laps</Button>
-                </Badge>
+                </Badge> */}
             </div>
             <TableContainer className={classes.container}>
                 <Table className={classes.table} aria-label="simple table">
@@ -246,68 +235,36 @@ export default function FollowUp(props) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {
-                            isSearchData ? (
-                                searchData.length !== 0 ?
-                                    searchData.map((search, index) => {
-                                        let leadPhoneNo = maskPhoneNo(search.phone_no);
-                                        return (
-                                            <TableRow className={classes.oddEvenRow} key={index}>
-                                                <TableCell className={classes.tabledata, classes.click}
-                                                    onClick={() => routeChangeHAndler(search.lead_crm_id)}
-                                                >{search.lead_crm_id}
-                                                </TableCell>
-                                                <TableCell className={classes.tabledata}>{search.name}</TableCell>
-                                                <TableCell className={classes.tabledata}>{leadPhoneNo}</TableCell>
-                                                <TableCell className={classes.tabledata}>{search.loan_amount}</TableCell>
-                                                <TableCell className={classes.tabledata}>{search.data.monthly_income}</TableCell>
-                                                <TableCell className={classes.tabledata}>{search.data.current_company_name}</TableCell>
-                                                <TableCell className={classes.tabledata}>{search.loan_type}</TableCell>
-                                                <TableCell className={classes.tabledata}>
-                                                    <div className={classes.loanTypeButton}>
-                                                        <div className={classes.loanButtonText}>{search.status}</div>
-                                                    </div>
-                                                </TableCell>
-                                                <TableCell className={classes.tabledata}>{search.sub_status}</TableCell>
-                                                <TableCell className={classes.tabledata}>{search.campaign_category}</TableCell>
-                                                <TableCell>
-                                                    <Tooltip title="Call Customer">
-                                                        <IconButton className={classes.callButton} onClick={() => clickToCall(search.phone_no, search.lead_crm_id)}>
-                                                            <CallIcon className={classes.callIcon} />
-                                                        </IconButton>
-                                                    </Tooltip>
-                                                </TableCell>
-                                            </TableRow>
-                                        )
-                                    }) : <span className={classes.emptydata}> No Data Found </span>)
-                                : (Object.keys(leadData).length !== 0 ?
-                                    <TableRow className={classes.oddEvenRow}>
-                                        <TableCell className={classes.tabledata, classes.click}
-                                            onClick={() => routeChangeHAndler(leadData.lead_crm_id)}
-                                        >{leadData.lead_crm_id} </TableCell>
-                                        <TableCell className={classes.tabledata}>{leadData.name}</TableCell>
-                                        <TableCell className={classes.tabledata}>{maskPhoneNo(leadData.phone_no)}</TableCell>
-                                        <TableCell className={classes.tabledata}>{leadData.loan_amount}</TableCell>
-                                        <TableCell className={classes.tabledata}>{leadData.data['monthly_income']}</TableCell>
-                                        <TableCell className={classes.tabledata}>{leadData.data['current_company_name']}</TableCell>
-                                        <TableCell className={classes.tabledata}>{leadData.loan_type}</TableCell>
-                                        <TableCell className={classes.tabledata}>
-                                            <div className={classes.loanTypeButton}>
-                                                <div className={classes.loanButtonText}>{leadData.status}</div>
-                                            </div>
-                                        </TableCell>
-                                        <TableCell className={classes.tabledata}>{leadData.sub_status}</TableCell>
-                                        <TableCell className={classes.tabledata}>{leadData.campaign_category}</TableCell>
-                                        <TableCell>
-                                            <Tooltip title="Call Customer">
-                                                <IconButton className={classes.callButton} onClick={() => clickToCall(leadData.phone_no, leadData.lead_crm_id)}>
-                                                    <CallIcon className={classes.callIcon} />
-                                                </IconButton>
-                                            </Tooltip>
-                                        </TableCell>
-                                    </TableRow>
-                                    : <span className={classes.emptydata}> No Data Found </span>)
-                        }
+                        {isLoading ? <div className="loader">
+                            <CircularProgress size={100} thickness={3} />
+                        </div> : (Object.keys(leadData).length !== 0 ?
+                            <TableRow className={classes.oddEvenRow}>
+                                <TableCell className={classes.tabledata, classes.click}
+                                    onClick={() => routeChangeHAndler(leadData.lead.lead_crm_id)}
+                                >{leadData.lead.lead_crm_id} </TableCell>
+                                <TableCell className={classes.tabledata}>{leadData.lead.name ? leadData.lead.name : 'NA'}</TableCell>
+                                <TableCell className={classes.tabledata}>{maskPhoneNo(leadData.lead.phone_no) ? maskPhoneNo(leadData.lead.phone_no) : 'NA'}</TableCell>
+                                <TableCell className={classes.tabledata}>{leadData.lead.loan_amount ? leadData.lead.loan_amount : 'NA'}</TableCell>
+                                <TableCell className={classes.tabledata}>{leadData.lead.data['monthly_income'] ? leadData.lead.data['monthly_income'] : 'NA'}</TableCell>
+                                <TableCell className={classes.tabledata}>{leadData.lead.data['current_company_name'] ? leadData.lead.data['current_company_name'] : 'NA'}</TableCell>
+                                <TableCell className={classes.tabledata}>{leadData.lead.loan_type ? leadData.lead.loan_type : 'NA'}</TableCell>
+                                <TableCell className={classes.tabledata}>
+                                    <div className={classes.loanTypeButton}>
+                                        <div className={classes.loanButtonText}>{leadData.lead.status}</div>
+                                    </div>
+                                </TableCell>
+                                <TableCell className={classes.tabledata}>{leadData.lead.sub_status ? leadData.lead.sub_status : 'NA'}</TableCell>
+                                <TableCell className={classes.tabledata}>{leadData.lead.campaign_category ? leadData.lead.campaign_category : 'NA'}</TableCell>
+                                <TableCell>
+                                    <Tooltip title="Call Customer">
+                                        <IconButton className={classes.callButton} onClick={() => clickToCall(leadData.lead.phone_no, leadData.lead.lead_crm_id)}>
+                                            <CallIcon className={classes.callIcon} />
+                                        </IconButton>
+                                    </Tooltip>
+                                </TableCell>
+                            </TableRow>
+                            : <span className={classes.emptydata}> No Data Found </span>
+                        )}
                         <div>
                             <CallerDialogBox
                                 onGoingCall={onGoingCall}
@@ -327,7 +284,7 @@ export default function FollowUp(props) {
                         </div>
                     </TableBody>
                 </Table>
-            </TableContainer> */}
+            </TableContainer>
         </PageLayerSection>
     )
 }

@@ -112,7 +112,7 @@ export default function PageLayerSection(props) {
                             startIcon={<AddCircleOutlineOutlinedIcon />}
                             onClick={props.onClick}
                         >
-                            Add Leads
+                            Add New Lead
                         </Button> : null}
                         <div className="nameContainer" onClick={handleMenu}>
                             <div className="nameText">{userName}</div>
@@ -125,8 +125,8 @@ export default function PageLayerSection(props) {
                             open={Boolean(anchorEl)}
                             onClose={handleClose}
                         >
-                            <NavLink to="/profile" style={{ textDecoration: "none", color: "#080707" }}><MenuItem >Profile</MenuItem></NavLink>
-                            <MenuItem onClick={logoutHandler}>Logout</MenuItem>
+                            <NavLink to="/profile" style={{ textDecoration: "none", color: "#080707" }}><MenuItem style={{ fontFamily: 'Lato' }}>Profile</MenuItem></NavLink>
+                            <MenuItem style={{ fontFamily: 'Lato' }} onClick={logoutHandler}>Logout</MenuItem>
                         </Menu>
                         <Avatar className="avatar" alt="User Name">{userName.charAt(0).toUpperCase()}</Avatar>
                     </div>

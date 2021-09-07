@@ -18,7 +18,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import { Button } from '@material-ui/core';
 import CallIcon from '@material-ui/icons/Call';
 import SendIcon from '@material-ui/icons/Send';
-// import Autocomplete from '@material-ui/lab/Autocomplete';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { ListGroup } from 'react-bootstrap';
 import {
     getBank,
@@ -27,7 +27,7 @@ import {
     getProfileData,
     getStatusData
 } from "../../global/leadsGlobalData";
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useHistory, useLocation } from 'react-router-dom';
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 function Alert(props) {
@@ -117,9 +117,11 @@ export default function LeadDetailsNew(props) {
     const [date, setDate] = useState(new Date());
     const [mobileNo, setMobileNo] = useState("");
     const [pincode, setPincode] = useState("");
+    const [city, setcity] = useState("");
+    const [states, setstates] = useState("");
     const [name, setname] = useState("");
     const [companyName, setCompanyName] = useState("");
-    const [searchCompany, setSearchCompany] = useState([]);
+    const [searchCompany, setSearchCompany] = useState({});
     const [pancardNo, setPancardNo] = useState("");
     const [totalWorkExp, setTotalWorkExp] = useState("");
     const [currentWorkExp, setCurrentWorkExp] = useState("");
@@ -127,11 +129,11 @@ export default function LeadDetailsNew(props) {
     const [designation, setDesignation] = useState("");
     const [currentEMI, setCurrentEMI] = useState("");
     const [creditCardOutstanding, setCreditCardOutstanding] = useState("");
+    const [creditCardbalanceTransfer, setcreditCardbalanceTransfer] = useState("");
     const [salaryCreditMode, setSalaryCreditMode] = useState("");
     const [salaryBankAcc, setSalaryBankAcc] = useState("");
     const [currentResidentType, setCurrentResidentType] = useState("");
     const [yearsInCurrentCity, setYearsInCurrentCity] = useState("");
-    const [isEditable, setIsEditable] = useState(false);
     const [status, setStatus] = useState('');
     const [subStatus, setSubStatus] = useState([]);
     const [loanType, setLoanType] = useState("");
@@ -156,9 +158,20 @@ export default function LeadDetailsNew(props) {
     const [disableHangupBtn, setDisableHangupBtn] = useState(true);
     const [vertageCall, setVertageCall] = useState(false);
     const [colorTick, setcolorTick] = useState(false);
+    const [colorTick2, setcolorTick2] = useState(false);
+    const [colorTick3, setcolorTick3] = useState(false);
+    const [colorTick4, setcolorTick4] = useState(false);
+    const [appID, setappID] = useState('');
+    const [bankNBFC, setbankNBFC] = useState('');
+    const [scheme, setscheme] = useState('');
+    const [followUpDate, setfollowUpDate] = useState('');
+    const [isLoading, setisLoading] = useState(false);
+    const [isCopy, setisCopy] = useState(false);
     let statusData = getStatusData();
     let { leadid } = useParams();
     let history = useHistory();
+    let location = useLocation();
+
     const maskPhoneNo = (phoneNo) => {
         let data = phoneNo;
         let unMaskdata = data.slice(-4);
@@ -175,6 +188,7 @@ export default function LeadDetailsNew(props) {
     }
     useEffect(() => {
         const fetchLeadDetaile = async (leadId) => {
+            setisLoading(true)
             let headers = { 'Authorization': `Token ${profileData.token}` }
             try {
                 await axios
@@ -189,21 +203,41 @@ export default function LeadDetailsNew(props) {
                         setCurrentCompany(response.data.lead_data['data'].current_company);
                         setDate(response.data.lead_data["data"].dob);
                         setPincode(response.data.lead_data["data"].residential_pincode);
+                        setcity(response.data.lead_data["data"].city);
+                        setstates(response.data.lead_data["data"].state);
                         setname(response.data.lead_data.name);
                         setCompanyName(response.data.lead_data["data"].current_company_name);
                         setLoanType(response.data.lead_data.loan_type);
                         setSource(response.data.lead_data.source);
                         setPancardNo(response.data.eligibility_data.pan_no);
+                        setEmploymentType(response.data.lead_data["data"].employment_type)
                         setTotalWorkExp(response.data.eligibility_data.total_work_exp);
                         setCurrentWorkExp(response.data.eligibility_data.current_work_exp);
                         setEmail(response.data.eligibility_data.email_id);
                         setDesignation(response.data.eligibility_data.designation);
                         setCurrentEMI(response.data.eligibility_data.current_emi);
                         setCreditCardOutstanding(response.data.eligibility_data.credit_card_outstanding);
+                        setcreditCardbalanceTransfer(response.data.lead_data["data"].credi_card_balance_transfer)
                         setSalaryCreditMode(response.data.eligibility_data.salary_mode);
                         setSalaryBankAcc(response.data.eligibility_data.salary_bank);
                         setCurrentResidentType(response.data.eligibility_data.residence_type);
                         setYearsInCurrentCity(response.data.eligibility_data.no_of_years_current_city);
+                        setappID(response.data.lead_extra_details.app_id);
+                        setbankNBFC(response.data.lead_extra_details.bank);
+                        setscheme(response.data.lead_extra_details.scheme);
+                        setisLoading(false)
+                        if (response.data.lead_data.lead_crm_id !== '' && response.data.lead_data.loan_type !== '' && response.data.lead_data.loan_amount !== '' && response.data.lead_data.name !== '' && response.data.lead_data["data"].dob !== '' && response.data.eligibility_data.pan_no !== '' && response.data.eligibility_data.email_id !== '' && response.data.lead_data.phone_no !== '') {
+                            setcolorTick(true)
+                        }
+                        if (response.data.lead_data["data"].residential_pincode !== '' && response.data.lead_data["data"].city !== '' && response.data.lead_data["data"].state !== '' && response.data.eligibility_data.residence_type !== '') {
+                            setcolorTick2(true)
+                        }
+                        if (response.data.lead_data["data"].employment_type !== '' && response.data.lead_data["data"].current_company_name !== '' && response.data.eligibility_data.designation !== '' && response.data.eligibility_data.current_work_exp !== '' && response.data.eligibility_data.total_work_exp !== '' && response.data.lead_data["data"].monthly_income !== '' && response.data.eligibility_data.salary_mode !== '' && response.data.eligibility_data.salary_bank !== '') {
+                            setcolorTick3(true)
+                        }
+                        if (response.data.eligibility_data.current_emi !== '' && response.data.eligibility_data.credit_card_outstanding !== '' && response.data.lead_data["data"].credi_card_balance_transfer !== '') {
+                            setcolorTick4(true)
+                        }
                     });
             } catch (error) {
                 console.log(error);
@@ -233,6 +267,7 @@ export default function LeadDetailsNew(props) {
     };
     useEffect(() => {
         const fetchRemarks = async (id) => {
+            setisLoading(true)
             setIsDisplay(false);
             let headers = {
                 'Authorization': `Token ${profileData.token}`,
@@ -241,6 +276,7 @@ export default function LeadDetailsNew(props) {
                 .get(`${baseUrl}/leads/lead_remark/${id}`, { headers })
                 .then((response) => {
                     setRemarks(response.data.remarks);
+                    setisLoading(false)
                 })
                 .catch((error) => {
                     console.log(error);
@@ -249,13 +285,42 @@ export default function LeadDetailsNew(props) {
 
         fetchRemarks(leadid);
     }, [loadingRemarks]);
-    const editControlHandler = () => {
-        setIsEditable(true);
-    }
     const updateLeadDetails = async (id) => {
+        if (expanded === 'panel1') {
+            setExpanded('panel2')
+            if (leadId !== '' && loanType !== '' && loanAmount !== '' && name !== '' && date !== '' && pancardNo !== '' && email !== '' && mobileNo !== '') {
+                setcolorTick(true)
+            } else {
+                setcolorTick(false)
+            }
+        }
+        if (expanded === 'panel2') {
+            setExpanded('panel3')
+            if (pincode !== '' && city !== '' && states !== '' && residentType !== '') {
+                setcolorTick2(true)
+            } else {
+                setcolorTick2(false)
+            }
+        }
+        if (expanded === 'panel3') {
+            setExpanded('panel4')
+            if (employmentType !== '' && companyName !== '' && designation !== '' && currentWorkExp !== '' && totalWorkExp !== '' && monthlyIncome !== '' && salaryCreditMode !== '' && salaryBankAcc !== '') {
+                setcolorTick3(true)
+            } else {
+                setcolorTick3(false)
+            }
+        }
+        if (expanded === 'panel4') {
+            setExpanded('panel1')
+            if (currentEMI !== '' && creditCardOutstanding !== '' && creditCardbalanceTransfer !== '') {
+                setcolorTick4(true)
+            } else {
+                setcolorTick4(false)
+            }
+        }
         let data = {
             dob: date, monthly_income: monthlyIncome, current_company_name: companyName,
-            residential_pincode: pincode, current_company: currentCompany
+            residential_pincode: pincode, city: city, state: states, current_company: currentCompany, employment_type: employmentType, credi_card_balance_transfer: creditCardbalanceTransfer
         };
         let lead_data = {
             lead_crm_id: leadId, loan_amount: loanAmount,
@@ -269,21 +334,24 @@ export default function LeadDetailsNew(props) {
             salary_mode: salaryCreditMode, salary_bank: salaryBankAcc, residence_type: currentResidentType,
             no_of_years_current_city: yearsInCurrentCity
         }
+        let lead_extra_details = {
+            app_id: appID, bank: bankNBFC, scheme: scheme
+        }
         let regex = /[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(eligibility_data.pan_no);
         if (eligibility_data.pan_no !== '' && !regex) {
             setAlertMessage('Inavlid PAN Number')
             setIsLeadError(true);
             return;
         }
-        let items = { lead_data, eligibility_data };
+        let items = { lead_data, eligibility_data, lead_extra_details };
         let headers = { 'Authorization': `Token ${profileData.token}` }
         await axios.put(`${baseUrl}/leads/lead_detail/${id}`, items, { headers })
             .then((response) => {
                 if (response.status === 200) {
                     setIsLeadDetails(true);
                 }
-                setIsEditable(false);
             }).catch((error) => {
+                setAlertMessage('Something Wrong');
                 setIsLeadError(true);
             })
     }
@@ -308,19 +376,29 @@ export default function LeadDetailsNew(props) {
     }
     const options = subStatusHandler();
     const statusUpdateHandler = async (id) => {
-        let items = { status: status, sub_status: subStatus }
+        let items = { status: status, sub_status: subStatus, app_id: appID, bank: bankNBFC, scheme: scheme, callback_time: followUpDate.replace('T', ' ') }
         let headers = { 'Authorization': `Token ${profileData.token}` }
         if (status !== '' && subStatus.length > 0) {
             await axios.put(`${baseUrl}/leads/lead_status/${id}`, items, { headers })
                 .then((response) => {
-                    // setAlertMessage(response.data['data'])
                     if (response.status === 200) {
                         setIsStatus(true)
                     }
-                    setTimeout(() => {
-                        history.push('/dashboards/leads')
-                    }, 1500)
+                    if (location.pathname === `/dashboards/myleads/edit/${leadid}`) {
+                        setTimeout(() => {
+                            history.goBack()
+                        }, 1500)
+                    } else if (location.pathname === `/dashboards/followup/edit/${leadid}`) {
+                        setTimeout(() => {
+                            history.goBack()
+                        }, 1500)
+                    } else {
+                        setTimeout(() => {
+                            history.push('/dashboards/leads')
+                        }, 1500)
+                    }
                 }).catch((error) => {
+                    setAlertMessage(error.response.data.error)
                     setIsLeadError(true)
                 })
         }
@@ -341,15 +419,39 @@ export default function LeadDetailsNew(props) {
 
         }
     }
-
+    const getPincodeHandler = async (e) => {
+        setPincode(e.target.value)
+        let item = { pincode: e.target.value };
+        const header = { 'Content-Type': 'application/json' }
+        if (e.target.value >= 6) {
+            await axios.post(`${baseUrl}/common/fetchPincode/`, item, { header })
+                .then((response) => {
+                    if (response.data[0].pin === e.target.value) {
+                        setcity(response.data[0].city_name)
+                        setstates(response.data[0].state_name)
+                    }
+                }).catch((error) => {
+                    console.log(error)
+                })
+        }
+    }
     const selectCompany = (company) => {
         setCompanyName(company);
         setShowCompany(false);
+    }
+    const updateClipboard = (newClip) => {
+        navigator.clipboard.writeText(newClip).then(function () {
+            setisCopy(true);
+        }, function () {
+            setAlertMessage('Lead ID not copied!');
+            isLeadError(true)
+        });
     }
     const disableHangUpSnacks = () => {
         sethangUpSnacks(false);
         setIsLeadError(false);
         setIsLeadDetails(false);
+        setisCopy(false);
     }
     const clickToCall = async (customerNo, leadID) => {
         if (profileData.dialer === 'TATA') {
@@ -416,16 +518,7 @@ export default function LeadDetailsNew(props) {
         setVertageCall(false)
         setDisableHangupBtn(false)
     }
-    const checkOpenState = () => {
-        if (expanded === 'panel1') {
-            setExpanded('panel2')
-            if (leadId !== '' || loanType !== '' || loanAmount !== '' || name !== '' || date !== '' || pancardNo !== '' || email !== '' || mobileNo !== '') {
-                setcolorTick(true)
-            } else {
-                setcolorTick(false)
-            }
-        }
-    }
+
     return (
         <PageLayerSection pageTitle="Lead Details">
             {/* Errors SnackBars Start */}
@@ -439,14 +532,14 @@ export default function LeadDetailsNew(props) {
                     Call in progress....
                 </Alert>
             </Snackbar> : ""}
+            <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isCopy} autoHideDuration={1500} onClose={disableHangUpSnacks}>
+                <Alert onClose={disableHangUpSnacks} severity="success">
+                    Successfully copied to clipboard
+                </Alert>
+            </Snackbar>
             <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isLeadDetails} autoHideDuration={1500} onClose={disableHangUpSnacks}>
                 <Alert onClose={disableHangUpSnacks} severity="success">
                     Lead Data Successfully Updated
-                </Alert>
-            </Snackbar>
-            <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isLeadError} autoHideDuration={1500} onClose={disableHangUpSnacks}>
-                <Alert onClose={disableHangUpSnacks} severity="error">
-                    Something Wrong
                 </Alert>
             </Snackbar>
             <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isStatus} autoHideDuration={1500} onClose={disableHangUpSnacks}>
@@ -460,7 +553,9 @@ export default function LeadDetailsNew(props) {
                 </Alert>
             </Snackbar>
             {/* Errors SnackBars End */}
-            <Grid container justifyContent="flex-start">
+            {isLoading ? <div className="loader">
+                <CircularProgress size={100} thickness={3} />
+            </div> : <Grid container justifyContent="flex-start">
                 <Grid className="accordianContainer" lg={9}>
                     <Accordion square defaultExpanded={true} expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
                         <AccordionSummary expandIcon={<ArrowRightIcon />} aria-controls="panel1d-content" id="panel1d-header">
@@ -530,7 +625,12 @@ export default function LeadDetailsNew(props) {
                                         variant="outlined"
                                         size="small"
                                         value={loanAmount}
-                                        onChange={(e) => setLoanAmount(e.target.value)}
+                                        onChange={(e) => {
+                                            const re = /^[0-9\b]+$/;
+                                            if (e.target.value === '' || re.test(e.target.value)) {
+                                                setLoanAmount(e.target.value)
+                                            }
+                                        }}
                                     />
                                 </Grid>
                                 <Grid lg={4}>
@@ -622,7 +722,7 @@ export default function LeadDetailsNew(props) {
                                     />
                                 </Grid>
                                 <Grid lg={4} style={{ display: 'flex', alignItems: 'center' }}>
-                                    <Button onClick={checkOpenState} className="saveAndNextBtn" color='primary' variant='contained'>SAVE &amp; NEXT</Button>
+                                    <Button onClick={() => updateLeadDetails(leadid)} className="saveAndNextBtn" color='primary' variant='contained'>SAVE &amp; NEXT</Button>
                                 </Grid>
                             </Grid>
                         </AccordionDetails>
@@ -630,7 +730,7 @@ export default function LeadDetailsNew(props) {
                     <Accordion square expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
                         <AccordionSummary expandIcon={<ArrowRightIcon />} aria-controls="panel2d-content" id="panel2d-header">
                             <Typography className={classes.headerText}>Current Residential Details</Typography>
-                            <CheckCircleIcon className={classes.circleTick} />
+                            <CheckCircleIcon className={colorTick2 ? classes.activeColorTick : classes.circleTick} />
                         </AccordionSummary>
                         <AccordionDetails>
                             <Grid container direction="row"
@@ -645,56 +745,43 @@ export default function LeadDetailsNew(props) {
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
-                                        helperText="Current Residence"
                                         variant="outlined"
                                         size="small"
                                         value={pincode}
-                                        onChange={(e) => setPincode(e.target.value)}
+                                        onChange={(e) => getPincodeHandler(e)}
                                     />
                                 </Grid>
                                 <Grid lg={4}>
                                     <TextField
                                         className="textField"
                                         id="outlined-full-width"
-                                        select
                                         label="City"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
-                                        SelectProps={{
-                                            native: true,
-                                        }}
                                         variant="outlined"
                                         size="small"
-                                    >
-                                        <option key="" value="">
-                                            Select
-                                        </option>
-                                    </TextField>
+                                        value={city}
+                                        disabled
+                                    />
                                 </Grid>
                                 <Grid lg={4}>
                                     <TextField
                                         className="textField"
                                         id="outlined-full-width"
-                                        select
                                         label="State"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
-                                        SelectProps={{
-                                            native: true,
-                                        }}
                                         variant="outlined"
                                         size="small"
-                                    >
-                                        <option key="" value="">
-                                            Select
-                                        </option>
-                                    </TextField>
+                                        value={states}
+                                        disabled
+                                    />
                                 </Grid>
                                 <Grid container direction="row"
                                     justifyContent="space-between"
@@ -727,7 +814,7 @@ export default function LeadDetailsNew(props) {
                                         </TextField>
                                     </Grid>
                                     <Grid lg={4} style={{ display: 'flex', alignItems: 'center' }}>
-                                        <Button className="saveAndNextBtn" color='primary' variant='contained'>SAVE &amp; NEXT</Button>
+                                        <Button className="saveAndNextBtn" color='primary' variant='contained' onClick={() => updateLeadDetails(leadid)}>SAVE &amp; NEXT</Button>
                                     </Grid>
                                 </Grid>
                             </Grid>
@@ -736,7 +823,7 @@ export default function LeadDetailsNew(props) {
                     <Accordion square expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
                         <AccordionSummary expandIcon={<ArrowRightIcon />} expanded={expanded === 'panel3'} onChange={handleChange('panel3')} aria-controls="panel3d-content" id="panel3d-header">
                             <Typography className={classes.headerText}>Employment &amp; Income Details</Typography>
-                            <CheckCircleIcon className={classes.circleTick} />
+                            <CheckCircleIcon className={colorTick3 ? classes.activeColorTick : classes.circleTick} />
                         </AccordionSummary>
                         <AccordionDetails>
                             <Grid container direction="row" justifyContent="center">
@@ -756,10 +843,13 @@ export default function LeadDetailsNew(props) {
                                         }}
                                         variant="outlined"
                                         size="small"
+                                        value={employmentType}
+                                        onChange={(e) => setEmploymentType(e.target.value)}
                                     >
-                                        <option key="" value="">
-                                            Select
-                                        </option>
+                                        <option key="" value="">Select</option>
+                                        <option value="salaried">Salaried</option>
+                                        <option value="self_employed">Self Employed</option>
+                                        <option value="self_employed_professional">Self Employed Professional</option>
                                     </TextField>
                                 </Grid>
                                 <Grid lg={4}>
@@ -784,14 +874,6 @@ export default function LeadDetailsNew(props) {
                                             >{company.name}</ListGroup.Item>
                                         )) : null}
                                     </ListGroup>
-                                    {/* <Autocomplete
-                                        id="combo-box-demo"
-                                        options={searchCompany}
-                                        getOptionSelected={(option, value) => option.name === value.name}
-                                        getOptionLabel={(option) => selectCompany(option.name)}
-                                        style={{ width: 300 }}
-                                        renderInput={(params) => }
-                                    /> */}
                                 </Grid>
                                 <Grid lg={4}>
                                     <TextField
@@ -813,33 +895,61 @@ export default function LeadDetailsNew(props) {
                                     <TextField
                                         className="textField"
                                         id="outlined-full-width"
+                                        select
                                         label="Vintage in Current Company"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
+                                        SelectProps={{
+                                            native: true
+                                        }}
                                         variant="outlined"
                                         size="small"
                                         value={currentWorkExp}
                                         onChange={(e) => setCurrentWorkExp(e.target.value)}
-                                    />
+                                    >
+                                        <option key="" value="">Select</option>
+                                        <option value="0-3 months">0-3 months</option>
+                                        <option value="3-6 months">3-6 months</option>
+                                        <option value="6-12 months">6-12 months</option>
+                                        <option value="1-2 years">1-2 years</option>
+                                        <option value="2-3 years">2-3 years</option>
+                                        <option value="3-5 years">3-5 years</option>
+                                        <option value="5-10 years">5-10 years</option>
+                                        <option value="10+ years">10+ years</option>
+                                    </TextField>
                                 </Grid>
                                 <Grid lg={4}>
                                     <TextField
                                         className="textField"
                                         id="outlined-full-width"
+                                        select
                                         label="Total Work Experience"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
+                                        SelectProps={{
+                                            native: true
+                                        }}
                                         variant="outlined"
                                         size="small"
                                         value={totalWorkExp}
                                         onChange={(e) => setTotalWorkExp(e.target.value)}
-                                    />
+                                    >
+                                        <option key="" value="">Select</option>
+                                        <option value="0-3 months">0-3 months</option>
+                                        <option value="3-6 months">3-6 months</option>
+                                        <option value="6-12 months">6-12 months</option>
+                                        <option value="1-2 years">1-2 years</option>
+                                        <option value="2-3 years">2-3 years</option>
+                                        <option value="3-5 years">3-5 years</option>
+                                        <option value="5-10 years">5-10 years</option>
+                                        <option value="10+ years">10+ years</option>
+                                    </TextField>
                                 </Grid>
                                 <Grid lg={4}>
                                     <TextField
@@ -854,7 +964,12 @@ export default function LeadDetailsNew(props) {
                                         variant="outlined"
                                         size="small"
                                         value={monthlyIncome}
-                                        onChange={(e) => setMonthlyIncome(e.target.value)}
+                                        onChange={(e) => {
+                                            const re = /^[0-9\b]+$/;
+                                            if (e.target.value === '' || re.test(e.target.value)) {
+                                                setMonthlyIncome(e.target.value)
+                                            }
+                                        }}
                                     />
                                 </Grid>
                                 <Grid lg={4}>
@@ -916,7 +1031,7 @@ export default function LeadDetailsNew(props) {
                     <Accordion square expanded={expanded === 'panel4'} onChange={handleChange('panel4')}>
                         <AccordionSummary expandIcon={<ArrowRightIcon />} expanded={expanded === 'panel4'} onChange={handleChange('panel4')} aria-controls="panel4d-content" id="panel4-header">
                             <Typography className={classes.headerText}>Obligation Details</Typography>
-                            <CheckCircleIcon className={classes.circleTick} />
+                            <CheckCircleIcon className={colorTick4 ? classes.activeColorTick : classes.circleTick} />
                         </AccordionSummary>
                         <AccordionDetails>
                             <Grid container direction="row" justifyContent="center">
@@ -933,7 +1048,16 @@ export default function LeadDetailsNew(props) {
                                         variant="outlined"
                                         size="small"
                                         value={currentEMI}
-                                        onChange={(e) => setCurrentEMI(e.target.value)}
+                                        inputProps={{
+                                            maxLength: "6"
+                                        }}
+                                        onChange={(e) => {
+                                            const re = /^[0-9\b]+$/;
+                                            if (e.target.value === '' || re.test(e.target.value)) {
+                                                setCurrentEMI(e.target.value)
+                                            }
+                                        }
+                                        }
                                     />
                                 </Grid>
                                 <Grid lg={4}>
@@ -948,8 +1072,16 @@ export default function LeadDetailsNew(props) {
                                         }}
                                         variant="outlined"
                                         size="small"
+                                        inputProps={{
+                                            maxLength: "7"
+                                        }}
                                         value={creditCardOutstanding}
-                                        onChange={(e) => setCreditCardOutstanding(e.target.value)}
+                                        onChange={(e) => {
+                                            const re = /^[0-9\b]+$/;
+                                            if (e.target.value === '' || re.test(e.target.value)) {
+                                                setCreditCardOutstanding(e.target.value)
+                                            }
+                                        }}
                                     />
                                 </Grid>
                                 <Grid lg={4}>
@@ -968,15 +1100,17 @@ export default function LeadDetailsNew(props) {
                                         }}
                                         variant="outlined"
                                         size="small"
+                                        value={creditCardbalanceTransfer}
+                                        onChange={(e) => setcreditCardbalanceTransfer(e.target.value)}
                                     >
                                         <option value="">Select</option>
                                         <option value="Yes">Yes</option>
                                         <option value="No">No</option>
                                     </TextField>
                                 </Grid>
-                                <Grid container direction="row" justifyContent="flex-end" alignItems="center">
+                                <Grid container direction="row" style={{ justifyContent: "flex-end", alignItems: "center" }}>
                                     <Grid lg={4} style={{ display: 'flex', alignItems: 'center' }}>
-                                        <Button className="saveAndNextBtn" color='primary' variant='contained'>SAVE</Button>
+                                        <Button className="saveAndNextBtn" color='primary' variant='contained' onClick={() => updateLeadDetails(leadid)}>SAVE</Button>
                                     </Grid>
                                 </Grid>
                             </Grid>
@@ -1034,8 +1168,8 @@ export default function LeadDetailsNew(props) {
                     </Grid>
                 </Grid>
                 <Grid className="callConatiner" lg={3}>
-                    <Grid container justifyContent="center">
-                        {profileData.dialer === 'TATA' ? null : <React.Fragment><Button
+                    <Grid className="callAdjustContainer">
+                        {profileData.dialer === 'TATA' ? null : <div className="buttonAdjust"><Button
                             className="callBtn"
                             color="primary"
                             variant="contained"
@@ -1051,7 +1185,7 @@ export default function LeadDetailsNew(props) {
                                 disabled={localStorage.getItem("callHangUp") && localStorage.getItem("callHangUp") !== null ? false : callHangUpState}
                                 onClick={hangupCallHandler}>
                                 End
-                            </Button></React.Fragment>}
+                            </Button></div>}
                         <Grid>
                             <TextField
                                 className="textField"
@@ -1121,13 +1255,115 @@ export default function LeadDetailsNew(props) {
                                 variant="outlined"
                                 size="small"
                                 InputAdornmentProps={{ position: 'start' }}
+                                value={followUpDate}
+                                onChange={(e) => setfollowUpDate(e.target.value)}
                             />
                         </Grid>
-                        <Grid>
+                        {status === "STB" ? <React.Fragment>
+                            <Grid>
+                                <TextField
+                                    className="textField"
+                                    id="outlined-full-width"
+                                    label="App ID"
+                                    style={{ margin: 8 }}
+                                    margin="normal"
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    variant="outlined"
+                                    size="small"
+                                    value={appID}
+                                    onChange={(e) => { setappID((e.target.value).toUpperCase()) }}
+                                />
+                            </Grid>
+                            <Grid container justifyContent="center">
+                                <Grid>
+                                    <TextField
+                                        className="textField2 textLeft"
+                                        id="outlined-full-width"
+                                        select
+                                        label="Bank/NBFC"
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        SelectProps={{
+                                            native: true,
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={bankNBFC}
+                                        onChange={(e) => { setbankNBFC(e.target.value) }}
+                                    >
+                                        <option key="" value="">Select</option>
+                                        <option value="HDFB_Bank_(Online)">HDFB Bank (Online)</option>
+                                        <option value="HDFC_Bank_(DSA)">HDFC Bank (DSA)</option>
+                                        <option value="Kotak_Bank_(Online)">Kotak Bank (Online)</option>
+                                        <option value="Kotak_Bank_(DSA)">Kotak Bank (DSA)</option>
+                                        <option value="IDFC_Bank_(Online)">IDFC Bank (Online)</option>
+                                        <option value="IDFC_Bank_(DSA)">IDFC Bank (DSA)</option>
+                                        <option value="ICICI_Bank_(Online)">ICICI Bank (Online)</option>
+                                        <option value="ICICI_Bank_(DSA)">ICICI Bank (DSA)</option>
+                                        <option value="Yes_Bank_(Online)">Yes Bank (Online)</option>
+                                        <option value="Yes_Bank_(DSA)">Yes Bank (DSA)</option>
+                                        <option value="SCB_(DSA)">SCB (DSA)</option>
+                                        <option value="AXIS_BANK_(DSA)">AXIS BANK (DSA)</option>
+                                        <option value="INDUSIND_BANK_(DSA)">INDUSIND BANK (DSA)</option>
+                                        <option value="TATA_Capital_(Online)">TATA Capital (Online)</option>
+                                        <option value="TATA_Capital_(DSA)">TATA Capital (DSA)</option>
+                                        <option value="BIZ_DSA">BIZ DSA</option>
+                                        <option value="BIZ_API">BIZ API</option>
+                                        <option value="BIZ_Online">BIZ Online</option>
+                                        <option value="ABFL">ABFL</option>
+                                        <option value="Fullerton">Fullerton</option>
+                                        <option value="INCRED">INCRED</option>
+                                        <option value="HERO_Fincorp">HERO Fincorp</option>
+                                        <option value="Paysense">Paysense</option>
+                                        <option value="Others">Others</option>
+                                    </TextField>
+                                </Grid>
+                                <Grid>
+                                    <TextField
+                                        className="textField2 textRight"
+                                        id="outlined-full-width"
+                                        select
+                                        label="Scheme"
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        SelectProps={{
+                                            native: true,
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={scheme}
+                                        onChange={(e) => { setscheme(e.target.value) }}
+                                    >
+                                        <option key="" value="">Select</option>
+                                        <option value="Fresh-PL">Fresh-PL</option>
+                                        <option value="PL-Topup">PL-Topup</option>
+                                        <option value="PL-BT">PL-BT</option>
+                                        <option value="PL-BT-Topup">PL-BT-Topup</option>
+                                        <option value="Fresh_OD">Fresh OD</option>
+                                        <option value="OD-Topup">OD-Topup</option>
+                                        <option value="OD-BT-Topup">OD-BT-Topup</option>
+                                        <option value="CC-BT">CC-BT</option>
+                                        <option value="CC-BT-Topup">CC-BT-Topup</option>
+                                        <option value="PL-CC-BT">PL-CC-BT</option>
+                                        <option value="PL-CC-BT-Topup">PL-CC-BT-Topup</option>
+                                        <option value="Others">Others</option>
+                                    </TextField>
+                                </Grid>
+                            </Grid>
+                        </React.Fragment> : ''}
+                        {/* {subStatus === 'Disbursed' ? <Grid>
                             <TextField
                                 className="textField"
                                 id="outlined-full-width"
-                                label="App ID"
+                                type="date"
+                                label="Disbursal Date"
+                                defaultValue="2017-05-24"
                                 style={{ margin: 8 }}
                                 margin="normal"
                                 InputLabelProps={{
@@ -1135,52 +1371,9 @@ export default function LeadDetailsNew(props) {
                                 }}
                                 variant="outlined"
                                 size="small"
+                                InputAdornmentProps={{ position: 'start' }}
                             />
-                        </Grid>
-                        <Grid container justifyContent="center">
-                            <Grid>
-                                <TextField
-                                    className="textField2 textLeft"
-                                    id="outlined-full-width"
-                                    select
-                                    label="Bank/NBFC"
-                                    margin="normal"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    SelectProps={{
-                                        native: true,
-                                    }}
-                                    variant="outlined"
-                                    size="small"
-                                >
-                                    <option key="" value="">
-                                        Select
-                                    </option>
-                                </TextField>
-                            </Grid>
-                            <Grid>
-                                <TextField
-                                    className="textField2 textRight"
-                                    id="outlined-full-width"
-                                    select
-                                    label="Scheme"
-                                    margin="normal"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    SelectProps={{
-                                        native: true,
-                                    }}
-                                    variant="outlined"
-                                    size="small"
-                                >
-                                    <option key="" value="">
-                                        Select
-                                    </option>
-                                </TextField>
-                            </Grid>
-                        </Grid>
+                        </Grid> : ''} */}
                     </Grid>
                     <div className="addRemarkContainer">
                         <Grid container justifyContent="center">
@@ -1199,7 +1392,7 @@ export default function LeadDetailsNew(props) {
                         <Button className="submitBtn" color='primary' variant='contained' onClick={() => statusUpdateHandler(leadid)} disabled={localStorage.getItem("callHangUp") && localStorage.getItem("callHangUp") !== null ? submitFalse : false}>Submit</Button>
                     </Grid>
                     <div className="allremarksContainer">
-                        <h4>All Remarks <span>{leadid}</span></h4>
+                        <h4>All Remarks <span onClick={() => updateClipboard(leadid)}>{leadid}</span></h4>
                         <div className="autoScroll">
                             {
                                 remarks.map((item, index) => {
@@ -1215,7 +1408,7 @@ export default function LeadDetailsNew(props) {
                         </div>
                     </div>
                 </Grid>
-            </Grid>
+            </Grid>}
             <div>
                 <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={vertageCall} autoHideDuration={1500} onClose={disableDialerPopUp}>
                     <Alert onClose={disableDialerPopUp} severity="info">
