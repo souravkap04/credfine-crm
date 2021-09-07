@@ -111,6 +111,7 @@ export default function LeadDetailsNew(props) {
     const salaryMode = getSalaryModeType();
     const [loanAmount, setLoanAmount] = useState("");
     const [leadId, setLeadId] = useState("");
+    const [STBError, setSTBError] = useState([false, false, false]);
     const [employmentType, setEmploymentType] = useState("");
     const [monthlyIncome, setMonthlyIncome] = useState("");
     const [currentCompany, setCurrentCompany] = useState("");
@@ -167,6 +168,8 @@ export default function LeadDetailsNew(props) {
     const [followUpDate, setfollowUpDate] = useState('');
     const [isLoading, setisLoading] = useState(false);
     const [isCopy, setisCopy] = useState(false);
+    const [disbursedDate, setdisbursedDate] = useState('');
+    const [disbursedError, setdisbursedError] = useState([false]);
     let statusData = getStatusData();
     let { leadid } = useParams();
     let history = useHistory();
@@ -225,6 +228,7 @@ export default function LeadDetailsNew(props) {
                         setappID(response.data.lead_extra_details.app_id);
                         setbankNBFC(response.data.lead_extra_details.bank);
                         setscheme(response.data.lead_extra_details.scheme);
+                        setdisbursedDate(response.data.lead_extra_details.disbursed_date)
                         setisLoading(false)
                         if (response.data.lead_data.lead_crm_id !== '' && response.data.lead_data.loan_type !== '' && response.data.lead_data.loan_amount !== '' && response.data.lead_data.name !== '' && response.data.lead_data["data"].dob !== '' && response.data.eligibility_data.pan_no !== '' && response.data.eligibility_data.email_id !== '' && response.data.lead_data.phone_no !== '') {
                             setcolorTick(true)
@@ -376,7 +380,26 @@ export default function LeadDetailsNew(props) {
     }
     const options = subStatusHandler();
     const statusUpdateHandler = async (id) => {
-        let items = { status: status, sub_status: subStatus, app_id: appID, bank: bankNBFC, scheme: scheme, callback_time: followUpDate.replace('T', ' ') }
+        if (status === 'STB') {
+            let data = [...STBError];
+            if (appID === "") data[0] = true;
+            if (bankNBFC === "") data[1] = true;
+            if (scheme === "") data[2] = true;
+
+            if (appID == '' || bankNBFC == '' || scheme == '') {
+                setSTBError(data);
+                return;
+            }
+        }
+        if (subStatus === 'Disbursed') {
+            let disData = [...disbursedError];
+            if (disbursedDate === "") {
+                disData[0] = true;
+                setdisbursedError(disData);
+                return;
+            }
+        }
+        let items = { status: status, sub_status: subStatus, app_id: appID, bank: bankNBFC, scheme: scheme, callback_time: followUpDate.replace('T', ' '), disbursed_date: disbursedDate }
         let headers = { 'Authorization': `Token ${profileData.token}` }
         if (status !== '' && subStatus.length > 0) {
             await axios.put(`${baseUrl}/leads/lead_status/${id}`, items, { headers })
@@ -518,7 +541,6 @@ export default function LeadDetailsNew(props) {
         setVertageCall(false)
         setDisableHangupBtn(false)
     }
-
     return (
         <PageLayerSection pageTitle="Lead Details">
             {/* Errors SnackBars Start */}
@@ -1240,7 +1262,7 @@ export default function LeadDetailsNew(props) {
                                 ))}
                             </TextField>
                         </Grid>
-                        <Grid>
+                        {status === 'Contacted NI/NE' || status === 'Customer Not Interested' || status === 'Not Contactable' ? '' : <Grid>
                             <TextField
                                 className="textField"
                                 id="outlined-full-width"
@@ -1258,7 +1280,7 @@ export default function LeadDetailsNew(props) {
                                 value={followUpDate}
                                 onChange={(e) => setfollowUpDate(e.target.value)}
                             />
-                        </Grid>
+                        </Grid>}
                         {status === "STB" ? <React.Fragment>
                             <Grid>
                                 <TextField
@@ -1273,7 +1295,16 @@ export default function LeadDetailsNew(props) {
                                     variant="outlined"
                                     size="small"
                                     value={appID}
-                                    onChange={(e) => { setappID((e.target.value).toUpperCase()) }}
+                                    onChange={(e) => {
+                                        setappID((e.target.value).toUpperCase())
+                                    }}
+                                    onFocus={() => {
+                                        let data = [...STBError];
+                                        data[0] = false;
+                                        setSTBError(data);
+                                    }}
+                                    error={STBError[0]}
+                                    helperText={STBError[0] ? 'App Id is required' : ''}
                                 />
                             </Grid>
                             <Grid container justifyContent="center">
@@ -1293,7 +1324,17 @@ export default function LeadDetailsNew(props) {
                                         variant="outlined"
                                         size="small"
                                         value={bankNBFC}
-                                        onChange={(e) => { setbankNBFC(e.target.value) }}
+                                        onChange={(e) => {
+                                            setbankNBFC(e.target.value)
+
+                                        }}
+                                        onFocus={() => {
+                                            let data = [...STBError];
+                                            data[1] = false;
+                                            setSTBError(data);
+                                        }}
+                                        error={STBError[1]}
+                                        helperText={STBError[1] ? 'Bank is required' : ''}
                                     >
                                         <option key="" value="">Select</option>
                                         <option value="HDFB_Bank_(Online)">HDFB Bank (Online)</option>
@@ -1338,7 +1379,16 @@ export default function LeadDetailsNew(props) {
                                         variant="outlined"
                                         size="small"
                                         value={scheme}
-                                        onChange={(e) => { setscheme(e.target.value) }}
+                                        onChange={(e) => {
+                                            setscheme(e.target.value)
+                                        }}
+                                        onFocus={() => {
+                                            let data = [...STBError];
+                                            data[2] = false;
+                                            setSTBError(data);
+                                        }}
+                                        error={STBError[2]}
+                                        helperText={STBError[2] ? 'Scheme is required' : ''}
                                     >
                                         <option key="" value="">Select</option>
                                         <option value="Fresh-PL">Fresh-PL</option>
@@ -1357,13 +1407,12 @@ export default function LeadDetailsNew(props) {
                                 </Grid>
                             </Grid>
                         </React.Fragment> : ''}
-                        {/* {subStatus === 'Disbursed' ? <Grid>
+                        {subStatus === 'Disbursed' ? <Grid>
                             <TextField
                                 className="textField"
                                 id="outlined-full-width"
                                 type="date"
                                 label="Disbursal Date"
-                                defaultValue="2017-05-24"
                                 style={{ margin: 8 }}
                                 margin="normal"
                                 InputLabelProps={{
@@ -1371,9 +1420,17 @@ export default function LeadDetailsNew(props) {
                                 }}
                                 variant="outlined"
                                 size="small"
-                                InputAdornmentProps={{ position: 'start' }}
+                                value={disbursedDate}
+                                onChange={(e) => setdisbursedDate(e.target.value)}
+                                onFocus={() => {
+                                    let disData = [...disbursedError];
+                                    disData[0] = false;
+                                    setdisbursedError(disData)
+                                }}
+                                error={disbursedError[0]}
+                                helperText={disbursedError[0] ? 'Disbursal date required' : ''}
                             />
-                        </Grid> : ''} */}
+                        </Grid> : ''}
                     </Grid>
                     <div className="addRemarkContainer">
                         <Grid container justifyContent="center">

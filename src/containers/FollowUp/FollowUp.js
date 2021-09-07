@@ -107,6 +107,7 @@ export default function FollowUp(props) {
     let history = useHistory();
     const profileData = getProfileData();
     const [leadData, setLeadData] = useState({});
+    const [LeadCount, setLeadCount] = useState(0);
     const [isCalling, setIsCalling] = useState(false);
     const [isCallConnect, setIsCallConnect] = useState(false);
     const [onGoingCall, setOnGoingCall] = useState(false);
@@ -123,8 +124,13 @@ export default function FollowUp(props) {
         };
         await axios.get(`${baseUrl}/leads/fetchOpenLead/`, { headers })
             .then((response) => {
-                setLeadData(response.data);
-                setisLoading(false);
+                if (response.data.total_followup === 0) {
+                    setisLoading(false);
+                } else {
+                    setLeadCount(response.data.total_followup)
+                    setLeadData(response.data.data);
+                    setisLoading(false);
+                }
             }).catch((error) => {
                 console.log(error);
             })
@@ -210,10 +216,10 @@ export default function FollowUp(props) {
         <PageLayerSection>
             {/* <NoDataFound text="Coming Soon" /> */}
             <div className="followUpBtnContainer">
-                {/* <Badge className="followbtn" badgeContent={9999} color="secondary">
+                {LeadCount !== 0 ? <Badge className="followbtn" badgeContent={LeadCount} color="secondary">
                     <Button variant="contained">Follow Up</Button>
-                </Badge>
-                <Badge className="followbtn" badgeContent={4} color="secondary">
+                </Badge> : ''}
+                {/* <Badge className="followbtn" badgeContent={4} color="secondary">
                     <Button variant="contained">Laps</Button>
                 </Badge> */}
             </div>
@@ -237,7 +243,7 @@ export default function FollowUp(props) {
                     <TableBody>
                         {isLoading ? <div className="loader">
                             <CircularProgress size={100} thickness={3} />
-                        </div> : (Object.keys(leadData).length !== 0 ?
+                        </div> : LeadCount !== 0 ? (Object.keys(leadData).length !== 0 ?
                             <TableRow className={classes.oddEvenRow}>
                                 <TableCell className={classes.tabledata, classes.click}
                                     onClick={() => routeChangeHAndler(leadData.lead.lead_crm_id)}
@@ -263,8 +269,8 @@ export default function FollowUp(props) {
                                     </Tooltip>
                                 </TableCell>
                             </TableRow>
-                            : <span className={classes.emptydata}> No Data Found </span>
-                        )}
+                            : '') : <span className={classes.emptydata}> No Data Found </span>
+                        }
                         <div>
                             <CallerDialogBox
                                 onGoingCall={onGoingCall}
