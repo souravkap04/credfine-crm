@@ -7,6 +7,8 @@ import { InputBase, MenuItem, Menu } from '@material-ui/core';
 import { useIdleTimer } from 'react-idle-timer';
 import ArrowDropDownOutlinedIcon from '@material-ui/icons/ArrowDropDownOutlined';
 import { NavLink, useHistory } from 'react-router-dom';
+import { Button } from '@material-ui/core';
+import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
 export default function PageLayerSection(props) {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [searchInput, setSearchInput] = useState("");
@@ -75,29 +77,43 @@ export default function PageLayerSection(props) {
             </div>
             <div className="rightSection">
                 <div className="appBarContainer">
-                    <div className="searchContainer">
-                        <div className="searchIconContainer">
-                            <SearchIcon className="searchIcon" />
-                        </div>
-                        <InputBase
-                            placeholder="Lead ID / Mobile"
-                            className="inputContainer"
-                            inputProps={{ "aria-label": "search" }}
-                            value={searchInput}
-                            onChange={(e) => setSearchInput((e.target.value).toUpperCase().trim())}
-                            onKeyPress={(event) => {
-                                if (event.key === "Enter") {
-                                    if (searchInput !== "" && searchValidation(searchInput)) {
-                                        history.push("/dashboards/leads?query=" + searchInput);
-                                    } else if (searchInput === "") {
-                                        history.push("/dashboards/leads");
-                                        window.location.reload();
+                    <div className="searchMainContainer">
+                        <div className="searchContainer">
+                            <div className="searchIconContainer">
+                                <SearchIcon className="searchIcon" />
+                            </div>
+                            <InputBase
+                                placeholder="Lead ID / Mobile"
+                                className="inputContainer"
+                                inputProps={{ "aria-label": "search" }}
+                                value={searchInput}
+                                onChange={(e) => setSearchInput((e.target.value).toUpperCase().trim())}
+                                onKeyPress={(event) => {
+                                    if (event.key === "Enter") {
+                                        if (searchInput !== "" && searchValidation(searchInput)) {
+                                            history.push("/dashboards/leads?query=" + searchInput);
+                                        } else if (searchInput === "") {
+                                            history.push("/dashboards/leads");
+                                            window.location.reload();
+                                        }
                                     }
-                                }
-                            }}
-                        />
+                                }}
+                            />
+                        </div>
+                        <div className="headerSection">
+                            <h3>{props.pageTitle}</h3>
+                        </div>
                     </div>
                     <div className="rightAppBarSection">
+                        {props.addLeadButton ? <Button
+                            className="addBtn"
+                            color="primary"
+                            variant="contained"
+                            startIcon={<AddCircleOutlineOutlinedIcon />}
+                            onClick={props.onClick}
+                        >
+                            Add Leads
+                        </Button> : null}
                         <div className="nameContainer" onClick={handleMenu}>
                             <div className="nameText">{userName}</div>
                             <ArrowDropDownOutlinedIcon className="arrowDown" />

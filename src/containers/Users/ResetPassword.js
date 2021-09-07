@@ -24,6 +24,11 @@ import EditIcon from '@material-ui/icons/Edit';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
+import MuiAlert from '@material-ui/lab/Alert';
+import Snackbar from '@material-ui/core/Snackbar';
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 const useStyles = makeStyles({
   container: {
     marginTop: '10px'
@@ -32,14 +37,6 @@ const useStyles = makeStyles({
     overflow: 'auto',
     // maxHeight: '500px',
     marginBottom: '25px'
-  },
-  searchInput: {
-    margin: '0px 200px',
-    padding: '20px'
-  },
-  header: {
-    position: 'sticky',
-    top: 0,
   },
   table: {
     Width: "100%",
@@ -75,15 +72,40 @@ const useStyles = makeStyles({
     }
   },
   tableheading: {
-    padding: '0 4px',
-    fontSize: '12px',
-    textAlign: 'center'
+    backgroundColor: '#8f9bb3',
+    color: '#ffffff',
+    fontSize: '14px',
   },
   tabledata: {
     padding: '0 4px',
     fontSize: '12px',
     textAlign: 'center'
   },
+  oddEvenRow: {
+    '&:nth-of-type(odd)': {
+      backgroundColor: '#f7f9fc',
+    },
+    '&:nth-of-type(even)': {
+      backgroundColor: '#fff',
+    },
+  },
+  buttonContainer:{
+    display:'flex',
+    justifyContent:'flex-end',
+    alignItems:'center',
+    padding: '20px'
+  },
+  activeUserBtn:{
+    margin:'0 10px'
+  },
+  userType:{
+    marginRight:'60vh'
+  },
+  deleteUsersData:{
+    padding: '20px 5px',
+    fontSize: '12px',
+    textAlign: 'center'
+  }
 
 });
 export default function Users() {
@@ -91,9 +113,12 @@ export default function Users() {
   const profileData = getProfileData();
   const [isResetPassword, setIsResetPassword] = useState(false);
   const [isEditUser, setIsEditUser] = useState(false);
+  const [isDeleteUser, setIsDeleteUser] = useState(false);
+  const [userName,setUserName] = useState(null);
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [users, setUsers] = useState([]);
+  const [deletedUsers,setDeletedUsers] = useState([]);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -103,6 +128,7 @@ export default function Users() {
   const [gender, setGender] = useState("");
   const [dialerApiKey, setDialerApiKey] = useState("");
   const [loading, setLoading] = useState(false);
+  const [loadingDeletedUser,setLoadingDeletedUser] = useState(false)
   const [errors, setErrors] = useState({});
   const [rowData, setRowData] = useState({});
   const [alertMessage, setAlertMessage] = useState('');
@@ -112,6 +138,7 @@ export default function Users() {
   const [searchTerm, setSearchTerm] = useState('');
   const [vertageId, setVertageId] = useState("");
   const [vertagePass, setVertagePass] = useState("");
+  const [isActiveUser,setIsActiveUser] = useState(true);
   const resetPasswordHandler = (userName, index) => {
     setIsResetPassword(true);
     setRowData(userName);
@@ -163,21 +190,43 @@ export default function Users() {
 
   }
   useEffect(() => {
-    const fetchUserData = async () => {
-      const headers = {
-        'userRoleHash': profileData.user_roles[0].user_role_hash,
-      };
-      try {
-        const response = await axios.get(`${baseUrl}/user/fetchUsers/`, { headers });
-        setUsers(response.data);
-        setLoading(true);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchUserData();
+    listOfActiveUsers();
   }, [deleteCount])
-  const deleteUser = async (userName, index) => {
+  const listOfActiveUsers = async ()=>{
+    const headers = {
+      'userRoleHash': profileData.user_roles[0].user_role_hash,
+    };
+    try {
+      const response = await axios.get(`${baseUrl}/user/fetchUsers/`, { headers });
+      setIsActiveUser(true);
+      setLoading(true);
+      setUsers(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  const listOfDeletedUsers = async ()=>{
+    const headers = {
+      'userRoleHash': profileData.user_roles[0].user_role_hash,
+    };
+    try {
+      const response = await axios.get(`${baseUrl}/user/fetchDeletedUser/`, { headers });
+      setIsActiveUser(false);
+      setLoadingDeletedUser(true);
+      setDeletedUsers(response.data);
+      
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  const deletedUserPopUpHandler = (username)=>{
+    setIsDeleteUser(true);
+    setUserName(username);
+  }
+  const closeDeleteUserPopUp = ()=>{
+    setIsDeleteUser(false);
+  }
+  const deleteUser = async () => {
     const headers = {
       'userRoleHash': profileData.user_roles[0].user_role_hash,
       // 'userRoleHash' : 'f63e2d14-b15a-11eb-bc7e-000000000013'
@@ -185,7 +234,12 @@ export default function Users() {
     let item = null;
     await axios.post(`${baseUrl}/user/deleteUser/${userName}`, item, { headers })
       .then((response) => {
-        setDeleteCount(deleteCount + 1);
+        if(response.status === 200){
+          setIsDisplay(true);
+          setAlertMessage(response.data.message);
+          setIsDeleteUser(false);
+          setDeleteCount(deleteCount + 1);
+        }
       }).catch((error) => {
         console.log(error);
       })
@@ -225,21 +279,39 @@ export default function Users() {
         setIsDisplay(true);
       })
   }
-
+  const closeSnankBar = ()=>{
+    setIsDisplay(false);
+  }
   return (
     <PageLayerSection>
+      <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isDisplay} autoHideDuration={1500} onClose={closeSnankBar}>
+        <Alert>
+          {alertMessage}
+        </Alert>
+      </Snackbar>
       <div className={classes.container}>
         <Paper>
-          <div className={classes.searchInput}>
+          <div className={classes.buttonContainer}>
+            <div className={classes.userType}>
+              {isActiveUser ? <Typography>Active User</Typography>:<Typography>Deleted User</Typography>}
+            </div>
+          <div>
             <InputGroup>
               <FormControl type="text" placeholder="Search..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm((e.target.value).toLowerCase().trim())} />
             </InputGroup>
+            </div>
+            <div className={classes.activeUserBtn}>
+              <Button disabled={isActiveUser} onClick={listOfActiveUsers}>Active User</Button>
+            </div>
+            <div>
+              <Button disabled={!isActiveUser} onClick={listOfDeletedUsers}>Deleted User</Button>
+            </div>
           </div>
           <TableContainer className={classes.scroller}>
-            <Table>
-              <TableHead className={classes.header}>
+            <Table className={classes.table}>
+              <TableHead className={classes.tableheading}>
                 <TableRow>
                 <TableCell className={classes.tableheading}>Sl No</TableCell>
                   <TableCell className={classes.tableheading}>User Name</TableCell>
@@ -257,7 +329,8 @@ export default function Users() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {loading ? users.filter((user) => {
+                { isActiveUser ?
+                 loading ? users.filter((user) => {
                   if (searchTerm === "") {
                     return user;
                   } else if (user.phone_no.toLowerCase().includes(searchTerm.toLowerCase())) {
@@ -268,7 +341,7 @@ export default function Users() {
                     return user;
                   }
                 }).map((user, index) => (
-                  <TableRow key={index} >
+                  <TableRow className={classes.oddEvenRow} key={index} >
                     <TableCell className={classes.tabledata}>{index+1}</TableCell>
                     <TableCell className={classes.tabledata}>{user.myuser.username}</TableCell>
                     <TableCell className={classes.tabledata}>{user.myuser.first_name}</TableCell>
@@ -297,7 +370,8 @@ export default function Users() {
                         </IconButton>
                       </Tooltip>
                       <Tooltip title="Delete User">
-                        <IconButton onClick={() => deleteUser(user.myuser.username, index)}>
+                        {/* <IconButton onClick={() => deleteUser(user.myuser.username, index)}> */}
+                        <IconButton onClick={()=>deletedUserPopUpHandler(user.myuser.username)}>
                           <DeleteIcon />
                         </IconButton>
                       </Tooltip>
@@ -306,8 +380,46 @@ export default function Users() {
                 )) :
                   <div className={classes.loader}>
                     <ReactBootstrap.Spinner animation="border" />
+                  </div> 
+                  : loadingDeletedUser ? deletedUsers.filter((deletedUser) => {
+                    if (searchTerm === "") {
+                      return deletedUser;
+                    } else if (deletedUser.phone_no.toLowerCase().includes(searchTerm.toLowerCase())) {
+                      return deletedUser;
+                    } else if (deletedUser.myuser.first_name.toLowerCase().includes(searchTerm.toLowerCase())) {
+                      return deletedUser;
+                    } else if (deletedUser.myuser.username.toLowerCase().includes(searchTerm.toLowerCase())) {
+                      return deletedUser;
+                    }
+                  }).map((deletedUser,index)=>(
+                        <TableRow className={classes.oddEvenRow} key={index} >
+                            <TableCell className={classes.deleteUsersData}>{index+1}</TableCell>
+                            <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.username}</TableCell>
+                            <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.first_name}</TableCell>
+                            <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.last_name}</TableCell>
+                            <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.email}</TableCell>
+                            <TableCell className={classes.deleteUsersData}>{deletedUser.role}</TableCell>
+                            <TableCell className={classes.deleteUsersData}>{deletedUser.product_type}</TableCell>
+                            <TableCell className={classes.deleteUsersData}>{deletedUser.phone_no}</TableCell>
+                            <TableCell className={classes.deleteUsersData}>{deletedUser.gender}</TableCell>
+                            {/* <TableCell className={classes.deleteUsersData}>{user.myuser.dialer_pass}</TableCell> */}
+                            <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_id}</TableCell>
+                            <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_pass}</TableCell>
+                        </TableRow> 
+                       )):
+                  <div className={classes.loader}>
+                    <ReactBootstrap.Spinner animation="border" />
                   </div>
                 }
+                <>
+                  <Dialog open={isDeleteUser}>
+                    <DialogTitle>Are You Want to Delete User?</DialogTitle>
+                    <DialogContent>
+                      <Button style={{padding:'0 50px',marginRight:'20px'}} onClick={deleteUser}>Yes</Button>
+                      <Button style={{padding:'0 50px'}} onClick={closeDeleteUserPopUp}>No</Button>
+                    </DialogContent>
+                  </Dialog>
+                </>
                 <>
                   <Dialog open={isResetPassword} onClose={closeResetPassword}>
                     <DialogTitle id="form-dialog-title">Reset Password</DialogTitle>

@@ -4,7 +4,7 @@ import PageLayerSection from '../PageLayerSection/PageLayerSection'
 export default function Dashboard() {
     return (
         <PageLayerSection>
-            <NoDataFound />
+            <NoDataFound text="No Data Found" />
         </PageLayerSection>
     )
 }
