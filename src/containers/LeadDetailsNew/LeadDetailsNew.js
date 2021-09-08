@@ -122,7 +122,7 @@ export default function LeadDetailsNew(props) {
     const [states, setstates] = useState("");
     const [name, setname] = useState("");
     const [companyName, setCompanyName] = useState("");
-    const [searchCompany, setSearchCompany] = useState({});
+    const [searchCompany, setSearchCompany] = useState([]);
     const [pancardNo, setPancardNo] = useState("");
     const [totalWorkExp, setTotalWorkExp] = useState("");
     const [currentWorkExp, setCurrentWorkExp] = useState("");
@@ -166,6 +166,7 @@ export default function LeadDetailsNew(props) {
     const [bankNBFC, setbankNBFC] = useState('');
     const [scheme, setscheme] = useState('');
     const [followUpDate, setfollowUpDate] = useState('');
+    const [followUpDateError, setfollowUpDateError] = useState([false]);
     const [isLoading, setisLoading] = useState(false);
     const [isCopy, setisCopy] = useState(false);
     const [disbursedDate, setdisbursedDate] = useState('');
@@ -290,17 +291,22 @@ export default function LeadDetailsNew(props) {
         fetchRemarks(leadid);
     }, [loadingRemarks]);
     const updateLeadDetails = async (id) => {
+        let regex = /[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(pancardNo);
         if (expanded === 'panel1') {
-            setExpanded('panel2')
             if (leadId !== '' && loanType !== '' && loanAmount !== '' && name !== '' && date !== '' && pancardNo !== '' && email !== '' && mobileNo !== '') {
                 setcolorTick(true)
+            } else if (pancardNo !== '' && !regex) {
+                setAlertMessage('Inavlid PAN Number')
+                setIsLeadError(true);
+                return;
             } else {
                 setcolorTick(false)
             }
+            setExpanded('panel2')
         }
         if (expanded === 'panel2') {
             setExpanded('panel3')
-            if (pincode !== '' && city !== '' && states !== '' && residentType !== '') {
+            if (pincode !== '' && city !== '' && states !== '' && currentResidentType !== '') {
                 setcolorTick2(true)
             } else {
                 setcolorTick2(false)
@@ -341,12 +347,7 @@ export default function LeadDetailsNew(props) {
         let lead_extra_details = {
             app_id: appID, bank: bankNBFC, scheme: scheme
         }
-        let regex = /[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(eligibility_data.pan_no);
-        if (eligibility_data.pan_no !== '' && !regex) {
-            setAlertMessage('Inavlid PAN Number')
-            setIsLeadError(true);
-            return;
-        }
+
         let items = { lead_data, eligibility_data, lead_extra_details };
         let headers = { 'Authorization': `Token ${profileData.token}` }
         await axios.put(`${baseUrl}/leads/lead_detail/${id}`, items, { headers })
@@ -388,6 +389,14 @@ export default function LeadDetailsNew(props) {
 
             if (appID == '' || bankNBFC == '' || scheme == '') {
                 setSTBError(data);
+                return;
+            }
+        }
+        if(status === 'Valid Follow-Up' || status === 'Cold Follow-Up' || status === 'Hot Follow-Up' || (status === 'Punched' && subStatus === 'Eligible')) {
+            let followData = [...followUpDateError];
+            if (followUpDate === "") {
+                followData[0] = true;
+                setfollowUpDateError(followData);
                 return;
             }
         }
@@ -983,6 +992,9 @@ export default function LeadDetailsNew(props) {
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
+                                        inputProps={{
+                                            maxLength: 7
+                                        }}
                                         variant="outlined"
                                         size="small"
                                         value={monthlyIncome}
@@ -1262,13 +1274,12 @@ export default function LeadDetailsNew(props) {
                                 ))}
                             </TextField>
                         </Grid>
-                        {status === 'Contacted NI/NE' || status === 'Customer Not Interested' || status === 'Not Contactable' ? '' : <Grid>
+                        {status === 'Contacted NI/NE' || status === 'Customer Not Interested' || status === 'Not Contactable' || (status === 'Punched' && subStatus === 'Not Eligible') || status === 'STB' ? '' : <Grid>
                             <TextField
                                 className="textField"
                                 id="outlined-full-width"
                                 type="datetime-local"
                                 label="Follow-up Date"
-                                defaultValue="2017-05-24T10:30"
                                 style={{ margin: 8 }}
                                 margin="normal"
                                 InputLabelProps={{
@@ -1279,6 +1290,13 @@ export default function LeadDetailsNew(props) {
                                 InputAdornmentProps={{ position: 'start' }}
                                 value={followUpDate}
                                 onChange={(e) => setfollowUpDate(e.target.value)}
+                                onFocus={() => {
+                                    let followData = [...followUpDateError];
+                                    followData[0] = false;
+                                    setfollowUpDateError(followData);
+                                }}
+                                error={followUpDateError[0]}
+                                helperText={followUpDateError[0] ? 'Follow-up date is required' : ''}
                             />
                         </Grid>}
                         {status === "STB" ? <React.Fragment>

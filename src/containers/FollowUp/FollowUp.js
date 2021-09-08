@@ -115,7 +115,7 @@ export default function FollowUp(props) {
     const [vertageCall, setVertageCall] = useState(false);
     const [disableHangupBtn, setDisableHangupBtn] = useState(true);
     const [isLoading, setisLoading] = useState(false);
-
+    const [currentDateTime, setcurrentDateTime] = useState('');
     const fetchLeadsData = async () => {
         setisLoading(true);
         const headers = {
@@ -126,7 +126,19 @@ export default function FollowUp(props) {
             .then((response) => {
                 if (response.data.total_followup === 0) {
                     setisLoading(false);
+                } else if (response.data.total_followup > 0 && response.data.data === undefined) {
+                    setLeadCount(response.data.total_followup)
+                    setisLoading(false);
                 } else {
+                    let data = response.data.data.callback_time;
+                    let d = new Date(data * 1000)
+                    let dateTime = d.toLocaleDateString() + ' ' + d.toLocaleTimeString()
+                    if (new Date().toLocaleTimeString() === d.toLocaleTimeString()) {
+                        console.log("true")
+                        localStorage.setItem('followUpdateStatus', true)
+                    }
+                    else console.log("false")
+                    setcurrentDateTime(dateTime)
                     setLeadCount(response.data.total_followup)
                     setLeadData(response.data.data);
                     setisLoading(false);
@@ -235,6 +247,7 @@ export default function FollowUp(props) {
                             <TableCell className={classes.tableheading} >Company</TableCell>
                             <TableCell className={classes.tableheading} >Loan Type</TableCell>
                             <TableCell className={clsx(classes.tableheading, classes.statusHeading)} >Status</TableCell>
+                            <TableCell className={classes.tableheading}>Follow-Up Date</TableCell>
                             <TableCell className={classes.tableheading} >Sub Status</TableCell>
                             <TableCell className={classes.tableheading} >Campaign</TableCell>
                             <TableCell className={classes.tableheading} ></TableCell>
@@ -259,6 +272,7 @@ export default function FollowUp(props) {
                                         <div className={classes.loanButtonText}>{leadData.lead.status}</div>
                                     </div>
                                 </TableCell>
+                                <TableCell className={classes.tabledata}>{currentDateTime ? currentDateTime : 'NA'}</TableCell>
                                 <TableCell className={classes.tabledata}>{leadData.lead.sub_status ? leadData.lead.sub_status : 'NA'}</TableCell>
                                 <TableCell className={classes.tabledata}>{leadData.lead.campaign_category ? leadData.lead.campaign_category : 'NA'}</TableCell>
                                 <TableCell>
