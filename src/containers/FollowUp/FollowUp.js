@@ -23,7 +23,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Button } from '@material-ui/core';
 import Badge from '@material-ui/core/Badge';
-import NoDataFound from '../NoDataFound/NoDataFound';
+// import NoDataFound from '../NoDataFound/NoDataFound';
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -50,8 +50,9 @@ const useStyles = makeStyles({
     },
     emptydata: {
         position: 'relative',
-        left: '30rem',
-        fontSize: '12px'
+        left: '35vw',
+        fontSize: '15px',
+        whiteSpace: 'nowrap'
     },
     click: {
         cursor: 'pointer',
@@ -133,11 +134,6 @@ export default function FollowUp(props) {
                     let data = response.data.data.callback_time;
                     let d = new Date(data * 1000)
                     let dateTime = d.toLocaleDateString() + ' ' + d.toLocaleTimeString()
-                    if (new Date().toLocaleTimeString() === d.toLocaleTimeString()) {
-                        console.log("true")
-                        localStorage.setItem('followUpdateStatus', true)
-                    }
-                    else console.log("false")
                     setcurrentDateTime(dateTime)
                     setLeadCount(response.data.total_followup)
                     setLeadData(response.data.data);
@@ -283,7 +279,7 @@ export default function FollowUp(props) {
                                     </Tooltip>
                                 </TableCell>
                             </TableRow>
-                            : '') : <span className={classes.emptydata}> No Data Found </span>
+                            : <span className={classes.emptydata}> Follow up after some time </span>) : <span className={classes.emptydata}> No Data Found </span>
                         }
                         <div>
                             <CallerDialogBox

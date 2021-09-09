@@ -246,6 +246,7 @@ export default function Leads() {
     setDisableHangupBtn(false)
   }
   const personalLoanSubmitHandler = async () => {
+    console.log(profileData.user_roles[0].allowed_products[0])
     let formErrorData = [...formError];
     if (fullName === "") formErrorData[0] = true;
     if (mobileNo === "" || mobileNo.length !== 10) formErrorData[1] = true;
@@ -257,7 +258,7 @@ export default function Leads() {
     }
     let item = {
       loan_amount: loanAmount, monthly_income: monthlyIncome, dob: date, phone_no: mobileNo,
-      residential_pincode: pincode, current_company_name: companyName, name: fullName, loan_type: "PL",
+      residential_pincode: pincode, current_company_name: companyName, name: fullName, loan_type: profileData.user_roles[0].allowed_products[0] === "PL" ? "PL" : "BL",
       current_company: currentCompany, employment_type: employmentType, campaign_category: campaign
     };
     let headers = {
