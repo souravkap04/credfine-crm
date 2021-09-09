@@ -73,7 +73,7 @@ export default function PageLayerSection(props) {
         if (today >= 7 && today <= 20) {
             setInterval(() => {
                 notification();
-            }, 5000)
+            }, 300000)
         }
     }, []);
     const searchValidation = (search) => {
