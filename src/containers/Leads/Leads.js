@@ -136,6 +136,10 @@ export default function Leads() {
   const [isError, setIsError] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [isLoading, setisLoading] = useState(false);
+  const [fullName, setfullName] = useState('');
+  const [mobileNo, setmobileNo] = useState('');
+  const [monthlyIncome, setmonthlyIncome] = useState('');
+  const [formError, setformError] = useState([false, false, false]);
   useEffect(() => {
     leadQuery ? fetchSearchData(leadQuery) : fetchLeadsData();
   }, [leadQuery])
@@ -167,10 +171,7 @@ export default function Leads() {
       })
   };
   const routeChangeHAndler = (leadId) => {
-    // props.userListCallback(leadId);
-    //history.push(`/leadDetails/${leadId}`);
     history.push(`/dashboards/leads/edit/${leadId}`);
-    // props.mainMenuCallBack(true, leadId);
   };
   const clickToCall = async (encryptData, leadID) => {
     const customerNo = decodeURIComponent(window.atob(encryptData));
@@ -244,12 +245,20 @@ export default function Leads() {
     setVertageCall(false)
     setDisableHangupBtn(false)
   }
-  const { register, handleSubmit, errors, clearErrors } = useForm();
-  const personalLoanSubmitHandler = async (data) => {
-    const { fullName, mobileNo, monthlyIncome } = data;
+  const personalLoanSubmitHandler = async () => {
+    console.log(profileData.user_roles[0].allowed_products[0])
+    let formErrorData = [...formError];
+    if (fullName === "") formErrorData[0] = true;
+    if (mobileNo === "" || mobileNo.length !== 10) formErrorData[1] = true;
+    if (monthlyIncome === "") formErrorData[2] = true;
+
+    if (fullName == '' || mobileNo == '' || mobileNo.length !== 10 || monthlyIncome == '') {
+      setformError(formErrorData);
+      return;
+    }
     let item = {
       loan_amount: loanAmount, monthly_income: monthlyIncome, dob: date, phone_no: mobileNo,
-      residential_pincode: pincode, current_company_name: companyName, name: fullName, loan_type: "PL",
+      residential_pincode: pincode, current_company_name: companyName, name: fullName, loan_type: profileData.user_roles[0].allowed_products[0] === "PL" ? "PL" : "BL",
       current_company: currentCompany, employment_type: employmentType, campaign_category: campaign
     };
     let headers = {
@@ -281,15 +290,18 @@ export default function Leads() {
   }
   const closeDrawer = () => {
     setState(false)
-    clearErrors()
+    setfullName('')
+    setmobileNo('')
+    setmonthlyIncome('')
     setCampaign('')
+    setformError([false, false, false])
   };
   const closeSnankBar = () => {
     setIsDisplay(false);
     setIsError(false);
   }
   return (
-    <PageLayerSection addLeadButton={true} onClick={() => openDrawer()}>
+    <PageLayerSection addLeadButton={state ? false : true} onClick={() => openDrawer()}>
       <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isDisplay} autoHideDuration={1500} onClose={closeSnankBar}>
         <Alert onClose={closeSnankBar} severity="success">
           {alertMessage}
@@ -302,7 +314,7 @@ export default function Leads() {
       </Snackbar>
       <Drawer anchor='right' open={state} onClose={closeDrawer}>
         <div className="rightContainerForm">
-          <form onSubmit={handleSubmit(personalLoanSubmitHandler)}>
+          <form>
             <Grid container justifyContent="flex-start"><h4>Add New Lead</h4></Grid>
             <Grid>
               <TextField
@@ -318,21 +330,19 @@ export default function Leads() {
                 }}
                 variant="outlined"
                 size="small"
-                name="fullName"
-                inputRef={register({
-                  required: 'Full name is required',
-                  pattern: {
-                    value: /^([a-zA-Z ]){2,30}$/g,
-                    message: 'please enter a valid full name'
-                  }
-                })}
-                error={Boolean(errors.fullName)}
-                helperText={errors.fullName?.type === "required" ? errors.fullName?.message : errors.fullName?.message}
+                value={fullName}
+                onChange={(e) => setfullName(e.target.value)}
+                onFocus={() => {
+                  let formErrorData = [...formError];
+                  formErrorData[0] = false;
+                  setformError(formErrorData);
+                }}
+                error={formError[0]}
+                helperText={formError[0] ? 'Please enter a valid full name' : ''}
               />
             </Grid>
             <Grid>
               <TextField
-                // type="number"
                 className="textField"
                 id="outlined-full-width"
                 label="Mobile Number"
@@ -347,21 +357,24 @@ export default function Leads() {
                 }}
                 variant="outlined"
                 size="small"
-                name="mobileNo"
-                inputRef={register({
-                  required: 'Phone no is required',
-                  pattern: {
-                    value: /^[0-9]{10}$/g,
-                    message: 'Phone no should be 10 digits'
+                value={mobileNo}
+                onChange={(e) => {
+                  const re = /^[0-9\b]+$/;
+                  if (e.target.value === '' || re.test(e.target.value)) {
+                    setmobileNo(e.target.value)
                   }
-                })}
-                error={Boolean(errors.mobileNo)}
-                helperText={errors.mobileNo?.type === "required" ? errors.mobileNo?.message : errors.mobileNo?.message}
+                }}
+                onFocus={() => {
+                  let formErrorData = [...formError];
+                  formErrorData[1] = false;
+                  setformError(formErrorData);
+                }}
+                error={formError[1]}
+                helperText={formError[1] ? 'Mobile no is required' : ''}
               />
             </Grid>
             <Grid>
               <TextField
-                type="number"
                 className="textField"
                 id="outlined-full-width"
                 label="Net Monthly Income"
@@ -371,14 +384,25 @@ export default function Leads() {
                   shrink: true,
                   required: true
                 }}
+                inputProps={{
+                  maxLength: 7,
+                }}
                 variant="outlined"
                 size="small"
-                name="monthlyIncome"
-                inputRef={register({
-                  required: 'Net monthly income is required',
-                })}
-                error={Boolean(errors.monthlyIncome)}
-                helperText={errors.monthlyIncome?.type === "required" ? errors.monthlyIncome?.message : errors.monthlyIncome?.message}
+                value={monthlyIncome}
+                onChange={(e) => {
+                  const re = /^[0-9\b]+$/;
+                  if (e.target.value === '' || re.test(e.target.value)) {
+                    setmonthlyIncome(e.target.value)
+                  }
+                }}
+                onFocus={() => {
+                  let formErrorData = [...formError];
+                  formErrorData[2] = false;
+                  setformError(formErrorData);
+                }}
+                error={formError[2]}
+                helperText={formError[2] ? 'Net monthly income is required' : ''}
               />
             </Grid>
             <Grid>
@@ -412,7 +436,7 @@ export default function Leads() {
               </TextField>
             </Grid>
             <Grid>
-              <Button type="submit" className="submitBtn" color='primary' variant='contained'>Submit</Button>
+              <Button onClick={() => personalLoanSubmitHandler()} className="submitBtn" color='primary' variant='contained'>Submit</Button>
             </Grid>
           </form>
         </div>

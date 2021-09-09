@@ -64,6 +64,29 @@ $desk: 100 / 1440;
                     box-shadow: none;
                     margin-right: 20 * $desk + vw;
                 }
+                .notificationContainer {
+                    margin-right: 20 * $desk + vw;
+
+                    .notificationIcon {
+                        font-size: 30 * $desk + vw;
+                        color: #535ad1;
+                        transition: 0.3s;
+                    }
+                }
+                @keyframes fade {
+                    0% {
+                        opacity: 0;
+                    }
+                    50% {
+                        opacity: 1;
+                    }
+                    100% {
+                        opacity: 0;
+                    }
+                }
+                .notificationContainer .MuiBadge-badge {
+                    animation: fade 2s infinite ease-in-out;
+                }
                 .nameContainer {
                     display: flex;
                     align-items: center;

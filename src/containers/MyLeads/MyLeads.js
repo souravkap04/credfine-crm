@@ -87,8 +87,9 @@ const useStyles = makeStyles({
     color: '#8F9BB3'
   },
   tabledata: {
-    // padding: '0 8px',
+    padding: '15px',
     fontSize: '12px',
+    overflowWrap: 'break-word'
   },
   emptydata: {
     position: 'relative',
