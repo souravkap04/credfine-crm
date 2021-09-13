@@ -76,8 +76,8 @@ const useStyles = makeStyles({
     color: '#ffffff',
     fontSize: '14px',
   },
-  tabledata: {
-    padding: '0 4px',
+  tableData: {
+    padding: '4px',
     fontSize: '12px',
     textAlign: 'center'
   },
@@ -89,24 +89,26 @@ const useStyles = makeStyles({
       backgroundColor: '#fff',
     },
   },
-  buttonContainer:{
-    display:'flex',
-    justifyContent:'flex-end',
-    alignItems:'center',
+  buttonContainer: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
     padding: '20px'
   },
-  activeUserBtn:{
-    margin:'0 10px'
+  activeUserBtn: {
+    margin: '0 10px'
   },
-  userType:{
-    marginRight:'60vh'
+  userType: {
+    marginRight: '60vh'
   },
-  deleteUsersData:{
-    padding: '20px 5px',
+  deleteUsersData: {
     fontSize: '12px',
     textAlign: 'center'
+  },
+  tableIconData: {
+    display: 'flex',
+    padding: '4px'
   }
-
 });
 export default function Users() {
   const classes = useStyles();
@@ -114,11 +116,11 @@ export default function Users() {
   const [isResetPassword, setIsResetPassword] = useState(false);
   const [isEditUser, setIsEditUser] = useState(false);
   const [isDeleteUser, setIsDeleteUser] = useState(false);
-  const [userName,setUserName] = useState(null);
+  const [userName, setUserName] = useState(null);
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [users, setUsers] = useState([]);
-  const [deletedUsers,setDeletedUsers] = useState([]);
+  const [deletedUsers, setDeletedUsers] = useState([]);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -128,7 +130,7 @@ export default function Users() {
   const [gender, setGender] = useState("");
   const [dialerApiKey, setDialerApiKey] = useState("");
   const [loading, setLoading] = useState(false);
-  const [loadingDeletedUser,setLoadingDeletedUser] = useState(false)
+  const [loadingDeletedUser, setLoadingDeletedUser] = useState(false)
   const [errors, setErrors] = useState({});
   const [rowData, setRowData] = useState({});
   const [alertMessage, setAlertMessage] = useState('');
@@ -138,7 +140,7 @@ export default function Users() {
   const [searchTerm, setSearchTerm] = useState('');
   const [vertageId, setVertageId] = useState("");
   const [vertagePass, setVertagePass] = useState("");
-  const [isActiveUser,setIsActiveUser] = useState(true);
+  const [isActiveUser, setIsActiveUser] = useState(true);
   const resetPasswordHandler = (userName, index) => {
     setIsResetPassword(true);
     setRowData(userName);
@@ -192,7 +194,7 @@ export default function Users() {
   useEffect(() => {
     listOfActiveUsers();
   }, [deleteCount])
-  const listOfActiveUsers = async ()=>{
+  const listOfActiveUsers = async () => {
     const headers = {
       'userRoleHash': profileData.user_roles[0].user_role_hash,
     };
@@ -205,7 +207,7 @@ export default function Users() {
       console.log(error);
     }
   }
-  const listOfDeletedUsers = async ()=>{
+  const listOfDeletedUsers = async () => {
     const headers = {
       'userRoleHash': profileData.user_roles[0].user_role_hash,
     };
@@ -214,16 +216,16 @@ export default function Users() {
       setIsActiveUser(false);
       setLoadingDeletedUser(true);
       setDeletedUsers(response.data);
-      
+
     } catch (error) {
       console.log(error);
     }
   }
-  const deletedUserPopUpHandler = (username)=>{
+  const deletedUserPopUpHandler = (username) => {
     setIsDeleteUser(true);
     setUserName(username);
   }
-  const closeDeleteUserPopUp = ()=>{
+  const closeDeleteUserPopUp = () => {
     setIsDeleteUser(false);
   }
   const deleteUser = async () => {
@@ -234,7 +236,7 @@ export default function Users() {
     let item = null;
     await axios.post(`${baseUrl}/user/deleteUser/${userName}`, item, { headers })
       .then((response) => {
-        if(response.status === 200){
+        if (response.status === 200) {
           setIsDisplay(true);
           setAlertMessage(response.data.message);
           setIsDeleteUser(false);
@@ -279,7 +281,7 @@ export default function Users() {
         setIsDisplay(true);
       })
   }
-  const closeSnankBar = ()=>{
+  const closeSnankBar = () => {
     setIsDisplay(false);
   }
   return (
@@ -293,14 +295,14 @@ export default function Users() {
         <Paper>
           <div className={classes.buttonContainer}>
             <div className={classes.userType}>
-              {isActiveUser ? <Typography>Active User</Typography>:<Typography>Deleted User</Typography>}
+              {isActiveUser ? <Typography>Active User</Typography> : <Typography>Deleted User</Typography>}
             </div>
-          <div>
-            <InputGroup>
-              <FormControl type="text" placeholder="Search..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm((e.target.value).toLowerCase().trim())} />
-            </InputGroup>
+            <div>
+              <InputGroup>
+                <FormControl type="text" placeholder="Search..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm((e.target.value).toLowerCase().trim())} />
+              </InputGroup>
             </div>
             <div className={classes.activeUserBtn}>
               <Button disabled={isActiveUser} onClick={listOfActiveUsers}>Active User</Button>
@@ -310,10 +312,10 @@ export default function Users() {
             </div>
           </div>
           <TableContainer className={classes.scroller}>
-            <Table className={classes.table}>
+            <Table className={classes.table + ' tableMainContainer'}>
               <TableHead className={classes.tableheading}>
                 <TableRow>
-                <TableCell className={classes.tableheading}>Sr No</TableCell>
+                  <TableCell className={classes.tableheading}>Sr No</TableCell>
                   <TableCell className={classes.tableheading}>User Name</TableCell>
                   <TableCell className={classes.tableheading}>First Name</TableCell>
                   <TableCell className={classes.tableheading}>Last Name</TableCell>
@@ -329,58 +331,58 @@ export default function Users() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                { isActiveUser ?
-                 loading ? users.filter((user) => {
-                  if (searchTerm === "") {
-                    return user;
-                  } else if (user.phone_no.toLowerCase().includes(searchTerm.toLowerCase())) {
-                    return user;
-                  } else if (user.myuser.first_name.toLowerCase().includes(searchTerm.toLowerCase())) {
-                    return user;
-                  } else if (user.myuser.username.toLowerCase().includes(searchTerm.toLowerCase())) {
-                    return user;
-                  }
-                }).map((user, index) => (
-                  <TableRow className={classes.oddEvenRow} key={index} >
-                    <TableCell className={classes.tabledata}>{index+1}</TableCell>
-                    <TableCell className={classes.tabledata}>{user.myuser.username}</TableCell>
-                    <TableCell className={classes.tabledata}>{user.myuser.first_name}</TableCell>
-                    <TableCell className={classes.tabledata}>{user.myuser.last_name}</TableCell>
-                    <TableCell className={classes.tabledata}>{user.myuser.email}</TableCell>
-                    <TableCell className={classes.tabledata}>{user.role}</TableCell>
-                    <TableCell className={classes.tabledata}>{user.product_type}</TableCell>
-                    <TableCell className={classes.tabledata}>{user.phone_no}</TableCell>
-                    <TableCell className={classes.tabledata}>{user.gender}</TableCell>
-                    {/* <TableCell className={classes.tabledata}>{user.myuser.dialer_pass}</TableCell> */}
-                    <TableCell className={classes.tabledata}>{user.myuser.vertage_id}</TableCell>
-                    <TableCell className={classes.tabledata}>{user.myuser.vertage_pass}</TableCell>
-                    <TableCell className={classes.tabledata}>
-                      <Tooltip title="Reset Password">
-                        <IconButton onClick={() => resetPasswordHandler(user.myuser.username, index)}>
-                          <LockIcon />
-                        </IconButton>
-                      </Tooltip>
-                      <Tooltip title="Edit">
-                        <IconButton
-                          onClick={() => editUser(user.myuser.username, user.myuser.first_name,
-                            user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
-                            user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
-                            user.myuser.vertage_pass)}>
-                          <EditIcon />
-                        </IconButton>
-                      </Tooltip>
-                      <Tooltip title="Delete User">
-                        {/* <IconButton onClick={() => deleteUser(user.myuser.username, index)}> */}
-                        <IconButton onClick={()=>deletedUserPopUpHandler(user.myuser.username)}>
-                          <DeleteIcon />
-                        </IconButton>
-                      </Tooltip>
-                    </TableCell>
-                  </TableRow>
-                )) :
-                  <div className={classes.loader}>
-                    <ReactBootstrap.Spinner animation="border" />
-                  </div> 
+                {isActiveUser ?
+                  loading ? users.filter((user) => {
+                    if (searchTerm === "") {
+                      return user;
+                    } else if (user.phone_no.toLowerCase().includes(searchTerm.toLowerCase())) {
+                      return user;
+                    } else if (user.myuser.first_name.toLowerCase().includes(searchTerm.toLowerCase())) {
+                      return user;
+                    } else if (user.myuser.username.toLowerCase().includes(searchTerm.toLowerCase())) {
+                      return user;
+                    }
+                  }).map((user, index) => (
+                    <TableRow className={classes.oddEvenRow} key={index} >
+                      <TableCell className={classes.tableData}>{index + 1}</TableCell>
+                      <TableCell className={classes.tableData}>{user.myuser.username}</TableCell>
+                      <TableCell className={classes.tableData}>{user.myuser.first_name}</TableCell>
+                      <TableCell className={classes.tableData}>{user.myuser.last_name}</TableCell>
+                      <TableCell className={classes.tableData}>{user.myuser.email}</TableCell>
+                      <TableCell className={classes.tableData}>{user.role}</TableCell>
+                      <TableCell className={classes.tableData}>{user.product_type}</TableCell>
+                      <TableCell className={classes.tableData}>{user.phone_no}</TableCell>
+                      <TableCell className={classes.tableData}>{user.gender}</TableCell>
+                      {/* <TableCell className={classes.tableData}>{user.myuser.dialer_pass}</TableCell> */}
+                      <TableCell className={classes.tableData}>{user.myuser.vertage_id}</TableCell>
+                      <TableCell className={classes.tableData}>{user.myuser.vertage_pass}</TableCell>
+                      <TableCell className={classes.tableIconData}>
+                        <Tooltip title="Reset Password">
+                          <IconButton onClick={() => resetPasswordHandler(user.myuser.username, index)}>
+                            <LockIcon />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Edit">
+                          <IconButton
+                            onClick={() => editUser(user.myuser.username, user.myuser.first_name,
+                              user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
+                              user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
+                              user.myuser.vertage_pass)}>
+                            <EditIcon />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Delete User">
+                          {/* <IconButton onClick={() => deleteUser(user.myuser.username, index)}> */}
+                          <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username)}>
+                            <DeleteIcon />
+                          </IconButton>
+                        </Tooltip>
+                      </TableCell>
+                    </TableRow>
+                  )) :
+                    <div className={classes.loader}>
+                      <ReactBootstrap.Spinner animation="border" />
+                    </div>
                   : loadingDeletedUser ? deletedUsers.filter((deletedUser) => {
                     if (searchTerm === "") {
                       return deletedUser;
@@ -391,32 +393,33 @@ export default function Users() {
                     } else if (deletedUser.myuser.username.toLowerCase().includes(searchTerm.toLowerCase())) {
                       return deletedUser;
                     }
-                  }).map((deletedUser,index)=>(
-                        <TableRow className={classes.oddEvenRow} key={index} >
-                            <TableCell className={classes.deleteUsersData}>{index+1}</TableCell>
-                            <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.username}</TableCell>
-                            <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.first_name}</TableCell>
-                            <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.last_name}</TableCell>
-                            <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.email}</TableCell>
-                            <TableCell className={classes.deleteUsersData}>{deletedUser.role}</TableCell>
-                            <TableCell className={classes.deleteUsersData}>{deletedUser.product_type}</TableCell>
-                            <TableCell className={classes.deleteUsersData}>{deletedUser.phone_no}</TableCell>
-                            <TableCell className={classes.deleteUsersData}>{deletedUser.gender}</TableCell>
-                            {/* <TableCell className={classes.deleteUsersData}>{user.myuser.dialer_pass}</TableCell> */}
-                            <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_id}</TableCell>
-                            <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_pass}</TableCell>
-                        </TableRow> 
-                       )):
-                  <div className={classes.loader}>
-                    <ReactBootstrap.Spinner animation="border" />
-                  </div>
+                  }).map((deletedUser, index) => (
+                    <TableRow className={classes.oddEvenRow} key={index} >
+                      <TableCell className={classes.deleteUsersData}>{index + 1}</TableCell>
+                      <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.username}</TableCell>
+                      <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.first_name}</TableCell>
+                      <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.last_name}</TableCell>
+                      <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.email}</TableCell>
+                      <TableCell className={classes.deleteUsersData}>{deletedUser.role}</TableCell>
+                      <TableCell className={classes.deleteUsersData}>{deletedUser.product_type}</TableCell>
+                      <TableCell className={classes.deleteUsersData}>{deletedUser.phone_no}</TableCell>
+                      <TableCell className={classes.deleteUsersData}>{deletedUser.gender}</TableCell>
+                      {/* <TableCell className={classes.deleteUsersData}>{user.myuser.dialer_pass}</TableCell> */}
+                      <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_id}</TableCell>
+                      <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_pass}</TableCell>
+                      <TableCell className={classes.deleteUsersData}></TableCell>
+                    </TableRow>
+                  )) :
+                    <div className={classes.loader}>
+                      <ReactBootstrap.Spinner animation="border" />
+                    </div>
                 }
                 <>
                   <Dialog open={isDeleteUser}>
                     <DialogTitle>Are You Want to Delete User?</DialogTitle>
                     <DialogContent>
-                      <Button style={{padding:'0 50px',marginRight:'20px'}} onClick={deleteUser}>Yes</Button>
-                      <Button style={{padding:'0 50px'}} onClick={closeDeleteUserPopUp}>No</Button>
+                      <Button style={{ padding: '0 50px', marginRight: '20px' }} onClick={deleteUser}>Yes</Button>
+                      <Button style={{ padding: '0 50px' }} onClick={closeDeleteUserPopUp}>No</Button>
                     </DialogContent>
                   </Dialog>
                 </>
