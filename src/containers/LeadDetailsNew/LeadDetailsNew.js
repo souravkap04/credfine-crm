@@ -1368,7 +1368,7 @@ export default function LeadDetailsNew(props) {
                                     helperText={STBError[0] ? 'App Id is required' : ''}
                                 />
                             </Grid>
-                            <Grid container justifyContent="center">
+                            <Grid container style={{ justifyContent: 'center' }}>
                                 <Grid>
                                     <TextField
                                         className="textField2 textLeft"

@@ -9,15 +9,11 @@ import ArrowDropDownOutlinedIcon from '@material-ui/icons/ArrowDropDownOutlined'
 import { NavLink, useHistory } from 'react-router-dom';
 import { Button } from '@material-ui/core';
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
-import { getProfileData } from '../../global/leadsGlobalData';
-import axios from 'axios';
-import baseUrl from '../../global/api';
 import Badge from '@material-ui/core/Badge';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 export default function PageLayerSection(props) {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [searchInput, setSearchInput] = useState("");
-    const getProfile = getProfileData()
     let history = useHistory()
     let profileData = JSON.parse(localStorage.getItem("user_info"));
     let userName = profileData.username.toLowerCase();
@@ -33,7 +29,6 @@ export default function PageLayerSection(props) {
         setIsTimeOut(false)
     }
     const onIdle = (e) => {
-        console.log('user is idle', e)
         if (istimeOut) {
             props.history.push("/");
             localStorage.removeItem('user_info');
@@ -55,27 +50,6 @@ export default function PageLayerSection(props) {
     const handleClose = () => {
         setAnchorEl(null);
     };
-    const notification = async () => {
-        const headers = {
-            'Authorization': `Token ${getProfile.token}`,
-        };
-        await axios.get(`${baseUrl}/leads/CheckFollowupLead/`, { headers })
-            .then((response) => {
-                if (response.data.followup_lead_avail === true && response.data.total_followup_lead > 0) {
-                    setnotificationCount(response.data.total_followup_lead)
-                }
-            }).catch((error) => {
-
-            })
-    }
-    useEffect(() => {
-        var today = new Date().getHours();
-        if (today >= 7 && today <= 20) {
-            setInterval(() => {
-                notification();
-            }, 300000)
-        }
-    }, []);
     const searchValidation = (search) => {
         if (/^[0-9]{10}$/.test(search) || /^[L][D][0-9]{8}$/.test(search)) {
             return true;
@@ -87,6 +61,7 @@ export default function PageLayerSection(props) {
         history.push("/");
         localStorage.removeItem('user_info');
         localStorage.removeItem('status_info');
+        localStorage.removeItem('notification');
     }
     return (
         <div className="pageAdjustSection">
@@ -132,7 +107,7 @@ export default function PageLayerSection(props) {
                         >
                             Add New Lead
                         </Button> : null}
-                        <NavLink to="/dashboards/followup" activeClassName="active"><Badge className="notificationContainer" badgeContent={notificationCount !== 0 ? notificationCount : 0} color="secondary">
+                        <NavLink to="/dashboards/followup" activeClassName="active"><Badge className="notificationContainer" badgeContent={localStorage.getItem('notification') !== 0 ? localStorage.getItem('notification') : 0} color="secondary">
                             <NotificationsIcon className="notificationIcon" />
                         </Badge></NavLink>
                         <div className="nameContainer" onClick={handleMenu}>

@@ -21,6 +21,9 @@ import Reports from './containers/Report/Report';
 import BulkUploads from './containers/UploadLeads/UploadLeads';
 import AddUsers from './containers/UserCreate/UserCreate';
 import LeadDetailsNew from './containers/LeadDetailsNew/LeadDetailsNew';
+import { getProfileData } from './global/leadsGlobalData';
+import axios from 'axios';
+import baseUrl from './global/api';
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 function Alert(props) {
@@ -30,6 +33,33 @@ function App() {
   const [showStatus, setshowStatus] = useState(false)
   const [showStatusOnline, setshowStatusOnline] = useState(false)
   const [showStatusMessage, setshowStatusMessage] = useState('')
+  const getProfile = getProfileData()
+  const notification = async () => {
+    const headers = {
+      'Authorization': `Token ${getProfile.token}`,
+    };
+    await axios.get(`${baseUrl}/leads/CheckFollowupLead/`, { headers })
+      .then((response) => {
+        if (response.data.followup_lead_avail === true && response.data.total_followup_lead > 0) {
+          localStorage.setItem('notification', response.data.total_followup_lead);
+        }
+      }).catch((error) => {
+
+      })
+  }
+  useEffect(() => {
+    var today = new Date().getHours();
+    if (today >= 7 && today <= 20) {
+      setInterval(() => {
+        if (localStorage.getItem('user_info')) {
+          notification();
+        }
+      }, 300000)
+    }
+    if (localStorage.removeItem('notification')) {
+      clearInterval();
+    }
+  }, []);
   useEffect(() => {
     // now we listen for network status changes
     window.addEventListener('online', () => {
