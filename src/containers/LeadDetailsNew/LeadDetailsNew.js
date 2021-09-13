@@ -632,7 +632,7 @@ export default function LeadDetailsNew(props) {
             {/* Errors SnackBars End */}
             {isLoading ? <div className="loader">
                 <CircularProgress size={100} thickness={3} />
-            </div> : <Grid container justifyContent="flex-start">
+            </div> : <Grid container style={{ justifyContent: "flex-start" }}>
                 <Grid className="accordianContainer" lg={9}>
                     <Accordion square defaultExpanded={true} expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
                         <AccordionSummary expandIcon={<ArrowRightIcon />} aria-controls="panel1d-content" id="panel1d-header">
@@ -640,10 +640,7 @@ export default function LeadDetailsNew(props) {
                             {colorRed[0] ? <CheckCircleIcon className={colorRed[0] ? classes.activeColorTickRed : classes.circleTick} /> : <CheckCircleIcon className={colorTick ? classes.activeColorTick : classes.circleTick} />}
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Grid container
-                                direction="row"
-                                justifyContent="center"
-                            >
+                            <Grid container style={{ flexDirection: "row", justifyContent: "center" }}>
                                 <Grid lg={4}>
                                     <TextField
                                         className="textField"
@@ -810,8 +807,7 @@ export default function LeadDetailsNew(props) {
                             {colorRed[1] ? <CheckCircleIcon className={colorRed[1] ? classes.activeColorTickRed : classes.circleTick} /> : <CheckCircleIcon className={colorTick2 ? classes.activeColorTick : classes.circleTick} />}
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Grid container direction="row"
-                                justifyContent="center">
+                            <Grid container style={{ justifyContent: "center", flexDirection: 'row' }}>
                                 <Grid lg={4}>
                                     <TextField
                                         className="textField"
@@ -863,9 +859,7 @@ export default function LeadDetailsNew(props) {
                                         disabled
                                     />
                                 </Grid>
-                                <Grid container direction="row"
-                                    justifyContent="space-between"
-                                    alignItems="center" >
+                                <Grid container style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }} >
                                     <Grid lg={4}>
                                         <TextField
                                             className="textField"
@@ -906,7 +900,7 @@ export default function LeadDetailsNew(props) {
                             {colorRed[2] ? <CheckCircleIcon className={colorRed[2] ? classes.activeColorTickRed : classes.circleTick} /> : <CheckCircleIcon className={colorTick3 ? classes.activeColorTick : classes.circleTick} />}
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Grid container direction="row" justifyContent="center">
+                            <Grid container style={{ flexDirection: "row", justifyContent: "center" }}>
                                 <Grid lg={4}>
                                     <TextField
                                         className="textField"
@@ -1117,7 +1111,7 @@ export default function LeadDetailsNew(props) {
                             {colorRed[3] ? <CheckCircleIcon className={colorRed[3] ? classes.activeColorTickRed : classes.circleTick} /> : <CheckCircleIcon className={colorTick4 ? classes.activeColorTick : classes.circleTick} />}
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Grid container direction="row" justifyContent="center">
+                            <Grid container style={{ flexDirection: "row", justifyContent: "center" }}>
                                 <Grid lg={4}>
                                     <TextField
                                         className="textField"
@@ -1191,7 +1185,7 @@ export default function LeadDetailsNew(props) {
                                         <option value="No">No</option>
                                     </TextField>
                                 </Grid>
-                                <Grid container direction="row" style={{ justifyContent: "flex-end", alignItems: "center" }}>
+                                <Grid container style={{ flexDirection: 'row', justifyContent: "flex-end", alignItems: "center" }}>
                                     <Grid lg={4} style={{ display: 'flex', alignItems: 'center' }}>
                                         <Button className="saveAndNextBtn" color='primary' variant='contained' onClick={() => updateLeadDetails(leadid)}>SAVE</Button>
                                     </Grid>
@@ -1500,7 +1494,7 @@ export default function LeadDetailsNew(props) {
                         </Grid> : ''}
                     </Grid>
                     <div className="addRemarkContainer">
-                        <Grid container justifyContent="center">
+                        <Grid container style={{ justifyContent: 'center' }}>
                             <h4>Add Remarks</h4>
                             <div className="remarks">
                                 <textarea rows="4" cols="4" placeholder="Add remarks here..." value={input} onChange={(e) => setInput(e.target.value)} onKeyPress={(event) => {
@@ -1512,7 +1506,7 @@ export default function LeadDetailsNew(props) {
                             </div>
                         </Grid>
                     </div>
-                    <Grid container justifyContent="center">
+                    <Grid container style={{ justifyContent: 'center' }}>
                         <Button className="submitBtn" color='primary' variant='contained' onClick={() => statusUpdateHandler(leadid)} disabled={localStorage.getItem("callHangUp") && localStorage.getItem("callHangUp") !== null ? submitFalse : false}>Submit</Button>
                     </Grid>
                     <div className="allremarksContainer">
