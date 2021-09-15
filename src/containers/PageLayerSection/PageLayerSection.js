@@ -9,6 +9,7 @@ import ArrowDropDownOutlinedIcon from '@material-ui/icons/ArrowDropDownOutlined'
 import { NavLink, useHistory } from 'react-router-dom';
 import { Button } from '@material-ui/core';
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
+import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 import Badge from '@material-ui/core/Badge';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 export default function PageLayerSection(props) {
@@ -107,7 +108,16 @@ export default function PageLayerSection(props) {
                         >
                             Add New Lead
                         </Button> : null}
-                        <NavLink to="/dashboards/followup" activeClassName="active"><Badge className="notificationContainer" badgeContent={localStorage.getItem('notification') !== 0 ? localStorage.getItem('notification') : 0} color="secondary">
+                        {props.offerButton ? <Button
+                            className="addBtn"
+                            color="primary"
+                            variant="contained"
+                            startIcon={<LocalOfferIcon />}
+                            onClick={props.onClick}
+                        >
+                            Pricing
+                        </Button> : null}
+                        <NavLink to="/dashboards/followup" activeClassName="active"><Badge className="notificationContainer" badgeContent={localStorage.getItem('notification') !== 0 ? localStorage.getItem('notification') : 0} max={999} color="secondary">
                             <NotificationsIcon className="notificationIcon" />
                         </Badge></NavLink>
                         <div className="nameContainer" onClick={handleMenu}>

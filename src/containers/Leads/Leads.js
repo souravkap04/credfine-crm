@@ -246,7 +246,6 @@ export default function Leads() {
     setDisableHangupBtn(false)
   }
   const personalLoanSubmitHandler = async () => {
-    console.log(profileData.user_roles[0].allowed_products[0])
     let formErrorData = [...formError];
     if (fullName === "") formErrorData[0] = true;
     if (mobileNo === "" || mobileNo.length !== 10) formErrorData[1] = true;
