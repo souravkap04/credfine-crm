@@ -30,10 +30,14 @@ import {
 import { useParams, useHistory, useLocation } from 'react-router-dom';
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
+import PricingPopup from '../PricingPopup/PricingPopup';
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 const useStyles = makeStyles({
+    appBar: {
+        position: 'relative'
+    },
     circleTick: {
         opacity: '0.4'
     },
@@ -176,6 +180,7 @@ export default function LeadDetailsNew(props) {
     const [disbursedDate, setdisbursedDate] = useState('');
     const [disbursedError, setdisbursedError] = useState([false]);
     const [colorRed, setcolorRed] = useState([false, false, false, false]);
+    const [openState, setopenState] = useState(false);
     let statusData = getStatusData();
     let { leadid } = useParams();
     let history = useHistory();
@@ -596,8 +601,15 @@ export default function LeadDetailsNew(props) {
         setVertageCall(false)
         setDisableHangupBtn(false)
     }
+    const handlePopup = () => {
+        setopenState(true)
+    }
+    const closePopup = () => {
+        setopenState(false)
+    }
     return (
-        <PageLayerSection pageTitle="Lead Details">
+        <PageLayerSection pageTitle="Lead Details" className={classes.scrollEnable} offerButton={true} onClick={handlePopup}>
+            {openState ? <PricingPopup handleClose={closePopup} />: ''}
             {/* Errors SnackBars Start */}
             <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={hangUpSnacks} autoHideDuration={1500} onClose={disableHangUpSnacks}>
                 <Alert onClose={disableHangUpSnacks} severity="success">
