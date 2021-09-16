@@ -30,7 +30,16 @@ import {
 import { useParams, useHistory, useLocation } from 'react-router-dom';
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
-import PricingPopup from '../PricingPopup/PricingPopup';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+import clsx from 'clsx';
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -54,6 +63,33 @@ const useStyles = makeStyles({
         fontSize: '17px',
         fontWeight: '400',
         letterSpacing: '0.4px'
+    },
+    tableheading: {
+        backgroundColor: '#8f9bb3',
+        color: '#ffffff',
+        fontSize: '13px',
+        border: '1px solid #ededed',
+        textAlign: 'center'
+    },
+    tabledata: {
+        fontSize: '12px',
+        overflowWrap: 'break-word',
+        border: '1px solid #ededed',
+        textAlign: 'center',
+        color: '#424242',
+        backgroundColor: '#fff'
+    },
+    closeContainer: {
+        display: 'flex',
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+    },
+    Toolbar: {
+        minHeight: '0',
+        padding: '0'
+    },
+    closeBtn: {
+        padding: '0'
     }
 });
 const Accordion = withStyles({
@@ -109,9 +145,13 @@ const AccordionDetails = withStyles((theme) => ({
 }))(MuiAccordionDetails);
 export default function LeadDetailsNew(props) {
     const classes = useStyles();
-    const [expanded, setExpanded] = React.useState('panel1');
+    const [expanded, setExpanded] = useState('panel1');
     const handleChange = (panel) => (event, newExpanded) => {
         setExpanded(newExpanded ? panel : false);
+    };
+    const [journeyStatus, setjourneyStatus] = useState('');
+    const handleJourneyStatusChange = (name) => {
+        setjourneyStatus(name ? name : false);
     };
     const profileData = getProfileData();
     const banks = getBank();
@@ -180,7 +220,6 @@ export default function LeadDetailsNew(props) {
     const [disbursedDate, setdisbursedDate] = useState('');
     const [disbursedError, setdisbursedError] = useState([false]);
     const [colorRed, setcolorRed] = useState([false, false, false, false]);
-    const [openState, setopenState] = useState(false);
     let statusData = getStatusData();
     let { leadid } = useParams();
     let history = useHistory();
@@ -601,15 +640,8 @@ export default function LeadDetailsNew(props) {
         setVertageCall(false)
         setDisableHangupBtn(false)
     }
-    const handlePopup = () => {
-        setopenState(true)
-    }
-    const closePopup = () => {
-        setopenState(false)
-    }
     return (
-        <PageLayerSection pageTitle="Lead Details" className={classes.scrollEnable} offerButton={true} onClick={handlePopup}>
-            {openState ? <PricingPopup handleClose={closePopup} />: ''}
+        <PageLayerSection pageTitle="Lead Details" className={classes.scrollEnable} offerButton={true}>
             {/* Errors SnackBars Start */}
             <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={hangUpSnacks} autoHideDuration={1500} onClose={disableHangUpSnacks}>
                 <Alert onClose={disableHangUpSnacks} severity="success">
@@ -1213,21 +1245,21 @@ export default function LeadDetailsNew(props) {
                             COMPLETE JOURNEY
                         </Button>
                         <Button
-                            className="journeyBtn"
+                            className={journeyStatus === 'leadJourney' ? "activeBtn" : "journeyBtn"}
                             color="primary"
-                            variant="contained">
+                            variant="contained" onClick={() => handleJourneyStatusChange('leadJourney')}>
                             LEAD JOURNEY
                         </Button>
                         <Button
-                            className="journeyBtn"
+                            className={journeyStatus === 'leadHistory' ? "activeBtn" : "journeyBtn"}
                             color="primary"
-                            variant="contained">
+                            variant="contained" onClick={() => handleJourneyStatusChange('leadHistory')}>
                             LEAD HISTORY
                         </Button>
                         <Button
-                            className="journeyBtn"
+                            className={journeyStatus === 'dispositionHistory' ? "activeBtn" : "journeyBtn"}
                             color="primary"
-                            variant="contained">
+                            variant="contained" onClick={() => handleJourneyStatusChange('dispositionHistory')}>
                             DISPOSITION HISTORY
                         </Button>
                         <Button
@@ -1255,6 +1287,147 @@ export default function LeadDetailsNew(props) {
                             SOURCE
                         </Button>
                     </Grid>
+                    {journeyStatus === 'leadHistory' ? <Grid className="leadHistory">
+                        <TableContainer style={{ maxHeight: '320px' }}>
+                            <Table stickyHeader>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell className={classes.tableheading}>Lead Id</TableCell>
+                                        <TableCell className={classes.tableheading}>Created Date</TableCell>
+                                        <TableCell className={classes.tableheading}>Closer Status</TableCell>
+                                        <TableCell className={classes.tableheading}>Closer Sub-Status</TableCell>
+                                        <TableCell className={classes.tableheading}>
+                                            <div className={classes.closeContainer}>
+                                                Closing User
+                                                <Toolbar className={classes.Toolbar}>
+                                                    <IconButton edge="end" className={classes.closeBtn} color="inherit" onClick={() => handleJourneyStatusChange('')} aria-label="close">
+                                                        <CloseIcon />
+                                                    </IconButton>
+                                                </Toolbar>
+                                            </div>
+                                        </TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    <TableRow>
+                                        <TableCell className={classes.tabledata}>LD00000164</TableCell>
+                                        <TableCell className={classes.tabledata}>12-02-2021</TableCell>
+                                        <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
+                                        <TableCell className={classes.tabledata}>RNR</TableCell>
+                                        <TableCell className={classes.tabledata}>Yes</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell className={classes.tabledata}>LD00000164</TableCell>
+                                        <TableCell className={classes.tabledata}>12-02-2021</TableCell>
+                                        <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
+                                        <TableCell className={classes.tabledata}>RNR</TableCell>
+                                        <TableCell className={classes.tabledata}>Yes</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell className={classes.tabledata}>LD00000164</TableCell>
+                                        <TableCell className={classes.tabledata}>12-02-2021</TableCell>
+                                        <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
+                                        <TableCell className={classes.tabledata}>RNR</TableCell>
+                                        <TableCell className={classes.tabledata}>Yes</TableCell>
+                                    </TableRow>
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Grid> : ''}
+                    {journeyStatus === 'dispositionHistory' ? <Grid className="leadHistory">
+                        <TableContainer style={{ maxHeight: '320px' }}>
+                            <Table stickyHeader>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell className={classes.tableheading}>Lead Id</TableCell>
+                                        <TableCell className={classes.tableheading}>Updated Date + Time</TableCell>
+                                        <TableCell className={classes.tableheading}>Updated Status</TableCell>
+                                        <TableCell className={classes.tableheading}>Updated Sub Status</TableCell>
+                                        <TableCell className={classes.tableheading}>
+                                            <div className={classes.closeContainer}>
+                                                Updating User
+                                                <Toolbar className={classes.Toolbar}>
+                                                    <IconButton edge="end" className={classes.closeBtn} color="inherit" onClick={() => handleJourneyStatusChange('')} aria-label="close">
+                                                        <CloseIcon />
+                                                    </IconButton>
+                                                </Toolbar>
+                                            </div>
+                                        </TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    <TableRow>
+                                        <TableCell className={classes.tabledata}>LD00000164</TableCell>
+                                        <TableCell className={classes.tabledata}>12-02-2021</TableCell>
+                                        <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
+                                        <TableCell className={classes.tabledata}>RNR</TableCell>
+                                        <TableCell className={classes.tabledata}>Yes</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell className={classes.tabledata}>LD00000164</TableCell>
+                                        <TableCell className={classes.tabledata}>12-02-2021</TableCell>
+                                        <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
+                                        <TableCell className={classes.tabledata}>RNR</TableCell>
+                                        <TableCell className={classes.tabledata}>Yes</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell className={classes.tabledata}>LD00000164</TableCell>
+                                        <TableCell className={classes.tabledata}>12-02-2021</TableCell>
+                                        <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
+                                        <TableCell className={classes.tabledata}>RNR</TableCell>
+                                        <TableCell className={classes.tabledata}>Yes</TableCell>
+                                    </TableRow>
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Grid> : ''}
+                    {journeyStatus === 'leadJourney' ? <Grid className="leadHistory">
+                        <TableContainer style={{ maxHeight: '320px' }}>
+                            <Table stickyHeader>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell className={classes.tableheading}>Lead Id</TableCell>
+                                        <TableCell className={classes.tableheading}>Created By</TableCell>
+                                        <TableCell className={classes.tableheading}>Created Date</TableCell>
+                                        <TableCell className={classes.tableheading}>Created Time</TableCell>
+                                        <TableCell className={classes.tableheading}>
+                                            <div className={classes.closeContainer}>
+                                                Source
+                                                <Toolbar className={classes.Toolbar}>
+                                                    <IconButton edge="end" className={classes.closeBtn} color="inherit" onClick={() => handleJourneyStatusChange('')} aria-label="close">
+                                                        <CloseIcon />
+                                                    </IconButton>
+                                                </Toolbar>
+                                            </div>
+                                        </TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    <TableRow>
+                                        <TableCell className={classes.tabledata}>LD00000164</TableCell>
+                                        <TableCell className={classes.tabledata}>System (Bulk Upload+Website+ Campaigns)</TableCell>
+                                        <TableCell className={classes.tabledata}>12-02-2021</TableCell>
+                                        <TableCell className={classes.tabledata}>10:30 PM</TableCell>
+                                        <TableCell className={classes.tabledata}>Website</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell className={classes.tabledata}>LD00000164</TableCell>
+                                        <TableCell className={classes.tabledata}>System (Bulk Upload+Website+ Campaigns)</TableCell>
+                                        <TableCell className={classes.tabledata}>12-02-2021</TableCell>
+                                        <TableCell className={classes.tabledata}>10:30 PM</TableCell>
+                                        <TableCell className={classes.tabledata}>Misscall</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell className={classes.tabledata}>LD00000164</TableCell>
+                                        <TableCell className={classes.tabledata}>System (Bulk Upload+Website+ Campaigns)</TableCell>
+                                        <TableCell className={classes.tabledata}>12-02-2021</TableCell>
+                                        <TableCell className={classes.tabledata}>10:30 PM</TableCell>
+                                        <TableCell className={classes.tabledata}>IVR</TableCell>
+                                    </TableRow>
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Grid> : ''}
                 </Grid>
                 <Grid className="callConatiner" lg={3}>
                     <Grid className="callAdjustContainer">
@@ -1539,13 +1712,11 @@ export default function LeadDetailsNew(props) {
                     </div>
                 </Grid>
             </Grid>}
-            <div>
-                <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={vertageCall} autoHideDuration={1500} onClose={disableDialerPopUp}>
-                    <Alert onClose={disableDialerPopUp} severity="info">
-                        Calling...
-                    </Alert>
-                </Snackbar>
-            </div>
+            <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={vertageCall} autoHideDuration={1500} onClose={disableDialerPopUp}>
+                <Alert onClose={disableDialerPopUp} severity="info">
+                    Calling...
+                </Alert>
+            </Snackbar>
         </PageLayerSection>
     )
 }
