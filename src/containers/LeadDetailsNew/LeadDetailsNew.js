@@ -39,7 +39,6 @@ import TableRow from '@material-ui/core/TableRow';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
-import clsx from 'clsx';
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -238,6 +237,21 @@ export default function LeadDetailsNew(props) {
         } else {
             return data;
         }
+    }
+    const notification = async () => {
+        const headers = {
+            'Authorization': `Token ${profileData.token}`,
+        };
+        await axios.get(`${baseUrl}/leads/CheckFollowupLead/`, { headers })
+            .then((response) => {
+                if (response.data.followup_lead_avail === true && response.data.total_followup_lead > 0) {
+                    localStorage.setItem('notification', response.data.total_followup_lead);
+                } else if (response.data.followup_lead_avail === false && response.data.total_followup_lead === 0) {
+                    localStorage.removeItem('notification')
+                }
+            }).catch((error) => {
+
+            })
     }
     useEffect(() => {
         const fetchLeadDetaile = async (leadId) => {
@@ -511,6 +525,9 @@ export default function LeadDetailsNew(props) {
                             history.goBack()
                         }, 1500)
                     } else if (location.pathname === `/dashboards/followup/edit/${leadid}`) {
+                        setTimeout(() => {
+                            notification()
+                        }, 5000)
                         setTimeout(() => {
                             history.goBack()
                         }, 1500)

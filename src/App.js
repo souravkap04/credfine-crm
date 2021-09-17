@@ -43,6 +43,8 @@ function App() {
       .then((response) => {
         if (response.data.followup_lead_avail === true && response.data.total_followup_lead > 0) {
           localStorage.setItem('notification', response.data.total_followup_lead);
+        } else if (response.data.followup_lead_avail === false && response.data.total_followup_lead === 0) {
+          localStorage.removeItem('notification')
         }
       }).catch((error) => {
 
