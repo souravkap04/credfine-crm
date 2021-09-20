@@ -234,12 +234,13 @@ export default function Leads() {
     for (let i = (data.length) - 4; i > 0; i--) {
       maskData += 'x';
     }
-    let leadPhoneNo = maskData + unMaskdata;
-    if (profileData.user_roles[0].user_type === 3) {
-      return leadPhoneNo;
-    } else {
-      return data;
-    }
+    // let leadPhoneNo = maskData + unMaskdata;
+    // if (profileData.user_roles[0].user_type === 3) {
+    //   return leadPhoneNo;
+    // } else {
+    //   return data;
+    // }
+    return data;
   }
   const disableDialerPopUp = () => {
     setVertageCall(false)
