@@ -216,8 +216,9 @@ export default function LeadDetailsNew(props) {
     const [followUpDateError, setfollowUpDateError] = useState([false]);
     const [isLoading, setisLoading] = useState(false);
     const [isCopy, setisCopy] = useState(false);
-    const [disbursedDate, setdisbursedDate] = useState('');
-    const [disbursedError, setdisbursedError] = useState([false]);
+    const [disbursedDate, setdisbursedDate] = useState(new Date());
+    const [Roi, setRoi] = useState('');
+    const [disbursedError, setdisbursedError] = useState([false, false]);
     const [colorRed, setcolorRed] = useState([false, false, false, false]);
     let statusData = getStatusData();
     let { leadid } = useParams();
@@ -293,6 +294,7 @@ export default function LeadDetailsNew(props) {
                         setbankNBFC(response.data.lead_extra_details.bank);
                         setscheme(response.data.lead_extra_details.scheme);
                         setdisbursedDate(response.data.lead_extra_details.disbursed_date)
+                        setRoi(response.data.lead_extra_details.roi)
                         setisLoading(false)
                         if (response.data.lead_data.lead_crm_id !== '' && response.data.lead_data.loan_type !== '' && response.data.lead_data.loan_amount !== '' && response.data.lead_data.name !== '' && response.data.lead_data["data"].dob !== '' && response.data.eligibility_data.pan_no !== '' && response.data.eligibility_data.email_id !== '' && response.data.lead_data.phone_no !== '') {
                             setcolorTick(true)
@@ -506,13 +508,14 @@ export default function LeadDetailsNew(props) {
         }
         if (subStatus === 'Disbursed') {
             let disData = [...disbursedError];
-            if (disbursedDate === "") {
-                disData[0] = true;
+            if (disbursedDate === null) disData[0] = true;
+            if (Roi === 0) disData[1] = true;
+            if (disbursedDate === null || Roi === 0) {
                 setdisbursedError(disData);
                 return;
             }
         }
-        let items = { status: status, sub_status: subStatus, app_id: appID, bank: bankNBFC, scheme: scheme, callback_time: followUpDate.replace('T', ' '), disbursed_date: disbursedDate }
+        let items = { status: status, sub_status: subStatus, app_id: appID, bank: bankNBFC, scheme: scheme, callback_time: followUpDate.replace('T', ' '), disbursed_date: disbursedDate, roi: Roi }
         let headers = { 'Authorization': `Token ${profileData.token}` }
         if (status !== '' && subStatus.length > 0) {
             await axios.put(`${baseUrl}/leads/lead_status/${id}`, items, { headers })
@@ -1670,29 +1673,60 @@ export default function LeadDetailsNew(props) {
                                 </Grid>
                             </Grid>
                         </React.Fragment> : ''}
-                        {subStatus === 'Disbursed' ? <Grid>
-                            <TextField
-                                className="textField"
-                                id="outlined-full-width"
-                                type="date"
-                                label="Disbursal Date"
-                                style={{ margin: 8 }}
-                                margin="normal"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                variant="outlined"
-                                size="small"
-                                value={disbursedDate}
-                                onChange={(e) => setdisbursedDate(e.target.value)}
-                                onFocus={() => {
-                                    let disData = [...disbursedError];
-                                    disData[0] = false;
-                                    setdisbursedError(disData)
-                                }}
-                                error={disbursedError[0]}
-                                helperText={disbursedError[0] ? 'Disbursal date required' : ''}
-                            />
+                        {subStatus === 'Disbursed' ? <Grid container style={{ justifyContent: 'center' }}>
+                            <Grid>
+                                <TextField
+                                    className="textField2 textLeft"
+                                    id="outlined-full-width"
+                                    type="date"
+                                    label="Disb Date"
+                                    margin="normal"
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    variant="outlined"
+                                    size="small"
+                                    value={disbursedDate}
+                                    onChange={(e) => setdisbursedDate(e.target.value)}
+                                    onFocus={() => {
+                                        let disData = [...disbursedError];
+                                        disData[0] = false;
+                                        setdisbursedError(disData)
+                                    }}
+                                    error={disbursedError[0]}
+                                    helperText={disbursedError[0] ? 'Disbursal date required' : ''}
+                                />
+                            </Grid>
+                            <Grid>
+                                <TextField
+                                    className="textField2 textRight"
+                                    id="outlined-full-width"
+                                    label="ROI %"
+                                    margin="normal"
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    inputProps={{
+                                        maxLength: 5
+                                    }}
+                                    variant="outlined"
+                                    size="small"
+                                    value={Roi}
+                                    onChange={(e) => {
+                                        const re = /^[0-9\b.]+$/;
+                                        if (e.target.value === '' || re.test(e.target.value)) {
+                                            setRoi(e.target.value)
+                                        }
+                                    }}
+                                    onFocus={() => {
+                                        let disData = [...disbursedError];
+                                        disData[1] = false;
+                                        setdisbursedError(disData)
+                                    }}
+                                    error={disbursedError[1]}
+                                    helperText={disbursedError[1] ? 'Roi is required' : ''}
+                                />
+                            </Grid>
                         </Grid> : ''}
                     </Grid>
                     <div className="addRemarkContainer">
