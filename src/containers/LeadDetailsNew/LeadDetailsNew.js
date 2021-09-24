@@ -220,6 +220,8 @@ export default function LeadDetailsNew(props) {
     const [Roi, setRoi] = useState('');
     const [disbursedError, setdisbursedError] = useState([false, false]);
     const [colorRed, setcolorRed] = useState([false, false, false, false]);
+    const [leadHistoryData, setleadHistoryData] = useState([]);
+    const [leadStatusHistoryData, setleadStatusHistoryData] = useState([]);
     let statusData = getStatusData();
     let { leadid } = useParams();
     let history = useHistory();
@@ -545,6 +547,12 @@ export default function LeadDetailsNew(props) {
                 })
         }
     }
+    useEffect(() => {
+        if (status === 'Contacted NI/NE' || status === 'Customer Not Interested') {
+            setAlertMessage('Please Add Remark');
+            setIsLeadError(true);
+        }
+    }, [status]);
     const searchCompanyHandler = async (e) => {
         setCompanyName(e.target.value);
         setShowCompany(true);
@@ -659,6 +667,24 @@ export default function LeadDetailsNew(props) {
     const disableDialerPopUp = () => {
         setVertageCall(false)
         setDisableHangupBtn(false)
+    }
+    const leadHistory = async (id) => {
+        let headers = { 'Authorization': `Token ${profileData.token}` }
+        await axios.get(`${baseUrl}/leads/LeadHistory/${id}`, { headers })
+            .then(response => {
+                setleadHistoryData(response.data.lead_history)
+            }).catch(error => {
+                console.log(error)
+            })
+    }
+    const leadStatusHistory = async (id) => {
+        let headers = { 'Authorization': `Token ${profileData.token}` }
+        await axios.get(`${baseUrl}/leads/LeadStatusHistory/${id}`, { headers })
+            .then(response => {
+                setleadStatusHistoryData(response.data.lead_history)
+            }).catch(error => {
+                console.log(error)
+            })
     }
     return (
         <PageLayerSection pageTitle="Lead Details" className={classes.scrollEnable} offerButton={true}>
@@ -1273,13 +1299,19 @@ export default function LeadDetailsNew(props) {
                         <Button
                             className={journeyStatus === 'leadHistory' ? "activeBtn" : "journeyBtn"}
                             color="primary"
-                            variant="contained" onClick={() => handleJourneyStatusChange('leadHistory')}>
+                            variant="contained" onClick={() => {
+                                handleJourneyStatusChange('leadHistory')
+                                leadHistory(leadid)
+                            }}>
                             LEAD HISTORY
                         </Button>
                         <Button
                             className={journeyStatus === 'dispositionHistory' ? "activeBtn" : "journeyBtn"}
                             color="primary"
-                            variant="contained" onClick={() => handleJourneyStatusChange('dispositionHistory')}>
+                            variant="contained" onClick={() => {
+                                handleJourneyStatusChange('dispositionHistory')
+                                leadStatusHistory(leadid)
+                            }}>
                             DISPOSITION HISTORY
                         </Button>
                         <Button
@@ -1308,7 +1340,7 @@ export default function LeadDetailsNew(props) {
                         </Button>
                     </Grid>
                     {journeyStatus === 'leadHistory' ? <Grid className="leadHistory">
-                        <TableContainer style={{ maxHeight: '320px' }}>
+                        <TableContainer style={{ maxHeight: '210px' }}>
                             <Table stickyHeader>
                                 <TableHead>
                                     <TableRow>
@@ -1329,33 +1361,23 @@ export default function LeadDetailsNew(props) {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    <TableRow>
-                                        <TableCell className={classes.tabledata}>LD00000164</TableCell>
-                                        <TableCell className={classes.tabledata}>12-02-2021</TableCell>
-                                        <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
-                                        <TableCell className={classes.tabledata}>RNR</TableCell>
-                                        <TableCell className={classes.tabledata}>Yes</TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell className={classes.tabledata}>LD00000164</TableCell>
-                                        <TableCell className={classes.tabledata}>12-02-2021</TableCell>
-                                        <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
-                                        <TableCell className={classes.tabledata}>RNR</TableCell>
-                                        <TableCell className={classes.tabledata}>Yes</TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell className={classes.tabledata}>LD00000164</TableCell>
-                                        <TableCell className={classes.tabledata}>12-02-2021</TableCell>
-                                        <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
-                                        <TableCell className={classes.tabledata}>RNR</TableCell>
-                                        <TableCell className={classes.tabledata}>Yes</TableCell>
-                                    </TableRow>
+                                    {leadHistoryData.length !== 0 ? leadHistoryData.map(item => {
+                                        let date = new Date(item.created_date);
+                                        let user = profileData.username
+                                        return <TableRow>
+                                            <TableCell className={classes.tabledata}>{leadid}</TableCell>
+                                            <TableCell className={classes.tabledata}>{date.toLocaleDateString()}</TableCell>
+                                            <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
+                                            <TableCell className={classes.tabledata}>RNR</TableCell>
+                                            <TableCell className={classes.tabledata}>{user}</TableCell>
+                                        </TableRow>
+                                    }) : ''}
                                 </TableBody>
                             </Table>
                         </TableContainer>
                     </Grid> : ''}
                     {journeyStatus === 'dispositionHistory' ? <Grid className="leadHistory">
-                        <TableContainer style={{ maxHeight: '320px' }}>
+                        <TableContainer style={{ maxHeight: '210px' }}>
                             <Table stickyHeader>
                                 <TableHead>
                                     <TableRow>
@@ -1363,9 +1385,10 @@ export default function LeadDetailsNew(props) {
                                         <TableCell className={classes.tableheading}>Updated Date + Time</TableCell>
                                         <TableCell className={classes.tableheading}>Updated Status</TableCell>
                                         <TableCell className={classes.tableheading}>Updated Sub Status</TableCell>
+                                        <TableCell className={classes.tableheading}>Updated User</TableCell>
                                         <TableCell className={classes.tableheading}>
                                             <div className={classes.closeContainer}>
-                                                Updating User
+                                                Updating Username
                                                 <Toolbar className={classes.Toolbar}>
                                                     <IconButton edge="end" className={classes.closeBtn} color="inherit" onClick={() => handleJourneyStatusChange('')} aria-label="close">
                                                         <CloseIcon />
@@ -1376,33 +1399,24 @@ export default function LeadDetailsNew(props) {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    <TableRow>
-                                        <TableCell className={classes.tabledata}>LD00000164</TableCell>
-                                        <TableCell className={classes.tabledata}>12-02-2021</TableCell>
-                                        <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
-                                        <TableCell className={classes.tabledata}>RNR</TableCell>
-                                        <TableCell className={classes.tabledata}>Yes</TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell className={classes.tabledata}>LD00000164</TableCell>
-                                        <TableCell className={classes.tabledata}>12-02-2021</TableCell>
-                                        <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
-                                        <TableCell className={classes.tabledata}>RNR</TableCell>
-                                        <TableCell className={classes.tabledata}>Yes</TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell className={classes.tabledata}>LD00000164</TableCell>
-                                        <TableCell className={classes.tabledata}>12-02-2021</TableCell>
-                                        <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
-                                        <TableCell className={classes.tabledata}>RNR</TableCell>
-                                        <TableCell className={classes.tabledata}>Yes</TableCell>
-                                    </TableRow>
+                                    {leadStatusHistoryData.length !== 0 ? leadStatusHistoryData.map(item => {
+                                        let date = new Date(item.updated_date);
+                                        let user = profileData.username
+                                        return <TableRow>
+                                            <TableCell className={classes.tabledata}>{leadid}</TableCell>
+                                            <TableCell className={classes.tabledata}>{date.toLocaleDateString() + ' ' + date.toLocaleTimeString()}</TableCell>
+                                            <TableCell className={classes.tabledata}>{item.status}</TableCell>
+                                            <TableCell className={classes.tabledata}>{item.sub_status}</TableCell>
+                                            <TableCell className={classes.tabledata}>{user}</TableCell>
+                                            <TableCell className={classes.tabledata}>{item.agent_user_name}</TableCell>
+                                        </TableRow>
+                                    }) : ''}
                                 </TableBody>
                             </Table>
                         </TableContainer>
                     </Grid> : ''}
                     {journeyStatus === 'leadJourney' ? <Grid className="leadHistory">
-                        <TableContainer style={{ maxHeight: '320px' }}>
+                        <TableContainer style={{ maxHeight: '210px' }}>
                             <Table stickyHeader>
                                 <TableHead>
                                     <TableRow>
@@ -1768,6 +1782,6 @@ export default function LeadDetailsNew(props) {
                     Calling...
                 </Alert>
             </Snackbar>
-        </PageLayerSection>
+        </PageLayerSection >
     )
 }
