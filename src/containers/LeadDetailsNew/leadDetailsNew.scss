@@ -63,6 +63,7 @@ $desk: 100 / 1440;
         width: 100%;
         height: 115 * $desk + vw;
         margin-top: 10 * $desk + vw;
+        margin-bottom: 10 * $desk + vw;
         box-shadow: 0 3px 4.7px 0 rgba(0, 0, 0, 0.27);
         background-color: #e4e9f2;
         display: flex;
@@ -82,6 +83,18 @@ $desk: 100 / 1440;
             font-family: "Lato";
             // font-weight: 600;
         }
+        .activeBtn {
+            width: 176 * $desk + vw;
+            height: 40 * $desk + vw;
+            color: #fff;
+            border-radius: 5 * $desk + vw;
+            font-size: 12 * $desk + vw;
+            margin: 7 * $desk + vw;
+            box-shadow: none;
+            font-family: "Lato";
+            background-color: #535ad1;
+            border: none;
+        }
     }
 }
 .MuiGrid-grid-lg-9 {
@@ -90,12 +103,12 @@ $desk: 100 / 1440;
 }
 .callConatiner {
     position: relative;
-    height: auto;
+    height: 100%;
     border-radius: 6px;
     box-shadow: 0 3px 4.7px 0 rgba(0, 0, 0, 0.27);
     background-color: #fff;
     margin-left: 5 * $desk + vw;
-    margin-bottom: 50 * $desk + vw;
+    margin-bottom: 20 * $desk + vw;
     padding-top: 18 * $desk + vw;
     padding-left: 28 * $desk + vw;
     padding-right: 28 * $desk + vw;
@@ -293,4 +306,11 @@ $desk: 100 / 1440;
             border-radius: 8 * $desk + vw;
         }
     }
+}
+.leadHistory {
+    width: 100%;
+    height: auto;
+    border-radius: 6px;
+    box-shadow: 0 3px 4.7px 0 rgba(0, 0, 0, 0.27);
+    margin-bottom: 50 * $desk + vw;
 }
