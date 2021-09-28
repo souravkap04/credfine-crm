@@ -1558,12 +1558,15 @@ export default function LeadDetailsNew(props) {
                         <Grid container style={{ justifyContent: 'center' }}>
                             <h4>Add Remarks</h4>
                             <div className="remarks">
-                                <textarea rows="4" cols="4" placeholder="To add remark kindly click green button before submit....." value={input} onChange={(e) => setInput(e.target.value)} onKeyPress={(event) => {
+                                <textarea rows="4" cols="4" placeholder="Enter Remark....." value={input} onChange={(e) => setInput(e.target.value)} onKeyPress={(event) => {
                                     if (event.key === "Enter") {
                                         return remarksHandler(event, leadid)
                                     }
                                 }} />
-                                <SendIcon onClick={(event) => remarksHandler(event, leadid)} className="remarkSend" style={{ color: '#14cc9e' }} />
+                                <div className="remarkSubmitContainer">
+                                    <div className="remarkBtnText">Click green button to update remark.</div>
+                                    <SendIcon onClick={(event) => remarksHandler(event, leadid)} className="remarkSend" style={{ color: '#14cc9e' }} />
+                                </div>
                             </div>
                         </Grid>
                     </div>
