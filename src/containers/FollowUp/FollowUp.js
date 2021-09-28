@@ -226,7 +226,7 @@ export default function FollowUp(props) {
         <PageLayerSection>
             {/* <NoDataFound text="Coming Soon" /> */}
             <div className="followUpBtnContainer">
-                {LeadCount !== 0 ? <Badge className="followbtn" max={999} badgeContent={LeadCount} color="secondary">
+                {LeadCount !== 0 ? <Badge className="followbtn" badgeContent={LeadCount} color="secondary">
                     <Button variant="contained">Follow Up</Button>
                 </Badge> : ''}
                 {/* <Badge className="followbtn" badgeContent={4} color="secondary">

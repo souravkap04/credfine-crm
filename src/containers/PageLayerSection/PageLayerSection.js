@@ -108,15 +108,15 @@ export default function PageLayerSection(props) {
                         >
                             Add New Lead
                         </Button> : null}
-                        {props.offerButton ? <NavLink to="/dashboards/pricing" target="_blank"><Button
+                        {props.offerButton ? <Button
                             className="addBtn"
                             color="primary"
                             variant="contained"
                             startIcon={<LocalOfferIcon />}
-                            // onClick={props.onClick}
+                            onClick={props.onClick}
                         >
                             Pricing
-                        </Button></NavLink> : null}
+                        </Button> : null}
                         <NavLink to="/dashboards/followup" activeClassName="active"><Badge className="notificationContainer" badgeContent={localStorage.getItem('notification') !== 0 ? localStorage.getItem('notification') : 0} max={999} color="secondary">
                             <NotificationsIcon className="notificationIcon" />
                         </Badge></NavLink>

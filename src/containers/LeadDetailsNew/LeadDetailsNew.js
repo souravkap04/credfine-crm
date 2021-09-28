@@ -30,15 +30,7 @@ import {
 import { useParams, useHistory, useLocation } from 'react-router-dom';
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
+import PricingPopup from '../PricingPopup/PricingPopup';
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -62,33 +54,6 @@ const useStyles = makeStyles({
         fontSize: '17px',
         fontWeight: '400',
         letterSpacing: '0.4px'
-    },
-    tableheading: {
-        backgroundColor: '#8f9bb3',
-        color: '#ffffff',
-        fontSize: '13px',
-        border: '1px solid #ededed',
-        textAlign: 'center'
-    },
-    tabledata: {
-        fontSize: '12px',
-        overflowWrap: 'break-word',
-        border: '1px solid #ededed',
-        textAlign: 'center',
-        color: '#424242',
-        backgroundColor: '#fff'
-    },
-    closeContainer: {
-        display: 'flex',
-        justifyContent: 'space-evenly',
-        alignItems: 'center',
-    },
-    Toolbar: {
-        minHeight: '0',
-        padding: '0'
-    },
-    closeBtn: {
-        padding: '0'
     }
 });
 const Accordion = withStyles({
@@ -144,13 +109,9 @@ const AccordionDetails = withStyles((theme) => ({
 }))(MuiAccordionDetails);
 export default function LeadDetailsNew(props) {
     const classes = useStyles();
-    const [expanded, setExpanded] = useState('panel1');
+    const [expanded, setExpanded] = React.useState('panel1');
     const handleChange = (panel) => (event, newExpanded) => {
         setExpanded(newExpanded ? panel : false);
-    };
-    const [journeyStatus, setjourneyStatus] = useState('');
-    const handleJourneyStatusChange = (name) => {
-        setjourneyStatus(name ? name : false);
     };
     const profileData = getProfileData();
     const banks = getBank();
@@ -216,12 +177,10 @@ export default function LeadDetailsNew(props) {
     const [followUpDateError, setfollowUpDateError] = useState([false]);
     const [isLoading, setisLoading] = useState(false);
     const [isCopy, setisCopy] = useState(false);
-    const [disbursedDate, setdisbursedDate] = useState(new Date());
-    const [Roi, setRoi] = useState('');
-    const [disbursedError, setdisbursedError] = useState([false, false]);
+    const [disbursedDate, setdisbursedDate] = useState('');
+    const [disbursedError, setdisbursedError] = useState([false]);
     const [colorRed, setcolorRed] = useState([false, false, false, false]);
-    const [leadHistoryData, setleadHistoryData] = useState([]);
-    const [leadStatusHistoryData, setleadStatusHistoryData] = useState([]);
+    const [openState, setopenState] = useState(false);
     let statusData = getStatusData();
     let { leadid } = useParams();
     let history = useHistory();
@@ -240,21 +199,6 @@ export default function LeadDetailsNew(props) {
         } else {
             return data;
         }
-    }
-    const notification = async () => {
-        const headers = {
-            'Authorization': `Token ${profileData.token}`,
-        };
-        await axios.get(`${baseUrl}/leads/CheckFollowupLead/`, { headers })
-            .then((response) => {
-                if (response.data.followup_lead_avail === true && response.data.total_followup_lead > 0) {
-                    localStorage.setItem('notification', response.data.total_followup_lead);
-                } else if (response.data.followup_lead_avail === false && response.data.total_followup_lead === 0) {
-                    localStorage.removeItem('notification')
-                }
-            }).catch((error) => {
-
-            })
     }
     useEffect(() => {
         const fetchLeadDetaile = async (leadId) => {
@@ -296,7 +240,6 @@ export default function LeadDetailsNew(props) {
                         setbankNBFC(response.data.lead_extra_details.bank);
                         setscheme(response.data.lead_extra_details.scheme);
                         setdisbursedDate(response.data.lead_extra_details.disbursed_date)
-                        setRoi(response.data.lead_extra_details.roi)
                         setisLoading(false)
                         if (response.data.lead_data.lead_crm_id !== '' && response.data.lead_data.loan_type !== '' && response.data.lead_data.loan_amount !== '' && response.data.lead_data.name !== '' && response.data.lead_data["data"].dob !== '' && response.data.eligibility_data.pan_no !== '' && response.data.eligibility_data.email_id !== '' && response.data.lead_data.phone_no !== '') {
                             setcolorTick(true)
@@ -510,14 +453,13 @@ export default function LeadDetailsNew(props) {
         }
         if (subStatus === 'Disbursed') {
             let disData = [...disbursedError];
-            if (disbursedDate === null) disData[0] = true;
-            if (Roi === 0) disData[1] = true;
-            if (disbursedDate === null || Roi === 0) {
+            if (disbursedDate === "") {
+                disData[0] = true;
                 setdisbursedError(disData);
                 return;
             }
         }
-        let items = { status: status, sub_status: subStatus, app_id: appID, bank: bankNBFC, scheme: scheme, callback_time: followUpDate.replace('T', ' '), disbursed_date: disbursedDate, roi: Roi }
+        let items = { status: status, sub_status: subStatus, app_id: appID, bank: bankNBFC, scheme: scheme, callback_time: followUpDate.replace('T', ' '), disbursed_date: disbursedDate }
         let headers = { 'Authorization': `Token ${profileData.token}` }
         if (status !== '' && subStatus.length > 0) {
             await axios.put(`${baseUrl}/leads/lead_status/${id}`, items, { headers })
@@ -530,9 +472,6 @@ export default function LeadDetailsNew(props) {
                             history.goBack()
                         }, 1500)
                     } else if (location.pathname === `/dashboards/followup/edit/${leadid}`) {
-                        setTimeout(() => {
-                            notification()
-                        }, 5000)
                         setTimeout(() => {
                             history.goBack()
                         }, 1500)
@@ -547,12 +486,6 @@ export default function LeadDetailsNew(props) {
                 })
         }
     }
-    useEffect(() => {
-        if (status === 'Contacted NI/NE' || status === 'Customer Not Interested') {
-            setAlertMessage('Please Add Remark');
-            setIsLeadError(true);
-        }
-    }, [status]);
     const searchCompanyHandler = async (e) => {
         setCompanyName(e.target.value);
         setShowCompany(true);
@@ -668,26 +601,15 @@ export default function LeadDetailsNew(props) {
         setVertageCall(false)
         setDisableHangupBtn(false)
     }
-    const leadHistory = async (id) => {
-        let headers = { 'Authorization': `Token ${profileData.token}` }
-        await axios.get(`${baseUrl}/leads/LeadHistory/${id}`, { headers })
-            .then(response => {
-                setleadHistoryData(response.data.lead_history)
-            }).catch(error => {
-                console.log(error)
-            })
+    const handlePopup = () => {
+        setopenState(true)
     }
-    const leadStatusHistory = async (id) => {
-        let headers = { 'Authorization': `Token ${profileData.token}` }
-        await axios.get(`${baseUrl}/leads/LeadStatusHistory/${id}`, { headers })
-            .then(response => {
-                setleadStatusHistoryData(response.data.lead_history)
-            }).catch(error => {
-                console.log(error)
-            })
+    const closePopup = () => {
+        setopenState(false)
     }
     return (
-        <PageLayerSection pageTitle="Lead Details" className={classes.scrollEnable} offerButton={true}>
+        <PageLayerSection pageTitle="Lead Details" className={classes.scrollEnable} offerButton={true} onClick={handlePopup}>
+            {openState ? <PricingPopup handleClose={closePopup} />: ''}
             {/* Errors SnackBars Start */}
             <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={hangUpSnacks} autoHideDuration={1500} onClose={disableHangUpSnacks}>
                 <Alert onClose={disableHangUpSnacks} severity="success">
@@ -1291,27 +1213,21 @@ export default function LeadDetailsNew(props) {
                             COMPLETE JOURNEY
                         </Button>
                         <Button
-                            className={journeyStatus === 'leadJourney' ? "activeBtn" : "journeyBtn"}
+                            className="journeyBtn"
                             color="primary"
-                            variant="contained" onClick={() => handleJourneyStatusChange('leadJourney')}>
+                            variant="contained">
                             LEAD JOURNEY
                         </Button>
                         <Button
-                            className={journeyStatus === 'leadHistory' ? "activeBtn" : "journeyBtn"}
+                            className="journeyBtn"
                             color="primary"
-                            variant="contained" onClick={() => {
-                                handleJourneyStatusChange('leadHistory')
-                                leadHistory(leadid)
-                            }}>
+                            variant="contained">
                             LEAD HISTORY
                         </Button>
                         <Button
-                            className={journeyStatus === 'dispositionHistory' ? "activeBtn" : "journeyBtn"}
+                            className="journeyBtn"
                             color="primary"
-                            variant="contained" onClick={() => {
-                                handleJourneyStatusChange('dispositionHistory')
-                                leadStatusHistory(leadid)
-                            }}>
+                            variant="contained">
                             DISPOSITION HISTORY
                         </Button>
                         <Button
@@ -1339,129 +1255,6 @@ export default function LeadDetailsNew(props) {
                             SOURCE
                         </Button>
                     </Grid>
-                    {journeyStatus === 'leadHistory' ? <Grid className="leadHistory">
-                        <TableContainer style={{ maxHeight: '210px' }}>
-                            <Table stickyHeader>
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell className={classes.tableheading}>Lead Id</TableCell>
-                                        <TableCell className={classes.tableheading}>Created Date</TableCell>
-                                        <TableCell className={classes.tableheading}>Closer Status</TableCell>
-                                        <TableCell className={classes.tableheading}>Closer Sub-Status</TableCell>
-                                        <TableCell className={classes.tableheading}>
-                                            <div className={classes.closeContainer}>
-                                                Closing User
-                                                <Toolbar className={classes.Toolbar}>
-                                                    <IconButton edge="end" className={classes.closeBtn} color="inherit" onClick={() => handleJourneyStatusChange('')} aria-label="close">
-                                                        <CloseIcon />
-                                                    </IconButton>
-                                                </Toolbar>
-                                            </div>
-                                        </TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {leadHistoryData.length !== 0 ? leadHistoryData.map(item => {
-                                        let date = new Date(item.created_date);
-                                        let user = profileData.username
-                                        return <TableRow>
-                                            <TableCell className={classes.tabledata}>{leadid}</TableCell>
-                                            <TableCell className={classes.tabledata}>{date.toLocaleDateString()}</TableCell>
-                                            <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
-                                            <TableCell className={classes.tabledata}>RNR</TableCell>
-                                            <TableCell className={classes.tabledata}>{user}</TableCell>
-                                        </TableRow>
-                                    }) : ''}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    </Grid> : ''}
-                    {journeyStatus === 'dispositionHistory' ? <Grid className="leadHistory">
-                        <TableContainer style={{ maxHeight: '210px' }}>
-                            <Table stickyHeader>
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell className={classes.tableheading}>Lead Id</TableCell>
-                                        <TableCell className={classes.tableheading}>Updated Date + Time</TableCell>
-                                        <TableCell className={classes.tableheading}>Updated Status</TableCell>
-                                        <TableCell className={classes.tableheading}>Updated Sub Status</TableCell>
-                                        <TableCell className={classes.tableheading}>Updated User</TableCell>
-                                        <TableCell className={classes.tableheading}>
-                                            <div className={classes.closeContainer}>
-                                                Updating Username
-                                                <Toolbar className={classes.Toolbar}>
-                                                    <IconButton edge="end" className={classes.closeBtn} color="inherit" onClick={() => handleJourneyStatusChange('')} aria-label="close">
-                                                        <CloseIcon />
-                                                    </IconButton>
-                                                </Toolbar>
-                                            </div>
-                                        </TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {leadStatusHistoryData.length !== 0 ? leadStatusHistoryData.map(item => {
-                                        let date = new Date(item.updated_date);
-                                        let user = profileData.username
-                                        return <TableRow>
-                                            <TableCell className={classes.tabledata}>{leadid}</TableCell>
-                                            <TableCell className={classes.tabledata}>{date.toLocaleDateString() + ' ' + date.toLocaleTimeString()}</TableCell>
-                                            <TableCell className={classes.tabledata}>{item.status}</TableCell>
-                                            <TableCell className={classes.tabledata}>{item.sub_status}</TableCell>
-                                            <TableCell className={classes.tabledata}>{user}</TableCell>
-                                            <TableCell className={classes.tabledata}>{item.agent_user_name}</TableCell>
-                                        </TableRow>
-                                    }) : ''}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    </Grid> : ''}
-                    {journeyStatus === 'leadJourney' ? <Grid className="leadHistory">
-                        <TableContainer style={{ maxHeight: '210px' }}>
-                            <Table stickyHeader>
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell className={classes.tableheading}>Lead Id</TableCell>
-                                        <TableCell className={classes.tableheading}>Created By</TableCell>
-                                        <TableCell className={classes.tableheading}>Created Date</TableCell>
-                                        <TableCell className={classes.tableheading}>Created Time</TableCell>
-                                        <TableCell className={classes.tableheading}>
-                                            <div className={classes.closeContainer}>
-                                                Source
-                                                <Toolbar className={classes.Toolbar}>
-                                                    <IconButton edge="end" className={classes.closeBtn} color="inherit" onClick={() => handleJourneyStatusChange('')} aria-label="close">
-                                                        <CloseIcon />
-                                                    </IconButton>
-                                                </Toolbar>
-                                            </div>
-                                        </TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    <TableRow>
-                                        <TableCell className={classes.tabledata}>LD00000164</TableCell>
-                                        <TableCell className={classes.tabledata}>System (Bulk Upload+Website+ Campaigns)</TableCell>
-                                        <TableCell className={classes.tabledata}>12-02-2021</TableCell>
-                                        <TableCell className={classes.tabledata}>10:30 PM</TableCell>
-                                        <TableCell className={classes.tabledata}>Website</TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell className={classes.tabledata}>LD00000164</TableCell>
-                                        <TableCell className={classes.tabledata}>System (Bulk Upload+Website+ Campaigns)</TableCell>
-                                        <TableCell className={classes.tabledata}>12-02-2021</TableCell>
-                                        <TableCell className={classes.tabledata}>10:30 PM</TableCell>
-                                        <TableCell className={classes.tabledata}>Misscall</TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell className={classes.tabledata}>LD00000164</TableCell>
-                                        <TableCell className={classes.tabledata}>System (Bulk Upload+Website+ Campaigns)</TableCell>
-                                        <TableCell className={classes.tabledata}>12-02-2021</TableCell>
-                                        <TableCell className={classes.tabledata}>10:30 PM</TableCell>
-                                        <TableCell className={classes.tabledata}>IVR</TableCell>
-                                    </TableRow>
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    </Grid> : ''}
                 </Grid>
                 <Grid className="callConatiner" lg={3}>
                     <Grid className="callAdjustContainer">
@@ -1687,60 +1480,29 @@ export default function LeadDetailsNew(props) {
                                 </Grid>
                             </Grid>
                         </React.Fragment> : ''}
-                        {subStatus === 'Disbursed' ? <Grid container style={{ justifyContent: 'center' }}>
-                            <Grid>
-                                <TextField
-                                    className="textField2 textLeft"
-                                    id="outlined-full-width"
-                                    type="date"
-                                    label="Disb Date"
-                                    margin="normal"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    variant="outlined"
-                                    size="small"
-                                    value={disbursedDate}
-                                    onChange={(e) => setdisbursedDate(e.target.value)}
-                                    onFocus={() => {
-                                        let disData = [...disbursedError];
-                                        disData[0] = false;
-                                        setdisbursedError(disData)
-                                    }}
-                                    error={disbursedError[0]}
-                                    helperText={disbursedError[0] ? 'Disbursal date required' : ''}
-                                />
-                            </Grid>
-                            <Grid>
-                                <TextField
-                                    className="textField2 textRight"
-                                    id="outlined-full-width"
-                                    label="ROI %"
-                                    margin="normal"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    inputProps={{
-                                        maxLength: 5
-                                    }}
-                                    variant="outlined"
-                                    size="small"
-                                    value={Roi}
-                                    onChange={(e) => {
-                                        const re = /^[0-9\b.]+$/;
-                                        if (e.target.value === '' || re.test(e.target.value)) {
-                                            setRoi(e.target.value)
-                                        }
-                                    }}
-                                    onFocus={() => {
-                                        let disData = [...disbursedError];
-                                        disData[1] = false;
-                                        setdisbursedError(disData)
-                                    }}
-                                    error={disbursedError[1]}
-                                    helperText={disbursedError[1] ? 'Roi is required' : ''}
-                                />
-                            </Grid>
+                        {subStatus === 'Disbursed' ? <Grid>
+                            <TextField
+                                className="textField"
+                                id="outlined-full-width"
+                                type="date"
+                                label="Disbursal Date"
+                                style={{ margin: 8 }}
+                                margin="normal"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                variant="outlined"
+                                size="small"
+                                value={disbursedDate}
+                                onChange={(e) => setdisbursedDate(e.target.value)}
+                                onFocus={() => {
+                                    let disData = [...disbursedError];
+                                    disData[0] = false;
+                                    setdisbursedError(disData)
+                                }}
+                                error={disbursedError[0]}
+                                helperText={disbursedError[0] ? 'Disbursal date required' : ''}
+                            />
                         </Grid> : ''}
                     </Grid>
                     <div className="addRemarkContainer">
@@ -1777,11 +1539,13 @@ export default function LeadDetailsNew(props) {
                     </div>
                 </Grid>
             </Grid>}
-            <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={vertageCall} autoHideDuration={1500} onClose={disableDialerPopUp}>
-                <Alert onClose={disableDialerPopUp} severity="info">
-                    Calling...
-                </Alert>
-            </Snackbar>
-        </PageLayerSection >
+            <div>
+                <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={vertageCall} autoHideDuration={1500} onClose={disableDialerPopUp}>
+                    <Alert onClose={disableDialerPopUp} severity="info">
+                        Calling...
+                    </Alert>
+                </Snackbar>
+            </div>
+        </PageLayerSection>
     )
 }

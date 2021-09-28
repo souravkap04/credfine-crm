@@ -74,7 +74,6 @@
   width: 100%;
   height: 7.98611vw;
   margin-top: 0.69444vw;
-  margin-bottom: 0.69444vw;
   -webkit-box-shadow: 0 3px 4.7px 0 rgba(0, 0, 0, 0.27);
           box-shadow: 0 3px 4.7px 0 rgba(0, 0, 0, 0.27);
   background-color: #e4e9f2;
@@ -105,20 +104,6 @@
   font-family: "Lato";
 }
 
-.accordianContainer .completeJourneyContainer .activeBtn {
-  width: 12.22222vw;
-  height: 2.77778vw;
-  color: #fff;
-  border-radius: 0.34722vw;
-  font-size: 0.83333vw;
-  margin: 0.48611vw;
-  -webkit-box-shadow: none;
-          box-shadow: none;
-  font-family: "Lato";
-  background-color: #535ad1;
-  border: none;
-}
-
 .MuiGrid-grid-lg-9 {
   max-width: 74% !important;
   -ms-flex-preferred-size: 74% !important;
@@ -127,13 +112,13 @@
 
 .callConatiner {
   position: relative;
-  height: 100%;
+  height: auto;
   border-radius: 6px;
   -webkit-box-shadow: 0 3px 4.7px 0 rgba(0, 0, 0, 0.27);
           box-shadow: 0 3px 4.7px 0 rgba(0, 0, 0, 0.27);
   background-color: #fff;
   margin-left: 0.34722vw;
-  margin-bottom: 1.38889vw;
+  margin-bottom: 3.47222vw;
   padding-top: 1.25vw;
   padding-left: 1.94444vw;
   padding-right: 1.94444vw;
@@ -390,14 +375,5 @@
 .callConatiner .allremarksContainer .autoScroll::-webkit-scrollbar-thumb {
   background-color: #f7f9fc;
   border-radius: 0.55556vw;
-}
-
-.leadHistory {
-  width: 100%;
-  height: auto;
-  border-radius: 6px;
-  -webkit-box-shadow: 0 3px 4.7px 0 rgba(0, 0, 0, 0.27);
-          box-shadow: 0 3px 4.7px 0 rgba(0, 0, 0, 0.27);
-  margin-bottom: 3.47222vw;
 }
 /*# sourceMappingURL=leadDetailsNew.css.map */
