@@ -26,6 +26,7 @@ import axios from 'axios';
 import baseUrl from './global/api';
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
+import PricingPopup from './containers/PricingPopup/PricingPopup';
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -42,6 +43,8 @@ function App() {
       .then((response) => {
         if (response.data.followup_lead_avail === true && response.data.total_followup_lead > 0) {
           localStorage.setItem('notification', response.data.total_followup_lead);
+        } else if (response.data.followup_lead_avail === false && response.data.total_followup_lead === 0) {
+          localStorage.removeItem('notification')
         }
       }).catch((error) => {
 
@@ -121,6 +124,7 @@ function App() {
           <PrivateRoute exact path="/dashboards/reports" component={Reports} />
           <PrivateRoute exact path="/dashboards/bulkuploads" component={BulkUploads} />
           <PrivateRoute exact path="/dashboards/addusers" component={AddUsers} />
+          <PrivateRoute exact path="/dashboards/pricing" component={PricingPopup} />
         </Switch>
       </Router>
     </div>

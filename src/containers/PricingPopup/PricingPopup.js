@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
 import Dialog from '@material-ui/core/Dialog';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -11,7 +8,11 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { makeStyles } from '@material-ui/core/styles';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import InputLabel from '@material-ui/core/InputLabel';
 import clsx from 'clsx';
+import './pricing.css';
 const useStyles = makeStyles({
     container: {
         overflow: 'auto',
@@ -26,7 +27,12 @@ const useStyles = makeStyles({
         backgroundColor: '#8f9bb3',
         color: '#ffffff',
         fontSize: '13px',
-        border: '1px solid #ededed'
+        border: '1px solid #ededed',
+        textAlign: 'center'
+    },
+    tableInputLabel: {
+        color: '#ffffff',
+        fontSize: '13px',
     },
     tabledataRed: {
         color: '#eb5757',
@@ -76,14 +82,6 @@ const useStyles = makeStyles({
         marginBottom: '2px',
         color: '#eb5757'
     }
-    // oddEvenRow: {
-    //     '&:nth-of-type(odd)': {
-    //         backgroundColor: '#f7f9fc',
-    //     },
-    //     '&:nth-of-type(even)': {
-    //         backgroundColor: '#fff',
-    //     },
-    // },
 });
 export default function PricingPopup(props) {
     const classes = useStyles();
@@ -91,7 +89,7 @@ export default function PricingPopup(props) {
         {
             banks_nbfc: 'IDFC Smart',
             age: '23 To 60',
-            salary: '20K',
+            salary: '20k',
             salary_not: '-',
             roi: '10.49% To 24%',
             loan_tenure: '12 To 60 Months',
@@ -104,7 +102,7 @@ export default function PricingPopup(props) {
         {
             banks_nbfc: 'IDFC PL',
             age: '23 To 60',
-            salary: '20K',
+            salary: '20k',
             salary_not: '-',
             roi: '11.25% To 24%',
             loan_tenure: '12 To 60 Months',
@@ -117,7 +115,7 @@ export default function PricingPopup(props) {
         {
             banks_nbfc: 'ABFL PL',
             age: '23 To 60',
-            salary: '20K',
+            salary: '20k',
             salary_not: '-',
             roi: '12.99%  To 28%',
             loan_tenure: '12 To 84 Months',
@@ -130,7 +128,7 @@ export default function PricingPopup(props) {
         {
             banks_nbfc: 'Incred PL',
             age: '23 To 60',
-            salary: '20K',
+            salary: '20k',
             salary_not: '-',
             roi: '16 % To 28%',
             loan_tenure: '12 To 60 Months',
@@ -143,7 +141,7 @@ export default function PricingPopup(props) {
         {
             banks_nbfc: 'Fullerton PL',
             age: '21 To 58',
-            salary: '25K',
+            salary: '25k',
             salary_not: '-',
             roi: '13.99% To 28%',
             loan_tenure: '12 To 60 Months',
@@ -182,7 +180,7 @@ export default function PricingPopup(props) {
         {
             banks_nbfc: 'YES BANK PL',
             age: '22 To 60',
-            salary: '25K',
+            salary: '25k',
             salary_not: '-',
             roi: '10.99 % TO 20%',
             loan_tenure: '12 To 60 Months',
@@ -195,7 +193,7 @@ export default function PricingPopup(props) {
         {
             banks_nbfc: 'HDFC BANK PL',
             age: '21 To 60',
-            salary: '25K',
+            salary: '25k',
             salary_not: '-',
             roi: '10.50% To 20%',
             loan_tenure: '12 To 72 Months',
@@ -221,7 +219,7 @@ export default function PricingPopup(props) {
         {
             banks_nbfc: 'ICICI Bank PL',
             age: '23 TO 58',
-            salary: '30K',
+            salary: '30k',
             salary_not: '-',
             roi: '10.50% To 20%',
             loan_tenure: '12 To 60 Months',
@@ -234,27 +232,27 @@ export default function PricingPopup(props) {
         {
             banks_nbfc: 'BAJAJ PL',
             age: '21 TO 58',
-            salary: '40k',
-            salary_not: '-',
-            roi: '12.5% TO 18%',
+            salary: '35k',
+            salary_not: '40k',
+            roi: '13.5%',
             loan_tenure: '12 To 60 Months',
             max_loan_amt: '25 Lakhs',
-            loan_charges: 'Up to 2.5% of the loan amount include insurance',
+            loan_charges: 'Up to 2% of the loan amount include insurance',
             part_payment: 'Part-payment allowed after 1 EMI upto 75% with 2% charges',
             force_clousre: "Foreclosure allowed after 1 EMI's 4% charges plus GST",
-            firms_not_allowed: 'PROP/Partnership/NGO/LLP Only if Listed',
+            firms_not_allowed: 'PROP/Partnership/NGO/LLP/Construction Company Only if Listed',
         },
         {
             banks_nbfc: 'BAJAJ OD',
             age: '21 TO 58',
-            salary: '40k',
-            salary_not: '-',
-            roi: '14.75%',
+            salary: '35k',
+            salary_not: '50k',
+            roi: '14% To 15.25%',
             loan_tenure: '12 To 84 Months',
             max_loan_amt: '25 Lakhs',
             loan_charges: 'Up to 2% of the loan amount include insurance',
             part_payment: 'Part-payment allowed after 1 day with nill charges',
-            force_clousre: "Foreclosure allowed after 6 EMI's 4% charges plus GST",
+            force_clousre: "Foreclosure allowed after 6 EMI's 4.72% charges plus GST",
             firms_not_allowed: 'PROP/Partnership/NGO/LLP Only if Listed',
         },
         {
@@ -297,18 +295,11 @@ export default function PricingPopup(props) {
             firms_not_allowed: 'PROP/PARTNERSHIP/NGO/LLP ONLY IF LISTED',
         }
     ]);
-    const handleClose = () => {
-        props.handleClose()
-    }
+    const [age, setAge] = useState('');
     const Transition = React.forwardRef(function Transition(props, ref) {
         return <Slide direction="up" ref={ref} {...props} />;
     });
-    return <Dialog fullScreen open={true} onClose={handleClose} TransitionComponent={Transition}>
-        <Toolbar style={{ display: 'flex', justifyContent: 'end' }}>
-            <IconButton edge="end" color="inherit" onClick={handleClose} aria-label="close">
-                <CloseIcon />
-            </IconButton>
-        </Toolbar>
+    return <Dialog fullScreen open={true} TransitionComponent={Transition}>
         <div className={classes.textGreen}>Data marked in green allowed part-payment from 2nd day with nill charges</div>
         <div className={classes.textBlack}>Data marked in black allow part-payment but after the locking period and with limitation</div>
         <div className={classes.textRed}>Data marked in red don’t  allow part-payment</div>
@@ -318,7 +309,24 @@ export default function PricingPopup(props) {
                     <TableRow>
                         <TableCell className={classes.tableheading}>BANKS / NBFC</TableCell>
                         <TableCell className={classes.tableheading}>AGE</TableCell>
-                        <TableCell className={classes.tableheading}>SAL IF LISTED CAT A OR SA</TableCell>
+                        <TableCell className={classes.tableheading}>
+                            <InputLabel id="demo-simple-select-label" className={classes.tableInputLabel}>SAL IF LISTED CAT A OR SA</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={age}
+                                onChange={(event) => setAge(event.target.value)}
+                                className="menuItem"
+                            >
+                                <MenuItem value="15k">15k</MenuItem>
+                                <MenuItem value="20k">20k</MenuItem>
+                                <MenuItem value="25k">25k</MenuItem>
+                                <MenuItem value="30k">30k</MenuItem>
+                                <MenuItem value="35k">35k</MenuItem>
+                                <MenuItem value="40k">40k</MenuItem>
+                                <MenuItem value="50k">50k</MenuItem>
+                            </Select>
+                        </TableCell>
                         <TableCell className={classes.tableheading}>SAL REQ IF NOT LISTED</TableCell>
                         <TableCell className={classes.tableheading}>ROI %</TableCell>
                         <TableCell className={classes.tableheading}>LAON TENURE</TableCell>
@@ -331,48 +339,94 @@ export default function PricingPopup(props) {
                 </TableHead>
                 <TableBody>
                     {pricingData.map((item, index) => {
-                        if (index === 1 || index === 3 || index === 4 || index === 10 || index === 14) {
-                            return <TableRow className={classes.oddEvenRow}>
-                                <TableCell className={clsx(classes.tabledataRed, classes.banksNBFC)}>{item.banks_nbfc}</TableCell>
-                                <TableCell className={clsx(classes.tabledataRed, classes.tableAge)}>{item.age}</TableCell>
-                                <TableCell className={classes.tabledataRed}>{item.salary}</TableCell>
-                                <TableCell className={clsx(classes.tabledataRed, classes.salaryNot)}>{item.salary_not}</TableCell>
-                                <TableCell className={classes.tabledataRed}>{item.roi}</TableCell>
-                                <TableCell className={classes.tabledataRed}>{item.loan_tenure}</TableCell>
-                                <TableCell className={classes.tabledataRed}>{item.max_loan_amt}</TableCell>
-                                <TableCell className={classes.tabledataRed}>{item.loan_charges}</TableCell>
-                                <TableCell className={classes.tabledataRed}>{item.part_payment}</TableCell>
-                                <TableCell className={classes.tabledataRed}>{item.force_clousre}</TableCell>
-                                <TableCell className={classes.tabledataRed}>{item.firms_not_allowed}</TableCell>
-                            </TableRow>
-                        } else if (index === 12 || index === 13) {
-                            return <TableRow className={classes.oddEvenRow}>
-                                <TableCell className={clsx(classes.tabledataGreen, classes.banksNBFC)}>{item.banks_nbfc}</TableCell>
-                                <TableCell className={clsx(classes.tabledataGreen, classes.tableAge)}>{item.age}</TableCell>
-                                <TableCell className={classes.tabledataGreen}>{item.salary}</TableCell>
-                                <TableCell className={clsx(classes.tabledataGreen, classes.salaryNot)}>{item.salary_not}</TableCell>
-                                <TableCell className={classes.tabledataGreen}>{item.roi}</TableCell>
-                                <TableCell className={classes.tabledataGreen}>{item.loan_tenure}</TableCell>
-                                <TableCell className={classes.tabledataGreen}>{item.max_loan_amt}</TableCell>
-                                <TableCell className={classes.tabledataGreen}>{item.loan_charges}</TableCell>
-                                <TableCell className={classes.tabledataGreen}>{item.part_payment}</TableCell>
-                                <TableCell className={classes.tabledataGreen}>{item.force_clousre}</TableCell>
-                                <TableCell className={classes.tabledataGreen}>{item.firms_not_allowed}</TableCell>
-                            </TableRow>
-                        } else {
-                            return <TableRow className={classes.oddEvenRow}>
-                                <TableCell className={clsx(classes.tabledata, classes.banksNBFC)}>{item.banks_nbfc}</TableCell>
-                                <TableCell className={clsx(classes.tabledata, classes.tableAge)}>{item.age}</TableCell>
-                                <TableCell className={classes.tabledata}>{item.salary}</TableCell>
-                                <TableCell className={clsx(classes.tabledata, classes.salaryNot)}>{item.salary_not}</TableCell>
-                                <TableCell className={classes.tabledata}>{item.roi}</TableCell>
-                                <TableCell className={classes.tabledata}>{item.loan_tenure}</TableCell>
-                                <TableCell className={classes.tabledata}>{item.max_loan_amt}</TableCell>
-                                <TableCell className={classes.tabledata}>{item.loan_charges}</TableCell>
-                                <TableCell className={classes.tabledata}>{item.part_payment}</TableCell>
-                                <TableCell className={classes.tabledata}>{item.force_clousre}</TableCell>
-                                <TableCell className={classes.tabledata}>{item.firms_not_allowed}</TableCell>
-                            </TableRow>
+                        if (age === '') {
+                            if (index === 1 || index === 3 || index === 4 || index === 10 || index === 14) {
+                                return <TableRow className={classes.oddEvenRow}>
+                                    <TableCell className={clsx(classes.tabledataRed, classes.banksNBFC)}>{item.banks_nbfc}</TableCell>
+                                    <TableCell className={clsx(classes.tabledataRed, classes.tableAge)}>{item.age}</TableCell>
+                                    <TableCell className={classes.tabledataRed}>{item.salary}</TableCell>
+                                    <TableCell className={clsx(classes.tabledataRed, classes.salaryNot)}>{item.salary_not}</TableCell>
+                                    <TableCell className={classes.tabledataRed}>{item.roi}</TableCell>
+                                    <TableCell className={classes.tabledataRed}>{item.loan_tenure}</TableCell>
+                                    <TableCell className={classes.tabledataRed}>{item.max_loan_amt}</TableCell>
+                                    <TableCell className={classes.tabledataRed}>{item.loan_charges}</TableCell>
+                                    <TableCell className={classes.tabledataRed}>{item.part_payment}</TableCell>
+                                    <TableCell className={classes.tabledataRed}>{item.force_clousre}</TableCell>
+                                    <TableCell className={classes.tabledataRed}>{item.firms_not_allowed}</TableCell>
+                                </TableRow>
+                            } else if (index === 12 || index === 13) {
+                                return <TableRow className={classes.oddEvenRow}>
+                                    <TableCell className={clsx(classes.tabledataGreen, classes.banksNBFC)}>{item.banks_nbfc}</TableCell>
+                                    <TableCell className={clsx(classes.tabledataGreen, classes.tableAge)}>{item.age}</TableCell>
+                                    <TableCell className={classes.tabledataGreen}>{item.salary}</TableCell>
+                                    <TableCell className={clsx(classes.tabledataGreen, classes.salaryNot)}>{item.salary_not}</TableCell>
+                                    <TableCell className={classes.tabledataGreen}>{item.roi}</TableCell>
+                                    <TableCell className={classes.tabledataGreen}>{item.loan_tenure}</TableCell>
+                                    <TableCell className={classes.tabledataGreen}>{item.max_loan_amt}</TableCell>
+                                    <TableCell className={classes.tabledataGreen}>{item.loan_charges}</TableCell>
+                                    <TableCell className={classes.tabledataGreen}>{item.part_payment}</TableCell>
+                                    <TableCell className={classes.tabledataGreen}>{item.force_clousre}</TableCell>
+                                    <TableCell className={classes.tabledataGreen}>{item.firms_not_allowed}</TableCell>
+                                </TableRow>
+                            } else {
+                                return <TableRow className={classes.oddEvenRow}>
+                                    <TableCell className={clsx(classes.tabledata, classes.banksNBFC)}>{item.banks_nbfc}</TableCell>
+                                    <TableCell className={clsx(classes.tabledata, classes.tableAge)}>{item.age}</TableCell>
+                                    <TableCell className={classes.tabledata}>{item.salary}</TableCell>
+                                    <TableCell className={clsx(classes.tabledata, classes.salaryNot)}>{item.salary_not}</TableCell>
+                                    <TableCell className={classes.tabledata}>{item.roi}</TableCell>
+                                    <TableCell className={classes.tabledata}>{item.loan_tenure}</TableCell>
+                                    <TableCell className={classes.tabledata}>{item.max_loan_amt}</TableCell>
+                                    <TableCell className={classes.tabledata}>{item.loan_charges}</TableCell>
+                                    <TableCell className={classes.tabledata}>{item.part_payment}</TableCell>
+                                    <TableCell className={classes.tabledata}>{item.force_clousre}</TableCell>
+                                    <TableCell className={classes.tabledata}>{item.firms_not_allowed}</TableCell>
+                                </TableRow>
+                            }
+                        } else if (age === item.salary) {
+                            if (index === 1 || index === 3 || index === 4 || index === 10 || index === 14) {
+                                return <TableRow className={classes.oddEvenRow}>
+                                    <TableCell className={clsx(classes.tabledataRed, classes.banksNBFC)}>{item.banks_nbfc}</TableCell>
+                                    <TableCell className={clsx(classes.tabledataRed, classes.tableAge)}>{item.age}</TableCell>
+                                    <TableCell className={classes.tabledataRed}>{item.salary}</TableCell>
+                                    <TableCell className={clsx(classes.tabledataRed, classes.salaryNot)}>{item.salary_not}</TableCell>
+                                    <TableCell className={classes.tabledataRed}>{item.roi}</TableCell>
+                                    <TableCell className={classes.tabledataRed}>{item.loan_tenure}</TableCell>
+                                    <TableCell className={classes.tabledataRed}>{item.max_loan_amt}</TableCell>
+                                    <TableCell className={classes.tabledataRed}>{item.loan_charges}</TableCell>
+                                    <TableCell className={classes.tabledataRed}>{item.part_payment}</TableCell>
+                                    <TableCell className={classes.tabledataRed}>{item.force_clousre}</TableCell>
+                                    <TableCell className={classes.tabledataRed}>{item.firms_not_allowed}</TableCell>
+                                </TableRow>
+                            } else if (index === 12 || index === 13) {
+                                return <TableRow className={classes.oddEvenRow}>
+                                    <TableCell className={clsx(classes.tabledataGreen, classes.banksNBFC)}>{item.banks_nbfc}</TableCell>
+                                    <TableCell className={clsx(classes.tabledataGreen, classes.tableAge)}>{item.age}</TableCell>
+                                    <TableCell className={classes.tabledataGreen}>{item.salary}</TableCell>
+                                    <TableCell className={clsx(classes.tabledataGreen, classes.salaryNot)}>{item.salary_not}</TableCell>
+                                    <TableCell className={classes.tabledataGreen}>{item.roi}</TableCell>
+                                    <TableCell className={classes.tabledataGreen}>{item.loan_tenure}</TableCell>
+                                    <TableCell className={classes.tabledataGreen}>{item.max_loan_amt}</TableCell>
+                                    <TableCell className={classes.tabledataGreen}>{item.loan_charges}</TableCell>
+                                    <TableCell className={classes.tabledataGreen}>{item.part_payment}</TableCell>
+                                    <TableCell className={classes.tabledataGreen}>{item.force_clousre}</TableCell>
+                                    <TableCell className={classes.tabledataGreen}>{item.firms_not_allowed}</TableCell>
+                                </TableRow>
+                            } else {
+                                return <TableRow className={classes.oddEvenRow}>
+                                    <TableCell className={clsx(classes.tabledata, classes.banksNBFC)}>{item.banks_nbfc}</TableCell>
+                                    <TableCell className={clsx(classes.tabledata, classes.tableAge)}>{item.age}</TableCell>
+                                    <TableCell className={classes.tabledata}>{item.salary}</TableCell>
+                                    <TableCell className={clsx(classes.tabledata, classes.salaryNot)}>{item.salary_not}</TableCell>
+                                    <TableCell className={classes.tabledata}>{item.roi}</TableCell>
+                                    <TableCell className={classes.tabledata}>{item.loan_tenure}</TableCell>
+                                    <TableCell className={classes.tabledata}>{item.max_loan_amt}</TableCell>
+                                    <TableCell className={classes.tabledata}>{item.loan_charges}</TableCell>
+                                    <TableCell className={classes.tabledata}>{item.part_payment}</TableCell>
+                                    <TableCell className={classes.tabledata}>{item.force_clousre}</TableCell>
+                                    <TableCell className={classes.tabledata}>{item.firms_not_allowed}</TableCell>
+                                </TableRow>
+                            }
                         }
                     })}
                 </TableBody>
