@@ -1,0 +1,14 @@
+.menuItem {
+  color: #fff !important;
+  font-size: 13px;
+  text-align: center;
+}
+
+.menuItem .MuiSvgIcon-root {
+  color: #fff;
+}
+
+.menuItem::before {
+  border-bottom: 1px solid #fff !important;
+}
+/*# sourceMappingURL=pricing.css.map */
