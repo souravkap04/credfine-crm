@@ -283,9 +283,23 @@
   font-family: "Lato";
 }
 
-.callConatiner .addRemarkContainer .remarks .remarkSend {
+.callConatiner .addRemarkContainer .remarks .remarkSubmitContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.callConatiner .addRemarkContainer .remarks .remarkSubmitContainer .remarkBtnText {
+  font-size: 1.04167vw;
+  line-height: 1.04167vw;
+  margin-right: 0.34722vw;
+}
+
+.callConatiner .addRemarkContainer .remarks .remarkSubmitContainer .remarkSend {
   cursor: pointer;
-  float: right;
   margin-top: 0.34722vw;
   margin-right: 0.83333vw;
 }

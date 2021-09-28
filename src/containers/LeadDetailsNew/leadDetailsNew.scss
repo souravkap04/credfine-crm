@@ -216,11 +216,20 @@ $desk: 100 / 1440;
                 outline: none;
                 font-family: "Lato";
             }
-            .remarkSend {
-                cursor: pointer;
-                float: right;
-                margin-top: 5 * $desk + vw;
-                margin-right: 12 * $desk + vw;
+            .remarkSubmitContainer {
+                display: flex;
+                align-items: center;
+                .remarkBtnText {
+                    font-size: 15 * $desk + vw;
+                    line-height: 15 * $desk + vw;
+                    // font-weight: bold;
+                    margin-right: 5 * $desk + vw;
+                }
+                .remarkSend {
+                    cursor: pointer;
+                    margin-top: 5 * $desk + vw;
+                    margin-right: 12 * $desk + vw;
+                }
             }
         }
     }
