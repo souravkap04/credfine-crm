@@ -7,10 +7,14 @@ import { InputBase, MenuItem, Menu } from '@material-ui/core';
 import { useIdleTimer } from 'react-idle-timer';
 import ArrowDropDownOutlinedIcon from '@material-ui/icons/ArrowDropDownOutlined';
 import { NavLink, useHistory } from 'react-router-dom';
+import { Button } from '@material-ui/core';
+import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
+import LocalOfferIcon from '@material-ui/icons/LocalOffer';
+import Badge from '@material-ui/core/Badge';
+import NotificationsIcon from '@material-ui/icons/Notifications';
 export default function PageLayerSection(props) {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [searchInput, setSearchInput] = useState("");
-    // const [isSearchData, setIsSearchData] = useState(false);
     let history = useHistory()
     let profileData = JSON.parse(localStorage.getItem("user_info"));
     let userName = profileData.username.toLowerCase();
@@ -18,6 +22,7 @@ export default function PageLayerSection(props) {
     userName = userName.replace(/\s+/g, " ");
     const [istimeOut, setIsTimeOut] = useState(false);
     const timeout = 1000 * 60 * 30;
+    const [notificationCount, setnotificationCount] = useState(0);
     const onAction = (e) => {
         setIsTimeOut(false)
     }
@@ -25,7 +30,6 @@ export default function PageLayerSection(props) {
         setIsTimeOut(false)
     }
     const onIdle = (e) => {
-        console.log('user is idle', e)
         if (istimeOut) {
             props.history.push("/");
             localStorage.removeItem('user_info');
@@ -47,15 +51,6 @@ export default function PageLayerSection(props) {
     const handleClose = () => {
         setAnchorEl(null);
     };
-    // const searchHandler = (e) => {
-    //     if (e.key === 'Enter') {
-    //         if (searchInput !== "" && searchValidation(searchInput)) {
-    //             setIsSearchData(true)
-    //         } else if (searchInput.length === 0) {
-    //             setIsSearchData(false)
-    //         }
-    //     }
-    // };
     const searchValidation = (search) => {
         if (/^[0-9]{10}$/.test(search) || /^[L][D][0-9]{8}$/.test(search)) {
             return true;
@@ -67,6 +62,7 @@ export default function PageLayerSection(props) {
         history.push("/");
         localStorage.removeItem('user_info');
         localStorage.removeItem('status_info');
+        localStorage.removeItem('notification');
     }
     return (
         <div className="pageAdjustSection">
@@ -75,29 +71,55 @@ export default function PageLayerSection(props) {
             </div>
             <div className="rightSection">
                 <div className="appBarContainer">
-                    <div className="searchContainer">
-                        <div className="searchIconContainer">
-                            <SearchIcon className="searchIcon" />
-                        </div>
-                        <InputBase
-                            placeholder="Lead ID / Mobile"
-                            className="inputContainer"
-                            inputProps={{ "aria-label": "search" }}
-                            value={searchInput}
-                            onChange={(e) => setSearchInput((e.target.value).toUpperCase().trim())}
-                            onKeyPress={(event) => {
-                                if (event.key === "Enter") {
-                                    if (searchInput !== "" && searchValidation(searchInput)) {
-                                        history.push("/dashboards/leads?query=" + searchInput);
-                                    } else if (searchInput === "") {
-                                        history.push("/dashboards/leads");
-                                        window.location.reload();
+                    <div className="searchMainContainer">
+                        <div className="searchContainer">
+                            <div className="searchIconContainer">
+                                <SearchIcon className="searchIcon" />
+                            </div>
+                            <InputBase
+                                placeholder="Lead ID / Mobile"
+                                className="inputContainer"
+                                inputProps={{ "aria-label": "search" }}
+                                value={searchInput}
+                                onChange={(e) => setSearchInput((e.target.value).toUpperCase().trim())}
+                                onKeyPress={(event) => {
+                                    if (event.key === "Enter") {
+                                        if (searchInput !== "" && searchValidation(searchInput)) {
+                                            history.push("/dashboards/leads?query=" + searchInput);
+                                        } else if (searchInput === "") {
+                                            history.push("/dashboards/leads");
+                                            window.location.reload();
+                                        }
                                     }
-                                }
-                            }}
-                        />
+                                }}
+                            />
+                        </div>
+                        <div className="headerSection">
+                            <h3>{props.pageTitle}</h3>
+                        </div>
                     </div>
                     <div className="rightAppBarSection">
+                        {props.addLeadButton ? <Button
+                            className="addBtn"
+                            color="primary"
+                            variant="contained"
+                            startIcon={<AddCircleOutlineOutlinedIcon />}
+                            onClick={props.onClick}
+                        >
+                            Add New Lead
+                        </Button> : null}
+                        {props.offerButton ? <Button
+                            className="addBtn"
+                            color="primary"
+                            variant="contained"
+                            startIcon={<LocalOfferIcon />}
+                            onClick={props.onClick}
+                        >
+                            Pricing
+                        </Button> : null}
+                        <NavLink to="/dashboards/followup" activeClassName="active"><Badge className="notificationContainer" badgeContent={localStorage.getItem('notification') !== 0 ? localStorage.getItem('notification') : 0} max={999} color="secondary">
+                            <NotificationsIcon className="notificationIcon" />
+                        </Badge></NavLink>
                         <div className="nameContainer" onClick={handleMenu}>
                             <div className="nameText">{userName}</div>
                             <ArrowDropDownOutlinedIcon className="arrowDown" />
@@ -109,8 +131,8 @@ export default function PageLayerSection(props) {
                             open={Boolean(anchorEl)}
                             onClose={handleClose}
                         >
-                            <NavLink to="/profile" style={{ textDecoration: "none", color: "#080707" }}><MenuItem >Profile</MenuItem></NavLink>
-                            <MenuItem onClick={logoutHandler}>Logout</MenuItem>
+                            <NavLink to="/profile" style={{ textDecoration: "none", color: "#080707" }}><MenuItem style={{ fontFamily: 'Lato' }}>Profile</MenuItem></NavLink>
+                            <MenuItem style={{ fontFamily: 'Lato' }} onClick={logoutHandler}>Logout</MenuItem>
                         </Menu>
                         <Avatar className="avatar" alt="User Name">{userName.charAt(0).toUpperCase()}</Avatar>
                     </div>

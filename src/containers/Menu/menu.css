@@ -14,4 +14,8 @@ a {
   background-color: rgba(143, 155, 179, 0.4);
   border-radius: 0.55556vw;
 }
+
+.MuiListItemText-primary {
+  font-family: "Lato" !important;
+}
 /*# sourceMappingURL=menu.css.map */

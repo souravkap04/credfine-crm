@@ -21,6 +21,7 @@ import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import IconButton from '@material-ui/core/IconButton';
+import PhoneCallbackOutlinedIcon from '@material-ui/icons/PhoneCallbackOutlined';
 import MenuIcon from '@material-ui/icons/Menu';
 import { Drawer } from '@material-ui/core';
 import clsx from 'clsx';
@@ -149,14 +150,14 @@ export default function Menu(props) {
                 aria-labelledby="nested-list-subheader"
                 className={classes.list + ' list'}
             >
-                {isHiddenTab ? null : <NavLink to="/dashboard" activeClassName="active">
+                <NavLink to="/dashboard" activeClassName="active">
                     <ListItem className="selected" button>
                         <ListItemIcon>
                             <DashboardOutlinedIcon className={classes.color} />
                         </ListItemIcon>
                         <ListItemText className={classes.color} primary="Dashboard" />
                     </ListItem>
-                </NavLink>}
+                </NavLink>
                 <NavLink to="/dashboards/leads" activeClassName="active">
                     <ListItem className="selected" button>
                         <ListItemIcon>
@@ -165,12 +166,12 @@ export default function Menu(props) {
                         <ListItemText className={classes.color} primary="New Leads" />
                     </ListItem>
                 </NavLink>
-                <NavLink to="/dashboards/addleads" activeClassName="active">
+                <NavLink to="/dashboards/followup" activeClassName="active">
                     <ListItem className="selected" button>
                         <ListItemIcon>
-                            <AddCircleOutlineOutlinedIcon className={classes.color} />
+                            <PhoneCallbackOutlinedIcon className={classes.color} />
                         </ListItemIcon>
-                        <ListItemText className={classes.color} primary="Add Leads" />
+                        <ListItemText className={classes.color} primary="Follow Up" />
                     </ListItem>
                 </NavLink>
                 <NavLink to="/dashboards/myleads" activeClassName="active">

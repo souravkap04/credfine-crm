@@ -1,0 +1,25 @@
+.followUpBtnContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  margin-bottom: 1.11111vw;
+}
+
+.followUpBtnContainer .followbtn {
+  margin-right: 1.04167vw;
+  margin-left: 1.04167vw;
+}
+
+.followUpBtnContainer .followbtn button {
+  background-color: #535ad1;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+
+.followUpBtnContainer .followbtn button span {
+  color: #fff;
+}
+/*# sourceMappingURL=followup.css.map */

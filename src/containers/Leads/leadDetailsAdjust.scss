@@ -5,3 +5,76 @@ $desk: 100 / 1440;
 .Toastify__progress-bar--default {
     background: #14cc9e;
 }
+.loader {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 45vh;
+    width: 80%;
+    .MuiCircularProgress-colorPrimary {
+        color: #535ad1;
+    }
+}
+// Lead Page CSS
+.rightContainerForm {
+    width: 23vw;
+    background-color: #fff;
+    padding-top: 30 * $desk + vw;
+    form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    h4 {
+        margin-left: 40 * $desk + vw;
+        font-size: 22 * $desk + vw;
+        font-weight: bold;
+        letter-spacing: 0.15 * $desk + vw;
+        color: #535ad1;
+        margin-bottom: 12 * $desk + vw;
+        font-family: "Lato";
+    }
+    .textField {
+        width: 260 * $desk + vw;
+        margin-top: 14 * $desk + vw !important;
+        // margin-bottom: 14 * $desk + vw !important;
+        font-family: 'Lato';
+        label {
+            color: #535ad1;
+            letter-spacing: 0.4px;
+            font-size: 15.5;
+            font-family: "Lato";
+            span {
+                position: absolute;
+                color: red;
+                font-size: 22px;
+                top: -25px;
+                margin-left: 2px;
+            }
+        }
+        // .MuiInputLabel-outlined.MuiInputLabel-shrink {
+        //     transform: translate(14px, -10px) scale(0.75);
+        // }
+        .MuiOutlinedInput-root {
+            height: 48 * $desk + vw;
+        }
+        .MuiOutlinedInput-notchedOutline {
+            border: 2px solid #c5cee0;
+        }
+        .MuiInputAdornment-root {
+            opacity: 0.6;
+        }
+        .MuiInputBase-input {
+            font-size: 16 * $desk + vw;
+            font-family: 'Lato' !important;
+        }
+    }
+    .submitBtn {
+        width: 140 * $desk + vw;
+        height: 48 * $desk + vw;
+        background-color: #535ad1;
+        margin-top: 10 * $desk + vw;
+        font-family: "Lato";
+    }
+}

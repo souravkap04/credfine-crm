@@ -18,7 +18,7 @@ import {
 import style from "./LeadDetails.module.css";
 import baseUrl from "../../global/api";
 import RemarkForm from "./Remarks/RemarkForm";
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useHistory, useLocation } from 'react-router-dom';
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
 import { vertageDialerApi } from "../../global/callApi";
 import MuiAlert from '@material-ui/lab/Alert';
@@ -70,6 +70,7 @@ function LeadDetails(props) {
   let statusData = getStatusData();
   let { leadid } = useParams();
   let history = useHistory();
+  let location = useLocation();
   const maskPhoneNo = (phoneNo) => {
     let data = phoneNo;
     let unMaskdata = data.slice(-4);
@@ -191,10 +192,17 @@ function LeadDetails(props) {
           if (response.status === 200) {
             setIsStatus(true)
           }
-          setTimeout(() => {
-            history.push('/dashboards/leads')
-          }, 1500)
+          if (location.pathname === `/dashboards/myleads/edit/${leadid}`) {
+            setTimeout(() => {
+              history.goBack()
+            }, 1500)
+          } else {
+            setTimeout(() => {
+              history.push('/dashboards/leads')
+            }, 1500)
+          }
         }).catch((error) => {
+          setAlertMessage(error.response.data.error)
           setIsLeadError(true)
         })
     }
@@ -271,11 +279,11 @@ function LeadDetails(props) {
                   Lead Data Successfully Updated
                 </Alert>
               </Snackbar>
-              <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isLeadError} autoHideDuration={1500} onClose={disableHangUpSnacks}>
+              {/* <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isLeadError} autoHideDuration={1500} onClose={disableHangUpSnacks}>
                 <Alert onClose={disableHangUpSnacks} severity="error">
                   Something Wrong
                 </Alert>
-              </Snackbar>
+              </Snackbar> */}
               <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isStatus} autoHideDuration={1500} onClose={disableHangUpSnacks}>
                 <Alert onClose={disableHangUpSnacks} severity="success">
                   Status Successfully Updated
