@@ -19,41 +19,67 @@ const useStyles = makeStyles({
         marginBottom: '10px'
     },
     table: {
-        width: '98%',
-        margin: 'auto',
-        border: '1px solid #ededed'
+        width: '100%',
+        margin: 'auto'
     },
     tableheading: {
-        backgroundColor: '#8f9bb3',
+        backgroundColor: '#535AD1',
         color: '#ffffff',
         fontSize: '13px',
-        border: '1px solid #ededed',
-        textAlign: 'center'
+        // textAlign: 'center'
+    },
+    tableheadingBorder: {
+        backgroundColor: '#535AD1',
+        padding: '0 !important'
     },
     tableInputLabel: {
         color: '#ffffff',
         fontSize: '13px',
     },
     tabledataRed: {
-        color: '#eb5757',
-        fontSize: '12px',
+        color: '#656565',
+        fontSize: '13px',
         overflowWrap: 'break-word',
-        border: '1px solid #ededed',
-        fontWeight: '600'
+        fontWeight: '600',
+        backgroundColor: '#FFF2F2',
+        borderBottom: '2px solid #fff !important'
+    },
+    tabledataRedBorder: {
+        // borderLeft: '10px solid #EB5757',
+        padding: '0 !important',
+        backgroundColor: '#EB5757',
+        borderBottom: '2px solid #fff !important',
+        width: '10px !important'
     },
     tabledataGreen: {
-        color: '#14cc9e',
-        fontSize: '12px',
+        color: '#656565',
+        fontSize: '13px',
         overflowWrap: 'break-word',
-        border: '1px solid #ededed',
-        fontWeight: '600'
+        fontWeight: '600',
+        backgroundColor: '#EEFFF8',
+        borderBottom: '2px solid #fff !important'
+    },
+    tabledataGreenBorder: {
+        // borderLeft: '10px solid #5DC699',
+        backgroundColor: '#5DC699',
+        borderBottom: '2px solid #fff !important',
+        padding: '0 !important',
+        width: '10px !important'
     },
     tabledata: {
-        fontSize: '12px',
+        fontSize: '13px',
         overflowWrap: 'break-word',
-        border: '1px solid #ededed',
         fontWeight: '600',
-        color: '#424242'
+        color: '#656565',
+        backgroundColor: '#FFFBF2',
+        borderBottom: '2px solid #fff !important'
+    },
+    tabledataBorder: {
+        // borderLeft: '10px solid #FFBD14',
+        backgroundColor: '#FFBD14',
+        borderBottom: '2px solid #fff !important',
+        padding: '0 !important',
+        width: '10px !important'
     },
     banksNBFC: {
         whiteSpace: 'nowrap'
@@ -63,24 +89,6 @@ const useStyles = makeStyles({
     },
     salaryNot: {
         textAlign: 'center'
-    },
-    textGreen: {
-        marginLeft: '15px',
-        fontSize: '16px',
-        marginBottom: '2px',
-        color: '#14cc9e'
-    },
-    textBlack: {
-        marginLeft: '15px',
-        fontSize: '16px',
-        marginBottom: '2px',
-        color: '#424242'
-    },
-    textRed: {
-        marginLeft: '15px',
-        fontSize: '16px',
-        marginBottom: '2px',
-        color: '#eb5757'
     }
 });
 export default function PricingPopup(props) {
@@ -300,13 +308,16 @@ export default function PricingPopup(props) {
         return <Slide direction="up" ref={ref} {...props} />;
     });
     return <Dialog fullScreen open={true} TransitionComponent={Transition}>
-        <div className={classes.textGreen}>Data marked in green allowed part-payment from 2nd day with nill charges</div>
-        <div className={classes.textBlack}>Data marked in black allow part-payment but after the locking period and with limitation</div>
-        <div className={classes.textRed}>Data marked in red don’t  allow part-payment</div>
+        <div className="guideContainer">
+            <div className="textGreen"><span></span>Allow Part-payment from 2nd day with nil charges</div>
+            <div className="textBlack"><span></span>Allow Part-payment after the lock-in period &amp; limitation</div>
+            <div className="textRed"><span></span>Part-Payment Not Allowed</div>
+        </div>
         <TableContainer className={classes.container}>
             <Table className={classes.table} aria-label="simple table" stickyHeader>
                 <TableHead className={classes.tableheading}>
                     <TableRow>
+                        <TableCell className={classes.tableheadingBorder}></TableCell>
                         <TableCell className={classes.tableheading}>BANKS / NBFC</TableCell>
                         <TableCell className={classes.tableheading}>AGE</TableCell>
                         <TableCell className={classes.tableheading}>
@@ -342,6 +353,7 @@ export default function PricingPopup(props) {
                         if (age === '') {
                             if (index === 1 || index === 3 || index === 4 || index === 10 || index === 14) {
                                 return <TableRow className={classes.oddEvenRow}>
+                                    <TableCell className={classes.tabledataRedBorder}></TableCell>
                                     <TableCell className={clsx(classes.tabledataRed, classes.banksNBFC)}>{item.banks_nbfc}</TableCell>
                                     <TableCell className={clsx(classes.tabledataRed, classes.tableAge)}>{item.age}</TableCell>
                                     <TableCell className={classes.tabledataRed}>{item.salary}</TableCell>
@@ -356,6 +368,7 @@ export default function PricingPopup(props) {
                                 </TableRow>
                             } else if (index === 12 || index === 13) {
                                 return <TableRow className={classes.oddEvenRow}>
+                                    <TableCell className={classes.tabledataGreenBorder}></TableCell>
                                     <TableCell className={clsx(classes.tabledataGreen, classes.banksNBFC)}>{item.banks_nbfc}</TableCell>
                                     <TableCell className={clsx(classes.tabledataGreen, classes.tableAge)}>{item.age}</TableCell>
                                     <TableCell className={classes.tabledataGreen}>{item.salary}</TableCell>
@@ -370,6 +383,7 @@ export default function PricingPopup(props) {
                                 </TableRow>
                             } else {
                                 return <TableRow className={classes.oddEvenRow}>
+                                     <TableCell className={classes.tabledataBorder}></TableCell>
                                     <TableCell className={clsx(classes.tabledata, classes.banksNBFC)}>{item.banks_nbfc}</TableCell>
                                     <TableCell className={clsx(classes.tabledata, classes.tableAge)}>{item.age}</TableCell>
                                     <TableCell className={classes.tabledata}>{item.salary}</TableCell>
@@ -386,6 +400,7 @@ export default function PricingPopup(props) {
                         } else if (age === item.salary) {
                             if (index === 1 || index === 3 || index === 4 || index === 10 || index === 14) {
                                 return <TableRow className={classes.oddEvenRow}>
+                                    <TableCell className={classes.tabledataRedBorder}></TableCell>
                                     <TableCell className={clsx(classes.tabledataRed, classes.banksNBFC)}>{item.banks_nbfc}</TableCell>
                                     <TableCell className={clsx(classes.tabledataRed, classes.tableAge)}>{item.age}</TableCell>
                                     <TableCell className={classes.tabledataRed}>{item.salary}</TableCell>
@@ -400,6 +415,7 @@ export default function PricingPopup(props) {
                                 </TableRow>
                             } else if (index === 12 || index === 13) {
                                 return <TableRow className={classes.oddEvenRow}>
+                                    <TableCell className={classes.tabledataGreenBorder}></TableCell>
                                     <TableCell className={clsx(classes.tabledataGreen, classes.banksNBFC)}>{item.banks_nbfc}</TableCell>
                                     <TableCell className={clsx(classes.tabledataGreen, classes.tableAge)}>{item.age}</TableCell>
                                     <TableCell className={classes.tabledataGreen}>{item.salary}</TableCell>
@@ -414,6 +430,7 @@ export default function PricingPopup(props) {
                                 </TableRow>
                             } else {
                                 return <TableRow className={classes.oddEvenRow}>
+                                    <TableCell className={classes.tabledataBorder}></TableCell>
                                     <TableCell className={clsx(classes.tabledata, classes.banksNBFC)}>{item.banks_nbfc}</TableCell>
                                     <TableCell className={clsx(classes.tabledata, classes.tableAge)}>{item.age}</TableCell>
                                     <TableCell className={classes.tabledata}>{item.salary}</TableCell>

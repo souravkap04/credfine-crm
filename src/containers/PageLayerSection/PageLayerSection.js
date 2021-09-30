@@ -112,9 +112,9 @@ export default function PageLayerSection(props) {
                             className="addBtn"
                             color="primary"
                             variant="contained"
-                            startIcon={<LocalOfferIcon />}
+                            // startIcon={<LocalOfferIcon />}
                         >
-                            Pricing
+                            BANK INTEREST CHART
                         </Button></NavLink> : null}
                         <NavLink to="/dashboards/followup" activeClassName="active"><Badge className="notificationContainer" badgeContent={localStorage.getItem('notification') !== 0 ? localStorage.getItem('notification') : 0} max={999} color="secondary">
                             <NotificationsIcon className="notificationIcon" />
