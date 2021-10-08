@@ -12,8 +12,16 @@ import {
   DialogTitle,
   DialogContent,
   Typography,
+  TextField,
+  Grid
 } from "@material-ui/core";
-import { Form, Row, Col, Button, InputGroup, FormControl } from 'react-bootstrap';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import ListItemText from '@material-ui/core/ListItemText';
+import Select from '@material-ui/core/Select';
+import Checkbox from '@material-ui/core/Checkbox';
+import { Form, Row, Col, Button, InputGroup } from 'react-bootstrap';
 import * as ReactBootstrap from "react-bootstrap";
 import axios from 'axios';
 import baseUrl from '../../global/api';
@@ -26,6 +34,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
+import './resetpassword.css';
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -63,7 +72,7 @@ const useStyles = makeStyles({
     backgroundColor: '#13B980',
     fontSize: '15px',
     fontFamily: 'Lato',
-    margin: '12px 121px',
+    margin: '12px 115px',
     padding: '5px',
     width: '50%',
     color: 'white',
@@ -93,7 +102,10 @@ const useStyles = makeStyles({
     display: 'flex',
     justifyContent: 'flex-end',
     alignItems: 'center',
-    padding: '20px'
+    paddingLeft: '20px',
+    paddingRight: '20px',
+    paddingTop: '10px',
+    paddingBottom: '10px'
   },
   activeUserBtn: {
     margin: '0 10px'
@@ -140,6 +152,9 @@ export default function Users() {
   const [searchTerm, setSearchTerm] = useState('');
   const [vertageId, setVertageId] = useState("");
   const [vertagePass, setVertagePass] = useState("");
+  const [parent, setparent] = useState("");
+  const [location, setlocation] = useState([]);
+  const [pullLocation, setpullLocation] = useState([]);
   const [isActiveUser, setIsActiveUser] = useState(true);
   const resetPasswordHandler = (userName, index) => {
     setIsResetPassword(true);
@@ -193,6 +208,7 @@ export default function Users() {
   }
   useEffect(() => {
     listOfActiveUsers();
+    listOfLocations();
   }, [deleteCount])
   const listOfActiveUsers = async () => {
     const headers = {
@@ -203,9 +219,21 @@ export default function Users() {
       setIsActiveUser(true);
       setLoading(true);
       setUsers(response.data);
+      setlocation(response.data)
     } catch (error) {
       console.log(error);
     }
+  }
+  const listOfLocations = async () => {
+    const headers = {
+      'Authorization': `Token ${profileData.token}`,
+    }
+    await axios.get(`${baseUrl}/common/getLocations`, { headers })
+      .then((response) => {
+        setpullLocation(response.data)
+      }).catch((error) => {
+        console.log(error);
+      })
   }
   const listOfDeletedUsers = async () => {
     const headers = {
@@ -246,7 +274,7 @@ export default function Users() {
         console.log(error);
       })
   }
-  const editUser = (userName, firstName, lastName, email, role, gender, phoneNo, productType, dialerPass, vertageId, vertagePass) => {
+  const editUser = (userName, firstName, lastName, email, role, gender, phoneNo, productType, dialerPass, vertageId, vertagePass, parent_user, location) => {
     setIsEditUser(true);
     setSelectedUserName(userName);
     setFirstName(firstName);
@@ -259,6 +287,8 @@ export default function Users() {
     setDialerApiKey(dialerPass);
     setVertageId(vertageId);
     setVertagePass(vertagePass);
+    setparent(parent_user);
+    setlocation(location);
   }
   const closeEditUser = () => {
     setIsEditUser(false);
@@ -267,7 +297,7 @@ export default function Users() {
     e.preventDefault();
     let item = {
       first_name: firstName, last_name: lastName, email, role, gender, phone_no: phoneNo,
-      product_type: productType, dialer_pass: dialerApiKey, vertage_id: vertageId, vertage_pass: vertagePass
+      product_type: productType, dialer_pass: dialerApiKey, vertage_id: vertageId, vertage_pass: vertagePass, parent_user: parent, locations: location
     };
     const headers = {
       'userRoleHash': profileData.user_roles[0].user_role_hash,
@@ -299,7 +329,10 @@ export default function Users() {
             </div>
             <div>
               <InputGroup>
-                <FormControl type="text" placeholder="Search..."
+                <TextField
+                  className="searchTermBox"
+                  variant="outlined"
+                  placeholder="Search....."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm((e.target.value).toLowerCase().trim())} />
               </InputGroup>
@@ -327,6 +360,8 @@ export default function Users() {
                   {/* <TableCell className={classes.tableheading}>DIALER API Key</TableCell> */}
                   <TableCell className={classes.tableheading}>Vertage Id</TableCell>
                   <TableCell className={classes.tableheading}>Vertage Pass</TableCell>
+                  <TableCell className={classes.tableheading}>Parent</TableCell>
+                  <TableCell className={classes.tableheading}>Location</TableCell>
                   <TableCell className={classes.tableheading}></TableCell>
                 </TableRow>
               </TableHead>
@@ -356,6 +391,8 @@ export default function Users() {
                       {/* <TableCell className={classes.tableData}>{user.myuser.dialer_pass}</TableCell> */}
                       <TableCell className={classes.tableData}>{user.myuser.vertage_id}</TableCell>
                       <TableCell className={classes.tableData}>{user.myuser.vertage_pass}</TableCell>
+                      <TableCell className={classes.tableData}>{user.myuser.parent_id}</TableCell>
+                      <TableCell className={classes.tableData}>{user.myuser.location.join(',')}</TableCell>
                       <TableCell className={classes.tableIconData}>
                         <Tooltip title="Reset Password">
                           <IconButton onClick={() => resetPasswordHandler(user.myuser.username, index)}>
@@ -367,7 +404,7 @@ export default function Users() {
                             onClick={() => editUser(user.myuser.username, user.myuser.first_name,
                               user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
                               user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
-                              user.myuser.vertage_pass)}>
+                              user.myuser.vertage_pass, user.myuser.parent_id, user.myuser.location)}>
                             <EditIcon />
                           </IconButton>
                         </Tooltip>
@@ -407,6 +444,8 @@ export default function Users() {
                       {/* <TableCell className={classes.deleteUsersData}>{user.myuser.dialer_pass}</TableCell> */}
                       <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_id}</TableCell>
                       <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_pass}</TableCell>
+                      <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.parent_id}</TableCell>
+                      <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.location}</TableCell>
                       <TableCell className={classes.deleteUsersData}></TableCell>
                     </TableRow>
                   )) :
@@ -459,120 +498,263 @@ export default function Users() {
                     <DialogTitle>Edit User</DialogTitle>
                     <DialogContent>
                       <Form onSubmit={updateUserData}>
-                        {isDisplay ? <ReactBootstrap.Alert variant="primary">{alertMessage}</ReactBootstrap.Alert> : null}
-                        <Row>
-                          <Col>
-                            <Form.Group>
-                              <Form.Label>First Name</Form.Label>
-                              <Form.Control
-                                type="text"
-                                value={firstName}
-                                onChange={(e) => setFirstName((e.target.value).toLowerCase().trim())} />
-                            </Form.Group>
-                          </Col>
-                          <Col>
-                            <Form.Group>
-                              <Form.Label>Last Name</Form.Label>
-                              <Form.Control
-                                type="text"
-                                value={lastName}
-                                onChange={(e) => setLastName((e.target.value).toLowerCase().trim())} />
-                            </Form.Group>
-                          </Col>
-                        </Row>
-                        <Row>
-                          <Col>
-                            <Form.Group>
-                              <Form.Label>EmailId</Form.Label>
-                              <Form.Control
-                                type="email"
-                                value={email}
-                                onChange={(e) => setEmail((e.target.value).toLowerCase().trim())} />
-                            </Form.Group>
-                          </Col>
-                          <Col>
-                            <Form.Group>
-                              <Form.Label>Role</Form.Label>
-                              <Form.Control
-                                as="select"
-                                value={role}
-                                onChange={(e) => setRole(e.target.value)}>
-                                <option>Select One</option>
-                                <option value="1">Admin</option>
-                                <option value="2">Manager</option>
-                                <option value="3">Agent</option>
-                              </Form.Control>
-                            </Form.Group>
-                          </Col>
-                        </Row>
-                        <Row>
-                          <Col>
-                            <Form.Group>
-                              <Form.Label>Product Type</Form.Label>
-                              <Form.Control
-                                as="select"
-                                value={productType}
-                                onChange={(e) => setProductType(e.target.value)}>
-                                <option value="">Select One</option>
-                                <option value="PL">Personal Loan</option>
-                                <option value="BL">Business Loan</option>
-                              </Form.Control>
-                            </Form.Group>
-                          </Col>
-                          <Col>
-                            <Form.Group>
-                              <Form.Label>Phone No</Form.Label>
-                              <Form.Control
-                                type="number"
-                                value={phoneNo}
-                                onChange={(e) => setPhoneNo((e.target.value).trim())} />
-                            </Form.Group>
-                          </Col>
-                        </Row>
-                        <Row>
-                          <Col>
-                            <Form.Group>
-                              <Form.Label>Gender</Form.Label>
-                              <Form.Control
-                                as="select"
-                                value={gender}
-                                onChange={(e) => setGender(e.target.value)}>
-                                <option value="">Select One</option>
-                                <option value="M">Male</option>
-                                <option value="F">Female</option>
-                              </Form.Control>
-                            </Form.Group>
-                          </Col>
-                          <Col>
-                            <Form.Group>
-                              <Form.Label>Dialer Api Key</Form.Label>
-                              <Form.Control
-                                type="text"
-                                value={dialerApiKey}
-                                onChange={(e) => setDialerApiKey((e.target.value).trim())} />
-                            </Form.Group>
-                          </Col>
-                        </Row>
-                        <Row>
-                          <Col>
-                            <Form.Group>
-                              <Form.Label>Vertage Id</Form.Label>
-                              <Form.Control
-                                type="text"
-                                value={vertageId}
-                                onChange={(e) => setVertageId((e.target.value).trim())} />
-                            </Form.Group>
-                          </Col>
-                          <Col>
-                            <Form.Group>
-                              <Form.Label>Vertage Pass</Form.Label>
-                              <Form.Control
-                                type="text"
-                                value={vertagePass}
-                                onChange={(e) => setVertagePass((e.target.value).trim())} />
-                            </Form.Group>
-                          </Col>
-                        </Row>
+                        <Grid container style={{ justifyContent: 'center' }}>
+                          <Grid>
+                            <TextField
+                              className="textField"
+                              id="outlined-full-width"
+                              label="First Name"
+                              style={{ margin: 8 }}
+                              margin="normal"
+                              InputLabelProps={{
+                                shrink: true,
+                              }}
+                              variant="outlined"
+                              size="small"
+                              value={firstName}
+                              onChange={(e) => setFirstName((e.target.value).toLowerCase().trim())}
+                            />
+                          </Grid>
+                          <Grid>
+                            <TextField
+                              className="textField"
+                              id="outlined-full-width"
+                              label="Last Name"
+                              style={{ margin: 8 }}
+                              margin="normal"
+                              InputLabelProps={{
+                                shrink: true,
+                              }}
+                              variant="outlined"
+                              size="small"
+                              value={lastName}
+                              onChange={(e) => setLastName((e.target.value).toLowerCase().trim())}
+                            />
+                          </Grid>
+                        </Grid>
+                        <Grid container style={{ justifyContent: 'center' }}>
+                          <Grid>
+                            <TextField
+                              className="textField"
+                              id="outlined-full-width"
+                              label="Email Id"
+                              style={{ margin: 8 }}
+                              margin="normal"
+                              InputLabelProps={{
+                                shrink: true,
+                              }}
+                              variant="outlined"
+                              size="small"
+                              value={email}
+                              onChange={(e) => setEmail((e.target.value).toLowerCase().trim())}
+                            />
+                          </Grid>
+                          <Grid>
+                            <TextField
+                              select
+                              className="textField"
+                              id="outlined-full-width"
+                              label="Role"
+                              style={{ margin: 8 }}
+                              margin="normal"
+                              InputLabelProps={{
+                                shrink: true,
+                              }}
+                              SelectProps={{
+                                native: true,
+                              }}
+                              variant="outlined"
+                              size="small"
+                              value={role}
+                              onChange={(e) => setRole(e.target.value)}
+                            >
+                              <option>Select One</option>
+                              <option value="1">Super Admin</option>
+                              <option value="2">Admin</option>
+                              <option value="3">Manager</option>
+                              <option value="4">Team Leader</option>
+                              <option value="5">Agent</option>
+                              <option value="6">Backend</option>
+                            </TextField>
+                          </Grid>
+                        </Grid>
+                        <Grid container style={{ justifyContent: 'center' }}>
+                          <Grid>
+                            <TextField
+                              select
+                              className="textField"
+                              id="outlined-full-width"
+                              label="Product Type"
+                              style={{ margin: 8 }}
+                              margin="normal"
+                              InputLabelProps={{
+                                shrink: true,
+                              }}
+                              SelectProps={{
+                                native: true,
+                              }}
+                              variant="outlined"
+                              size="small"
+                              value={productType}
+                              onChange={(e) => setProductType(e.target.value)}
+                            >
+                              <option>Select One</option>
+                              <option value="PL">Personal Loan</option>
+                              <option value="BL">Business Loan</option>
+                              <option value="CC">Credit Card</option>
+                              <option value="HL">Home Loan</option>
+                              <option value="LAP">Loan Against Property</option>
+                            </TextField>
+                          </Grid>
+                          <Grid>
+                            <TextField
+                              className="textField"
+                              id="outlined-full-width"
+                              label="Phone No"
+                              style={{ margin: 8 }}
+                              margin="normal"
+                              InputLabelProps={{
+                                shrink: true,
+                              }}
+                              variant="outlined"
+                              size="small"
+                              value={phoneNo}
+                              onChange={(e) => {
+                                const re = /^[0-9\b]+$/;
+                                if (e.target.value === '' || re.test(e.target.value)) {
+                                  setPhoneNo((e.target.value).trim())
+                                }
+                              }}
+                            />
+                          </Grid>
+                        </Grid>
+                        <Grid container style={{ justifyContent: 'center' }}>
+                          <Grid>
+                            <TextField
+                              select
+                              className="textField"
+                              id="outlined-full-width"
+                              label="Gender"
+                              style={{ margin: 8 }}
+                              margin="normal"
+                              InputLabelProps={{
+                                shrink: true,
+                              }}
+                              SelectProps={{
+                                native: true,
+                              }}
+                              variant="outlined"
+                              size="small"
+                              value={gender}
+                              onChange={(e) => setGender(e.target.value)}
+                            >
+                              <option value="">Select One</option>
+                              <option value="M">Male</option>
+                              <option value="F">Female</option>
+                              <option value="T">LGBT</option>
+                            </TextField>
+                          </Grid>
+                          <Grid>
+                            <TextField
+                              className="textField"
+                              id="outlined-full-width"
+                              label="Dialer Api Key"
+                              style={{ margin: 8 }}
+                              margin="normal"
+                              InputLabelProps={{
+                                shrink: true,
+                              }}
+                              variant="outlined"
+                              size="small"
+                              value={dialerApiKey}
+                              onChange={(e) => setDialerApiKey((e.target.value).trim())}
+                            />
+                          </Grid>
+                        </Grid>
+                        <Grid container style={{ justifyContent: 'center' }}>
+                          <Grid>
+                            <TextField
+                              className="textField"
+                              id="outlined-full-width"
+                              label="Vertage Id"
+                              style={{ margin: 8 }}
+                              margin="normal"
+                              InputLabelProps={{
+                                shrink: true,
+                              }}
+                              variant="outlined"
+                              size="small"
+                              value={vertageId}
+                              onChange={(e) => setVertageId((e.target.value).trim())}
+                            />
+                          </Grid>
+                          <Grid>
+                            <TextField
+                              className="textField"
+                              id="outlined-full-width"
+                              label="Vertage Password"
+                              style={{ margin: 8 }}
+                              margin="normal"
+                              InputLabelProps={{
+                                shrink: true,
+                              }}
+                              variant="outlined"
+                              size="small"
+                              value={vertagePass}
+                              onChange={(e) => setVertagePass((e.target.value).trim())}
+                            />
+                          </Grid>
+                        </Grid>
+                        <Grid container style={{ justifyContent: 'center' }}>
+                          <Grid>
+                            <TextField
+                              select
+                              className="textField"
+                              id="outlined-full-width"
+                              label="Parent"
+                              style={{ margin: 8 }}
+                              margin="normal"
+                              InputLabelProps={{
+                                shrink: true,
+                              }}
+                              variant="outlined"
+                              size="small"
+                              value={parent}
+                              onChange={(e) => setparent(e.target.value)}
+                            >
+                              <option>Select One</option>
+                              {users.map(item => {
+                                return <option value={item.myuser.username}>{item.myuser.username}</option>
+                              })}
+                            </TextField>
+                          </Grid>
+                          <Grid>
+                            <FormControl
+                              className="textField"
+                              style={{ margin: 8 }}
+                              margin="normal"
+                              variant="outlined"
+                              size="small">
+                              <InputLabel id="demo-mutiple-checkbox-label">Location</InputLabel>
+                              <Select
+                                labelId="demo-mutiple-checkbox-label"
+                                id="demo-mutiple-checkbox"
+                                multiple
+                                value={location}
+                                onChange={(e) => setlocation(e.target.value)}
+                                label="Location"
+                                renderValue={(selected) => selected.join(', ')}
+                              >
+                                {pullLocation.map((name) => (
+                                  <MenuItem value={name.id}>
+                                    <Checkbox style={{ color: "#535ad1" }} checked={location.indexOf(name.id) > -1} />
+                                    <ListItemText primary={name.city} />
+                                  </MenuItem>
+                                ))}
+                              </Select>
+                            </FormControl>
+                          </Grid>
+                        </Grid>
                         <Button type="submit" className={classes.editUserBtn}>
                           Update</Button>
                       </Form>

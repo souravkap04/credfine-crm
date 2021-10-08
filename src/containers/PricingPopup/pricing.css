@@ -1,3 +1,73 @@
+.guideContainer {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 100%;
+  padding-top: 2.43056vw;
+  padding-bottom: 2.43056vw;
+}
+
+.guideContainer .textGreen {
+  margin-left: 2.56944vw;
+  font-size: 1.04167vw;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.guideContainer .textGreen span {
+  margin-right: 0.55556vw;
+  width: 1.25vw;
+  height: 1.25vw;
+  border-radius: 50%;
+  background-color: #14cc9e;
+}
+
+.guideContainer .textBlack {
+  margin-left: 1.80556vw;
+  font-size: 1.04167vw;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.guideContainer .textBlack span {
+  margin-right: 0.55556vw;
+  width: 1.25vw;
+  height: 1.25vw;
+  border-radius: 50%;
+  background-color: #FFBD14;
+}
+
+.guideContainer .textRed {
+  margin-left: 1.80556vw;
+  font-size: 1.04167vw;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.guideContainer .textRed span {
+  margin-right: 0.55556vw;
+  width: 1.25vw;
+  height: 1.25vw;
+  border-radius: 50%;
+  background-color: #eb5757;
+}
+
 .menuItem {
   color: #fff !important;
   font-size: 13px;
