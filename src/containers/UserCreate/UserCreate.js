@@ -11,6 +11,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
 import { getProfileData } from '../../global/leadsGlobalData';
+import './usercreate.css';
 const useStyles = makeStyles((theme) => ({
   CreateUser: {
     padding: '25px 300px'
@@ -34,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
   input_field: {
     margin: theme.spacing(1, 0),
     '&:hover': {
-      borderRadius: '1px solid #535ad1',
+      borderRadius: '2px solid #c5cee0',
     }
   },
   create_user_btn: {
@@ -67,7 +68,7 @@ export default function UserCreate() {
     const { userName, firstName, lastName, email, role, productType, phoneNo, gender, parent } = data;
     let item = {
       username: userName, first_name: firstName, last_name: lastName, email, role,
-      product_type: productType, phone_no: phoneNo, gender: gender, parent_id: parent, locations: location
+      product_type: productType, phone_no: phoneNo, gender: gender, parent_user: parent, locations: location
     };
     await axios.post(`${baseUrl}/user/userRegistration/`, item)
       .then((response) => {
@@ -88,7 +89,7 @@ export default function UserCreate() {
     setIsError(false);
   }
   useEffect(() => {
-    listOfUsers()
+    // listOfUsers()
     listOfLocations()
   }, []);
   const listOfLocations = async () => {
@@ -102,17 +103,18 @@ export default function UserCreate() {
         console.log(error);
       })
   }
-  const listOfUsers = async () => {
+  const listOfUsers = async (role) => {
     const headers = {
       'Authorization': `Token ${profileData.token}`,
       'userRoleHash': profileData.user_roles[0].user_role_hash,
     };
-    try {
-      const response = await axios.get(`${baseUrl}/user/fetchUsers/`, { headers });
-      setUsers(response.data);
-    } catch (error) {
-      console.log(error);
-    }
+    let items = { user_role: role }
+    await axios.post(`${baseUrl}/user/fetchRoleUser/`, items, { headers })
+      .then((response) => {
+        setUsers(response.data);
+      }).catch((error) => {
+        console.log(error);
+      })
   }
   return (
     <PageLayerSection>
@@ -139,8 +141,8 @@ export default function UserCreate() {
               <Grid >
                 <Typography>User Name</Typography>
                 <TextField
-                  className={classes.input_field}
-                  variant="filled"
+                  className={classes.input_field + ' input_field'}
+                  variant="outlined"
                   fullWidth
                   type="text"
                   name="userName"
@@ -157,15 +159,15 @@ export default function UserCreate() {
               <Grid >
                 <Typography>First Name</Typography>
                 <TextField
-                  className={classes.input_field}
-                  variant="filled"
+                  className={classes.input_field + ' input_field'}
+                  variant="outlined"
                   fullWidth
                   type="text"
                   name="firstName"
                   inputRef={register({
                     required: 'First name is required',
                     pattern: {
-                      value: /^(?! )[a-z]*(?<! )$/g,
+                      value: /^(?! )[A-Z][a-z]*(?<! )$/g,
                       message: 'please enter a valid first name'
                     }
                   })}
@@ -175,15 +177,15 @@ export default function UserCreate() {
               <Grid >
                 <Typography>Last Name</Typography>
                 <TextField
-                  className={classes.input_field}
-                  variant="filled"
+                  className={classes.input_field + ' input_field'}
+                  variant="outlined"
                   fullWidth
                   type="text"
                   name="lastName"
                   inputRef={register({
                     required: 'Last name is required',
                     pattern: {
-                      value: /^(?! )[a-z]*(?<! )$/g,
+                      value: /^(?! )[A-Z][a-z]*(?<! )$/g,
                       message: 'please enter a valid last name'
                     }
                   })}
@@ -193,8 +195,8 @@ export default function UserCreate() {
               <Grid >
                 <Typography>Phone No</Typography>
                 <TextField
-                  className={classes.input_field}
-                  variant="filled"
+                  className={classes.input_field + ' input_field'}
+                  variant="outlined"
                   fullWidth
                   type="number"
                   name="phoneNo"
@@ -212,8 +214,8 @@ export default function UserCreate() {
               <Grid >
                 <Typography>Email Id</Typography>
                 <TextField
-                  className={classes.input_field}
-                  variant="filled"
+                  className={classes.input_field + ' input_field'}
+                  variant="outlined"
                   fullWidth
                   type="text"
                   name="email"
@@ -231,16 +233,16 @@ export default function UserCreate() {
               <Grid >
                 <Typography>Gender</Typography>
                 <FormControl
-                  className={classes.input_field}
+                  className={classes.input_field + ' input_field'}
                   fullWidth
-                  variant="filled"
+                  variant="outlined"
                   error={Boolean(errors.gender)}>
                   <InputLabel>Select</InputLabel>
                   <Controller
                     render={(props) => (
-                      <Select value={props.value} onChange={props.onChange}>
+                      <Select label="Select" value={props.value} onChange={props.onChange}>
                         <MenuItem value="M">Male</MenuItem>
-                        <MenuItem value="B">Female</MenuItem>
+                        <MenuItem value="F">Female</MenuItem>
                         <MenuItem value="T">LGBT</MenuItem>
                       </Select>
                     )}
@@ -257,20 +259,20 @@ export default function UserCreate() {
               <Grid >
                 <Typography>Role</Typography>
                 <FormControl
-                  className={classes.input_field}
+                  className={classes.input_field + ' input_field'}
                   fullWidth
-                  variant="filled"
+                  variant="outlined"
                   error={Boolean(errors.role)}>
                   <InputLabel>Select</InputLabel>
                   <Controller
                     render={(props) => (
-                      <Select value={props.value} onChange={props.onChange}>
-                        <MenuItem value="1">Super Admin</MenuItem>
-                        <MenuItem value="2">Admin</MenuItem>
-                        <MenuItem value="3">Manager</MenuItem>
-                        <MenuItem value="4">Team Leader</MenuItem>
-                        <MenuItem value="5">Agent</MenuItem>
-                        <MenuItem value="6">Backend</MenuItem>
+                      <Select label="Select" value={props.value} onChange={props.onChange}>
+                        <MenuItem value="1" onClick={() => listOfUsers(1)}>Super Admin</MenuItem>
+                        <MenuItem value="2" onClick={() => listOfUsers(2)}>Admin</MenuItem>
+                        <MenuItem value="3" onClick={() => listOfUsers(3)}>Manager</MenuItem>
+                        <MenuItem value="4" onClick={() => listOfUsers(4)}>Team Leader</MenuItem>
+                        <MenuItem value="5" onClick={() => listOfUsers(5)}>Agent</MenuItem>
+                        <MenuItem value="6" onClick={() => listOfUsers(6)}>Backend</MenuItem>
                       </Select>
                     )}
                     defaultValue=""
@@ -286,14 +288,14 @@ export default function UserCreate() {
               <Grid >
                 <Typography>Product Type</Typography>
                 <FormControl
-                  className={classes.input_field}
+                  className={classes.input_field + ' input_field'}
                   fullWidth
-                  variant="filled"
+                  variant="outlined"
                   error={Boolean(errors.productType)}>
                   <InputLabel>Select</InputLabel>
                   <Controller
                     render={(props) => (
-                      <Select value={props.value} onChange={props.onChange}>
+                      <Select label="Select" value={props.value} onChange={props.onChange}>
                         <MenuItem value="PL">Personal Loan</MenuItem>
                         <MenuItem value="BL">Business Loan</MenuItem>
                         <MenuItem value="CC">Credit Card</MenuItem>
@@ -314,16 +316,16 @@ export default function UserCreate() {
               <Grid>
                 <Typography>Parent</Typography>
                 <FormControl
-                  className={classes.input_field}
+                  className={classes.input_field + ' input_field'}
                   fullWidth
-                  variant="filled"
+                  variant="outlined"
                   error={Boolean(errors.parent)}>
                   <InputLabel>Select</InputLabel>
                   <Controller
                     render={(props) => (
-                      <Select value={props.value} onChange={props.onChange}>
+                      <Select label="Select" value={props.value} onChange={props.onChange}>
                         {users.map(item => {
-                          return <MenuItem value={item.id}>{item.myuser.username}</MenuItem>
+                          return <MenuItem value={item.myuser.username}>{item.myuser.username}</MenuItem>
                         })}
                       </Select>
                     )}
@@ -339,13 +341,14 @@ export default function UserCreate() {
               </Grid>
               <Grid>
                 <Typography>Location</Typography>
-                <FormControl className={classes.input_field}
+                <FormControl className={classes.input_field + ' input_field'}
                   fullWidth
-                  variant="filled"
+                  variant="outlined"
                   error={Boolean(errors.location)}
                 >
                   <InputLabel>Select</InputLabel>
                   <Select
+                    label="Select"
                     labelId="demo-mutiple-name-label"
                     id="demo-mutiple-name"
                     multiple

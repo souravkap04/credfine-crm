@@ -1,0 +1,19 @@
+$desk: 100 / 1440;
+.input_field {
+    label {
+        color: #535ad1;
+        letter-spacing: 0.4px;
+        font-size: 15.5px;
+        font-family: "Lato";
+    }
+    .MuiOutlinedInput-notchedOutline {
+        border: 2px solid #c5cee0;
+    }
+    .MuiInputAdornment-root {
+        opacity: 0.6;
+    }
+    .MuiInputBase-input {
+        font-size: 16 * $desk + vw;
+        font-family: "Lato";
+    }
+}
