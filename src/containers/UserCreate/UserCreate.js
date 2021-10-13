@@ -74,6 +74,7 @@ export default function UserCreate() {
       .then((response) => {
         setAlertMessage(response.data['data']);
         setIsDisplay(true);
+        data = ''
       }).catch((error) => {
         if (error.response?.status === 409) {
           setAlertMessage(error.response.data.error);

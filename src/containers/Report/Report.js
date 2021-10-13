@@ -1,18 +1,66 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import style from './Report.module.css';
 import moment from 'moment';
 import axios from 'axios';
 import baseUrl from '../../global/api'
 import { getProfileData, getStatusData } from '../../global/leadsGlobalData';
-import { Form, Card, Button, Row, Col, FormControl, Alert } from "react-bootstrap";
+import { Form, Card, Button, Row, Col, FormControl } from "react-bootstrap";
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import { makeStyles } from '@material-ui/core/styles';
+import MuiAlert from '@material-ui/lab/Alert';
+import Snackbar from '@material-ui/core/Snackbar';
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+const useStyles = makeStyles({
+  container: {
+    overflow: 'auto',
+    marginBottom: '10px',
+    maxHeight: '500px'
+  },
+  table: {
+    width: '95%',
+    margin: 'auto'
+  },
+  tableheading: {
+    backgroundColor: '#8f9bb3',
+    color: '#ffffff',
+    fontSize: '14px',
+  },
+  tabledata: {
+    padding: '15px',
+    fontSize: '12px',
+    overflowWrap: 'break-word',
+  },
+  emptydata: {
+    position: 'relative',
+    left: '30rem',
+    fontSize: '12px'
+  },
+  oddEvenRow: {
+    '&:nth-of-type(odd)': {
+      backgroundColor: '#f7f9fc',
+    },
+    '&:nth-of-type(even)': {
+      backgroundColor: '#fff',
+    },
+  },
+});
 export default function Report() {
+  const classes = useStyles();
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [status, setStatus] = useState("");
   const [productType, setProductType] = useState("");
   const [alertMessage, setAlertMessage] = useState('');
   const [isDisplay, setIsDisplay] = useState(false);
+  const [leadHistoryData, setleadHistoryData] = useState([]);
   const [errors, setErrors] = useState({});
   const profileData = getProfileData();
   const statusData = getStatusData();
@@ -54,6 +102,12 @@ export default function Report() {
       let item = { start_date: startDate, end_date: endDate }
       await axios.post(`${baseUrl}/leads/lead_report/`, item, { headers })
         .then((response) => {
+          if (response.status === 200) {
+            setStartDate('')
+            setEndDate('')
+            setStatus('')
+            setProductType('')
+          }
           setAlertMessage(response.data.msg);
           setIsDisplay(true)
         }).catch((error) => {
@@ -62,13 +116,34 @@ export default function Report() {
         })
     }
   }
-
+  const leadReportHistory = async () => {
+    const headers = { 'userRoleHash': profileData.user_roles[0].user_role_hash }
+    await axios.get(`${baseUrl}/leads/leadReportHistory`, { headers })
+      .then((response) => {
+        console.log(response.data)
+        if (response.status === 200) {
+          setleadHistoryData(response.data)
+        }
+      }).catch((error) => {
+        console.log(error)
+      })
+  }
+  const closeReport = () => {
+    setIsDisplay(false)
+  }
+  useEffect(() => {
+    leadReportHistory()
+  }, [leadHistoryData]);
   return (
     <PageLayerSection>
       <div>
         <Form onSubmit={reportSubmit}>
           <Card className={style.card}>
-            {isDisplay ? <Alert className={style.alertBox}>{alertMessage}</Alert> : null}
+            <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isDisplay} autoHideDuration={1500} onClose={closeReport}>
+              <Alert onClose={closeReport} severity="info">
+                {alertMessage}
+              </Alert>
+            </Snackbar>
             <Form.Label className={style.Heading}>Report</Form.Label>
             <Row>
               <Col>
@@ -131,6 +206,40 @@ export default function Report() {
           </Card>
         </Form>
       </div>
+      <TableContainer className={classes.container}>
+        <Table className={classes.table} >
+          <TableHead className={classes.tableheading}>
+            <TableRow>
+              <TableCell className={classes.tableheading}>Sr No</TableCell>
+              <TableCell className={classes.tableheading}>User ID</TableCell>
+              <TableCell className={classes.tableheading}>User Name</TableCell>
+              <TableCell className={classes.tableheading}>Start Date</TableCell>
+              <TableCell className={classes.tableheading}>End Date</TableCell>
+              <TableCell className={classes.tableheading}>Updated Time</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {leadHistoryData.map((item, index) => {
+              if (item.length !== 0) {
+                let time = new Date(item.updated_date);
+                let updatedTime = time.toLocaleTimeString();
+                return (
+                  <TableRow className={classes.oddEvenRow}>
+                    <TableCell className={classes.tabledata}>{(index + 1)}</TableCell>
+                    <TableCell className={classes.tabledata}>{item.user_name}</TableCell>
+                    <TableCell className={classes.tabledata}>{item.user}</TableCell>
+                    <TableCell className={classes.tabledata}>{item.query.start_date}</TableCell>
+                    <TableCell className={classes.tabledata}>{item.query.end_date}</TableCell>
+                    <TableCell className={classes.tabledata}>{updatedTime}</TableCell>
+                  </TableRow>
+                )
+              } else {
+
+              }
+            })}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </PageLayerSection>
   )
 }

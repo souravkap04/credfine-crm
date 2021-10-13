@@ -48,7 +48,7 @@ const useStyles = makeStyles({
     marginBottom: '25px'
   },
   table: {
-    Width: "100%",
+    width: "100%",
   },
   loader: {
     position: "relative",
@@ -304,6 +304,12 @@ export default function Users() {
     };
     await axios.put(`${baseUrl}/user/updateUser/${selectedUserName}`, item, { headers })
       .then((response) => {
+        if (response.status === 200) {
+          setTimeout(() => {
+            setIsEditUser(false)
+            listOfActiveUsers();
+          }, 2000);
+        }
         setAlertMessage(response.data.message);
         setIsDisplay(true);
       }).catch((error) => {
@@ -404,7 +410,7 @@ export default function Users() {
                             onClick={() => editUser(user.myuser.username, user.myuser.first_name,
                               user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
                               user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
-                              user.myuser.vertage_pass, user.myuser.parent_id, user.myuser.location)}>
+                              user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
                             <EditIcon />
                           </IconButton>
                         </Tooltip>
@@ -724,7 +730,7 @@ export default function Users() {
                             >
                               <option>Select One</option>
                               {users.map(item => {
-                                return <option value={item.myuser.username}>{item.myuser.username}</option>
+                                return <option style={{ cursor: 'pointer' }} value={item.myuser.username}>{item.myuser.username}</option>
                               })}
                             </TextField>
                           </Grid>
