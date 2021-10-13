@@ -40,7 +40,7 @@ const useStyles = makeStyles({
     marginBottom: '10px'
   },
   table: {
-    Width: '100%',
+    width: '100%',
   },
   tableheading: {
     // padding: '0 8px',
@@ -198,6 +198,8 @@ export default function MyLeads(props) {
   const [campaign, setCampaign] = useState([]);
   const [startdate, setstartDate] = useState("");
   const [enddate, setendDate] = useState("");
+  const [users, setUsers] = useState([]);
+  const [users_id, setUserID] = useState('');
   const [isError, setisError] = useState(false);
   const [isLoading, setisLoading] = useState(false);
   let statusData = getStatusData();
@@ -208,6 +210,7 @@ export default function MyLeads(props) {
   const endDate = queryy.get("end_date") || "";
   const sub_status = queryy.get("sub_status") || "";
   const campaign_category = queryy.get("campaign_category") || "";
+  const user_id = queryy.get("user_id") || "";
   const splitUrl = (data) => {
     if (data !== null) {
       const [url, pager] = data.split('?');
@@ -218,7 +221,7 @@ export default function MyLeads(props) {
   const fetchMyLeads = async () => {
     setisLoading(true)
     const headers = { 'Authorization': `Token ${profileData.token}` }
-    await axios.get(`${baseUrl}/leads/fetchUpdatedLeadsUserWise/?status=${filterstatus}&start_date=${startDate}&end_date=${endDate}&sub_status=${sub_status}&campaign_category=${campaign_category}`, { headers })
+    await axios.get(`${baseUrl}/leads/fetchUpdatedLeadsUserWise/?status=${filterstatus}&start_date=${startDate}&end_date=${endDate}&sub_status=${sub_status}&campaign_category=${campaign_category}&user_id=${user_id}`, { headers })
       .then((response) => {
         setRowsPerPage(response.data.results.length)
         settotalDataPerPage(response.data.results.length)
@@ -233,7 +236,19 @@ export default function MyLeads(props) {
   };
   useEffect(() => {
     fetchMyLeads();
-  }, [filterstatus, startDate, endDate, subStatus, campaign_category])
+    listOfUsers();
+  }, [filterstatus, startDate, endDate, subStatus, campaign_category, user_id])
+  const listOfUsers = async () => {
+    const headers = {
+      'Authorization': `Token ${profileData.token}`,
+    };
+    await axios.get(`${baseUrl}/user/childUsers/`, { headers })
+      .then((response) => {
+        setUsers(response.data);
+      }).catch((error) => {
+        console.log(error);
+      })
+  }
   const leadDetailsHandler = (leadId) => {
     history.push(`/dashboards/myleads/edit/${leadId}`);
     // props.mainMenuCallBack(true, leadId);
@@ -372,7 +387,7 @@ export default function MyLeads(props) {
       setisError(true)
       return;
     }
-    history.push(`/dashboards/myleads/?status=${status}&start_date=${startdate}&end_date=${enddate}&sub_status=${subStatus}&campaign_category=${campaign}`)
+    history.push(`/dashboards/myleads/?status=${status}&start_date=${startdate}&end_date=${enddate}&sub_status=${subStatus}&campaign_category=${campaign}&user_id=${users_id}`)
     closeDrawer()
   }
   const closeDrawer = () => {
@@ -383,6 +398,7 @@ export default function MyLeads(props) {
     setendDate('')
     setSubStatus('')
     setCampaign('')
+    setUserID('')
   };
   return (
     <PageLayerSection>
@@ -408,7 +424,6 @@ export default function MyLeads(props) {
                 size="small"
                 value={startdate}
                 onChange={(e) => setstartDate(e.target.value)}
-
               />
             </Grid>
             <Grid>
@@ -438,55 +453,57 @@ export default function MyLeads(props) {
                 helperText={isError ? "End Date is requireds" : ""}
               />
             </Grid>
-            <Grid>
-              <TextField
-                select
-                className="textField"
-                id="outlined-full-width"
-                label="Status"
-                style={{ margin: 8 }}
-                margin="normal"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                SelectProps={{
-                  native: true
-                }}
-                variant="outlined"
-                size="small"
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-              >
-                <option value="">Select</option>
-                {uniqueStatus.map((item, index) => (
-                  <option key={index} value={item}>{item}</option>
-                ))}
-              </TextField>
-            </Grid>
-            <Grid>
-              <TextField
-                className="textField"
-                select
-                id="outlined-full-width"
-                label="Sub Status"
-                style={{ margin: 8 }}
-                margin="normal"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                SelectProps={{
-                  native: true
-                }}
-                variant="outlined"
-                size="small"
-                value={subStatus}
-                onChange={(e) => { setSubStatus(e.target.value) }}
-              >
-                <option value="">Select</option>
-                {options.map((item, index) => (
-                  <option key={index} value={item}>{item}</option>
-                ))}
-              </TextField>
+            <Grid container style={{ justifyContent: 'center' }}>
+              <Grid>
+                <TextField
+                  select
+                  className="textField2"
+                  id="outlined-full-width"
+                  label="Status"
+                  style={{ margin: 8 }}
+                  margin="normal"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  SelectProps={{
+                    native: true
+                  }}
+                  variant="outlined"
+                  size="small"
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                >
+                  <option value="">Select</option>
+                  {uniqueStatus.map((item, index) => (
+                    <option key={index} value={item}>{item}</option>
+                  ))}
+                </TextField>
+              </Grid>
+              <Grid>
+                <TextField
+                  className="textField2"
+                  select
+                  id="outlined-full-width"
+                  label="Sub Status"
+                  style={{ margin: 8 }}
+                  margin="normal"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  SelectProps={{
+                    native: true
+                  }}
+                  variant="outlined"
+                  size="small"
+                  value={subStatus}
+                  onChange={(e) => { setSubStatus(e.target.value) }}
+                >
+                  <option value="">Select</option>
+                  {options.map((item, index) => (
+                    <option key={index} value={item}>{item}</option>
+                  ))}
+                </TextField>
+              </Grid>
             </Grid>
             <Grid>
               <TextField
@@ -511,6 +528,31 @@ export default function MyLeads(props) {
                 {campaignData.map((item, index) => (
                   <option key={index} value={item}>{item}</option>
                 ))}
+              </TextField>
+            </Grid>
+            <Grid>
+              <TextField
+                select
+                className="textField"
+                id="outlined-full-width"
+                label="Users"
+                style={{ margin: 8 }}
+                margin="normal"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                SelectProps={{
+                  native: true
+                }}
+                variant="outlined"
+                size="small"
+                value={users_id}
+                onChange={(e) => setUserID(e.target.value)}
+              >
+                <option value="">Select User</option>
+                {users.map(item => {
+                  return <option value={item.id}>{item.myuser.username}</option>
+                })}
               </TextField>
             </Grid>
             <Grid>

@@ -2,6 +2,31 @@ $desk: 100 / 1440;
 .MuiTableCell-root {
     border-bottom: none !important;
 }
+.rightContainerForm {
+    .textField2 {
+        width: 121 * $desk + vw;
+        margin-top: 20 * $desk + vw !important;
+        label {
+            color: #535ad1;
+            letter-spacing: 0.4px;
+            font-size: 15.5px;
+            font-family: "Lato";
+        }
+        .MuiOutlinedInput-root {
+            height: 48 * $desk + vw;
+        }
+        .MuiOutlinedInput-notchedOutline {
+            border: 2px solid #c5cee0;
+        }
+        .MuiInputAdornment-root {
+            opacity: 0.6;
+        }
+        .MuiInputBase-input {
+            font-size: 16 * $desk + vw;
+            font-family: "Lato";
+        }
+    }
+}
 .filterMainContainer {
     position: relative;
     display: flex;
