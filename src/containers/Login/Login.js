@@ -78,7 +78,7 @@ export default function Login() {
                 localStorage.setItem('user_info', JSON.stringify(response.data));
                 const profileData = JSON.parse(localStorage.getItem('user_info'));
                 if (profileData.is_admin_verified) {
-                    if (profileData.user_roles[0].user_type === 3) {
+                    if (profileData.user_roles[0].user_type === 5) {
                         history.push("/dashboards/leads");
                         let headers = { 'Authorization': `Token ${profileData.token}` };
                         axios.get(`${baseUrl}/leads/fetchAllLeads/`, { headers })

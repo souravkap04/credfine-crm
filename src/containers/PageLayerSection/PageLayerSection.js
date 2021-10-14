@@ -17,12 +17,11 @@ export default function PageLayerSection(props) {
     const [searchInput, setSearchInput] = useState("");
     let history = useHistory()
     let profileData = JSON.parse(localStorage.getItem("user_info"));
-    let userName = profileData.username.toLowerCase();
+    let userName = profileData.username;
     userName = userName.replace(/^\s+|\s+$/g, "");
     userName = userName.replace(/\s+/g, " ");
     const [istimeOut, setIsTimeOut] = useState(false);
     const timeout = 1000 * 60 * 30;
-    const [notificationCount, setnotificationCount] = useState(0);
     const onAction = (e) => {
         setIsTimeOut(false)
     }
