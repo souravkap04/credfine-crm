@@ -120,7 +120,6 @@ export default function Report() {
     const headers = { 'userRoleHash': profileData.user_roles[0].user_role_hash }
     await axios.get(`${baseUrl}/leads/leadReportHistory`, { headers })
       .then((response) => {
-        console.log(response.data)
         if (response.status === 200) {
           setleadHistoryData(response.data)
         }
@@ -219,8 +218,8 @@ export default function Report() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {leadHistoryData.map((item, index) => {
-              if (item.length !== 0) {
+            {leadHistoryData.length !== 0 ?
+              leadHistoryData.map((item, index) => {
                 let time = new Date(item.updated_date);
                 let updatedTime = time.toLocaleTimeString();
                 return (
@@ -233,10 +232,7 @@ export default function Report() {
                     <TableCell className={classes.tabledata}>{updatedTime}</TableCell>
                   </TableRow>
                 )
-              } else {
-
-              }
-            })}
+              }) : <span className={classes.emptydata}>No Data Found</span>}
           </TableBody>
         </Table>
       </TableContainer>
