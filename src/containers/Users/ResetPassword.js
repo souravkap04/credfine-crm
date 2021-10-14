@@ -212,6 +212,7 @@ export default function Users() {
   }, [deleteCount])
   const listOfActiveUsers = async () => {
     const headers = {
+      'Authorization': `Token ${profileData.token}`,
       'userRoleHash': profileData.user_roles[0].user_role_hash,
     };
     try {
@@ -237,6 +238,7 @@ export default function Users() {
   }
   const listOfDeletedUsers = async () => {
     const headers = {
+      'Authorization': `Token ${profileData.token}`,
       'userRoleHash': profileData.user_roles[0].user_role_hash,
     };
     try {
@@ -575,11 +577,11 @@ export default function Users() {
                               onChange={(e) => setRole(e.target.value)}
                             >
                               <option>Select One</option>
-                              <option value="1">Super Admin</option>
-                              <option value="2">Admin</option>
-                              <option value="3">Manager</option>
-                              <option value="4">Team Leader</option>
-                              <option value="5">Agent</option>
+                              <option value="4">Super Admin</option>
+                              <option value="1">Admin</option>
+                              <option value="2">Manager</option>
+                              <option value="5">Team Leader</option>
+                              <option value="3">Agent</option>
                               <option value="6">Backend</option>
                             </TextField>
                           </Grid>

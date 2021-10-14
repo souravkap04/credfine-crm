@@ -268,11 +268,11 @@ export default function UserCreate() {
                   <Controller
                     render={(props) => (
                       <Select label="Select" value={props.value} onChange={props.onChange}>
-                        <MenuItem value="1" onClick={() => listOfUsers(1)}>Super Admin</MenuItem>
-                        <MenuItem value="2" onClick={() => listOfUsers(2)}>Admin</MenuItem>
-                        <MenuItem value="3" onClick={() => listOfUsers(3)}>Manager</MenuItem>
-                        <MenuItem value="4" onClick={() => listOfUsers(4)}>Team Leader</MenuItem>
-                        <MenuItem value="5" onClick={() => listOfUsers(5)}>Agent</MenuItem>
+                        <MenuItem value="4" onClick={() => listOfUsers(4)}>Super Admin</MenuItem>
+                        <MenuItem value="1" onClick={() => listOfUsers(1)}>Admin</MenuItem>
+                        <MenuItem value="2" onClick={() => listOfUsers(2)}>Manager</MenuItem>
+                        <MenuItem value="5" onClick={() => listOfUsers(5)}>Team Leader</MenuItem>
+                        <MenuItem value="3" onClick={() => listOfUsers(3)}>Agent</MenuItem>
                         <MenuItem value="6" onClick={() => listOfUsers(6)}>Backend</MenuItem>
                       </Select>
                     )}
