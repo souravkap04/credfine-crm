@@ -104,7 +104,6 @@ export default function Menu(props) {
     const [drawerOpen, setdrawerOpen] = React.useState(true);
     const [dashboardPage, setdashboardPage] = useState(false);
     const [newLeadPage, setnewLeadPage] = useState(false);
-    const [addLeadPage, setaddLeadPage] = useState(false);
     const [followUpLeadPage, setfollowUpLeadPage] = useState(false);
     const [myLeadPage, setmyLeadPage] = useState(false);
     const [addUserPage, setaddUserPage] = useState(false);
@@ -114,6 +113,7 @@ export default function Menu(props) {
     const [freshLeadPage, setfreshLeadPage] = useState(false);
     const [reportPage, setreportPage] = useState(false);
     const [isHiddenTab, setIsHiddenTab] = useState(false);
+    const [isUserTab, setIsUserTab] = useState(false);
     const handleClick = () => {
         setOpen(!openen);
     };
@@ -125,8 +125,7 @@ export default function Menu(props) {
         if (profileData.user_roles[0].user_type === 1) {
             setdashboardPage(true)
             setnewLeadPage(false)
-            setaddLeadPage(false)
-            setfollowUpLeadPage(true)
+            setfollowUpLeadPage(false)
             setmyLeadPage(true)
             setaddUserPage(true)
             setverfiyUserPage(true)
@@ -138,7 +137,6 @@ export default function Menu(props) {
         if (profileData.user_roles[0].user_type === 2) {
             setdashboardPage(true)
             setnewLeadPage(false)
-            setaddLeadPage(false)
             setfollowUpLeadPage(true)
             setmyLeadPage(true)
             setaddUserPage(true)
@@ -149,37 +147,10 @@ export default function Menu(props) {
             setreportPage(true)
         }
         if (profileData.user_roles[0].user_type === 3) {
-            setdashboardPage(true)
-            setnewLeadPage(false)
-            setaddLeadPage(false)
-            setfollowUpLeadPage(true)
-            setmyLeadPage(true)
-            setaddUserPage(true)
-            setverfiyUserPage(true)
-            setallUsersPage(true)
-            setbulkUploadPage(true)
-            setfreshLeadPage(true)
-            setreportPage(true)
-        }
-        if (profileData.user_roles[0].user_type === 4) {
-            setIsHiddenTab(true)
-            setdashboardPage(true)
-            setnewLeadPage(false)
-            setaddLeadPage(true)
-            setfollowUpLeadPage(true)
-            setmyLeadPage(true)
-            setaddUserPage(true)
-            setverfiyUserPage(false)
-            setallUsersPage(true)
-            setbulkUploadPage(false)
-            setfreshLeadPage(false)
-            setreportPage(false)
-        }
-        if (profileData.user_roles[0].user_type === 5) {
+            setIsUserTab(true)
             setIsHiddenTab(true)
             setdashboardPage(true)
             setnewLeadPage(true)
-            setaddLeadPage(false)
             setfollowUpLeadPage(true)
             setmyLeadPage(true)
             setaddUserPage(false)
@@ -189,11 +160,37 @@ export default function Menu(props) {
             setfreshLeadPage(false)
             setreportPage(false)
         }
-        if (profileData.user_roles[0].user_type === 6) {
+        if (profileData.user_roles[0].user_type === 4) {
+            setdashboardPage(true)
+            setnewLeadPage(false)
+            setfollowUpLeadPage(false)
+            setmyLeadPage(true)
+            setaddUserPage(true)
+            setverfiyUserPage(true)
+            setallUsersPage(true)
+            setbulkUploadPage(true)
+            setfreshLeadPage(true)
+            setreportPage(true)
+        }
+        if (profileData.user_roles[0].user_type === 5) {
+            setIsUserTab(false)
             setIsHiddenTab(true)
             setdashboardPage(true)
             setnewLeadPage(false)
-            setaddLeadPage(true)
+            setfollowUpLeadPage(true)
+            setmyLeadPage(true)
+            setaddUserPage(true)
+            setverfiyUserPage(false)
+            setallUsersPage(true)
+            setbulkUploadPage(false)
+            setfreshLeadPage(false)
+            setreportPage(false)
+        }
+        if (profileData.user_roles[0].user_type === 6) {
+            setIsUserTab(true)
+            setIsHiddenTab(true)
+            setdashboardPage(true)
+            setnewLeadPage(false)
             setfollowUpLeadPage(false)
             setmyLeadPage(true)
             setaddUserPage(false)
@@ -255,14 +252,6 @@ export default function Menu(props) {
                         <ListItemText className={classes.color} primary="New Leads" />
                     </ListItem>
                 </NavLink> : ''}
-                {addLeadPage ? <NavLink to="/dashboards/addlead" activeClassName="active">
-                    <ListItem className="selected" button>
-                        <ListItemIcon>
-                            <AddCircleOutlineOutlinedIcon className={classes.color} />
-                        </ListItemIcon>
-                        <ListItemText className={classes.color} primary="Add Lead" />
-                    </ListItem>
-                </NavLink> : ''}
                 {followUpLeadPage ? <NavLink to="/dashboards/followup" activeClassName="active">
                     <ListItem className="selected" button>
                         <ListItemIcon>
@@ -279,7 +268,7 @@ export default function Menu(props) {
                         <ListItemText className={classes.color} primary="My Leads" />
                     </ListItem>
                 </NavLink> : ''}
-                {isHiddenTab ? null : <React.Fragment><ListItem button className={classes.color} onClick={handleClick}>
+                {isUserTab ? null : <React.Fragment><ListItem button className={classes.color} onClick={handleClick}>
                     <ListItemIcon>
                         <PeopleAltOutlinedIcon className={classes.color} />
                     </ListItemIcon>

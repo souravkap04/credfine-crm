@@ -27,7 +27,6 @@ import baseUrl from './global/api';
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import PricingPopup from './containers/PricingPopup/PricingPopup';
-import PlForm from './containers/PlData/PlForm';
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -115,7 +114,6 @@ function App() {
           <PrivateRoute exact path="/dashboards/leads" component={Leads} />
           <PrivateRoute exact path="/dashboards/leads/edit/:leadid" component={LeadDetailsNew} />
           <PrivateRoute exact path="/dashboards/freshlead" component={FreshLeads} />
-          <PrivateRoute exact path="/dashboards/addlead" component={PlForm} />
           <PrivateRoute exact path="/dashboards/followup" component={FollowUp} />
           <PrivateRoute exact path="/dashboards/followup/edit/:leadid" component={LeadDetailsNew} />
           <PrivateRoute exact path="/dashboards/myleads" component={MyLeads} />
