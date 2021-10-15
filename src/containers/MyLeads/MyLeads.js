@@ -551,7 +551,7 @@ export default function MyLeads(props) {
               >
                 <option value="">Select User</option>
                 {users.map(item => {
-                  return <option value={item.id}>{item.myuser.username}</option>
+                  return <option value={item.myuser.username}>{item.myuser.username}</option>
                 })}
               </TextField>
             </Grid>
