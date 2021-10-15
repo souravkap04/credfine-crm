@@ -137,7 +137,7 @@ export default function Menu(props) {
         if (profileData.user_roles[0].user_type === 2) {
             setdashboardPage(true)
             setnewLeadPage(false)
-            setfollowUpLeadPage(true)
+            setfollowUpLeadPage(false)
             setmyLeadPage(true)
             setaddUserPage(true)
             setverfiyUserPage(false)
