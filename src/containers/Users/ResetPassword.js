@@ -213,10 +213,9 @@ export default function Users() {
   const listOfActiveUsers = async () => {
     const headers = {
       'Authorization': `Token ${profileData.token}`,
-      'userRoleHash': profileData.user_roles[0].user_role_hash,
     };
     try {
-      const response = await axios.get(`${baseUrl}/user/fetchUsers/`, { headers });
+      const response = await axios.get(`${baseUrl}/user/childUsers/`, { headers });
       setIsActiveUser(true);
       setLoading(true);
       setUsers(response.data);
