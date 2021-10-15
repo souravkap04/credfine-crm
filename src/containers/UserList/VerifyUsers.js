@@ -31,6 +31,7 @@ export default function VerifyUsers() {
     useEffect(() => {
         const fetchData = async () => {
             const headers = {
+                'Authorization': `Token ${profileData.token}`,
                 'userRoleHash': profileData.user_roles[0].user_role_hash,
             };
             try {

@@ -271,6 +271,11 @@ export default function Leads() {
           setAlertMessage(response.data.message)
           setIsDisplay(true);
         }
+        if (response.status === 200) {
+          setAlertMessage(response.data.message)
+          setIsError(true);
+          return;
+        }
         setTimeout(() => {
           closeDrawer()
           fetchLeadsData()

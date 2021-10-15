@@ -17,12 +17,11 @@ export default function PageLayerSection(props) {
     const [searchInput, setSearchInput] = useState("");
     let history = useHistory()
     let profileData = JSON.parse(localStorage.getItem("user_info"));
-    let userName = profileData.username.toLowerCase();
+    let userName = profileData.username;
     userName = userName.replace(/^\s+|\s+$/g, "");
     userName = userName.replace(/\s+/g, " ");
     const [istimeOut, setIsTimeOut] = useState(false);
     const timeout = 1000 * 60 * 30;
-    const [notificationCount, setnotificationCount] = useState(0);
     const onAction = (e) => {
         setIsTimeOut(false)
     }
@@ -112,9 +111,9 @@ export default function PageLayerSection(props) {
                             className="addBtn"
                             color="primary"
                             variant="contained"
-                            startIcon={<LocalOfferIcon />}
+                            // startIcon={<LocalOfferIcon />}
                         >
-                            Pricing
+                            BANK INTEREST CHART
                         </Button></NavLink> : null}
                         <NavLink to="/dashboards/followup" activeClassName="active"><Badge className="notificationContainer" badgeContent={localStorage.getItem('notification') !== 0 ? localStorage.getItem('notification') : 0} max={999} color="secondary">
                             <NotificationsIcon className="notificationIcon" />

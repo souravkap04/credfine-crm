@@ -102,17 +102,103 @@ export default function Menu(props) {
     const [openen, setOpen] = React.useState(true);
     const [uploadOpen, setuploadOpen] = useState(true);
     const [drawerOpen, setdrawerOpen] = React.useState(true);
+    const [dashboardPage, setdashboardPage] = useState(false);
+    const [newLeadPage, setnewLeadPage] = useState(false);
+    const [followUpLeadPage, setfollowUpLeadPage] = useState(false);
+    const [myLeadPage, setmyLeadPage] = useState(false);
+    const [addUserPage, setaddUserPage] = useState(false);
+    const [verfiyUserPage, setverfiyUserPage] = useState(false);
+    const [allUsersPage, setallUsersPage] = useState(false);
+    const [bulkUploadPage, setbulkUploadPage] = useState(false);
+    const [freshLeadPage, setfreshLeadPage] = useState(false);
+    const [reportPage, setreportPage] = useState(false);
+    const [isHiddenTab, setIsHiddenTab] = useState(false);
+    const [isUserTab, setIsUserTab] = useState(false);
     const handleClick = () => {
         setOpen(!openen);
     };
     const uploadHandleClick = () => {
         setuploadOpen(!uploadOpen);
     }
-    const [isHiddenTab, setIsHiddenTab] = useState(false);
     let profileData = JSON.parse(localStorage.getItem("user_info"));
     useEffect(() => {
+        if (profileData.user_roles[0].user_type === 1) {
+            setdashboardPage(true)
+            setnewLeadPage(false)
+            setfollowUpLeadPage(false)
+            setmyLeadPage(true)
+            setaddUserPage(true)
+            setverfiyUserPage(true)
+            setallUsersPage(true)
+            setbulkUploadPage(true)
+            setfreshLeadPage(true)
+            setreportPage(true)
+        }
+        if (profileData.user_roles[0].user_type === 2) {
+            setdashboardPage(true)
+            setnewLeadPage(false)
+            setfollowUpLeadPage(false)
+            setmyLeadPage(true)
+            setaddUserPage(true)
+            setverfiyUserPage(false)
+            setallUsersPage(true)
+            setbulkUploadPage(true)
+            setfreshLeadPage(true)
+            setreportPage(true)
+        }
         if (profileData.user_roles[0].user_type === 3) {
-            setIsHiddenTab(true);
+            setIsUserTab(true)
+            setIsHiddenTab(true)
+            setdashboardPage(true)
+            setnewLeadPage(true)
+            setfollowUpLeadPage(true)
+            setmyLeadPage(true)
+            setaddUserPage(false)
+            setverfiyUserPage(false)
+            setallUsersPage(false)
+            setbulkUploadPage(false)
+            setfreshLeadPage(false)
+            setreportPage(false)
+        }
+        if (profileData.user_roles[0].user_type === 4) {
+            setdashboardPage(true)
+            setnewLeadPage(false)
+            setfollowUpLeadPage(false)
+            setmyLeadPage(true)
+            setaddUserPage(true)
+            setverfiyUserPage(true)
+            setallUsersPage(true)
+            setbulkUploadPage(true)
+            setfreshLeadPage(true)
+            setreportPage(true)
+        }
+        if (profileData.user_roles[0].user_type === 5) {
+            setIsUserTab(false)
+            setIsHiddenTab(true)
+            setdashboardPage(true)
+            setnewLeadPage(false)
+            setfollowUpLeadPage(false)
+            setmyLeadPage(true)
+            setaddUserPage(true)
+            setverfiyUserPage(false)
+            setallUsersPage(true)
+            setbulkUploadPage(false)
+            setfreshLeadPage(false)
+            setreportPage(false)
+        }
+        if (profileData.user_roles[0].user_type === 6) {
+            setIsUserTab(true)
+            setIsHiddenTab(true)
+            setdashboardPage(true)
+            setnewLeadPage(false)
+            setfollowUpLeadPage(false)
+            setmyLeadPage(true)
+            setaddUserPage(false)
+            setverfiyUserPage(false)
+            setallUsersPage(false)
+            setbulkUploadPage(false)
+            setfreshLeadPage(false)
+            setreportPage(true)
         }
     }, []);
     const handleDrawerOpen = () => {
@@ -150,39 +236,39 @@ export default function Menu(props) {
                 aria-labelledby="nested-list-subheader"
                 className={classes.list + ' list'}
             >
-                <NavLink to="/dashboard" activeClassName="active">
+                {dashboardPage ? <NavLink to="/dashboard" activeClassName="active">
                     <ListItem className="selected" button>
                         <ListItemIcon>
                             <DashboardOutlinedIcon className={classes.color} />
                         </ListItemIcon>
                         <ListItemText className={classes.color} primary="Dashboard" />
                     </ListItem>
-                </NavLink>
-                <NavLink to="/dashboards/leads" activeClassName="active">
+                </NavLink> : ''}
+                {newLeadPage ? <NavLink to="/dashboards/leads" activeClassName="active">
                     <ListItem className="selected" button>
                         <ListItemIcon>
                             <AccountCircleOutlinedIcon className={classes.color} />
                         </ListItemIcon>
                         <ListItemText className={classes.color} primary="New Leads" />
                     </ListItem>
-                </NavLink>
-                <NavLink to="/dashboards/followup" activeClassName="active">
+                </NavLink> : ''}
+                {followUpLeadPage ? <NavLink to="/dashboards/followup" activeClassName="active">
                     <ListItem className="selected" button>
                         <ListItemIcon>
                             <PhoneCallbackOutlinedIcon className={classes.color} />
                         </ListItemIcon>
                         <ListItemText className={classes.color} primary="Follow Up" />
                     </ListItem>
-                </NavLink>
-                <NavLink to="/dashboards/myleads" activeClassName="active">
+                </NavLink> : ''}
+                {myLeadPage ? <NavLink to="/dashboards/myleads" activeClassName="active">
                     <ListItem className="selected" button>
                         <ListItemIcon>
                             <VerifiedUserOutlinedIcon className={classes.color} />
                         </ListItemIcon>
                         <ListItemText className={classes.color} primary="My Leads" />
                     </ListItem>
-                </NavLink>
-                {isHiddenTab ? null : <React.Fragment><ListItem button className={classes.color} onClick={handleClick}>
+                </NavLink> : ''}
+                {isUserTab ? null : <React.Fragment><ListItem button className={classes.color} onClick={handleClick}>
                     <ListItemIcon>
                         <PeopleAltOutlinedIcon className={classes.color} />
                     </ListItemIcon>
@@ -191,23 +277,24 @@ export default function Menu(props) {
                 </ListItem>
                     <Collapse in={openen} timeout="auto" unmountOnExit>
                         <List component="div" disablePadding>
-                            <NavLink to="/dashboards/addusers" activeClassName="active">
+                            {addUserPage ? <NavLink to="/dashboards/addusers" activeClassName="active">
                                 <ListItem button className={classes.nested + " selected"}>
                                     <ListItemText primary="Add Users" />
                                 </ListItem>
-                            </NavLink>
-                            <NavLink to="/dashboards/verifyusers" activeClassName="active">
+                            </NavLink> : ''}
+                            {verfiyUserPage ? <NavLink to="/dashboards/verifyusers" activeClassName="active">
                                 <ListItem button className={classes.nested + " selected"}>
                                     <ListItemText primary="Verify Users" />
                                 </ListItem>
-                            </NavLink>
-                            <NavLink to="/dashboards/users" activeClassName="active">
+                            </NavLink> : ''}
+                            {allUsersPage ? <NavLink to="/dashboards/users" activeClassName="active">
                                 <ListItem button className={classes.nested + " selected"}>
                                     <ListItemText primary="All Users" />
                                 </ListItem>
-                            </NavLink>
+                            </NavLink> : ''}
                         </List>
-                    </Collapse>
+                    </Collapse></React.Fragment>}
+                {isHiddenTab ? null : <React.Fragment>
                     <ListItem button className={classes.color} onClick={uploadHandleClick}>
                         <ListItemIcon>
                             <PublishOutlinedIcon className={classes.color} />
@@ -217,27 +304,28 @@ export default function Menu(props) {
                     </ListItem>
                     <Collapse in={uploadOpen} timeout="auto" unmountOnExit>
                         <List component="div" disablePadding>
-                            <NavLink to="/dashboards/bulkuploads" activeClassName="active">
+                            {bulkUploadPage ? <NavLink to="/dashboards/bulkuploads" activeClassName="active">
                                 <ListItem button className={classes.nested + " selected"}>
                                     <ListItemText primary="Bulk Uploads" />
                                 </ListItem>
-                            </NavLink>
-                            <NavLink to="/dashboards/freshlead" activeClassName="active">
+                            </NavLink> : ''}
+                            {freshLeadPage ? <NavLink to="/dashboards/freshlead" activeClassName="active">
                                 <ListItem button className={classes.nested + " selected"}>
                                     <ListItemText primary="Fresh Leads" />
                                 </ListItem>
-                            </NavLink>
+                            </NavLink> : ''}
                         </List>
                     </Collapse>
-                    <NavLink to="/dashboards/reports" activeClassName="active">
-                        <ListItem className="selected" button>
-                            <ListItemIcon>
-                                <FileCopyOutlinedIcon className={classes.color} />
-                            </ListItemIcon>
-                            <ListItemText className={classes.color} primary="Reports" />
-                        </ListItem>
-                    </NavLink></React.Fragment>}
+                </React.Fragment>}
+                {reportPage ? <NavLink to="/dashboards/reports" activeClassName="active">
+                    <ListItem className="selected" button>
+                        <ListItemIcon>
+                            <FileCopyOutlinedIcon className={classes.color} />
+                        </ListItemIcon>
+                        <ListItemText className={classes.color} primary="Reports" />
+                    </ListItem>
+                </NavLink> : ''}
             </List>
-        </Drawer>
+        </Drawer >
     );
 }
