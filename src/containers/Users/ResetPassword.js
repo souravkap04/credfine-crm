@@ -67,12 +67,22 @@ const useStyles = makeStyles({
       backgroundColor: '#447d40'
     }
   },
+  formContainer: {
+    padding: '8px 10px'
+  },
+  formSubContainer: {
+    display: 'flex',
+    flexDirection: 'column'
+  },
   editUserBtn: {
     borderRadius: '15px',
     backgroundColor: '#13B980',
     fontSize: '15px',
     fontFamily: 'Lato',
-    margin: '12px 115px',
+    // margin: '12px 115px',
+    margin: 'auto',
+    marginTop: '12px',
+    marginBottom: '12px',
     padding: '5px',
     width: '50%',
     color: 'white',
@@ -132,6 +142,7 @@ export default function Users() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [users, setUsers] = useState([]);
+  const [updateUsers, setUpdateUsers] = useState([]);
   const [deletedUsers, setDeletedUsers] = useState([]);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -318,6 +329,19 @@ export default function Users() {
         setIsDisplay(true);
       })
   }
+  const listOfUsers = async (role) => {
+    const headers = {
+      'Authorization': `Token ${profileData.token}`,
+      'userRoleHash': profileData.user_roles[0].user_role_hash,
+    };
+    let items = { user_role: role }
+    await axios.post(`${baseUrl}/user/fetchRoleUser/`, items, { headers })
+      .then((response) => {
+        setUpdateUsers(response.data);
+      }).catch((error) => {
+        console.log(error);
+      })
+  }
   const closeSnankBar = () => {
     setIsDisplay(false);
   }
@@ -474,26 +498,40 @@ export default function Users() {
                     <DialogTitle id="form-dialog-title">Reset Password</DialogTitle>
                     <DialogContent>
                       <Form onSubmit={confirmPasswordHandler}>
-                        {isDisplay ? <ReactBootstrap.Alert variant="primary">{alertMessage}</ReactBootstrap.Alert> : null}
-                        <Form.Group>
-                          <Form.Label>Password</Form.Label>
-                          <Form.Control
-                            autoFocus
+                        <Grid>
+                          <TextField
                             type="password"
+                            className="textField"
+                            id="outlined-full-width"
+                            label="Password"
+                            style={{ margin: 8 }}
+                            margin="normal"
+                            InputLabelProps={{
+                              shrink: true,
+                            }}
+                            variant="outlined"
+                            size="small"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            isInvalid={!!errors.password} />
-                          <Form.Control.Feedback type="invalid"> {errors.password}</Form.Control.Feedback>
-                        </Form.Group>
-                        <Form.Group>
-                          <Form.Label>Confirm Password</Form.Label>
-                          <Form.Control
+                          />
+                        </Grid>
+                        <Grid>
+                          <TextField
                             type="password"
+                            className="textField"
+                            id="outlined-full-width"
+                            label="Confirm Password"
+                            style={{ margin: 8 }}
+                            margin="normal"
+                            InputLabelProps={{
+                              shrink: true,
+                            }}
+                            variant="outlined"
+                            size="small"
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
-                            isInvalid={!!errors.cnfrmPassword} />
-                          <Form.Control.Feedback type="invalid"> {errors.cnfrmPassword}</Form.Control.Feedback>
-                        </Form.Group>
+                          />
+                        </Grid>
                         <Button type="submit" className={classes.cnfrmPasswordBtn}>
                           Submit</Button>
                       </Form>
@@ -503,8 +541,8 @@ export default function Users() {
                 <>
                   <Dialog open={isEditUser} onClose={closeEditUser}>
                     <DialogTitle>Edit User</DialogTitle>
-                    <DialogContent>
-                      <Form onSubmit={updateUserData}>
+                    <DialogContent className={classes.formContainer}>
+                      <Form onSubmit={updateUserData} className={classes.formSubContainer}>
                         <Grid container style={{ justifyContent: 'center' }}>
                           <Grid>
                             <TextField
@@ -573,7 +611,10 @@ export default function Users() {
                               variant="outlined"
                               size="small"
                               value={role}
-                              onChange={(e) => setRole(e.target.value)}
+                              onChange={(e) => {
+                                setRole(e.target.value)
+                                listOfUsers(e.target.value)
+                              }}
                             >
                               <option>Select One</option>
                               <option value="4">Super Admin</option>
@@ -730,7 +771,7 @@ export default function Users() {
                               onChange={(e) => setparent(e.target.value)}
                             >
                               <option>Select One</option>
-                              {users.map(item => {
+                              {updateUsers.map(item => {
                                 return <option style={{ cursor: 'pointer' }} value={item.myuser.username}>{item.myuser.username}</option>
                               })}
                             </TextField>
