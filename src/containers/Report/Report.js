@@ -4,7 +4,7 @@ import moment from 'moment';
 import axios from 'axios';
 import baseUrl from '../../global/api'
 import { getProfileData, getStatusData } from '../../global/leadsGlobalData';
-import { Form, Card, Button, Row, Col, FormControl } from "react-bootstrap";
+import { Form, Card, Row, Col, FormControl } from "react-bootstrap";
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -13,8 +13,10 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { makeStyles } from '@material-ui/core/styles';
+import { TextField, Button } from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
+import './reportdata.css';
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -22,7 +24,7 @@ const useStyles = makeStyles({
   container: {
     overflow: 'auto',
     marginBottom: '10px',
-    maxHeight: '500px'
+    maxHeight: '300px'
   },
   table: {
     width: '95%',
@@ -51,11 +53,25 @@ const useStyles = makeStyles({
       backgroundColor: '#fff',
     },
   },
+  editReportBtn: {
+    borderRadius: '15px',
+    backgroundColor: '#13B980',
+    fontSize: '15px',
+    margin: 'auto',
+    marginTop: '12px',
+    marginBottom: '12px',
+    padding: '5px',
+    width: '50%',
+    color: 'white',
+    '&:hover': {
+      backgroundColor: '#447d40'
+    }
+  }
 });
 export default function Report() {
   const classes = useStyles();
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
   const [status, setStatus] = useState("");
   const [productType, setProductType] = useState("");
   const [alertMessage, setAlertMessage] = useState('');
@@ -107,6 +123,7 @@ export default function Report() {
             setEndDate('')
             setStatus('')
             setProductType('')
+            leadReportHistory()
           }
           setAlertMessage(response.data.msg);
           setIsDisplay(true)
@@ -118,7 +135,7 @@ export default function Report() {
   }
   const leadReportHistory = async () => {
     const headers = { 'userRoleHash': profileData.user_roles[0].user_role_hash }
-    await axios.get(`${baseUrl}/leads/leadReportHistory`, { headers })
+    await axios.get(`${baseUrl}/leads/leadReportHistory/`, { headers })
       .then((response) => {
         if (response.status === 200) {
           setleadHistoryData(response.data)
@@ -132,7 +149,7 @@ export default function Report() {
   }
   useEffect(() => {
     leadReportHistory()
-  }, [leadHistoryData]);
+  }, []);
   return (
     <PageLayerSection>
       <div>
@@ -146,61 +163,101 @@ export default function Report() {
             <Form.Label className={style.Heading}>Report</Form.Label>
             <Row>
               <Col>
-                <Form.Group>
-                  <Form.Label>Start Date</Form.Label>
-                  <FormControl
-                    type="date"
-                    max={moment().format('YYYY-MM-DD')}
-                    onChange={(e) => setStartDate(e.target.value)}
-                    isInvalid={!!errors.startDate} />
-                  <Form.Control.Feedback type="invalid"> {errors.startDate}</Form.Control.Feedback>
-                </Form.Group>
+                <TextField
+                  type="date"
+                  className="textFieldReport"
+                  id="outlined-full-width"
+                  label="Start Date"
+                  margin="normal"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  inputProps={{
+                    max: moment().format('YYYY-MM-DD')
+                  }}
+                  variant="outlined"
+                  size="small"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  error={!!errors.startDate}
+                  helperText={errors.startDate}
+                  onFocus={() => setErrors("")}
+                />
               </Col>
               <Col>
-                <Form.Group>
-                  <Form.Label>End Date</Form.Label>
-                  <FormControl
-                    type="date"
-                    min={startDate}
-                    max={moment().format('YYYY-MM-DD')}
-                    onChange={(e) => setEndDate(e.target.value)}
-                    isInvalid={!!errors.endDate} />
-                  <Form.Control.Feedback type="invalid"> {errors.endDate}</Form.Control.Feedback>
-                </Form.Group>
+                <TextField
+                  type="date"
+                  className="textFieldReport"
+                  id="outlined-full-width"
+                  label="Start Date"
+                  margin="normal"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  variant="outlined"
+                  size="small"
+                  value={endDate}
+                  inputProps={{
+                    min: startDate,
+                    max: moment().format('YYYY-MM-DD')
+                  }}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  error={!!errors.endDate}
+                  helperText={errors.endDate}
+                  onFocus={() => setErrors("")}
+                />
               </Col>
             </Row>
             <Row>
               <Col>
-                <Form.Group>
-                  <Form.Label>Status</Form.Label>
-                  <FormControl
-                    as="select"
-                    value={status}
-                    onChange={(e) => setStatus(e.target.value)}
-                  >
-                    <option value="">Select One</option>
-                    {uniqueStatus.map((item, index) => (
-                      <option key={index} value={item}>{item}</option>
-                    ))}
-                  </FormControl>
-                </Form.Group>
+                <TextField
+                  select
+                  className="textFieldReport"
+                  id="outlined-full-width"
+                  label="Status"
+                  margin="normal"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  SelectProps={{
+                    native: true
+                  }}
+                  variant="outlined"
+                  size="small"
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                >
+                  <option value="">Select One</option>
+                  {uniqueStatus.map((item, index) => (
+                    <option key={index} value={item}>{item}</option>
+                  ))}
+                </TextField>
               </Col>
               <Col>
-                <Form.Group>
-                  <Form.Label>Product Type</Form.Label>
-                  <FormControl
-                    as="select"
-                    value={productType}
-                    onChange={(e) => setProductType(e.target.value)}
-                  >
-                    <option value="">Select One</option>
-                    <option value="PL">Personal Loan</option>
-                    <option value="BL">Business Loan</option>
-                  </FormControl>
-                </Form.Group>
+                <TextField
+                  select
+                  className="textFieldReport"
+                  id="outlined-full-width"
+                  label="Product Type"
+                  margin="normal"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  SelectProps={{
+                    native: true
+                  }}
+                  variant="outlined"
+                  size="small"
+                  value={productType}
+                  onChange={(e) => setProductType(e.target.value)}
+                >
+                  <option value="">Select One</option>
+                  <option value="PL">Personal Loan</option>
+                  <option value="BL">Business Loan</option>
+                </TextField>
               </Col>
             </Row>
-            <Button className={style.button} type="submit"
+            <Button className={classes.editReportBtn} type="submit"
               variant="success">SUBMIT</Button>
           </Card>
         </Form>

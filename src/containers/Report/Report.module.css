@@ -1,29 +1,25 @@
-.card{
-    background-color: #FFFFFF!important;
-    border:  4px solid #535ad1;
-    border-radius: 15px!important;
+.card {
     padding: 1rem 2rem;
     margin: 25px;
 }
 
-.button{
-    border-radius:15px ;
-    background-color: #13B980;
+.button {
+    border-radius: 15px;
+    background-color: #13b980;
     font-size: 15px;
     font-family: Lato;
     margin: 20px 255px;
-     padding: 6px;
- 
-    }
- .Heading{
+    padding: 6px;
+}
+.Heading {
     font-weight: bold;
     color: #183365;
     font-family: Lato;
-    }
-   .alertBox{
+}
+.alertBox {
     color: #004085;
     background-color: #cce5ff;
     border-color: #b8daff;
     text-align: center;
     margin: 0 auto;
-   } 
+}

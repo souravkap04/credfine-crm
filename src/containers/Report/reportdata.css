@@ -1,0 +1,31 @@
+.textFieldReport {
+  width: 100%;
+  margin-top: 0.97222vw !important;
+  margin-bottom: 0.97222vw !important;
+  font-family: "Lato";
+}
+
+.textFieldReport label {
+  color: #535ad1;
+  letter-spacing: 0.4px;
+  font-size: 15.5px;
+  font-family: "Lato";
+}
+
+.textFieldReport .MuiOutlinedInput-root {
+  height: 3.33333vw;
+}
+
+.textFieldReport .MuiOutlinedInput-notchedOutline {
+  border: 2px solid #c5cee0;
+}
+
+.textFieldReport .MuiInputAdornment-root {
+  opacity: 0.6;
+}
+
+.textFieldReport .MuiInputBase-input {
+  font-size: 1.11111vw;
+  font-family: "Lato";
+}
+/*# sourceMappingURL=reportdata.css.map */
