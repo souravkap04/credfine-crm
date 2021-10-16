@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom";
+import moment from 'moment';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -133,7 +134,7 @@ export default function FollowUp(props) {
                 } else {
                     let data = response.data.data.callback_time;
                     let d = new Date(data * 1000)
-                    let dateTime = d.toLocaleDateString() + ' ' + d.toLocaleTimeString()
+                    let dateTime = d.toLocaleDateString() + ' ' + moment(d.toLocaleTimeString(), "HH:mm:ss").format("hh:mm A")
                     setcurrentDateTime(dateTime)
                     setLeadCount(response.data.total_followup)
                     setLeadData(response.data.data);

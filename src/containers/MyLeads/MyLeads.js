@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
+import moment from 'moment';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -607,11 +608,11 @@ export default function MyLeads(props) {
               <TableCell className={classes.tableheading}>Mobile</TableCell>
               <TableCell className={classes.tableheading}>Loan Amt</TableCell>
               <TableCell className={classes.tableheading}>Income</TableCell>
-              <TableCell className={classes.tableheading}>Company</TableCell>
               <TableCell className={classes.tableheading}>Loan Type</TableCell>
               <TableCell className={clsx(classes.tableheading, classes.statusHeading)}>Status</TableCell>
               <TableCell className={classes.tableheading}>Sub Status</TableCell>
               <TableCell className={classes.tableheading} >Campaign</TableCell>
+              <TableCell className={classes.tableheading}>Last Updated</TableCell>
               <TableCell className={classes.tableheading} ></TableCell>
             </TableRow>
           </TableHead>
@@ -621,6 +622,8 @@ export default function MyLeads(props) {
             </div> : myLeads.length !== 0 ?
               myLeads.map((my_leads, index) => {
                 let leadPhoneNo = maskPhoneNo(my_leads.lead.phone_no_encrypt)
+                let updatedDate = new Date(my_leads.updated_date)
+                let currentUpdatedDate = updatedDate.toLocaleDateString() + ' ' + moment(updatedDate.toLocaleTimeString(), "HH:mm:ss").format("hh:mm A")
                 return (
                   <TableRow className={classes.oddEvenRow} key={index}>
                     <TableCell className={classes.tabledata}>{index + 1}</TableCell>
@@ -631,7 +634,6 @@ export default function MyLeads(props) {
                     <TableCell className={classes.tabledata}>{leadPhoneNo ? leadPhoneNo : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>{my_leads.lead.loan_amount ? my_leads.lead.loan_amount : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>{my_leads.lead.data.monthly_income ? my_leads.lead.data.monthly_income : 'NA'}</TableCell>
-                    <TableCell className={classes.tabledata}>{my_leads.lead.data.current_company_name ? my_leads.lead.data.current_company_name : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>{my_leads.lead.loan_type ? my_leads.lead.loan_type : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>
                       <div className={classes.loanTypeButton}>
@@ -640,6 +642,7 @@ export default function MyLeads(props) {
                     </TableCell>
                     <TableCell className={classes.tabledata}>{my_leads.lead.sub_status ? my_leads.lead.sub_status : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>{my_leads.lead.campaign_category ? my_leads.lead.campaign_category : 'NA'}</TableCell>
+                    <TableCell className={classes.tabledata}>{currentUpdatedDate ? currentUpdatedDate : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>
                       <Tooltip title="Call Customer">
                         <IconButton className={classes.callButton} onClick={() => clickToCall(my_leads.lead.phone_no_encrypt, my_leads.lead.lead_crm_id)}>
