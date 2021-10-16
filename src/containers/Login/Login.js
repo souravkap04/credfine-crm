@@ -8,11 +8,13 @@ import crmLogo from "../../images/crmLogo.svg";
 import loinImage from "../../images/loginImage.png"
 import {
     Button, Container, FormControl, Grid, InputAdornment, InputLabel,
-    Select, MenuItem, TextField, Typography, FormHelperText
+    Select, MenuItem, TextField, Typography, FormHelperText, IconButton
 } from "@material-ui/core";
 import { getCampaign, getDialer } from '../../global/leadsGlobalData';
 import EmailOutlinedIcon from '@material-ui/icons/EmailOutlined';
 import HttpsOutlinedIcon from '@material-ui/icons/HttpsOutlined';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import Alert from '@material-ui/lab/Alert';
 import './login.css';
 
@@ -69,6 +71,7 @@ export default function Login() {
     let history = useHistory();
     const [alertMessage, setAlertMessage] = useState('');
     const [isDisplay, setIsDisplay] = useState(false);
+    const [showPassword, setshowPassword] = useState(false);
     const { register, handleSubmit, control, errors } = useForm();
     const onSubmit = async (data) => {
         const { email, password, campaign, dialer } = data;
@@ -104,6 +107,9 @@ export default function Login() {
                 setIsDisplay(true);
             })
     }
+    const handleClickShowPassword = () => {
+        setshowPassword(!showPassword);
+    };
     return (
         <div className={classes.root}>
             <div className="leftSectionImage">
@@ -154,7 +160,7 @@ export default function Login() {
                                 className={classes.input_field}
                                 variant="standard"
                                 fullWidth
-                                type="password"
+                                type={showPassword ? 'text' : 'password'}
                                 name="password"
                                 inputRef={register({
                                     required: 'Password is required'
@@ -165,6 +171,16 @@ export default function Login() {
                                     startAdornment: (
                                         <InputAdornment position="start">
                                             <HttpsOutlinedIcon />
+                                        </InputAdornment>
+                                    ),
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                aria-label="toggle password visibility"
+                                                onClick={handleClickShowPassword}
+                                            >
+                                                {showPassword ? <Visibility /> : <VisibilityOff />}
+                                            </IconButton>
                                         </InputAdornment>
                                     )
                                 }} />

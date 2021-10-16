@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
+import moment from 'moment';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -199,12 +200,14 @@ export default function MyLeads(props) {
   const [startdate, setstartDate] = useState("");
   const [enddate, setendDate] = useState("");
   const [users, setUsers] = useState([]);
+  const [dateType, setdateType] = useState("");
   const [users_id, setUserID] = useState('');
   const [isError, setisError] = useState(false);
   const [isLoading, setisLoading] = useState(false);
   let statusData = getStatusData();
   let campaignData = getCampaign();
   const queryy = useQueryy();
+  const datetype = queryy.get("datetype") || "";
   const filterstatus = queryy.get("status") || "";
   const startDate = queryy.get("start_date") || "";
   const endDate = queryy.get("end_date") || "";
@@ -221,7 +224,7 @@ export default function MyLeads(props) {
   const fetchMyLeads = async () => {
     setisLoading(true)
     const headers = { 'Authorization': `Token ${profileData.token}` }
-    await axios.get(`${baseUrl}/leads/fetchUpdatedLeadsUserWise/?status=${filterstatus}&start_date=${startDate}&end_date=${endDate}&sub_status=${sub_status}&campaign_category=${campaign_category}&user_id=${user_id}`, { headers })
+    await axios.get(`${baseUrl}/leads/fetchUpdatedLeadsUserWise/?datetype=${datetype}&status=${filterstatus}&start_date=${startDate}&end_date=${endDate}&sub_status=${sub_status}&campaign_category=${campaign_category}&user_id=${user_id}`, { headers })
       .then((response) => {
         setRowsPerPage(response.data.results.length)
         settotalDataPerPage(response.data.results.length)
@@ -237,7 +240,7 @@ export default function MyLeads(props) {
   useEffect(() => {
     fetchMyLeads();
     listOfUsers();
-  }, [filterstatus, startDate, endDate, subStatus, campaign_category, user_id])
+  }, [datetype, filterstatus, startDate, endDate, subStatus, campaign_category, user_id])
   const listOfUsers = async () => {
     const headers = {
       'Authorization': `Token ${profileData.token}`,
@@ -387,7 +390,7 @@ export default function MyLeads(props) {
       setisError(true)
       return;
     }
-    history.push(`/dashboards/myleads/?status=${status}&start_date=${startdate}&end_date=${enddate}&sub_status=${subStatus}&campaign_category=${campaign}&user_id=${users_id}`)
+    history.push(`/dashboards/myleads/?datetype=${dateType}&status=${status}&start_date=${startdate}&end_date=${enddate}&sub_status=${subStatus}&campaign_category=${campaign}&user_id=${users_id}`)
     closeDrawer()
   }
   const closeDrawer = () => {
@@ -399,6 +402,7 @@ export default function MyLeads(props) {
     setSubStatus('')
     setCampaign('')
     setUserID('')
+    setdateType('')
   };
   return (
     <PageLayerSection>
@@ -406,6 +410,30 @@ export default function MyLeads(props) {
         <div className="rightContainerForm">
           <form>
             <Grid container justifyContent="flex-start"><h4>Search Here</h4></Grid>
+            <Grid>
+              <TextField
+                select
+                className="textField"
+                id="outlined-full-width"
+                label="Lead Created/Updated"
+                style={{ margin: 8 }}
+                margin="normal"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                SelectProps={{
+                  native: true
+                }}
+                variant="outlined"
+                size="small"
+                value={dateType}
+                onChange={(e) => setdateType(e.target.value)}
+              >
+                <option value="">Select One</option>
+                <option value="created">Create Date</option>
+                <option value="updated">Updated Date</option>
+              </TextField>
+            </Grid>
             <Grid>
               <TextField
                 className="textField"
@@ -580,11 +608,11 @@ export default function MyLeads(props) {
               <TableCell className={classes.tableheading}>Mobile</TableCell>
               <TableCell className={classes.tableheading}>Loan Amt</TableCell>
               <TableCell className={classes.tableheading}>Income</TableCell>
-              <TableCell className={classes.tableheading}>Company</TableCell>
               <TableCell className={classes.tableheading}>Loan Type</TableCell>
               <TableCell className={clsx(classes.tableheading, classes.statusHeading)}>Status</TableCell>
               <TableCell className={classes.tableheading}>Sub Status</TableCell>
               <TableCell className={classes.tableheading} >Campaign</TableCell>
+              <TableCell className={classes.tableheading}>Last Updated</TableCell>
               <TableCell className={classes.tableheading} ></TableCell>
             </TableRow>
           </TableHead>
@@ -594,6 +622,8 @@ export default function MyLeads(props) {
             </div> : myLeads.length !== 0 ?
               myLeads.map((my_leads, index) => {
                 let leadPhoneNo = maskPhoneNo(my_leads.lead.phone_no_encrypt)
+                let updatedDate = new Date(my_leads.updated_date)
+                let currentUpdatedDate = updatedDate.toLocaleDateString() + ' ' + moment(updatedDate.toLocaleTimeString(), "HH:mm:ss").format("hh:mm A")
                 return (
                   <TableRow className={classes.oddEvenRow} key={index}>
                     <TableCell className={classes.tabledata}>{index + 1}</TableCell>
@@ -604,7 +634,6 @@ export default function MyLeads(props) {
                     <TableCell className={classes.tabledata}>{leadPhoneNo ? leadPhoneNo : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>{my_leads.lead.loan_amount ? my_leads.lead.loan_amount : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>{my_leads.lead.data.monthly_income ? my_leads.lead.data.monthly_income : 'NA'}</TableCell>
-                    <TableCell className={classes.tabledata}>{my_leads.lead.data.current_company_name ? my_leads.lead.data.current_company_name : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>{my_leads.lead.loan_type ? my_leads.lead.loan_type : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>
                       <div className={classes.loanTypeButton}>
@@ -613,6 +642,7 @@ export default function MyLeads(props) {
                     </TableCell>
                     <TableCell className={classes.tabledata}>{my_leads.lead.sub_status ? my_leads.lead.sub_status : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>{my_leads.lead.campaign_category ? my_leads.lead.campaign_category : 'NA'}</TableCell>
+                    <TableCell className={classes.tabledata}>{currentUpdatedDate ? currentUpdatedDate : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>
                       <Tooltip title="Call Customer">
                         <IconButton className={classes.callButton} onClick={() => clickToCall(my_leads.lead.phone_no_encrypt, my_leads.lead.lead_crm_id)}>
