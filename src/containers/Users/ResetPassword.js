@@ -13,7 +13,8 @@ import {
   DialogContent,
   Typography,
   TextField,
-  Grid
+  Grid,
+  Button
 } from "@material-ui/core";
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -21,7 +22,7 @@ import FormControl from '@material-ui/core/FormControl';
 import ListItemText from '@material-ui/core/ListItemText';
 import Select from '@material-ui/core/Select';
 import Checkbox from '@material-ui/core/Checkbox';
-import { Form, Row, Col, Button, InputGroup } from 'react-bootstrap';
+import { Form, Row, Col, InputGroup } from 'react-bootstrap';
 import * as ReactBootstrap from "react-bootstrap";
 import axios from 'axios';
 import baseUrl from '../../global/api';
@@ -42,6 +43,11 @@ const useStyles = makeStyles({
   container: {
     marginTop: '10px'
   },
+  userButton: {
+    backgroundColor: '#535ad1',
+    color: '#fff',
+    boxShadow: 'none'
+  },
   scroller: {
     overflow: 'auto',
     // maxHeight: '500px',
@@ -59,7 +65,7 @@ const useStyles = makeStyles({
     backgroundColor: '#13B980',
     fontSize: '15px',
     fontFamily: 'Lato',
-    margin: '0 56px',
+    margin: '10px 56px',
     padding: '5px',
     width: '50%',
     color: 'white',
@@ -170,7 +176,6 @@ export default function Users() {
   const resetPasswordHandler = (userName, index) => {
     setIsResetPassword(true);
     setRowData(userName);
-
   }
   const closeResetPassword = () => {
     setIsResetPassword(false);
@@ -209,6 +214,13 @@ export default function Users() {
           .then((response) => {
             setAlertMessage(response.data.message);
             setIsDisplay(true);
+            if (response.status === 200) {
+              setPassword('')
+              setConfirmPassword('')
+              setTimeout(() => {
+                setIsResetPassword(false)
+              }, 1500)
+            }
           })
       } catch (error) {
         setAlertMessage("something wrong");
@@ -369,10 +381,12 @@ export default function Users() {
               </InputGroup>
             </div>
             <div className={classes.activeUserBtn}>
-              <Button disabled={isActiveUser} onClick={listOfActiveUsers}>Active User</Button>
+              <Button disabled={isActiveUser} className={classes.userButton} color="primary"
+                variant="contained" onClick={listOfActiveUsers}>Active User</Button>
             </div>
             <div>
-              <Button disabled={!isActiveUser} onClick={listOfDeletedUsers}>Deleted User</Button>
+              <Button disabled={!isActiveUser} className={classes.userButton} color="primary"
+                variant="contained" onClick={listOfDeletedUsers}>Deleted User</Button>
             </div>
           </div>
           <TableContainer className={classes.scroller}>
@@ -408,46 +422,255 @@ export default function Users() {
                     } else if (user.myuser.username.toLowerCase().includes(searchTerm.toLowerCase())) {
                       return user;
                     }
-                  }).map((user, index) => (
-                    <TableRow className={classes.oddEvenRow} key={index} >
-                      <TableCell className={classes.tableData}>{index + 1}</TableCell>
-                      <TableCell className={classes.tableData}>{user.myuser.username}</TableCell>
-                      <TableCell className={classes.tableData}>{user.myuser.first_name}</TableCell>
-                      <TableCell className={classes.tableData}>{user.myuser.last_name}</TableCell>
-                      <TableCell className={classes.tableData}>{user.myuser.email}</TableCell>
-                      <TableCell className={classes.tableData}>{user.role}</TableCell>
-                      <TableCell className={classes.tableData}>{user.product_type}</TableCell>
-                      <TableCell className={classes.tableData}>{user.phone_no}</TableCell>
-                      <TableCell className={classes.tableData}>{user.gender}</TableCell>
-                      {/* <TableCell className={classes.tableData}>{user.myuser.dialer_pass}</TableCell> */}
-                      <TableCell className={classes.tableData}>{user.myuser.vertage_id}</TableCell>
-                      <TableCell className={classes.tableData}>{user.myuser.vertage_pass}</TableCell>
-                      <TableCell className={classes.tableData}>{user.myuser.parent_id}</TableCell>
-                      <TableCell className={classes.tableData}>{user.myuser.location.join(',')}</TableCell>
-                      <TableCell className={classes.tableIconData}>
-                        <Tooltip title="Reset Password">
-                          <IconButton onClick={() => resetPasswordHandler(user.myuser.username, index)}>
-                            <LockIcon />
-                          </IconButton>
-                        </Tooltip>
-                        <Tooltip title="Edit">
-                          <IconButton
-                            onClick={() => editUser(user.myuser.username, user.myuser.first_name,
-                              user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
-                              user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
-                              user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
-                            <EditIcon />
-                          </IconButton>
-                        </Tooltip>
-                        <Tooltip title="Delete User">
-                          {/* <IconButton onClick={() => deleteUser(user.myuser.username, index)}> */}
-                          <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username)}>
-                            <DeleteIcon />
-                          </IconButton>
-                        </Tooltip>
-                      </TableCell>
-                    </TableRow>
-                  )) :
+                  }).map((user, index) => {
+                    let roleName;
+                    if (user.role === "1") {
+                      roleName = 'Admin'
+                      return <TableRow className={classes.oddEvenRow} key={index} >
+                        <TableCell className={classes.tableData}>{index + 1}</TableCell>
+                        <TableCell className={classes.tableData}>{user.myuser.username}</TableCell>
+                        <TableCell className={classes.tableData}>{user.myuser.first_name}</TableCell>
+                        <TableCell className={classes.tableData}>{user.myuser.last_name}</TableCell>
+                        <TableCell className={classes.tableData}>{user.myuser.email}</TableCell>
+                        <TableCell className={classes.tableData}>{roleName}</TableCell>
+                        <TableCell className={classes.tableData}>{user.product_type}</TableCell>
+                        <TableCell className={classes.tableData}>{user.phone_no}</TableCell>
+                        <TableCell className={classes.tableData}>{user.gender}</TableCell>
+                        {/* <TableCell className={classes.tableData}>{user.myuser.dialer_pass}</TableCell> */}
+                        <TableCell className={classes.tableData}>{user.myuser.vertage_id}</TableCell>
+                        <TableCell className={classes.tableData}>{user.myuser.vertage_pass}</TableCell>
+                        <TableCell className={classes.tableData}>{user.myuser.parent_id}</TableCell>
+                        <TableCell className={classes.tableData}>{user.myuser.location.join(',')}</TableCell>
+                        <TableCell className={classes.tableIconData}>
+                          <Tooltip title="Reset Password">
+                            <IconButton onClick={() => resetPasswordHandler(user.myuser.username, index)}>
+                              <LockIcon />
+                            </IconButton>
+                          </Tooltip>
+                          <Tooltip title="Edit">
+                            <IconButton
+                              onClick={() => editUser(user.myuser.username, user.myuser.first_name,
+                                user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
+                                user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
+                                user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
+                              <EditIcon />
+                            </IconButton>
+                          </Tooltip>
+                          <Tooltip title="Delete User">
+                            {/* <IconButton onClick={() => deleteUser(user.myuser.username, index)}> */}
+                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username)}>
+                              <DeleteIcon />
+                            </IconButton>
+                          </Tooltip>
+                        </TableCell>
+                      </TableRow>
+                    }
+                    if (user.role === "2") {
+                      roleName = 'Manager'
+                      return <TableRow className={classes.oddEvenRow} key={index} >
+                        <TableCell className={classes.tableData}>{index + 1}</TableCell>
+                        <TableCell className={classes.tableData}>{user.myuser.username}</TableCell>
+                        <TableCell className={classes.tableData}>{user.myuser.first_name}</TableCell>
+                        <TableCell className={classes.tableData}>{user.myuser.last_name}</TableCell>
+                        <TableCell className={classes.tableData}>{user.myuser.email}</TableCell>
+                        <TableCell className={classes.tableData}>{roleName}</TableCell>
+                        <TableCell className={classes.tableData}>{user.product_type}</TableCell>
+                        <TableCell className={classes.tableData}>{user.phone_no}</TableCell>
+                        <TableCell className={classes.tableData}>{user.gender}</TableCell>
+                        {/* <TableCell className={classes.tableData}>{user.myuser.dialer_pass}</TableCell> */}
+                        <TableCell className={classes.tableData}>{user.myuser.vertage_id}</TableCell>
+                        <TableCell className={classes.tableData}>{user.myuser.vertage_pass}</TableCell>
+                        <TableCell className={classes.tableData}>{user.myuser.parent_id}</TableCell>
+                        <TableCell className={classes.tableData}>{user.myuser.location.join(',')}</TableCell>
+                        <TableCell className={classes.tableIconData}>
+                          <Tooltip title="Reset Password">
+                            <IconButton onClick={() => resetPasswordHandler(user.myuser.username, index)}>
+                              <LockIcon />
+                            </IconButton>
+                          </Tooltip>
+                          <Tooltip title="Edit">
+                            <IconButton
+                              onClick={() => editUser(user.myuser.username, user.myuser.first_name,
+                                user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
+                                user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
+                                user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
+                              <EditIcon />
+                            </IconButton>
+                          </Tooltip>
+                          <Tooltip title="Delete User">
+                            {/* <IconButton onClick={() => deleteUser(user.myuser.username, index)}> */}
+                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username)}>
+                              <DeleteIcon />
+                            </IconButton>
+                          </Tooltip>
+                        </TableCell>
+                      </TableRow>
+                    }
+                    if (user.role === "3") {
+                      roleName = 'Agent'
+                      return <TableRow className={classes.oddEvenRow} key={index} >
+                        <TableCell className={classes.tableData}>{index + 1}</TableCell>
+                        <TableCell className={classes.tableData}>{user.myuser.username}</TableCell>
+                        <TableCell className={classes.tableData}>{user.myuser.first_name}</TableCell>
+                        <TableCell className={classes.tableData}>{user.myuser.last_name}</TableCell>
+                        <TableCell className={classes.tableData}>{user.myuser.email}</TableCell>
+                        <TableCell className={classes.tableData}>{roleName}</TableCell>
+                        <TableCell className={classes.tableData}>{user.product_type}</TableCell>
+                        <TableCell className={classes.tableData}>{user.phone_no}</TableCell>
+                        <TableCell className={classes.tableData}>{user.gender}</TableCell>
+                        {/* <TableCell className={classes.tableData}>{user.myuser.dialer_pass}</TableCell> */}
+                        <TableCell className={classes.tableData}>{user.myuser.vertage_id}</TableCell>
+                        <TableCell className={classes.tableData}>{user.myuser.vertage_pass}</TableCell>
+                        <TableCell className={classes.tableData}>{user.myuser.parent_id}</TableCell>
+                        <TableCell className={classes.tableData}>{user.myuser.location.join(',')}</TableCell>
+                        <TableCell className={classes.tableIconData}>
+                          <Tooltip title="Reset Password">
+                            <IconButton onClick={() => resetPasswordHandler(user.myuser.username, index)}>
+                              <LockIcon />
+                            </IconButton>
+                          </Tooltip>
+                          <Tooltip title="Edit">
+                            <IconButton
+                              onClick={() => editUser(user.myuser.username, user.myuser.first_name,
+                                user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
+                                user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
+                                user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
+                              <EditIcon />
+                            </IconButton>
+                          </Tooltip>
+                          <Tooltip title="Delete User">
+                            {/* <IconButton onClick={() => deleteUser(user.myuser.username, index)}> */}
+                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username)}>
+                              <DeleteIcon />
+                            </IconButton>
+                          </Tooltip>
+                        </TableCell>
+                      </TableRow>
+                    }
+                    if (user.role === "4") {
+                      roleName = 'Super Admin'
+                      return <TableRow className={classes.oddEvenRow} key={index} >
+                        <TableCell className={classes.tableData}>{index + 1}</TableCell>
+                        <TableCell className={classes.tableData}>{user.myuser.username}</TableCell>
+                        <TableCell className={classes.tableData}>{user.myuser.first_name}</TableCell>
+                        <TableCell className={classes.tableData}>{user.myuser.last_name}</TableCell>
+                        <TableCell className={classes.tableData}>{user.myuser.email}</TableCell>
+                        <TableCell className={classes.tableData}>{roleName}</TableCell>
+                        <TableCell className={classes.tableData}>{user.product_type}</TableCell>
+                        <TableCell className={classes.tableData}>{user.phone_no}</TableCell>
+                        <TableCell className={classes.tableData}>{user.gender}</TableCell>
+                        {/* <TableCell className={classes.tableData}>{user.myuser.dialer_pass}</TableCell> */}
+                        <TableCell className={classes.tableData}>{user.myuser.vertage_id}</TableCell>
+                        <TableCell className={classes.tableData}>{user.myuser.vertage_pass}</TableCell>
+                        <TableCell className={classes.tableData}>{user.myuser.parent_id}</TableCell>
+                        <TableCell className={classes.tableData}>{user.myuser.location.join(',')}</TableCell>
+                        <TableCell className={classes.tableIconData}>
+                          <Tooltip title="Reset Password">
+                            <IconButton onClick={() => resetPasswordHandler(user.myuser.username, index)}>
+                              <LockIcon />
+                            </IconButton>
+                          </Tooltip>
+                          <Tooltip title="Edit">
+                            <IconButton
+                              onClick={() => editUser(user.myuser.username, user.myuser.first_name,
+                                user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
+                                user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
+                                user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
+                              <EditIcon />
+                            </IconButton>
+                          </Tooltip>
+                          <Tooltip title="Delete User">
+                            {/* <IconButton onClick={() => deleteUser(user.myuser.username, index)}> */}
+                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username)}>
+                              <DeleteIcon />
+                            </IconButton>
+                          </Tooltip>
+                        </TableCell>
+                      </TableRow>
+                    }
+                    if (user.role === "5") {
+                      roleName = 'Team Leader'
+                      return <TableRow className={classes.oddEvenRow} key={index} >
+                        <TableCell className={classes.tableData}>{index + 1}</TableCell>
+                        <TableCell className={classes.tableData}>{user.myuser.username}</TableCell>
+                        <TableCell className={classes.tableData}>{user.myuser.first_name}</TableCell>
+                        <TableCell className={classes.tableData}>{user.myuser.last_name}</TableCell>
+                        <TableCell className={classes.tableData}>{user.myuser.email}</TableCell>
+                        <TableCell className={classes.tableData}>{roleName}</TableCell>
+                        <TableCell className={classes.tableData}>{user.product_type}</TableCell>
+                        <TableCell className={classes.tableData}>{user.phone_no}</TableCell>
+                        <TableCell className={classes.tableData}>{user.gender}</TableCell>
+                        {/* <TableCell className={classes.tableData}>{user.myuser.dialer_pass}</TableCell> */}
+                        <TableCell className={classes.tableData}>{user.myuser.vertage_id}</TableCell>
+                        <TableCell className={classes.tableData}>{user.myuser.vertage_pass}</TableCell>
+                        <TableCell className={classes.tableData}>{user.myuser.parent_id}</TableCell>
+                        <TableCell className={classes.tableData}>{user.myuser.location.join(',')}</TableCell>
+                        <TableCell className={classes.tableIconData}>
+                          <Tooltip title="Reset Password">
+                            <IconButton onClick={() => resetPasswordHandler(user.myuser.username, index)}>
+                              <LockIcon />
+                            </IconButton>
+                          </Tooltip>
+                          <Tooltip title="Edit">
+                            <IconButton
+                              onClick={() => editUser(user.myuser.username, user.myuser.first_name,
+                                user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
+                                user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
+                                user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
+                              <EditIcon />
+                            </IconButton>
+                          </Tooltip>
+                          <Tooltip title="Delete User">
+                            {/* <IconButton onClick={() => deleteUser(user.myuser.username, index)}> */}
+                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username)}>
+                              <DeleteIcon />
+                            </IconButton>
+                          </Tooltip>
+                        </TableCell>
+                      </TableRow>
+                    }
+                    if (user.role === "6") {
+                      roleName = 'Backend'
+                      return <TableRow className={classes.oddEvenRow} key={index} >
+                        <TableCell className={classes.tableData}>{index + 1}</TableCell>
+                        <TableCell className={classes.tableData}>{user.myuser.username}</TableCell>
+                        <TableCell className={classes.tableData}>{user.myuser.first_name}</TableCell>
+                        <TableCell className={classes.tableData}>{user.myuser.last_name}</TableCell>
+                        <TableCell className={classes.tableData}>{user.myuser.email}</TableCell>
+                        <TableCell className={classes.tableData}>{roleName}</TableCell>
+                        <TableCell className={classes.tableData}>{user.product_type}</TableCell>
+                        <TableCell className={classes.tableData}>{user.phone_no}</TableCell>
+                        <TableCell className={classes.tableData}>{user.gender}</TableCell>
+                        {/* <TableCell className={classes.tableData}>{user.myuser.dialer_pass}</TableCell> */}
+                        <TableCell className={classes.tableData}>{user.myuser.vertage_id}</TableCell>
+                        <TableCell className={classes.tableData}>{user.myuser.vertage_pass}</TableCell>
+                        <TableCell className={classes.tableData}>{user.myuser.parent_id}</TableCell>
+                        <TableCell className={classes.tableData}>{user.myuser.location.join(',')}</TableCell>
+                        <TableCell className={classes.tableIconData}>
+                          <Tooltip title="Reset Password">
+                            <IconButton onClick={() => resetPasswordHandler(user.myuser.username, index)}>
+                              <LockIcon />
+                            </IconButton>
+                          </Tooltip>
+                          <Tooltip title="Edit">
+                            <IconButton
+                              onClick={() => editUser(user.myuser.username, user.myuser.first_name,
+                                user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
+                                user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
+                                user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
+                              <EditIcon />
+                            </IconButton>
+                          </Tooltip>
+                          <Tooltip title="Delete User">
+                            {/* <IconButton onClick={() => deleteUser(user.myuser.username, index)}> */}
+                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username)}>
+                              <DeleteIcon />
+                            </IconButton>
+                          </Tooltip>
+                        </TableCell>
+                      </TableRow>
+                    }
+                  }) :
                     <div className={classes.loader}>
                       <ReactBootstrap.Spinner animation="border" />
                     </div>
@@ -461,25 +684,129 @@ export default function Users() {
                     } else if (deletedUser.myuser.username.toLowerCase().includes(searchTerm.toLowerCase())) {
                       return deletedUser;
                     }
-                  }).map((deletedUser, index) => (
-                    <TableRow className={classes.oddEvenRow} key={index} >
-                      <TableCell className={classes.deleteUsersData}>{index + 1}</TableCell>
-                      <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.username}</TableCell>
-                      <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.first_name}</TableCell>
-                      <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.last_name}</TableCell>
-                      <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.email}</TableCell>
-                      <TableCell className={classes.deleteUsersData}>{deletedUser.role}</TableCell>
-                      <TableCell className={classes.deleteUsersData}>{deletedUser.product_type}</TableCell>
-                      <TableCell className={classes.deleteUsersData}>{deletedUser.phone_no}</TableCell>
-                      <TableCell className={classes.deleteUsersData}>{deletedUser.gender}</TableCell>
-                      {/* <TableCell className={classes.deleteUsersData}>{user.myuser.dialer_pass}</TableCell> */}
-                      <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_id}</TableCell>
-                      <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_pass}</TableCell>
-                      <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.parent_id}</TableCell>
-                      <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.location}</TableCell>
-                      <TableCell className={classes.deleteUsersData}></TableCell>
-                    </TableRow>
-                  )) :
+                  }).map((deletedUser, index) => {
+                    let roleName;
+                    if (deletedUser.role === "1") {
+                      roleName = 'Admin'
+                      return <TableRow className={classes.oddEvenRow} key={index} >
+                        <TableCell className={classes.deleteUsersData}>{index + 1}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.username}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.first_name}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.last_name}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.email}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{roleName}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.product_type}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.phone_no}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.gender}</TableCell>
+                        {/* <TableCell className={classes.deleteUsersData}>{user.myuser.dialer_pass}</TableCell> */}
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_id}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_pass}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.parent_id}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.location}</TableCell>
+                        <TableCell className={classes.deleteUsersData}></TableCell>
+                      </TableRow>
+                    }
+                    if (deletedUser.role === "2") {
+                      roleName = 'Manager'
+                      return <TableRow className={classes.oddEvenRow} key={index} >
+                        <TableCell className={classes.deleteUsersData}>{index + 1}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.username}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.first_name}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.last_name}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.email}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{roleName}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.product_type}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.phone_no}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.gender}</TableCell>
+                        {/* <TableCell className={classes.deleteUsersData}>{user.myuser.dialer_pass}</TableCell> */}
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_id}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_pass}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.parent_id}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.location}</TableCell>
+                        <TableCell className={classes.deleteUsersData}></TableCell>
+                      </TableRow>
+                    }
+                    if (deletedUser.role === "3") {
+                      roleName = 'Agent'
+                      return <TableRow className={classes.oddEvenRow} key={index} >
+                        <TableCell className={classes.deleteUsersData}>{index + 1}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.username}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.first_name}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.last_name}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.email}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{roleName}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.product_type}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.phone_no}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.gender}</TableCell>
+                        {/* <TableCell className={classes.deleteUsersData}>{user.myuser.dialer_pass}</TableCell> */}
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_id}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_pass}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.parent_id}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.location}</TableCell>
+                        <TableCell className={classes.deleteUsersData}></TableCell>
+                      </TableRow>
+                    }
+                    if (deletedUser.role === "4") {
+                      roleName = 'Super Admin'
+                      return <TableRow className={classes.oddEvenRow} key={index} >
+                        <TableCell className={classes.deleteUsersData}>{index + 1}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.username}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.first_name}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.last_name}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.email}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{roleName}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.product_type}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.phone_no}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.gender}</TableCell>
+                        {/* <TableCell className={classes.deleteUsersData}>{user.myuser.dialer_pass}</TableCell> */}
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_id}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_pass}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.parent_id}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.location}</TableCell>
+                        <TableCell className={classes.deleteUsersData}></TableCell>
+                      </TableRow>
+                    }
+                    if (deletedUser.role === "5") {
+                      roleName = 'Team Leader'
+                      return <TableRow className={classes.oddEvenRow} key={index} >
+                        <TableCell className={classes.deleteUsersData}>{index + 1}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.username}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.first_name}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.last_name}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.email}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{roleName}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.product_type}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.phone_no}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.gender}</TableCell>
+                        {/* <TableCell className={classes.deleteUsersData}>{user.myuser.dialer_pass}</TableCell> */}
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_id}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_pass}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.parent_id}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.location}</TableCell>
+                        <TableCell className={classes.deleteUsersData}></TableCell>
+                      </TableRow>
+                    }
+                    if (deletedUser.role === "6") {
+                      roleName = 'Backend'
+                      return <TableRow className={classes.oddEvenRow} key={index} >
+                        <TableCell className={classes.deleteUsersData}>{index + 1}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.username}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.first_name}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.last_name}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.email}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{roleName}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.product_type}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.phone_no}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.gender}</TableCell>
+                        {/* <TableCell className={classes.deleteUsersData}>{user.myuser.dialer_pass}</TableCell> */}
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_id}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_pass}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.parent_id}</TableCell>
+                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.location}</TableCell>
+                        <TableCell className={classes.deleteUsersData}></TableCell>
+                      </TableRow>
+                    }
+                  }) :
                     <div className={classes.loader}>
                       <ReactBootstrap.Spinner animation="border" />
                     </div>
@@ -487,9 +814,11 @@ export default function Users() {
                 <>
                   <Dialog open={isDeleteUser}>
                     <DialogTitle>Are You Want to Delete User?</DialogTitle>
-                    <DialogContent>
-                      <Button style={{ padding: '0 50px', marginRight: '20px' }} onClick={deleteUser}>Yes</Button>
-                      <Button style={{ padding: '0 50px' }} onClick={closeDeleteUserPopUp}>No</Button>
+                    <DialogContent style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', padding: '0', marginBottom: '20px' }}>
+                      <Button className="deleteButton" color="primary"
+                        variant="contained" onClick={deleteUser}>Yes</Button>
+                      <Button className="deleteButton" color="primary"
+                        variant="contained" onClick={closeDeleteUserPopUp}>No</Button>
                     </DialogContent>
                   </Dialog>
                 </>
@@ -513,6 +842,9 @@ export default function Users() {
                             size="small"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
+                            error={!!errors.password}
+                            helperText={errors.password}
+                            onFocus={() => setErrors("")}
                           />
                         </Grid>
                         <Grid>
@@ -530,6 +862,9 @@ export default function Users() {
                             size="small"
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
+                            error={!!errors.cnfrmPassword}
+                            helperText={errors.cnfrmPassword}
+                            onFocus={() => setErrors("")}
                           />
                         </Grid>
                         <Button type="submit" className={classes.cnfrmPasswordBtn}>
