@@ -111,13 +111,13 @@ export default function PageLayerSection(props) {
                             className="addBtn"
                             color="primary"
                             variant="contained"
-                            // startIcon={<LocalOfferIcon />}
+                        // startIcon={<LocalOfferIcon />}
                         >
                             BANK INTEREST CHART
                         </Button></NavLink> : null}
-                        <NavLink to="/dashboards/followup" activeClassName="active"><Badge className="notificationContainer" badgeContent={localStorage.getItem('notification') !== 0 ? localStorage.getItem('notification') : 0} max={999} color="secondary">
+                        {profileData.user_roles[0].user_type === 1 || profileData.user_roles[0].user_type === 2 || profileData.user_roles[0].user_type === 4 || profileData.user_roles[0].user_type === 6 ? '' : <NavLink to="/dashboards/followup" activeClassName="active"><Badge className="notificationContainer" badgeContent={localStorage.getItem('notification') !== 0 ? localStorage.getItem('notification') : 0} max={999} color="secondary">
                             <NotificationsIcon className="notificationIcon" />
-                        </Badge></NavLink>
+                        </Badge></NavLink>}
                         <div className="nameContainer" onClick={handleMenu}>
                             <div className="nameText">{userName}</div>
                             <ArrowDropDownOutlinedIcon className="arrowDown" />
