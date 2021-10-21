@@ -1,0 +1,100 @@
+$desk: 0.063;
+.iconTextContainer {
+    display: flex;
+    align-items: center;
+    margin: auto;
+    margin-top: 3 * $desk + rem;
+    width: 1024 * $desk + rem;
+    .icon {
+        width: 36 * $desk + rem;
+        height: 36 * $desk + rem;
+        margin-right: 16 * $desk + rem;
+        // margin-left: 47 * $desk + rem;
+        img {
+            width: 100%;
+            height: 100%;
+        }
+    }
+    .text {
+        font-size: 22 * $desk + rem;
+        font-weight: 600;
+        color: #727272;
+    }
+}
+.formMainContainer {
+    position: relative;
+    margin: auto;
+    margin-top: 30 * $desk + rem;
+    margin-bottom: 50 * $desk + rem;
+    width: 1024 * $desk + rem;
+    h3 {
+        font-size: 24 * $desk + rem;
+        font-weight: 600;
+        color: #535ad1;
+        margin-bottom: 25 * $desk + rem;
+    }
+    .formContainer {
+        display: flex;
+        flex-wrap: wrap;
+        width: 800 * $desk + rem;
+
+        .textField {
+            width: 244 * $desk + rem;
+            margin-right: 20 * $desk + rem !important;
+            margin-bottom: 31 * $desk + rem !important;
+            margin-top: 0 !important;
+            label {
+                color: #07498e;
+                letter-spacing: 0.4 * $desk + rem;
+                font-size: 15.5 * $desk + rem;
+            }
+            .MuiOutlinedInput-root {
+                height: 56 * $desk + rem;
+            }
+            .MuiOutlinedInput-notchedOutline {
+                border: 1px solid #bababa;
+            }
+            .MuiInputAdornment-root {
+                opacity: 0.6;
+            }
+            .MuiInputBase-input {
+                font-size: 16 * $desk + rem;
+            }
+            // .MuiInputBase-root:hover .MuiOutlinedInput-notchedOutline {
+            //     border: 2px solid #c5cee0;
+            // }
+        }
+    }
+    .borderBottom {
+        width: 774 * $desk + rem;
+        border-bottom: solid 1px #eaeaea;
+    }
+    .saveButton {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 200 * $desk + rem;
+        height: 50 * $desk + rem;
+        border-radius: 33 * $desk + rem;
+        background-color: #1cb980;
+        cursor: pointer;
+        margin-top: 18.5 * $desk + rem;
+        margin-left: 576 * $desk + rem;
+        .btnText {
+            font-size: 16 * $desk + rem;
+            font-weight: 500;
+            color: #fff;
+        }
+        .arrowIcon {
+            width: 16 * $desk + rem;
+            height: 16 * $desk + rem;
+            margin-left: 27.5 * $desk + rem;
+            margin-top: -1 * $desk + rem;
+            img {
+                width: 100%;
+                height: 100%;
+                vertical-align: unset !important;
+            }
+        }
+    }
+}

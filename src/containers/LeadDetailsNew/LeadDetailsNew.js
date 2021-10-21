@@ -27,7 +27,7 @@ import {
     getProfileData,
     getStatusData
 } from "../../global/leadsGlobalData";
-import { useParams, useHistory, useLocation } from 'react-router-dom';
+import { useParams, useHistory, useLocation, NavLink } from 'react-router-dom';
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 function Alert(props) {
@@ -1224,12 +1224,14 @@ export default function LeadDetailsNew(props) {
                         </AccordionDetails>
                     </Accordion>
                     <Grid className="completeJourneyContainer">
-                        <Button
-                            className="journeyBtn"
-                            color="primary"
-                            variant="contained">
-                            COMPLETE JOURNEY
-                        </Button>
+                        <NavLink to={`/dashboards/PersonalLoanForm/${leadid}`} target="_blank">
+                            <Button
+                                className="journeyBtn"
+                                color="primary"
+                                variant="contained">
+                                COMPLETE JOURNEY
+                            </Button>
+                        </NavLink>
                         <Button
                             className="journeyBtn"
                             color="primary"

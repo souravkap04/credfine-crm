@@ -1,0 +1,125 @@
+.iconTextContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin: auto;
+  margin-top: 0.189rem;
+  width: 64.512rem;
+}
+
+.iconTextContainer .icon {
+  width: 2.268rem;
+  height: 2.268rem;
+  margin-right: 1.008rem;
+}
+
+.iconTextContainer .icon img {
+  width: 100%;
+  height: 100%;
+}
+
+.iconTextContainer .text {
+  font-size: 1.386rem;
+  font-weight: 600;
+  color: #727272;
+}
+
+.formMainContainer {
+  position: relative;
+  margin: auto;
+  margin-top: 1.89rem;
+  margin-bottom: 3.15rem;
+  width: 64.512rem;
+}
+
+.formMainContainer h3 {
+  font-size: 1.512rem;
+  font-weight: 600;
+  color: #535ad1;
+  margin-bottom: 1.575rem;
+}
+
+.formMainContainer .formContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  width: 50.4rem;
+}
+
+.formMainContainer .formContainer .textField {
+  width: 15.372rem;
+  margin-right: 1.26rem !important;
+  margin-bottom: 1.953rem !important;
+  margin-top: 0 !important;
+}
+
+.formMainContainer .formContainer .textField label {
+  color: #07498e;
+  letter-spacing: 0.0252rem;
+  font-size: 0.9765rem;
+}
+
+.formMainContainer .formContainer .textField .MuiOutlinedInput-root {
+  height: 3.528rem;
+}
+
+.formMainContainer .formContainer .textField .MuiOutlinedInput-notchedOutline {
+  border: 1px solid #bababa;
+}
+
+.formMainContainer .formContainer .textField .MuiInputAdornment-root {
+  opacity: 0.6;
+}
+
+.formMainContainer .formContainer .textField .MuiInputBase-input {
+  font-size: 1.008rem;
+}
+
+.formMainContainer .borderBottom {
+  width: 48.762rem;
+  border-bottom: solid 1px #eaeaea;
+}
+
+.formMainContainer .saveButton {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 12.6rem;
+  height: 3.15rem;
+  border-radius: 2.079rem;
+  background-color: #1cb980;
+  cursor: pointer;
+  margin-top: 1.1655rem;
+  margin-left: 36.288rem;
+}
+
+.formMainContainer .saveButton .btnText {
+  font-size: 1.008rem;
+  font-weight: 500;
+  color: #fff;
+}
+
+.formMainContainer .saveButton .arrowIcon {
+  width: 1.008rem;
+  height: 1.008rem;
+  margin-left: 1.7325rem;
+  margin-top: -0.063rem;
+}
+
+.formMainContainer .saveButton .arrowIcon img {
+  width: 100%;
+  height: 100%;
+  vertical-align: unset !important;
+}
+/*# sourceMappingURL=formcontainer.css.map */

@@ -27,6 +27,8 @@ import baseUrl from './global/api';
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import PricingPopup from './containers/PricingPopup/PricingPopup';
+import PersonalLoanForm from './containers/PersonalLoanForm/PersonalLoanForm';
+import HDFCForm from './containers/HDFCForm/HDFCForm';
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -125,6 +127,8 @@ function App() {
           <PrivateRoute exact path="/dashboards/bulkuploads" component={BulkUploads} />
           <PrivateRoute exact path="/dashboards/addusers" component={AddUsers} />
           <PrivateRoute exact path="/dashboards/pricing" component={PricingPopup} />
+          <PrivateRoute exact path="/dashboards/PersonalLoanForm/:leadid" component={PersonalLoanForm} />
+          <PrivateRoute exact path="/dashboards/HDFCForm" component={HDFCForm} />
         </Switch>
       </Router>
     </div>

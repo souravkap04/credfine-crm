@@ -1,0 +1,651 @@
+.personalFormContainer {
+  position: relative;
+}
+
+.personalFormContainer .leftSection {
+  position: fixed;
+  width: 14.994rem;
+  background-color: #8669d9;
+  height: 100%;
+}
+
+.personalFormContainer .leftSection .logoContainer {
+  width: 100%;
+  height: 5.922rem;
+  background-color: #fff;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.personalFormContainer .leftSection .progressContainer {
+  margin-top: 2.835rem;
+}
+
+.personalFormContainer .leftSection .progressContainer .progressBox {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.personalFormContainer .leftSection .progressContainer .progressBox .progressIconBox {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-left: 1.953rem;
+}
+
+.personalFormContainer .leftSection .progressContainer .progressBox .progressIconBox .iconBar {
+  width: 1.134rem;
+  height: 1.134rem;
+  border: solid 1px #fff;
+  background-color: #fff;
+  border-radius: 50%;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+
+.personalFormContainer .leftSection .progressContainer .progressBox .progressIconBox .activeiconBar {
+  border: solid 1px #1cb980;
+  background-color: #1cb980;
+}
+
+.personalFormContainer .leftSection .progressContainer .progressBox .progressIconBox .bottomProgress {
+  width: 0;
+  height: 3.213rem;
+  border: solid 1px #fff;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+
+.personalFormContainer .leftSection .progressContainer .progressBox .progressIconBox .activebottomProgress {
+  border: solid 1px #1cb980;
+}
+
+.personalFormContainer .leftSection .progressContainer .progressBox .iconText {
+  font-size: 0.945rem;
+  font-weight: 500;
+  margin-left: 0.504rem;
+  margin-top: -0.126rem;
+  color: #fff;
+}
+
+.personalFormContainer .leftSection .progressContainer .progressBox .activeiconText {
+  color: #daccff;
+}
+
+.personalFormContainer .rightSection {
+  position: relative;
+  width: auto;
+  height: 100%;
+  margin-left: 14.994rem;
+  background-color: #fff;
+}
+
+.personalFormContainer .rightSection .listGroup {
+  position: absolute;
+  z-index: 100;
+  max-width: 15.75rem;
+  max-height: 10.71rem;
+  overflow-y: scroll;
+  margin-top: -1.89rem;
+}
+
+.personalFormContainer .rightSection .listGroup .list-group-item {
+  cursor: pointer;
+}
+
+.personalFormContainer .rightSection .listGroup::-webkit-scrollbar {
+  width: 0.504rem;
+}
+
+.personalFormContainer .rightSection .listGroup::-webkit-scrollbar-thumb {
+  background-color: #f7f9fc;
+  border-radius: 0.504rem;
+}
+
+.personalFormContainer .rightSection .adjustBackground {
+  height: 100vh;
+  background-color: #fff;
+}
+
+.personalFormContainer .rightSection .headerContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  width: 64.512rem;
+  height: 5.922rem;
+  margin: auto;
+}
+
+.personalFormContainer .rightSection .headerContainer .backButton {
+  width: 1.512rem;
+  height: 1.512rem;
+  cursor: pointer;
+}
+
+.personalFormContainer .rightSection .headerContainer .backButton img {
+  width: 100%;
+  height: 100%;
+}
+
+.personalFormContainer .rightSection .headerContainer .needHelpContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.personalFormContainer .rightSection .headerContainer .needHelpContainer .leftPart {
+  width: 2.142rem;
+  height: 2.142rem;
+  margin-right: 0.504rem;
+}
+
+.personalFormContainer .rightSection .headerContainer .needHelpContainer .leftPart img {
+  width: 100%;
+  height: 100%;
+}
+
+.personalFormContainer .rightSection .headerContainer .needHelpContainer .rightPart .needHelpText {
+  font-size: 0.882rem;
+  color: #535ad1;
+  line-height: 0.756rem;
+}
+
+.personalFormContainer .rightSection .headerContainer .needHelpContainer .rightPart .numberText {
+  font-size: 1.26rem;
+  font-weight: 800;
+  color: #fd914d;
+}
+
+.personalFormContainer .rightSection .calculationContainer {
+  position: relative;
+  width: 64.512rem;
+  height: 7.623rem;
+  border-radius: 0.504rem;
+  background-color: #f7f7f7;
+  margin: auto;
+  margin-top: 1.638rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.personalFormContainer .rightSection .calculationContainer .personalLacsContainer {
+  position: relative;
+  margin-left: 1.764rem;
+}
+
+.personalFormContainer .rightSection .calculationContainer .personalLacsContainer label {
+  margin-top: 1.575rem;
+}
+
+.personalFormContainer .rightSection .calculationContainer .personalLacsContainer .loanCard {
+  position: relative;
+  width: 21.42rem;
+}
+
+.personalFormContainer .rightSection .calculationContainer .personalLacsContainer .loanCard .tagText {
+  position: absolute;
+  right: 0.126rem;
+  top: -1.26rem;
+  font-size: 1.008rem;
+  font-weight: 600;
+}
+
+.personalFormContainer .rightSection .calculationContainer .personalLacsContainer .loanCard .loanCardBar {
+  height: 0.504rem;
+  color: #d6d6d6;
+}
+
+.personalFormContainer .rightSection .calculationContainer .personalLacsContainer .loanCard .loanCardBar .MuiSlider-track {
+  color: #fd914d;
+}
+
+.personalFormContainer .rightSection .calculationContainer .personalLacsContainer .loanCard .loanCardBar .MuiSlider-thumb {
+  width: 1.512rem;
+  height: 1.512rem;
+  background-color: #535ad1;
+}
+
+.personalFormContainer .rightSection .calculationContainer .personalMonthContainer {
+  position: relative;
+  margin-left: 3.528rem;
+}
+
+.personalFormContainer .rightSection .calculationContainer .personalMonthContainer label {
+  margin-top: 1.575rem;
+}
+
+.personalFormContainer .rightSection .calculationContainer .personalMonthContainer .loanCard {
+  position: relative;
+  width: 21.42rem;
+}
+
+.personalFormContainer .rightSection .calculationContainer .personalMonthContainer .loanCard .tagText {
+  position: absolute;
+  right: 0.126rem;
+  top: -1.26rem;
+  font-size: 1.008rem;
+  font-weight: 600;
+}
+
+.personalFormContainer .rightSection .calculationContainer .personalMonthContainer .loanCard .loanCardBar {
+  height: 0.504rem;
+  color: #d6d6d6;
+}
+
+.personalFormContainer .rightSection .calculationContainer .personalMonthContainer .loanCard .loanCardBar .MuiSlider-track {
+  color: #fd914d;
+}
+
+.personalFormContainer .rightSection .calculationContainer .personalMonthContainer .loanCard .loanCardBar .MuiSlider-thumb {
+  width: 1.512rem;
+  height: 1.512rem;
+  background-color: #535ad1;
+}
+
+.personalFormContainer .rightSection .calculationContainer .indicationContainer {
+  margin-top: 1.071rem;
+  margin-left: 3.591rem;
+}
+
+.personalFormContainer .rightSection .calculationContainer .indicationContainer .loanLacText {
+  font-size: 2.898rem;
+  font-weight: bold;
+  color: #535ad1;
+  line-height: 3.465rem;
+}
+
+.personalFormContainer .rightSection .calculationContainer .indicationContainer .loanMonthText {
+  font-size: 1.512rem;
+  font-weight: 300;
+  color: #535ad1;
+  margin-left: 0.315rem;
+}
+
+.personalFormContainer .rightSection .exclusiveHeaderContainer {
+  position: relative;
+  width: 64.512rem;
+  margin: auto;
+  margin-top: 1.323rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.personalFormContainer .rightSection .exclusiveHeaderContainer h3 {
+  font-size: 1.386rem;
+  font-weight: 600;
+  color: #535ad1;
+  margin-bottom: 0;
+}
+
+.personalFormContainer .rightSection .exclusiveHeaderContainer .viewContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.personalFormContainer .rightSection .exclusiveHeaderContainer .viewContainer .listImage {
+  width: 1.386rem;
+  height: 1.386rem;
+  margin-right: 1.008rem;
+  cursor: pointer;
+}
+
+.personalFormContainer .rightSection .exclusiveHeaderContainer .viewContainer .listImage img {
+  width: 100%;
+  height: 100%;
+  vertical-align: unset;
+  -webkit-filter: grayscale(1);
+          filter: grayscale(1);
+}
+
+.personalFormContainer .rightSection .exclusiveHeaderContainer .viewContainer .gridImage {
+  width: 1.386rem;
+  height: 1.386rem;
+  margin-right: 1.008rem;
+  cursor: pointer;
+}
+
+.personalFormContainer .rightSection .exclusiveHeaderContainer .viewContainer .gridImage img {
+  width: 100%;
+  height: 100%;
+  vertical-align: unset;
+  -webkit-filter: grayscale(1);
+          filter: grayscale(1);
+}
+
+.personalFormContainer .rightSection .exclusiveHeaderContainer .viewContainer .activeImage img {
+  -webkit-filter: grayscale(0);
+          filter: grayscale(0);
+}
+
+.personalFormContainer .rightSection .offerMainCardContainer {
+  position: relative;
+  width: 64.512rem;
+  margin: auto;
+  margin-top: 0.945rem;
+  height: 115vh;
+}
+
+.personalFormContainer .rightSection .offerMainCardContainer .offerCardContainer {
+  width: 64.512rem;
+  height: 6.3rem;
+  border-radius: 0.567rem;
+  -webkit-box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.1);
+          box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-bottom: 1.26rem;
+}
+
+.personalFormContainer .rightSection .offerMainCardContainer .offerCardContainer .bankLogoImage {
+  width: 9.45rem;
+  height: 3.15rem;
+  margin-left: 3.15rem;
+  margin-right: 3.15rem;
+}
+
+.personalFormContainer .rightSection .offerMainCardContainer .offerCardContainer .bankLogoImage img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+
+.personalFormContainer .rightSection .offerMainCardContainer .offerCardContainer .rate {
+  width: 7.56rem;
+  font-size: 0.945rem;
+  color: #535ad1;
+}
+
+.personalFormContainer .rightSection .offerMainCardContainer .offerCardContainer .price {
+  width: 7.56rem;
+  font-size: 0.945rem;
+  color: #535ad1;
+}
+
+.personalFormContainer .rightSection .offerMainCardContainer .offerCardContainer .months {
+  width: 7.245rem;
+  font-size: 0.945rem;
+  color: #535ad1;
+}
+
+.personalFormContainer .rightSection .offerMainCardContainer .offerCardContainer .after12 {
+  width: 7.875rem;
+  font-size: 0.945rem;
+  color: #535ad1;
+}
+
+.personalFormContainer .rightSection .offerMainCardContainer .offerCardContainer .after18 {
+  width: 7.875rem;
+  font-size: 0.945rem;
+  color: #535ad1;
+}
+
+.personalFormContainer .rightSection .offerMainCardContainer .offerCardContainer .applyBtn {
+  width: 8.379rem;
+  height: 2.52rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border-radius: 1.26rem;
+  background-color: #bcbcbc;
+  cursor: pointer;
+}
+
+.personalFormContainer .rightSection .offerMainCardContainer .offerCardContainer .applyBtn .btnText {
+  font-size: 0.945rem;
+  font-weight: 500;
+  color: #fff;
+}
+
+.personalFormContainer .rightSection .offerMainCardContainer .offerCardContainer:hover {
+  -webkit-box-shadow: 0 3px 16px 0 rgba(83, 90, 209, 0.3);
+          box-shadow: 0 3px 16px 0 rgba(83, 90, 209, 0.3);
+  cursor: pointer;
+}
+
+.personalFormContainer .rightSection .offerMainCardContainer .offerCardContainer:hover .applyBtn {
+  width: 8.379rem;
+  height: 2.52rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border-radius: 1.26rem;
+  -webkit-box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+          box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+  background-color: #1cb980;
+  cursor: pointer;
+}
+
+.personalFormContainer .rightSection .offerMainCardContainer .offerCardContainer:hover .applyBtn .btnText {
+  font-size: 0.945rem;
+  font-weight: 500;
+  color: #fff;
+}
+
+.personalFormContainer .rightSection .OfferMainGridContainer {
+  position: relative;
+  margin: auto;
+  width: 64.512rem;
+  margin-top: 0.945rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+.personalFormContainer .rightSection .OfferMainGridContainer .offerGridContainer {
+  position: relative;
+  margin-right: 0.882rem;
+  margin-left: 0.882rem;
+  margin-bottom: 2.016rem;
+  width: 19.656rem;
+  height: 17.64rem;
+  border-radius: 0.567rem;
+  -webkit-box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.1);
+          box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+.personalFormContainer .rightSection .OfferMainGridContainer .offerGridContainer .bankLogoImage {
+  position: relative;
+  width: 9.45rem;
+  height: 3.15rem;
+  margin-left: 1.701rem;
+  margin-top: 1.449rem;
+}
+
+.personalFormContainer .rightSection .OfferMainGridContainer .offerGridContainer .bankLogoImage img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+
+.personalFormContainer .rightSection .OfferMainGridContainer .offerGridContainer .bottomAdjustContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  margin-left: 1.701rem;
+  margin-right: 1.575rem;
+}
+
+.personalFormContainer .rightSection .OfferMainGridContainer .offerGridContainer .bottomAdjustContainer .rateContainer {
+  margin-top: 1.071rem;
+  margin-bottom: 1.071rem;
+}
+
+.personalFormContainer .rightSection .OfferMainGridContainer .offerGridContainer .bottomAdjustContainer .rateContainer .label {
+  font-size: 0.882rem;
+  color: #727272;
+  margin-bottom: 0;
+}
+
+.personalFormContainer .rightSection .OfferMainGridContainer .offerGridContainer .bottomAdjustContainer .rateContainer .rate {
+  font-size: 0.945rem;
+  color: #535ad1;
+}
+
+.personalFormContainer .rightSection .OfferMainGridContainer .offerGridContainer .bottomAdjustContainer .priceContainer {
+  margin-left: 1.575rem;
+  margin-right: 1.575rem;
+  margin-top: 1.071rem;
+  margin-bottom: 1.071rem;
+}
+
+.personalFormContainer .rightSection .OfferMainGridContainer .offerGridContainer .bottomAdjustContainer .priceContainer .label {
+  font-size: 0.882rem;
+  color: #727272;
+}
+
+.personalFormContainer .rightSection .OfferMainGridContainer .offerGridContainer .bottomAdjustContainer .priceContainer .price {
+  font-size: 0.945rem;
+  color: #535ad1;
+}
+
+.personalFormContainer .rightSection .OfferMainGridContainer .offerGridContainer .bottomAdjustContainer .monthsContainer {
+  margin-top: 1.071rem;
+  margin-bottom: 1.071rem;
+}
+
+.personalFormContainer .rightSection .OfferMainGridContainer .offerGridContainer .bottomAdjustContainer .monthsContainer .label {
+  font-size: 0.882rem;
+  color: #727272;
+}
+
+.personalFormContainer .rightSection .OfferMainGridContainer .offerGridContainer .bottomAdjustContainer .monthsContainer .months {
+  font-size: 0.945rem;
+  color: #535ad1;
+}
+
+.personalFormContainer .rightSection .OfferMainGridContainer .offerGridContainer .bottomAdjustContainer .after12Container .label {
+  font-size: 0.882rem;
+  color: #727272;
+}
+
+.personalFormContainer .rightSection .OfferMainGridContainer .offerGridContainer .bottomAdjustContainer .after12Container .after12 {
+  font-size: 0.945rem;
+  color: #535ad1;
+}
+
+.personalFormContainer .rightSection .OfferMainGridContainer .offerGridContainer .bottomAdjustContainer .after18Container .label {
+  font-size: 0.882rem;
+  color: #727272;
+}
+
+.personalFormContainer .rightSection .OfferMainGridContainer .offerGridContainer .bottomAdjustContainer .after18Container .after18 {
+  font-size: 0.945rem;
+  color: #535ad1;
+}
+
+.personalFormContainer .rightSection .OfferMainGridContainer .offerGridContainer .applyBtn {
+  width: 8.379rem;
+  height: 2.52rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border-radius: 1.26rem;
+  background-color: #bcbcbc;
+  cursor: pointer;
+  margin: auto;
+  margin-top: 1.575rem;
+}
+
+.personalFormContainer .rightSection .OfferMainGridContainer .offerGridContainer .applyBtn .btnText {
+  font-size: 0.945rem;
+  font-weight: 500;
+  color: #fff;
+}
+
+.personalFormContainer .rightSection .OfferMainGridContainer .offerGridContainer:hover {
+  -webkit-box-shadow: 0 3px 16px 0 rgba(83, 90, 209, 0.3);
+          box-shadow: 0 3px 16px 0 rgba(83, 90, 209, 0.3);
+  cursor: pointer;
+}
+
+.personalFormContainer .rightSection .OfferMainGridContainer .offerGridContainer:hover .applyBtn {
+  width: 8.379rem;
+  height: 2.52rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border-radius: 1.26rem;
+  -webkit-box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+          box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+  background-color: #1cb980;
+  cursor: pointer;
+}
+
+.personalFormContainer .rightSection .OfferMainGridContainer .offerGridContainer:hover .applyBtn .btnText {
+  font-size: 0.945rem;
+  font-weight: 500;
+  color: #fff;
+}
+/*# sourceMappingURL=personalform.css.map */
