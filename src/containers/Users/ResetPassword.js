@@ -320,7 +320,7 @@ export default function Users() {
   const updateUserData = async (e) => {
     e.preventDefault();
     let item = {
-      first_name: firstName, last_name: lastName, email, role, gender, phone_no: phoneNo,
+      username: selectedUserName, first_name: firstName, last_name: lastName, email, role, gender, phone_no: phoneNo,
       product_type: productType, dialer_pass: dialerApiKey, vertage_id: vertageId, vertage_pass: vertagePass, parent_user: parent, locations: location
     };
     const headers = {
@@ -883,6 +883,22 @@ export default function Users() {
                             <TextField
                               className="textField"
                               id="outlined-full-width"
+                              label="Username"
+                              style={{ margin: 8 }}
+                              margin="normal"
+                              InputLabelProps={{
+                                shrink: true,
+                              }}
+                              variant="outlined"
+                              size="small"
+                              value={selectedUserName}
+                              onChange={(e) => setSelectedUserName(e.target.value)}
+                            />
+                          </Grid>
+                          <Grid>
+                            <TextField
+                              className="textField"
+                              id="outlined-full-width"
                               label="First Name"
                               style={{ margin: 8 }}
                               margin="normal"
@@ -895,6 +911,8 @@ export default function Users() {
                               onChange={(e) => setFirstName((e.target.value).toLowerCase().trim())}
                             />
                           </Grid>
+                        </Grid>
+                        <Grid container style={{ justifyContent: 'center' }}>
                           <Grid>
                             <TextField
                               className="textField"
@@ -911,8 +929,6 @@ export default function Users() {
                               onChange={(e) => setLastName((e.target.value).toLowerCase().trim())}
                             />
                           </Grid>
-                        </Grid>
-                        <Grid container style={{ justifyContent: 'center' }}>
                           <Grid>
                             <TextField
                               className="textField"
@@ -929,6 +945,8 @@ export default function Users() {
                               onChange={(e) => setEmail((e.target.value).toLowerCase().trim())}
                             />
                           </Grid>
+                        </Grid>
+                        <Grid container style={{ justifyContent: 'center' }}>
                           <Grid>
                             <TextField
                               select
@@ -960,8 +978,6 @@ export default function Users() {
                               <option value="6">Backend</option>
                             </TextField>
                           </Grid>
-                        </Grid>
-                        <Grid container style={{ justifyContent: 'center' }}>
                           <Grid>
                             <TextField
                               select
@@ -989,6 +1005,8 @@ export default function Users() {
                               <option value="LAP">Loan Against Property</option>
                             </TextField>
                           </Grid>
+                        </Grid>
+                        <Grid container style={{ justifyContent: 'center' }}>
                           <Grid>
                             <TextField
                               className="textField"
@@ -1010,8 +1028,6 @@ export default function Users() {
                               }}
                             />
                           </Grid>
-                        </Grid>
-                        <Grid container style={{ justifyContent: 'center' }}>
                           <Grid>
                             <TextField
                               select
@@ -1036,22 +1052,6 @@ export default function Users() {
                               <option value="F">Female</option>
                               <option value="T">LGBT</option>
                             </TextField>
-                          </Grid>
-                          <Grid>
-                            <TextField
-                              className="textField"
-                              id="outlined-full-width"
-                              label="Dialer Api Key"
-                              style={{ margin: 8 }}
-                              margin="normal"
-                              InputLabelProps={{
-                                shrink: true,
-                              }}
-                              variant="outlined"
-                              size="small"
-                              value={dialerApiKey}
-                              onChange={(e) => setDialerApiKey((e.target.value).trim())}
-                            />
                           </Grid>
                         </Grid>
                         <Grid container style={{ justifyContent: 'center' }}>
