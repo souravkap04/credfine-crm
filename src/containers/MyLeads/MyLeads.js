@@ -13,7 +13,7 @@ import { getCampaign, getProfileData, getStatusData } from '../../global/leadsGl
 import ChevronLeftOutlinedIcon from '@material-ui/icons/ChevronLeftOutlined';
 import ChevronRightOutlinedIcon from '@material-ui/icons/ChevronRightOutlined';
 import Button from '@material-ui/core/Button'
-import { clickToCallApi, vertageDialerApi } from '../../global/callApi';
+import { clickToCallApi, haloocomDialerApi } from '../../global/callApi';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import CallIcon from '@material-ui/icons/Call';
@@ -191,7 +191,7 @@ export default function MyLeads(props) {
   const [isCallNotConnected, setIsCallNotConnected] = useState(false)
   const [rowsPerPage, setRowsPerPage] = React.useState(100);
   const [totalDataPerPage, settotalDataPerPage] = useState(0);
-  const [vertageCall, setVertageCall] = useState(false);
+  const [dialerCall, setDialerCall] = useState(false);
   const [disableHangupBtn, setDisableHangupBtn] = useState(true);
   const [state, setState] = useState(false);
   const [status, setStatus] = useState('');
@@ -353,10 +353,10 @@ export default function MyLeads(props) {
       setTimeout(() => {
         history.push(`/dashboards/myleads/edit/${leadID}`)
       }, 1500)
-    } else if (profileData.dialer === 'VERTAGE') {
-      await axios.post(`${vertageDialerApi}&user=${profileData.vertage_id}&pass=${profileData.vertage_pass}&agent_user=${profileData.vertage_id}&function=external_dial&value=${customerNo}&phone_code=+91&search=YES&preview=NO&focus=YES`)
+    } else if (profileData.dialer === 'HALOOCOM') {
+      await axios.post(`${haloocomDialerApi}/click2dial.php?number=${customerNo}&user=1001`)
         .then((response) => {
-          setVertageCall(true);
+          setDialerCall(true);
           setDisableHangupBtn(false);
           if (response.status === 200) {
             localStorage.setItem('callHangUp', true)
@@ -378,7 +378,7 @@ export default function MyLeads(props) {
     setIsCallNotConnected(false)
   }
   const disableDialerPopUp = () => {
-    setVertageCall(false)
+    setDialerCall(false)
     setDisableHangupBtn(false)
   }
   const openDrawer = () => {
@@ -666,7 +666,7 @@ export default function MyLeads(props) {
           />
         </div>
         <div>
-          <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={vertageCall} autoHideDuration={1500} onClose={disableDialerPopUp}>
+          <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={dialerCall} autoHideDuration={1500} onClose={disableDialerPopUp}>
             <Alert onClose={disableDialerPopUp} severity="info">
               Calling...
             </Alert>
