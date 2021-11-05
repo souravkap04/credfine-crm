@@ -168,6 +168,7 @@
 .pageAdjustSection .rightSection .appBarContainer .rightAppBarSection .nameContainer .nameText {
   color: #8f9bb3;
   font-size: 1.18056vw;
+  text-transform: capitalize;
 }
 
 .pageAdjustSection .rightSection .appBarContainer .rightAppBarSection .nameContainer .arrowDown {

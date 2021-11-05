@@ -164,7 +164,7 @@ export default function UserCreate() {
                     inputRef={register({
                       required: 'User name is required',
                       pattern: {
-                        value: /^(?! )[a-z0-9]*(?<! )$/g,
+                        value: /^(?! )[A-Za-z0-9]*(?<! )$/g,
                         message: 'please enter a valid user name'
                       }
                     })}
