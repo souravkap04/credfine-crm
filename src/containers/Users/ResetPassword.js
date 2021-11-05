@@ -910,7 +910,7 @@ export default function Users() {
                               variant="outlined"
                               size="small"
                               value={firstName}
-                              onChange={(e) => setFirstName((e.target.value).toLowerCase().trim())}
+                              onChange={(e) => setFirstName(e.target.value)}
                             />
                           </Grid>
                         </Grid>
@@ -928,7 +928,7 @@ export default function Users() {
                               variant="outlined"
                               size="small"
                               value={lastName}
-                              onChange={(e) => setLastName((e.target.value).toLowerCase().trim())}
+                              onChange={(e) => setLastName(e.target.value)}
                             />
                           </Grid>
                           <Grid>

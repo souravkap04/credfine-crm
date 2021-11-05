@@ -623,7 +623,7 @@ export default function MyLeads(props) {
               myLeads.map((my_leads, index) => {
                 let leadPhoneNo = maskPhoneNo(my_leads.lead.phone_no_encrypt)
                 let updatedDate = new Date(my_leads.updated_date)
-                let currentUpdatedDate = updatedDate.toLocaleDateString() + ' ' + moment(updatedDate.toLocaleTimeString(), "HH:mm:ss").format("hh:mm A")
+                let currentUpdatedDate = updatedDate.toLocaleDateString() + ' ' + moment(updatedDate.toLocaleTimeString(), "HH:mm:ss a").format("hh:mm A")
                 return (
                   <TableRow className={classes.oddEvenRow} key={index}>
                     <TableCell className={classes.tabledata}>{index + 1}</TableCell>
