@@ -396,13 +396,6 @@ export default function MyLeads(props) {
   const closeDrawer = () => {
     setState(false)
     setisError(false)
-    setStatus('')
-    setstartDate('')
-    setendDate('')
-    setSubStatus('')
-    setCampaign('')
-    setUserID('')
-    setdateType('')
   };
   return (
     <PageLayerSection>
