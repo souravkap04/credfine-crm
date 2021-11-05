@@ -166,6 +166,7 @@ export default function Users() {
   const [isDisplay, setIsDisplay] = useState(false);
   const [deleteCount, setDeleteCount] = useState(0);
   const [selectedUserName, setSelectedUserName] = useState('');
+  const [updatedUserName, setUpdatedUserName] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [vertageId, setVertageId] = useState("");
   const [vertagePass, setVertagePass] = useState("");
@@ -298,9 +299,10 @@ export default function Users() {
         console.log(error);
       })
   }
-  const editUser = (userName, firstName, lastName, email, role, gender, phoneNo, productType, dialerPass, vertageId, vertagePass, parent_user, location) => {
+  const editUser = (userName, updatedUserName, firstName, lastName, email, role, gender, phoneNo, productType, dialerPass, vertageId, vertagePass, parent_user, location) => {
     setIsEditUser(true);
     setSelectedUserName(userName);
+    setUpdatedUserName(updatedUserName);
     setFirstName(firstName);
     setLastName(lastName);
     setEmail(email);
@@ -320,7 +322,7 @@ export default function Users() {
   const updateUserData = async (e) => {
     e.preventDefault();
     let item = {
-      first_name: firstName, last_name: lastName, email, role, gender, phone_no: phoneNo,
+      username: updatedUserName, first_name: firstName, last_name: lastName, email, role, gender, phone_no: phoneNo,
       product_type: productType, dialer_pass: dialerApiKey, vertage_id: vertageId, vertage_pass: vertagePass, parent_user: parent, locations: location
     };
     const headers = {
@@ -449,7 +451,7 @@ export default function Users() {
                           </Tooltip>
                           <Tooltip title="Edit">
                             <IconButton
-                              onClick={() => editUser(user.myuser.username, user.myuser.first_name,
+                              onClick={() => editUser(user.myuser.username, user.myuser.username, user.myuser.first_name,
                                 user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
                                 user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
                                 user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
@@ -490,7 +492,7 @@ export default function Users() {
                           </Tooltip>
                           <Tooltip title="Edit">
                             <IconButton
-                              onClick={() => editUser(user.myuser.username, user.myuser.first_name,
+                              onClick={() => editUser(user.myuser.username, user.myuser.username, user.myuser.first_name,
                                 user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
                                 user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
                                 user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
@@ -531,7 +533,7 @@ export default function Users() {
                           </Tooltip>
                           <Tooltip title="Edit">
                             <IconButton
-                              onClick={() => editUser(user.myuser.username, user.myuser.first_name,
+                              onClick={() => editUser(user.myuser.username, user.myuser.username, user.myuser.first_name,
                                 user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
                                 user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
                                 user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
@@ -572,7 +574,7 @@ export default function Users() {
                           </Tooltip>
                           <Tooltip title="Edit">
                             <IconButton
-                              onClick={() => editUser(user.myuser.username, user.myuser.first_name,
+                              onClick={() => editUser(user.myuser.username, user.myuser.username, user.myuser.first_name,
                                 user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
                                 user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
                                 user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
@@ -613,7 +615,7 @@ export default function Users() {
                           </Tooltip>
                           <Tooltip title="Edit">
                             <IconButton
-                              onClick={() => editUser(user.myuser.username, user.myuser.first_name,
+                              onClick={() => editUser(user.myuser.username, user.myuser.username, user.myuser.first_name,
                                 user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
                                 user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
                                 user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
@@ -654,7 +656,7 @@ export default function Users() {
                           </Tooltip>
                           <Tooltip title="Edit">
                             <IconButton
-                              onClick={() => editUser(user.myuser.username, user.myuser.first_name,
+                              onClick={() => editUser(user.myuser.username, user.myuser.username, user.myuser.first_name,
                                 user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
                                 user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
                                 user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
@@ -883,6 +885,22 @@ export default function Users() {
                             <TextField
                               className="textField"
                               id="outlined-full-width"
+                              label="Username"
+                              style={{ margin: 8 }}
+                              margin="normal"
+                              InputLabelProps={{
+                                shrink: true,
+                              }}
+                              variant="outlined"
+                              size="small"
+                              value={updatedUserName}
+                              onChange={(e) => setUpdatedUserName(e.target.value)}
+                            />
+                          </Grid>
+                          <Grid>
+                            <TextField
+                              className="textField"
+                              id="outlined-full-width"
                               label="First Name"
                               style={{ margin: 8 }}
                               margin="normal"
@@ -895,6 +913,8 @@ export default function Users() {
                               onChange={(e) => setFirstName((e.target.value).toLowerCase().trim())}
                             />
                           </Grid>
+                        </Grid>
+                        <Grid container style={{ justifyContent: 'center' }}>
                           <Grid>
                             <TextField
                               className="textField"
@@ -911,8 +931,6 @@ export default function Users() {
                               onChange={(e) => setLastName((e.target.value).toLowerCase().trim())}
                             />
                           </Grid>
-                        </Grid>
-                        <Grid container style={{ justifyContent: 'center' }}>
                           <Grid>
                             <TextField
                               className="textField"
@@ -929,6 +947,8 @@ export default function Users() {
                               onChange={(e) => setEmail((e.target.value).toLowerCase().trim())}
                             />
                           </Grid>
+                        </Grid>
+                        <Grid container style={{ justifyContent: 'center' }}>
                           <Grid>
                             <TextField
                               select
@@ -960,8 +980,6 @@ export default function Users() {
                               <option value="6">Backend</option>
                             </TextField>
                           </Grid>
-                        </Grid>
-                        <Grid container style={{ justifyContent: 'center' }}>
                           <Grid>
                             <TextField
                               select
@@ -989,6 +1007,8 @@ export default function Users() {
                               <option value="LAP">Loan Against Property</option>
                             </TextField>
                           </Grid>
+                        </Grid>
+                        <Grid container style={{ justifyContent: 'center' }}>
                           <Grid>
                             <TextField
                               className="textField"
@@ -1010,8 +1030,6 @@ export default function Users() {
                               }}
                             />
                           </Grid>
-                        </Grid>
-                        <Grid container style={{ justifyContent: 'center' }}>
                           <Grid>
                             <TextField
                               select
@@ -1036,22 +1054,6 @@ export default function Users() {
                               <option value="F">Female</option>
                               <option value="T">LGBT</option>
                             </TextField>
-                          </Grid>
-                          <Grid>
-                            <TextField
-                              className="textField"
-                              id="outlined-full-width"
-                              label="Dialer Api Key"
-                              style={{ margin: 8 }}
-                              margin="normal"
-                              InputLabelProps={{
-                                shrink: true,
-                              }}
-                              variant="outlined"
-                              size="small"
-                              value={dialerApiKey}
-                              onChange={(e) => setDialerApiKey((e.target.value).trim())}
-                            />
                           </Grid>
                         </Grid>
                         <Grid container style={{ justifyContent: 'center' }}>
