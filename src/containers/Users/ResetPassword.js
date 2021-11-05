@@ -166,6 +166,7 @@ export default function Users() {
   const [isDisplay, setIsDisplay] = useState(false);
   const [deleteCount, setDeleteCount] = useState(0);
   const [selectedUserName, setSelectedUserName] = useState('');
+  const [updatedUserName, setUpdatedUserName] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [vertageId, setVertageId] = useState("");
   const [vertagePass, setVertagePass] = useState("");
@@ -298,9 +299,10 @@ export default function Users() {
         console.log(error);
       })
   }
-  const editUser = (userName, firstName, lastName, email, role, gender, phoneNo, productType, dialerPass, vertageId, vertagePass, parent_user, location) => {
+  const editUser = (userName, updatedUserName, firstName, lastName, email, role, gender, phoneNo, productType, dialerPass, vertageId, vertagePass, parent_user, location) => {
     setIsEditUser(true);
     setSelectedUserName(userName);
+    setUpdatedUserName(updatedUserName);
     setFirstName(firstName);
     setLastName(lastName);
     setEmail(email);
@@ -320,7 +322,7 @@ export default function Users() {
   const updateUserData = async (e) => {
     e.preventDefault();
     let item = {
-      username: selectedUserName, first_name: firstName, last_name: lastName, email, role, gender, phone_no: phoneNo,
+      username: updatedUserName, first_name: firstName, last_name: lastName, email, role, gender, phone_no: phoneNo,
       product_type: productType, dialer_pass: dialerApiKey, vertage_id: vertageId, vertage_pass: vertagePass, parent_user: parent, locations: location
     };
     const headers = {
@@ -449,7 +451,7 @@ export default function Users() {
                           </Tooltip>
                           <Tooltip title="Edit">
                             <IconButton
-                              onClick={() => editUser(user.myuser.username, user.myuser.first_name,
+                              onClick={() => editUser(user.myuser.username, user.myuser.username, user.myuser.first_name,
                                 user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
                                 user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
                                 user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
@@ -490,7 +492,7 @@ export default function Users() {
                           </Tooltip>
                           <Tooltip title="Edit">
                             <IconButton
-                              onClick={() => editUser(user.myuser.username, user.myuser.first_name,
+                              onClick={() => editUser(user.myuser.username, user.myuser.username, user.myuser.first_name,
                                 user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
                                 user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
                                 user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
@@ -531,7 +533,7 @@ export default function Users() {
                           </Tooltip>
                           <Tooltip title="Edit">
                             <IconButton
-                              onClick={() => editUser(user.myuser.username, user.myuser.first_name,
+                              onClick={() => editUser(user.myuser.username, user.myuser.username, user.myuser.first_name,
                                 user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
                                 user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
                                 user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
@@ -572,7 +574,7 @@ export default function Users() {
                           </Tooltip>
                           <Tooltip title="Edit">
                             <IconButton
-                              onClick={() => editUser(user.myuser.username, user.myuser.first_name,
+                              onClick={() => editUser(user.myuser.username, user.myuser.username, user.myuser.first_name,
                                 user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
                                 user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
                                 user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
@@ -613,7 +615,7 @@ export default function Users() {
                           </Tooltip>
                           <Tooltip title="Edit">
                             <IconButton
-                              onClick={() => editUser(user.myuser.username, user.myuser.first_name,
+                              onClick={() => editUser(user.myuser.username, user.myuser.username, user.myuser.first_name,
                                 user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
                                 user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
                                 user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
@@ -654,7 +656,7 @@ export default function Users() {
                           </Tooltip>
                           <Tooltip title="Edit">
                             <IconButton
-                              onClick={() => editUser(user.myuser.username, user.myuser.first_name,
+                              onClick={() => editUser(user.myuser.username, user.myuser.username, user.myuser.first_name,
                                 user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
                                 user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
                                 user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
@@ -891,8 +893,8 @@ export default function Users() {
                               }}
                               variant="outlined"
                               size="small"
-                              value={selectedUserName}
-                              onChange={(e) => setSelectedUserName(e.target.value)}
+                              value={updatedUserName}
+                              onChange={(e) => setUpdatedUserName(e.target.value)}
                             />
                           </Grid>
                           <Grid>
