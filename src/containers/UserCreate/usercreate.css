@@ -1,3 +1,7 @@
+.input_field {
+  width: 15.97222vw !important;
+}
+
 .input_field label {
   color: #535ad1;
   letter-spacing: 0.4px;

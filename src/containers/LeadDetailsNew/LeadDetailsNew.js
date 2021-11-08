@@ -3,7 +3,7 @@ import PageLayerSection from '../PageLayerSection/PageLayerSection';
 import './leadDetailsNew.css';
 import axios from "axios";
 import baseUrl from "../../global/api";
-import { clickToCallApi, haloocomDialerApi } from "../../global/callApi";
+import { clickToCallApi, haloocomDialerApi,haloocomMumbaiDialerApi,haloocomNoidaDialerApi } from "../../global/callApi";
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import MuiAccordion from '@material-ui/core/Accordion';
@@ -586,8 +586,19 @@ export default function LeadDetailsNew(props) {
                         setIsCalling(false);
                     }
                 })
-        } else if (profileData.dialer === 'HALOOCOM') {
-            await axios.post(`${haloocomDialerApi}/click2dial.php?number=${customerNo}&user=1001`)
+        } else if (profileData.dialer === 'HALOOCOM-Mumbai') {
+            await axios.post(`${haloocomMumbaiDialerApi}/click2dial.php?number=${customerNo}&user=1001`)
+                .then((response) => {
+                    setDialerCall(true);
+                    setDisableHangupBtn(false);
+                    if (response.status === 200) {
+                        localStorage.setItem('callHangUp', true)
+                    }
+                }).catch((error) => {
+                    console.log('error');
+                })
+        }else if (profileData.dialer === 'HALOOCOM-Noida') {
+            await axios.post(`${haloocomNoidaDialerApi}/click2dial.php?number=${customerNo}&user=1001`)
                 .then((response) => {
                     setDialerCall(true);
                     setDisableHangupBtn(false);
@@ -600,7 +611,8 @@ export default function LeadDetailsNew(props) {
         }
     }
     const hangupCallHandler = async () => {
-        await axios.post(`${haloocomDialerApi}/action.php?user=1001&type=Hangup`)
+        if(profileData.dialer === 'HALOOCOM-Mumbai'){
+        await axios.post(`${haloocomMumbaiDialerApi}/action.php?user=1001&type=Hangup`)
             .then((response) => {
                 // setDisableDisposeBtn(false);
                 setCallHangUpState(false);
@@ -612,6 +624,20 @@ export default function LeadDetailsNew(props) {
             }).catch((error) => {
                 console.log(error);
             })
+        }else if(profileData.dialer === 'HALOOCOM-Noida'){
+            await axios.post(`${haloocomNoidaDialerApi}/action.php?user=1001&type=Hangup`)
+                .then((response) => {
+                    // setDisableDisposeBtn(false);
+                    setCallHangUpState(false);
+                    if (response.status === 200) {
+                        localStorage.removeItem('callHangUp')
+                       return disposeCallHandler()
+                    }
+                    // setCallHangUpState(true);
+                }).catch((error) => {
+                    console.log(error);
+                })
+            }
     }
     const disposeCallHandler =  () => {
         // await axios.post()

@@ -13,7 +13,7 @@ import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOut
 import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 import Badge from '@material-ui/core/Badge';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import {haloocomDialerApi} from '../../global/callApi';
+import {haloocomDialerApi,haloocomMumbaiDialerApi,haloocomNoidaDialerApi} from '../../global/callApi';
 export default function PageLayerSection(props) {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [searchInput, setSearchInput] = useState("");
@@ -65,12 +65,24 @@ export default function PageLayerSection(props) {
         localStorage.removeItem('status_info');
         localStorage.removeItem('notification');
         localStorage.removeItem('callHangUp');
-        await axios.post(`${haloocomDialerApi}/action.php?user=1001&type=Logout`)
+        if (profileData.dialer === "HALOOCOM-Mumbai") {
+            console.log("dialer-mumbai successfully logout")
+            await axios.post(`${haloocomMumbaiDialerApi}/action.php?user=1001&type=Logout`)
         .then((response)=>{
-            console.log("dialer successfully logout")
+            console.log("dialer-mumbai successfully logout")
         }).catch((error)=>{
             console.log(error)
         })
+        }else if (profileData.dialer === 'HALOOCOM-Noida'){
+            console.log("dialer-noida successfully logout")
+            await axios.post(`${haloocomNoidaDialerApi}/action.php?user=1001&type=Logout`)
+            .then((response)=>{
+                console.log("dialer-noida successfully logout")
+            }).catch((error)=>{
+                console.log(error)
+            })
+
+        }
     }
     return (
         <div className="pageAdjustSection">
@@ -120,13 +132,13 @@ export default function PageLayerSection(props) {
                             className="addBtn"
                             color="primary"
                             variant="contained"
-                            // startIcon={<LocalOfferIcon />}
+                        // startIcon={<LocalOfferIcon />}
                         >
                             BANK INTEREST CHART
                         </Button></NavLink> : null}
-                        <NavLink to="/dashboards/followup" activeClassName="active"><Badge className="notificationContainer" badgeContent={localStorage.getItem('notification') !== 0 ? localStorage.getItem('notification') : 0} max={999} color="secondary">
+                        {profileData.user_roles[0].user_type === 1 || profileData.user_roles[0].user_type === 2 || profileData.user_roles[0].user_type === 4 || profileData.user_roles[0].user_type === 6 ? '' : <NavLink to="/dashboards/followup" activeClassName="active"><Badge className="notificationContainer" badgeContent={localStorage.getItem('notification') !== 0 ? localStorage.getItem('notification') : 0} max={999} color="secondary">
                             <NotificationsIcon className="notificationIcon" />
-                        </Badge></NavLink>
+                        </Badge></NavLink>}
                         <div className="nameContainer" onClick={handleMenu}>
                             <div className="nameText">{userName}</div>
                             <ArrowDropDownOutlinedIcon className="arrowDown" />

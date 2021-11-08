@@ -1,5 +1,6 @@
 $desk: 100 / 1440;
 .input_field {
+    width: 230 * $desk + vw !important;
     label {
         color: #535ad1;
         letter-spacing: 0.4px;
