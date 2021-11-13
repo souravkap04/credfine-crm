@@ -176,7 +176,7 @@ export default function Leads() {
   const clickToCall = async (encryptData, leadID) => {
     const customerNo = decodeURIComponent(window.atob(encryptData));
     if (profileData.dialer === 'TATA') {
-      const headers = {
+     const headers = {
         'accept': 'application/json',
         'content-type': 'application/json'
       };
@@ -199,7 +199,7 @@ export default function Leads() {
             setIsCallConnect(true);
             setIsCalling(false);
           }
-        })
+        }) 
       setTimeout(() => {
         history.push(`/dashboards/leads/edit/${leadID}`)
       }, 1500)
