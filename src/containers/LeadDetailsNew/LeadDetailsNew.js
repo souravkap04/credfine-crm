@@ -600,7 +600,7 @@ export default function LeadDetailsNew(props) {
         }
     }
     const hangupCallHandler = async () => {
-        await axios.post(`${haloocomDialerApi}/action.php?user=${profileData.vertage_id}&type=Hangup`)
+        await axios.post(`${haloocomDialerApi}/action.php?user=${profileData.vertage_id}&type=Hangup&disposition`)
             .then((response) => {
                 // setDisableDisposeBtn(false);
                 setCallHangUpState(false);
