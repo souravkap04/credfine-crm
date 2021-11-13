@@ -13,7 +13,7 @@ import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOut
 import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 import Badge from '@material-ui/core/Badge';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import {haloocomDialerApi,haloocomMumbaiDialerApi,haloocomNoidaDialerApi} from '../../global/callApi';
+import {haloocomDialerApi} from '../../global/callApi';
 export default function PageLayerSection(props) {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [searchInput, setSearchInput] = useState("");
@@ -65,23 +65,14 @@ export default function PageLayerSection(props) {
         localStorage.removeItem('status_info');
         localStorage.removeItem('notification');
         localStorage.removeItem('callHangUp');
-        if (profileData.dialer === "HALOOCOM-Mumbai") {
+        if (profileData.dialer === "HALOOCOM") {
             console.log("dialer-mumbai successfully logout")
-            await axios.post(`${haloocomMumbaiDialerApi}/action.php?user=1001&type=Logout`)
+            await axios.post(`${haloocomDialerApi}/action.php?user=${profileData.vertage_id}&type=Logout`)
         .then((response)=>{
             console.log("dialer-mumbai successfully logout")
         }).catch((error)=>{
             console.log(error)
         })
-        }else if (profileData.dialer === 'HALOOCOM-Noida'){
-            console.log("dialer-noida successfully logout")
-            await axios.post(`${haloocomNoidaDialerApi}/action.php?user=1001&type=Logout`)
-            .then((response)=>{
-                console.log("dialer-noida successfully logout")
-            }).catch((error)=>{
-                console.log(error)
-            })
-
         }
     }
     return (

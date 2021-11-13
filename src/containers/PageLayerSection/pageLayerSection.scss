@@ -94,6 +94,7 @@ $desk: 100 / 1440;
                     .nameText {
                         color: #8f9bb3;
                         font-size: 17 * $desk + vw;
+                        text-transform: capitalize;
                     }
                     .arrowDown {
                         color: #8f9bb3;

@@ -21,7 +21,7 @@ import {
   IconButton,
 } from "@material-ui/core";
 import { getCampaign, getDialer } from "../../global/leadsGlobalData";
-import {haloocomDialerApi,haloocomMumbaiDialerApi,haloocomNoidaDialerApi} from '../../global/callApi';
+import {haloocomDialerApi} from '../../global/callApi';
 import EmailOutlinedIcon from "@material-ui/icons/EmailOutlined";
 import HttpsOutlinedIcon from "@material-ui/icons/HttpsOutlined";
 import Visibility from "@material-ui/icons/Visibility";
@@ -117,28 +117,20 @@ export default function Login() {
               console.log(error);
             });
         }
+        if(dialer === "HALOOCOM"){
+          console.log("dialer-mumbai loin successfull")
+         axios.post(`${haloocomDialerApi}/action.php?user=${profileData.vertage_id}&type=Login`)
+         .then((response)=>{
+           console.log("dialer loin successfull")
+         }).catch((error)=>{
+          console.log(error);
+         })
+        }
       })
       .catch((error) => {
         setAlertMessage("This is an error alert — check it out!");
         setIsDisplay(true);
       });
-      if(dialer === "HALOOCOM-Mumbai"){
-        console.log("dialer-mumbai loin successfull")
-      await axios.post(`${haloocomMumbaiDialerApi}/action.php?user=1001&type=Login`)
-       .then((response)=>{
-         console.log("dialer loin successfull")
-       }).catch((error)=>{
-        console.log(error);
-       })
-      }else if (dialer === "HALOOCOM-Noida"){
-        console.log("dialer-noida loin successfull")
-      await axios.post(`${haloocomNoidaDialerApi}/action.php?user=1001&type=Login`)
-       .then((response)=>{
-         console.log("dialer loin successfull")
-       }).catch((error)=>{
-        console.log(error);
-       })
-      }
   };
   const handleClickShowPassword = () => {
     setshowPassword(!showPassword);

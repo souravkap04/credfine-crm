@@ -28,7 +28,7 @@ export const getCampaign = ()=>{
     return campaign;
 }
 export const getDialer = ()=>{
-    const dialer = ['TATA','HALOOCOM-Mumbai','HALOOCOM-Noida'];
+    const dialer = ['TATA','HALOOCOM'];
     return dialer;
 }
 
