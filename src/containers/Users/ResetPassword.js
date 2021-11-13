@@ -277,7 +277,6 @@ export default function Users() {
     }
   }
   const deletedUserPopUpHandler = (username,vertageid) => {
-    console.log("ggggg:"+vertageid);
     setIsDeleteUser(true);
     setUserName(username);
     setSelectedVertageId(vertageid)
