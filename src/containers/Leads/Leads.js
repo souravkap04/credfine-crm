@@ -12,7 +12,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import CallIcon from '@material-ui/icons/Call';
 import axios from 'axios';
 import baseUrl from '../../global/api';
-import { clickToCallApi, haloocomDialerApi} from '../../global/callApi'
+import { clickToCallApi,haloocomNoidaDialerApi,haloocomMumbaiDialerApi} from '../../global/callApi'
 import { getProfileData } from '../../global/leadsGlobalData'
 import { useQueryy } from '../../global/query';
 import CallerDialogBox from './CallerDialog/CallerDialogBox';
@@ -203,8 +203,22 @@ export default function Leads() {
       setTimeout(() => {
         history.push(`/dashboards/leads/edit/${leadID}`)
       }, 1500)
-    } else if (profileData.dialer === 'HALOOCOM') {
-      await axios.post(`${haloocomDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`)
+    } else if (profileData.dialer === 'HALOOCOM-Noida') {
+      await axios.post(`${haloocomNoidaDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`)
+        .then((response) => {
+          setDialerCall(true);
+          setDisableHangupBtn(false);
+          if (response.status === 200) {
+            localStorage.setItem('callHangUp', true)
+          }
+        }).catch((error) => {
+          console.log('error');
+        })
+      setTimeout(() => {
+        history.push(`/dashboards/leads/edit/${leadID}`)
+      }, 1500)
+    }else if (profileData.dialer === 'HALOOCOM-Mumbai') {
+      await axios.post(`${haloocomMumbaiDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`)
         .then((response) => {
           setDialerCall(true);
           setDisableHangupBtn(false);

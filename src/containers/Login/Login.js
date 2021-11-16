@@ -21,7 +21,7 @@ import {
   IconButton,
 } from "@material-ui/core";
 import { getCampaign, getDialer } from "../../global/leadsGlobalData";
-import {haloocomDialerApi} from '../../global/callApi';
+import {haloocomNoidaDialerApi,haloocomMumbaiDialerApi} from '../../global/callApi';
 import EmailOutlinedIcon from "@material-ui/icons/EmailOutlined";
 import HttpsOutlinedIcon from "@material-ui/icons/HttpsOutlined";
 import Visibility from "@material-ui/icons/Visibility";
@@ -92,7 +92,6 @@ export default function Login() {
       campaign_category: campaign,
       dialer,
     };
-    console.log("dfdfdf:"+dialer);
     await axios
       .post(`${baseUrl}/user/login/`, item)
       .then((response) => {
@@ -117,14 +116,20 @@ export default function Login() {
               console.log(error);
             });
         }
-        if(dialer === "HALOOCOM"){
-          console.log("dialer-mumbai loin successfull")
-         axios.post(`${haloocomDialerApi}/action.php?user=${profileData.vertage_id}&type=Login`)
+        if(dialer === "HALOOCOM-Noida"){
+         axios.post(`${haloocomNoidaDialerApi}/action.php?user=${profileData.vertage_id}&type=Login`)
          .then((response)=>{
-           console.log("dialer loin successfull")
+          console.log("dialer-noida loin successfull")
          }).catch((error)=>{
           console.log(error);
          })
+        }else if(dialer === "HALOOCOM-Mumbai"){
+          axios.post(`${haloocomMumbaiDialerApi}/action.php?user=${profileData.vertage_id}&type=Login`)
+          .then((response)=>{
+           console.log("dialer-mumbai loin successfull")
+          }).catch((error)=>{
+           console.log(error);
+          })
         }
       })
       .catch((error) => {

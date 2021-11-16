@@ -13,7 +13,7 @@ import { getCampaign, getProfileData, getStatusData } from '../../global/leadsGl
 import ChevronLeftOutlinedIcon from '@material-ui/icons/ChevronLeftOutlined';
 import ChevronRightOutlinedIcon from '@material-ui/icons/ChevronRightOutlined';
 import Button from '@material-ui/core/Button'
-import { clickToCallApi, haloocomDialerApi} from '../../global/callApi';
+import { clickToCallApi, haloocomNoidaDialerApi,haloocomMumbaiDialerApi} from '../../global/callApi';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import CallIcon from '@material-ui/icons/Call';
@@ -353,8 +353,22 @@ export default function MyLeads(props) {
       setTimeout(() => {
         history.push(`/dashboards/myleads/edit/${leadID}`)
       }, 1500)
-    } else if (profileData.dialer === 'HALOOCOM') {
-      await axios.post(`${haloocomDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`)
+    } else if (profileData.dialer === 'HALOOCOM-Noida') {
+      await axios.post(`${haloocomNoidaDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`)
+        .then((response) => {
+          setDialerCall(true);
+          setDisableHangupBtn(false);
+          if (response.status === 200) {
+            localStorage.setItem('callHangUp', true)
+          }
+        }).catch((error) => {
+          console.log('error');
+        })
+      setTimeout(() => {
+        history.push(`/dashboards/myleads/edit/${leadID}`)
+      }, 1500)
+    }else if (profileData.dialer === 'HALOOCOM-Mumbai') {
+      await axios.post(`${haloocomMumbaiDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`)
         .then((response) => {
           setDialerCall(true);
           setDisableHangupBtn(false);

@@ -35,7 +35,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
-import {haloocomDialerApi} from "../../global/callApi";
+import {haloocomNoidaDialerApi,haloocomMumbaiDialerApi} from "../../global/callApi";
 import './resetpassword.css';
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -298,9 +298,8 @@ export default function Users() {
           setAlertMessage(response.data.message);
           setIsDeleteUser(false);
           setDeleteCount(deleteCount + 1);
-          if(profileData.dialer === "HALOOCOM"){
-            console.log("dialer user is successfully deleted"+selectedVertageId)
-             axios.post(`${haloocomDialerApi}/userCreation.php?user=${selectedVertageId}&operation=Delete`)
+          if(profileData.dialer === "HALOOCOM-Noida"){
+             axios.post(`${haloocomNoidaDialerApi}/userCreation.php?user=${selectedVertageId}&operation=Delete`)
            .then((response)=>{
             setAlertMessage("dialer user is successfully deleted");
             setIsDisplay(true);
@@ -308,7 +307,16 @@ export default function Users() {
             setAlertMessage("something wrong in dialer users delete");
             setIsDisplay(true);
            })
-          }
+          }else if(profileData.dialer === "HALOOCOM-Mumbai"){
+            axios.post(`${haloocomMumbaiDialerApi}/userCreation.php?user=${selectedVertageId}&operation=Delete`)
+          .then((response)=>{
+           setAlertMessage("dialer user is successfully deleted");
+           setIsDisplay(true);
+          }).catch((error)=>{
+           setAlertMessage("something wrong in dialer users delete");
+           setIsDisplay(true);
+          })
+         }
         }
       }).catch((error) => {
         console.log(error);
@@ -346,17 +354,25 @@ export default function Users() {
     await axios.put(`${baseUrl}/user/updateUser/${selectedUserName}`, item, { headers })
       .then((response) => {
         if (response.status === 200) {
-          if(profileData.dialer === "HALOOCOM"){
-            console.log("dialer-mumbai usercreate successfull")
-             axios.post(`${haloocomDialerApi}/userCreation.php?user=${vertageId}&operation=Add`)
+          if(profileData.dialer === "HALOOCOM-Noida"){
+             axios.post(`${haloocomNoidaDialerApi}/userCreation.php?user=${vertageId}&operation=Add`)
            .then((response)=>{
-            setAlertMessage("user creation for dialer is successfull");
+            setAlertMessage(response.data.Description);
             setIsDisplay(true);
            }).catch((error)=>{
             setAlertMessage("something wrong in dialer user creation");
             setIsDisplay(true);
            })
-          }
+          }if(profileData.dialer === "HALOOCOM-Mumbai"){
+            axios.post(`${haloocomMumbaiDialerApi}/userCreation.php?user=${vertageId}&operation=Add`)
+          .then((response)=>{
+           setAlertMessage(response.data.Description);
+           setIsDisplay(true);
+          }).catch((error)=>{
+           setAlertMessage("something wrong in dialer user creation");
+           setIsDisplay(true);
+          })
+         }
           setTimeout(() => {
             setIsEditUser(false)
             listOfActiveUsers();
