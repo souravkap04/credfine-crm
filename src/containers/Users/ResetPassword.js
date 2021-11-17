@@ -35,6 +35,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
+import {haloocomNoidaDialerApi,haloocomMumbaiDialerApi} from "../../global/callApi";
 import './resetpassword.css';
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -164,9 +165,12 @@ export default function Users() {
   const [rowData, setRowData] = useState({});
   const [alertMessage, setAlertMessage] = useState('');
   const [isDisplay, setIsDisplay] = useState(false);
+  const [dialerAlertMessage,setDialerAlertMessage] = useState('');
+  const [isDisplayDialerMessage,setIsDisplayDialerMessage] = useState(false);
   const [deleteCount, setDeleteCount] = useState(0);
   const [selectedUserName, setSelectedUserName] = useState('');
   const [updatedUserName, setUpdatedUserName] = useState('');
+  const [selectedVertageId,setSelectedVertageId] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [vertageId, setVertageId] = useState("");
   const [vertagePass, setVertagePass] = useState("");
@@ -274,9 +278,11 @@ export default function Users() {
       console.log(error);
     }
   }
-  const deletedUserPopUpHandler = (username) => {
+  const deletedUserPopUpHandler = (username,vertageid) => {
     setIsDeleteUser(true);
     setUserName(username);
+    setSelectedVertageId(vertageid)
+
   }
   const closeDeleteUserPopUp = () => {
     setIsDeleteUser(false);
@@ -294,6 +300,25 @@ export default function Users() {
           setAlertMessage(response.data.message);
           setIsDeleteUser(false);
           setDeleteCount(deleteCount + 1);
+          if(profileData.dialer === "HALOOCOM-Noida"){
+             axios.post(`${haloocomNoidaDialerApi}/userCreation.php?user=${selectedVertageId}&operation=Delete`)
+           .then((response)=>{
+            setAlertMessage("dialer user is successfully deleted");
+            setIsDisplay(true);
+           }).catch((error)=>{
+            setAlertMessage("something wrong in dialer users delete");
+            setIsDisplay(true);
+           })
+          }else if(profileData.dialer === "HALOOCOM-Mumbai"){
+            axios.post(`${haloocomMumbaiDialerApi}/userCreation.php?user=${selectedVertageId}&operation=Delete`)
+          .then((response)=>{
+           setAlertMessage("dialer user is successfully deleted");
+           setIsDisplay(true);
+          }).catch((error)=>{
+           setAlertMessage("something wrong in dialer users delete");
+           setIsDisplay(true);
+          })
+         }
         }
       }).catch((error) => {
         console.log(error);
@@ -331,6 +356,25 @@ export default function Users() {
     await axios.put(`${baseUrl}/user/updateUser/${selectedUserName}`, item, { headers })
       .then((response) => {
         if (response.status === 200) {
+          if(profileData.dialer === "HALOOCOM-Noida"){
+             axios.post(`${haloocomNoidaDialerApi}/userCreation.php?user=${vertageId}&operation=Add`)
+           .then((response)=>{
+            setDialerAlertMessage(response.data.Description);
+            setIsDisplayDialerMessage(true);
+           }).catch((error)=>{
+            setDialerAlertMessage("something wrong in dialer user creation");
+            setIsDisplayDialerMessage(true);
+           })
+          }if(profileData.dialer === "HALOOCOM-Mumbai"){
+            axios.post(`${haloocomMumbaiDialerApi}/userCreation.php?user=${vertageId}&operation=Add`)
+          .then((response)=>{
+            setDialerAlertMessage(response.data.Description);
+            setIsDisplayDialerMessage(true);
+          }).catch((error)=>{
+            setDialerAlertMessage("something wrong in dialer user creation");
+            setIsDisplayDialerMessage(true);
+          })
+         }
           setTimeout(() => {
             setIsEditUser(false)
             listOfActiveUsers();
@@ -358,12 +402,18 @@ export default function Users() {
   }
   const closeSnankBar = () => {
     setIsDisplay(false);
+    setIsDisplayDialerMessage(false);
   }
   return (
     <PageLayerSection>
-      <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isDisplay} autoHideDuration={1500} onClose={closeSnankBar}>
+      <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isDisplay} autoHideDuration={null} onClose={closeSnankBar}>
         <Alert>
           {alertMessage}
+        </Alert>
+      </Snackbar>
+      <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isDisplayDialerMessage} autoHideDuration={null} onClose={closeSnankBar} >
+        <Alert onClose={closeSnankBar} severity="success">
+          {dialerAlertMessage}
         </Alert>
       </Snackbar>
       <div className={classes.container}>
@@ -460,7 +510,7 @@ export default function Users() {
                           </Tooltip>
                           <Tooltip title="Delete User">
                             {/* <IconButton onClick={() => deleteUser(user.myuser.username, index)}> */}
-                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username)}>
+                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username,user.myuser.vertage_id)}>
                               <DeleteIcon />
                             </IconButton>
                           </Tooltip>
@@ -501,7 +551,7 @@ export default function Users() {
                           </Tooltip>
                           <Tooltip title="Delete User">
                             {/* <IconButton onClick={() => deleteUser(user.myuser.username, index)}> */}
-                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username)}>
+                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username,user.myuser.vertage_id)}>
                               <DeleteIcon />
                             </IconButton>
                           </Tooltip>
@@ -542,7 +592,7 @@ export default function Users() {
                           </Tooltip>
                           <Tooltip title="Delete User">
                             {/* <IconButton onClick={() => deleteUser(user.myuser.username, index)}> */}
-                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username)}>
+                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username,user.myuser.vertage_id)}>
                               <DeleteIcon />
                             </IconButton>
                           </Tooltip>
@@ -583,7 +633,7 @@ export default function Users() {
                           </Tooltip>
                           <Tooltip title="Delete User">
                             {/* <IconButton onClick={() => deleteUser(user.myuser.username, index)}> */}
-                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username)}>
+                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username,user.myuser.vertage_id)}>
                               <DeleteIcon />
                             </IconButton>
                           </Tooltip>
@@ -624,7 +674,7 @@ export default function Users() {
                           </Tooltip>
                           <Tooltip title="Delete User">
                             {/* <IconButton onClick={() => deleteUser(user.myuser.username, index)}> */}
-                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username)}>
+                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username,user.myuser.vertage_id)}>
                               <DeleteIcon />
                             </IconButton>
                           </Tooltip>
@@ -665,7 +715,7 @@ export default function Users() {
                           </Tooltip>
                           <Tooltip title="Delete User">
                             {/* <IconButton onClick={() => deleteUser(user.myuser.username, index)}> */}
-                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username)}>
+                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username,user.myuser.vertage_id)}>
                               <DeleteIcon />
                             </IconButton>
                           </Tooltip>

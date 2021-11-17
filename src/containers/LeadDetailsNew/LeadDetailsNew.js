@@ -3,7 +3,7 @@ import PageLayerSection from '../PageLayerSection/PageLayerSection';
 import './leadDetailsNew.css';
 import axios from "axios";
 import baseUrl from "../../global/api";
-import { clickToCallApi, vertageDialerApi } from "../../global/callApi";
+import { clickToCallApi,haloocomNoidaDialerApi,haloocomMumbaiDialerApi} from "../../global/callApi";
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import MuiAccordion from '@material-ui/core/Accordion';
@@ -164,7 +164,7 @@ export default function LeadDetailsNew(props) {
     const [onGoingCall, setOnGoingCall] = useState(false);
     const [isCallNotConnected, setIsCallNotConnected] = useState(false)
     const [disableHangupBtn, setDisableHangupBtn] = useState(true);
-    const [vertageCall, setVertageCall] = useState(false);
+    const [dialerCall, setDialerCall] = useState(false);
     const [colorTick, setcolorTick] = useState(false);
     const [colorTick2, setcolorTick2] = useState(false);
     const [colorTick3, setcolorTick3] = useState(false);
@@ -586,10 +586,21 @@ export default function LeadDetailsNew(props) {
                         setIsCalling(false);
                     }
                 })
-        } else if (profileData.dialer === 'VERTAGE') {
-            await axios.post(`${vertageDialerApi}&user=${profileData.vertage_id}&pass=${profileData.vertage_pass}&agent_user=${profileData.vertage_id}&function=external_dial&value=${customerNo}&phone_code=+91&search=YES&preview=NO&focus=YES`)
+        } else if (profileData.dialer === 'HALOOCOM-Noida') {
+            await axios.post(`${haloocomNoidaDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`)
                 .then((response) => {
-                    setVertageCall(true);
+                    setDialerCall(true);
+                    setDisableHangupBtn(false);
+                    if (response.status === 200) {
+                        localStorage.setItem('callHangUp', true)
+                    }
+                }).catch((error) => {
+                    console.log('error');
+                })
+        }else if (profileData.dialer === 'HALOOCOM-Mumbai') {
+            await axios.post(`${haloocomMumbaiDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`)
+                .then((response) => {
+                    setDialerCall(true);
                     setDisableHangupBtn(false);
                     if (response.status === 200) {
                         localStorage.setItem('callHangUp', true)
@@ -600,30 +611,48 @@ export default function LeadDetailsNew(props) {
         }
     }
     const hangupCallHandler = async () => {
-        await axios.post(`${vertageDialerApi}&user=${profileData.vertage_id}&pass=${profileData.vertage_pass}&agent_user=${profileData.vertage_id}&function=external_hangup&value=1`)
+        if(profileData.dialer === "HALOOCOM-Noida"){
+        await axios.post(`${haloocomNoidaDialerApi}/action.php?user=${profileData.vertage_id}&type=Hangup&disposition`)
             .then((response) => {
                 // setDisableDisposeBtn(false);
                 setCallHangUpState(false);
                 if (response.status === 200) {
                     localStorage.removeItem('callHangUp')
-                    return disposeCallHandler()
+                   return disposeCallHandler()
                 }
                 // setCallHangUpState(true);
             }).catch((error) => {
                 console.log(error);
             })
+        }else if(profileData.dialer === "HALOOCOM-Mumbai"){
+            await axios.post(`${haloocomMumbaiDialerApi}/action.php?user=${profileData.vertage_id}&type=Hangup&disposition`)
+                .then((response) => {
+                    // setDisableDisposeBtn(false);
+                    setCallHangUpState(false);
+                    if (response.status === 200) {
+                        localStorage.removeItem('callHangUp')
+                       return disposeCallHandler()
+                    }
+                    // setCallHangUpState(true);
+                }).catch((error) => {
+                    console.log(error);
+                })
+            }
     }
-    const disposeCallHandler = async () => {
-        await axios.post(`${vertageDialerApi}&user=${profileData.vertage_id}&pass=${profileData.vertage_pass}&agent_user=${profileData.vertage_id}&function=external_status&value=A`)
-            .then((response) => {
-                sethangUpSnacks(true);
-                setCallHangUpState(true);
-            }).catch((error) => {
-                console.log(error);
-            })
+    const disposeCallHandler =  () => {
+        // await axios.post()
+        //     .then((response) => {
+        //         sethangUpSnacks(true);
+        //         setCallHangUpState(true);
+        //     }).catch((error) => {
+        //         console.log(error);
+        //     })
+        sethangUpSnacks(true);
+        setCallHangUpState(true);
+
     }
     const disableDialerPopUp = () => {
-        setVertageCall(false)
+        setDialerCall(false)
         setDisableHangupBtn(false)
     }
     return (
@@ -634,7 +663,7 @@ export default function LeadDetailsNew(props) {
                     Hang Up Successfully...
                 </Alert>
             </Snackbar>
-            {profileData.dialer === 'VERTAGE' ? <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={localStorage.getItem("callHangUp") && localStorage.getItem("callHangUp") !== null ? true : callInProgress} autoHideDuration={1500} onClose={disableHangUpSnacks}>
+            {profileData.dialer === 'HALOOCOM' ? <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={localStorage.getItem("callHangUp") && localStorage.getItem("callHangUp") !== null ? true : callInProgress} autoHideDuration={1500} onClose={disableHangUpSnacks}>
                 <Alert onClose={disableHangUpSnacks} severity="info">
                     Call in progress....
                 </Alert>
@@ -1592,7 +1621,7 @@ export default function LeadDetailsNew(props) {
                 </Grid>
             </Grid>}
             <div>
-                <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={vertageCall} autoHideDuration={1500} onClose={disableDialerPopUp}>
+                <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={dialerCall} autoHideDuration={1500} onClose={disableDialerPopUp}>
                     <Alert onClose={disableDialerPopUp} severity="info">
                         Calling...
                     </Alert>
