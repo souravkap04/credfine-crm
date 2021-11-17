@@ -75,7 +75,7 @@ export default function UserCreate() {
   const [pullLocation, setpullLocation] = useState([]);
   const { register, handleSubmit, control, errors } = useForm();
   const onSubmit = async (data) => {
-    const { userName, firstName, lastName, email, role, productType, phoneNo, gender, parent } = data;
+    const { userName, firstName, lastName, email, role, productType, phoneNo, gender, parent ,dialerId ,dialerPassword} = data;
     let item = {
       username: userName, first_name: firstName, last_name: lastName, email, role,
       product_type: productType, phone_no: phoneNo, gender: gender, parent_user: parent, locations: location
@@ -186,12 +186,13 @@ export default function UserCreate() {
                     inputRef={register({
                       required: 'First name is required',
                       pattern: {
-                        value: /^(?! )[A-Z][a-z]*(?<! )$/g,
+                        value: /^[a-zA-Z ]{2,30}$/,
                         message: 'please enter a valid first name'
                       }
                     })}
                     error={Boolean(errors.firstName)}
-                    helperText={errors.firstName?.type === "required" ? errors.firstName?.message : errors.firstName?.message} />
+                    helperText={errors.firstName?.type === "required" ? errors.firstName?.message : errors.firstName?.message} 
+                    />
                 </Grid>
               </Grid>
               <Grid container style={{ justifyContent: 'space-evenly' }}>
@@ -209,12 +210,13 @@ export default function UserCreate() {
                     inputRef={register({
                       required: 'Last name is required',
                       pattern: {
-                        value: /^(?! )[A-Z][a-z]*(?<! )$/g,
+                        value: /^[a-zA-Z ]{2,30}$/,
                         message: 'please enter a valid last name'
                       }
                     })}
                     error={Boolean(errors.lastName)}
-                    helperText={errors.lastName?.type === "required" ? errors.lastName?.message : errors.lastName?.message} />
+                    helperText={errors.lastName?.type === "required" ? errors.lastName?.message : errors.lastName?.message} 
+                    />
                 </Grid>
                 <Grid >
                   <TextField
