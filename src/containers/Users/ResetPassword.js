@@ -165,6 +165,8 @@ export default function Users() {
   const [rowData, setRowData] = useState({});
   const [alertMessage, setAlertMessage] = useState('');
   const [isDisplay, setIsDisplay] = useState(false);
+  const [dialerAlertMessage,setDialerAlertMessage] = useState('');
+  const [isDisplayDialerMessage,setIsDisplayDialerMessage] = useState(false);
   const [deleteCount, setDeleteCount] = useState(0);
   const [selectedUserName, setSelectedUserName] = useState('');
   const [updatedUserName, setUpdatedUserName] = useState('');
@@ -357,20 +359,20 @@ export default function Users() {
           if(profileData.dialer === "HALOOCOM-Noida"){
              axios.post(`${haloocomNoidaDialerApi}/userCreation.php?user=${vertageId}&operation=Add`)
            .then((response)=>{
-            setAlertMessage(response.data.Description);
-            setIsDisplay(true);
+            setDialerAlertMessage(response.data.Description);
+            setIsDisplayDialerMessage(true);
            }).catch((error)=>{
-            setAlertMessage("something wrong in dialer user creation");
-            setIsDisplay(true);
+            setDialerAlertMessage("something wrong in dialer user creation");
+            setIsDisplayDialerMessage(true);
            })
           }if(profileData.dialer === "HALOOCOM-Mumbai"){
             axios.post(`${haloocomMumbaiDialerApi}/userCreation.php?user=${vertageId}&operation=Add`)
           .then((response)=>{
-           setAlertMessage(response.data.Description);
-           setIsDisplay(true);
+            setDialerAlertMessage(response.data.Description);
+            setIsDisplayDialerMessage(true);
           }).catch((error)=>{
-           setAlertMessage("something wrong in dialer user creation");
-           setIsDisplay(true);
+            setDialerAlertMessage("something wrong in dialer user creation");
+            setIsDisplayDialerMessage(true);
           })
          }
           setTimeout(() => {
@@ -400,12 +402,18 @@ export default function Users() {
   }
   const closeSnankBar = () => {
     setIsDisplay(false);
+    setIsDisplayDialerMessage(false);
   }
   return (
     <PageLayerSection>
-      <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isDisplay} autoHideDuration={1500} onClose={closeSnankBar}>
+      <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isDisplay} autoHideDuration={null} onClose={closeSnankBar}>
         <Alert>
           {alertMessage}
+        </Alert>
+      </Snackbar>
+      <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isDisplayDialerMessage} autoHideDuration={null} onClose={closeSnankBar} >
+        <Alert onClose={closeSnankBar} severity="success">
+          {dialerAlertMessage}
         </Alert>
       </Snackbar>
       <div className={classes.container}>

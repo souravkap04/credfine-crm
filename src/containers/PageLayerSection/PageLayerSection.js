@@ -66,7 +66,6 @@ export default function PageLayerSection(props) {
         localStorage.removeItem('notification');
         localStorage.removeItem('callHangUp');
         if (profileData.dialer === "HALOOCOM-Noida") {
-            console.log("dialer-mumbai successfully logout")
             await axios.post(`${haloocomNoidaDialerApi}/action.php?user=${profileData.vertage_id}&type=Logout`)
         .then((response)=>{
             console.log("dialer-mumbai successfully logout")
@@ -74,7 +73,6 @@ export default function PageLayerSection(props) {
             console.log(error)
          })
         }else if (profileData.dialer === "HALOOCOM-Mumbai") {
-            console.log("dialer-mumbai successfully logout")
             await axios.post(`${haloocomMumbaiDialerApi}/action.php?user=${profileData.vertage_id}&type=Logout`)
         .then((response)=>{
             console.log("dialer-mumbai successfully logout")
