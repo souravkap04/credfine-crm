@@ -148,6 +148,12 @@ export default function PageLayerSection(props) {
                             onClose={handleClose}
                         >
                             <NavLink to="/profile" style={{ textDecoration: "none", color: "#080707" }}><MenuItem style={{ fontFamily: 'Lato' }}>Profile</MenuItem></NavLink>
+                            <MenuItem style={{ fontFamily: 'Lato' }} onClick={logoutHandler}>Logout For Tea</MenuItem>
+                            <MenuItem style={{ fontFamily: 'Lato' }} onClick={logoutHandler}>Logout For Team Meeting</MenuItem>
+                            <MenuItem style={{ fontFamily: 'Lato' }} onClick={logoutHandler}>Logout For Lunch</MenuItem>
+                            <MenuItem style={{ fontFamily: 'Lato' }} onClick={logoutHandler}>Logout For Washroom</MenuItem>
+                            <MenuItem style={{ fontFamily: 'Lato' }} onClick={logoutHandler}>Logout For Fresh Mind</MenuItem>
+                            <MenuItem style={{ fontFamily: 'Lato' }} onClick={logoutHandler}>Logout For Traning</MenuItem>
                             <MenuItem style={{ fontFamily: 'Lato' }} onClick={logoutHandler}>Logout</MenuItem>
                         </Menu>
                         <Avatar className="avatar" alt="User Name">{userName.charAt(0).toUpperCase()}</Avatar>
