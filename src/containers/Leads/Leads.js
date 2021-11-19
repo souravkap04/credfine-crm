@@ -27,6 +27,7 @@ import './leadDetailsAdjust.css';
 import clsx from 'clsx';
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
+import { findAllByTestId } from '@testing-library/react';
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -248,13 +249,12 @@ export default function Leads() {
     for (let i = (data.length) - 4; i > 0; i--) {
       maskData += 'x';
     }
-    // let leadPhoneNo = maskData + unMaskdata;
-    // if (profileData.user_roles[0].user_type === 3) {
-    //   return leadPhoneNo;
-    // } else {
-    //   return data;
-    // }
-    return data;
+    let leadPhoneNo = maskData + unMaskdata;
+    if (profileData.user_roles[0].user_type === 2 || profileData.user_roles[0].user_type === 3 || profileData.user_roles[0].user_type === 5 || profileData.user_roles[0].user_type === 6) {
+      return leadPhoneNo;
+    } else {
+      return data;
+    }
   }
   const disableDialerPopUp = () => {
     setDialerCall(false)
@@ -264,9 +264,8 @@ export default function Leads() {
     let formErrorData = [...formError];
     if (fullName === "") formErrorData[0] = true;
     if (mobileNo === "" || mobileNo.length !== 10) formErrorData[1] = true;
-    if (monthlyIncome === "") formErrorData[2] = true;
-
-    if (fullName == '' || mobileNo == '' || mobileNo.length !== 10 || monthlyIncome == '') {
+  
+    if (fullName == '' || mobileNo == '' || mobileNo.length !== 10 ) {
       setformError(formErrorData);
       return;
     }
@@ -401,7 +400,7 @@ export default function Leads() {
                 margin="normal"
                 InputLabelProps={{
                   shrink: true,
-                  required: true
+                  required: false
                 }}
                 inputProps={{
                   maxLength: 7,
@@ -415,13 +414,6 @@ export default function Leads() {
                     setmonthlyIncome(e.target.value)
                   }
                 }}
-                onFocus={() => {
-                  let formErrorData = [...formError];
-                  formErrorData[2] = false;
-                  setformError(formErrorData);
-                }}
-                error={formError[2]}
-                helperText={formError[2] ? 'Net monthly income is required' : ''}
               />
             </Grid>
             <Grid>
