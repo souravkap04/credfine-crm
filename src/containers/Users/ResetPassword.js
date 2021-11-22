@@ -35,6 +35,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
+import SendIcon from '@material-ui/icons/Send';
+import InputAdornment from '@material-ui/core/InputAdornment';
 import {haloocomNoidaDialerApi,haloocomMumbaiDialerApi} from "../../global/callApi";
 import './resetpassword.css';
 function Alert(props) {
@@ -356,25 +358,6 @@ export default function Users() {
     await axios.put(`${baseUrl}/user/updateUser/${selectedUserName}`, item, { headers })
       .then((response) => {
         if (response.status === 200) {
-          if(profileData.dialer === "HALOOCOM-Noida"){
-             axios.post(`${haloocomNoidaDialerApi}/userCreation.php?user=${vertageId}&operation=Add`)
-           .then((response)=>{
-            setDialerAlertMessage(response.data.Description);
-            setIsDisplayDialerMessage(true);
-           }).catch((error)=>{
-            setDialerAlertMessage("something wrong in dialer user creation");
-            setIsDisplayDialerMessage(true);
-           })
-          }if(profileData.dialer === "HALOOCOM-Mumbai"){
-            axios.post(`${haloocomMumbaiDialerApi}/userCreation.php?user=${vertageId}&operation=Add`)
-          .then((response)=>{
-            setDialerAlertMessage(response.data.Description);
-            setIsDisplayDialerMessage(true);
-          }).catch((error)=>{
-            setDialerAlertMessage("something wrong in dialer user creation");
-            setIsDisplayDialerMessage(true);
-          })
-         }
           setTimeout(() => {
             setIsEditUser(false)
             listOfActiveUsers();
@@ -404,9 +387,31 @@ export default function Users() {
     setIsDisplay(false);
     setIsDisplayDialerMessage(false);
   }
+  const submitHaloocomUserName = ()=>{
+    console.log("submitHaloocomUserName:"+vertageId);
+    if(profileData.dialer === "HALOOCOM-Noida"){
+      axios.post(`${haloocomNoidaDialerApi}/userCreation.php?user=${vertageId}&operation=Add`)
+    .then((response)=>{
+     setDialerAlertMessage(response.data.Description);
+     setIsDisplayDialerMessage(true);
+    }).catch((error)=>{
+     setDialerAlertMessage("something wrong in dialer user creation");
+     setIsDisplayDialerMessage(true);
+    })
+   }if(profileData.dialer === "HALOOCOM-Mumbai"){
+     axios.post(`${haloocomMumbaiDialerApi}/userCreation.php?user=${vertageId}&operation=Add`)
+   .then((response)=>{
+     setDialerAlertMessage(response.data.Description);
+     setIsDisplayDialerMessage(true);
+   }).catch((error)=>{
+     setDialerAlertMessage("something wrong in dialer user creation");
+     setIsDisplayDialerMessage(true);
+   })
+  }
+  }
   return (
     <PageLayerSection>
-      <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isDisplay} autoHideDuration={null} onClose={closeSnankBar}>
+      <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isDisplay} autoHideDuration={1500} onClose={closeSnankBar}>
         <Alert>
           {alertMessage}
         </Alert>
@@ -960,7 +965,7 @@ export default function Users() {
                               variant="outlined"
                               size="small"
                               value={firstName}
-                              onChange={(e) => setFirstName((e.target.value).charAt(0).toUpperCase())}
+                              onChange={(e) => setFirstName((e.target.value).trim())}
                             />
                           </Grid>
                         </Grid>
@@ -978,7 +983,7 @@ export default function Users() {
                               variant="outlined"
                               size="small"
                               value={lastName}
-                              onChange={(e) => setLastName((e.target.value).charAt(0).toUpperCase())}
+                              onChange={(e) => setLastName((e.target.value).trim())}
                             />
                           </Grid>
                           <Grid>
@@ -1111,11 +1116,20 @@ export default function Users() {
                             <TextField
                               className="textField"
                               id="outlined-full-width"
-                              label="Vertage Id"
+                              label="Haloocoom Username"
                               style={{ margin: 8 }}
                               margin="normal"
                               InputLabelProps={{
                                 shrink: true,
+                              }}
+                              InputProps={{
+                                endAdornment: (
+                                  <InputAdornment position="end">
+                                    <IconButton onClick={submitHaloocomUserName}>
+                                       <SendIcon style={{ color: '#14cc9e' }}/>
+                                    </IconButton>
+                                  </InputAdornment>
+                                ),
                               }}
                               variant="outlined"
                               size="small"
