@@ -3,7 +3,7 @@ import PageLayerSection from '../PageLayerSection/PageLayerSection';
 import './leadDetailsNew.css';
 import axios from "axios";
 import baseUrl from "../../global/api";
-import { clickToCallApi,haloocomNoidaDialerApi,haloocomMumbaiDialerApi} from "../../global/callApi";
+import { clickToCallApi, haloocomNoidaDialerApi, haloocomMumbaiDialerApi } from "../../global/callApi";
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import MuiAccordion from '@material-ui/core/Accordion';
@@ -598,7 +598,7 @@ export default function LeadDetailsNew(props) {
                 }).catch((error) => {
                     console.log('error');
                 })
-        }else if (profileData.dialer === 'HALOOCOM-Mumbai') {
+        } else if (profileData.dialer === 'HALOOCOM-Mumbai') {
             await axios.post(`${haloocomMumbaiDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`)
                 .then((response) => {
                     setDialerCall(true);
@@ -612,35 +612,35 @@ export default function LeadDetailsNew(props) {
         }
     }
     const hangupCallHandler = async () => {
-        if(profileData.dialer === "HALOOCOM-Noida"){
-        await axios.post(`${haloocomNoidaDialerApi}/action.php?user=${profileData.vertage_id}&type=Hangup&disposition`)
-            .then((response) => {
-                // setDisableDisposeBtn(false);
-                setCallHangUpState(false);
-                if (response.status === 200) {
-                    localStorage.removeItem('callHangUp')
-                   return disposeCallHandler()
-                }
-                // setCallHangUpState(true);
-            }).catch((error) => {
-                console.log(error);
-            })
-        }else if(profileData.dialer === "HALOOCOM-Mumbai"){
+        if (profileData.dialer === "HALOOCOM-Noida") {
+            await axios.post(`${haloocomNoidaDialerApi}/action.php?user=${profileData.vertage_id}&type=Hangup&disposition`)
+                .then((response) => {
+                    // setDisableDisposeBtn(false);
+                    setCallHangUpState(false);
+                    if (response.status === 200) {
+                        localStorage.removeItem('callHangUp')
+                        return disposeCallHandler()
+                    }
+                    // setCallHangUpState(true);
+                }).catch((error) => {
+                    console.log(error);
+                })
+        } else if (profileData.dialer === "HALOOCOM-Mumbai") {
             await axios.post(`${haloocomMumbaiDialerApi}/action.php?user=${profileData.vertage_id}&type=Hangup&disposition`)
                 .then((response) => {
                     // setDisableDisposeBtn(false);
                     setCallHangUpState(false);
                     if (response.status === 200) {
                         localStorage.removeItem('callHangUp')
-                       return disposeCallHandler()
+                        return disposeCallHandler()
                     }
                     // setCallHangUpState(true);
                 }).catch((error) => {
                     console.log(error);
                 })
-            }
+        }
     }
-    const disposeCallHandler =  () => {
+    const disposeCallHandler = () => {
         // await axios.post()
         //     .then((response) => {
         //         sethangUpSnacks(true);
@@ -657,7 +657,7 @@ export default function LeadDetailsNew(props) {
         setDisableHangupBtn(false)
     }
     return (
-        <PageLayerSection pageTitle="Lead Details" className={classes.scrollEnable} offerButton={true}>
+        <PageLayerSection pageTitle="Lead Details" className={classes.scrollEnable} offerButton={true} isWhatsapp={true} whatsappNumber={mobileNo}>
             {/* Errors SnackBars Start */}
             <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={hangUpSnacks} autoHideDuration={1500} onClose={disableHangUpSnacks}>
                 <Alert onClose={disableHangUpSnacks} severity="success">
