@@ -64,6 +64,12 @@ $desk: 100 / 1440;
                     box-shadow: none;
                     margin-right: 20 * $desk + vw;
                 }
+                .whatsapp {
+                    font-size: 35 * $desk + vw;
+                    margin-right: 20 * $desk + vw;
+                    color: #25D366;
+                    cursor: pointer;
+                }
                 .notificationContainer {
                     margin-right: 20 * $desk + vw;
 
