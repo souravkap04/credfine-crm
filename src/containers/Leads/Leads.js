@@ -12,7 +12,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import CallIcon from '@material-ui/icons/Call';
 import axios from 'axios';
 import baseUrl from '../../global/api';
-import { clickToCallApi,haloocomNoidaDialerApi,haloocomMumbaiDialerApi} from '../../global/callApi'
+import { clickToCallApi, haloocomNoidaDialerApi, haloocomMumbaiDialerApi } from '../../global/callApi'
 import { getProfileData } from '../../global/leadsGlobalData'
 import { useQueryy } from '../../global/query';
 import CallerDialogBox from './CallerDialog/CallerDialogBox';
@@ -177,7 +177,7 @@ export default function Leads() {
   const clickToCall = async (encryptData, leadID) => {
     const customerNo = decodeURIComponent(window.atob(encryptData));
     if (profileData.dialer === 'TATA') {
-     const headers = {
+      const headers = {
         'accept': 'application/json',
         'content-type': 'application/json'
       };
@@ -200,7 +200,7 @@ export default function Leads() {
             setIsCallConnect(true);
             setIsCalling(false);
           }
-        }) 
+        })
       setTimeout(() => {
         history.push(`/dashboards/leads/edit/${leadID}`)
       }, 1500)
@@ -218,7 +218,7 @@ export default function Leads() {
       setTimeout(() => {
         history.push(`/dashboards/leads/edit/${leadID}`)
       }, 1500)
-    }else if (profileData.dialer === 'HALOOCOM-Mumbai') {
+    } else if (profileData.dialer === 'HALOOCOM-Mumbai') {
       await axios.post(`${haloocomMumbaiDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`)
         .then((response) => {
           setDialerCall(true);
@@ -249,13 +249,12 @@ export default function Leads() {
     for (let i = (data.length) - 4; i > 0; i--) {
       maskData += 'x';
     }
-    // let leadPhoneNo = maskData + unMaskdata;
-    // if (profileData.user_roles[0].user_type === 2 || profileData.user_roles[0].user_type === 3 || profileData.user_roles[0].user_type === 5 || profileData.user_roles[0].user_type === 6) {
-    //   return leadPhoneNo;
-    // } else {
-    //   return data;
-    // }
-    return data;
+    let leadPhoneNo = maskData + unMaskdata;
+    if (profileData.user_roles[0].user_type === 2 || profileData.user_roles[0].user_type === 3 || profileData.user_roles[0].user_type === 5 || profileData.user_roles[0].user_type === 6) {
+      return leadPhoneNo;
+    } else {
+      return data;
+    }
   }
   const disableDialerPopUp = () => {
     setDialerCall(false)
@@ -265,8 +264,8 @@ export default function Leads() {
     let formErrorData = [...formError];
     if (fullName === "") formErrorData[0] = true;
     if (mobileNo === "" || mobileNo.length !== 10) formErrorData[1] = true;
-  
-    if (fullName == '' || mobileNo == '' || mobileNo.length !== 10 ) {
+
+    if (fullName == '' || mobileNo == '' || mobileNo.length !== 10) {
       setformError(formErrorData);
       return;
     }
