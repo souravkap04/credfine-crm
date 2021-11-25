@@ -13,7 +13,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import CallIcon from '@material-ui/icons/Call';
 import axios from 'axios';
 import baseUrl from '../../global/api';
-import { clickToCallApi, haloocomNoidaDialerApi,haloocomMumbaiDialerApi} from '../../global/callApi'
+import { clickToCallApi, haloocomNoidaDialerApi, haloocomMumbaiDialerApi } from '../../global/callApi'
 import { getProfileData } from '../../global/leadsGlobalData';
 import CallerDialogBox from '../Leads/CallerDialog/CallerDialogBox';
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
@@ -193,7 +193,7 @@ export default function FollowUp(props) {
             setTimeout(() => {
                 history.push(`/dashboards/followup/edit/${leadID}`)
             }, 1500)
-        }else if (profileData.dialer === 'HALOOCOM-Mumbai') {
+        } else if (profileData.dialer === 'HALOOCOM-Mumbai') {
             await axios.post(`${haloocomMumbaiDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`)
                 .then((response) => {
                     setDialerCall(true);
@@ -224,14 +224,13 @@ export default function FollowUp(props) {
         for (let i = (data.length) - 4; i > 0; i--) {
             maskData += 'x';
         }
-        // let leadPhoneNo = maskData + unMaskdata;
-        // if (profileData.user_roles[0].user_type === 2 || profileData.user_roles[0].user_type === 3 || profileData.user_roles[0].user_type === 5 || profileData.user_roles[0].user_type === 6) {
-        //     return leadPhoneNo;
-        // } else {
-        //     return data;
-        // }
-        return data;
-}
+        let leadPhoneNo = maskData + unMaskdata;
+        if (profileData.user_roles[0].user_type === 2 || profileData.user_roles[0].user_type === 3 || profileData.user_roles[0].user_type === 5 || profileData.user_roles[0].user_type === 6) {
+            return leadPhoneNo;
+        } else {
+            return data;
+        }
+    }
     const disableDialerPopUp = () => {
         setDialerCall(false)
         setDisableHangupBtn(false)
