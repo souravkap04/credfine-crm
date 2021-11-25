@@ -3,7 +3,7 @@ import PageLayerSection from '../PageLayerSection/PageLayerSection';
 import './leadDetailsNew.css';
 import axios from "axios";
 import baseUrl from "../../global/api";
-import { clickToCallApi, haloocomNoidaDialerApi, haloocomMumbaiDialerApi } from "../../global/callApi";
+import {haloocomNoidaDialerApi, haloocomMumbaiDialerApi } from "../../global/callApi";
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import MuiAccordion from '@material-ui/core/Accordion';
@@ -562,31 +562,7 @@ export default function LeadDetailsNew(props) {
         setisCopy(false);
     }
     const clickToCall = async (customerNo, leadID) => {
-        if (profileData.dialer === 'TATA') {
-            const headers = {
-                'accept': 'application/json',
-                'content-type': 'application/json'
-            };
-            const item = { customer_number: customerNo, api_key: profileData.dialer_pass };
-            axios.interceptors.request.use((request) => {
-                setIsCalling(true);
-                return request;
-            })
-            await axios.post(clickToCallApi, item, { headers })
-                .then((response) => {
-                    if (response.data.success) {
-                        setIsCalling(false);
-                        setOnGoingCall(true);
-                    } else {
-                        setIsCallNotConnected(true)
-                    }
-                }).catch((error) => {
-                    if (error.message) {
-                        setIsCallConnect(true);
-                        setIsCalling(false);
-                    }
-                })
-        } else if (profileData.dialer === 'HALOOCOM-Noida') {
+         if (profileData.dialer === 'HALOOCOM-Noida') {
             await axios.post(`${haloocomNoidaDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`)
                 .then((response) => {
                     setDialerCall(true);
@@ -1305,7 +1281,7 @@ export default function LeadDetailsNew(props) {
                 </Grid>
                 <Grid className="callConatiner" lg={3}>
                     <Grid className="callAdjustContainer">
-                        {profileData.dialer === 'TATA' ? null : <div className="buttonAdjust"><Button
+                         <div className="buttonAdjust"><Button
                             className="callBtn"
                             color="primary"
                             variant="contained"
@@ -1321,7 +1297,8 @@ export default function LeadDetailsNew(props) {
                                 disabled={localStorage.getItem("callHangUp") && localStorage.getItem("callHangUp") !== null ? false : callHangUpState}
                                 onClick={hangupCallHandler}>
                                 End
-                            </Button></div>}
+                            </Button>
+                            </div>
                         <Grid>
                             <TextField
                                 className="textField"

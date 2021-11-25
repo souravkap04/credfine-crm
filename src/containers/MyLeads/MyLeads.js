@@ -13,7 +13,7 @@ import { getCampaign, getProfileData, getStatusData } from '../../global/leadsGl
 import ChevronLeftOutlinedIcon from '@material-ui/icons/ChevronLeftOutlined';
 import ChevronRightOutlinedIcon from '@material-ui/icons/ChevronRightOutlined';
 import Button from '@material-ui/core/Button'
-import { clickToCallApi, haloocomNoidaDialerApi,haloocomMumbaiDialerApi} from '../../global/callApi';
+import {haloocomNoidaDialerApi,haloocomMumbaiDialerApi} from '../../global/callApi';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import CallIcon from '@material-ui/icons/Call';
@@ -324,35 +324,7 @@ export default function MyLeads(props) {
   }
   const clickToCall = async (encryptData, leadID) => {
     const customerNo = decodeURIComponent(window.atob(encryptData));
-    if (profileData.dialer === 'TATA') {
-      const headers = {
-        'accept': 'application/json',
-        'content-type': 'application/json'
-      };
-      const item = { customer_number: customerNo, api_key: profileData.dialer_pass };
-      axios.interceptors.request.use((request) => {
-        setIsCalling(true);
-        return request;
-      })
-      await axios.post(clickToCallApi, item, { headers })
-        .then((response) => {
-          if (response.data.success) {
-            setIsCalling(false);
-            setOnGoingCall(true);
-          } else {
-            setIsCallNotConnected(true)
-          }
-        }).catch((error) => {
-          console.log(error)
-          if (error.message) {
-            setIsCallConnect(true);
-            setIsCalling(false);
-          }
-        })
-      setTimeout(() => {
-        history.push(`/dashboards/myleads/edit/${leadID}`)
-      }, 1500)
-    } else if (profileData.dialer === 'HALOOCOM-Noida') {
+      if (profileData.dialer === 'HALOOCOM-Noida') {
       await axios.post(`${haloocomNoidaDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`)
         .then((response) => {
           setDialerCall(true);
