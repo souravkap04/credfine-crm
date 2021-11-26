@@ -12,7 +12,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import CallIcon from '@material-ui/icons/Call';
 import axios from 'axios';
 import baseUrl from '../../global/api';
-import { clickToCallApi, haloocomNoidaDialerApi, haloocomMumbaiDialerApi } from '../../global/callApi'
+import {haloocomNoidaDialerApi, haloocomMumbaiDialerApi } from '../../global/callApi'
 import { getProfileData } from '../../global/leadsGlobalData'
 import { useQueryy } from '../../global/query';
 import CallerDialogBox from './CallerDialog/CallerDialogBox';
@@ -176,35 +176,7 @@ export default function Leads() {
   };
   const clickToCall = async (encryptData, leadID) => {
     const customerNo = decodeURIComponent(window.atob(encryptData));
-    if (profileData.dialer === 'TATA') {
-      const headers = {
-        'accept': 'application/json',
-        'content-type': 'application/json'
-      };
-      const item = { customer_number: customerNo, api_key: profileData.dialer_pass };
-      axios.interceptors.request.use((request) => {
-        setIsCalling(true);
-        return request;
-      })
-      await axios.post(clickToCallApi, item, { headers })
-        .then((response) => {
-          if (response.data.success) {
-            setIsCalling(false);
-            setOnGoingCall(true);
-          } else {
-            setIsCallNotConnected(true)
-          }
-        }).catch((error) => {
-          console.log(error)
-          if (error.message) {
-            setIsCallConnect(true);
-            setIsCalling(false);
-          }
-        })
-      setTimeout(() => {
-        history.push(`/dashboards/leads/edit/${leadID}`)
-      }, 1500)
-    } else if (profileData.dialer === 'HALOOCOM-Noida') {
+      if (profileData.dialer === 'HALOOCOM-Noida') {
       await axios.post(`${haloocomNoidaDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`)
         .then((response) => {
           setDialerCall(true);
