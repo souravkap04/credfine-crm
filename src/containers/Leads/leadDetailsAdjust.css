@@ -57,7 +57,7 @@
 .rightContainerForm .textField {
   width: 18.05556vw;
   margin-top: 0.97222vw !important;
-  font-family: 'Lato';
+  font-family: "Lato";
 }
 
 .rightContainerForm .textField label {
@@ -89,7 +89,7 @@
 
 .rightContainerForm .textField .MuiInputBase-input {
   font-size: 1.11111vw;
-  font-family: 'Lato' !important;
+  font-family: "Lato" !important;
 }
 
 .rightContainerForm .submitBtn {

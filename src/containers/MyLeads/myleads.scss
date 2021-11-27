@@ -63,3 +63,35 @@ $desk: 100 / 1440;
         }
     }
 }
+.buttonAdjust {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .callBtn {
+        width: 118 * $desk + vw;
+        height: 36 * $desk + vw;
+        background-color: #14cc9e;
+        margin-right: 10 * $desk + vw;
+        margin-bottom: 3 * $desk + vw;
+        box-shadow: none;
+        font-family: "Lato";
+    }
+    .callBtn:hover {
+        background-color: rgba(20, 204, 158, 0.8);
+    }
+    .callIcon {
+        font-size: 24 * $desk + vw !important;
+    }
+    .endBtn {
+        width: 118 * $desk + vw;
+        height: 36 * $desk + vw;
+        background-color: #eb5757;
+        margin-left: 10 * $desk + vw;
+        margin-bottom: 3 * $desk + vw;
+        box-shadow: none;
+        font-family: "Lato";
+    }
+    .endBtn:hover {
+        background-color: rgba(235, 87, 87, 0.8);
+    }
+}
