@@ -39,7 +39,7 @@ $desk: 100 / 1440;
         width: 260 * $desk + vw;
         margin-top: 14 * $desk + vw !important;
         // margin-bottom: 14 * $desk + vw !important;
-        font-family: 'Lato';
+        font-family: "Lato";
         label {
             color: #535ad1;
             letter-spacing: 0.4px;
@@ -67,7 +67,7 @@ $desk: 100 / 1440;
         }
         .MuiInputBase-input {
             font-size: 16 * $desk + vw;
-            font-family: 'Lato' !important;
+            font-family: "Lato" !important;
         }
     }
     .submitBtn {
