@@ -13,7 +13,7 @@ import { getCampaign, getProfileData, getStatusData } from '../../global/leadsGl
 import ChevronLeftOutlinedIcon from '@material-ui/icons/ChevronLeftOutlined';
 import ChevronRightOutlinedIcon from '@material-ui/icons/ChevronRightOutlined';
 import Button from '@material-ui/core/Button'
-import {haloocomNoidaDialerApi,haloocomMumbaiDialerApi} from '../../global/callApi';
+import { haloocomNoidaDialerApi, haloocomMumbaiDialerApi } from '../../global/callApi';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import CallIcon from '@material-ui/icons/Call';
@@ -194,6 +194,7 @@ export default function MyLeads(props) {
   const [dialerCall, setDialerCall] = useState(false);
   const [disableHangupBtn, setDisableHangupBtn] = useState(true);
   const [state, setState] = useState(false);
+  const [manualState, setmanualState] = useState(false);
   const [status, setStatus] = useState('');
   const [subStatus, setSubStatus] = useState([]);
   const [campaign, setCampaign] = useState([]);
@@ -204,6 +205,9 @@ export default function MyLeads(props) {
   const [users_id, setUserID] = useState('');
   const [isError, setisError] = useState(false);
   const [isLoading, setisLoading] = useState(false);
+  const [dialerMobileNumber, setdialerMobileNumber] = useState('')
+  const [callHangUpState, setCallHangUpState] = useState(true);
+  const [hangUpSnacks, sethangUpSnacks] = useState(false);
   let statusData = getStatusData();
   let campaignData = getCampaign();
   const queryy = useQueryy();
@@ -324,7 +328,7 @@ export default function MyLeads(props) {
   }
   const clickToCall = async (encryptData, leadID) => {
     const customerNo = decodeURIComponent(window.atob(encryptData));
-      if (profileData.dialer === 'HALOOCOM-Noida') {
+    if (profileData.dialer === 'HALOOCOM-Noida') {
       await axios.post(`${haloocomNoidaDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`)
         .then((response) => {
           setDialerCall(true);
@@ -338,7 +342,7 @@ export default function MyLeads(props) {
       setTimeout(() => {
         history.push(`/dashboards/myleads/edit/${leadID}`)
       }, 1500)
-    }else if (profileData.dialer === 'HALOOCOM-Mumbai') {
+    } else if (profileData.dialer === 'HALOOCOM-Mumbai') {
       await axios.post(`${haloocomMumbaiDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`)
         .then((response) => {
           setDialerCall(true);
@@ -369,6 +373,9 @@ export default function MyLeads(props) {
   const openDrawer = () => {
     setState(true)
   }
+  const openDialer = () => {
+    setmanualState(true)
+  }
 
   const filterSubmit = () => {
     if (startdate !== "" && enddate === "") {
@@ -381,7 +388,70 @@ export default function MyLeads(props) {
   const closeDrawer = () => {
     setState(false)
     setisError(false)
+    setmanualState(false)
+    setdialerMobileNumber('')
   };
+  const clickToManualCall = async () => {
+    if (profileData.dialer === 'HALOOCOM-Noida') {
+      await axios.post(`${haloocomNoidaDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${dialerMobileNumber}`)
+        .then((response) => {
+          setDialerCall(true);
+          setDisableHangupBtn(false);
+          if (response.status === 200) {
+            localStorage.setItem('callHangUp', true)
+          }
+        }).catch((error) => {
+          console.log('error');
+        })
+    } else if (profileData.dialer === 'HALOOCOM-Mumbai') {
+      await axios.post(`${haloocomMumbaiDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${dialerMobileNumber}`)
+        .then((response) => {
+          setDialerCall(true);
+          setDisableHangupBtn(false);
+          if (response.status === 200) {
+            localStorage.setItem('callHangUp', true)
+          }
+        }).catch((error) => {
+          console.log('error');
+        })
+    }
+  }
+  const hangupCallHandler = async () => {
+    if (profileData.dialer === "HALOOCOM-Noida") {
+      await axios.post(`${haloocomNoidaDialerApi}/action.php?user=${profileData.vertage_id}&type=Hangup&disposition`)
+        .then((response) => {
+          // setDisableDisposeBtn(false);
+          setCallHangUpState(false);
+          if (response.status === 200) {
+            localStorage.removeItem('callHangUp')
+            setdialerMobileNumber('')
+            return disposeCallHandler()
+          }
+          // setCallHangUpState(true);
+        }).catch((error) => {
+          console.log(error);
+        })
+    } else if (profileData.dialer === "HALOOCOM-Mumbai") {
+      await axios.post(`${haloocomMumbaiDialerApi}/action.php?user=${profileData.vertage_id}&type=Hangup&disposition`)
+        .then((response) => {
+          // setDisableDisposeBtn(false);
+          setCallHangUpState(false);
+          if (response.status === 200) {
+            localStorage.removeItem('callHangUp')
+            setdialerMobileNumber('')
+            return disposeCallHandler()
+          }
+          // setCallHangUpState(true);
+        }).catch((error) => {
+          console.log(error);
+        })
+    }
+  }
+  const disposeCallHandler = () => {
+    sethangUpSnacks(true);
+    setCallHangUpState(true);
+
+  }
   return (
     <PageLayerSection>
       <Drawer anchor='right' open={state} onClose={closeDrawer}>
@@ -567,13 +637,77 @@ export default function MyLeads(props) {
           </form>
         </div>
       </Drawer>
+      <Drawer anchor='right' open={manualState} onClose={closeDrawer}>
+        <div className="rightContainerForm">
+          <form>
+            <Grid container justifyContent="flex-start"><h4>Manual Dialer</h4></Grid>
+            <Grid>
+              <TextField
+                className="textField"
+                id="outlined-full-width"
+                label="Mobile Number"
+                margin="normal"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                variant="outlined"
+                size="small"
+                value={dialerMobileNumber}
+                onChange={(e) => setdialerMobileNumber(e.target.value)}
+                onKeyPress={(event) => {
+                  if (event.which == '13') {
+                    event.preventDefault();
+                  }
+                  if (event.key === "Enter") {
+                    clickToManualCall()
+                  }
+                }}
+                inputProps={{
+                  maxLength: 10
+                }}
+              />
+            </Grid>
+            <div className="buttonAdjust">
+              <Button
+                className="callBtn"
+                color="primary"
+                variant="contained"
+                startIcon={<CallIcon className="callIcon" />}
+                onClick={() => clickToManualCall()}
+              >
+                Call
+              </Button>
+              <Button
+                className="endBtn"
+                color="primary"
+                variant="contained"
+                startIcon={<CallIcon className="callIcon" />}
+                disabled={localStorage.getItem("callHangUp") && localStorage.getItem("callHangUp") !== null ? false : callHangUpState}
+                onClick={hangupCallHandler}>
+                End
+              </Button>
+            </div>
+          </form>
+        </div>
+      </Drawer>
       <div className="filterMainContainer">
         <h3>My Leads ({totalLeads})</h3>
-        <div className="filterButtonContainer" onClick={() => openDrawer()}>
-          <div className="filterImage">
-            <img src={filter} alt="" />
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          {profileData.user_roles[0].user_type === 3 ? '' : <Button
+            className="addBtn"
+            color="primary"
+            variant="contained"
+            style={{ marginRight: '15px' }}
+            onClick={() => openDialer()}
+          >
+            Manual Dialer
+          </Button>}
+          <div className="filterButtonContainer" onClick={() => openDrawer()}>
+            <div className="filterImage">
+              <img src={filter} alt="" />
+            </div>
+            <div className="filterText">FILTER</div>
           </div>
-          <div className="filterText">FILTER</div>
         </div>
       </div>
       <TableContainer className={classes.container}>
