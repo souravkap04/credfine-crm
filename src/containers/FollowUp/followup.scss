@@ -3,6 +3,11 @@ $desk: 100 / 1440;
     display: flex;
     justify-content: flex-end;
     margin-bottom: 16 * $desk + vw;
+    .followUpAutoDialerStartBtn {
+        background-color:#14cc9e;
+        box-shadow: none;
+        cursor: pointer;
+    }
     .followbtn {
         margin-right: 15 * $desk + vw;
         margin-left: 15 * $desk + vw;

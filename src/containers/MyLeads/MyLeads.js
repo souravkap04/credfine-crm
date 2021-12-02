@@ -208,9 +208,12 @@ export default function MyLeads(props) {
   const [dialerMobileNumber, setdialerMobileNumber] = useState('')
   const [callHangUpState, setCallHangUpState] = useState(true);
   const [hangUpSnacks, sethangUpSnacks] = useState(false);
+  const [myLeadSearchData, setMyLeadSearchData] = useState([]);
+  const [isMyLeadsSearchData, setisMyLeadsSearchData] = useState(false);
   let statusData = getStatusData();
   let campaignData = getCampaign();
   const queryy = useQueryy();
+  const myLeadQuery = queryy.get("query") || "";
   const datetype = queryy.get("datetype") || "";
   const filterstatus = queryy.get("status") || "";
   const startDate = queryy.get("start_date") || "";
@@ -241,10 +244,22 @@ export default function MyLeads(props) {
         console.log(error);
       })
   };
+  const fetchMyLeadsSearchData = async (key) => {
+    setisMyLeadsSearchData(true);
+    setisLoading(true)
+    let headers = { 'Authorization': `Token ${profileData.token}` }
+    await axios.get(`${baseUrl}/leads/search/${key}`, { headers })
+      .then((response) => {
+        setMyLeadSearchData(response.data);
+        setisLoading(false)
+      }).catch((error) => {
+        console.log(error);
+      })
+  }
   useEffect(() => {
-    fetchMyLeads();
+    myLeadQuery ? fetchMyLeadsSearchData(myLeadQuery) : fetchMyLeads();
     listOfUsers();
-  }, [datetype, filterstatus, startDate, endDate, subStatus, campaign_category, user_id])
+  }, [datetype, filterstatus, startDate, endDate, subStatus, campaign_category, user_id , myLeadQuery])
   const listOfUsers = async () => {
     const headers = {
       'Authorization': `Token ${profileData.token}`,
@@ -453,7 +468,7 @@ export default function MyLeads(props) {
 
   }
   return (
-    <PageLayerSection>
+    <PageLayerSection isMyLeadsSearch={true}>
       <Drawer anchor='right' open={state} onClose={closeDrawer}>
         <div className="rightContainerForm">
           <form>
@@ -693,7 +708,7 @@ export default function MyLeads(props) {
       <div className="filterMainContainer">
         <h3>My Leads ({totalLeads})</h3>
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          {profileData.user_roles[0].user_type === 3 ? '' : <Button
+           <Button
             className="addBtn"
             color="primary"
             variant="contained"
@@ -701,7 +716,7 @@ export default function MyLeads(props) {
             onClick={() => openDialer()}
           >
             Manual Dialer
-          </Button>}
+          </Button>
           <div className="filterButtonContainer" onClick={() => openDrawer()}>
             <div className="filterImage">
               <img src={filter} alt="" />
@@ -731,7 +746,42 @@ export default function MyLeads(props) {
           <TableBody>
             {isLoading ? <div className="loader">
               <CircularProgress size={100} thickness={3} />
-            </div> : myLeads.length !== 0 ?
+            </div> : isMyLeadsSearchData ? (
+              myLeadSearchData.length !== 0 ?
+              myLeadSearchData.map((search,index)=>{
+               let leadPhoneNo = maskPhoneNo(search.phone_no_encrypt)
+               let updatedDate = new Date(search.updated_date)
+                let currentUpdatedDate = updatedDate.toLocaleDateString() + ' ' + moment(updatedDate.toLocaleTimeString(), "HH:mm:ss a").format("hh:mm A")
+                return (
+                  <TableRow className={classes.oddEvenRow} key={index}>
+                    <TableCell className={classes.tabledata}>{index + 1}</TableCell>
+                     <TableCell className={classes.tabledata, classes.leadid} 
+                      onClick={() => leadDetailsHandler(search.lead_crm_id)}
+                    >{search.lead_crm_id}</TableCell> 
+                    <TableCell className={classes.tabledata}>{search.name ? search.name : 'NA'}</TableCell>
+                    <TableCell className={classes.tabledata}>{leadPhoneNo ? leadPhoneNo : 'NA'}</TableCell>
+                    <TableCell className={classes.tabledata}>{search.loan_amount ? search.loan_amount : 'NA'}</TableCell>
+                    <TableCell className={classes.tabledata}>{search.data.monthly_income ? search.data.monthly_income : 'NA'}</TableCell>
+                    <TableCell className={classes.tabledata}>
+                      <div className={classes.loanTypeButton}>
+                        <div className={classes.loanButtonText}>{search.status}</div>
+                      </div>
+                    </TableCell>
+                    <TableCell className={classes.tabledata}>{search.sub_status ? search.sub_status : 'NA'}</TableCell>
+                    <TableCell className={classes.tabledata}>{search.campaign_category ? search.campaign_category : 'NA'}</TableCell>
+                    <TableCell className={classes.tabledata}>{currentUpdatedDate ? currentUpdatedDate : 'NA'}</TableCell>
+                    <TableCell className={classes.tabledata}>{search.lead_agent_name ? search.lead_agent_name : 'NA'}</TableCell>
+                    <TableCell className={classes.tabledata}>
+                      <Tooltip title="Call Customer">
+                        <IconButton className={classes.callButton} onClick={() => clickToCall(search.phone_no_encrypt, search.lead_crm_id)}>
+                          <CallIcon className={classes.callIcon} />
+                        </IconButton>
+                      </Tooltip>
+                    </TableCell>
+                  </TableRow>
+                )
+              }) : <span className={classes.emptydata}>No Data Found</span>) :
+            myLeads.length !== 0 ?
               myLeads.map((my_leads, index) => {
                 let leadPhoneNo = maskPhoneNo(my_leads.lead.phone_no_encrypt)
                 let updatedDate = new Date(my_leads.updated_date)

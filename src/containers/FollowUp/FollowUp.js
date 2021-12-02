@@ -118,6 +118,7 @@ export default function FollowUp(props) {
     const [disableHangupBtn, setDisableHangupBtn] = useState(true);
     const [isLoading, setisLoading] = useState(false);
     const [currentDateTime, setcurrentDateTime] = useState('');
+    const [isAutoDialerStart,setIsAutoDialerStart] = useState(false);
     const fetchLeadsData = async () => {
         setisLoading(true);
         const headers = {
@@ -206,11 +207,31 @@ export default function FollowUp(props) {
     const disableDialerPopUp = () => {
         setDialerCall(false)
         setDisableHangupBtn(false)
+        setIsAutoDialerStart(false);
     }
+    const autoDialerHandler = () => {
+        localStorage.setItem("auto_dialer", true);
+        setIsAutoDialerStart(true);
+        clickToCall(leadData.lead.phone_no, leadData.lead.lead_crm_id);
+      };
+    useEffect(() => {
+        if (localStorage.getItem("auto_dialer") && Object.keys(leadData).length !== 0 ) {
+        clickToCall(leadData.lead.phone_no,leadData.lead.lead_crm_id)
+        }
+    }, [leadData]);
     return (
         <PageLayerSection>
             {/* <NoDataFound text="Coming Soon" /> */}
             <div className="followUpBtnContainer">
+                <div>
+                    <Button 
+                    className="followUpAutoDialerStartBtn"
+                    color="primary"
+                    variant="contained"
+                    onClick={() => autoDialerHandler()}
+                    >
+                    Start</Button>
+                </div>
                 {LeadCount !== 0 ? <Badge className="followbtn" max={999} badgeContent={LeadCount} color="secondary">
                     <Button variant="contained">Follow Up</Button>
                 </Badge> : ''}
@@ -282,6 +303,11 @@ export default function FollowUp(props) {
                             <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={dialerCall} autoHideDuration={3000} onClose={disableDialerPopUp}>
                                 <Alert onClose={disableDialerPopUp} severity="info">
                                     Calling...
+                                </Alert>
+                            </Snackbar>
+                            <Snackbar anchorOrigin={{ vertical: "top", horizontal: "center" }} open={isAutoDialerStart} autoHideDuration={3000} onClose={disableDialerPopUp}>
+                                <Alert onClose={disableDialerPopUp} severity="info">
+                                    Auto dial mode is on
                                 </Alert>
                             </Snackbar>
                         </div>
