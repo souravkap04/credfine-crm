@@ -138,6 +138,7 @@ export default function Leads() {
   const [validated, setValidated] = useState(false);
   const [isDisplay, setIsDisplay] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [isAutoDialerStart,setIsAutoDialerStart] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [isLoading, setisLoading] = useState(false);
   const [fullName, setfullName] = useState("");
@@ -322,9 +323,11 @@ export default function Leads() {
   const closeSnankBar = () => {
     setIsDisplay(false);
     setIsError(false);
+    setIsAutoDialerStart(false);
   };
   const autoDialerHandler = () => {
     localStorage.setItem("auto_dialer", true);
+    setIsAutoDialerStart(true);
     clickToCall(leadData.phone_no_encrypt, leadData.lead_crm_id);
   };
   useEffect(() => {
@@ -339,6 +342,16 @@ export default function Leads() {
       startAutoDialerButton={true}
       startAutoDialerClick={() => autoDialerHandler()}
     >
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        open={isAutoDialerStart}
+        autoHideDuration={1500}
+        onClose={closeSnankBar}
+      >
+        <Alert onClose={closeSnankBar} severity="info">
+          Auto dialer mode is on
+        </Alert>
+      </Snackbar>
       <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
         open={isDisplay}

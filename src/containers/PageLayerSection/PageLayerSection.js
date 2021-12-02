@@ -13,7 +13,6 @@ import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOut
 import WhatsAppIcon from '@material-ui/icons/WhatsApp';
 import Badge from '@material-ui/core/Badge';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import CallEndIcon from '@material-ui/icons/CallEnd';
 import { haloocomNoidaDialerApi, haloocomMumbaiDialerApi } from '../../global/callApi';
 export default function PageLayerSection(props) {
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -150,7 +149,6 @@ export default function PageLayerSection(props) {
                         >
                             Add New Lead
                         </Button> : null}
-                        {props.endAutoDialerBtn ? <IconButton onClick={props.endAutoDialerClick}> <CallEndIcon className="autoDialerEndBtn"/> </IconButton>:''}
                         {props.isWhatsapp ? <a href={`https://api.whatsapp.com/send?phone=+91${props.whatsappNumber}&text=Hi...`} target="_blank"><WhatsAppIcon className="whatsapp" /></a> : ''}
                         {props.offerButton ? <NavLink to="/dashboards/pricing" target="_blank"><Button
                             className="addBtn"
@@ -160,6 +158,14 @@ export default function PageLayerSection(props) {
                         >
                             BANK INTEREST CHART
                         </Button></NavLink> : null}
+                        {props.endAutoDialerBtn ? <Button 
+                        className="autoDialerEndBtn" 
+                        disabled={!localStorage.getItem('auto_dialer')}
+                        color="secondary"
+                        variant="contained"
+                        onClick={props.endAutoDialerClick}
+                        >
+                        Stop</Button>:''}
                         {profileData.user_roles[0].user_type === 1 || profileData.user_roles[0].user_type === 2 || profileData.user_roles[0].user_type === 4 || profileData.user_roles[0].user_type === 6 ? '' : <NavLink to="/dashboards/followup" activeClassName="active"><Badge className="notificationContainer" badgeContent={localStorage.getItem('notification') !== 0 ? localStorage.getItem('notification') : 0} max={999} color="secondary">
                             <NotificationsIcon className="notificationIcon" />
                         </Badge></NavLink>}

@@ -76,9 +76,8 @@ $desk: 100 / 1440;
                     cursor: pointer;
                 }
                 .autoDialerEndBtn {
-                    font-size: 35 * $desk + vw;
                     margin-right: 20 * $desk + vw;
-                    color:#eb5757;
+                    box-shadow: none;
                     cursor: pointer;
                 }
                 .notificationContainer {

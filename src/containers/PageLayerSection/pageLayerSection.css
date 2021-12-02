@@ -130,9 +130,9 @@
 }
 
 .pageAdjustSection .rightSection .appBarContainer .rightAppBarSection .autoDialerEndBtn {
-  font-size: 2.43056vw;
   margin-right: 1.38889vw;
-  color: #eb5757;
+  -webkit-box-shadow: none;
+          box-shadow: none;
   cursor: pointer;
 }
 
