@@ -59,6 +59,11 @@ $desk: 100 / 1440;
             .rightAppBarSection {
                 display: flex;
                 align-items: center;
+                .autoDialerStartBtn {
+                    background-color:#14cc9e;
+                    box-shadow: none;
+                    margin-right: 20 * $desk + vw;
+                }
                 .addBtn {
                     background-color: #535ad1;
                     box-shadow: none;
@@ -68,6 +73,12 @@ $desk: 100 / 1440;
                     font-size: 35 * $desk + vw;
                     margin-right: 20 * $desk + vw;
                     color: #25D366;
+                    cursor: pointer;
+                }
+                .autoDialerEndBtn {
+                    font-size: 35 * $desk + vw;
+                    margin-right: 20 * $desk + vw;
+                    color:#eb5757;
                     cursor: pointer;
                 }
                 .notificationContainer {

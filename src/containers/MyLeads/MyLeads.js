@@ -708,7 +708,7 @@ export default function MyLeads(props) {
       <div className="filterMainContainer">
         <h3>My Leads ({totalLeads})</h3>
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          {profileData.user_roles[0].user_type === 3 ? '' : <Button
+           <Button
             className="addBtn"
             color="primary"
             variant="contained"
@@ -716,7 +716,7 @@ export default function MyLeads(props) {
             onClick={() => openDialer()}
           >
             Manual Dialer
-          </Button>}
+          </Button>
           <div className="filterButtonContainer" onClick={() => openDrawer()}>
             <div className="filterImage">
               <img src={filter} alt="" />

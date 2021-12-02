@@ -4,7 +4,7 @@ import './pageLayerSection.css';
 import MenuMain from '../Menu/Menu';
 import Avatar from '@material-ui/core/Avatar';
 import SearchIcon from "@material-ui/icons/Search";
-import { InputBase, MenuItem, Menu } from '@material-ui/core';
+import { InputBase, MenuItem, Menu, IconButton } from '@material-ui/core';
 import { useIdleTimer } from 'react-idle-timer';
 import ArrowDropDownOutlinedIcon from '@material-ui/icons/ArrowDropDownOutlined';
 import { NavLink, useHistory } from 'react-router-dom';
@@ -13,6 +13,7 @@ import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOut
 import WhatsAppIcon from '@material-ui/icons/WhatsApp';
 import Badge from '@material-ui/core/Badge';
 import NotificationsIcon from '@material-ui/icons/Notifications';
+import CallEndIcon from '@material-ui/icons/CallEnd';
 import { haloocomNoidaDialerApi, haloocomMumbaiDialerApi } from '../../global/callApi';
 export default function PageLayerSection(props) {
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -134,6 +135,12 @@ export default function PageLayerSection(props) {
                         </div>
                     </div>
                     <div className="rightAppBarSection">
+                        {props.startAutoDialerButton ? <Button 
+                        className="autoDialerStartBtn"
+                        color="primary"
+                        variant="contained"
+                        onClick={props.startAutoDialerClick}
+                        > start</Button> : ''}
                         {props.addLeadButton ? <Button
                             className="addBtn"
                             color="primary"
@@ -143,6 +150,7 @@ export default function PageLayerSection(props) {
                         >
                             Add New Lead
                         </Button> : null}
+                        {props.endAutoDialerBtn ? <IconButton onClick={props.endAutoDialerClick}> <CallEndIcon className="autoDialerEndBtn"/> </IconButton>:''}
                         {props.isWhatsapp ? <a href={`https://api.whatsapp.com/send?phone=+91${props.whatsappNumber}&text=Hi...`} target="_blank"><WhatsAppIcon className="whatsapp" /></a> : ''}
                         {props.offerButton ? <NavLink to="/dashboards/pricing" target="_blank"><Button
                             className="addBtn"
@@ -167,6 +175,12 @@ export default function PageLayerSection(props) {
                             onClose={handleClose}
                         >
                             <NavLink to="/profile" style={{ textDecoration: "none", color: "#080707" }}><MenuItem style={{ fontFamily: 'Lato' }}>Profile</MenuItem></NavLink>
+                            <MenuItem style={{ fontFamily: 'Lato' }} onClick={logoutHandler}>Logout For Tea </MenuItem>
+                            <MenuItem style={{ fontFamily: 'Lato' }} onClick={logoutHandler}>Logout For Team Meeting</MenuItem>
+                            <MenuItem style={{ fontFamily: 'Lato' }} onClick={logoutHandler}>Logout For Lunch </MenuItem>
+                            <MenuItem style={{ fontFamily: 'Lato' }} onClick={logoutHandler}>Logout For Washroom </MenuItem>
+                            <MenuItem style={{ fontFamily: 'Lato' }} onClick={logoutHandler}>Logout For Fresh Mind</MenuItem>
+                            <MenuItem style={{ fontFamily: 'Lato' }} onClick={logoutHandler}>Logout For Training</MenuItem>
                             <MenuItem style={{ fontFamily: 'Lato' }} onClick={logoutHandler}>Logout</MenuItem>
                         </Menu>
                         <Avatar className="avatar" alt="User Name">{userName.charAt(0).toUpperCase()}</Avatar>

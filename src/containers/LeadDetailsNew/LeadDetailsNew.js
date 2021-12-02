@@ -631,8 +631,12 @@ export default function LeadDetailsNew(props) {
         setDialerCall(false)
         setDisableHangupBtn(false)
     }
+    const endAutoDialerBtnHandler = ()=>{
+        console.log('endAutoDialerBtnHandler');
+        localStorage.removeItem('auto_dialer');
+    }
     return (
-        <PageLayerSection pageTitle="Lead Details" className={classes.scrollEnable} offerButton={true} isWhatsapp={true} whatsappNumber={mobileNo}>
+        <PageLayerSection pageTitle="Lead Details" className={classes.scrollEnable} offerButton={true} isWhatsapp={true} whatsappNumber={mobileNo} endAutoDialerBtn={false} endAutoDialerClick={()=>endAutoDialerBtnHandler()}>
             {/* Errors SnackBars Start */}
             <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={hangUpSnacks} autoHideDuration={1500} onClose={disableHangUpSnacks}>
                 <Alert onClose={disableHangUpSnacks} severity="success">
