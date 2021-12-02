@@ -207,8 +207,17 @@ export default function FollowUp(props) {
         setDialerCall(false)
         setDisableHangupBtn(false)
     }
+    const autoDialerHandler = () => {
+        localStorage.setItem("auto_dialer", true);
+        clickToCall(leadData.lead.phone_no, leadData.lead.lead_crm_id);
+      };
+    useEffect(() => {
+        if (localStorage.getItem("auto_dialer") && Object.keys(leadData).length !== 0 ) {
+        clickToCall(leadData.lead.phone_no,leadData.lead.lead_crm_id)
+        }
+    }, [leadData]);
     return (
-        <PageLayerSection>
+        <PageLayerSection  startAutoDialerButton={true} startAutoDialerClick={() => autoDialerHandler()}>
             {/* <NoDataFound text="Coming Soon" /> */}
             <div className="followUpBtnContainer">
                 {LeadCount !== 0 ? <Badge className="followbtn" max={999} badgeContent={LeadCount} color="secondary">

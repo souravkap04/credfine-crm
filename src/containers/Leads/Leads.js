@@ -184,8 +184,7 @@ export default function Leads() {
     history.push(`/dashboards/leads/edit/${leadId}`);
   };
   const clickToCall = async (encryptData, leadID) => {
-    // const customerNo = decodeURIComponent(window.atob(encryptData));
-    const customerNo = encryptData;
+     const customerNo = decodeURIComponent(window.atob(encryptData));
     if (profileData.dialer === "HALOOCOM-Noida") {
       await axios
         .post(
@@ -326,22 +325,18 @@ export default function Leads() {
   };
   const autoDialerHandler = () => {
     localStorage.setItem("auto_dialer", true);
-    clickToCall(leadData.phone_no, leadData.lead_crm_id);
+    clickToCall(leadData.phone_no_encrypt, leadData.lead_crm_id);
   };
-  // useEffect(() => {
-  //   console.log("reload leads");
-  //   setTimeout(() => {
-  //     if (localStorage.getItem("auto_dialer")) {
-  //       console.log("hhhh:" + Object.values(leadData));
-  //       // clickToCall(leadData.phone_no,leadData.lead_crm_id)
-  //     }
-  //   }, 3000);
-  // }, [leadData]);
+  useEffect(() => {
+      if (localStorage.getItem("auto_dialer") && Object.keys(leadData).length !== 0 ) {
+        clickToCall(leadData.phone_no_encrypt,leadData.lead_crm_id)
+      }
+  }, [leadData]);
   return (
     <PageLayerSection
       addLeadButton={state ? false : true}
       onClick={() => openDrawer()}
-      startAutoDialerButton={false}
+      startAutoDialerButton={true}
       startAutoDialerClick={() => autoDialerHandler()}
     >
       <Snackbar
@@ -645,7 +640,7 @@ export default function Leads() {
                     <IconButton
                       className={classes.callButton}
                       onClick={() =>
-                        clickToCall(leadData.phone_no, leadData.lead_crm_id)
+                        clickToCall(leadData.phone_no_encrypt, leadData.lead_crm_id)
                       }
                     >
                       <CallIcon className={classes.callIcon} />
