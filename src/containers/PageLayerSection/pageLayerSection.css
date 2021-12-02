@@ -108,6 +108,13 @@
           align-items: center;
 }
 
+.pageAdjustSection .rightSection .appBarContainer .rightAppBarSection .autoDialerStartBtn {
+  background-color: #14cc9e;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+  margin-right: 1.38889vw;
+}
+
 .pageAdjustSection .rightSection .appBarContainer .rightAppBarSection .addBtn {
   background-color: #535ad1;
   -webkit-box-shadow: none;
@@ -119,6 +126,13 @@
   font-size: 2.43056vw;
   margin-right: 1.38889vw;
   color: #25D366;
+  cursor: pointer;
+}
+
+.pageAdjustSection .rightSection .appBarContainer .rightAppBarSection .autoDialerEndBtn {
+  margin-right: 1.38889vw;
+  -webkit-box-shadow: none;
+          box-shadow: none;
   cursor: pointer;
 }
 

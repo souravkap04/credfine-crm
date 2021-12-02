@@ -4,7 +4,7 @@ import './pageLayerSection.css';
 import MenuMain from '../Menu/Menu';
 import Avatar from '@material-ui/core/Avatar';
 import SearchIcon from "@material-ui/icons/Search";
-import { InputBase, MenuItem, Menu } from '@material-ui/core';
+import { InputBase, MenuItem, Menu, IconButton } from '@material-ui/core';
 import { useIdleTimer } from 'react-idle-timer';
 import ArrowDropDownOutlinedIcon from '@material-ui/icons/ArrowDropDownOutlined';
 import { NavLink, useHistory } from 'react-router-dom';
@@ -93,6 +93,24 @@ export default function PageLayerSection(props) {
                             <div className="searchIconContainer">
                                 <SearchIcon className="searchIcon" />
                             </div>
+                            {props.isMyLeadsSearch ? 
+                             <InputBase
+                             placeholder="Lead ID / Mobile"
+                             className="inputContainer"
+                             inputProps={{ "aria-label": "search" }}
+                             value={searchInput}
+                             onChange={(e) => setSearchInput((e.target.value).toUpperCase().trim())}
+                             onKeyPress={(event) => {
+                                 if (event.key === "Enter") {
+                                     if (searchInput !== "" && searchValidation(searchInput)) {
+                                         history.push("/dashboards/myleads?query=" + searchInput);
+                                     } else if (searchInput === "") {
+                                         history.push("/dashboards/myleads");
+                                         window.location.reload();
+                                     }
+                                 }
+                             }}
+                         />  :
                             <InputBase
                                 placeholder="Lead ID / Mobile"
                                 className="inputContainer"
@@ -109,13 +127,19 @@ export default function PageLayerSection(props) {
                                         }
                                     }
                                 }}
-                            />
+                            /> }
                         </div>
                         <div className="headerSection">
                             <h3>{props.pageTitle}</h3>
                         </div>
                     </div>
                     <div className="rightAppBarSection">
+                        {props.startAutoDialerButton ? <Button 
+                        className="autoDialerStartBtn"
+                        color="primary"
+                        variant="contained"
+                        onClick={props.startAutoDialerClick}
+                        > start</Button> : ''}
                         {props.addLeadButton ? <Button
                             className="addBtn"
                             color="primary"
@@ -134,6 +158,14 @@ export default function PageLayerSection(props) {
                         >
                             BANK INTEREST CHART
                         </Button></NavLink> : null}
+                        {props.endAutoDialerBtn ? <Button 
+                        className="autoDialerEndBtn" 
+                        disabled={!localStorage.getItem('auto_dialer')}
+                        color="secondary"
+                        variant="contained"
+                        onClick={props.endAutoDialerClick}
+                        >
+                        Stop</Button>:''}
                         {profileData.user_roles[0].user_type === 1 || profileData.user_roles[0].user_type === 2 || profileData.user_roles[0].user_type === 4 || profileData.user_roles[0].user_type === 6 ? '' : <NavLink to="/dashboards/followup" activeClassName="active"><Badge className="notificationContainer" badgeContent={localStorage.getItem('notification') !== 0 ? localStorage.getItem('notification') : 0} max={999} color="secondary">
                             <NotificationsIcon className="notificationIcon" />
                         </Badge></NavLink>}
@@ -149,12 +181,12 @@ export default function PageLayerSection(props) {
                             onClose={handleClose}
                         >
                             <NavLink to="/profile" style={{ textDecoration: "none", color: "#080707" }}><MenuItem style={{ fontFamily: 'Lato' }}>Profile</MenuItem></NavLink>
-                            <MenuItem style={{ fontFamily: 'Lato' }} onClick={logoutHandler}>Logout For Tea</MenuItem>
+                            <MenuItem style={{ fontFamily: 'Lato' }} onClick={logoutHandler}>Logout For Tea </MenuItem>
                             <MenuItem style={{ fontFamily: 'Lato' }} onClick={logoutHandler}>Logout For Team Meeting</MenuItem>
-                            <MenuItem style={{ fontFamily: 'Lato' }} onClick={logoutHandler}>Logout For Lunch</MenuItem>
-                            <MenuItem style={{ fontFamily: 'Lato' }} onClick={logoutHandler}>Logout For Washroom</MenuItem>
+                            <MenuItem style={{ fontFamily: 'Lato' }} onClick={logoutHandler}>Logout For Lunch </MenuItem>
+                            <MenuItem style={{ fontFamily: 'Lato' }} onClick={logoutHandler}>Logout For Washroom </MenuItem>
                             <MenuItem style={{ fontFamily: 'Lato' }} onClick={logoutHandler}>Logout For Fresh Mind</MenuItem>
-                            <MenuItem style={{ fontFamily: 'Lato' }} onClick={logoutHandler}>Logout For Traning</MenuItem>
+                            <MenuItem style={{ fontFamily: 'Lato' }} onClick={logoutHandler}>Logout For Training</MenuItem>
                             <MenuItem style={{ fontFamily: 'Lato' }} onClick={logoutHandler}>Logout</MenuItem>
                         </Menu>
                         <Avatar className="avatar" alt="User Name">{userName.charAt(0).toUpperCase()}</Avatar>

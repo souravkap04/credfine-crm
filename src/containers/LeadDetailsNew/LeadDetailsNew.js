@@ -180,6 +180,7 @@ export default function LeadDetailsNew(props) {
     const [Roi, setRoi] = useState('');
     const [disbursedError, setdisbursedError] = useState([false, false]);
     const [colorRed, setcolorRed] = useState([false, false, false, false]);
+    const [isAutoDialerEnd,setIsAutoDialerEnd] = useState(false);
     let statusData = getStatusData();
     let { leadid } = useParams();
     let history = useHistory();
@@ -560,6 +561,7 @@ export default function LeadDetailsNew(props) {
         setIsLeadError(false);
         setIsLeadDetails(false);
         setisCopy(false);
+        setIsAutoDialerEnd(false);
     }
     const clickToCall = async (customerNo, leadID) => {
          if (profileData.dialer === 'HALOOCOM-Noida') {
@@ -631,12 +633,21 @@ export default function LeadDetailsNew(props) {
         setDialerCall(false)
         setDisableHangupBtn(false)
     }
+    const endAutoDialerBtnHandler = ()=>{
+        setIsAutoDialerEnd(true);
+        localStorage.removeItem('auto_dialer');
+    }
     return (
-        <PageLayerSection pageTitle="Lead Details" className={classes.scrollEnable} offerButton={true} isWhatsapp={true} whatsappNumber={mobileNo}>
+        <PageLayerSection pageTitle="Lead Details" className={classes.scrollEnable} offerButton={true} isWhatsapp={true} whatsappNumber={mobileNo} endAutoDialerBtn={true} endAutoDialerClick={()=>endAutoDialerBtnHandler()}>
             {/* Errors SnackBars Start */}
             <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={hangUpSnacks} autoHideDuration={1500} onClose={disableHangUpSnacks}>
                 <Alert onClose={disableHangUpSnacks} severity="success">
                     Hang Up Successfully...
+                </Alert>
+            </Snackbar>
+            <Snackbar anchorOrigin={{ vertical: "top", horizontal: "center" }} open={isAutoDialerEnd} autoHideDuration={1500} onClose={disableHangUpSnacks}>
+                <Alert onClose={disableHangUpSnacks} severity="info">
+                    Auto dialer mode is off
                 </Alert>
             </Snackbar>
             {profileData.dialer === 'HALOOCOM' ? <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={localStorage.getItem("callHangUp") && localStorage.getItem("callHangUp") !== null ? true : callInProgress} autoHideDuration={1500} onClose={disableHangUpSnacks}>
