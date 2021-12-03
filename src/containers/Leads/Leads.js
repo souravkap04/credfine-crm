@@ -145,6 +145,7 @@ export default function Leads() {
   const [mobileNo, setmobileNo] = useState("");
   const [monthlyIncome, setmonthlyIncome] = useState("");
   const [formError, setformError] = useState([false, false, false]);
+  const [leadConflictPopUp,setLeadConflictPopUp] = useState(false);
   useEffect(() => {
     leadQuery ? fetchSearchData(leadQuery) : fetchLeadsData();
   }, [leadQuery]);
@@ -184,6 +185,9 @@ export default function Leads() {
   const routeChangeHAndler = (leadId) => {
     history.push(`/dashboards/leads/edit/${leadId}`);
   };
+  const leadConflictHandler = () => {
+    setLeadConflictPopUp(true);
+  }
   const clickToCall = async (encryptData, leadID) => {
      const customerNo = decodeURIComponent(window.atob(encryptData));
     if (profileData.dialer === "HALOOCOM-Noida") {
@@ -254,6 +258,7 @@ export default function Leads() {
   const disableDialerPopUp = () => {
     setDialerCall(false);
     setDisableHangupBtn(false);
+    setLeadConflictPopUp(false);
   };
   const personalLoanSubmitHandler = async () => {
     let formErrorData = [...formError];
@@ -537,12 +542,20 @@ export default function Leads() {
                   let leadPhoneNo = maskPhoneNo(search.phone_no_encrypt);
                   return (
                     <TableRow className={classes.oddEvenRow} key={index}>
+                      {profileData.username === search.lead_agent_name ? 
                       <TableCell
                         className={(classes.tabledata, classes.click)}
-                        onClick={() => routeChangeHAndler(search.lead_crm_id)}
+                        onClick={() => routeChangeHAndler(search.lead_crm_id)} 
                       >
                         {search.lead_crm_id}
-                      </TableCell>
+                      </TableCell> : 
+                        <TableCell
+                        className={(classes.tabledata, classes.click)}
+                        onClick={() => leadConflictHandler()} 
+                      >
+                        {search.lead_crm_id}
+                      </TableCell> 
+                        }
                       <TableCell className={classes.tabledata}>
                         {search.name ? search.name : "NA"}
                       </TableCell>
@@ -580,6 +593,7 @@ export default function Leads() {
                       <TableCell className={classes.tabledata}>
                         {search.sub_status ? search.sub_status : "NA"}
                       </TableCell>
+                      {profileData.username === search.lead_agent_name ?
                       <TableCell>
                         <Tooltip title="Call Customer">
                           <IconButton
@@ -594,7 +608,18 @@ export default function Leads() {
                             <CallIcon className={classes.callIcon} />
                           </IconButton>
                         </Tooltip>
-                      </TableCell>
+                      </TableCell> : 
+                      <TableCell>
+                      <Tooltip title="Call Customer">
+                        <IconButton
+                          className={classes.callButton}
+                          onClick={() => leadConflictHandler()}
+                        >
+                          <CallIcon className={classes.callIcon} />
+                        </IconButton>
+                      </Tooltip>
+                    </TableCell>
+                      }
                     </TableRow>
                   );
                 })
@@ -683,6 +708,16 @@ export default function Leads() {
               >
                 <Alert onClose={disableDialerPopUp} severity="info">
                   Calling...
+                </Alert>
+              </Snackbar>
+              <Snackbar
+                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                open={leadConflictPopUp}
+                autoHideDuration={3000}
+                onClose={disableDialerPopUp}
+              >
+                <Alert onClose={disableDialerPopUp} severity="error">
+                  Insufficient privilege
                 </Alert>
               </Snackbar>
             </div>

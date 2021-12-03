@@ -167,7 +167,7 @@ export default function PageLayerSection(props) {
                         onClick={props.endAutoDialerClick}
                         >
                         Stop</Button>:''}
-                        {profileData.user_roles[0].user_type === 1 || profileData.user_roles[0].user_type === 2 || profileData.user_roles[0].user_type === 4 || profileData.user_roles[0].user_type === 6 ? '' : <NavLink to="/dashboards/followup" activeClassName="active"><Badge className="notificationContainer" badgeContent={localStorage.getItem('notification') !== 0 ? localStorage.getItem('notification') : 0} max={999} color="secondary">
+                        {profileData.user_roles[0].user_type === 1 || profileData.user_roles[0].user_type === 2 || profileData.user_roles[0].user_type === 4 || profileData.user_roles[0].user_type === 6 ? '' : <NavLink to="/dashboards/followup" activeClassName="active"><Badge className="notificationContainer" badgeContent={localStorage.getItem('notification') !== 0 ? localStorage.getItem('notification') : 0} max={5000} color="secondary">
                             <NotificationsIcon className="notificationIcon" />
                         </Badge></NavLink>}
                         <div className="nameContainer" onClick={handleMenu}>

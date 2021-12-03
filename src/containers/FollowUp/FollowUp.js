@@ -230,7 +230,7 @@ export default function FollowUp(props) {
                     onClick={() => autoDialerHandler()}
                     >
                     Start</Button>
-                {LeadCount !== 0 ? <Badge className="followbtn" max={999} badgeContent={LeadCount} color="secondary">
+                {LeadCount !== 0 ? <Badge className="followbtn" max={5000} badgeContent={LeadCount} color="secondary">
                     <Button variant="contained">Follow Up</Button>
                 </Badge> : ''}
                 {/* <Badge className="followbtn" badgeContent={4} color="secondary">
