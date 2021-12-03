@@ -5,8 +5,8 @@ $desk: 100 / 1440;
     margin-bottom: 16 * $desk + vw;
     .followUpAutoDialerStartBtn {
         background-color:#14cc9e;
-        box-shadow: none;
         cursor: pointer;
+        box-shadow: none;
     }
     .followbtn {
         margin-right: 15 * $desk + vw;
@@ -20,4 +20,8 @@ $desk: 100 / 1440;
             color: #fff;
         }
     }
+}
+.followUpBtnContainer .followUpAutoDialerStartBtn:hover {
+    background-color: #14cc9e;
+    box-shadow: none;
 }
