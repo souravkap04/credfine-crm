@@ -273,7 +273,6 @@ export default function MyLeads(props) {
   }
   const leadDetailsHandler = (leadId) => {
     history.push(`/dashboards/myleads/edit/${leadId}`);
-    // props.mainMenuCallBack(true, leadId);
   }
   const nextPageHandler = async () => {
     setisLoading(true)
