@@ -734,11 +734,11 @@ export default function MyLeads(props) {
               <TableCell className={classes.tableheading}>Mobile</TableCell>
               <TableCell className={classes.tableheading}>Loan Amt</TableCell>
               <TableCell className={classes.tableheading}>Income</TableCell>
+              <TableCell className={classes.tableheading} >Campaign</TableCell>
+              <TableCell className={classes.tableheading}>Lead Agent Name</TableCell>
+              <TableCell className={classes.tableheading}>Last Updated</TableCell>
               <TableCell className={clsx(classes.tableheading, classes.statusHeading)}>Status</TableCell>
               <TableCell className={classes.tableheading}>Sub Status</TableCell>
-              <TableCell className={classes.tableheading} >Campaign</TableCell>
-              <TableCell className={classes.tableheading}>Last Updated</TableCell>
-              <TableCell className={classes.tableheading}>Lead Agent Name</TableCell>
               <TableCell className={classes.tableheading} ></TableCell>
             </TableRow>
           </TableHead>
@@ -761,15 +761,15 @@ export default function MyLeads(props) {
                     <TableCell className={classes.tabledata}>{leadPhoneNo ? leadPhoneNo : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>{search.loan_amount ? search.loan_amount : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>{search.data.monthly_income ? search.data.monthly_income : 'NA'}</TableCell>
+                    <TableCell className={classes.tabledata}>{search.campaign_category ? search.campaign_category : 'NA'}</TableCell>
+                    <TableCell className={classes.tabledata}>{search.lead_agent_name ? search.lead_agent_name : 'NA'}</TableCell>
+                    <TableCell className={classes.tabledata}>{currentUpdatedDate ? currentUpdatedDate : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>
                       <div className={classes.loanTypeButton}>
                         <div className={classes.loanButtonText}>{search.status}</div>
                       </div>
                     </TableCell>
                     <TableCell className={classes.tabledata}>{search.sub_status ? search.sub_status : 'NA'}</TableCell>
-                    <TableCell className={classes.tabledata}>{search.campaign_category ? search.campaign_category : 'NA'}</TableCell>
-                    <TableCell className={classes.tabledata}>{currentUpdatedDate ? currentUpdatedDate : 'NA'}</TableCell>
-                    <TableCell className={classes.tabledata}>{search.lead_agent_name ? search.lead_agent_name : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>
                       <Tooltip title="Call Customer">
                         <IconButton className={classes.callButton} onClick={() => clickToCall(search.phone_no_encrypt, search.lead_crm_id)}>
@@ -795,15 +795,15 @@ export default function MyLeads(props) {
                     <TableCell className={classes.tabledata}>{leadPhoneNo ? leadPhoneNo : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>{my_leads.lead.loan_amount ? my_leads.lead.loan_amount : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>{my_leads.lead.data.monthly_income ? my_leads.lead.data.monthly_income : 'NA'}</TableCell>
+                    <TableCell className={classes.tabledata}>{my_leads.lead.campaign_category ? my_leads.lead.campaign_category : 'NA'}</TableCell>
+                    <TableCell className={classes.tabledata}>{my_leads.lead_agent_name ? my_leads.lead_agent_name : 'NA'}</TableCell>
+                    <TableCell className={classes.tabledata}>{currentUpdatedDate ? currentUpdatedDate : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>
                       <div className={classes.loanTypeButton}>
                         <div className={classes.loanButtonText}>{my_leads.lead.status}</div>
                       </div>
                     </TableCell>
                     <TableCell className={classes.tabledata}>{my_leads.lead.sub_status ? my_leads.lead.sub_status : 'NA'}</TableCell>
-                    <TableCell className={classes.tabledata}>{my_leads.lead.campaign_category ? my_leads.lead.campaign_category : 'NA'}</TableCell>
-                    <TableCell className={classes.tabledata}>{currentUpdatedDate ? currentUpdatedDate : 'NA'}</TableCell>
-                    <TableCell className={classes.tabledata}>{my_leads.lead_agent_name ? my_leads.lead_agent_name : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>
                       <Tooltip title="Call Customer">
                         <IconButton className={classes.callButton} onClick={() => clickToCall(my_leads.lead.phone_no_encrypt, my_leads.lead.lead_crm_id)}>

@@ -249,11 +249,11 @@ export default function FollowUp(props) {
                             <TableCell className={classes.tableheading} >Loan Amt</TableCell>
                             <TableCell className={classes.tableheading}>Income</TableCell>
                             <TableCell className={classes.tableheading} >Company</TableCell>
-                            <TableCell className={clsx(classes.tableheading, classes.statusHeading)} >Status</TableCell>
-                            <TableCell className={classes.tableheading}>Follow-Up Date</TableCell>
-                            <TableCell className={classes.tableheading} >Sub Status</TableCell>
                             <TableCell className={classes.tableheading} >Campaign</TableCell>
                             <TableCell className={classes.tableheading} >Lead Agent Name</TableCell>
+                            <TableCell className={classes.tableheading}>Follow-Up Date</TableCell>
+                            <TableCell className={clsx(classes.tableheading, classes.statusHeading)} >Status</TableCell>
+                            <TableCell className={classes.tableheading} >Sub Status</TableCell>
                             <TableCell className={classes.tableheading} ></TableCell>
                         </TableRow>
                     </TableHead>
@@ -270,15 +270,15 @@ export default function FollowUp(props) {
                                 <TableCell className={classes.tabledata}>{leadData.lead.loan_amount ? leadData.lead.loan_amount : 'NA'}</TableCell>
                                 <TableCell className={classes.tabledata}>{leadData.lead.data['monthly_income'] ? leadData.lead.data['monthly_income'] : 'NA'}</TableCell>
                                 <TableCell className={classes.tabledata}>{leadData.lead.data['current_company_name'] ? leadData.lead.data['current_company_name'] : 'NA'}</TableCell>
+                                <TableCell className={classes.tabledata}>{leadData.lead.campaign_category ? leadData.lead.campaign_category : 'NA'}</TableCell>
+                                <TableCell className={classes.tabledata}>{leadData.lead.lead_agent_name ? leadData.lead.lead_agent_name : 'NA'}</TableCell>
+                                <TableCell className={classes.tabledata}>{currentDateTime ? currentDateTime : 'NA'}</TableCell>
                                 <TableCell className={classes.tabledata}>
                                     <div className={classes.loanTypeButton}>
                                         <div className={classes.loanButtonText}>{leadData.lead.status}</div>
                                     </div>
                                 </TableCell>
-                                <TableCell className={classes.tabledata}>{currentDateTime ? currentDateTime : 'NA'}</TableCell>
                                 <TableCell className={classes.tabledata}>{leadData.lead.sub_status ? leadData.lead.sub_status : 'NA'}</TableCell>
-                                <TableCell className={classes.tabledata}>{leadData.lead.campaign_category ? leadData.lead.campaign_category : 'NA'}</TableCell>
-                                <TableCell className={classes.tabledata}>{leadData.lead.lead_agent_name ? leadData.lead.lead_agent_name : 'NA'}</TableCell>
                                 <TableCell>
                                     <Tooltip title="Call Customer">
                                         <IconButton className={classes.callButton} onClick={() => clickToCall(leadData.lead.phone_no, leadData.lead.lead_crm_id)}>

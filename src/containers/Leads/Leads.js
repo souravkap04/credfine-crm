@@ -516,13 +516,13 @@ export default function Leads() {
               <TableCell className={classes.tableheading}>Income</TableCell>
               <TableCell className={classes.tableheading}>Company</TableCell>
               <TableCell className={classes.tableheading}>Loan Type</TableCell>
+              <TableCell className={classes.tableheading}>Campaign</TableCell>
               <TableCell
                 className={clsx(classes.tableheading, classes.statusHeading)}
               >
                 Status
               </TableCell>
               <TableCell className={classes.tableheading}>Sub Status</TableCell>
-              <TableCell className={classes.tableheading}>Campaign</TableCell>
               <TableCell className={classes.tableheading}></TableCell>
             </TableRow>
           </TableHead>
@@ -566,6 +566,11 @@ export default function Leads() {
                         {search.loan_type}
                       </TableCell>
                       <TableCell className={classes.tabledata}>
+                        {search.campaign_category
+                          ? search.campaign_category
+                          : "NA"}
+                      </TableCell>
+                      <TableCell className={classes.tabledata}>
                         <div className={classes.loanTypeButton}>
                           <div className={classes.loanButtonText}>
                             {search.status}
@@ -574,11 +579,6 @@ export default function Leads() {
                       </TableCell>
                       <TableCell className={classes.tabledata}>
                         {search.sub_status ? search.sub_status : "NA"}
-                      </TableCell>
-                      <TableCell className={classes.tabledata}>
-                        {search.campaign_category
-                          ? search.campaign_category
-                          : "NA"}
                       </TableCell>
                       <TableCell>
                         <Tooltip title="Call Customer">
@@ -634,6 +634,11 @@ export default function Leads() {
                   {leadData.loan_type ? leadData.loan_type : "NA"}
                 </TableCell>
                 <TableCell className={classes.tabledata}>
+                  {leadData.campaign_category
+                    ? leadData.campaign_category
+                    : "NA"}
+                </TableCell>
+                <TableCell className={classes.tabledata}>
                   <div className={classes.loanTypeButton}>
                     <div className={classes.loanButtonText}>
                       {leadData.status}
@@ -642,11 +647,6 @@ export default function Leads() {
                 </TableCell>
                 <TableCell className={classes.tabledata}>
                   {leadData.sub_status ? leadData.sub_status : "NA"}
-                </TableCell>
-                <TableCell className={classes.tabledata}>
-                  {leadData.campaign_category
-                    ? leadData.campaign_category
-                    : "NA"}
                 </TableCell>
                 <TableCell>
                   <Tooltip title="Call Customer">
