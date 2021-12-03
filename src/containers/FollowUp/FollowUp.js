@@ -223,7 +223,6 @@ export default function FollowUp(props) {
         <PageLayerSection>
             {/* <NoDataFound text="Coming Soon" /> */}
             <div className="followUpBtnContainer">
-                <div>
                     <Button 
                     className="followUpAutoDialerStartBtn"
                     color="primary"
@@ -231,7 +230,6 @@ export default function FollowUp(props) {
                     onClick={() => autoDialerHandler()}
                     >
                     Start</Button>
-                </div>
                 {LeadCount !== 0 ? <Badge className="followbtn" max={999} badgeContent={LeadCount} color="secondary">
                     <Button variant="contained">Follow Up</Button>
                 </Badge> : ''}
