@@ -185,7 +185,6 @@ export default function LeadDetailsNew(props) {
     let { leadid } = useParams();
     let history = useHistory();
     let location = useLocation();
-
     const maskPhoneNo = (phoneNo) => {
         let data = phoneNo;
         let unMaskdata = data.slice(-4);

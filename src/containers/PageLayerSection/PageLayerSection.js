@@ -7,7 +7,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import { InputBase, MenuItem, Menu, IconButton } from '@material-ui/core';
 import { useIdleTimer } from 'react-idle-timer';
 import ArrowDropDownOutlinedIcon from '@material-ui/icons/ArrowDropDownOutlined';
-import { NavLink, useHistory } from 'react-router-dom';
+import { NavLink, useHistory,useLocation} from 'react-router-dom';
 import { Button } from '@material-ui/core';
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
 import WhatsAppIcon from '@material-ui/icons/WhatsApp';
@@ -18,6 +18,7 @@ export default function PageLayerSection(props) {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [searchInput, setSearchInput] = useState("");
     let history = useHistory()
+    let location = useLocation();
     let profileData = JSON.parse(localStorage.getItem("user_info"));
     let userName = profileData.username;
     userName = userName.replace(/^\s+|\s+$/g, "");
@@ -93,7 +94,7 @@ export default function PageLayerSection(props) {
                             <div className="searchIconContainer">
                                 <SearchIcon className="searchIcon" />
                             </div>
-                            {props.isMyLeadsSearch ? 
+                            {props.isMyLeadsSearch || (location.pathname === `/dashboards/myleads/edit/${searchInput}`) ? 
                              <InputBase
                              placeholder="Lead ID / Mobile"
                              className="inputContainer"
@@ -166,7 +167,7 @@ export default function PageLayerSection(props) {
                         onClick={props.endAutoDialerClick}
                         >
                         Stop</Button>:''}
-                        {profileData.user_roles[0].user_type === 1 || profileData.user_roles[0].user_type === 2 || profileData.user_roles[0].user_type === 4 || profileData.user_roles[0].user_type === 6 ? '' : <NavLink to="/dashboards/followup" activeClassName="active"><Badge className="notificationContainer" badgeContent={localStorage.getItem('notification') !== 0 ? localStorage.getItem('notification') : 0} max={999} color="secondary">
+                        {profileData.user_roles[0].user_type === 1 || profileData.user_roles[0].user_type === 2 || profileData.user_roles[0].user_type === 4 || profileData.user_roles[0].user_type === 6 ? '' : <NavLink to="/dashboards/followup" activeClassName="active"><Badge className="notificationContainer" badgeContent={localStorage.getItem('notification') !== 0 ? localStorage.getItem('notification') : 0} max={5000} color="secondary">
                             <NotificationsIcon className="notificationIcon" />
                         </Badge></NavLink>}
                         <div className="nameContainer" onClick={handleMenu}>

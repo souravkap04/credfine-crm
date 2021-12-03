@@ -10,9 +10,9 @@
 
 .followUpBtnContainer .followUpAutoDialerStartBtn {
   background-color: #14cc9e;
+  cursor: pointer;
   -webkit-box-shadow: none;
           box-shadow: none;
-  cursor: pointer;
 }
 
 .followUpBtnContainer .followbtn {
@@ -28,5 +28,11 @@
 
 .followUpBtnContainer .followbtn button span {
   color: #fff;
+}
+
+.followUpBtnContainer .followUpAutoDialerStartBtn:hover {
+  background-color: #14cc9e;
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }
 /*# sourceMappingURL=followup.css.map */
