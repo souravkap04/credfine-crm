@@ -341,7 +341,7 @@ export default function Leads() {
       }
   }, [leadData]);
   return (
-    <PageLayerSection
+    <PageLayerSection isDisplaySearchBar={true}
       addLeadButton={state ? false : true}
       onClick={() => openDrawer()}
       startAutoDialerButton={true}

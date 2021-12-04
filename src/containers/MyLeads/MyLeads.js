@@ -472,7 +472,7 @@ export default function MyLeads(props) {
 
   }
   return (
-    <PageLayerSection isMyLeadsSearch={true}>
+    <PageLayerSection isDisplaySearchBar={true} isMyLeadsSearch={true}>
       <Drawer anchor='right' open={state} onClose={closeDrawer}>
         <div className="rightContainerForm">
           <form>
