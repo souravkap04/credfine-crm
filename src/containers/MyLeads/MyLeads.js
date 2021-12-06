@@ -1,182 +1,187 @@
-import React, { useState, useEffect } from 'react'
-import { makeStyles } from '@material-ui/core/styles';
-import moment from 'moment';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import axios from 'axios';
-import baseUrl from '../../global/api';
-import { getCampaign, getProfileData, getStatusData } from '../../global/leadsGlobalData'
-import ChevronLeftOutlinedIcon from '@material-ui/icons/ChevronLeftOutlined';
-import ChevronRightOutlinedIcon from '@material-ui/icons/ChevronRightOutlined';
-import Button from '@material-ui/core/Button'
-import { haloocomNoidaDialerApi, haloocomMumbaiDialerApi } from '../../global/callApi';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
-import CallIcon from '@material-ui/icons/Call';
-import CallerDialogBox from '../Leads/CallerDialog/CallerDialogBox';
-import PageLayerSection from '../PageLayerSection/PageLayerSection';
+import React, { useState, useEffect } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import moment from "moment";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import axios from "axios";
+import baseUrl from "../../global/api";
+import {
+  getCampaign,
+  getProfileData,
+  getStatusData,
+} from "../../global/leadsGlobalData";
+import ChevronLeftOutlinedIcon from "@material-ui/icons/ChevronLeftOutlined";
+import ChevronRightOutlinedIcon from "@material-ui/icons/ChevronRightOutlined";
+import Button from "@material-ui/core/Button";
+import {
+  haloocomNoidaDialerApi,
+  haloocomMumbaiDialerApi,
+} from "../../global/callApi";
+import IconButton from "@material-ui/core/IconButton";
+import Tooltip from "@material-ui/core/Tooltip";
+import CallIcon from "@material-ui/icons/Call";
+import CallerDialogBox from "../Leads/CallerDialog/CallerDialogBox";
+import PageLayerSection from "../PageLayerSection/PageLayerSection";
 import { useHistory } from "react-router-dom";
-import clsx from 'clsx';
-import './myleads.css';
-import { Drawer } from '@material-ui/core';
-import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
-import MuiAlert from '@material-ui/lab/Alert';
-import Snackbar from '@material-ui/core/Snackbar';
-import filter from '../../images/filter.png';
-import { useQueryy } from '../../global/query';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import clsx from "clsx";
+import "./myleads.css";
+import { Drawer } from "@material-ui/core";
+import Grid from "@material-ui/core/Grid";
+import TextField from "@material-ui/core/TextField";
+import MuiAlert from "@material-ui/lab/Alert";
+import Snackbar from "@material-ui/core/Snackbar";
+import filter from "../../images/filter.png";
+import { useQueryy } from "../../global/query";
+import CircularProgress from "@material-ui/core/CircularProgress";
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 const useStyles = makeStyles({
   container: {
     // margin: '25px',
-    overflow: 'auto',
+    overflow: "auto",
     // maxHeight: '550px',
-    marginBottom: '10px'
+    marginBottom: "10px",
   },
   table: {
-    width: '100%',
+    width: "100%",
   },
   tableheading: {
     // padding: '0 8px',
     // fontSize: '12px',
     // textAlign: 'center',
-    backgroundColor: '#8f9bb3',
-    color: '#ffffff',
-    fontSize: '14px',
+    backgroundColor: "#8f9bb3",
+    color: "#ffffff",
+    fontSize: "14px",
   },
   tablePagination: {
-    backgroundColor: '#ffffff',
-    width: '100%',
-    height: '64px',
-    marginTop: '8px',
-    marginBottom: '25px',
-    display: 'flex',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
+    backgroundColor: "#ffffff",
+    width: "100%",
+    height: "64px",
+    marginTop: "8px",
+    marginBottom: "25px",
+    display: "flex",
+    justifyContent: "flex-end",
+    alignItems: "center",
   },
   numberOfTotalCount: {
-    marginRight: '25px'
+    marginRight: "25px",
   },
   rowsPerPageContainer: {
-    marginRight: '70px',
-    display: 'flex',
-    alignItems: 'center'
+    marginRight: "70px",
+    display: "flex",
+    alignItems: "center",
   },
   rowsText: {
-    marginRight: '8px'
+    marginRight: "8px",
   },
   buttonsContainer: {
-    marginRight: '15px'
+    marginRight: "15px",
   },
   activeColor: {
-    color: '#000'
+    color: "#000",
   },
   statusHeading: {
-    textAlign: 'center'
+    textAlign: "center",
   },
   checkboxFix: {
-    color: '#ffffff'
+    color: "#ffffff",
   },
   checkboxFixData: {
-    color: '#8F9BB3'
+    color: "#8F9BB3",
   },
   tabledata: {
-    padding: '15px',
-    fontSize: '12px',
-    overflowWrap: 'break-word'
+    padding: "15px",
+    fontSize: "12px",
+    overflowWrap: "break-word",
   },
   emptydata: {
-    position: 'relative',
-    left: '30rem',
-    fontSize: '12px'
+    position: "relative",
+    left: "30rem",
+    fontSize: "12px",
   },
   leadid: {
-    cursor: 'pointer',
-    color: 'blue'
+    cursor: "pointer",
+    color: "blue",
   },
   buttonContainer: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    margin: '5px'
+    display: "flex",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    margin: "5px",
   },
   prevBtn: {
-    margin: '0px 8px',
-    backgroundColor: '#13B980',
-    border: '1px solid black',
-    cursor: 'pointer',
+    margin: "0px 8px",
+    backgroundColor: "#13B980",
+    border: "1px solid black",
+    cursor: "pointer",
   },
   nextBtn: {
-    backgroundColor: '#13B980',
-    border: '1px solid black',
-    cursor: 'pointer',
+    backgroundColor: "#13B980",
+    border: "1px solid black",
+    cursor: "pointer",
   },
   count: {
-    fontSize: '0.85em',
+    fontSize: "0.85em",
   },
   callButton: {
-    backgroundColor: '#14cc9e',
-    padding: '9px',
-    '&:hover': {
-      backgroundColor: 'rgba(0,0,0,0.4)'
-    }
+    backgroundColor: "#14cc9e",
+    padding: "9px",
+    "&:hover": {
+      backgroundColor: "rgba(0,0,0,0.4)",
+    },
   },
   callIcon: {
-    color: '#ffffff',
-    fontSize: '17px'
+    color: "#ffffff",
+    fontSize: "17px",
   },
   callingBtn: {
-    margin: '20px'
+    margin: "20px",
   },
   oddEvenRow: {
-    '&:nth-of-type(odd)': {
-      backgroundColor: '#f7f9fc',
+    "&:nth-of-type(odd)": {
+      backgroundColor: "#f7f9fc",
     },
-    '&:nth-of-type(even)': {
-      backgroundColor: '#fff',
+    "&:nth-of-type(even)": {
+      backgroundColor: "#fff",
     },
   },
   loanTypeButton: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignContent: 'center',
-    width: 'auto',
-    height: 'auto',
-    paddingTop: '5px',
-    paddingBottom: '5px',
-    paddingLeft: '5px',
-    paddingRight: '5px',
-    borderRadius: '35px',
-    backgroundColor: '#3ec68c'
+    display: "flex",
+    justifyContent: "center",
+    alignContent: "center",
+    width: "auto",
+    height: "auto",
+    paddingTop: "5px",
+    paddingBottom: "5px",
+    paddingLeft: "5px",
+    paddingRight: "5px",
+    borderRadius: "35px",
+    backgroundColor: "#3ec68c",
   },
   loanButtonText: {
-    fontSize: '0.8vw',
-    textAlign: 'center',
-    color: '#fff',
+    fontSize: "0.8vw",
+    textAlign: "center",
+    color: "#fff",
     // width: '75px',
-    whiteSpace: 'nowrap',
-    wordBreak: 'break-word'
-  }
+    whiteSpace: "nowrap",
+    wordBreak: "break-word",
+  },
 });
 function formatDate(date) {
   var d = new Date(date),
-    month = '' + (d.getMonth() + 1),
-    day = '' + d.getDate(),
+    month = "" + (d.getMonth() + 1),
+    day = "" + d.getDate(),
     year = d.getFullYear();
 
-  if (month.length < 2)
-    month = '0' + month;
-  if (day.length < 2)
-    day = '0' + day;
+  if (month.length < 2) month = "0" + month;
+  if (day.length < 2) day = "0" + day;
 
-  return [year, month, day].join('-');
+  return [year, month, day].join("-");
 }
 export default function MyLeads(props) {
   const classes = useStyles();
@@ -188,29 +193,29 @@ export default function MyLeads(props) {
   const [isCalling, setIsCalling] = useState(false);
   const [isCallConnect, setIsCallConnect] = useState(false);
   const [onGoingCall, setOnGoingCall] = useState(false);
-  const [isCallNotConnected, setIsCallNotConnected] = useState(false)
+  const [isCallNotConnected, setIsCallNotConnected] = useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(100);
   const [totalDataPerPage, settotalDataPerPage] = useState(0);
   const [dialerCall, setDialerCall] = useState(false);
   const [disableHangupBtn, setDisableHangupBtn] = useState(true);
   const [state, setState] = useState(false);
   const [manualState, setmanualState] = useState(false);
-  const [status, setStatus] = useState('');
+  const [status, setStatus] = useState("");
   const [subStatus, setSubStatus] = useState([]);
   const [campaign, setCampaign] = useState([]);
   const [startdate, setstartDate] = useState("");
   const [enddate, setendDate] = useState("");
   const [users, setUsers] = useState([]);
   const [dateType, setdateType] = useState("");
-  const [users_id, setUserID] = useState('');
+  const [users_id, setUserID] = useState("");
   const [isError, setisError] = useState(false);
   const [isLoading, setisLoading] = useState(false);
-  const [dialerMobileNumber, setdialerMobileNumber] = useState('')
+  const [dialerMobileNumber, setdialerMobileNumber] = useState("");
   const [callHangUpState, setCallHangUpState] = useState(true);
   const [hangUpSnacks, sethangUpSnacks] = useState(false);
   const [myLeadSearchData, setMyLeadSearchData] = useState([]);
   const [isMyLeadsSearchData, setisMyLeadsSearchData] = useState(false);
-  const [leadConflictPopUp,setLeadConflictPopUp] = useState(false);
+  const [leadConflictPopUp, setLeadConflictPopUp] = useState(false);
   let statusData = getStatusData();
   let campaignData = getCampaign();
   const queryy = useQueryy();
@@ -224,101 +229,129 @@ export default function MyLeads(props) {
   const user_id = queryy.get("user_id") || "";
   const splitUrl = (data) => {
     if (data !== null) {
-      const [url, pager] = data.split('?');
+      const [url, pager] = data.split("?");
       return pager;
     }
-  }
+  };
   let history = useHistory();
   const fetchMyLeads = async () => {
-    setisLoading(true)
-    const headers = { 'Authorization': `Token ${profileData.token}` }
-    await axios.get(`${baseUrl}/leads/fetchUpdatedLeadsUserWise/?datetype=${datetype}&status=${filterstatus}&start_date=${startDate}&end_date=${endDate}&sub_status=${sub_status}&campaign_category=${campaign_category}&user_id=${user_id}`, { headers })
+    setisLoading(true);
+    const headers = { Authorization: `Token ${profileData.token}` };
+    await axios
+      .get(
+        `${baseUrl}/leads/fetchUpdatedLeadsUserWise/?datetype=${datetype}&status=${filterstatus}&start_date=${startDate}&end_date=${endDate}&sub_status=${sub_status}&campaign_category=${campaign_category}&user_id=${user_id}`,
+        { headers }
+      )
       .then((response) => {
-        setRowsPerPage(response.data.results.length)
-        settotalDataPerPage(response.data.results.length)
+        setRowsPerPage(response.data.results.length);
+        settotalDataPerPage(response.data.results.length);
         setPrevPage(response.data.previous);
         setNextPage(response.data.next);
         setMyLeads(response.data.results);
         setTotalLeads(response.data.count);
-        setisLoading(false)
-      }).catch((error) => {
-        console.log(error);
+        setisLoading(false);
       })
+      .catch((error) => {
+        console.log(error);
+      });
   };
   const fetchMyLeadsSearchData = async (key) => {
     setisMyLeadsSearchData(true);
-    setisLoading(true)
-    let headers = { 'Authorization': `Token ${profileData.token}` }
-    await axios.get(`${baseUrl}/leads/search/${key}`, { headers })
+    setisLoading(true);
+    let headers = { Authorization: `Token ${profileData.token}` };
+    await axios
+      .get(`${baseUrl}/leads/search/${key}`, { headers })
       .then((response) => {
         setMyLeadSearchData(response.data);
-        setisLoading(false)
-      }).catch((error) => {
-        console.log(error);
+        setisLoading(false);
       })
-  }
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   useEffect(() => {
     myLeadQuery ? fetchMyLeadsSearchData(myLeadQuery) : fetchMyLeads();
     listOfUsers();
-  }, [datetype, filterstatus, startDate, endDate, subStatus, campaign_category, user_id , myLeadQuery])
+  }, [
+    datetype,
+    filterstatus,
+    startDate,
+    endDate,
+    subStatus,
+    campaign_category,
+    user_id,
+    myLeadQuery,
+  ]);
   const listOfUsers = async () => {
     const headers = {
-      'Authorization': `Token ${profileData.token}`,
+      Authorization: `Token ${profileData.token}`,
     };
-    await axios.get(`${baseUrl}/user/childUsers/`, { headers })
+    await axios
+      .get(`${baseUrl}/user/childUsers/`, { headers })
       .then((response) => {
         setUsers(response.data);
-      }).catch((error) => {
-        console.log(error);
       })
-  }
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   const leadDetailsHandler = (leadId) => {
     history.push(`/dashboards/myleads/edit/${leadId}`);
-  }
+  };
   const leadConflictHandler = () => {
     setLeadConflictPopUp(true);
-  }
+  };
   const nextPageHandler = async () => {
-    setisLoading(true)
-    const headers = { 'Authorization': `Token ${profileData.token}` }
-    await axios.get(`${baseUrl}/leads/fetchUpdatedLeadsUserWise/?${splitUrl(nextPage)}`, { headers })
+    setisLoading(true);
+    const headers = { Authorization: `Token ${profileData.token}` };
+    await axios
+      .get(
+        `${baseUrl}/leads/fetchUpdatedLeadsUserWise/?${splitUrl(nextPage)}`,
+        { headers }
+      )
       .then((response) => {
-        let nextCount = totalDataPerPage + response.data.results.length
-        settotalDataPerPage(nextCount)
-        setRowsPerPage(response.data.results.length)
+        let nextCount = totalDataPerPage + response.data.results.length;
+        settotalDataPerPage(nextCount);
+        setRowsPerPage(response.data.results.length);
         setPrevPage(response.data.previous);
         setNextPage(response.data.next);
         setMyLeads(response.data.results);
-        setisLoading(false)
-      }).catch((error) => {
-        setisLoading(false)
+        setisLoading(false);
       })
-  }
+      .catch((error) => {
+        setisLoading(false);
+      });
+  };
   const prevPageHandler = async () => {
-    setisLoading(true)
-    const headers = { 'Authorization': `Token ${profileData.token}` }
-    await axios.get(`${baseUrl}/leads/fetchUpdatedLeadsUserWise/?${splitUrl(prevPage)}`, { headers })
+    setisLoading(true);
+    const headers = { Authorization: `Token ${profileData.token}` };
+    await axios
+      .get(
+        `${baseUrl}/leads/fetchUpdatedLeadsUserWise/?${splitUrl(prevPage)}`,
+        { headers }
+      )
       .then((response) => {
-        let prevCount = totalDataPerPage - response.data.results.length
-        settotalDataPerPage(prevCount)
-        setRowsPerPage(response.data.results.length)
+        let prevCount = totalDataPerPage - response.data.results.length;
+        settotalDataPerPage(prevCount);
+        setRowsPerPage(response.data.results.length);
         setPrevPage(response.data.previous);
         setNextPage(response.data.next);
         setMyLeads(response.data.results);
-        setisLoading(false)
-      }).catch((error) => {
-        setisLoading(false)
+        setisLoading(false);
       })
-  }
+      .catch((error) => {
+        setisLoading(false);
+      });
+  };
   const removeDuplicateStatus = (data) => {
     let unique = [];
     data.forEach((element) => {
       if (!unique.includes(element.status)) {
-        unique.push(element.status)
+        unique.push(element.status);
       }
-    })
+    });
     return unique;
-  }
+  };
   const uniqueStatus = removeDuplicateStatus(statusData);
   const subStatusHandler = () => {
     let subStatusoptions = [];
@@ -326,157 +359,189 @@ export default function MyLeads(props) {
       if (item.status === status) {
         subStatusoptions.push(item.sub_status);
       }
-    })
+    });
     return subStatusoptions;
-  }
+  };
   const options = subStatusHandler();
   const maskPhoneNo = (encryptData) => {
     let data = decodeURIComponent(window.atob(encryptData));
     let unMaskdata = data.slice(-4);
-    let maskData = '';
-    for (let i = (data.length) - 4; i > 0; i--) {
-      maskData += 'x';
+    let maskData = "";
+    for (let i = data.length - 4; i > 0; i--) {
+      maskData += "x";
     }
     let leadPhoneNo = maskData + unMaskdata;
-    if (profileData.user_roles[0].user_type === 2 || profileData.user_roles[0].user_type === 3 || profileData.user_roles[0].user_type === 5 || profileData.user_roles[0].user_type === 6) {
+    if (
+      profileData.user_roles[0].user_type === 2 ||
+      profileData.user_roles[0].user_type === 3 ||
+      profileData.user_roles[0].user_type === 5 ||
+      profileData.user_roles[0].user_type === 6
+    ) {
       return leadPhoneNo;
     } else {
       return data;
     }
-  }
+  };
   const clickToCall = async (encryptData, leadID) => {
     const customerNo = decodeURIComponent(window.atob(encryptData));
-    if (profileData.dialer === 'HALOOCOM-Noida') {
-      await axios.post(`${haloocomNoidaDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`)
+    if (profileData.dialer === "HALOOCOM-Noida") {
+      await axios
+        .post(
+          `${haloocomNoidaDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`
+        )
         .then((response) => {
           setDialerCall(true);
           setDisableHangupBtn(false);
           if (response.status === 200) {
-            localStorage.setItem('callHangUp', true)
+            localStorage.setItem("callHangUp", true);
           }
-        }).catch((error) => {
-          console.log('error');
         })
+        .catch((error) => {
+          console.log("error");
+        });
       setTimeout(() => {
-        history.push(`/dashboards/myleads/edit/${leadID}`)
-      }, 1500)
-    } else if (profileData.dialer === 'HALOOCOM-Mumbai') {
-      await axios.post(`${haloocomMumbaiDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`)
+        history.push(`/dashboards/myleads/edit/${leadID}`);
+      }, 1500);
+    } else if (profileData.dialer === "HALOOCOM-Mumbai") {
+      await axios
+        .post(
+          `${haloocomMumbaiDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`
+        )
         .then((response) => {
           setDialerCall(true);
           setDisableHangupBtn(false);
           if (response.status === 200) {
-            localStorage.setItem('callHangUp', true)
+            localStorage.setItem("callHangUp", true);
           }
-        }).catch((error) => {
-          console.log('error');
         })
+        .catch((error) => {
+          console.log("error");
+        });
       setTimeout(() => {
-        history.push(`/dashboards/myleads/edit/${leadID}`)
-      }, 1500)
+        history.push(`/dashboards/myleads/edit/${leadID}`);
+      }, 1500);
     }
-  }
+  };
   const disablePopup = () => {
     setIsCalling(false);
     setOnGoingCall(false);
-  }
+  };
   const callConnectHandler = () => {
     setIsCallConnect(false);
-    setIsCallNotConnected(false)
-  }
+    setIsCallNotConnected(false);
+  };
   const disableDialerPopUp = () => {
-    setDialerCall(false)
-    setDisableHangupBtn(false)
+    setDialerCall(false);
+    setDisableHangupBtn(false);
     setLeadConflictPopUp(false);
-  }
+  };
   const openDrawer = () => {
-    setState(true)
-  }
+    setState(true);
+  };
   const openDialer = () => {
-    setmanualState(true)
-  }
+    setmanualState(true);
+  };
 
   const filterSubmit = () => {
     if (startdate !== "" && enddate === "") {
-      setisError(true)
+      setisError(true);
       return;
     }
-    history.push(`/dashboards/myleads/?datetype=${dateType}&status=${status}&start_date=${startdate}&end_date=${enddate}&sub_status=${subStatus}&campaign_category=${campaign}&user_id=${users_id}`)
-    closeDrawer()
-  }
+    history.push(
+      `/dashboards/myleads/?datetype=${dateType}&status=${status}&start_date=${startdate}&end_date=${enddate}&sub_status=${subStatus}&campaign_category=${campaign}&user_id=${users_id}`
+    );
+    closeDrawer();
+  };
   const closeDrawer = () => {
-    setState(false)
-    setisError(false)
-    setmanualState(false)
-    setdialerMobileNumber('')
+    setState(false);
+    setisError(false);
+    setmanualState(false);
+    setdialerMobileNumber("");
   };
   const clickToManualCall = async () => {
-    if (profileData.dialer === 'HALOOCOM-Noida') {
-      await axios.post(`${haloocomNoidaDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${dialerMobileNumber}`)
+    if (profileData.dialer === "HALOOCOM-Noida") {
+      await axios
+        .post(
+          `${haloocomNoidaDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${dialerMobileNumber}`
+        )
         .then((response) => {
           setDialerCall(true);
           setDisableHangupBtn(false);
           if (response.status === 200) {
-            localStorage.setItem('callHangUp', true)
+            localStorage.setItem("callHangUp", true);
           }
-        }).catch((error) => {
-          console.log('error');
         })
-    } else if (profileData.dialer === 'HALOOCOM-Mumbai') {
-      await axios.post(`${haloocomMumbaiDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${dialerMobileNumber}`)
+        .catch((error) => {
+          console.log("error");
+        });
+    } else if (profileData.dialer === "HALOOCOM-Mumbai") {
+      await axios
+        .post(
+          `${haloocomMumbaiDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${dialerMobileNumber}`
+        )
         .then((response) => {
           setDialerCall(true);
           setDisableHangupBtn(false);
           if (response.status === 200) {
-            localStorage.setItem('callHangUp', true)
+            localStorage.setItem("callHangUp", true);
           }
-        }).catch((error) => {
-          console.log('error');
         })
+        .catch((error) => {
+          console.log("error");
+        });
     }
-  }
+  };
   const hangupCallHandler = async () => {
     if (profileData.dialer === "HALOOCOM-Noida") {
-      await axios.post(`${haloocomNoidaDialerApi}/action.php?user=${profileData.vertage_id}&type=Hangup&disposition`)
+      await axios
+        .post(
+          `${haloocomNoidaDialerApi}/action.php?user=${profileData.vertage_id}&type=Hangup&disposition`
+        )
         .then((response) => {
           // setDisableDisposeBtn(false);
           setCallHangUpState(false);
           if (response.status === 200) {
-            localStorage.removeItem('callHangUp')
-            setdialerMobileNumber('')
-            return disposeCallHandler()
+            localStorage.removeItem("callHangUp");
+            setdialerMobileNumber("");
+            return disposeCallHandler();
           }
           // setCallHangUpState(true);
-        }).catch((error) => {
-          console.log(error);
         })
+        .catch((error) => {
+          console.log(error);
+        });
     } else if (profileData.dialer === "HALOOCOM-Mumbai") {
-      await axios.post(`${haloocomMumbaiDialerApi}/action.php?user=${profileData.vertage_id}&type=Hangup&disposition`)
+      await axios
+        .post(
+          `${haloocomMumbaiDialerApi}/action.php?user=${profileData.vertage_id}&type=Hangup&disposition`
+        )
         .then((response) => {
           // setDisableDisposeBtn(false);
           setCallHangUpState(false);
           if (response.status === 200) {
-            localStorage.removeItem('callHangUp')
-            setdialerMobileNumber('')
-            return disposeCallHandler()
+            localStorage.removeItem("callHangUp");
+            setdialerMobileNumber("");
+            return disposeCallHandler();
           }
           // setCallHangUpState(true);
-        }).catch((error) => {
-          console.log(error);
         })
+        .catch((error) => {
+          console.log(error);
+        });
     }
-  }
+  };
   const disposeCallHandler = () => {
     sethangUpSnacks(true);
     setCallHangUpState(true);
-
-  }
+  };
   return (
-    <PageLayerSection isMyLeadsSearch={true}>
-      <Drawer anchor='right' open={state} onClose={closeDrawer}>
+    <PageLayerSection isDisplaySearchBar={true} isMyLeadsSearch={true}>
+      <Drawer anchor="right" open={state} onClose={closeDrawer}>
         <div className="rightContainerForm">
           <form>
-            <Grid container justifyContent="flex-start"><h4>Search Here</h4></Grid>
+            <Grid container justifyContent="flex-start">
+              <h4>Search Here</h4>
+            </Grid>
             <Grid>
               <TextField
                 select
@@ -489,7 +554,7 @@ export default function MyLeads(props) {
                   shrink: true,
                 }}
                 SelectProps={{
-                  native: true
+                  native: true,
                 }}
                 variant="outlined"
                 size="small"
@@ -513,7 +578,7 @@ export default function MyLeads(props) {
                   shrink: true,
                 }}
                 inputProps={{
-                  max: formatDate(new Date())
+                  max: formatDate(new Date()),
                 }}
                 variant="outlined"
                 size="small"
@@ -534,21 +599,21 @@ export default function MyLeads(props) {
                   shrink: true,
                 }}
                 inputProps={{
-                  max: formatDate(new Date())
+                  max: formatDate(new Date()),
                 }}
                 variant="outlined"
                 size="small"
                 value={enddate}
                 onChange={(e) => {
-                  setendDate(e.target.value)
-                  setisError(false)
+                  setendDate(e.target.value);
+                  setisError(false);
                 }}
                 disabled={startdate !== "" ? false : true}
                 error={Boolean(isError ? true : false)}
                 helperText={isError ? "End Date is requireds" : ""}
               />
             </Grid>
-            <Grid container style={{ justifyContent: 'center' }}>
+            <Grid container style={{ justifyContent: "center" }}>
               <Grid>
                 <TextField
                   select
@@ -561,7 +626,7 @@ export default function MyLeads(props) {
                     shrink: true,
                   }}
                   SelectProps={{
-                    native: true
+                    native: true,
                   }}
                   variant="outlined"
                   size="small"
@@ -570,7 +635,9 @@ export default function MyLeads(props) {
                 >
                   <option value="">Select</option>
                   {uniqueStatus.map((item, index) => (
-                    <option key={index} value={item}>{item}</option>
+                    <option key={index} value={item}>
+                      {item}
+                    </option>
                   ))}
                 </TextField>
               </Grid>
@@ -586,16 +653,20 @@ export default function MyLeads(props) {
                     shrink: true,
                   }}
                   SelectProps={{
-                    native: true
+                    native: true,
                   }}
                   variant="outlined"
                   size="small"
                   value={subStatus}
-                  onChange={(e) => { setSubStatus(e.target.value) }}
+                  onChange={(e) => {
+                    setSubStatus(e.target.value);
+                  }}
                 >
                   <option value="">Select</option>
                   {options.map((item, index) => (
-                    <option key={index} value={item}>{item}</option>
+                    <option key={index} value={item}>
+                      {item}
+                    </option>
                   ))}
                 </TextField>
               </Grid>
@@ -612,16 +683,20 @@ export default function MyLeads(props) {
                   shrink: true,
                 }}
                 SelectProps={{
-                  native: true
+                  native: true,
                 }}
                 variant="outlined"
                 size="small"
                 value={campaign}
-                onChange={(e) => { setCampaign(e.target.value) }}
+                onChange={(e) => {
+                  setCampaign(e.target.value);
+                }}
               >
                 <option value="">Select</option>
                 {campaignData.map((item, index) => (
-                  <option key={index} value={item}>{item}</option>
+                  <option key={index} value={item}>
+                    {item}
+                  </option>
                 ))}
               </TextField>
             </Grid>
@@ -637,7 +712,7 @@ export default function MyLeads(props) {
                   shrink: true,
                 }}
                 SelectProps={{
-                  native: true
+                  native: true,
                 }}
                 variant="outlined"
                 size="small"
@@ -645,21 +720,34 @@ export default function MyLeads(props) {
                 onChange={(e) => setUserID(e.target.value)}
               >
                 <option value="">Select User</option>
-                {users.map(item => {
-                  return <option value={item.myuser.username}>{item.myuser.username}</option>
+                {users.map((item) => {
+                  return (
+                    <option value={item.myuser.username}>
+                      {item.myuser.username}
+                    </option>
+                  );
                 })}
               </TextField>
             </Grid>
             <Grid>
-              <Button onClick={() => filterSubmit()} className="submitBtn" color='primary' variant='contained'>Submit</Button>
+              <Button
+                onClick={() => filterSubmit()}
+                className="submitBtn"
+                color="primary"
+                variant="contained"
+              >
+                Submit
+              </Button>
             </Grid>
           </form>
         </div>
       </Drawer>
-      <Drawer anchor='right' open={manualState} onClose={closeDrawer}>
+      <Drawer anchor="right" open={manualState} onClose={closeDrawer}>
         <div className="rightContainerForm">
           <form>
-            <Grid container justifyContent="flex-start"><h4>Manual Dialer</h4></Grid>
+            <Grid container justifyContent="flex-start">
+              <h4>Manual Dialer</h4>
+            </Grid>
             <Grid>
               <TextField
                 className="textField"
@@ -674,15 +762,15 @@ export default function MyLeads(props) {
                 value={dialerMobileNumber}
                 onChange={(e) => setdialerMobileNumber(e.target.value)}
                 onKeyPress={(event) => {
-                  if (event.which == '13') {
+                  if (event.which == "13") {
                     event.preventDefault();
                   }
                   if (event.key === "Enter") {
-                    clickToManualCall()
+                    clickToManualCall();
                   }
                 }}
                 inputProps={{
-                  maxLength: 10
+                  maxLength: 10,
                 }}
               />
             </Grid>
@@ -701,8 +789,14 @@ export default function MyLeads(props) {
                 color="primary"
                 variant="contained"
                 startIcon={<CallIcon className="callIcon" />}
-                disabled={localStorage.getItem("callHangUp") && localStorage.getItem("callHangUp") !== null ? false : callHangUpState}
-                onClick={hangupCallHandler}>
+                disabled={
+                  localStorage.getItem("callHangUp") &&
+                  localStorage.getItem("callHangUp") !== null
+                    ? false
+                    : callHangUpState
+                }
+                onClick={hangupCallHandler}
+              >
                 End
               </Button>
             </div>
@@ -711,12 +805,12 @@ export default function MyLeads(props) {
       </Drawer>
       <div className="filterMainContainer">
         <h3>My Leads ({totalLeads})</h3>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-           <Button
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <Button
             className="addBtn"
             color="primary"
             variant="contained"
-            style={{ marginRight: '15px' }}
+            style={{ marginRight: "15px" }}
             onClick={() => openDialer()}
           >
             Manual Dialer
@@ -739,100 +833,244 @@ export default function MyLeads(props) {
               <TableCell className={classes.tableheading}>Mobile</TableCell>
               <TableCell className={classes.tableheading}>Loan Amt</TableCell>
               <TableCell className={classes.tableheading}>Income</TableCell>
-              <TableCell className={classes.tableheading} >Campaign</TableCell>
-              <TableCell className={classes.tableheading}>Lead Agent Name</TableCell>
-              <TableCell className={classes.tableheading}>Last Updated</TableCell>
-              <TableCell className={clsx(classes.tableheading, classes.statusHeading)}>Status</TableCell>
+              <TableCell className={classes.tableheading}>Campaign</TableCell>
+              <TableCell className={classes.tableheading}>
+                Lead Agent Name
+              </TableCell>
+              <TableCell className={classes.tableheading}>
+                Last Updated
+              </TableCell>
+              <TableCell
+                className={clsx(classes.tableheading, classes.statusHeading)}
+              >
+                Status
+              </TableCell>
               <TableCell className={classes.tableheading}>Sub Status</TableCell>
-              <TableCell className={classes.tableheading} ></TableCell>
+              <TableCell className={classes.tableheading}></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {isLoading ? <div className="loader">
-              <CircularProgress size={100} thickness={3} />
-            </div> : isMyLeadsSearchData ? (
-              myLeadSearchData.length !== 0 ?
-              myLeadSearchData.map((search,index)=>{
-               let leadPhoneNo = maskPhoneNo(search.phone_no_encrypt)
-               let updatedDate = new Date(search.updated_date)
-                let currentUpdatedDate = updatedDate.toLocaleDateString() + ' ' + moment(updatedDate.toLocaleTimeString(), "HH:mm:ss a").format("hh:mm A")
-                return (
-                  <TableRow className={classes.oddEvenRow} key={index}>
-                    <TableCell className={classes.tabledata}>{index + 1}</TableCell>
-                    {profileData.username === search.lead_agent_name ?
-                     <TableCell className={classes.tabledata, classes.leadid} 
-                      onClick={() => leadDetailsHandler(search.lead_crm_id)}
-                    >{search.lead_crm_id}</TableCell> : 
-                    <TableCell className={classes.tabledata, classes.leadid} 
-                    onClick={() => leadConflictHandler()}
-                  >{search.lead_crm_id}</TableCell>
-                    }
-                    <TableCell className={classes.tabledata}>{search.name ? search.name : 'NA'}</TableCell>
-                    <TableCell className={classes.tabledata}>{leadPhoneNo ? leadPhoneNo : 'NA'}</TableCell>
-                    <TableCell className={classes.tabledata}>{search.loan_amount ? search.loan_amount : 'NA'}</TableCell>
-                    <TableCell className={classes.tabledata}>{search.data.monthly_income ? search.data.monthly_income : 'NA'}</TableCell>
-                    <TableCell className={classes.tabledata}>{search.campaign_category ? search.campaign_category : 'NA'}</TableCell>
-                    <TableCell className={classes.tabledata}>{search.lead_agent_name ? search.lead_agent_name : 'NA'}</TableCell>
-                    <TableCell className={classes.tabledata}>{currentUpdatedDate ? currentUpdatedDate : 'NA'}</TableCell>
-                    <TableCell className={classes.tabledata}>
-                      <div className={classes.loanTypeButton}>
-                        <div className={classes.loanButtonText}>{search.status}</div>
-                      </div>
-                    </TableCell>
-                    <TableCell className={classes.tabledata}>{search.sub_status ? search.sub_status : 'NA'}</TableCell>
-                    {profileData.username === search.lead_agent_name ? 
-                    <TableCell className={classes.tabledata}>
-                      <Tooltip title="Call Customer">
-                        <IconButton className={classes.callButton} onClick={() => clickToCall(search.phone_no_encrypt, search.lead_crm_id)}>
-                          <CallIcon className={classes.callIcon} />
-                        </IconButton>
-                      </Tooltip>
-                    </TableCell> : 
-                    <TableCell className={classes.tabledata}>
-                    <Tooltip title="Call Customer">
-                      <IconButton className={classes.callButton} onClick={() => leadConflictHandler()}>
-                        <CallIcon className={classes.callIcon} />
-                      </IconButton>
-                    </Tooltip>
-                  </TableCell>
-                    }
-                  </TableRow>
-                )
-              }) : <span className={classes.emptydata}>No Data Found</span>) :
-            myLeads.length !== 0 ?
+            {isLoading ? (
+              <div className="loader">
+                <CircularProgress size={100} thickness={3} />
+              </div>
+            ) : isMyLeadsSearchData ? (
+              myLeadSearchData.length !== 0 ? (
+                myLeadSearchData.map((search, index) => {
+                  let leadPhoneNo = maskPhoneNo(search.phone_no_encrypt);
+                  let updatedDate = new Date(search.updated_date);
+                  let currentUpdatedDate =
+                    updatedDate.toLocaleDateString() +
+                    " " +
+                    moment(
+                      updatedDate.toLocaleTimeString(),
+                      "HH:mm:ss a"
+                    ).format("hh:mm A");
+                  return (
+                    <TableRow className={classes.oddEvenRow} key={index}>
+                      <TableCell className={classes.tabledata}>
+                        {index + 1}
+                      </TableCell>
+                      {profileData.user_roles[0].user_type === 1 ||
+                      profileData.user_roles[0].user_type === 2 ||
+                      profileData.user_roles[0].user_type === 4 ||
+                      profileData.user_roles[0].user_type === 5 ? (
+                        <TableCell
+                          className={(classes.tabledata, classes.leadid)}
+                          onClick={() => leadDetailsHandler(search.lead_crm_id)}
+                        >
+                          {search.lead_crm_id}
+                        </TableCell>
+                      ) : profileData.username === search.lead_agent_name ? (
+                        <TableCell
+                          className={(classes.tabledata, classes.leadid)}
+                          onClick={() => leadDetailsHandler(search.lead_crm_id)}
+                        >
+                          {search.lead_crm_id}
+                        </TableCell>
+                      ) : (
+                        <TableCell
+                          className={(classes.tabledata, classes.leadid)}
+                          onClick={() => leadConflictHandler()}
+                        >
+                          {search.lead_crm_id}
+                        </TableCell>
+                      )}
+                      <TableCell className={classes.tabledata}>
+                        {search.name ? search.name : "NA"}
+                      </TableCell>
+                      <TableCell className={classes.tabledata}>
+                        {leadPhoneNo ? leadPhoneNo : "NA"}
+                      </TableCell>
+                      <TableCell className={classes.tabledata}>
+                        {search.loan_amount ? search.loan_amount : "NA"}
+                      </TableCell>
+                      <TableCell className={classes.tabledata}>
+                        {search.data.monthly_income
+                          ? search.data.monthly_income
+                          : "NA"}
+                      </TableCell>
+                      <TableCell className={classes.tabledata}>
+                        {search.campaign_category
+                          ? search.campaign_category
+                          : "NA"}
+                      </TableCell>
+                      <TableCell className={classes.tabledata}>
+                        {search.lead_agent_name ? search.lead_agent_name : "NA"}
+                      </TableCell>
+                      <TableCell className={classes.tabledata}>
+                        {currentUpdatedDate ? currentUpdatedDate : "NA"}
+                      </TableCell>
+                      <TableCell className={classes.tabledata}>
+                        <div className={classes.loanTypeButton}>
+                          <div className={classes.loanButtonText}>
+                            {search.status}
+                          </div>
+                        </div>
+                      </TableCell>
+                      <TableCell className={classes.tabledata}>
+                        {search.sub_status ? search.sub_status : "NA"}
+                      </TableCell>
+                      {profileData.user_roles[0].user_type === 1 ||
+                      profileData.user_roles[0].user_type === 2 ||
+                      profileData.user_roles[0].user_type === 4 ||
+                      profileData.user_roles[0].user_type === 5 ? (
+                        <TableCell className={classes.tabledata}>
+                          <Tooltip title="Call Customer">
+                            <IconButton
+                              className={classes.callButton}
+                              onClick={() =>
+                                clickToCall(
+                                  search.phone_no_encrypt,
+                                  search.lead_crm_id
+                                )
+                              }
+                            >
+                              <CallIcon className={classes.callIcon} />
+                            </IconButton>
+                          </Tooltip>
+                        </TableCell>
+                      )
+                      :
+                      profileData.username === search.lead_agent_name ? (
+                        <TableCell className={classes.tabledata}>
+                          <Tooltip title="Call Customer">
+                            <IconButton
+                              className={classes.callButton}
+                              onClick={() =>
+                                clickToCall(
+                                  search.phone_no_encrypt,
+                                  search.lead_crm_id
+                                )
+                              }
+                            >
+                              <CallIcon className={classes.callIcon} />
+                            </IconButton>
+                          </Tooltip>
+                        </TableCell>
+                      ) : (
+                        <TableCell className={classes.tabledata}>
+                          <Tooltip title="Call Customer">
+                            <IconButton
+                              className={classes.callButton}
+                              onClick={() => leadConflictHandler()}
+                            >
+                              <CallIcon className={classes.callIcon} />
+                            </IconButton>
+                          </Tooltip>
+                        </TableCell>
+                      )}
+                    </TableRow>
+                  );
+                })
+              ) : (
+                <span className={classes.emptydata}>No Data Found</span>
+              )
+            ) : myLeads.length !== 0 ? (
               myLeads.map((my_leads, index) => {
-                let leadPhoneNo = maskPhoneNo(my_leads.lead.phone_no_encrypt)
-                let updatedDate = new Date(my_leads.updated_date)
-                let currentUpdatedDate = updatedDate.toLocaleDateString() + ' ' + moment(updatedDate.toLocaleTimeString(), "HH:mm:ss a").format("hh:mm A")
+                let leadPhoneNo = maskPhoneNo(my_leads.lead.phone_no_encrypt);
+                let updatedDate = new Date(my_leads.updated_date);
+                let currentUpdatedDate =
+                  updatedDate.toLocaleDateString() +
+                  " " +
+                  moment(updatedDate.toLocaleTimeString(), "HH:mm:ss a").format(
+                    "hh:mm A"
+                  );
                 return (
                   <TableRow className={classes.oddEvenRow} key={index}>
-                    <TableCell className={classes.tabledata}>{index + 1}</TableCell>
-                    <TableCell className={classes.tabledata, classes.leadid}
-                      onClick={() => leadDetailsHandler(my_leads.lead.lead_crm_id)}
-                    >{my_leads.lead.lead_crm_id}</TableCell>
-                    <TableCell className={classes.tabledata}>{my_leads.lead.name ? my_leads.lead.name : 'NA'}</TableCell>
-                    <TableCell className={classes.tabledata}>{leadPhoneNo ? leadPhoneNo : 'NA'}</TableCell>
-                    <TableCell className={classes.tabledata}>{my_leads.lead.loan_amount ? my_leads.lead.loan_amount : 'NA'}</TableCell>
-                    <TableCell className={classes.tabledata}>{my_leads.lead.data.monthly_income ? my_leads.lead.data.monthly_income : 'NA'}</TableCell>
-                    <TableCell className={classes.tabledata}>{my_leads.lead.campaign_category ? my_leads.lead.campaign_category : 'NA'}</TableCell>
-                    <TableCell className={classes.tabledata}>{my_leads.lead_agent_name ? my_leads.lead_agent_name : 'NA'}</TableCell>
-                    <TableCell className={classes.tabledata}>{currentUpdatedDate ? currentUpdatedDate : 'NA'}</TableCell>
+                    <TableCell className={classes.tabledata}>
+                      {index + 1}
+                    </TableCell>
+                    <TableCell
+                      className={(classes.tabledata, classes.leadid)}
+                      onClick={() =>
+                        leadDetailsHandler(my_leads.lead.lead_crm_id)
+                      }
+                    >
+                      {my_leads.lead.lead_crm_id}
+                    </TableCell>
+                    <TableCell className={classes.tabledata}>
+                      {my_leads.lead.name ? my_leads.lead.name : "NA"}
+                    </TableCell>
+                    <TableCell className={classes.tabledata}>
+                      {leadPhoneNo ? leadPhoneNo : "NA"}
+                    </TableCell>
+                    <TableCell className={classes.tabledata}>
+                      {my_leads.lead.loan_amount
+                        ? my_leads.lead.loan_amount
+                        : "NA"}
+                    </TableCell>
+                    <TableCell className={classes.tabledata}>
+                      {my_leads.lead.data.monthly_income
+                        ? my_leads.lead.data.monthly_income
+                        : "NA"}
+                    </TableCell>
+                    <TableCell className={classes.tabledata}>
+                      {my_leads.lead.campaign_category
+                        ? my_leads.lead.campaign_category
+                        : "NA"}
+                    </TableCell>
+                    <TableCell className={classes.tabledata}>
+                      {my_leads.lead_agent_name
+                        ? my_leads.lead_agent_name
+                        : "NA"}
+                    </TableCell>
+                    <TableCell className={classes.tabledata}>
+                      {currentUpdatedDate ? currentUpdatedDate : "NA"}
+                    </TableCell>
                     <TableCell className={classes.tabledata}>
                       <div className={classes.loanTypeButton}>
-                        <div className={classes.loanButtonText}>{my_leads.lead.status}</div>
+                        <div className={classes.loanButtonText}>
+                          {my_leads.lead.status}
+                        </div>
                       </div>
                     </TableCell>
-                    <TableCell className={classes.tabledata}>{my_leads.lead.sub_status ? my_leads.lead.sub_status : 'NA'}</TableCell>
+                    <TableCell className={classes.tabledata}>
+                      {my_leads.lead.sub_status
+                        ? my_leads.lead.sub_status
+                        : "NA"}
+                    </TableCell>
                     <TableCell className={classes.tabledata}>
                       <Tooltip title="Call Customer">
-                        <IconButton className={classes.callButton} onClick={() => clickToCall(my_leads.lead.phone_no_encrypt, my_leads.lead.lead_crm_id)}>
+                        <IconButton
+                          className={classes.callButton}
+                          onClick={() =>
+                            clickToCall(
+                              my_leads.lead.phone_no_encrypt,
+                              my_leads.lead.lead_crm_id
+                            )
+                          }
+                        >
                           <CallIcon className={classes.callIcon} />
                         </IconButton>
                       </Tooltip>
                     </TableCell>
                   </TableRow>
-                )
-              }) : <span className={classes.emptydata}>No Data Found</span>}
+                );
+              })
+            ) : (
+              <span className={classes.emptydata}>No Data Found</span>
+            )}
           </TableBody>
         </Table>
         <div>
@@ -846,44 +1084,64 @@ export default function MyLeads(props) {
           />
         </div>
         <div>
-          <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={dialerCall} autoHideDuration={1500} onClose={disableDialerPopUp}>
+          <Snackbar
+            anchorOrigin={{ vertical: "top", horizontal: "right" }}
+            open={dialerCall}
+            autoHideDuration={1500}
+            onClose={disableDialerPopUp}
+          >
             <Alert onClose={disableDialerPopUp} severity="info">
               Calling...
             </Alert>
           </Snackbar>
-          <Snackbar anchorOrigin={{ vertical: "top", horizontal: "center" }} open={leadConflictPopUp} autoHideDuration={1500} onClose={disableDialerPopUp}>
+          <Snackbar
+            anchorOrigin={{ vertical: "top", horizontal: "center" }}
+            open={leadConflictPopUp}
+            autoHideDuration={1500}
+            onClose={disableDialerPopUp}
+          >
             <Alert onClose={disableDialerPopUp} severity="error">
               Insufficient privilege
             </Alert>
           </Snackbar>
         </div>
       </TableContainer>
-      {isLoading ? '' : <div className={classes.tablePagination}>
-        <div className={classes.rowsPerPageContainer}>
-          <div className={classes.rowsText}>Rows Per Page: {rowsPerPage}</div>
+      {isLoading ? (
+        ""
+      ) : (
+        <div className={classes.tablePagination}>
+          <div className={classes.rowsPerPageContainer}>
+            <div className={classes.rowsText}>Rows Per Page: {rowsPerPage}</div>
+          </div>
+          <div className={classes.numberOfTotalCount}>
+            {totalDataPerPage} of {totalLeads}
+          </div>
+          <div className={classes.buttonsContainer}>
+            {prevPage === null ? (
+              <IconButton disabled onClick={prevPageHandler}>
+                <ChevronLeftOutlinedIcon />
+              </IconButton>
+            ) : (
+              <IconButton onClick={prevPageHandler}>
+                <ChevronLeftOutlinedIcon
+                  className={prevPage !== null ? classes.activeColor : ""}
+                />
+              </IconButton>
+            )}
+            {nextPage === null ? (
+              <IconButton disabled onClick={nextPageHandler}>
+                <ChevronRightOutlinedIcon />
+              </IconButton>
+            ) : (
+              <IconButton onClick={nextPageHandler}>
+                <ChevronRightOutlinedIcon
+                  className={nextPage !== null ? classes.activeColor : ""}
+                />
+              </IconButton>
+            )}
+          </div>
         </div>
-        <div className={classes.numberOfTotalCount}>{totalDataPerPage} of {totalLeads}</div>
-        <div className={classes.buttonsContainer}>
-          {prevPage === null ? <IconButton disabled
-            onClick={prevPageHandler}
-          >
-            <ChevronLeftOutlinedIcon />
-          </IconButton> : <IconButton
-            onClick={prevPageHandler}
-          >
-            <ChevronLeftOutlinedIcon className={prevPage !== null ? classes.activeColor : ''} />
-          </IconButton>}
-          {nextPage === null ? <IconButton disabled
-            onClick={nextPageHandler}
-          >
-            <ChevronRightOutlinedIcon />
-          </IconButton> : <IconButton
-            onClick={nextPageHandler}
-          >
-            <ChevronRightOutlinedIcon className={nextPage !== null ? classes.activeColor : ''} />
-          </IconButton>}
-        </div>
-      </div>}
-    </PageLayerSection >
+      )}
+    </PageLayerSection>
   );
 }

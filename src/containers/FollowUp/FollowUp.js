@@ -220,7 +220,7 @@ export default function FollowUp(props) {
         }
     }, [leadData]);
     return (
-        <PageLayerSection>
+        <PageLayerSection isDisplaySearchBar={false}>
             {/* <NoDataFound text="Coming Soon" /> */}
             <div className="followUpBtnContainer">
                     <Button 

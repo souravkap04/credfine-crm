@@ -90,6 +90,7 @@ export default function PageLayerSection(props) {
             <div className="rightSection">
                 <div className="appBarContainer">
                     <div className="searchMainContainer">
+                        {props.isDisplaySearchBar ? 
                         <div className="searchContainer">
                             <div className="searchIconContainer">
                                 <SearchIcon className="searchIcon" />
@@ -129,7 +130,7 @@ export default function PageLayerSection(props) {
                                     }
                                 }}
                             /> }
-                        </div>
+                        </div> : ''}
                         <div className="headerSection">
                             <h3>{props.pageTitle}</h3>
                         </div>
