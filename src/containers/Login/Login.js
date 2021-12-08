@@ -165,10 +165,10 @@ export default function Login() {
               </Typography>
             </Grid>
             <Grid item lg={12}>
-              <Typography>Email</Typography>
+              <Typography>Username</Typography>
               <TextField
                 className={classes.input_field}
-                placeholder="info@credfine.com"
+                placeholder="UserName1234"
                 variant="standard"
                 fullWidth
                 name="email"
