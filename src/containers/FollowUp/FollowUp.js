@@ -24,6 +24,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Button } from '@material-ui/core';
 import Badge from '@material-ui/core/Badge';
+import EmiCalculator from '../Emicalculator/EmiCalculator';
 // import NoDataFound from '../NoDataFound/NoDataFound';
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -219,8 +220,16 @@ export default function FollowUp(props) {
         clickToCall(leadData.lead.phone_no,leadData.lead.lead_crm_id)
         }
     }, [leadData]);
+    const [openCalculate, setopenCalculate] = useState(false);
+    const openCalculator = () => {
+        setopenCalculate(true);
+    }
+    const closeCalculator = () => {
+        setopenCalculate(false);
+    }
     return (
-        <PageLayerSection isDisplaySearchBar={false}>
+        <PageLayerSection isDisplaySearchBar={false} ActualEmiCalculate={openCalculator}>
+            <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
             {/* <NoDataFound text="Coming Soon" /> */}
             <div className="followUpBtnContainer">
                     <Button 

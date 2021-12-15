@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import NoDataFound from '../NoDataFound/NoDataFound';
+import React, { useState, useEffect } from 'react';
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
 import EmiCalculator from '../Emicalculator/EmiCalculator';
-export default function Dashboard() {
+import './calculatortable.css';
+export default function CalculatorTable(props) {
     const [openCalculate, setopenCalculate] = useState(false);
     const openCalculator = () => {
         setopenCalculate(true);
@@ -11,9 +11,11 @@ export default function Dashboard() {
         setopenCalculate(false);
     }
     return (
-        <PageLayerSection isDisplaySearchBar={false} ActualEmiCalculate={openCalculator}>
+        <PageLayerSection isDisplaySearchBar={true} ActualEmiCalculate={openCalculator}>
             <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
-            <NoDataFound text="No Data Found" />
+            <div className="EMIHeaderContainer">
+                <h3>EMI Table</h3>
+            </div>
         </PageLayerSection>
     )
 }

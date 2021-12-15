@@ -101,6 +101,7 @@ export default function Menu(props) {
     const theme = useTheme();
     const [openen, setOpen] = React.useState(true);
     const [uploadOpen, setuploadOpen] = useState(true);
+    const [calculatorOpen, setcalculatorOpen] = useState(true);
     const [drawerOpen, setdrawerOpen] = React.useState(true);
     const [dashboardPage, setdashboardPage] = useState(false);
     const [newLeadPage, setnewLeadPage] = useState(false);
@@ -114,11 +115,15 @@ export default function Menu(props) {
     const [reportPage, setreportPage] = useState(false);
     const [isHiddenTab, setIsHiddenTab] = useState(false);
     const [isUserTab, setIsUserTab] = useState(false);
+    const [isCalculatorTab, setIsCalculatorTab] = useState(false);
     const handleClick = () => {
         setOpen(!openen);
     };
     const uploadHandleClick = () => {
         setuploadOpen(!uploadOpen);
+    }
+    const calculatorHandleClick = () => {
+        setcalculatorOpen(!calculatorOpen)
     }
     let profileData = JSON.parse(localStorage.getItem("user_info"));
     useEffect(() => {
@@ -325,6 +330,24 @@ export default function Menu(props) {
                         <ListItemText className={classes.color} primary="Reports" />
                     </ListItem>
                 </NavLink> : ''}
+                {isCalculatorTab ? null : <React.Fragment><ListItem button className={classes.color} onClick={calculatorHandleClick}>
+                    <ListItemIcon>
+                        <PeopleAltOutlinedIcon className={classes.color} />
+                    </ListItemIcon>
+                    <ListItemText primary="Calculators" />
+                    {calculatorOpen ? <ExpandLess /> : <ExpandMore />}
+                </ListItem>
+                    <Collapse in={calculatorOpen} timeout="auto" unmountOnExit>
+                        <List component="div" disablePadding>
+                            <ListItem button className={classes.nested + " selected"} onClick={props.EmiCalculate}>
+                                <ListItemText primary="EMI Calculator" />
+                            </ListItem>
+                            <ListItem button className={classes.nested + " selected"}>
+                                <ListItemText primary="Loan Calculator" />
+                            </ListItem>
+                        </List>
+                    </Collapse>
+                </React.Fragment>}
             </List>
         </Drawer >
     );

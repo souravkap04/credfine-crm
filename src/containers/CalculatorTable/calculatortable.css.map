@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AACA,AAAA,mBAAmB,CAAC;EAChB,QAAQ,EAAE,QAAQ;EAClB,OAAO,EAAE,IAAI;EACb,eAAe,EAAE,aAAa;EAC9B,WAAW,EAAE,MAAM;EACnB,aAAa,EAAE,SAAe;CAOjC;;AAZD,AAMI,mBANe,CAMf,EAAE,CAAC;EACC,SAAS,EAAE,SAAe;EAC1B,KAAK,EAAE,OAAO;EACd,WAAW,EAAE,GAAG;EAChB,aAAa,EAAE,CAAC;CACnB",
+    "sources": [
+        "calculatortable.scss"
+    ],
+    "names": [],
+    "file": "calculatortable.css"
+}

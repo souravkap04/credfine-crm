@@ -1,0 +1,14 @@
+$desk: 100 / 1440;
+.EMIHeaderContainer {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16 * $desk + vw;
+    h3 {
+        font-size: 22 * $desk + vw;
+        color: #4046b2;
+        font-weight: 600;
+        margin-bottom: 0;
+    }
+}

@@ -85,7 +85,7 @@ export default function PageLayerSection(props) {
     return (
         <div className="pageAdjustSection">
             <div className="leftSection">
-                <MenuMain />
+                <MenuMain EmiCalculate={props.ActualEmiCalculate} />
             </div>
             <div className="rightSection">
                 <div className="appBarContainer">

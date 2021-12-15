@@ -31,6 +31,7 @@ import clsx from "clsx";
 import MuiAlert from "@material-ui/lab/Alert";
 import Snackbar from "@material-ui/core/Snackbar";
 import { findAllByTestId } from "@testing-library/react";
+import EmiCalculator from '../Emicalculator/EmiCalculator';
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -138,13 +139,20 @@ export default function Leads() {
   const [validated, setValidated] = useState(false);
   const [isDisplay, setIsDisplay] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [isAutoDialerStart,setIsAutoDialerStart] = useState(false);
+  const [isAutoDialerStart, setIsAutoDialerStart] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [isLoading, setisLoading] = useState(false);
   const [fullName, setfullName] = useState("");
   const [mobileNo, setmobileNo] = useState("");
   const [monthlyIncome, setmonthlyIncome] = useState("");
   const [formError, setformError] = useState([false, false, false]);
+  const [openCalculate, setopenCalculate] = useState(false);
+  const openCalculator = () => {
+    setopenCalculate(true);
+  }
+  const closeCalculator = () => {
+    setopenCalculate(false);
+  }
   useEffect(() => {
     leadQuery ? fetchSearchData(leadQuery) : fetchLeadsData();
   }, [leadQuery]);
@@ -176,7 +184,7 @@ export default function Leads() {
       .then((response) => {
         setLeadData(response.data);
         setisLoading(false);
-          })
+      })
       .catch((error) => {
         console.log(error);
       });
@@ -185,7 +193,7 @@ export default function Leads() {
     history.push(`/dashboards/leads/edit/${leadId}`);
   };
   const clickToCall = async (encryptData, leadID) => {
-     const customerNo = decodeURIComponent(window.atob(encryptData));
+    const customerNo = decodeURIComponent(window.atob(encryptData));
     if (profileData.dialer === "HALOOCOM-Noida") {
       await axios
         .post(
@@ -331,9 +339,9 @@ export default function Leads() {
     clickToCall(leadData.phone_no_encrypt, leadData.lead_crm_id);
   };
   useEffect(() => {
-      if (localStorage.getItem("auto_dialer") && Object.keys(leadData).length !== 0 ) {
-        clickToCall(leadData.phone_no_encrypt,leadData.lead_crm_id)
-      }
+    if (localStorage.getItem("auto_dialer") && Object.keys(leadData).length !== 0) {
+      clickToCall(leadData.phone_no_encrypt, leadData.lead_crm_id)
+    }
   }, [leadData]);
   return (
     <PageLayerSection isDisplaySearchBar={true}
@@ -341,7 +349,9 @@ export default function Leads() {
       onClick={() => openDrawer()}
       startAutoDialerButton={true}
       startAutoDialerClick={() => autoDialerHandler()}
+      ActualEmiCalculate={openCalculator}
     >
+      <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
       <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
         open={isAutoDialerStart}
@@ -539,10 +549,10 @@ export default function Leads() {
                     <TableRow className={classes.oddEvenRow} key={index}>
                       <TableCell
                         className={(classes.tabledata, classes.click)}
-                        onClick={() => routeChangeHAndler(search.lead_crm_id)} 
+                        onClick={() => routeChangeHAndler(search.lead_crm_id)}
                       >
                         {search.lead_crm_id}
-                      </TableCell> 
+                      </TableCell>
                       <TableCell className={classes.tabledata}>
                         {search.name ? search.name : "NA"}
                       </TableCell>
@@ -594,7 +604,7 @@ export default function Leads() {
                             <CallIcon className={classes.callIcon} />
                           </IconButton>
                         </Tooltip>
-                      </TableCell> 
+                      </TableCell>
                     </TableRow>
                   );
                 })

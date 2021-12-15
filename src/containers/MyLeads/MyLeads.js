@@ -37,6 +37,7 @@ import Snackbar from "@material-ui/core/Snackbar";
 import filter from "../../images/filter.png";
 import { useQueryy } from "../../global/query";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import EmiCalculator from '../Emicalculator/EmiCalculator';
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -529,8 +530,16 @@ export default function MyLeads(props) {
     sethangUpSnacks(true);
     setCallHangUpState(true);
   };
+  const [openCalculate, setopenCalculate] = useState(false);
+    const openCalculator = () => {
+        setopenCalculate(true);
+    }
+    const closeCalculator = () => {
+        setopenCalculate(false);
+    }
   return (
-    <PageLayerSection isDisplaySearchBar={true} isMyLeadsSearch={true}>
+    <PageLayerSection isDisplaySearchBar={true} isMyLeadsSearch={true} ActualEmiCalculate={openCalculator}>
+      <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
       <Drawer anchor="right" open={state} onClose={closeDrawer}>
         <div className="rightContainerForm">
           <form>

@@ -1,0 +1,21 @@
+.EMIHeaderContainer {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-bottom: 1.11111vw;
+}
+
+.EMIHeaderContainer h3 {
+  font-size: 1.52778vw;
+  color: #4046b2;
+  font-weight: 600;
+  margin-bottom: 0;
+}
+/*# sourceMappingURL=calculatortable.css.map */
