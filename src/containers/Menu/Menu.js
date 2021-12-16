@@ -23,6 +23,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import IconButton from '@material-ui/core/IconButton';
 import PhoneCallbackOutlinedIcon from '@material-ui/icons/PhoneCallbackOutlined';
 import MenuIcon from '@material-ui/icons/Menu';
+import CalculatorIcon from '../../images/calculator.svg';
 import { Drawer } from '@material-ui/core';
 import clsx from 'clsx';
 const useStyles = makeStyles((theme) => ({
@@ -331,8 +332,9 @@ export default function Menu(props) {
                     </ListItem>
                 </NavLink> : ''}
                 {isCalculatorTab ? null : <React.Fragment><ListItem button className={classes.color} onClick={calculatorHandleClick}>
-                    <ListItemIcon>
-                        <PeopleAltOutlinedIcon className={classes.color} />
+                    <ListItemIcon className='calImageContainer'>
+                        <img src={CalculatorIcon} className={classes.color} alt="" />
+                        {/* <PeopleAltOutlinedIcon className={classes.color} /> */}
                     </ListItemIcon>
                     <ListItemText primary="Calculators" />
                     {calculatorOpen ? <ExpandLess /> : <ExpandMore />}

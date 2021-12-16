@@ -4,7 +4,6 @@ import { Drawer } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import $ from 'jquery';
 import { NavLink } from "react-router-dom";
 function emi_calculator(p, r, t) {
     let emi;
@@ -44,7 +43,6 @@ export default function EmiCalculator(props) {
     const [isCalculate, setisCalculate] = useState(false);
     const [yearly, setyearly] = useState(true);
     const [monthly, setmonthly] = useState(false);
-    // const [numberOfEMI, setnumberOfEMI] = useState('');
     const filterSubmit = () => {
         setisCalculate(true);
     };
@@ -54,8 +52,6 @@ export default function EmiCalculator(props) {
         if (monthly === true) {
             var Yearly = loanTerm / 12;
             setLoanTerm(Yearly)
-            // var numberOfEMIs = loanTerm;
-            // setnumberOfEMI(numberOfEMIs)
         }
     }
     const monthlyButton = () => {
@@ -64,7 +60,6 @@ export default function EmiCalculator(props) {
         if (yearly === true) {
             var Monthly = loanTerm * 12;
             setLoanTerm(Monthly)
-            // setnumberOfEMI(Monthly)
         }
     }
     return (
@@ -85,6 +80,7 @@ export default function EmiCalculator(props) {
                             }}
                             variant="outlined"
                             size="small"
+                            autoComplete='off'
                             value={loanAmount}
                             onChange={(e) => {
                                 const re = /^[0-9\b]+$/;
@@ -108,6 +104,7 @@ export default function EmiCalculator(props) {
                             }}
                             variant="outlined"
                             size="small"
+                            autoComplete='off'
                             value={Roi}
                             onChange={(e) => {
                                 const re = /^[0-9\b.]+$/;
@@ -115,13 +112,6 @@ export default function EmiCalculator(props) {
                                     setRoi(e.target.value)
                                 }
                             }}
-                        // onFocus={() => {
-                        //     let disData = [...disbursedError];
-                        //     disData[1] = false;
-                        //     setdisbursedError(disData)
-                        // }}
-                        // error={disbursedError[1]}
-                        // helperText={disbursedError[1] ? 'Roi is required' : ''}
                         />
                     </Grid>
                     <Grid>
@@ -133,8 +123,12 @@ export default function EmiCalculator(props) {
                             InputLabelProps={{
                                 shrink: true,
                             }}
+                            inputProps={{
+                                maxLength: 2
+                            }}
                             variant="outlined"
                             size="small"
+                            autoComplete='off'
                             value={loanTerm}
                             onChange={(e) => {
                                 const re = /^[0-9\b]+$/;
