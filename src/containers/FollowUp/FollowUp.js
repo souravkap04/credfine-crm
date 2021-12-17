@@ -204,6 +204,14 @@ export default function FollowUp(props) {
             return data;
         }
     }
+    const createdDateHandler = (date)=>{
+        let createdDate = new Date(date);
+        let currentCreatedDate = createdDate.toLocaleDateString() + " " + 
+        moment(createdDate.toLocaleTimeString(), "HH:mm:ss a").format(
+        "hh:mm A"
+        );
+        return currentCreatedDate;
+    }
     const disableDialerPopUp = () => {
         setDialerCall(false)
         setDisableHangupBtn(false)
@@ -245,10 +253,10 @@ export default function FollowUp(props) {
                             <TableCell className={classes.tableheading} >Name</TableCell>
                             <TableCell className={classes.tableheading} >Mobile</TableCell>
                             <TableCell className={classes.tableheading} >Loan Amt</TableCell>
-                            <TableCell className={classes.tableheading}>Income</TableCell>
                             <TableCell className={classes.tableheading} >Company</TableCell>
                             <TableCell className={classes.tableheading} >Campaign</TableCell>
                             <TableCell className={classes.tableheading} >Lead Agent Name</TableCell>
+                            <TableCell className={classes.tableheading}>Created Date</TableCell>
                             <TableCell className={classes.tableheading}>Follow-Up Date</TableCell>
                             <TableCell className={clsx(classes.tableheading, classes.statusHeading)} >Status</TableCell>
                             <TableCell className={classes.tableheading} >Sub Status</TableCell>
@@ -266,10 +274,10 @@ export default function FollowUp(props) {
                                 <TableCell className={classes.tabledata}>{leadData.lead.name ? leadData.lead.name : 'NA'}</TableCell>
                                 <TableCell className={classes.tabledata}>{maskPhoneNo(leadData.lead.phone_no) ? maskPhoneNo(leadData.lead.phone_no) : 'NA'}</TableCell>
                                 <TableCell className={classes.tabledata}>{leadData.lead.loan_amount ? leadData.lead.loan_amount : 'NA'}</TableCell>
-                                <TableCell className={classes.tabledata}>{leadData.lead.data['monthly_income'] ? leadData.lead.data['monthly_income'] : 'NA'}</TableCell>
                                 <TableCell className={classes.tabledata}>{leadData.lead.data['current_company_name'] ? leadData.lead.data['current_company_name'] : 'NA'}</TableCell>
                                 <TableCell className={classes.tabledata}>{leadData.lead.campaign_category ? leadData.lead.campaign_category : 'NA'}</TableCell>
                                 <TableCell className={classes.tabledata}>{leadData.lead.lead_agent_name ? leadData.lead.lead_agent_name : 'NA'}</TableCell>
+                                <TableCell className={classes.tabledata}>{createdDateHandler(leadData.lead.created_date) ? createdDateHandler(leadData.lead.created_date) : 'NA'}</TableCell>
                                 <TableCell className={classes.tabledata}>{currentDateTime ? currentDateTime : 'NA'}</TableCell>
                                 <TableCell className={classes.tabledata}>
                                     <div className={classes.loanTypeButton}>
