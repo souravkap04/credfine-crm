@@ -10,12 +10,14 @@ import TableRow from '@material-ui/core/TableRow';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import { Button } from '@material-ui/core';
-// import CircularProgress from '@material-ui/core/CircularProgress';
-import WhatsAppIcon from '@material-ui/icons/WhatsApp';
-import DraftsRoundedIcon from '@material-ui/icons/DraftsRounded';
-import GetAppRoundedIcon from '@material-ui/icons/GetAppRounded';
+import TextField from "@material-ui/core/TextField";
+import CircularProgress from '@material-ui/core/CircularProgress';
+import WhatsApp from '../../images/whatsapp.svg';
+import iconEmail from '../../images/iconEmail.svg';
+import iconDownload from '../../images/iconDownload.svg';
 import clsx from 'clsx';
 import './calculatortable.css';
+import $ from 'jquery';
 const useStyles = makeStyles({
     container: {
         marginBottom: '50px'
@@ -122,12 +124,30 @@ function fullEMICalculate(p, r, t) {
     actualEMI = t * emi;
     return price_comma(Math.round(actualEMI))
 }
+function interestPercentage(p, r, t) {
+    let interest;
+    r = r / (12 * 100);
+    var emi = (p * r * Math.pow(1 + r, t)) / (Math.pow(1 + r, t) - 1);
+    var full = t * emi;
+    interest = full - p;
+    interest = (interest / full) * 100;
+    return interest.toFixed(1);
+}
+function principalPercentage(p, r, t) {
+    let percentage;
+    r = r / (12 * 100);
+    var emi = (p * r * Math.pow(1 + r, t)) / (Math.pow(1 + r, t) - 1);
+    var full = t * emi;
+    percentage = (p / full) * 100;
+    return percentage.toFixed(1);
+}
 export default function CalculatorTable(props) {
-    const [loanAmount, setLoanAmount] = useState('');
-    const [Roi, setRoi] = useState('');
-    const [loanTerm, setLoanTerm] = useState('');
-    const [yearly, setyearly] = useState(true);
-    const [monthly, setmonthly] = useState(false);
+    const [repaymentData, setrepaymentData] = useState([]);
+    const [whatsapp, setwhatsapp] = useState('');
+    const [emailSent, setemailSent] = useState('');
+    const [isWhatsapp, setisWhatsapp] = useState(true);
+    const [isEmail, setisEmail] = useState(false);
+    const [isDownload, setisDownload] = useState(false);
     const classes = useStyles();
     const [openCalculate, setopenCalculate] = useState(false);
     const openCalculator = () => {
@@ -210,6 +230,38 @@ export default function CalculatorTable(props) {
             monthEndBalance: '24,69,389'
         }
     ]
+    const calculateRepayment = (p, numberOfMonths, rateOfInterest, emi) => {
+        var detailDesc = [];
+        var bb = p;
+        var int_dd = 0;
+        var pre_dd = 0;
+        var end_dd = 0;
+        var principalPer = 0;
+        var interetPer = 0;
+        for (var j = 1; j <= numberOfMonths; j++) {
+            int_dd = bb * ((rateOfInterest / 100) / 12);
+            pre_dd = emi - int_dd.toFixed(2);
+            end_dd = bb - Math.round(pre_dd);
+            principalPer = (pre_dd / emi) * 100;
+            interetPer = (int_dd / emi) * 100;
+            var detailDescJson = {
+                month: j,
+                currentLoan: Math.round(bb),
+                EMI: emi,
+                preLoan: Math.round(pre_dd),
+                intLoan: Math.round(int_dd),
+                endLoan: Math.round(end_dd),
+                principalPercentage: principalPer.toFixed(1),
+                interestPercentage: interetPer.toFixed(1)
+            }
+            bb = bb - Math.round(pre_dd);
+            detailDesc.push(detailDescJson)
+        }
+        return setrepaymentData(detailDesc);
+    }
+    useEffect(() => {
+        calculateRepayment(localStorage.getItem('LoanAmount'), localStorage.getItem('LoanTenure'), localStorage.getItem('Interest'), localStorage.getItem('EMI'))
+    }, []);
     return (
         <PageLayerSection isDisplaySearchBar={true} ActualEmiCalculate={openCalculator}>
             <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
@@ -275,6 +327,8 @@ export default function CalculatorTable(props) {
                                 <TableRow>
                                     <TableCell className={clsx(classes.tableheading, classes.statusHeading)}>Month</TableCell>
                                     <TableCell className={classes.tableheading}>Principal Paid</TableCell>
+                                    <TableCell className={classes.tableheading}>EMI</TableCell>
+                                    <TableCell className={classes.tableheading}>Principal Paid</TableCell>
                                     <TableCell className={classes.tableheading}>Interest Paid</TableCell>
                                     <TableCell className={classes.tableheading}>Principal vs Interest</TableCell>
                                     <TableCell className={classes.tableheading}>Month End Balance</TableCell>
@@ -284,26 +338,28 @@ export default function CalculatorTable(props) {
                                 {/* <div className="loader">
                                     <CircularProgress size={100} thickness={3} />
                                 </div> */}
-                                {Data.map(item => {
+                                {repaymentData.length !== 0 ? repaymentData.map(item => {
                                     return <TableRow className={classes.oddEvenRow}>
                                         <TableCell className={clsx(classes.tabledata, classes.statusHeading)}>{item.month}</TableCell>
-                                        <TableCell className={classes.tabledata}>₹ {item.principal}</TableCell>
-                                        <TableCell className={classes.tabledata}>₹ {item.interestPaid}</TableCell>
+                                        <TableCell className={classes.tabledata}>₹ {price_comma(item.currentLoan)}</TableCell>
+                                        <TableCell className={classes.tabledata}>₹ {price_comma(item.EMI)}</TableCell>
+                                        <TableCell className={classes.tabledata}>₹ {price_comma(item.preLoan)}</TableCell>
+                                        <TableCell className={classes.tabledata}>₹ {price_comma(item.intLoan)}</TableCell>
                                         <TableCell className={classes.tabledata}>
                                             <div className="progressTableContainer">
                                                 <div className="progressBarLine">
-                                                    <div className="leftPart" style={{ width: `74.9%` }}></div>
-                                                    <div className="rightPart" style={{ width: `25.1%` }}></div>
+                                                    <div className="leftPart" style={{ width: `${item.principalPercentage}%` }}></div>
+                                                    <div className="rightPart" style={{ width: `${item.interestPercentage}%` }}></div>
                                                 </div>
                                                 <div className="bottomSection">
-                                                    <div className="textProgress" style={{ color: '#5DC699' }}>74.9%</div>
-                                                    <div className="textProgress" style={{ color: '#F18A8A' }}>25.1%</div>
+                                                    <div className="textProgress" style={{ color: '#5DC699' }}>{item.principalPercentage}%</div>
+                                                    <div className="textProgress" style={{ color: '#F18A8A' }}>{item.interestPercentage}%</div>
                                                 </div>
                                             </div>
                                         </TableCell>
-                                        <TableCell className={classes.tabledata}>₹ {item.monthEndBalance}</TableCell>
+                                        <TableCell className={classes.tabledata}>₹ {price_comma(item.endLoan)}</TableCell>
                                     </TableRow>
-                                })}
+                                }) : ''}
                             </TableBody>
                         </Table>
                     </TableContainer>
@@ -313,44 +369,44 @@ export default function CalculatorTable(props) {
                         <div>
                             <h3 className='summaryText'>Summary</h3>
                             <div className="totalPriceContainer">
-                                <div className="textPrice">₹ {yearly ? emi_calculator(loanAmount, Roi, loanTerm * 12) : emi_calculator(loanAmount, Roi, loanTerm)}</div>
-                                <div className="subTextPrice">EMI Per Month x {yearly ? loanTerm * 12 : loanTerm} Months</div>
+                                <div className="textPrice">₹ {emi_calculator(localStorage.getItem('LoanAmount'), localStorage.getItem('Interest'), localStorage.getItem('LoanTenure'))}</div>
+                                <div className="subTextPrice">EMI Per Month x {localStorage.getItem('LoanTenure')} Months</div>
                             </div>
                             <div className="progressContainer">
                                 <div className="leftBarPart">
                                     <div className="textProgress">Principal</div>
-                                    <div className="textProgress">74.9%</div>
+                                    <div className="textProgress">{principalPercentage(localStorage.getItem('LoanAmount'), localStorage.getItem('Interest'), localStorage.getItem('LoanTenure')) + '%'}</div>
                                 </div>
                                 <div className="progressBarLine">
-                                    <div className="leftPart" style={{ width: `74.9%` }}></div>
-                                    <div className="rightPart" style={{ width: `25.1%` }}></div>
+                                    <div className="leftPart" style={{ width: `${principalPercentage(localStorage.getItem('LoanAmount'), localStorage.getItem('Interest'), localStorage.getItem('LoanTenure')) + '%'}` }}></div>
+                                    <div className="rightPart" style={{ width: `${interestPercentage(localStorage.getItem('LoanAmount'), localStorage.getItem('Interest'), localStorage.getItem('LoanTenure')) + '%'}` }}></div>
                                 </div>
                                 <div className="rightBarPart">
                                     <div className="textProgress">Interest</div>
-                                    <div className="textProgress">25.1%</div>
+                                    <div className="textProgress">{interestPercentage(localStorage.getItem('LoanAmount'), localStorage.getItem('Interest'), localStorage.getItem('LoanTenure')) + '%'}</div>
                                 </div>
                             </div>
                         </div>
                         <div>
                             <div className="listOfTextAmountContainer">
                                 <div className="textPrice">Loan Amount</div>
-                                <div className="subTextPrice">₹ {price_comma(loanAmount)}</div>
+                                <div className="subTextPrice">₹ {price_comma(localStorage.getItem('LoanAmount'))}</div>
                             </div>
                             <div className="listOfTextAmountContainer">
                                 <div className="textPrice">Total Interest</div>
-                                <div className="subTextPrice">₹ {yearly ? interestCalculate(loanAmount, Roi, loanTerm * 12) : interestCalculate(loanAmount, Roi, loanTerm)}</div>
+                                <div className="subTextPrice">₹ {interestCalculate(localStorage.getItem('LoanAmount'), localStorage.getItem('Interest'), localStorage.getItem('LoanTenure'))}</div>
                             </div>
                             <div className="listOfTextAmountContainer">
                                 <div className="textPrice">Total Payment</div>
-                                <div className="subTextPrice">₹ {yearly ? fullEMICalculate(loanAmount, Roi, loanTerm * 12) : fullEMICalculate(loanAmount, Roi, loanTerm)}</div>
+                                <div className="subTextPrice">₹ {fullEMICalculate(localStorage.getItem('LoanAmount'), localStorage.getItem('Interest'), localStorage.getItem('LoanTenure'))}</div>
                             </div>
                             <div className="listOfTextAmountContainer">
                                 <div className="textPrice">No. of EMI</div>
-                                <div className="subTextPrice">{yearly ? loanTerm * 12 : loanTerm}</div>
+                                <div className="subTextPrice">{localStorage.getItem('LoanTenure')}</div>
                             </div>
                             <div className="listOfTextAmountContainer">
                                 <div className="textPrice">Rate of Interest</div>
-                                <div className="subTextPrice">{Roi}%</div>
+                                <div className="subTextPrice">{localStorage.getItem('Interest')}%</div>
                             </div>
                             <Button
                                 className="showEMITableBtn"
@@ -367,10 +423,95 @@ export default function CalculatorTable(props) {
                             <h3 className="shareText">Share EMI Table (PDF)</h3>
                         </div>
                         <div className='socialMediaContainer'>
-                            <WhatsAppIcon className='whatsappIcon' />
-                            <DraftsRoundedIcon className='emailIcon' />
-                            <GetAppRoundedIcon className='downloadIcon' />
+                            <div className={isWhatsapp ? 'socialIconActive' : 'socialIcon'} onClick={() => {
+                                setisEmail(false)
+                                setisWhatsapp(true)
+                                setisDownload(false)
+                            }}>
+                                <img src={WhatsApp} alt="" />
+                            </div>
+                            <div className={isEmail ? 'socialIconActive' : 'socialIcon'} onClick={() => {
+                                setisEmail(true)
+                                setisWhatsapp(false)
+                                setisDownload(false)
+                            }}>
+                                <img src={iconEmail} alt="" />
+                            </div>
+                            <div className={isDownload ? 'socialIconActive' : 'socialIcon'} onClick={() => {
+                                setisEmail(false)
+                                setisWhatsapp(false)
+                                setisDownload(true)
+                            }}>
+                                <img src={iconDownload} alt="" />
+                            </div>
                         </div>
+                        {isWhatsapp ? <div className='whatsappFieldContainer'>
+                            <TextField
+                                className="calculatorTableTextField"
+                                id="outlined-full-width"
+                                label="WhatsApp Number"
+                                margin="normal"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                variant="outlined"
+                                size="small"
+                                autoComplete='off'
+                                value={whatsapp}
+                                onChange={(e) => {
+                                    const re = /^[0-9\b]+$/;
+                                    if (e.target.value === '' || re.test(e.target.value)) {
+                                        setwhatsapp(e.target.value)
+                                    }
+                                }}
+                            />
+                            <Button
+                                className="sendBtn"
+                                color="primary"
+                                variant="contained"
+                            >
+                                Send
+                            </Button>
+                        </div> : ''}
+                        {isEmail ? <div className='whatsappFieldContainer'>
+                            <TextField
+                                className="calculatorTableTextField"
+                                id="outlined-full-width"
+                                label="Email ID"
+                                margin="normal"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                variant="outlined"
+                                size="small"
+                                autoComplete='off'
+                                value={emailSent}
+                                onChange={(e) => {
+                                    const re = /^(?:[A-Z\d][A-Z\d_-]{5,10}|[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4})$/i;
+                                    if (e.target.value === '' || re.test(e.target.value)) {
+                                        setemailSent(e.target.value)
+                                    }
+                                }}
+                            />
+                            <Button
+                                className="sendBtn"
+                                color="primary"
+                                variant="contained"
+                            >
+                                Send
+                            </Button>
+                        </div> : ''}
+                        {isDownload ? <div className='downloadContainer'>
+                            <p className='downloadText'>Download a copy of EMI Table
+                                to be sent after review.</p>
+                            <Button
+                                className="downloadBtn"
+                                color="primary"
+                                variant="contained"
+                            >
+                                Download
+                            </Button>
+                        </div> : ''}
                     </div>
                 </Grid>
             </Grid>

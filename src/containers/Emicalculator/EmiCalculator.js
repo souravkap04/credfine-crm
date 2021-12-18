@@ -7,8 +7,13 @@ import Button from "@material-ui/core/Button";
 import { NavLink } from "react-router-dom";
 function emi_calculator(p, r, t) {
     let emi;
+    let rate = r;
     r = r / (12 * 100); // one month interest
     emi = (p * r * Math.pow(1 + r, t)) / (Math.pow(1 + r, t) - 1);
+    localStorage.setItem('EMI', Math.round(emi))
+    localStorage.setItem('Interest', rate)
+    localStorage.setItem('LoanAmount', p)
+    localStorage.setItem('LoanTenure', t)
     return price_comma(Math.round(emi));
 }
 function price_comma(price) {
@@ -29,12 +34,29 @@ function interestCalculate(p, r, t) {
     interest = full - p;
     return price_comma(Math.round(interest))
 }
+function interestPercentage(p, r, t) {
+    let interest;
+    r = r / (12 * 100);
+    var emi = (p * r * Math.pow(1 + r, t)) / (Math.pow(1 + r, t) - 1);
+    var full = t * emi;
+    interest = full - p;
+    interest = (interest / full) * 100;
+    return interest.toFixed(1);
+}
 function fullEMICalculate(p, r, t) {
     let actualEMI;
     r = r / (12 * 100);
     var emi = (p * r * Math.pow(1 + r, t)) / (Math.pow(1 + r, t) - 1);
     actualEMI = t * emi;
     return price_comma(Math.round(actualEMI))
+}
+function principalPercentage(p, r, t) {
+    let percentage;
+    r = r / (12 * 100);
+    var emi = (p * r * Math.pow(1 + r, t)) / (Math.pow(1 + r, t) - 1);
+    var full = t * emi;
+    percentage = (p / full) * 100;
+    return percentage.toFixed(1);
 }
 export default function EmiCalculator(props) {
     const [loanAmount, setLoanAmount] = useState('');
@@ -173,15 +195,15 @@ export default function EmiCalculator(props) {
                             <div className="progressContainer">
                                 <div className="leftSection">
                                     <div className="textProgress">Principal</div>
-                                    <div className="textProgress">74.9%</div>
+                                    <div className="textProgress">{yearly ? principalPercentage(loanAmount, Roi, loanTerm * 12) + '%' : principalPercentage(loanAmount, Roi, loanTerm) + '%'}</div>
                                 </div>
                                 <div className="progressBarLine">
-                                    <div className="leftPart" style={{ width: `74.9%` }}></div>
-                                    <div className="rightPart" style={{ width: `25.1%` }}></div>
+                                    <div className="leftPart" style={{ width: `${yearly ? principalPercentage(loanAmount, Roi, loanTerm * 12) + '%' : principalPercentage(loanAmount, Roi, loanTerm) + '%'}` }}></div>
+                                    <div className="rightPart" style={{ width: `${yearly ? interestPercentage(loanAmount, Roi, loanTerm * 12) + '%' : interestPercentage(loanAmount, Roi, loanTerm) + '%'}` }}></div>
                                 </div>
                                 <div className="rightSection">
                                     <div className="textProgress">Interest</div>
-                                    <div className="textProgress">25.1%</div>
+                                    <div className="textProgress">{yearly ? interestPercentage(loanAmount, Roi, loanTerm * 12) + '%' : interestPercentage(loanAmount, Roi, loanTerm) + '%'}</div>
                                 </div>
                             </div>
                         </Grid>
