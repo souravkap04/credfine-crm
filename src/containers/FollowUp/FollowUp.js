@@ -13,7 +13,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import CallIcon from '@material-ui/icons/Call';
 import axios from 'axios';
 import baseUrl from '../../global/api';
-import {haloocomNoidaDialerApi, haloocomMumbaiDialerApi } from '../../global/callApi'
+import { haloocomNoidaDialerApi, haloocomMumbaiDialerApi } from '../../global/callApi'
 import { getProfileData } from '../../global/leadsGlobalData';
 import CallerDialogBox from '../Leads/CallerDialog/CallerDialogBox';
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
@@ -119,7 +119,7 @@ export default function FollowUp(props) {
     const [disableHangupBtn, setDisableHangupBtn] = useState(true);
     const [isLoading, setisLoading] = useState(false);
     const [currentDateTime, setcurrentDateTime] = useState('');
-    const [isAutoDialerStart,setIsAutoDialerStart] = useState(false);
+    const [isAutoDialerStart, setIsAutoDialerStart] = useState(false);
     const fetchLeadsData = async () => {
         setisLoading(true);
         const headers = {
@@ -153,7 +153,7 @@ export default function FollowUp(props) {
         history.push(`/dashboards/followup/edit/${leadId}`);
     };
     const clickToCall = async (customerNo, leadID) => {
-          if (profileData.dialer === 'HALOOCOM-Noida') {
+        if (profileData.dialer === 'HALOOCOM-Noida') {
             await axios.post(`${haloocomNoidaDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`)
                 .then((response) => {
                     setDialerCall(true);
@@ -205,6 +205,14 @@ export default function FollowUp(props) {
             return data;
         }
     }
+    const createdDateHandler = (date) => {
+        let createdDate = new Date(date);
+        let currentCreatedDate = createdDate.toLocaleDateString() + " " +
+            moment(createdDate.toLocaleTimeString(), "HH:mm:ss a").format(
+                "hh:mm A"
+            );
+        return currentCreatedDate;
+    }
     const disableDialerPopUp = () => {
         setDialerCall(false)
         setDisableHangupBtn(false)
@@ -214,10 +222,10 @@ export default function FollowUp(props) {
         localStorage.setItem("auto_dialer", true);
         setIsAutoDialerStart(true);
         clickToCall(leadData.lead.phone_no, leadData.lead.lead_crm_id);
-      };
+    };
     useEffect(() => {
-        if (localStorage.getItem("auto_dialer") && Object.keys(leadData).length !== 0 ) {
-        clickToCall(leadData.lead.phone_no,leadData.lead.lead_crm_id)
+        if (localStorage.getItem("auto_dialer") && Object.keys(leadData).length !== 0) {
+            clickToCall(leadData.lead.phone_no, leadData.lead.lead_crm_id)
         }
     }, [leadData]);
     const [openCalculate, setopenCalculate] = useState(false);
@@ -232,12 +240,12 @@ export default function FollowUp(props) {
             <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
             {/* <NoDataFound text="Coming Soon" /> */}
             <div className="followUpBtnContainer">
-                    <Button 
+                <Button
                     className="followUpAutoDialerStartBtn"
                     color="primary"
                     variant="contained"
                     onClick={() => autoDialerHandler()}
-                    >
+                >
                     Start</Button>
                 {LeadCount !== 0 ? <Badge className="followbtn" max={5000} badgeContent={LeadCount} color="secondary">
                     <Button variant="contained">Follow Up</Button>
@@ -254,13 +262,13 @@ export default function FollowUp(props) {
                             <TableCell className={classes.tableheading} >Name</TableCell>
                             <TableCell className={classes.tableheading} >Mobile</TableCell>
                             <TableCell className={classes.tableheading} >Loan Amt</TableCell>
-                            <TableCell className={classes.tableheading}>Income</TableCell>
                             <TableCell className={classes.tableheading} >Company</TableCell>
                             <TableCell className={classes.tableheading} >Campaign</TableCell>
-                            <TableCell className={classes.tableheading} >Lead Agent Name</TableCell>
+                            <TableCell className={classes.tableheading}>Created Date</TableCell>
                             <TableCell className={classes.tableheading}>Follow-Up Date</TableCell>
                             <TableCell className={clsx(classes.tableheading, classes.statusHeading)} >Status</TableCell>
                             <TableCell className={classes.tableheading} >Sub Status</TableCell>
+                            <TableCell className={classes.tableheading} >Lead Agent Name</TableCell>
                             <TableCell className={classes.tableheading} ></TableCell>
                         </TableRow>
                     </TableHead>
@@ -275,10 +283,9 @@ export default function FollowUp(props) {
                                 <TableCell className={classes.tabledata}>{leadData.lead.name ? leadData.lead.name : 'NA'}</TableCell>
                                 <TableCell className={classes.tabledata}>{maskPhoneNo(leadData.lead.phone_no) ? maskPhoneNo(leadData.lead.phone_no) : 'NA'}</TableCell>
                                 <TableCell className={classes.tabledata}>{leadData.lead.loan_amount ? leadData.lead.loan_amount : 'NA'}</TableCell>
-                                <TableCell className={classes.tabledata}>{leadData.lead.data['monthly_income'] ? leadData.lead.data['monthly_income'] : 'NA'}</TableCell>
                                 <TableCell className={classes.tabledata}>{leadData.lead.data['current_company_name'] ? leadData.lead.data['current_company_name'] : 'NA'}</TableCell>
                                 <TableCell className={classes.tabledata}>{leadData.lead.campaign_category ? leadData.lead.campaign_category : 'NA'}</TableCell>
-                                <TableCell className={classes.tabledata}>{leadData.lead.lead_agent_name ? leadData.lead.lead_agent_name : 'NA'}</TableCell>
+                                <TableCell className={classes.tabledata}>{createdDateHandler(leadData.lead.created_date) ? createdDateHandler(leadData.lead.created_date) : 'NA'}</TableCell>
                                 <TableCell className={classes.tabledata}>{currentDateTime ? currentDateTime : 'NA'}</TableCell>
                                 <TableCell className={classes.tabledata}>
                                     <div className={classes.loanTypeButton}>
@@ -286,6 +293,7 @@ export default function FollowUp(props) {
                                     </div>
                                 </TableCell>
                                 <TableCell className={classes.tabledata}>{leadData.lead.sub_status ? leadData.lead.sub_status : 'NA'}</TableCell>
+                                <TableCell className={classes.tabledata}>{leadData.lead.lead_agent_name ? leadData.lead.lead_agent_name : 'NA'}</TableCell>
                                 <TableCell>
                                     <Tooltip title="Call Customer">
                                         <IconButton className={classes.callButton} onClick={() => clickToCall(leadData.lead.phone_no, leadData.lead.lead_crm_id)}>
