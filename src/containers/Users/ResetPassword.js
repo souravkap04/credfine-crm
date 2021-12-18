@@ -327,6 +327,7 @@ export default function Users() {
       })
   }
   const editUser = (userName, updatedUserName, firstName, lastName, email, role, gender, phoneNo, productType, dialerPass, vertageId, vertagePass, parent_user, location) => {
+    listOfUsers(role);
     setIsEditUser(true);
     setSelectedUserName(userName);
     setUpdatedUserName(updatedUserName);
@@ -388,7 +389,6 @@ export default function Users() {
     setIsDisplayDialerMessage(false);
   }
   const submitHaloocomUserName = ()=>{
-    console.log("submitHaloocomUserName:"+vertageId);
     if(profileData.dialer === "HALOOCOM-Noida"){
       axios.post(`${haloocomNoidaDialerApi}/userCreation.php?user=${vertageId}&operation=Add`)
     .then((response)=>{
@@ -1171,7 +1171,7 @@ export default function Users() {
                               value={parent}
                               onChange={(e) => setparent(e.target.value)}
                             >
-                              <option>Select One</option>
+                              <option value="">Select One</option>
                               {updateUsers.map(item => {
                                 return <option style={{ cursor: 'pointer' }} value={item.myuser.username}>{item.myuser.username}</option>
                               })}
