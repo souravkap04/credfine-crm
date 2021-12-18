@@ -828,9 +828,6 @@ export default function MyLeads(props) {
               <TableCell className={classes.tableheading}>Mobile</TableCell>
               <TableCell className={classes.tableheading}>Loan Amt</TableCell>
               <TableCell className={classes.tableheading}>Campaign</TableCell>
-              <TableCell className={classes.tableheading}>
-                Lead Agent Name
-              </TableCell>
               <TableCell className={classes.tableheading}>Created Date</TableCell>
               <TableCell className={classes.tableheading}>
                 Last Updated
@@ -841,6 +838,9 @@ export default function MyLeads(props) {
                 Status
               </TableCell>
               <TableCell className={classes.tableheading}>Sub Status</TableCell>
+              <TableCell className={classes.tableheading}>
+                Lead Agent Name
+              </TableCell>
               <TableCell className={classes.tableheading}></TableCell>
             </TableRow>
           </TableHead>
@@ -892,9 +892,6 @@ export default function MyLeads(props) {
                           : "NA"}
                       </TableCell>
                       <TableCell className={classes.tabledata}>
-                        {search.lead_agent_name ? search.lead_agent_name : "NA"}
-                      </TableCell>
-                      <TableCell className={classes.tabledata}>
                         {currentCreatedDate ? currentCreatedDate : "NA"}
                       </TableCell>
                       <TableCell className={classes.tabledata}>
@@ -909,6 +906,9 @@ export default function MyLeads(props) {
                       </TableCell>
                       <TableCell className={classes.tabledata}>
                         {search.sub_status ? search.sub_status : "NA"}
+                      </TableCell>
+                      <TableCell className={classes.tabledata}>
+                        {search.lead_agent_name ? search.lead_agent_name : "NA"}
                       </TableCell>
                         <TableCell className={classes.tabledata}>
                           <Tooltip title="Call Customer">
@@ -976,11 +976,6 @@ export default function MyLeads(props) {
                         : "NA"}
                     </TableCell>
                     <TableCell className={classes.tabledata}>
-                      {my_leads.lead_agent_name
-                        ? my_leads.lead_agent_name
-                        : "NA"}
-                    </TableCell>
-                    <TableCell className={classes.tabledata}>
                       {currentCreatedDate ? currentCreatedDate : "NA"}
                     </TableCell>
                     <TableCell className={classes.tabledata}>
@@ -996,6 +991,11 @@ export default function MyLeads(props) {
                     <TableCell className={classes.tabledata}>
                       {my_leads.lead.sub_status
                         ? my_leads.lead.sub_status
+                        : "NA"}
+                    </TableCell>
+                    <TableCell className={classes.tabledata}>
+                      {my_leads.lead_agent_name
+                        ? my_leads.lead_agent_name
                         : "NA"}
                     </TableCell>
                     <TableCell className={classes.tabledata}>

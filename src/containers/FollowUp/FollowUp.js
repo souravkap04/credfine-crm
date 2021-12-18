@@ -255,11 +255,11 @@ export default function FollowUp(props) {
                             <TableCell className={classes.tableheading} >Loan Amt</TableCell>
                             <TableCell className={classes.tableheading} >Company</TableCell>
                             <TableCell className={classes.tableheading} >Campaign</TableCell>
-                            <TableCell className={classes.tableheading} >Lead Agent Name</TableCell>
                             <TableCell className={classes.tableheading}>Created Date</TableCell>
                             <TableCell className={classes.tableheading}>Follow-Up Date</TableCell>
                             <TableCell className={clsx(classes.tableheading, classes.statusHeading)} >Status</TableCell>
                             <TableCell className={classes.tableheading} >Sub Status</TableCell>
+                            <TableCell className={classes.tableheading} >Lead Agent Name</TableCell>
                             <TableCell className={classes.tableheading} ></TableCell>
                         </TableRow>
                     </TableHead>
@@ -276,7 +276,6 @@ export default function FollowUp(props) {
                                 <TableCell className={classes.tabledata}>{leadData.lead.loan_amount ? leadData.lead.loan_amount : 'NA'}</TableCell>
                                 <TableCell className={classes.tabledata}>{leadData.lead.data['current_company_name'] ? leadData.lead.data['current_company_name'] : 'NA'}</TableCell>
                                 <TableCell className={classes.tabledata}>{leadData.lead.campaign_category ? leadData.lead.campaign_category : 'NA'}</TableCell>
-                                <TableCell className={classes.tabledata}>{leadData.lead.lead_agent_name ? leadData.lead.lead_agent_name : 'NA'}</TableCell>
                                 <TableCell className={classes.tabledata}>{createdDateHandler(leadData.lead.created_date) ? createdDateHandler(leadData.lead.created_date) : 'NA'}</TableCell>
                                 <TableCell className={classes.tabledata}>{currentDateTime ? currentDateTime : 'NA'}</TableCell>
                                 <TableCell className={classes.tabledata}>
@@ -285,6 +284,7 @@ export default function FollowUp(props) {
                                     </div>
                                 </TableCell>
                                 <TableCell className={classes.tabledata}>{leadData.lead.sub_status ? leadData.lead.sub_status : 'NA'}</TableCell>
+                                <TableCell className={classes.tabledata}>{leadData.lead.lead_agent_name ? leadData.lead.lead_agent_name : 'NA'}</TableCell>
                                 <TableCell>
                                     <Tooltip title="Call Customer">
                                         <IconButton className={classes.callButton} onClick={() => clickToCall(leadData.lead.phone_no, leadData.lead.lead_crm_id)}>
