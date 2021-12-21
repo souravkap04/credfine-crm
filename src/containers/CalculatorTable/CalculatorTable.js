@@ -17,7 +17,11 @@ import iconEmail from '../../images/iconEmail.svg';
 import iconDownload from '../../images/iconDownload.svg';
 import clsx from 'clsx';
 import './calculatortable.css';
+import logo from '../../images/crmLogo.svg';
 import $ from 'jquery';
+import PDF, { Text, AddPage, Line, Image, Html } from 'jspdf-react';
+import jsPDF from 'jspdf'
+import autoTable from 'jspdf-autotable'
 const useStyles = makeStyles({
     container: {
         marginBottom: '50px'
@@ -38,6 +42,9 @@ const useStyles = makeStyles({
     },
     tabledata: {
         fontSize: '12px'
+    },
+    adjustTableData: {
+        whiteSpace: 'nowrap'
     },
     emptydata: {
         position: 'relative',
@@ -142,6 +149,7 @@ function principalPercentage(p, r, t) {
     return percentage.toFixed(1);
 }
 export default function CalculatorTable(props) {
+    const doc = new jsPDF()
     const [repaymentData, setrepaymentData] = useState([]);
     const [whatsapp, setwhatsapp] = useState('');
     const [emailSent, setemailSent] = useState('');
@@ -156,80 +164,6 @@ export default function CalculatorTable(props) {
     const closeCalculator = () => {
         setopenCalculate(false);
     }
-    const Data = [
-        {
-            month: '1',
-            principal: '30,611',
-            interestPaid: ' 25,000',
-            monthEndBalance: '24,69,389'
-        },
-        {
-            month: '2',
-            principal: '30,611',
-            interestPaid: ' 25,000',
-            monthEndBalance: '24,69,389'
-        },
-        {
-            month: '3',
-            principal: '30,611',
-            interestPaid: ' 25,000',
-            monthEndBalance: '24,69,389'
-        },
-        {
-            month: '4',
-            principal: '30,611',
-            interestPaid: ' 25,000',
-            monthEndBalance: '24,69,389'
-        },
-        {
-            month: '5',
-            principal: '30,611',
-            interestPaid: ' 25,000',
-            monthEndBalance: '24,69,389'
-        },
-        {
-            month: '6',
-            principal: '30,611',
-            interestPaid: ' 25,000',
-            monthEndBalance: '24,69,389'
-        },
-        {
-            month: '7',
-            principal: '30,611',
-            interestPaid: ' 25,000',
-            monthEndBalance: '24,69,389'
-        },
-        {
-            month: '8',
-            principal: '30,611',
-            interestPaid: ' 25,000',
-            monthEndBalance: '24,69,389'
-        },
-        {
-            month: '9',
-            principal: '30,611',
-            interestPaid: ' 25,000',
-            monthEndBalance: '24,69,389'
-        },
-        {
-            month: '10',
-            principal: '30,611',
-            interestPaid: ' 25,000',
-            monthEndBalance: '24,69,389'
-        },
-        {
-            month: '11',
-            principal: '30,611',
-            interestPaid: ' 25,000',
-            monthEndBalance: '24,69,389'
-        },
-        {
-            month: '12',
-            principal: '30,611',
-            interestPaid: ' 25,000',
-            monthEndBalance: '24,69,389'
-        }
-    ]
     const calculateRepayment = (p, numberOfMonths, rateOfInterest, emi) => {
         var detailDesc = [];
         var bb = p;
@@ -259,6 +193,10 @@ export default function CalculatorTable(props) {
         }
         return setrepaymentData(detailDesc);
     }
+    // const DownloadPDF = () => {
+    //     autoTable(doc, { html: '#my-table' })
+    //     doc.save('table.pdf')
+    // }
     useEffect(() => {
         calculateRepayment(localStorage.getItem('LoanAmount'), localStorage.getItem('LoanTenure'), localStorage.getItem('Interest'), localStorage.getItem('EMI'))
     }, []);
@@ -271,62 +209,11 @@ export default function CalculatorTable(props) {
             <Grid container style={{ justifyContent: "flex-start" }}>
                 <Grid lg={9}>
                     <TableContainer className={classes.container}>
-                        <div className={classes.table} style={{ display: 'iniline-block' }}>
-                            <Button
-                                className="yearTableBtnActive"
-                                color="primary"
-                                variant="contained"
-                            >
-                                Year 1
-                            </Button>
-                            <Button
-                                className="yearTableBtn"
-                                color="primary"
-                                variant="contained"
-                            >
-                                Year 2
-                            </Button>
-                            <Button
-                                className="yearTableBtn"
-                                color="primary"
-                                variant="contained"
-                            >
-                                Year 3
-                            </Button>
-                            <Button
-                                className="yearTableBtn"
-                                color="primary"
-                                variant="contained"
-                            >
-                                Year 4
-                            </Button>
-                            <Button
-                                className="yearTableBtn"
-                                color="primary"
-                                variant="contained"
-                            >
-                                Year 5
-                            </Button>
-                            <Button
-                                className="yearTableBtn"
-                                color="primary"
-                                variant="contained"
-                            >
-                                Year 6
-                            </Button>
-                            <Button
-                                className="yearTableBtn"
-                                color="primary"
-                                variant="contained"
-                            >
-                                Year 7
-                            </Button>
-                        </div>
                         <Table className={classes.table} aria-label="simple table">
                             <TableHead className={classes.tableheading}>
                                 <TableRow>
                                     <TableCell className={clsx(classes.tableheading, classes.statusHeading)}>Month</TableCell>
-                                    <TableCell className={classes.tableheading}>Principal Paid</TableCell>
+                                    <TableCell className={classes.tableheading}>Loan Amount Balance</TableCell>
                                     <TableCell className={classes.tableheading}>EMI</TableCell>
                                     <TableCell className={classes.tableheading}>Principal Paid</TableCell>
                                     <TableCell className={classes.tableheading}>Interest Paid</TableCell>
@@ -338,13 +225,13 @@ export default function CalculatorTable(props) {
                                 {/* <div className="loader">
                                     <CircularProgress size={100} thickness={3} />
                                 </div> */}
-                                {repaymentData.length !== 0 ? repaymentData.map(item => {
+                                {repaymentData.length !== 0 ? repaymentData.map((item, index) => {
                                     return <TableRow className={classes.oddEvenRow}>
                                         <TableCell className={clsx(classes.tabledata, classes.statusHeading)}>{item.month}</TableCell>
-                                        <TableCell className={classes.tabledata}>₹ {price_comma(item.currentLoan)}</TableCell>
-                                        <TableCell className={classes.tabledata}>₹ {price_comma(item.EMI)}</TableCell>
-                                        <TableCell className={classes.tabledata}>₹ {price_comma(item.preLoan)}</TableCell>
-                                        <TableCell className={classes.tabledata}>₹ {price_comma(item.intLoan)}</TableCell>
+                                        <TableCell className={classes.tabledata}>&#8377; {price_comma(item.currentLoan)}</TableCell>
+                                        <TableCell className={clsx(classes.tabledata, classes.adjustTableData)}>&#8377; {price_comma(item.EMI)}</TableCell>
+                                        <TableCell className={classes.tabledata}>&#8377; {price_comma(item.preLoan)}</TableCell>
+                                        <TableCell className={classes.tabledata}>&#8377; {price_comma(item.intLoan)}</TableCell>
                                         <TableCell className={classes.tabledata}>
                                             <div className="progressTableContainer">
                                                 <div className="progressBarLine">
@@ -357,7 +244,7 @@ export default function CalculatorTable(props) {
                                                 </div>
                                             </div>
                                         </TableCell>
-                                        <TableCell className={classes.tabledata}>₹ {price_comma(item.endLoan)}</TableCell>
+                                        <TableCell className={classes.tabledata}>&#8377; {price_comma(item.endLoan)}</TableCell>
                                     </TableRow>
                                 }) : ''}
                             </TableBody>
@@ -369,7 +256,7 @@ export default function CalculatorTable(props) {
                         <div>
                             <h3 className='summaryText'>Summary</h3>
                             <div className="totalPriceContainer">
-                                <div className="textPrice">₹ {emi_calculator(localStorage.getItem('LoanAmount'), localStorage.getItem('Interest'), localStorage.getItem('LoanTenure'))}</div>
+                                <div className="textPrice">&#8377; {emi_calculator(localStorage.getItem('LoanAmount'), localStorage.getItem('Interest'), localStorage.getItem('LoanTenure'))}</div>
                                 <div className="subTextPrice">EMI Per Month x {localStorage.getItem('LoanTenure')} Months</div>
                             </div>
                             <div className="progressContainer">
@@ -390,15 +277,15 @@ export default function CalculatorTable(props) {
                         <div>
                             <div className="listOfTextAmountContainer">
                                 <div className="textPrice">Loan Amount</div>
-                                <div className="subTextPrice">₹ {price_comma(localStorage.getItem('LoanAmount'))}</div>
+                                <div className="subTextPrice">&#8377; {price_comma(localStorage.getItem('LoanAmount'))}</div>
                             </div>
                             <div className="listOfTextAmountContainer">
                                 <div className="textPrice">Total Interest</div>
-                                <div className="subTextPrice">₹ {interestCalculate(localStorage.getItem('LoanAmount'), localStorage.getItem('Interest'), localStorage.getItem('LoanTenure'))}</div>
+                                <div className="subTextPrice">&#8377; {interestCalculate(localStorage.getItem('LoanAmount'), localStorage.getItem('Interest'), localStorage.getItem('LoanTenure'))}</div>
                             </div>
                             <div className="listOfTextAmountContainer">
                                 <div className="textPrice">Total Payment</div>
-                                <div className="subTextPrice">₹ {fullEMICalculate(localStorage.getItem('LoanAmount'), localStorage.getItem('Interest'), localStorage.getItem('LoanTenure'))}</div>
+                                <div className="subTextPrice">&#8377; {fullEMICalculate(localStorage.getItem('LoanAmount'), localStorage.getItem('Interest'), localStorage.getItem('LoanTenure'))}</div>
                             </div>
                             <div className="listOfTextAmountContainer">
                                 <div className="textPrice">No. of EMI</div>
@@ -418,7 +305,7 @@ export default function CalculatorTable(props) {
                             </Button>
                         </div>
                     </div>
-                    <div className="shareConatiner">
+                    {/* <div className="shareConatiner">
                         <div>
                             <h3 className="shareText">Share EMI Table (PDF)</h3>
                         </div>
@@ -508,13 +395,83 @@ export default function CalculatorTable(props) {
                                 className="downloadBtn"
                                 color="primary"
                                 variant="contained"
+                                onClick={() => DownloadPDF()}
                             >
                                 Download
                             </Button>
                         </div> : ''}
-                    </div>
+                    </div> */}
                 </Grid>
             </Grid>
+            <div className="summaryConatiner" id="summary" style={{ display: 'none' }}>
+                <div>
+                    <h3 className='summaryText'>Summary</h3>
+                    <div className="totalPriceContainer">
+                        <div className="textPrice">₹ {emi_calculator(localStorage.getItem('LoanAmount'), localStorage.getItem('Interest'), localStorage.getItem('LoanTenure'))}</div>
+                        <div className="subTextPrice">EMI Per Month x {localStorage.getItem('LoanTenure')} Months</div>
+                    </div>
+                    <div className="progressContainer">
+                        <div className="leftBarPart">
+                            <div className="textProgress">Principal</div>
+                            <div className="textProgress">{principalPercentage(localStorage.getItem('LoanAmount'), localStorage.getItem('Interest'), localStorage.getItem('LoanTenure')) + '%'}</div>
+                        </div>
+                        <div className="progressBarLine">
+                            <div className="leftPart" style={{ width: `${principalPercentage(localStorage.getItem('LoanAmount'), localStorage.getItem('Interest'), localStorage.getItem('LoanTenure')) + '%'}` }}></div>
+                            <div className="rightPart" style={{ width: `${interestPercentage(localStorage.getItem('LoanAmount'), localStorage.getItem('Interest'), localStorage.getItem('LoanTenure')) + '%'}` }}></div>
+                        </div>
+                        <div className="rightBarPart">
+                            <div className="textProgress">Interest</div>
+                            <div className="textProgress">{interestPercentage(localStorage.getItem('LoanAmount'), localStorage.getItem('Interest'), localStorage.getItem('LoanTenure')) + '%'}</div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div className="listOfTextAmountContainer">
+                        <div className="textPrice">Loan Amount</div>
+                        <div className="subTextPrice">₹ {price_comma(localStorage.getItem('LoanAmount'))}</div>
+                    </div>
+                    <div className="listOfTextAmountContainer">
+                        <div className="textPrice">Total Interest</div>
+                        <div className="subTextPrice">₹ {interestCalculate(localStorage.getItem('LoanAmount'), localStorage.getItem('Interest'), localStorage.getItem('LoanTenure'))}</div>
+                    </div>
+                    <div className="listOfTextAmountContainer">
+                        <div className="textPrice">Total Payment</div>
+                        <div className="subTextPrice">₹ {fullEMICalculate(localStorage.getItem('LoanAmount'), localStorage.getItem('Interest'), localStorage.getItem('LoanTenure'))}</div>
+                    </div>
+                    <div className="listOfTextAmountContainer">
+                        <div className="textPrice">No. of EMI</div>
+                        <div className="subTextPrice">{localStorage.getItem('LoanTenure')}</div>
+                    </div>
+                    <div className="listOfTextAmountContainer">
+                        <div className="textPrice">Rate of Interest</div>
+                        <div className="subTextPrice">{localStorage.getItem('Interest')}%</div>
+                    </div>
+                </div>
+            </div>
+            <Table className={classes.table} aria-label="simple table" style={{ display: 'none' }} id="my-table">
+                <TableHead className={classes.tableheading}>
+                    <TableRow>
+                        <TableCell className={clsx(classes.tableheading, classes.statusHeading)}>Month</TableCell>
+                        <TableCell className={classes.tableheading}>Loan Amount Balance</TableCell>
+                        <TableCell className={classes.tableheading}>EMI</TableCell>
+                        <TableCell className={classes.tableheading}>Principal Paid</TableCell>
+                        <TableCell className={classes.tableheading}>Interest Paid</TableCell>
+                        <TableCell className={classes.tableheading}>Month End Balance</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {repaymentData.length !== 0 ? repaymentData.map((item, index) => {
+                        return <TableRow className={classes.oddEvenRow}>
+                            <TableCell className={clsx(classes.tabledata, classes.statusHeading)}>{item.month}</TableCell>
+                            <TableCell className={classes.tabledata}>{price_comma(item.currentLoan)}</TableCell>
+                            <TableCell className={clsx(classes.tabledata, classes.adjustTableData)}>{price_comma(item.EMI)}</TableCell>
+                            <TableCell className={classes.tabledata}>{price_comma(item.preLoan)}</TableCell>
+                            <TableCell className={classes.tabledata}>{price_comma(item.intLoan)}</TableCell>
+                            <TableCell className={classes.tabledata}>{price_comma(item.endLoan)}</TableCell>
+                        </TableRow>
+                    }) : ''}
+                </TableBody>
+            </Table>
         </PageLayerSection>
     )
 }

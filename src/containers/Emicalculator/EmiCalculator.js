@@ -4,7 +4,7 @@ import { Drawer } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import { NavLink } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 function emi_calculator(p, r, t) {
     let emi;
     let rate = r;
@@ -59,6 +59,8 @@ function principalPercentage(p, r, t) {
     return percentage.toFixed(1);
 }
 export default function EmiCalculator(props) {
+    let location = useLocation();
+    let history = useHistory();
     const [loanAmount, setLoanAmount] = useState('');
     const [Roi, setRoi] = useState('');
     const [loanTerm, setLoanTerm] = useState('');
@@ -82,6 +84,13 @@ export default function EmiCalculator(props) {
         if (yearly === true) {
             var Monthly = loanTerm * 12;
             setLoanTerm(Monthly)
+        }
+    }
+    const ReCalculate = () => {
+        if (location.pathname === '/dashboards/EMIcalculator') {
+            window.location.reload(false)
+        } else {
+            history.push('/dashboards/EMIcalculator')
         }
     }
     return (
@@ -189,7 +198,7 @@ export default function EmiCalculator(props) {
                     {isCalculate ? <React.Fragment>
                         <Grid>
                             <div className="totalPriceContainer">
-                                <div className="textPrice">₹ {yearly ? emi_calculator(loanAmount, Roi, loanTerm * 12) : emi_calculator(loanAmount, Roi, loanTerm)}</div>
+                                <div className="textPrice">&#8377; {yearly ? emi_calculator(loanAmount, Roi, loanTerm * 12) : emi_calculator(loanAmount, Roi, loanTerm)}</div>
                                 <div className="subTextPrice">EMI Per Month x {yearly ? loanTerm * 12 : loanTerm} Months</div>
                             </div>
                             <div className="progressContainer">
@@ -210,15 +219,15 @@ export default function EmiCalculator(props) {
                         <Grid>
                             <div className="listOfTextAmountContainer">
                                 <div className="textPrice">Loan Amount</div>
-                                <div className="subTextPrice">₹ {price_comma(loanAmount)}</div>
+                                <div className="subTextPrice">&#8377; {price_comma(loanAmount)}</div>
                             </div>
                             <div className="listOfTextAmountContainer">
                                 <div className="textPrice">Total Interest</div>
-                                <div className="subTextPrice">₹ {yearly ? interestCalculate(loanAmount, Roi, loanTerm * 12) : interestCalculate(loanAmount, Roi, loanTerm)}</div>
+                                <div className="subTextPrice">&#8377; {yearly ? interestCalculate(loanAmount, Roi, loanTerm * 12) : interestCalculate(loanAmount, Roi, loanTerm)}</div>
                             </div>
                             <div className="listOfTextAmountContainer">
                                 <div className="textPrice">Total Payment</div>
-                                <div className="subTextPrice">₹ {yearly ? fullEMICalculate(loanAmount, Roi, loanTerm * 12) : fullEMICalculate(loanAmount, Roi, loanTerm)}</div>
+                                <div className="subTextPrice">&#8377; {yearly ? fullEMICalculate(loanAmount, Roi, loanTerm * 12) : fullEMICalculate(loanAmount, Roi, loanTerm)}</div>
                             </div>
                             <div className="listOfTextAmountContainer">
                                 <div className="textPrice">No. of EMI</div>
@@ -228,15 +237,14 @@ export default function EmiCalculator(props) {
                                 <div className="textPrice">Rate of Interest</div>
                                 <div className="subTextPrice">{Roi}%</div>
                             </div>
-                            <NavLink to="/dashboards/EMIcalculator">
-                                <Button
-                                    className="showEMITableBtn"
-                                    color="primary"
-                                    variant="contained"
-                                >
-                                    SHOW EMI TABLE
-                                </Button>
-                            </NavLink>
+                            <Button
+                                className="showEMITableBtn"
+                                color="primary"
+                                variant="contained"
+                                onClick={() => ReCalculate()}
+                            >
+                                SHOW EMI TABLE
+                            </Button>
                         </Grid>
                     </React.Fragment> : ''}
                 </form>
