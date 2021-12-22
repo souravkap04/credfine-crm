@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { fade, makeStyles, useTheme } from "@material-ui/core/styles";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation, useHistory } from "react-router-dom";
 import './menu.css';
 // List menu item
 import List from '@material-ui/core/List';
@@ -117,6 +117,7 @@ export default function Menu(props) {
     const [isHiddenTab, setIsHiddenTab] = useState(false);
     const [isUserTab, setIsUserTab] = useState(false);
     const [isCalculatorTab, setIsCalculatorTab] = useState(false);
+    let location = useLocation();
     const handleClick = () => {
         setOpen(!openen);
     };
@@ -341,12 +342,14 @@ export default function Menu(props) {
                 </ListItem>
                     <Collapse in={calculatorOpen} timeout="auto" unmountOnExit>
                         <List component="div" disablePadding>
-                            <ListItem button className={classes.nested + " selected"} onClick={props.EmiCalculate}>
+                            {location.pathname === '/dashboards/EMIcalculator' ? <NavLink to="/dashboards/EMIcalculator" activeClassName="active"><ListItem button className={classes.nested + " selected"}>
                                 <ListItemText primary="EMI Calculator" />
-                            </ListItem>
-                            <ListItem button className={classes.nested + " selected"}>
+                            </ListItem></NavLink> : <ListItem button className={classes.nested + " selected"} onClick={props.EmiCalculate}>
+                                <ListItemText primary="EMI Calculator" />
+                            </ListItem>}
+                            {/* <ListItem button className={classes.nested + " selected"}>
                                 <ListItemText primary="Loan Calculator" />
-                            </ListItem>
+                            </ListItem> */}
                         </List>
                     </Collapse>
                 </React.Fragment>}
