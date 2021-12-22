@@ -37,6 +37,7 @@ import Snackbar from "@material-ui/core/Snackbar";
 import filter from "../../images/filter.png";
 import { useQueryy } from "../../global/query";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import EmiCalculator from '../Emicalculator/EmiCalculator';
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -529,8 +530,16 @@ export default function MyLeads(props) {
     sethangUpSnacks(true);
     setCallHangUpState(true);
   };
+  const [openCalculate, setopenCalculate] = useState(false);
+  const openCalculator = () => {
+    setopenCalculate(true);
+  }
+  const closeCalculator = () => {
+    setopenCalculate(false);
+  }
   return (
-    <PageLayerSection isDisplaySearchBar={true} isMyLeadsSearch={true}>
+    <PageLayerSection isDisplaySearchBar={true} isMyLeadsSearch={true} ActualEmiCalculate={openCalculator}>
+      <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
       <Drawer anchor="right" open={state} onClose={closeDrawer}>
         <div className="rightContainerForm">
           <form>
@@ -786,7 +795,7 @@ export default function MyLeads(props) {
                 startIcon={<CallIcon className="callIcon" />}
                 disabled={
                   localStorage.getItem("callHangUp") &&
-                  localStorage.getItem("callHangUp") !== null
+                    localStorage.getItem("callHangUp") !== null
                     ? false
                     : callHangUpState
                 }
@@ -853,11 +862,11 @@ export default function MyLeads(props) {
               myLeadSearchData.length !== 0 ? (
                 myLeadSearchData.map((search, index) => {
                   let leadPhoneNo = maskPhoneNo(search.phone_no_encrypt);
-                  let createdDate = new Date(search.created_date );
-                  let currentCreatedDate = createdDate.toLocaleDateString() + " " + 
-                  moment(createdDate.toLocaleTimeString(), "HH:mm:ss a").format(
-                    "hh:mm A"
-                  );
+                  let createdDate = new Date(search.created_date);
+                  let currentCreatedDate = createdDate.toLocaleDateString() + " " +
+                    moment(createdDate.toLocaleTimeString(), "HH:mm:ss a").format(
+                      "hh:mm A"
+                    );
                   let updatedDate = new Date(search.updated_date);
                   let currentUpdatedDate =
                     updatedDate.toLocaleDateString() +
@@ -871,12 +880,12 @@ export default function MyLeads(props) {
                       <TableCell className={classes.tabledata}>
                         {index + 1}
                       </TableCell>
-                        <TableCell
-                          className={(classes.tabledata, classes.leadid)}
-                          onClick={() => leadDetailsHandler(search.lead_crm_id)}
-                        >
-                          {search.lead_crm_id}
-                        </TableCell>
+                      <TableCell
+                        className={(classes.tabledata, classes.leadid)}
+                        onClick={() => leadDetailsHandler(search.lead_crm_id)}
+                      >
+                        {search.lead_crm_id}
+                      </TableCell>
                       <TableCell className={classes.tabledata}>
                         {search.name ? search.name : "NA"}
                       </TableCell>
@@ -910,21 +919,21 @@ export default function MyLeads(props) {
                       <TableCell className={classes.tabledata}>
                         {search.lead_agent_name ? search.lead_agent_name : "NA"}
                       </TableCell>
-                        <TableCell className={classes.tabledata}>
-                          <Tooltip title="Call Customer">
-                            <IconButton
-                              className={classes.callButton}
-                              onClick={() =>
-                                clickToCall(
-                                  search.phone_no_encrypt,
-                                  search.lead_crm_id
-                                )
-                              }
-                            >
-                              <CallIcon className={classes.callIcon} />
-                            </IconButton>
-                          </Tooltip>
-                        </TableCell>
+                      <TableCell className={classes.tabledata}>
+                        <Tooltip title="Call Customer">
+                          <IconButton
+                            className={classes.callButton}
+                            onClick={() =>
+                              clickToCall(
+                                search.phone_no_encrypt,
+                                search.lead_crm_id
+                              )
+                            }
+                          >
+                            <CallIcon className={classes.callIcon} />
+                          </IconButton>
+                        </Tooltip>
+                      </TableCell>
                     </TableRow>
                   );
                 })
@@ -934,11 +943,11 @@ export default function MyLeads(props) {
             ) : myLeads.length !== 0 ? (
               myLeads.map((my_leads, index) => {
                 let leadPhoneNo = maskPhoneNo(my_leads.lead.phone_no_encrypt);
-                let createdDate = new Date(my_leads.created_date );
-                let currentCreatedDate = createdDate.toLocaleDateString() + " " + 
-                moment(createdDate.toLocaleTimeString(), "HH:mm:ss a").format(
-                  "hh:mm A"
-                );
+                let createdDate = new Date(my_leads.created_date);
+                let currentCreatedDate = createdDate.toLocaleDateString() + " " +
+                  moment(createdDate.toLocaleTimeString(), "HH:mm:ss a").format(
+                    "hh:mm A"
+                  );
                 let updatedDate = new Date(my_leads.updated_date);
                 let currentUpdatedDate =
                   updatedDate.toLocaleDateString() +

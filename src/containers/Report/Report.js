@@ -16,6 +16,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { TextField, Button } from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
+import EmiCalculator from '../Emicalculator/EmiCalculator';
 import './reportdata.css';
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -69,6 +70,13 @@ const useStyles = makeStyles({
   }
 });
 export default function Report() {
+  const [openCalculate, setopenCalculate] = useState(false);
+  const openCalculator = () => {
+    setopenCalculate(true);
+  }
+  const closeCalculator = () => {
+    setopenCalculate(false);
+  }
   const classes = useStyles();
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
@@ -151,7 +159,8 @@ export default function Report() {
     leadReportHistory()
   }, []);
   return (
-    <PageLayerSection>
+    <PageLayerSection ActualEmiCalculate={openCalculator}>
+      <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
       <div>
         <Form onSubmit={reportSubmit}>
           <Card className={style.card}>
