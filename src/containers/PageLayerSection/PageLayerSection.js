@@ -24,7 +24,18 @@ export default function PageLayerSection(props) {
     userName = userName.replace(/^\s+|\s+$/g, "");
     userName = userName.replace(/\s+/g, " ");
     const [istimeOut, setIsTimeOut] = useState(false);
-    const timeout = 1000 * 60 * 30;
+    var timeout = 1000 * 60;
+    if (profileData.user_roles[0].user_type === 4 || profileData.user_roles[0].user_type === 1 || profileData.user_roles[0].user_type === 6 ) {
+        console.log("superAdmin");
+        timeout = timeout * 15
+    }else if(profileData.user_roles[0].user_type === 2){
+        timeout = timeout * 10;
+    }else if(profileData.user_roles[0].user_type === 3){
+        console.log("Agent");
+        timeout = timeout * 3;
+    }else if(profileData.user_roles[0].user_type === 5){
+        timeout = timeout * 5;
+    }
     const onAction = (e) => {
         setIsTimeOut(false)
     }
@@ -33,9 +44,7 @@ export default function PageLayerSection(props) {
     }
     const onIdle = (e) => {
         if (istimeOut) {
-            props.history.push("/");
-            localStorage.removeItem('user_info');
-            localStorage.removeItem('status_info');
+            history.push("/");
         } else {
             reset();
             setIsTimeOut(true);
