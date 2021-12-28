@@ -22,17 +22,17 @@ export const getStatusData = ()=>{
     let statusData = JSON.parse(localStorage.getItem('status_info'));
     return statusData;
 }
-// export const getLeadAllocate = ()=>{
-//     const leadAllocate = JSON.parse(localStorage.getItem('lead_allocate'));
-//     return leadAllocate;
-// }
 export const getCampaign = ()=>{
-    const campaign = ['FRESH_PL_OD','BT_PL_OD','PL_OD_TOP_UP','PRE_APPROVED','HOT_LEAD',
-    'WEBSITE_LEAD','OTHER'];
+    // const campaign = ['FRESH_PL_OD','BT_PL_OD','PL_OD_TOP_UP','PRE_APPROVED','HOT_LEAD',
+    // 'WEBSITE_LEAD','OTHER','ABHISHEK_NOIDA_TEAM_1','ABHISHEK_NOIDA_TEAM_2','ABHISHEK_NOIDA_TEAM_3','ABHISHEK_NOIDA_TEAM_4',
+    // 'VISHAL_NOIDA_TEAM_1','VISHAL_NOIDA_TEAM_2','VISHAL_NOIDA_TEAM_3','VISHAL_NOIDA_TEAM_4'];
+    const campaign = ['FRESH_PL_OD','BT_PL_OD','PL_OD_TOP_UP',
+    'WEBSITE_LEAD','OTHER','ABHISHEK_NOIDA_TEAM_1','ABHISHEK_NOIDA_TEAM_2','ABHISHEK_NOIDA_TEAM_3','ABHISHEK_NOIDA_TEAM_4',
+    'VISHAL_NOIDA_TEAM_1','VISHAL_NOIDA_TEAM_2','VISHAL_NOIDA_TEAM_3','VISHAL_NOIDA_TEAM_4'];
     return campaign;
 }
 export const getDialer = ()=>{
-    const dialer = ['TATA','VERTAGE'];
+    const dialer = ['HALOOCOM-Noida','HALOOCOM-Mumbai'];
     return dialer;
 }
 

@@ -35,6 +35,10 @@ import Tooltip from '@material-ui/core/Tooltip';
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
+import SendIcon from '@material-ui/icons/Send';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import { haloocomNoidaDialerApi, haloocomMumbaiDialerApi } from "../../global/callApi";
+import EmiCalculator from '../Emicalculator/EmiCalculator';
 import './resetpassword.css';
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -139,6 +143,13 @@ const useStyles = makeStyles({
   }
 });
 export default function Users() {
+  const [openCalculate, setopenCalculate] = useState(false);
+  const openCalculator = () => {
+    setopenCalculate(true);
+  }
+  const closeCalculator = () => {
+    setopenCalculate(false);
+  }
   const classes = useStyles();
   const profileData = getProfileData();
   const [isResetPassword, setIsResetPassword] = useState(false);
@@ -164,8 +175,12 @@ export default function Users() {
   const [rowData, setRowData] = useState({});
   const [alertMessage, setAlertMessage] = useState('');
   const [isDisplay, setIsDisplay] = useState(false);
+  const [dialerAlertMessage, setDialerAlertMessage] = useState('');
+  const [isDisplayDialerMessage, setIsDisplayDialerMessage] = useState(false);
   const [deleteCount, setDeleteCount] = useState(0);
   const [selectedUserName, setSelectedUserName] = useState('');
+  const [updatedUserName, setUpdatedUserName] = useState('');
+  const [selectedVertageId, setSelectedVertageId] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [vertageId, setVertageId] = useState("");
   const [vertagePass, setVertagePass] = useState("");
@@ -273,9 +288,11 @@ export default function Users() {
       console.log(error);
     }
   }
-  const deletedUserPopUpHandler = (username) => {
+  const deletedUserPopUpHandler = (username, vertageid) => {
     setIsDeleteUser(true);
     setUserName(username);
+    setSelectedVertageId(vertageid)
+
   }
   const closeDeleteUserPopUp = () => {
     setIsDeleteUser(false);
@@ -293,14 +310,35 @@ export default function Users() {
           setAlertMessage(response.data.message);
           setIsDeleteUser(false);
           setDeleteCount(deleteCount + 1);
+          if (profileData.dialer === "HALOOCOM-Noida") {
+            axios.post(`${haloocomNoidaDialerApi}/userCreation.php?user=${selectedVertageId}&operation=Delete`)
+              .then((response) => {
+                setAlertMessage("dialer user is successfully deleted");
+                setIsDisplay(true);
+              }).catch((error) => {
+                setAlertMessage("something wrong in dialer users delete");
+                setIsDisplay(true);
+              })
+          } else if (profileData.dialer === "HALOOCOM-Mumbai") {
+            axios.post(`${haloocomMumbaiDialerApi}/userCreation.php?user=${selectedVertageId}&operation=Delete`)
+              .then((response) => {
+                setAlertMessage("dialer user is successfully deleted");
+                setIsDisplay(true);
+              }).catch((error) => {
+                setAlertMessage("something wrong in dialer users delete");
+                setIsDisplay(true);
+              })
+          }
         }
       }).catch((error) => {
         console.log(error);
       })
   }
-  const editUser = (userName, firstName, lastName, email, role, gender, phoneNo, productType, dialerPass, vertageId, vertagePass, parent_user, location) => {
+  const editUser = (userName, updatedUserName, firstName, lastName, email, role, gender, phoneNo, productType, dialerPass, vertageId, vertagePass, parent_user, location) => {
+    listOfUsers(role);
     setIsEditUser(true);
     setSelectedUserName(userName);
+    setUpdatedUserName(updatedUserName);
     setFirstName(firstName);
     setLastName(lastName);
     setEmail(email);
@@ -320,7 +358,7 @@ export default function Users() {
   const updateUserData = async (e) => {
     e.preventDefault();
     let item = {
-      first_name: firstName, last_name: lastName, email, role, gender, phone_no: phoneNo,
+      username: updatedUserName, first_name: firstName, last_name: lastName, email, role, gender, phone_no: phoneNo,
       product_type: productType, dialer_pass: dialerApiKey, vertage_id: vertageId, vertage_pass: vertagePass, parent_user: parent, locations: location
     };
     const headers = {
@@ -356,12 +394,40 @@ export default function Users() {
   }
   const closeSnankBar = () => {
     setIsDisplay(false);
+    setIsDisplayDialerMessage(false);
+  }
+  const submitHaloocomUserName = () => {
+    if (profileData.dialer === "HALOOCOM-Noida") {
+      axios.post(`${haloocomNoidaDialerApi}/userCreation.php?user=${vertageId}&operation=Add`)
+        .then((response) => {
+          setDialerAlertMessage(response.data.Description);
+          setIsDisplayDialerMessage(true);
+        }).catch((error) => {
+          setDialerAlertMessage("something wrong in dialer user creation");
+          setIsDisplayDialerMessage(true);
+        })
+    } if (profileData.dialer === "HALOOCOM-Mumbai") {
+      axios.post(`${haloocomMumbaiDialerApi}/userCreation.php?user=${vertageId}&operation=Add`)
+        .then((response) => {
+          setDialerAlertMessage(response.data.Description);
+          setIsDisplayDialerMessage(true);
+        }).catch((error) => {
+          setDialerAlertMessage("something wrong in dialer user creation");
+          setIsDisplayDialerMessage(true);
+        })
+    }
   }
   return (
-    <PageLayerSection>
+    <PageLayerSection ActualEmiCalculate={openCalculator}>
+      <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
       <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isDisplay} autoHideDuration={1500} onClose={closeSnankBar}>
         <Alert>
           {alertMessage}
+        </Alert>
+      </Snackbar>
+      <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isDisplayDialerMessage} autoHideDuration={null} onClose={closeSnankBar} >
+        <Alert onClose={closeSnankBar} severity="success">
+          {dialerAlertMessage}
         </Alert>
       </Snackbar>
       <div className={classes.container}>
@@ -449,7 +515,7 @@ export default function Users() {
                           </Tooltip>
                           <Tooltip title="Edit">
                             <IconButton
-                              onClick={() => editUser(user.myuser.username, user.myuser.first_name,
+                              onClick={() => editUser(user.myuser.username, user.myuser.username, user.myuser.first_name,
                                 user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
                                 user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
                                 user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
@@ -458,7 +524,7 @@ export default function Users() {
                           </Tooltip>
                           <Tooltip title="Delete User">
                             {/* <IconButton onClick={() => deleteUser(user.myuser.username, index)}> */}
-                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username)}>
+                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username, user.myuser.vertage_id)}>
                               <DeleteIcon />
                             </IconButton>
                           </Tooltip>
@@ -490,7 +556,7 @@ export default function Users() {
                           </Tooltip>
                           <Tooltip title="Edit">
                             <IconButton
-                              onClick={() => editUser(user.myuser.username, user.myuser.first_name,
+                              onClick={() => editUser(user.myuser.username, user.myuser.username, user.myuser.first_name,
                                 user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
                                 user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
                                 user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
@@ -499,7 +565,7 @@ export default function Users() {
                           </Tooltip>
                           <Tooltip title="Delete User">
                             {/* <IconButton onClick={() => deleteUser(user.myuser.username, index)}> */}
-                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username)}>
+                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username, user.myuser.vertage_id)}>
                               <DeleteIcon />
                             </IconButton>
                           </Tooltip>
@@ -531,7 +597,7 @@ export default function Users() {
                           </Tooltip>
                           <Tooltip title="Edit">
                             <IconButton
-                              onClick={() => editUser(user.myuser.username, user.myuser.first_name,
+                              onClick={() => editUser(user.myuser.username, user.myuser.username, user.myuser.first_name,
                                 user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
                                 user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
                                 user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
@@ -540,7 +606,7 @@ export default function Users() {
                           </Tooltip>
                           <Tooltip title="Delete User">
                             {/* <IconButton onClick={() => deleteUser(user.myuser.username, index)}> */}
-                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username)}>
+                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username, user.myuser.vertage_id)}>
                               <DeleteIcon />
                             </IconButton>
                           </Tooltip>
@@ -572,7 +638,7 @@ export default function Users() {
                           </Tooltip>
                           <Tooltip title="Edit">
                             <IconButton
-                              onClick={() => editUser(user.myuser.username, user.myuser.first_name,
+                              onClick={() => editUser(user.myuser.username, user.myuser.username, user.myuser.first_name,
                                 user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
                                 user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
                                 user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
@@ -581,7 +647,7 @@ export default function Users() {
                           </Tooltip>
                           <Tooltip title="Delete User">
                             {/* <IconButton onClick={() => deleteUser(user.myuser.username, index)}> */}
-                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username)}>
+                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username, user.myuser.vertage_id)}>
                               <DeleteIcon />
                             </IconButton>
                           </Tooltip>
@@ -613,7 +679,7 @@ export default function Users() {
                           </Tooltip>
                           <Tooltip title="Edit">
                             <IconButton
-                              onClick={() => editUser(user.myuser.username, user.myuser.first_name,
+                              onClick={() => editUser(user.myuser.username, user.myuser.username, user.myuser.first_name,
                                 user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
                                 user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
                                 user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
@@ -622,7 +688,7 @@ export default function Users() {
                           </Tooltip>
                           <Tooltip title="Delete User">
                             {/* <IconButton onClick={() => deleteUser(user.myuser.username, index)}> */}
-                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username)}>
+                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username, user.myuser.vertage_id)}>
                               <DeleteIcon />
                             </IconButton>
                           </Tooltip>
@@ -654,7 +720,7 @@ export default function Users() {
                           </Tooltip>
                           <Tooltip title="Edit">
                             <IconButton
-                              onClick={() => editUser(user.myuser.username, user.myuser.first_name,
+                              onClick={() => editUser(user.myuser.username, user.myuser.username, user.myuser.first_name,
                                 user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
                                 user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
                                 user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
@@ -663,7 +729,7 @@ export default function Users() {
                           </Tooltip>
                           <Tooltip title="Delete User">
                             {/* <IconButton onClick={() => deleteUser(user.myuser.username, index)}> */}
-                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username)}>
+                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username, user.myuser.vertage_id)}>
                               <DeleteIcon />
                             </IconButton>
                           </Tooltip>
@@ -883,6 +949,22 @@ export default function Users() {
                             <TextField
                               className="textField"
                               id="outlined-full-width"
+                              label="Username"
+                              style={{ margin: 8 }}
+                              margin="normal"
+                              InputLabelProps={{
+                                shrink: true,
+                              }}
+                              variant="outlined"
+                              size="small"
+                              value={updatedUserName}
+                              onChange={(e) => setUpdatedUserName(e.target.value)}
+                            />
+                          </Grid>
+                          <Grid>
+                            <TextField
+                              className="textField"
+                              id="outlined-full-width"
                               label="First Name"
                               style={{ margin: 8 }}
                               margin="normal"
@@ -892,9 +974,11 @@ export default function Users() {
                               variant="outlined"
                               size="small"
                               value={firstName}
-                              onChange={(e) => setFirstName((e.target.value).toLowerCase().trim())}
+                              onChange={(e) => setFirstName((e.target.value).trim())}
                             />
                           </Grid>
+                        </Grid>
+                        <Grid container style={{ justifyContent: 'center' }}>
                           <Grid>
                             <TextField
                               className="textField"
@@ -908,11 +992,9 @@ export default function Users() {
                               variant="outlined"
                               size="small"
                               value={lastName}
-                              onChange={(e) => setLastName((e.target.value).toLowerCase().trim())}
+                              onChange={(e) => setLastName((e.target.value).trim())}
                             />
                           </Grid>
-                        </Grid>
-                        <Grid container style={{ justifyContent: 'center' }}>
                           <Grid>
                             <TextField
                               className="textField"
@@ -929,6 +1011,8 @@ export default function Users() {
                               onChange={(e) => setEmail((e.target.value).toLowerCase().trim())}
                             />
                           </Grid>
+                        </Grid>
+                        <Grid container style={{ justifyContent: 'center' }}>
                           <Grid>
                             <TextField
                               select
@@ -960,8 +1044,6 @@ export default function Users() {
                               <option value="6">Backend</option>
                             </TextField>
                           </Grid>
-                        </Grid>
-                        <Grid container style={{ justifyContent: 'center' }}>
                           <Grid>
                             <TextField
                               select
@@ -989,6 +1071,8 @@ export default function Users() {
                               <option value="LAP">Loan Against Property</option>
                             </TextField>
                           </Grid>
+                        </Grid>
+                        <Grid container style={{ justifyContent: 'center' }}>
                           <Grid>
                             <TextField
                               className="textField"
@@ -1010,8 +1094,6 @@ export default function Users() {
                               }}
                             />
                           </Grid>
-                        </Grid>
-                        <Grid container style={{ justifyContent: 'center' }}>
                           <Grid>
                             <TextField
                               select
@@ -1037,33 +1119,26 @@ export default function Users() {
                               <option value="T">LGBT</option>
                             </TextField>
                           </Grid>
-                          <Grid>
-                            <TextField
-                              className="textField"
-                              id="outlined-full-width"
-                              label="Dialer Api Key"
-                              style={{ margin: 8 }}
-                              margin="normal"
-                              InputLabelProps={{
-                                shrink: true,
-                              }}
-                              variant="outlined"
-                              size="small"
-                              value={dialerApiKey}
-                              onChange={(e) => setDialerApiKey((e.target.value).trim())}
-                            />
-                          </Grid>
                         </Grid>
                         <Grid container style={{ justifyContent: 'center' }}>
                           <Grid>
                             <TextField
                               className="textField"
                               id="outlined-full-width"
-                              label="Vertage Id"
+                              label="Haloocoom Username"
                               style={{ margin: 8 }}
                               margin="normal"
                               InputLabelProps={{
                                 shrink: true,
+                              }}
+                              InputProps={{
+                                endAdornment: (
+                                  <InputAdornment position="end">
+                                    <IconButton onClick={submitHaloocomUserName}>
+                                      <SendIcon style={{ color: '#14cc9e' }} />
+                                    </IconButton>
+                                  </InputAdornment>
+                                ),
                               }}
                               variant="outlined"
                               size="small"
@@ -1105,7 +1180,7 @@ export default function Users() {
                               value={parent}
                               onChange={(e) => setparent(e.target.value)}
                             >
-                              <option>Select One</option>
+                              <option value="">Select One</option>
                               {updateUsers.map(item => {
                                 return <option style={{ cursor: 'pointer' }} value={item.myuser.username}>{item.myuser.username}</option>
                               })}

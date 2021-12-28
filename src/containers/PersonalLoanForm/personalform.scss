@@ -1,22 +1,142 @@
 $desk: 0.063;
+$mob: 100 / 375;
 .personalFormContainer {
     position: relative;
+    @media only screen and (max-width: 800px) {
+        display: flex;
+        flex-direction: column;
+    }
     .leftSection {
         position: fixed;
         width: 238 * $desk + rem;
         background-color: #8669d9;
         height: 100%;
+        @media only screen and (max-width: 800px) {
+            position: relative;
+            width: 100%;
+            height: 140 * $mob + vw;
+        }
         .logoContainer {
             width: 100%;
-            height: 94 * $desk + rem;
-            background-color: #fff;
+            height: 70 * $desk + rem;
+            background-color: #fafafa;
             display: flex;
             justify-content: center;
             align-items: center;
-            // border-right: 1px solid #8669d9;
+            @media only screen and (max-width: 800px) {
+                display: none;
+            }
+            .logoImage {
+                width: 127.4 * $desk + rem;
+                height: 40 * $desk + rem;
+                img {
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+        }
+        @media only screen and (min-width: 800px) {
+            .mobileBarsContainer {
+                display: none;
+            }
+            .mobileProgressContainer {
+                display: none;
+            }
+        }
+        @media only screen and (max-width: 800px) {
+            .mobileBarsContainer {
+                display: flex;
+                align-items: center;
+                height: 54 * $mob + vw;
+                .hambars {
+                    color: #fff;
+                    font-size: 23 * $mob + vw;
+                    margin-left: 24 * $mob + vw;
+                    margin-right: 17.9 * $mob + vw;
+                }
+                .mobileTitleText {
+                    font-family: Lato-regular;
+                    font-size: 18 * $mob + vw;
+                    font-weight: 600;
+                    color: #fff;
+                }
+            }
+            .mobileProgressContainer {
+                display: flex;
+                justify-content: space-evenly;
+                align-items: center;
+                height: 86 * $mob + vw;
+                .mobileProgressBox {
+                    display: flex;
+                    position: relative;
+                    .mobileProgressIconBox {
+                        display: flex;
+                        align-items: center;
+                        flex-direction: column;
+                        .iconBar {
+                            font-size: 15 * $mob + vw;
+                            color: #bca5fd;
+                            transition: 0.3s;
+                        }
+                        .activeBar {
+                            color: #fff;
+                            font-size: 15 * $mob + vw;
+                        }
+                        .activeiconBar {
+                            font-size: 15 * $mob + vw;
+                            color: #bca5fd;
+                        }
+                    }
+                    .bottomProgress {
+                        width: 37 * $mob + vw;
+                        height: 0;
+                        border-bottom: solid 2px #bca5ff;
+                        transition: 0.3s;
+                        position: absolute;
+                        top: 6 * $mob + vw;
+                        left: 23 * $mob + vw;
+                    }
+                    .activebottomProgress {
+                        border-bottom: solid 2px #bca5ff;
+                    }
+                    .bottomProgressAdjust2 {
+                        position: absolute;
+                        left: 26.5 * $mob + vw;
+                    }
+                    .bottomProgressAdjust3 {
+                        position: absolute;
+                        left: 27 * $mob + vw;
+                    }
+                    .bottomProgressAdjust4 {
+                        position: absolute;
+                        left: 24 * $mob + vw;
+                    }
+                    .bottomProgressAdjust5 {
+                        position: absolute;
+                        left: 30 * $mob + vw;
+                    }
+                    .bottomProgressAdjust6 {
+                        position: absolute;
+                        left: 21.5 * $mob + vw;
+                    }
+                    .iconText {
+                        font-size: 10 * $mob + vw;
+                        font-weight: 600;
+                        margin-top: 4 * $mob + vw;
+                        color: #fff;
+                        font-family: Lato-regular;
+                    }
+                    .activeiconText {
+                        color: #fff;
+                    }
+                }
+            }
         }
         .progressContainer {
-            margin-top: 45 * $desk + rem;
+            margin-top: 39 * $desk + rem;
+            @media only screen and (max-width: 800px) {
+                display: none;
+            }
             .progressBox {
                 display: flex;
                 .progressIconBox {
@@ -25,32 +145,33 @@ $desk: 0.063;
                     align-items: center;
                     margin-left: 31 * $desk + rem;
                     .iconBar {
-                        width: 18 * $desk + rem;
-                        height: 18 * $desk + rem;
-                        border: solid 1px #fff;
-                        background-color: #fff;
-                        border-radius: 50%;
+                        font-size: 20 * $desk + rem;
+                        color: #bca5fd;
                         transition: 0.3s;
                     }
+                    .activeBar {
+                        color: #fff;
+                        font-size: 20 * $desk + rem;
+                    }
                     .activeiconBar {
-                        border: solid 1px #1cb980;
-                        background-color: #1cb980;
+                        font-size: 20 * $desk + rem;
+                        color: #bca5fd;
                     }
                     .bottomProgress {
                         width: 0;
-                        height: 51 * $desk + rem;
-                        border: solid 1px #fff;
+                        height: 34 * $desk + rem;
+                        border: solid 1px #bca5ff;
                         transition: 0.3s;
                     }
                     .activebottomProgress {
-                        border: solid 1px #1cb980;
+                        border: solid 1px #bca5ff;
                     }
                 }
                 .iconText {
                     font-size: 15 * $desk + rem;
                     font-weight: 500;
                     margin-left: 8 * $desk + rem;
-                    margin-top: -2 * $desk + rem;
+                    // margin-top: 1 * $desk + rem;
                     color: #fff;
                 }
                 .activeiconText {
@@ -92,42 +213,59 @@ $desk: 0.063;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            width: 1024 * $desk + rem;
-            height: 94 * $desk + rem;
-            margin: auto;
+            width: 100%;
+            height: 70 * $desk + rem;
+            // margin: auto;
+            background-color: #fcfcfc;
+            @media only screen and (max-width: 800px) {
+                width: 100%;
+                height: 50 * $mob + vw;
+            }
             .backButton {
-                // margin-left: 47 * $desk + rem;
+                margin-left: 47 * $desk + rem;
                 width: 24 * $desk + rem;
                 height: 24 * $desk + rem;
                 cursor: pointer;
+                @media only screen and (max-width: 800px) {
+                    margin-left: 15 * $mob + vw;
+                    width: 19 * $mob + vw;
+                    height: 19 * $mob + vw;
+                }
                 img {
                     width: 100%;
                     height: 100%;
                 }
             }
             .needHelpContainer {
-                // margin-left: 818 * $desk + rem;
-                display: flex;
-                align-items: center;
-                .leftPart {
-                    width: 34 * $desk + rem;
-                    height: 34 * $desk + rem;
-                    margin-right: 8 * $desk + rem;
-                    img {
-                        width: 100%;
-                        height: 100%;
-                    }
+                margin-right: 43 * $desk + rem;
+                @media only screen and (max-width: 800px) {
+                    display: none;
+                }
+                .needHelpText {
+                    font-size: 12 * $desk + rem;
+                    color: #535ad1;
+                    // font-family: Lato-regular;
+                    line-height: 14 * $desk + rem;
+                    margin-left: 22 * $desk + rem;
                 }
                 .rightPart {
-                    .needHelpText {
-                        font-size: 14 * $desk + rem;
-                        color: #535ad1;
-                        line-height: 12 * $desk + rem;
+                    display: flex;
+                    justify-content: center;
+                    // align-items: center;
+                    .phoneCall {
+                        width: 18 * $desk + rem;
+                        height: 18 * $desk + rem;
+                        margin-right: 4 * $desk + rem;
+                        img {
+                            width: 100%;
+                            height: 100%;
+                        }
                     }
                     .numberText {
-                        font-size: 20 * $desk + rem;
-                        font-weight: 800;
-                        color: #fd914d;
+                        font-size: 18 * $desk + rem;
+                        // font-family: Lato-regular;
+                        font-weight: bold;
+                        color: #535ad1;
                     }
                 }
             }
@@ -360,6 +498,7 @@ $desk: 0.063;
             margin-top: 15 * $desk + rem;
             display: flex;
             flex-wrap: wrap;
+            height: 115vh;
             // margin-left: 47 * $desk + rem;
             .offerGridContainer {
                 position: relative;
