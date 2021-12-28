@@ -6,40 +6,63 @@
       -ms-flex-align: center;
           align-items: center;
   margin: auto;
-  margin-top: 0.189rem;
+  margin-top: 2.331rem;
   width: 64.512rem;
 }
 
+@media only screen and (max-width: 800px) {
+  .iconTextContainer {
+    display: none;
+  }
+}
+
 .iconTextContainer .icon {
-  width: 2.268rem;
-  height: 2.268rem;
-  margin-right: 1.008rem;
+  width: 2.394rem;
+  height: 2.394rem;
+  margin-right: 0.945rem;
 }
 
 .iconTextContainer .icon img {
   width: 100%;
   height: 100%;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 
 .iconTextContainer .text {
-  font-size: 1.386rem;
-  font-weight: 600;
-  color: #727272;
+  font-size: 1.26rem;
+  font-weight: bold;
+  color: #535ad1;
 }
 
 .formMainContainer {
   position: relative;
   margin: auto;
-  margin-top: 1.89rem;
+  margin-top: 2.016rem;
   margin-bottom: 3.15rem;
   width: 64.512rem;
 }
 
+@media only screen and (max-width: 800px) {
+  .formMainContainer {
+    width: 100%;
+    margin-top: 4.8vw;
+    margin-bottom: 13.33333vw;
+  }
+}
+
 .formMainContainer h3 {
-  font-size: 1.512rem;
+  font-size: 1.134rem;
   font-weight: 600;
-  color: #535ad1;
+  color: #727272;
   margin-bottom: 1.575rem;
+}
+
+@media only screen and (max-width: 800px) {
+  .formMainContainer h3 {
+    margin-left: 9.6vw;
+    margin-bottom: 4.26667vw;
+  }
 }
 
 .formMainContainer .formContainer {
@@ -51,11 +74,32 @@
   width: 50.4rem;
 }
 
+@media only screen and (max-width: 800px) {
+  .formMainContainer .formContainer {
+    -ms-flex-wrap: unset;
+        flex-wrap: unset;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    width: 100%;
+  }
+}
+
 .formMainContainer .formContainer .textField {
   width: 15.372rem;
   margin-right: 1.26rem !important;
   margin-bottom: 1.953rem !important;
   margin-top: 0 !important;
+}
+
+@media only screen and (max-width: 800px) {
+  .formMainContainer .formContainer .textField {
+    width: 83.2vw;
+    margin-right: 8.26667vw !important;
+    margin-left: 8.53333vw !important;
+    margin-bottom: 5.06667vw !important;
+  }
 }
 
 .formMainContainer .formContainer .textField label {
@@ -64,8 +108,21 @@
   font-size: 0.9765rem;
 }
 
+@media only screen and (max-width: 800px) {
+  .formMainContainer .formContainer .textField label {
+    letter-spacing: 0.10667vw;
+    font-size: 4.13333vw;
+  }
+}
+
 .formMainContainer .formContainer .textField .MuiOutlinedInput-root {
   height: 3.528rem;
+}
+
+@media only screen and (max-width: 800px) {
+  .formMainContainer .formContainer .textField .MuiOutlinedInput-root {
+    height: 14.93333vw;
+  }
 }
 
 .formMainContainer .formContainer .textField .MuiOutlinedInput-notchedOutline {
@@ -80,9 +137,21 @@
   font-size: 1.008rem;
 }
 
+@media only screen and (max-width: 800px) {
+  .formMainContainer .formContainer .textField .MuiInputBase-input {
+    font-size: 4.26667vw;
+  }
+}
+
 .formMainContainer .borderBottom {
   width: 48.762rem;
   border-bottom: solid 1px #eaeaea;
+}
+
+@media only screen and (max-width: 800px) {
+  .formMainContainer .borderBottom {
+    display: none;
+  }
 }
 
 .formMainContainer .saveButton {
@@ -104,10 +173,26 @@
   margin-left: 36.288rem;
 }
 
+@media only screen and (max-width: 800px) {
+  .formMainContainer .saveButton {
+    width: 53.33333vw;
+    height: 13.33333vw;
+    border-radius: 8.8vw;
+    margin: auto;
+    margin-top: 0;
+  }
+}
+
 .formMainContainer .saveButton .btnText {
   font-size: 1.008rem;
   font-weight: 500;
   color: #fff;
+}
+
+@media only screen and (max-width: 800px) {
+  .formMainContainer .saveButton .btnText {
+    font-size: 4.26667vw;
+  }
 }
 
 .formMainContainer .saveButton .arrowIcon {
@@ -115,6 +200,15 @@
   height: 1.008rem;
   margin-left: 1.7325rem;
   margin-top: -0.063rem;
+}
+
+@media only screen and (max-width: 800px) {
+  .formMainContainer .saveButton .arrowIcon {
+    width: 4.26667vw;
+    height: 4.26667vw;
+    margin-left: 7.33333vw;
+    margin-top: -0.26667vw;
+  }
 }
 
 .formMainContainer .saveButton .arrowIcon img {

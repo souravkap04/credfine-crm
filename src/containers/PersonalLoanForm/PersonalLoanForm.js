@@ -15,7 +15,8 @@ import SC from '../../images/forms/SC.svg';
 import IDFC from '../../images/forms/IDFC.svg';
 import kotak from '../../images/forms/kotak.svg';
 import ABC from '../../images/forms/ABC.svg';
-import { useParams } from 'react-router-dom';
+import PL from '../../images/newIcons/PL.svg';
+import { useParams, useHistory } from 'react-router-dom';
 import {
     getBank,
     getResidentType,
@@ -41,6 +42,8 @@ export default function PersonalLoanForm() {
     const [isObligationProgress, setisObligationProgress] = useState(false);
     const [isExclusiveOffers, setisExclusiveOffers] = useState(false);
     const [isExclusiveOffersProgress, setisExclusiveOffersProgress] = useState(false);
+    const [isEApproval, setisEApproval] = useState(false);
+    const [isEApprovalProgress, setisEApprovalProgress] = useState(false);
     const [loanCard, setloanCard] = useState(10.35);
     const [loanMonth, setloanMonth] = useState(12);
     const [isList, setisList] = useState(true);
@@ -55,53 +58,54 @@ export default function PersonalLoanForm() {
             Forclosure: '18',
             url: '/dashboards/HDFCForm'
         },
-        {
-            img: ICICI,
-            interest: '10.25%',
-            PFee: '2999',
-            MaxTenure: '72',
-            PartPayment: '12',
-            Forclosure: '18',
-            url: '/'
-        },
-        {
-            img: SC,
-            interest: '10.25%',
-            PFee: '2999',
-            MaxTenure: '72',
-            PartPayment: '12',
-            Forclosure: '18',
-            url: '/'
-        },
-        {
-            img: IDFC,
-            interest: '10.25%',
-            PFee: '10000',
-            MaxTenure: '72',
-            PartPayment: '12',
-            Forclosure: '18',
-            url: '/'
-        },
-        {
-            img: kotak,
-            interest: '10.25%',
-            PFee: '10000',
-            MaxTenure: '72',
-            PartPayment: '12',
-            Forclosure: '18',
-            url: '/'
-        },
-        {
-            img: ABC,
-            interest: '10.25%',
-            PFee: '10000',
-            MaxTenure: '72',
-            PartPayment: '12',
-            Forclosure: '18',
-            url: '/'
-        }
+        // {
+        //     img: ICICI,
+        //     interest: '10.25%',
+        //     PFee: '2999',
+        //     MaxTenure: '72',
+        //     PartPayment: '12',
+        //     Forclosure: '18',
+        //     url: '/'
+        // },
+        // {
+        //     img: SC,
+        //     interest: '10.25%',
+        //     PFee: '2999',
+        //     MaxTenure: '72',
+        //     PartPayment: '12',
+        //     Forclosure: '18',
+        //     url: '/'
+        // },
+        // {
+        //     img: IDFC,
+        //     interest: '10.25%',
+        //     PFee: '10000',
+        //     MaxTenure: '72',
+        //     PartPayment: '12',
+        //     Forclosure: '18',
+        //     url: '/'
+        // },
+        // {
+        //     img: kotak,
+        //     interest: '10.25%',
+        //     PFee: '10000',
+        //     MaxTenure: '72',
+        //     PartPayment: '12',
+        //     Forclosure: '18',
+        //     url: '/'
+        // },
+        // {
+        //     img: ABC,
+        //     interest: '10.25%',
+        //     PFee: '10000',
+        //     MaxTenure: '72',
+        //     PartPayment: '12',
+        //     Forclosure: '18',
+        //     url: '/'
+        // }
     ]);
     // Lead Fetch Details 
+    const history = useHistory();
     const profileData = getProfileData();
     const banks = getBank();
     const residentType = getResidentType();
@@ -294,62 +298,125 @@ export default function PersonalLoanForm() {
             </Snackbar>
             <div className="leftSection">
                 <div className="logoContainer">
-                    <img src={logo} alt="" />
+                    <div className="logoImage">
+                        <NavLink to="/"><img src={logo} alt="" /></NavLink>
+                    </div>
+                </div>
+                <div className="mobileBarsContainer">
+                    <i class="fas fa-bars hambars"></i>
+                    <div className="mobileTitleText">Personal Loan Application</div>
                 </div>
                 <div className="progressContainer">
                     <div className="progressBox">
                         <div className="progressIconBox">
-                            <div className={isPersonalProgress ? "iconBar activeiconBar" : "iconBar"}></div>
+                            <i class="fas fa-check-circle activeiconBar"></i>
+                            <div className="bottomProgress activebottomProgress"></div>
+                        </div>
+                        <div className="iconText activeiconText">Mobile Verified</div>
+                    </div>
+                    <div className="progressBox">
+                        <div className="progressIconBox">
+                            <div className={isPersonalProgress ? "fas fa-check-circle activeiconBar" : isPersonalDetail ? "fas fa-circle activeBar" : "fas fa-circle iconBar"}></div>
                             <div className={isPersonalProgress ? "bottomProgress activebottomProgress" : "bottomProgress"}></div>
                         </div>
                         <div className={isPersonalProgress ? "iconText activeiconText" : "iconText"}>Personal Details</div>
                     </div>
                     <div className="progressBox">
                         <div className="progressIconBox">
-                            <div className={isCurrentProgress ? "iconBar activeiconBar" : "iconBar"}></div>
+                            <div className={isCurrentProgress ? "fas fa-check-circle activeiconBar" : isCurrentResidentialDetail ? "fas fa-circle activeBar" : "fas fa-circle iconBar"}></div>
                             <div className={isCurrentProgress ? "bottomProgress activebottomProgress" : "bottomProgress"}></div>
                         </div>
                         <div className={isCurrentProgress ? "iconText activeiconText" : "iconText"}>Current Residential</div>
                     </div>
                     <div className="progressBox">
                         <div className="progressIconBox">
-                            <div className={isEmployementProgress ? "iconBar activeiconBar" : "iconBar"}></div>
+                            <div className={isEmployementProgress ? "fas fa-check-circle activeiconBar" : isEmploymentIncomeDetail ? "fas fa-circle activeBar" : "fas fa-circle iconBar"}></div>
                             <div className={isEmployementProgress ? "bottomProgress activebottomProgress" : "bottomProgress"}></div>
                         </div>
                         <div className={isEmployementProgress ? "iconText activeiconText" : "iconText"}>Employment &amp; Income</div>
                     </div>
                     <div className="progressBox">
                         <div className="progressIconBox">
-                            <div className={isObligationProgress ? "iconBar activeiconBar" : "iconBar"}></div>
+                            <div className={isObligationProgress ? "fas fa-check-circle activeiconBar" : isObligation ? "fas fa-circle activeBar" : "fas fa-circle iconBar"}></div>
                             <div className={isObligationProgress ? "bottomProgress activebottomProgress" : "bottomProgress"}></div>
                         </div>
                         <div className={isObligationProgress ? "iconText activeiconText" : "iconText"}>Obligation</div>
                     </div>
                     <div className="progressBox">
                         <div className="progressIconBox">
-                            <div className={isExclusiveOffersProgress ? "iconBar activeiconBar" : "iconBar"}></div>
+                            <div className={isExclusiveOffersProgress ? "fas fa-check-circle activeiconBar" : isExclusiveOffers ? "fas fa-circle activeBar" : "fas fa-circle iconBar"}></div>
                         </div>
                         <div className={isExclusiveOffersProgress ? "iconText activeiconText" : "iconText"}>Exclusive Offers</div>
+                    </div>
+                </div>
+                <div className="mobileProgressContainer">
+                    <div className="mobileProgressBox">
+                        <div className="mobileProgressIconBox">
+                            <i class="fas fa-check-circle activeiconBar"></i>
+                            <div className="iconText activeiconText">Verified</div>
+                        </div>
+                        <div className="bottomProgress activebottomProgress"></div>
+                    </div>
+                    <div className="mobileProgressBox">
+                        <div className="mobileProgressIconBox mobileProgressIconBoxAdjust">
+                            <div className={isPersonalProgress ? "fas fa-check-circle activeiconBar" : isPersonalDetail ? "fas fa-circle activeBar" : "fas fa-circle iconBar"}></div>
+                            <div className={isPersonalProgress ? "iconText activeiconText" : "iconText"}>Personal</div>
+                        </div>
+                        <div className={isPersonalProgress ? "bottomProgress activebottomProgress bottomProgressAdjust2" : "bottomProgress bottomProgressAdjust2"}></div>
+                    </div>
+                    <div className="mobileProgressBox">
+                        <div className="mobileProgressIconBox mobileProgressIconBoxAdjust">
+                            <div className={isCurrentProgress ? "fas fa-check-circle activeiconBar" : isCurrentResidentialDetail ? "fas fa-circle activeBar" : "fas fa-circle iconBar"}></div>
+                            <div className={isCurrentProgress ? "iconText activeiconText" : "iconText"}>Resident</div>
+                        </div>
+                        <div className={isCurrentProgress ? "bottomProgress activebottomProgress bottomProgressAdjust3" : "bottomProgress bottomProgressAdjust3"}></div>
+                    </div>
+                    <div className="mobileProgressBox">
+                        <div className="mobileProgressIconBox mobileProgressIconBoxAdjust">
+                            <div className={isEmployementProgress ? "fas fa-check-circle activeiconBar" : isEmploymentIncomeDetail ? "fas fa-circle activeBar" : "fas fa-circle iconBar"}></div>
+                            <div className={isEmployementProgress ? "iconText activeiconText" : "iconText"}>Income</div>
+                        </div>
+                        <div className={isEmployementProgress ? "bottomProgress activebottomProgress bottomProgressAdjust4" : "bottomProgress bottomProgressAdjust4"}></div>
+                    </div>
+                    <div className="mobileProgressBox">
+                        <div className="mobileProgressIconBox mobileProgressIconBoxAdjust">
+                            <div className={isObligationProgress ? "fas fa-check-circle activeiconBar" : isObligation ? "fas fa-circle activeBar" : "fas fa-circle iconBar"}></div>
+                            <div className={isObligationProgress ? "iconText activeiconText" : "iconText"}>Obligation</div>
+                        </div>
+                        <div className={isObligationProgress ? "bottomProgress activebottomProgress bottomProgressAdjust5" : "bottomProgress bottomProgressAdjust5"}></div>
+                    </div>
+                    <div className="mobileProgressBox">
+                        <div className="mobileProgressIconBox mobileProgressIconBoxAdjust">
+                            <div className={isExclusiveOffersProgress ? "fas fa-check-circle activeiconBar" : isExclusiveOffers ? "fas fa-circle activeBar" : "fas fa-circle iconBar"}></div>
+                            <div className={isExclusiveOffersProgress ? "iconText activeiconText" : "iconText"}>Offers</div>
+                        </div>
+                        <div className={isExclusiveOffersProgress ? "bottomProgress activebottomProgress bottomProgressAdjust6" : "bottomProgress bottomProgressAdjust6"}></div>
+                    </div>
+                    <div className="mobileProgressBox">
+                        <div className="mobileProgressIconBox">
+                            <div className={isEApprovalProgress ? "fas fa-check-circle activeiconBar" : isEApproval ? "fas fa-circle activeBar" : "fas fa-circle iconBar"}></div>
+                            <div className={isEApprovalProgress ? "iconText activeiconText" : "iconText"}>e-Approval</div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div className="rightSection">
                 {isPersonalDetail ? <div className="adjustBackground">
                     <div className="headerContainer">
-                        <div className="backButton">
+                        <div className="backButton" onClick={() => history.goBack()}>
                             <img src={back} alt="" />
                         </div>
                         <div className="needHelpContainer">
-                            <div className="leftPart">
-                                <img src={phoneCall} alt="" />
-                            </div>
+                            <div className="needHelpText">Need Help?</div>
                             <div className="rightPart">
-                                <div className="needHelpText">Need Help?</div>
+                                <div className="phoneCall">
+                                    <img src={phoneCall} alt="" />
+                                </div>
                                 <div className="numberText">7045330702</div>
                             </div>
                         </div>
                     </div>
-                    <FormContainer Name="Personal Details" onClick={() => {
+                    <FormContainer TitleText="Personal Loan Application" Name="Loan Amt &amp; Personal Details" iconImage={PL} onClick={() => {
                         let regex = /[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(pancardNo);
                         if (pancardNo !== '' && !regex) {
                             setAlertMessage('Inavlid PAN Number')
@@ -474,16 +541,16 @@ export default function PersonalLoanForm() {
                             <img src={back} alt="" />
                         </div>
                         <div className="needHelpContainer">
-                            <div className="leftPart">
-                                <img src={phoneCall} alt="" />
-                            </div>
+                            <div className="needHelpText">Need Help?</div>
                             <div className="rightPart">
-                                <div className="needHelpText">Need Help?</div>
+                                <div className="phoneCall">
+                                    <img src={phoneCall} alt="" />
+                                </div>
                                 <div className="numberText">7045330702</div>
                             </div>
                         </div>
                     </div>
-                    <FormContainer Name="Current Residential Details" onClick={() => {
+                    <FormContainer TitleText="Personal Loan Application" Name="Loan Amt &amp; Personal Details" iconImage={PL} onClick={() => {
                         updateLeadDetails(leadid)
                         setisCurrentResidentialDetail(false)
                         setisEmploymentIncomeDetail(true)
@@ -567,16 +634,16 @@ export default function PersonalLoanForm() {
                             <img src={back} alt="" />
                         </div>
                         <div className="needHelpContainer">
-                            <div className="leftPart">
-                                <img src={phoneCall} alt="" />
-                            </div>
+                            <div className="needHelpText">Need Help?</div>
                             <div className="rightPart">
-                                <div className="needHelpText">Need Help?</div>
+                                <div className="phoneCall">
+                                    <img src={phoneCall} alt="" />
+                                </div>
                                 <div className="numberText">7045330702</div>
                             </div>
                         </div>
                     </div>
-                    <FormContainer Name="Employment &amp; Income Details" onClick={() => {
+                    <FormContainer TitleText="Personal Loan Application" Name="Loan Amt &amp; Personal Details" iconImage={PL} onClick={() => {
                         updateLeadDetails(leadid)
                         setisEmploymentIncomeDetail(false)
                         setisObligation(true)
@@ -770,16 +837,16 @@ export default function PersonalLoanForm() {
                             <img src={back} alt="" />
                         </div>
                         <div className="needHelpContainer">
-                            <div className="leftPart">
-                                <img src={phoneCall} alt="" />
-                            </div>
+                            <div className="needHelpText">Need Help?</div>
                             <div className="rightPart">
-                                <div className="needHelpText">Need Help?</div>
+                                <div className="phoneCall">
+                                    <img src={phoneCall} alt="" />
+                                </div>
                                 <div className="numberText">7045330702</div>
                             </div>
                         </div>
                     </div>
-                    <FormContainer Name="Obligation" onClick={() => {
+                    <FormContainer TitleText="Personal Loan Application" Name="Loan Amt &amp; Personal Details" iconImage={PL} onClick={() => {
                         updateLeadDetails(leadid)
                         setisExclusiveOffers(true)
                         setisObligationProgress(true)
@@ -862,11 +929,11 @@ export default function PersonalLoanForm() {
                             <img src={back} alt="" />
                         </div>
                         <div className="needHelpContainer">
-                            <div className="leftPart">
-                                <img src={phoneCall} alt="" />
-                            </div>
+                            <div className="needHelpText">Need Help?</div>
                             <div className="rightPart">
-                                <div className="needHelpText">Need Help?</div>
+                                <div className="phoneCall">
+                                    <img src={phoneCall} alt="" />
+                                </div>
                                 <div className="numberText">7045330702</div>
                             </div>
                         </div>

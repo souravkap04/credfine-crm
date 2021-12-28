@@ -2,6 +2,18 @@
   position: relative;
 }
 
+@media only screen and (max-width: 800px) {
+  .personalFormContainer {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+}
+
 .personalFormContainer .leftSection {
   position: fixed;
   width: 14.994rem;
@@ -9,10 +21,18 @@
   height: 100%;
 }
 
+@media only screen and (max-width: 800px) {
+  .personalFormContainer .leftSection {
+    position: relative;
+    width: 100%;
+    height: 37.33333vw;
+  }
+}
+
 .personalFormContainer .leftSection .logoContainer {
   width: 100%;
-  height: 5.922rem;
-  background-color: #fff;
+  height: 4.41rem;
+  background-color: #fafafa;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -24,8 +44,150 @@
           align-items: center;
 }
 
+@media only screen and (max-width: 800px) {
+  .personalFormContainer .leftSection .logoContainer {
+    display: none;
+  }
+}
+
+.personalFormContainer .leftSection .logoContainer .logoImage {
+  width: 8.0262rem;
+  height: 2.52rem;
+}
+
+.personalFormContainer .leftSection .logoContainer .logoImage img {
+  width: 100%;
+  height: 100%;
+}
+
+@media only screen and (min-width: 800px) {
+  .personalFormContainer .leftSection .mobileBarsContainer {
+    display: none;
+  }
+  .personalFormContainer .leftSection .mobileProgressContainer {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 800px) {
+  .personalFormContainer .leftSection .mobileBarsContainer {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    height: 14.4vw;
+  }
+  .personalFormContainer .leftSection .mobileBarsContainer .hambars {
+    color: #fff;
+    font-size: 6.13333vw;
+    margin-left: 6.4vw;
+    margin-right: 4.77333vw;
+  }
+  .personalFormContainer .leftSection .mobileBarsContainer .mobileTitleText {
+    font-family: Lato-regular;
+    font-size: 4.8vw;
+    font-weight: 600;
+    color: #fff;
+  }
+  .personalFormContainer .leftSection .mobileProgressContainer {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: space-evenly;
+        -ms-flex-pack: space-evenly;
+            justify-content: space-evenly;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    height: 22.93333vw;
+  }
+  .personalFormContainer .leftSection .mobileProgressContainer .mobileProgressBox {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    position: relative;
+  }
+  .personalFormContainer .leftSection .mobileProgressContainer .mobileProgressBox .mobileProgressIconBox {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+  .personalFormContainer .leftSection .mobileProgressContainer .mobileProgressBox .mobileProgressIconBox .iconBar {
+    font-size: 4vw;
+    color: #bca5fd;
+    -webkit-transition: 0.3s;
+    transition: 0.3s;
+  }
+  .personalFormContainer .leftSection .mobileProgressContainer .mobileProgressBox .mobileProgressIconBox .activeBar {
+    color: #fff;
+    font-size: 4vw;
+  }
+  .personalFormContainer .leftSection .mobileProgressContainer .mobileProgressBox .mobileProgressIconBox .activeiconBar {
+    font-size: 4vw;
+    color: #bca5fd;
+  }
+  .personalFormContainer .leftSection .mobileProgressContainer .mobileProgressBox .bottomProgress {
+    width: 9.86667vw;
+    height: 0;
+    border-bottom: solid 2px #bca5ff;
+    -webkit-transition: 0.3s;
+    transition: 0.3s;
+    position: absolute;
+    top: 1.6vw;
+    left: 6.13333vw;
+  }
+  .personalFormContainer .leftSection .mobileProgressContainer .mobileProgressBox .activebottomProgress {
+    border-bottom: solid 2px #bca5ff;
+  }
+  .personalFormContainer .leftSection .mobileProgressContainer .mobileProgressBox .bottomProgressAdjust2 {
+    position: absolute;
+    left: 7.06667vw;
+  }
+  .personalFormContainer .leftSection .mobileProgressContainer .mobileProgressBox .bottomProgressAdjust3 {
+    position: absolute;
+    left: 7.2vw;
+  }
+  .personalFormContainer .leftSection .mobileProgressContainer .mobileProgressBox .bottomProgressAdjust4 {
+    position: absolute;
+    left: 6.4vw;
+  }
+  .personalFormContainer .leftSection .mobileProgressContainer .mobileProgressBox .bottomProgressAdjust5 {
+    position: absolute;
+    left: 8vw;
+  }
+  .personalFormContainer .leftSection .mobileProgressContainer .mobileProgressBox .bottomProgressAdjust6 {
+    position: absolute;
+    left: 5.73333vw;
+  }
+  .personalFormContainer .leftSection .mobileProgressContainer .mobileProgressBox .iconText {
+    font-size: 2.66667vw;
+    font-weight: 600;
+    margin-top: 1.06667vw;
+    color: #fff;
+    font-family: Lato-regular;
+  }
+  .personalFormContainer .leftSection .mobileProgressContainer .mobileProgressBox .activeiconText {
+    color: #fff;
+  }
+}
+
 .personalFormContainer .leftSection .progressContainer {
-  margin-top: 2.835rem;
+  margin-top: 2.457rem;
+}
+
+@media only screen and (max-width: 800px) {
+  .personalFormContainer .leftSection .progressContainer {
+    display: none;
+  }
 }
 
 .personalFormContainer .leftSection .progressContainer .progressBox {
@@ -49,37 +211,38 @@
 }
 
 .personalFormContainer .leftSection .progressContainer .progressBox .progressIconBox .iconBar {
-  width: 1.134rem;
-  height: 1.134rem;
-  border: solid 1px #fff;
-  background-color: #fff;
-  border-radius: 50%;
+  font-size: 1.26rem;
+  color: #bca5fd;
   -webkit-transition: 0.3s;
   transition: 0.3s;
 }
 
+.personalFormContainer .leftSection .progressContainer .progressBox .progressIconBox .activeBar {
+  color: #fff;
+  font-size: 1.26rem;
+}
+
 .personalFormContainer .leftSection .progressContainer .progressBox .progressIconBox .activeiconBar {
-  border: solid 1px #1cb980;
-  background-color: #1cb980;
+  font-size: 1.26rem;
+  color: #bca5fd;
 }
 
 .personalFormContainer .leftSection .progressContainer .progressBox .progressIconBox .bottomProgress {
   width: 0;
-  height: 3.213rem;
-  border: solid 1px #fff;
+  height: 2.142rem;
+  border: solid 1px #bca5ff;
   -webkit-transition: 0.3s;
   transition: 0.3s;
 }
 
 .personalFormContainer .leftSection .progressContainer .progressBox .progressIconBox .activebottomProgress {
-  border: solid 1px #1cb980;
+  border: solid 1px #bca5ff;
 }
 
 .personalFormContainer .leftSection .progressContainer .progressBox .iconText {
   font-size: 0.945rem;
   font-weight: 500;
   margin-left: 0.504rem;
-  margin-top: -0.126rem;
   color: #fff;
 }
 
@@ -132,15 +295,31 @@
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
-  width: 64.512rem;
-  height: 5.922rem;
-  margin: auto;
+  width: 100%;
+  height: 4.41rem;
+  background-color: #fcfcfc;
+}
+
+@media only screen and (max-width: 800px) {
+  .personalFormContainer .rightSection .headerContainer {
+    width: 100%;
+    height: 13.33333vw;
+  }
 }
 
 .personalFormContainer .rightSection .headerContainer .backButton {
+  margin-left: 2.961rem;
   width: 1.512rem;
   height: 1.512rem;
   cursor: pointer;
+}
+
+@media only screen and (max-width: 800px) {
+  .personalFormContainer .rightSection .headerContainer .backButton {
+    margin-left: 4vw;
+    width: 5.06667vw;
+    height: 5.06667vw;
+  }
 }
 
 .personalFormContainer .rightSection .headerContainer .backButton img {
@@ -149,35 +328,46 @@
 }
 
 .personalFormContainer .rightSection .headerContainer .needHelpContainer {
+  margin-right: 2.709rem;
+}
+
+@media only screen and (max-width: 800px) {
+  .personalFormContainer .rightSection .headerContainer .needHelpContainer {
+    display: none;
+  }
+}
+
+.personalFormContainer .rightSection .headerContainer .needHelpContainer .needHelpText {
+  font-size: 0.756rem;
+  color: #535ad1;
+  line-height: 0.882rem;
+  margin-left: 1.386rem;
+}
+
+.personalFormContainer .rightSection .headerContainer .needHelpContainer .rightPart {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
 
-.personalFormContainer .rightSection .headerContainer .needHelpContainer .leftPart {
-  width: 2.142rem;
-  height: 2.142rem;
-  margin-right: 0.504rem;
+.personalFormContainer .rightSection .headerContainer .needHelpContainer .rightPart .phoneCall {
+  width: 1.134rem;
+  height: 1.134rem;
+  margin-right: 0.252rem;
 }
 
-.personalFormContainer .rightSection .headerContainer .needHelpContainer .leftPart img {
+.personalFormContainer .rightSection .headerContainer .needHelpContainer .rightPart .phoneCall img {
   width: 100%;
   height: 100%;
 }
 
-.personalFormContainer .rightSection .headerContainer .needHelpContainer .rightPart .needHelpText {
-  font-size: 0.882rem;
-  color: #535ad1;
-  line-height: 0.756rem;
-}
-
 .personalFormContainer .rightSection .headerContainer .needHelpContainer .rightPart .numberText {
-  font-size: 1.26rem;
-  font-weight: 800;
-  color: #fd914d;
+  font-size: 1.134rem;
+  font-weight: bold;
+  color: #535ad1;
 }
 
 .personalFormContainer .rightSection .calculationContainer {
@@ -482,6 +672,7 @@
   display: flex;
   -ms-flex-wrap: wrap;
       flex-wrap: wrap;
+  height: 115vh;
 }
 
 .personalFormContainer .rightSection .OfferMainGridContainer .offerGridContainer {

@@ -1,55 +1,86 @@
 $desk: 0.063;
+$mob: 100 / 375;
 .iconTextContainer {
     display: flex;
     align-items: center;
     margin: auto;
-    margin-top: 3 * $desk + rem;
+    margin-top: 37 * $desk + rem;
     width: 1024 * $desk + rem;
+    @media only screen and (max-width: 800px) {
+        display: none;
+    }
     .icon {
-        width: 36 * $desk + rem;
-        height: 36 * $desk + rem;
-        margin-right: 16 * $desk + rem;
+        width: 38 * $desk + rem;
+        height: 38 * $desk + rem;
+        margin-right: 15 * $desk + rem;
         // margin-left: 47 * $desk + rem;
         img {
             width: 100%;
             height: 100%;
+            object-fit: contain;
         }
     }
     .text {
-        font-size: 22 * $desk + rem;
-        font-weight: 600;
-        color: #727272;
+        font-size: 20 * $desk + rem;
+        font-weight: bold;
+        color: #535ad1;
     }
 }
 .formMainContainer {
     position: relative;
     margin: auto;
-    margin-top: 30 * $desk + rem;
+    margin-top: 32 * $desk + rem;
     margin-bottom: 50 * $desk + rem;
     width: 1024 * $desk + rem;
+    @media only screen and (max-width: 800px) {
+        width: 100%;
+        margin-top: 18 * $mob + vw;
+        margin-bottom: 50 * $mob + vw;
+    }
     h3 {
-        font-size: 24 * $desk + rem;
+        font-size: 18 * $desk + rem;
         font-weight: 600;
-        color: #535ad1;
+        color: #727272;
         margin-bottom: 25 * $desk + rem;
+        @media only screen and (max-width: 800px) {
+            margin-left: 36 * $mob + vw;
+            margin-bottom: 16 * $mob + vw;
+        }
     }
     .formContainer {
         display: flex;
         flex-wrap: wrap;
         width: 800 * $desk + rem;
-
+        @media only screen and (max-width: 800px) {
+            flex-wrap: unset;
+            flex-direction: column;
+            width: 100%;
+        }
         .textField {
             width: 244 * $desk + rem;
             margin-right: 20 * $desk + rem !important;
             margin-bottom: 31 * $desk + rem !important;
             margin-top: 0 !important;
+            @media only screen and (max-width: 800px) {
+                width: 312 * $mob + vw;
+                margin-right: 31 * $mob + vw !important;
+                margin-left: 32 * $mob + vw !important;
+                margin-bottom: 19 * $mob + vw !important;
+            }
             label {
                 color: #07498e;
                 letter-spacing: 0.4 * $desk + rem;
                 font-size: 15.5 * $desk + rem;
+                @media only screen and (max-width: 800px) {
+                    letter-spacing: 0.4 * $mob + vw;
+                    font-size: 15.5 * $mob + vw;
+                }
             }
             .MuiOutlinedInput-root {
                 height: 56 * $desk + rem;
+                @media only screen and (max-width: 800px) {
+                    height: 56 * $mob + vw;
+                }
             }
             .MuiOutlinedInput-notchedOutline {
                 border: 1px solid #bababa;
@@ -59,6 +90,9 @@ $desk: 0.063;
             }
             .MuiInputBase-input {
                 font-size: 16 * $desk + rem;
+                @media only screen and (max-width: 800px) {
+                    font-size: 16 * $mob + vw;
+                }
             }
             // .MuiInputBase-root:hover .MuiOutlinedInput-notchedOutline {
             //     border: 2px solid #c5cee0;
@@ -68,6 +102,9 @@ $desk: 0.063;
     .borderBottom {
         width: 774 * $desk + rem;
         border-bottom: solid 1px #eaeaea;
+        @media only screen and (max-width: 800px) {
+            display: none;
+        }
     }
     .saveButton {
         display: flex;
@@ -80,16 +117,32 @@ $desk: 0.063;
         cursor: pointer;
         margin-top: 18.5 * $desk + rem;
         margin-left: 576 * $desk + rem;
+        @media only screen and (max-width: 800px) {
+            width: 200 * $mob + vw;
+            height: 50 * $mob + vw;
+            border-radius: 33 * $mob + vw;
+            margin: auto;
+            margin-top: 0;
+        }
         .btnText {
             font-size: 16 * $desk + rem;
             font-weight: 500;
             color: #fff;
+            @media only screen and (max-width: 800px) {
+                font-size: 16 * $mob + vw;
+            }
         }
         .arrowIcon {
             width: 16 * $desk + rem;
             height: 16 * $desk + rem;
             margin-left: 27.5 * $desk + rem;
             margin-top: -1 * $desk + rem;
+            @media only screen and (max-width: 800px) {
+                width: 16 * $mob + vw;
+                height: 16 * $mob + vw;
+                margin-left: 27.5 * $mob + vw;
+                margin-top: -1 * $mob + vw;
+            }
             img {
                 width: 100%;
                 height: 100%;

@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import RightArrow from '../../images/forms/iconArrowRight.svg';
-import personalLoanIcon from '../../images/forms/1.svg';
 import './formcontainer.css';
 export default function FormContainer(props) {
     return (
         <React.Fragment>
             <div className={"iconTextContainer " + props.className}>
                 <div className="icon">
-                    <img src={personalLoanIcon} alt="" />
+                    <img src={props.iconImage} alt="" />
                 </div>
-                <div className="text">Personal Loan Application</div>
+                <div className="text">{props.TitleText}</div>
             </div>
             <div className={"formMainContainer " + props.className}>
                 <h3>{props.Name}</h3>
