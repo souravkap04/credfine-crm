@@ -13,7 +13,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import CallIcon from '@material-ui/icons/Call';
 import axios from 'axios';
 import baseUrl from '../../global/api';
-import { clickToCallApi, vertageDialerApi } from '../../global/callApi'
+import { haloocomNoidaDialerApi, haloocomMumbaiDialerApi } from '../../global/callApi'
 import { getProfileData } from '../../global/leadsGlobalData';
 import CallerDialogBox from '../Leads/CallerDialog/CallerDialogBox';
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
@@ -24,6 +24,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Button } from '@material-ui/core';
 import Badge from '@material-ui/core/Badge';
+import EmiCalculator from '../Emicalculator/EmiCalculator';
 // import NoDataFound from '../NoDataFound/NoDataFound';
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -114,10 +115,11 @@ export default function FollowUp(props) {
     const [isCallConnect, setIsCallConnect] = useState(false);
     const [onGoingCall, setOnGoingCall] = useState(false);
     const [isCallNotConnected, setIsCallNotConnected] = useState(false)
-    const [vertageCall, setVertageCall] = useState(false);
+    const [dialerCall, setDialerCall] = useState(false);
     const [disableHangupBtn, setDisableHangupBtn] = useState(true);
     const [isLoading, setisLoading] = useState(false);
     const [currentDateTime, setcurrentDateTime] = useState('');
+    const [isAutoDialerStart, setIsAutoDialerStart] = useState(false);
     const fetchLeadsData = async () => {
         setisLoading(true);
         const headers = {
@@ -151,38 +153,24 @@ export default function FollowUp(props) {
         history.push(`/dashboards/followup/edit/${leadId}`);
     };
     const clickToCall = async (customerNo, leadID) => {
-        if (profileData.dialer === 'TATA') {
-            const headers = {
-                'accept': 'application/json',
-                'content-type': 'application/json'
-            };
-            const item = { customer_number: customerNo, api_key: profileData.dialer_pass };
-            axios.interceptors.request.use((request) => {
-                setIsCalling(true);
-                return request;
-            })
-            await axios.post(clickToCallApi, item, { headers })
+        if (profileData.dialer === 'HALOOCOM-Noida') {
+            await axios.post(`${haloocomNoidaDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`)
                 .then((response) => {
-                    if (response.data.success) {
-                        setIsCalling(false);
-                        setOnGoingCall(true);
-                    } else {
-                        setIsCallNotConnected(true)
+                    setDialerCall(true);
+                    setDisableHangupBtn(false);
+                    if (response.status === 200) {
+                        localStorage.setItem('callHangUp', true)
                     }
                 }).catch((error) => {
-                    console.log(error)
-                    if (error.message) {
-                        setIsCallConnect(true);
-                        setIsCalling(false);
-                    }
+                    console.log('error');
                 })
             setTimeout(() => {
                 history.push(`/dashboards/followup/edit/${leadID}`)
             }, 1500)
-        } else if (profileData.dialer === 'VERTAGE') {
-            await axios.post(`${vertageDialerApi}&user=${profileData.vertage_id}&pass=${profileData.vertage_pass}&agent_user=${profileData.vertage_id}&function=external_dial&value=${customerNo}&phone_code=+91&search=YES&preview=NO&focus=YES`)
+        } else if (profileData.dialer === 'HALOOCOM-Mumbai') {
+            await axios.post(`${haloocomMumbaiDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`)
                 .then((response) => {
-                    setVertageCall(true);
+                    setDialerCall(true);
                     setDisableHangupBtn(false);
                     if (response.status === 200) {
                         localStorage.setItem('callHangUp', true)
@@ -210,24 +198,56 @@ export default function FollowUp(props) {
         for (let i = (data.length) - 4; i > 0; i--) {
             maskData += 'x';
         }
-        // let leadPhoneNo = maskData + unMaskdata;
-        // if (profileData.user_roles[0].user_type === 3) {
-        //     return leadPhoneNo;
-        // } else {
-        //     return data;
-        // }
-        return data;
-
+        let leadPhoneNo = maskData + unMaskdata;
+        if (profileData.user_roles[0].user_type === 2 || profileData.user_roles[0].user_type === 3 || profileData.user_roles[0].user_type === 5 || profileData.user_roles[0].user_type === 6) {
+            return leadPhoneNo;
+        } else {
+            return data;
+        }
+    }
+    const createdDateHandler = (date) => {
+        let createdDate = new Date(date);
+        let currentCreatedDate = createdDate.toLocaleDateString() + " " +
+            moment(createdDate.toLocaleTimeString(), "HH:mm:ss a").format(
+                "hh:mm A"
+            );
+        return currentCreatedDate;
     }
     const disableDialerPopUp = () => {
-        setVertageCall(false)
+        setDialerCall(false)
         setDisableHangupBtn(false)
+        setIsAutoDialerStart(false);
+    }
+    const autoDialerHandler = () => {
+        localStorage.setItem("auto_dialer", true);
+        setIsAutoDialerStart(true);
+        clickToCall(leadData.lead.phone_no, leadData.lead.lead_crm_id);
+    };
+    useEffect(() => {
+        if (localStorage.getItem("auto_dialer") && Object.keys(leadData).length !== 0) {
+            clickToCall(leadData.lead.phone_no, leadData.lead.lead_crm_id)
+        }
+    }, [leadData]);
+    const [openCalculate, setopenCalculate] = useState(false);
+    const openCalculator = () => {
+        setopenCalculate(true);
+    }
+    const closeCalculator = () => {
+        setopenCalculate(false);
     }
     return (
-        <PageLayerSection>
+        <PageLayerSection isDisplaySearchBar={false} ActualEmiCalculate={openCalculator}>
+            <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
             {/* <NoDataFound text="Coming Soon" /> */}
             <div className="followUpBtnContainer">
-                {LeadCount !== 0 ? <Badge className="followbtn" max={999} badgeContent={LeadCount} color="secondary">
+                <Button
+                    className="followUpAutoDialerStartBtn"
+                    color="primary"
+                    variant="contained"
+                    onClick={() => autoDialerHandler()}
+                >
+                    Start</Button>
+                {LeadCount !== 0 ? <Badge className="followbtn" max={5000} badgeContent={LeadCount} color="secondary">
                     <Button variant="contained">Follow Up</Button>
                 </Badge> : ''}
                 {/* <Badge className="followbtn" badgeContent={4} color="secondary">
@@ -242,13 +262,13 @@ export default function FollowUp(props) {
                             <TableCell className={classes.tableheading} >Name</TableCell>
                             <TableCell className={classes.tableheading} >Mobile</TableCell>
                             <TableCell className={classes.tableheading} >Loan Amt</TableCell>
-                            <TableCell className={classes.tableheading}>Income</TableCell>
                             <TableCell className={classes.tableheading} >Company</TableCell>
-                            <TableCell className={classes.tableheading} >Loan Type</TableCell>
-                            <TableCell className={clsx(classes.tableheading, classes.statusHeading)} >Status</TableCell>
-                            <TableCell className={classes.tableheading}>Follow-Up Date</TableCell>
-                            <TableCell className={classes.tableheading} >Sub Status</TableCell>
                             <TableCell className={classes.tableheading} >Campaign</TableCell>
+                            <TableCell className={classes.tableheading}>Created Date</TableCell>
+                            <TableCell className={classes.tableheading}>Follow-Up Date</TableCell>
+                            <TableCell className={clsx(classes.tableheading, classes.statusHeading)} >Status</TableCell>
+                            <TableCell className={classes.tableheading} >Sub Status</TableCell>
+                            <TableCell className={classes.tableheading} >Lead Agent Name</TableCell>
                             <TableCell className={classes.tableheading} ></TableCell>
                         </TableRow>
                     </TableHead>
@@ -263,17 +283,17 @@ export default function FollowUp(props) {
                                 <TableCell className={classes.tabledata}>{leadData.lead.name ? leadData.lead.name : 'NA'}</TableCell>
                                 <TableCell className={classes.tabledata}>{maskPhoneNo(leadData.lead.phone_no) ? maskPhoneNo(leadData.lead.phone_no) : 'NA'}</TableCell>
                                 <TableCell className={classes.tabledata}>{leadData.lead.loan_amount ? leadData.lead.loan_amount : 'NA'}</TableCell>
-                                <TableCell className={classes.tabledata}>{leadData.lead.data['monthly_income'] ? leadData.lead.data['monthly_income'] : 'NA'}</TableCell>
                                 <TableCell className={classes.tabledata}>{leadData.lead.data['current_company_name'] ? leadData.lead.data['current_company_name'] : 'NA'}</TableCell>
-                                <TableCell className={classes.tabledata}>{leadData.lead.loan_type ? leadData.lead.loan_type : 'NA'}</TableCell>
+                                <TableCell className={classes.tabledata}>{leadData.lead.campaign_category ? leadData.lead.campaign_category : 'NA'}</TableCell>
+                                <TableCell className={classes.tabledata}>{createdDateHandler(leadData.lead.created_date) ? createdDateHandler(leadData.lead.created_date) : 'NA'}</TableCell>
+                                <TableCell className={classes.tabledata}>{currentDateTime ? currentDateTime : 'NA'}</TableCell>
                                 <TableCell className={classes.tabledata}>
                                     <div className={classes.loanTypeButton}>
                                         <div className={classes.loanButtonText}>{leadData.lead.status}</div>
                                     </div>
                                 </TableCell>
-                                <TableCell className={classes.tabledata}>{currentDateTime ? currentDateTime : 'NA'}</TableCell>
                                 <TableCell className={classes.tabledata}>{leadData.lead.sub_status ? leadData.lead.sub_status : 'NA'}</TableCell>
-                                <TableCell className={classes.tabledata}>{leadData.lead.campaign_category ? leadData.lead.campaign_category : 'NA'}</TableCell>
+                                <TableCell className={classes.tabledata}>{leadData.lead.lead_agent_name ? leadData.lead.lead_agent_name : 'NA'}</TableCell>
                                 <TableCell>
                                     <Tooltip title="Call Customer">
                                         <IconButton className={classes.callButton} onClick={() => clickToCall(leadData.lead.phone_no, leadData.lead.lead_crm_id)}>
@@ -295,9 +315,14 @@ export default function FollowUp(props) {
                             />
                         </div>
                         <div>
-                            <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={vertageCall} autoHideDuration={3000} onClose={disableDialerPopUp}>
+                            <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={dialerCall} autoHideDuration={3000} onClose={disableDialerPopUp}>
                                 <Alert onClose={disableDialerPopUp} severity="info">
                                     Calling...
+                                </Alert>
+                            </Snackbar>
+                            <Snackbar anchorOrigin={{ vertical: "top", horizontal: "center" }} open={isAutoDialerStart} autoHideDuration={3000} onClose={disableDialerPopUp}>
+                                <Alert onClose={disableDialerPopUp} severity="info">
+                                    Auto dial mode is on
                                 </Alert>
                             </Snackbar>
                         </div>

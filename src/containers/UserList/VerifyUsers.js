@@ -6,6 +6,7 @@ import axios from 'axios';
 import baseUrl from '../../global/api';
 import { getProfileData } from '../../global/leadsGlobalData'
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
+import EmiCalculator from '../Emicalculator/EmiCalculator';
 const useStyles = makeStyles({
     container: {
         overflow: 'auto',
@@ -72,8 +73,16 @@ export default function VerifyUsers() {
                 setVerifyUsers(userList);
             })
     }
+    const [openCalculate, setopenCalculate] = useState(false);
+    const openCalculator = () => {
+        setopenCalculate(true);
+    }
+    const closeCalculator = () => {
+        setopenCalculate(false);
+    }
     return (
-        <PageLayerSection>
+        <PageLayerSection ActualEmiCalculate={openCalculator}>
+            <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
             <TableContainer component={Paper} className={classes.container}>
                 <Table className={classes.table} aria-label="user table">
                     <TableHead className={classes.tableheading}>

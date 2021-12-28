@@ -8,6 +8,13 @@
   margin-bottom: 1.11111vw;
 }
 
+.followUpBtnContainer .followUpAutoDialerStartBtn {
+  background-color: #14cc9e;
+  cursor: pointer;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+
 .followUpBtnContainer .followbtn {
   margin-right: 1.04167vw;
   margin-left: 1.04167vw;
@@ -21,5 +28,11 @@
 
 .followUpBtnContainer .followbtn button span {
   color: #fff;
+}
+
+.followUpBtnContainer .followUpAutoDialerStartBtn:hover {
+  background-color: #14cc9e;
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }
 /*# sourceMappingURL=followup.css.map */

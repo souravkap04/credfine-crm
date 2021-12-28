@@ -3,7 +3,7 @@ import PageLayerSection from '../PageLayerSection/PageLayerSection';
 import './leadDetailsNew.css';
 import axios from "axios";
 import baseUrl from "../../global/api";
-import { clickToCallApi, vertageDialerApi } from "../../global/callApi";
+import {haloocomNoidaDialerApi, haloocomMumbaiDialerApi } from "../../global/callApi";
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import MuiAccordion from '@material-ui/core/Accordion';
@@ -28,6 +28,7 @@ import {
     getStatusData
 } from "../../global/leadsGlobalData";
 import { useParams, useHistory, useLocation, NavLink } from 'react-router-dom';
+import EmiCalculator from '../Emicalculator/EmiCalculator';
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 function Alert(props) {
@@ -112,6 +113,13 @@ export default function LeadDetailsNew(props) {
     const handleChange = (panel) => (event, newExpanded) => {
         setExpanded(newExpanded ? panel : false);
     };
+    const [openCalculate, setopenCalculate] = useState(false);
+    const openCalculator = () => {
+        setopenCalculate(true);
+    }
+    const closeCalculator = () => {
+        setopenCalculate(false);
+    }
     const profileData = getProfileData();
     const banks = getBank();
     const residentType = getResidentType();
@@ -164,7 +172,7 @@ export default function LeadDetailsNew(props) {
     const [onGoingCall, setOnGoingCall] = useState(false);
     const [isCallNotConnected, setIsCallNotConnected] = useState(false)
     const [disableHangupBtn, setDisableHangupBtn] = useState(true);
-    const [vertageCall, setVertageCall] = useState(false);
+    const [dialerCall, setDialerCall] = useState(false);
     const [colorTick, setcolorTick] = useState(false);
     const [colorTick2, setcolorTick2] = useState(false);
     const [colorTick3, setcolorTick3] = useState(false);
@@ -180,11 +188,11 @@ export default function LeadDetailsNew(props) {
     const [Roi, setRoi] = useState('');
     const [disbursedError, setdisbursedError] = useState([false, false]);
     const [colorRed, setcolorRed] = useState([false, false, false, false]);
+    const [isAutoDialerEnd,setIsAutoDialerEnd] = useState(false);
     let statusData = getStatusData();
     let { leadid } = useParams();
     let history = useHistory();
     let location = useLocation();
-
     const maskPhoneNo = (phoneNo) => {
         let data = phoneNo;
         let unMaskdata = data.slice(-4);
@@ -560,36 +568,24 @@ export default function LeadDetailsNew(props) {
         setIsLeadError(false);
         setIsLeadDetails(false);
         setisCopy(false);
+        setIsAutoDialerEnd(false);
     }
     const clickToCall = async (customerNo, leadID) => {
-        if (profileData.dialer === 'TATA') {
-            const headers = {
-                'accept': 'application/json',
-                'content-type': 'application/json'
-            };
-            const item = { customer_number: customerNo, api_key: profileData.dialer_pass };
-            axios.interceptors.request.use((request) => {
-                setIsCalling(true);
-                return request;
-            })
-            await axios.post(clickToCallApi, item, { headers })
+         if (profileData.dialer === 'HALOOCOM-Noida') {
+            await axios.post(`${haloocomNoidaDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`)
                 .then((response) => {
-                    if (response.data.success) {
-                        setIsCalling(false);
-                        setOnGoingCall(true);
-                    } else {
-                        setIsCallNotConnected(true)
+                    setDialerCall(true);
+                    setDisableHangupBtn(false);
+                    if (response.status === 200) {
+                        localStorage.setItem('callHangUp', true)
                     }
                 }).catch((error) => {
-                    if (error.message) {
-                        setIsCallConnect(true);
-                        setIsCalling(false);
-                    }
+                    console.log('error');
                 })
-        } else if (profileData.dialer === 'VERTAGE') {
-            await axios.post(`${vertageDialerApi}&user=${profileData.vertage_id}&pass=${profileData.vertage_pass}&agent_user=${profileData.vertage_id}&function=external_dial&value=${customerNo}&phone_code=+91&search=YES&preview=NO&focus=YES`)
+        } else if (profileData.dialer === 'HALOOCOM-Mumbai') {
+            await axios.post(`${haloocomMumbaiDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`)
                 .then((response) => {
-                    setVertageCall(true);
+                    setDialerCall(true);
                     setDisableHangupBtn(false);
                     if (response.status === 200) {
                         localStorage.setItem('callHangUp', true)
@@ -600,41 +596,69 @@ export default function LeadDetailsNew(props) {
         }
     }
     const hangupCallHandler = async () => {
-        await axios.post(`${vertageDialerApi}&user=${profileData.vertage_id}&pass=${profileData.vertage_pass}&agent_user=${profileData.vertage_id}&function=external_hangup&value=1`)
-            .then((response) => {
-                // setDisableDisposeBtn(false);
-                setCallHangUpState(false);
-                if (response.status === 200) {
-                    localStorage.removeItem('callHangUp')
-                    return disposeCallHandler()
-                }
-                // setCallHangUpState(true);
-            }).catch((error) => {
-                console.log(error);
-            })
+        if (profileData.dialer === "HALOOCOM-Noida") {
+            await axios.post(`${haloocomNoidaDialerApi}/action.php?user=${profileData.vertage_id}&type=Hangup&disposition`)
+                .then((response) => {
+                    // setDisableDisposeBtn(false);
+                    setCallHangUpState(false);
+                    if (response.status === 200) {
+                        localStorage.removeItem('callHangUp')
+                        return disposeCallHandler()
+                    }
+                    // setCallHangUpState(true);
+                }).catch((error) => {
+                    console.log(error);
+                })
+        } else if (profileData.dialer === "HALOOCOM-Mumbai") {
+            await axios.post(`${haloocomMumbaiDialerApi}/action.php?user=${profileData.vertage_id}&type=Hangup&disposition`)
+                .then((response) => {
+                    // setDisableDisposeBtn(false);
+                    setCallHangUpState(false);
+                    if (response.status === 200) {
+                        localStorage.removeItem('callHangUp')
+                        return disposeCallHandler()
+                    }
+                    // setCallHangUpState(true);
+                }).catch((error) => {
+                    console.log(error);
+                })
+        }
     }
-    const disposeCallHandler = async () => {
-        await axios.post(`${vertageDialerApi}&user=${profileData.vertage_id}&pass=${profileData.vertage_pass}&agent_user=${profileData.vertage_id}&function=external_status&value=A`)
-            .then((response) => {
-                sethangUpSnacks(true);
-                setCallHangUpState(true);
-            }).catch((error) => {
-                console.log(error);
-            })
+    const disposeCallHandler = () => {
+        // await axios.post()
+        //     .then((response) => {
+        //         sethangUpSnacks(true);
+        //         setCallHangUpState(true);
+        //     }).catch((error) => {
+        //         console.log(error);
+        //     })
+        sethangUpSnacks(true);
+        setCallHangUpState(true);
+
     }
     const disableDialerPopUp = () => {
-        setVertageCall(false)
+        setDialerCall(false)
         setDisableHangupBtn(false)
     }
+    const endAutoDialerBtnHandler = ()=>{
+        setIsAutoDialerEnd(true);
+        localStorage.removeItem('auto_dialer');
+    }
     return (
-        <PageLayerSection pageTitle="Lead Details" className={classes.scrollEnable} offerButton={true}>
+        <PageLayerSection isDisplaySearchBar={true} pageTitle="Lead Details" className={classes.scrollEnable} offerButton={true} isWhatsapp={true} whatsappNumber={mobileNo} endAutoDialerBtn={true} endAutoDialerClick={()=>endAutoDialerBtnHandler()} ActualEmiCalculate={openCalculator}>
+            <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
             {/* Errors SnackBars Start */}
             <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={hangUpSnacks} autoHideDuration={1500} onClose={disableHangUpSnacks}>
                 <Alert onClose={disableHangUpSnacks} severity="success">
                     Hang Up Successfully...
                 </Alert>
             </Snackbar>
-            {profileData.dialer === 'VERTAGE' ? <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={localStorage.getItem("callHangUp") && localStorage.getItem("callHangUp") !== null ? true : callInProgress} autoHideDuration={1500} onClose={disableHangUpSnacks}>
+            <Snackbar anchorOrigin={{ vertical: "top", horizontal: "center" }} open={isAutoDialerEnd} autoHideDuration={1500} onClose={disableHangUpSnacks}>
+                <Alert onClose={disableHangUpSnacks} severity="info">
+                    Auto dialer mode is off
+                </Alert>
+            </Snackbar>
+            {profileData.dialer === 'HALOOCOM' ? <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={localStorage.getItem("callHangUp") && localStorage.getItem("callHangUp") !== null ? true : callInProgress} autoHideDuration={1500} onClose={disableHangUpSnacks}>
                 <Alert onClose={disableHangUpSnacks} severity="info">
                     Call in progress....
                 </Alert>
@@ -1278,7 +1302,7 @@ export default function LeadDetailsNew(props) {
                 </Grid>
                 <Grid className="callConatiner" lg={3}>
                     <Grid className="callAdjustContainer">
-                        {profileData.dialer === 'TATA' ? null : <div className="buttonAdjust"><Button
+                         <div className="buttonAdjust"><Button
                             className="callBtn"
                             color="primary"
                             variant="contained"
@@ -1294,7 +1318,8 @@ export default function LeadDetailsNew(props) {
                                 disabled={localStorage.getItem("callHangUp") && localStorage.getItem("callHangUp") !== null ? false : callHangUpState}
                                 onClick={hangupCallHandler}>
                                 End
-                            </Button></div>}
+                            </Button>
+                            </div>
                         <Grid>
                             <TextField
                                 className="textField"
@@ -1594,7 +1619,7 @@ export default function LeadDetailsNew(props) {
                 </Grid>
             </Grid>}
             <div>
-                <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={vertageCall} autoHideDuration={1500} onClose={disableDialerPopUp}>
+                <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={dialerCall} autoHideDuration={1500} onClose={disableDialerPopUp}>
                     <Alert onClose={disableDialerPopUp} severity="info">
                         Calling...
                     </Alert>
