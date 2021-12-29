@@ -808,6 +808,15 @@ export default function HDFCFrom() {
                     }}>
                         <img src={back} alt="" />
                     </div>
+                    <div className="needHelpContainer">
+                        <div className="needHelpText">Need Help?</div>
+                        <div className="rightPart">
+                            <div className="phoneCall">
+                                <img src={phoneCall} alt="" />
+                            </div>
+                            <div className="numberText">7045330702</div>
+                        </div>
+                    </div>
                 </div>
                 <div className="texualContainer">
                     <div className="headText2"><strong>Congratulations!</strong></div>
