@@ -669,10 +669,6 @@ export default function HDFCFrom() {
                     //     }
                     // }}
                     />
-                    <div className="checkboxContainer">
-                        <Checkbox className="check" />
-                        <p>By submitting I provide my consent to retrieve my credit information from Credit Bureaus including CIBIL to check eligibility for this application. I understand that this may impact my credit score.</p>
-                    </div>
                 </FormContainer>
                 <div className="uploadContainer">
                     <div className="uploadBankStatementContainer">
@@ -791,6 +787,10 @@ export default function HDFCFrom() {
                         <option value="">Select One</option>
                         <option value="voterId">Voter ID</option>
                     </TextField>
+                    <div className="checkboxContainer">
+                        <Checkbox className="check" />
+                        <p>By submitting I provide my consent to retrieve my credit information from Credit Bureaus including CIBIL to check eligibility for this application. I understand that this may impact my credit score.</p>
+                    </div>
                 </FormContainer>
             </div> : ''}
             {isApprovalStatus ? <div className="adjustBackground" style={{ height: '100vh' }}>
