@@ -8,7 +8,10 @@ import Checkbox from '@material-ui/core/Checkbox';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import uploadSRC from '../../images/forms/fileUpload.svg';
 import List from '@material-ui/core/List';
+import { useHistory } from 'react-router-dom';
+import phoneCall from '../../images/forms/phoneCall.svg';
 export default function HDFCFrom() {
+    const history = useHistory();
     const [isPersonalDetail, setisPersonalDetail] = useState(true);
     const [isPersonalProgress, setisPersonalProgress] = useState(false);
     const [isCurrentResidentialDetail, setisCurrentResidentialDetail] = useState(false);
@@ -25,7 +28,9 @@ export default function HDFCFrom() {
     return <div className="HDFCFormContainer">
         <div className="leftSection">
             <div className="logoContainer">
-                <img src={logo} alt="" />
+                <div className="logoImage">
+                    <img src={logo} alt="" />
+                </div>
             </div>
             <List className="list">
                 <div className="progressContainer">
@@ -99,8 +104,17 @@ export default function HDFCFrom() {
         <div className="rightSection">
             {isPersonalDetail ? <div className="adjustBackground">
                 <div className="headerContainer">
-                    <div className="backButton">
+                    <div className="backButton" onClick={() => history.goBack()}>
                         <img src={back} alt="" />
+                    </div>
+                    <div className="needHelpContainer">
+                        <div className="needHelpText">Need Help?</div>
+                        <div className="rightPart">
+                            <div className="phoneCall">
+                                <img src={phoneCall} alt="" />
+                            </div>
+                            <div className="numberText">7045330702</div>
+                        </div>
                     </div>
                 </div>
                 <div className="texualContainer">
@@ -376,43 +390,6 @@ export default function HDFCFrom() {
                     // onChange={(e) => setEmail(e.target.value)}
                     />
                 </FormContainer>
-            </div> : ''}
-            {isCurrentResidentialDetail ? <div className="adjustBackground">
-                <div className="headerContainer">
-                    <div className="backButton" onClick={() => {
-                        setisPersonalDetail(true)
-                        setisCurrentResidentialDetail(false)
-                        setisPersonalProgress(false)
-                    }}>
-                        <img src={back} alt="" />
-                    </div>
-                </div>
-                <div className="texualContainer">
-                    <div className="headText"><strong>Congratulations!</strong> your personal loan is a few steps away…</div>
-                    <div className="offerContainer">
-                        <div className="offerBox">
-                            <div className="offerHead">Loan Amount</div>
-                            <div className="offerText">₹ 15,00,000</div>
-                        </div>
-                        <div className="offerBox">
-                            <div className="offerHead">Loan Tenure</div>
-                            <div className="offerText">5 Years</div>
-                        </div>
-                        <div className="offerBox">
-                            <div className="offerHead">Interest Rate</div>
-                            <div className="offerText">10.25%</div>
-                        </div>
-                        <div className="offerBox">
-                            <div className="offerHead">EMI</div>
-                            <div className="offerText">₹ 27,575</div>
-                        </div>
-                        <div className="offerBox">
-                            <div className="offerHead">Processing Fee</div>
-                            <div className="offerText">₹ 1,999</div>
-                        </div>
-                    </div>
-                </div>
-                <div className="offerBorder"></div>
                 <FormContainer Name="Residential Details" onClick={() => {
                     setisCurrentResidentialDetail(false)
                     setisBusinessDetail(true)
@@ -496,43 +473,6 @@ export default function HDFCFrom() {
                         <option key="" value="">Select</option>
                     </TextField>
                 </FormContainer>
-            </div> : ''}
-            {isBusinessDetail ? <div className="adjustBackground">
-                <div className="headerContainer">
-                    <div className="backButton" onClick={() => {
-                        setisCurrentResidentialDetail(true)
-                        setisBusinessDetail(false)
-                        setisCurrentProgress(false)
-                    }}>
-                        <img src={back} alt="" />
-                    </div>
-                </div>
-                <div className="texualContainer">
-                    <div className="headText"><strong>Congratulations!</strong> your personal loan is a few steps away…</div>
-                    <div className="offerContainer">
-                        <div className="offerBox">
-                            <div className="offerHead">Loan Amount</div>
-                            <div className="offerText">₹ 15,00,000</div>
-                        </div>
-                        <div className="offerBox">
-                            <div className="offerHead">Loan Tenure</div>
-                            <div className="offerText">5 Years</div>
-                        </div>
-                        <div className="offerBox">
-                            <div className="offerHead">Interest Rate</div>
-                            <div className="offerText">10.25%</div>
-                        </div>
-                        <div className="offerBox">
-                            <div className="offerHead">EMI</div>
-                            <div className="offerText">₹ 27,575</div>
-                        </div>
-                        <div className="offerBox">
-                            <div className="offerHead">Processing Fee</div>
-                            <div className="offerText">₹ 1,999</div>
-                        </div>
-                    </div>
-                </div>
-                <div className="offerBorder"></div>
                 <FormContainer Name="Business Details" onClick={() => {
                     setisBusinessDetail(false)
                     setisPersonalReference(true)
@@ -679,43 +619,6 @@ export default function HDFCFrom() {
                     // onChange={(e) => setSalaryBankAcc(e.target.value)}
                     />
                 </FormContainer>
-            </div> : ''}
-            {isPersonalReference ? <div className="adjustBackground">
-                <div className="headerContainer">
-                    <div className="backButton" onClick={() => {
-                        setisBusinessDetail(true)
-                        setisPersonalReference(false)
-                        setisBusinessProgress(false)
-                    }}>
-                        <img src={back} alt="" />
-                    </div>
-                </div>
-                <div className="texualContainer">
-                    <div className="headText"><strong>Congratulations!</strong> your personal loan is a few steps away…</div>
-                    <div className="offerContainer">
-                        <div className="offerBox">
-                            <div className="offerHead">Loan Amount</div>
-                            <div className="offerText">₹ 15,00,000</div>
-                        </div>
-                        <div className="offerBox">
-                            <div className="offerHead">Loan Tenure</div>
-                            <div className="offerText">5 Years</div>
-                        </div>
-                        <div className="offerBox">
-                            <div className="offerHead">Interest Rate</div>
-                            <div className="offerText">10.25%</div>
-                        </div>
-                        <div className="offerBox">
-                            <div className="offerHead">EMI</div>
-                            <div className="offerText">₹ 27,575</div>
-                        </div>
-                        <div className="offerBox">
-                            <div className="offerHead">Processing Fee</div>
-                            <div className="offerText">₹ 1,999</div>
-                        </div>
-                    </div>
-                </div>
-                <div className="offerBorder"></div>
                 <FormContainer Name="Personal Reference" onClick={() => {
                     setisPersonalReference(false)
                     setisUploadDocument(true)
@@ -771,44 +674,6 @@ export default function HDFCFrom() {
                         <p>By submitting I provide my consent to retrieve my credit information from Credit Bureaus including CIBIL to check eligibility for this application. I understand that this may impact my credit score.</p>
                     </div>
                 </FormContainer>
-            </div> : ''}
-            {isUploadDocument ? <div className="adjustBackground">
-                <div className="headerContainer">
-                    <div className="backButton" onClick={() => {
-                        setisUploadDocument(false)
-                        setisReferenceProgress(false)
-                        setisPersonalReference(true)
-                        setisBankStatement(false)
-                    }}>
-                        <img src={back} alt="" />
-                    </div>
-                </div>
-                <div className="texualContainer">
-                    <div className="headText"><strong>Congratulations!</strong> your personal loan is a few steps away…</div>
-                    <div className="offerContainer">
-                        <div className="offerBox">
-                            <div className="offerHead">Loan Amount</div>
-                            <div className="offerText">₹ 15,00,000</div>
-                        </div>
-                        <div className="offerBox">
-                            <div className="offerHead">Loan Tenure</div>
-                            <div className="offerText">5 Years</div>
-                        </div>
-                        <div className="offerBox">
-                            <div className="offerHead">Interest Rate</div>
-                            <div className="offerText">10.25%</div>
-                        </div>
-                        <div className="offerBox">
-                            <div className="offerHead">EMI</div>
-                            <div className="offerText">₹ 27,575</div>
-                        </div>
-                        <div className="offerBox">
-                            <div className="offerHead">Processing Fee</div>
-                            <div className="offerText">₹ 1,999</div>
-                        </div>
-                    </div>
-                </div>
-                <div className="offerBorder"></div>
                 <div className="uploadContainer">
                     <div className="uploadBankStatementContainer">
                         <div className="titleContainer">
@@ -869,12 +734,16 @@ export default function HDFCFrom() {
                         </div>
                     </div>
                 </div>
-                <FormContainer className="uploadDocumentFormContainer" onClick={() => {
+                <FormContainer isSaveNextButton={true} className="uploadDocumentFormContainer" onClick={() => {
                     setisApprovalStatus(true)
-                    setisUploadDocument(false)
+                    setisPersonalDetail(false)
                     setisApprovalStatusProgress(true)
                     setisUploadProgress(true)
                     setisBankStatement(true)
+                    setisPersonalProgress(true)
+                    setisCurrentProgress(true)
+                    setisBusinessProgress(true)
+                    setisReferenceProgress(true)
                 }}>
                     <TextField
                         className="textField"
@@ -924,13 +793,18 @@ export default function HDFCFrom() {
                     </TextField>
                 </FormContainer>
             </div> : ''}
-            {isApprovalStatus ? <div className="adjustBackground">
+            {isApprovalStatus ? <div className="adjustBackground" style={{ height: '100vh' }}>
                 <div className="headerContainer">
                     <div className="backButton" onClick={() => {
                         setisApprovalStatus(false)
-                        setisUploadDocument(true)
+                        setisPersonalDetail(true)
                         setisUploadProgress(false)
                         setisApprovalStatusProgress(false)
+                        setisPersonalProgress(false)
+                        setisBankStatement(false)
+                        setisCurrentProgress(false)
+                        setisBusinessProgress(false)
+                        setisReferenceProgress(false)
                     }}>
                         <img src={back} alt="" />
                     </div>
@@ -942,7 +816,6 @@ export default function HDFCFrom() {
                         <div className="btnText">TRACK STATUS</div>
                     </div>
                 </div>
-
             </div> : ''}
         </div>
     </div>

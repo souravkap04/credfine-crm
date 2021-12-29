@@ -11,8 +11,8 @@
 
 .HDFCFormContainer .leftSection .logoContainer {
   width: 100%;
-  height: 5.922rem;
-  background-color: #fff;
+  height: 4.41rem;
+  background-color: #fafafa;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -22,6 +22,22 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+}
+
+@media only screen and (max-width: 800px) {
+  .HDFCFormContainer .leftSection .logoContainer {
+    display: none;
+  }
+}
+
+.HDFCFormContainer .leftSection .logoContainer .logoImage {
+  width: 8.84835rem;
+  height: 2.52rem;
+}
+
+.HDFCFormContainer .leftSection .logoContainer .logoImage img {
+  width: 100%;
+  height: 100%;
 }
 
 .HDFCFormContainer .leftSection .list {
@@ -130,7 +146,7 @@
   font-size: 0.945rem;
   font-weight: 500;
   margin-left: 0.504rem;
-  margin-top: -0.126rem;
+  margin-top: 0.063rem;
   color: #e5e9ff;
 }
 
@@ -154,13 +170,13 @@
 .HDFCFormContainer .rightSection {
   position: relative;
   width: auto;
-  height: 100%;
+  height: auto;
   margin-left: 14.994rem;
   background-color: #fff;
 }
 
 .HDFCFormContainer .rightSection .adjustBackground {
-  height: 120vh;
+  height: 290vh;
   background-color: #fff;
 }
 
@@ -174,15 +190,31 @@
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
-  width: 53.613rem;
-  height: 5.922rem;
-  margin: auto;
+  width: 100%;
+  height: 4.41rem;
+  background-color: #fcfcfc;
+}
+
+@media only screen and (max-width: 800px) {
+  .HDFCFormContainer .rightSection .headerContainer {
+    width: 100%;
+    height: 13.33333vw;
+  }
 }
 
 .HDFCFormContainer .rightSection .headerContainer .backButton {
+  margin-left: 2.961rem;
   width: 1.512rem;
   height: 1.512rem;
   cursor: pointer;
+}
+
+@media only screen and (max-width: 800px) {
+  .HDFCFormContainer .rightSection .headerContainer .backButton {
+    margin-left: 4vw;
+    width: 5.06667vw;
+    height: 5.06667vw;
+  }
 }
 
 .HDFCFormContainer .rightSection .headerContainer .backButton img {
@@ -190,8 +222,52 @@
   height: 100%;
 }
 
+.HDFCFormContainer .rightSection .headerContainer .needHelpContainer {
+  margin-right: 2.709rem;
+}
+
+@media only screen and (max-width: 800px) {
+  .HDFCFormContainer .rightSection .headerContainer .needHelpContainer {
+    display: none;
+  }
+}
+
+.HDFCFormContainer .rightSection .headerContainer .needHelpContainer .needHelpText {
+  font-size: 0.756rem;
+  color: #535ad1;
+  line-height: 0.882rem;
+  margin-left: 1.386rem;
+}
+
+.HDFCFormContainer .rightSection .headerContainer .needHelpContainer .rightPart {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.HDFCFormContainer .rightSection .headerContainer .needHelpContainer .rightPart .phoneCall {
+  width: 1.134rem;
+  height: 1.134rem;
+  margin-right: 0.252rem;
+}
+
+.HDFCFormContainer .rightSection .headerContainer .needHelpContainer .rightPart .phoneCall img {
+  width: 100%;
+  height: 100%;
+}
+
+.HDFCFormContainer .rightSection .headerContainer .needHelpContainer .rightPart .numberText {
+  font-size: 1.134rem;
+  font-weight: bold;
+  color: #535ad1;
+}
+
 .HDFCFormContainer .rightSection .texualContainer {
   margin: auto;
+  margin-top: 1.449rem;
   width: 53.613rem;
 }
 

@@ -309,13 +309,6 @@ export default function PersonalLoanForm() {
                 <div className="progressContainer">
                     <div className="progressBox">
                         <div className="progressIconBox">
-                            <i class="fas fa-check-circle activeiconBar"></i>
-                            <div className="bottomProgress activebottomProgress"></div>
-                        </div>
-                        <div className="iconText activeiconText">Mobile Verified</div>
-                    </div>
-                    <div className="progressBox">
-                        <div className="progressIconBox">
                             <div className={isPersonalProgress ? "fas fa-check-circle activeiconBar" : isPersonalDetail ? "fas fa-circle activeBar" : "fas fa-circle iconBar"}></div>
                             <div className={isPersonalProgress ? "bottomProgress activebottomProgress" : "bottomProgress"}></div>
                         </div>
@@ -416,7 +409,7 @@ export default function PersonalLoanForm() {
                             </div>
                         </div>
                     </div>
-                    <FormContainer TitleText="Personal Loan Application" Name="Loan Amt &amp; Personal Details" iconImage={PL} onClick={() => {
+                    <FormContainer isSaveNextButton={true} TitleText="Personal Loan Application" Name="Loan Amt &amp; Personal Details" iconImage={PL} onClick={() => {
                         let regex = /[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(pancardNo);
                         if (pancardNo !== '' && !regex) {
                             setAlertMessage('Inavlid PAN Number')
@@ -550,7 +543,7 @@ export default function PersonalLoanForm() {
                             </div>
                         </div>
                     </div>
-                    <FormContainer TitleText="Personal Loan Application" Name="Loan Amt &amp; Personal Details" iconImage={PL} onClick={() => {
+                    <FormContainer isSaveNextButton={true} TitleText="Personal Loan Application" Name="Loan Amt &amp; Personal Details" iconImage={PL} onClick={() => {
                         updateLeadDetails(leadid)
                         setisCurrentResidentialDetail(false)
                         setisEmploymentIncomeDetail(true)
@@ -643,7 +636,7 @@ export default function PersonalLoanForm() {
                             </div>
                         </div>
                     </div>
-                    <FormContainer TitleText="Personal Loan Application" Name="Loan Amt &amp; Personal Details" iconImage={PL} onClick={() => {
+                    <FormContainer isSaveNextButton={true} TitleText="Personal Loan Application" Name="Loan Amt &amp; Personal Details" iconImage={PL} onClick={() => {
                         updateLeadDetails(leadid)
                         setisEmploymentIncomeDetail(false)
                         setisObligation(true)
@@ -846,7 +839,7 @@ export default function PersonalLoanForm() {
                             </div>
                         </div>
                     </div>
-                    <FormContainer TitleText="Personal Loan Application" Name="Loan Amt &amp; Personal Details" iconImage={PL} onClick={() => {
+                    <FormContainer isSaveNextButton={true} TitleText="Personal Loan Application" Name="Loan Amt &amp; Personal Details" iconImage={PL} onClick={() => {
                         updateLeadDetails(leadid)
                         setisExclusiveOffers(true)
                         setisObligationProgress(true)

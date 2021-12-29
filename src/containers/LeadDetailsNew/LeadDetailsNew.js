@@ -644,9 +644,6 @@ export default function LeadDetailsNew(props) {
         setIsAutoDialerEnd(true);
         localStorage.removeItem('auto_dialer');
     }
-    const getID = () => {
-        return localStorage.setItem('getID', leadid)
-    }
     return (
         <PageLayerSection isDisplaySearchBar={true} pageTitle="Lead Details" className={classes.scrollEnable} offerButton={true} isWhatsapp={true} whatsappNumber={mobileNo} endAutoDialerBtn={true} endAutoDialerClick={() => endAutoDialerBtnHandler()} ActualEmiCalculate={openCalculator}>
             <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
@@ -1251,8 +1248,7 @@ export default function LeadDetailsNew(props) {
                         </AccordionDetails>
                     </Accordion>
                     <Grid className="completeJourneyContainer">
-                        {/* to={`/dashboards/PersonalLoanForm/${leadid}`} */}
-                        <NavLink to={`/dashboards/ProductLogin`} onClick={() => getID()}>
+                        <NavLink to={`/dashboards/PersonalLoanForm/${leadid}`}>
                             <Button
                                 className="journeyBtn"
                                 color="primary"
