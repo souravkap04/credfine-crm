@@ -1,4 +1,5 @@
 $desk: 0.063;
+$mob: 100 / 375;
 .HDFCFormContainer {
     position: relative;
     .leftSection {
@@ -8,12 +9,22 @@ $desk: 0.063;
         height: 100%;
         .logoContainer {
             width: 100%;
-            height: 94 * $desk + rem;
-            background-color: #fff;
+            height: 70 * $desk + rem;
+            background-color: #fafafa;
             display: flex;
             justify-content: center;
             align-items: center;
-            // border-right: 1px solid #8669d9;
+            @media only screen and (max-width: 800px) {
+                display: none;
+            }
+            .logoImage {
+                width: 140.45 * $desk + rem;
+                height: 40 * $desk + rem;
+                img {
+                    width: 100%;
+                    height: 100%;
+                }
+            }
         }
         .list {
             height: 88% !important;
@@ -83,7 +94,7 @@ $desk: 0.063;
                         font-size: 15 * $desk + rem;
                         font-weight: 500;
                         margin-left: 8 * $desk + rem;
-                        margin-top: -2 * $desk + rem;
+                        margin-top: 1 * $desk + rem;
                         color: #e5e9ff;
                     }
                     .subIconText {
@@ -107,33 +118,77 @@ $desk: 0.063;
     .rightSection {
         position: relative;
         width: auto;
-        height: 100%;
+        height: auto;
         margin-left: 238 * $desk + rem;
         background-color: #fff;
         .adjustBackground {
-            height: 120vh;
+            height: 290vh;
             background-color: #fff;
         }
         .headerContainer {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            width: 851 * $desk + rem;
-            height: 94 * $desk + rem;
-            margin: auto;
+            width: 100%;
+            height: 70 * $desk + rem;
+            // margin: auto;
+            background-color: #fcfcfc;
+            @media only screen and (max-width: 800px) {
+                width: 100%;
+                height: 50 * $mob + vw;
+            }
             .backButton {
-                // margin-left: 38 * $desk + rem;
+                margin-left: 47 * $desk + rem;
                 width: 24 * $desk + rem;
                 height: 24 * $desk + rem;
                 cursor: pointer;
+                @media only screen and (max-width: 800px) {
+                    margin-left: 15 * $mob + vw;
+                    width: 19 * $mob + vw;
+                    height: 19 * $mob + vw;
+                }
                 img {
                     width: 100%;
                     height: 100%;
                 }
             }
+            .needHelpContainer {
+                margin-right: 43 * $desk + rem;
+                @media only screen and (max-width: 800px) {
+                    display: none;
+                }
+                .needHelpText {
+                    font-size: 12 * $desk + rem;
+                    color: #535ad1;
+                    // font-family: Lato-regular;
+                    line-height: 14 * $desk + rem;
+                    margin-left: 22 * $desk + rem;
+                }
+                .rightPart {
+                    display: flex;
+                    justify-content: center;
+                    // align-items: center;
+                    .phoneCall {
+                        width: 18 * $desk + rem;
+                        height: 18 * $desk + rem;
+                        margin-right: 4 * $desk + rem;
+                        img {
+                            width: 100%;
+                            height: 100%;
+                        }
+                    }
+                    .numberText {
+                        font-size: 18 * $desk + rem;
+                        // font-family: Lato-regular;
+                        font-weight: bold;
+                        color: #535ad1;
+                    }
+                }
+            }
         }
         .texualContainer {
             margin: auto;
+            margin-top: 23 * $desk + rem;
             width: 851 * $desk + rem;
             .headText {
                 font-size: 32 * $desk + rem;

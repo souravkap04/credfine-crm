@@ -16,12 +16,12 @@ export default function FormContainer(props) {
                     {props.children}
                 </div>
                 <div className="borderBottom"></div>
-                <div className="saveButton" onClick={props.onClick}>
+                {props.isSaveNextButton ? <div className="saveButton" onClick={props.onClick}>
                     <div className="btnText">SAVE &amp; NEXT</div>
                     <div className="arrowIcon">
                         <img src={RightArrow} alt="" />
                     </div>
-                </div>
+                </div> : ''}
             </div>
         </React.Fragment>
     )
