@@ -1,0 +1,819 @@
+.HDFCFormContainer {
+  position: relative;
+}
+
+.HDFCFormContainer .leftSection {
+  position: fixed;
+  width: 14.994rem;
+  background-color: #074a8e;
+  height: 100%;
+}
+
+.HDFCFormContainer .leftSection .logoContainer {
+  width: 100%;
+  height: 4.41rem;
+  background-color: #fafafa;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+@media only screen and (max-width: 800px) {
+  .HDFCFormContainer .leftSection .logoContainer {
+    display: none;
+  }
+}
+
+.HDFCFormContainer .leftSection .logoContainer .logoImage {
+  width: 8.84835rem;
+  height: 2.52rem;
+}
+
+.HDFCFormContainer .leftSection .logoContainer .logoImage img {
+  width: 100%;
+  height: 100%;
+}
+
+.HDFCFormContainer .leftSection .list {
+  height: 88% !important;
+  overflow-y: auto !important;
+}
+
+.HDFCFormContainer .leftSection .list .progressContainer {
+  margin-top: 2.835rem;
+  margin-bottom: 2.835rem;
+}
+
+.HDFCFormContainer .leftSection .list .progressContainer .progressBox {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.HDFCFormContainer .leftSection .list .progressContainer .progressBox .progressIconBox {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-left: 1.953rem;
+}
+
+.HDFCFormContainer .leftSection .list .progressContainer .progressBox .progressIconBox .iconBar {
+  width: 1.134rem;
+  height: 1.134rem;
+  background-color: #2b72ba;
+  border-radius: 50%;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+
+.HDFCFormContainer .leftSection .list .progressContainer .progressBox .progressIconBox .activeCurrent {
+  background-color: #fff;
+}
+
+.HDFCFormContainer .leftSection .list .progressContainer .progressBox .progressIconBox .activeiconBar {
+  background-color: #1cb980;
+}
+
+.HDFCFormContainer .leftSection .list .progressContainer .progressBox .progressIconBox .bottomProgress {
+  width: 0;
+  height: 3.213rem;
+  border: solid 1px #1c86fc;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+
+.HDFCFormContainer .leftSection .list .progressContainer .progressBox .progressIconBox .activebottomProgress {
+  border: solid 1px #1c86fc;
+}
+
+.HDFCFormContainer .leftSection .list .progressContainer .progressBox .subProgressIconBox {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-left: 2.142rem;
+}
+
+.HDFCFormContainer .leftSection .list .progressContainer .progressBox .subProgressIconBox .subIconBar {
+  width: 0.756rem;
+  height: 0.756rem;
+  background-color: #2b72ba;
+  border-radius: 50%;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+
+.HDFCFormContainer .leftSection .list .progressContainer .progressBox .subProgressIconBox .activeCurrent {
+  background-color: #fff;
+}
+
+.HDFCFormContainer .leftSection .list .progressContainer .progressBox .subProgressIconBox .activeiconBar {
+  background-color: #1cb980;
+}
+
+.HDFCFormContainer .leftSection .list .progressContainer .progressBox .subProgressIconBox .bottomProgress {
+  width: 0;
+  height: 3.213rem;
+  border: solid 1px #1c86fc;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+
+.HDFCFormContainer .leftSection .list .progressContainer .progressBox .subProgressIconBox .activebottomProgress {
+  border: solid 1px #1c86fc;
+}
+
+.HDFCFormContainer .leftSection .list .progressContainer .progressBox .iconText {
+  font-size: 0.945rem;
+  font-weight: 500;
+  margin-left: 0.504rem;
+  margin-top: 0.063rem;
+  color: #e5e9ff;
+}
+
+.HDFCFormContainer .leftSection .list .progressContainer .progressBox .subIconText {
+  font-size: 0.882rem;
+  font-weight: 500;
+  margin-left: 0.693rem;
+  margin-top: -0.2961rem;
+  color: #e5e9ff;
+}
+
+.HDFCFormContainer .leftSection .list::-webkit-scrollbar {
+  width: 0.504vw;
+}
+
+.HDFCFormContainer .leftSection .list::-webkit-scrollbar-thumb {
+  background-color: rgba(143, 155, 179, 0.4);
+  border-radius: 0.504vw;
+}
+
+.HDFCFormContainer .rightSection {
+  position: relative;
+  width: auto;
+  height: auto;
+  margin-left: 14.994rem;
+  background-color: #fff;
+}
+
+.HDFCFormContainer .rightSection .adjustBackground {
+  height: 290vh;
+  background-color: #fff;
+}
+
+.HDFCFormContainer .rightSection .headerContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  width: 100%;
+  height: 4.41rem;
+  background-color: #fcfcfc;
+}
+
+@media only screen and (max-width: 800px) {
+  .HDFCFormContainer .rightSection .headerContainer {
+    width: 100%;
+    height: 13.33333vw;
+  }
+}
+
+.HDFCFormContainer .rightSection .headerContainer .backButton {
+  margin-left: 2.961rem;
+  width: 1.512rem;
+  height: 1.512rem;
+  cursor: pointer;
+}
+
+@media only screen and (max-width: 800px) {
+  .HDFCFormContainer .rightSection .headerContainer .backButton {
+    margin-left: 4vw;
+    width: 5.06667vw;
+    height: 5.06667vw;
+  }
+}
+
+.HDFCFormContainer .rightSection .headerContainer .backButton img {
+  width: 100%;
+  height: 100%;
+}
+
+.HDFCFormContainer .rightSection .headerContainer .needHelpContainer {
+  margin-right: 2.709rem;
+}
+
+@media only screen and (max-width: 800px) {
+  .HDFCFormContainer .rightSection .headerContainer .needHelpContainer {
+    display: none;
+  }
+}
+
+.HDFCFormContainer .rightSection .headerContainer .needHelpContainer .needHelpText {
+  font-size: 0.756rem;
+  color: #535ad1;
+  line-height: 0.882rem;
+  margin-left: 1.386rem;
+}
+
+.HDFCFormContainer .rightSection .headerContainer .needHelpContainer .rightPart {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.HDFCFormContainer .rightSection .headerContainer .needHelpContainer .rightPart .phoneCall {
+  width: 1.134rem;
+  height: 1.134rem;
+  margin-right: 0.252rem;
+}
+
+.HDFCFormContainer .rightSection .headerContainer .needHelpContainer .rightPart .phoneCall img {
+  width: 100%;
+  height: 100%;
+}
+
+.HDFCFormContainer .rightSection .headerContainer .needHelpContainer .rightPart .numberText {
+  font-size: 1.134rem;
+  font-weight: bold;
+  color: #535ad1;
+}
+
+.HDFCFormContainer .rightSection .texualContainer {
+  margin: auto;
+  margin-top: 1.449rem;
+  width: 53.613rem;
+}
+
+.HDFCFormContainer .rightSection .texualContainer .headText {
+  font-size: 2.016rem;
+  color: #07498e;
+  margin-bottom: 1.26rem;
+}
+
+.HDFCFormContainer .rightSection .texualContainer .headText2 {
+  font-size: 2.016rem;
+  color: #07498e;
+}
+
+.HDFCFormContainer .rightSection .texualContainer .subText {
+  font-size: 1.008rem;
+  color: #727272;
+  margin-bottom: 5.04rem;
+}
+
+.HDFCFormContainer .rightSection .texualContainer .trackStatus {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 12.6rem;
+  height: 3.15rem;
+  border-radius: 2.079rem;
+  background-color: #1c86fc;
+  cursor: pointer;
+}
+
+.HDFCFormContainer .rightSection .texualContainer .trackStatus .btnText {
+  font-size: 1.008rem;
+  font-weight: 500;
+  color: #fff;
+}
+
+.HDFCFormContainer .rightSection .offerContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.HDFCFormContainer .rightSection .offerContainer .offerBox {
+  margin-right: 2.52rem;
+}
+
+.HDFCFormContainer .rightSection .offerContainer .offerBox .offerHead {
+  font-size: 1.008rem;
+  color: #fc001b;
+}
+
+.HDFCFormContainer .rightSection .offerContainer .offerBox .offerText {
+  font-size: 1.512rem;
+  color: #07498e;
+  margin-bottom: 1.008rem;
+}
+
+.HDFCFormContainer .rightSection .offerBorder {
+  margin: auto;
+  width: 53.613rem;
+  height: 0;
+  border: solid 1px #d1d1d1;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer {
+  position: relative;
+  margin: auto;
+  margin-top: 2.016rem;
+  width: 53.613rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadBankStatementContainer {
+  position: relative;
+  margin-right: 3.024rem;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadBankStatementContainer .titleContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadBankStatementContainer .titleContainer .headText {
+  font-size: 1.323rem;
+  font-weight: 300;
+  color: #000;
+  margin-right: 0.504rem;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadBankStatementContainer .titleContainer .tickCircle {
+  color: #bcbcbc;
+  font-size: 1.449rem;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadBankStatementContainer .subText {
+  font-size: 0.882rem;
+  font-weight: 600;
+  color: #07498e;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadBankStatementContainer .uploadMainBox {
+  margin-top: 1.008rem;
+  width: 15.435rem;
+  height: 8.316rem;
+  border-radius: 0.378rem;
+  -webkit-box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+          box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+  background-color: #fff;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadBankStatementContainer .uploadMainBox .boxBorder {
+  width: 14.049rem;
+  height: 7.182rem;
+  border-radius: 0.378rem;
+  border: dashed 1px #727272;
+  background-color: #fff;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadBankStatementContainer .uploadMainBox .boxBorder .uploadImage {
+  width: 1.386rem;
+  height: 1.827rem;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadBankStatementContainer .uploadMainBox .boxBorder .uploadImage img {
+  width: 100%;
+  height: 100%;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadSalaryslipContainer {
+  position: relative;
+  margin-right: 3.024rem;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadSalaryslipContainer .titleContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadSalaryslipContainer .titleContainer .headText {
+  font-size: 1.323rem;
+  font-weight: 300;
+  color: #000;
+  margin-right: 0.504rem;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadSalaryslipContainer .titleContainer .tickCircle {
+  color: #bcbcbc;
+  font-size: 1.449rem;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadSalaryslipContainer .subText {
+  font-size: 0.882rem;
+  font-weight: 600;
+  color: #07498e;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadSalaryslipContainer .uploadMainBox {
+  margin-top: 1.008rem;
+  width: 15.435rem;
+  height: 8.316rem;
+  border-radius: 0.378rem;
+  -webkit-box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+          box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+  background-color: #fff;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadSalaryslipContainer .uploadMainBox .boxBorder {
+  width: 14.049rem;
+  height: 7.182rem;
+  border-radius: 0.378rem;
+  border: dashed 1px #727272;
+  background-color: #fff;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadSalaryslipContainer .uploadMainBox .boxBorder .uploadImage {
+  width: 1.386rem;
+  height: 1.827rem;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadSalaryslipContainer .uploadMainBox .boxBorder .uploadImage img {
+  width: 100%;
+  height: 100%;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadAddressProof {
+  position: relative;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadAddressProof .titleContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadAddressProof .titleContainer .headText {
+  font-size: 1.323rem;
+  font-weight: 300;
+  color: #000;
+  margin-right: 0.504rem;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadAddressProof .titleContainer .tickCircle {
+  color: #bcbcbc;
+  font-size: 1.449rem;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadAddressProof .subText {
+  font-size: 0.882rem;
+  font-weight: 600;
+  color: #07498e;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadAddressProof .uploadAdjustContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadAddressProof .uploadAdjustContainer .leftPart {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadAddressProof .uploadAdjustContainer .leftPart .uploadMainBox {
+  margin-top: 1.008rem;
+  width: 7.7175rem;
+  height: 8.316rem;
+  border-radius: 0.378rem;
+  -webkit-box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+          box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+  background-color: #fff;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-right: 0.441rem;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadAddressProof .uploadAdjustContainer .leftPart .uploadMainBox .boxBorder {
+  width: 6.4575rem;
+  height: 7.182rem;
+  border-radius: 0.378rem;
+  border: dashed 1px #727272;
+  background-color: #fff;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadAddressProof .uploadAdjustContainer .leftPart .uploadMainBox .boxBorder .uploadImage {
+  width: 1.386rem;
+  height: 1.827rem;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadAddressProof .uploadAdjustContainer .leftPart .uploadMainBox .boxBorder .uploadImage img {
+  width: 100%;
+  height: 100%;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadAddressProof .uploadAdjustContainer .leftPart .front {
+  margin-top: 0.378rem;
+  font-size: 0.756rem;
+  color: #727272;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadAddressProof .uploadAdjustContainer .rightPart {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadAddressProof .uploadAdjustContainer .rightPart .uploadMainBox {
+  margin-top: 1.008rem;
+  width: 7.7175rem;
+  height: 8.316rem;
+  border-radius: 0.378rem;
+  -webkit-box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+          box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+  background-color: #fff;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-left: 0.441rem;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadAddressProof .uploadAdjustContainer .rightPart .uploadMainBox .boxBorder {
+  width: 6.4575rem;
+  height: 7.182rem;
+  border-radius: 0.378rem;
+  border: dashed 1px #727272;
+  background-color: #fff;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadAddressProof .uploadAdjustContainer .rightPart .uploadMainBox .boxBorder .uploadImage {
+  width: 1.386rem;
+  height: 1.827rem;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadAddressProof .uploadAdjustContainer .rightPart .uploadMainBox .boxBorder .uploadImage img {
+  width: 100%;
+  height: 100%;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadAddressProof .uploadAdjustContainer .rightPart .back {
+  margin-top: 0.378rem;
+  font-size: 0.756rem;
+  color: #727272;
+}
+
+.HDFCFormContainer .rightSection .iconTextContainer {
+  display: none;
+}
+
+.HDFCFormContainer .rightSection .formMainContainer {
+  width: 53.613rem;
+  margin: auto;
+  margin-top: 1.386rem;
+}
+
+.HDFCFormContainer .rightSection .formMainContainer h3 {
+  font-weight: 400;
+  color: #000;
+  font-size: 1.386rem;
+}
+
+.HDFCFormContainer .rightSection .formMainContainer .checkboxContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+}
+
+.HDFCFormContainer .rightSection .formMainContainer .checkboxContainer .check {
+  margin-top: -0.315rem;
+  margin-left: -0.63rem;
+}
+
+.HDFCFormContainer .rightSection .formMainContainer .checkboxContainer p {
+  width: 44.919rem;
+  font-size: 0.882rem;
+  font-weight: 300;
+  color: #000;
+}
+
+.HDFCFormContainer .rightSection .formMainContainer .saveButton {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 12.6rem;
+  height: 3.15rem;
+  border-radius: 2.079rem;
+  background-color: #1c86fc;
+  cursor: pointer;
+  margin-top: 1.2915rem;
+  margin-left: 36.288rem;
+}
+
+.HDFCFormContainer .rightSection .formMainContainer .saveButton .btnText {
+  font-size: 1.008rem;
+  font-weight: 500;
+  color: #fff;
+}
+
+.HDFCFormContainer .rightSection .formMainContainer .saveButton .arrowIcon {
+  display: none;
+}
+
+.HDFCFormContainer .rightSection .uploadDocumentFormContainer {
+  width: 53.613rem;
+  margin: auto;
+}
+
+.HDFCFormContainer .rightSection .uploadDocumentFormContainer .formContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  width: 56.385rem;
+}
+
+.HDFCFormContainer .rightSection .uploadDocumentFormContainer .formContainer .textField {
+  width: 15.372rem;
+  margin-right: 3.024rem !important;
+  margin-bottom: 1.953rem !important;
+  margin-top: 0 !important;
+}
+
+.HDFCFormContainer .rightSection .uploadDocumentFormContainer .formContainer .textField label {
+  color: #07498e;
+  letter-spacing: 0.0252rem;
+  font-size: 0.9765rem;
+}
+
+.HDFCFormContainer .rightSection .uploadDocumentFormContainer .formContainer .textField .MuiOutlinedInput-root {
+  height: 3.528rem;
+}
+
+.HDFCFormContainer .rightSection .uploadDocumentFormContainer .formContainer .textField .MuiOutlinedInput-notchedOutline {
+  border: 1px solid #bababa;
+}
+
+.HDFCFormContainer .rightSection .uploadDocumentFormContainer .formContainer .textField .MuiInputAdornment-root {
+  opacity: 0.6;
+}
+
+.HDFCFormContainer .rightSection .uploadDocumentFormContainer .formContainer .textField .MuiInputBase-input {
+  font-size: 1.008rem;
+}
+
+.HDFCFormContainer .rightSection .uploadDocumentFormContainer .borderBottom {
+  width: 53.613rem;
+  border-bottom: solid 1px #eaeaea;
+}
+
+.HDFCFormContainer .rightSection .uploadDocumentFormContainer .saveButton {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 12.6rem;
+  height: 3.15rem;
+  border-radius: 2.079rem;
+  background-color: #1c86fc;
+  cursor: pointer;
+  margin-top: 1.2915rem;
+  margin-left: 40.95rem;
+}
+
+.HDFCFormContainer .rightSection .uploadDocumentFormContainer .saveButton .btnText {
+  font-size: 1.008rem;
+  font-weight: 500;
+  color: #fff;
+}
+
+.HDFCFormContainer .rightSection .uploadDocumentFormContainer .saveButton .arrowIcon {
+  display: none;
+}
+/*# sourceMappingURL=HDFC.css.map */

@@ -1,0 +1,175 @@
+$desk: 0.063;
+.calculateContainer {
+    .rightContainerForm {
+        width: 300 * $desk + vw;
+        padding-top: 20 * $desk + vw;
+        h4 {
+            margin-left: 37 * $desk + vw;
+            font-size: 22 * $desk + vw;
+            font-weight: bold;
+            letter-spacing: 0.15 * $desk + vw;
+            color: #535ad1;
+            margin-bottom: 7 * $desk + vw;
+            font-family: "Lato";
+        }
+        .calculateTextField {
+            width: 230 * $desk + vw !important;
+            margin-top: 15 * $desk + vw !important;
+            margin-bottom: 0 !important;
+            label {
+                color: #535ad1;
+                letter-spacing: 0.4px;
+                font-size: 15.5px;
+                font-family: "Lato";
+            }
+            .MuiOutlinedInput-root {
+                height: 48 * $desk + vw;
+            }
+            .MuiOutlinedInput-notchedOutline {
+                border: 2px solid #c5cee0;
+            }
+            .MuiInputAdornment-root {
+                opacity: 0.6;
+            }
+            .MuiInputBase-input {
+                font-size: 16 * $desk + vw;
+                font-family: "Lato";
+            }
+        }
+        .calculateActive {
+            background-color: #8f9bb3 !important;
+            border: 2px solid #8f9bb3 !important;
+            color: #fff !important;
+        }
+        .calculateCommonBtn {
+            width: 106 * $desk + vw;
+            height: 51 * $desk + vw;
+            background-color: #fff;
+            border: 2px solid #c5cee0;
+            box-shadow: none;
+            font-family: "Lato";
+            color: #000;
+            margin-left: 9 * $desk + vw;
+            margin-right: 9 * $desk + vw;
+            margin-top: 15 * $desk + vw;
+            font-size: 14 * $desk + vw;
+        }
+        .calculateBtn {
+            width: 230 * $desk + vw;
+            height: 48 * $desk + vw;
+            background-color: #535ad1;
+            margin-top: 15 * $desk + vw;
+            font-family: "Lato";
+            border-radius: 5 * $desk + vw;
+            box-shadow: none;
+            font-size: 14 * $desk + vw;
+        }
+        .progressContainer {
+            display: flex;
+            justify-content: center;
+            margin-top: 15 * $desk + vw;
+            .leftSection {
+                display: flex;
+                flex-direction: column;
+                .textProgress {
+                    font-family: "Lato";
+                    font-weight: bold;
+                    font-size: 12 * $desk + vw;
+                    line-height: 20 * $desk + vw;
+                    letter-spacing: 0.15 * $desk + vw;
+                    color: #8f9bb3;
+                }
+            }
+            .progressBarLine {
+                height: 10 * $desk + vw;
+                width: 121 * $desk + vw;
+                border-radius: 30 * $desk + vw;
+                display: flex;
+                justify-content: center;
+                margin-left: 8 * $desk + vw;
+                margin-right: 8 * $desk + vw;
+                margin-top: 4 * $desk + vw;
+                .leftPart {
+                    background-color: #5DC699;
+                    border-top-left-radius: 30 * $desk + vw;
+                    border-bottom-left-radius: 30 * $desk + vw;
+                }
+                .rightPart {
+                    background-color: #F18A8A;
+                    border-top-right-radius: 30 * $desk + vw;
+                    border-bottom-right-radius: 30 * $desk + vw;
+                }
+            }
+            .rightSection {
+                display: flex;
+                flex-direction: column;
+                .textProgress {
+                    font-family: "Lato";
+                    font-weight: bold;
+                    font-size: 12 * $desk + vw;
+                    line-height: 20 * $desk + vw;
+                    letter-spacing: 0.15 * $desk + vw;
+                    color: #8f9bb3;
+                }
+            }
+        }
+        .totalPriceContainer {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 80 * $desk + vw;
+            width: 230 * $desk + vw;
+            border-radius: 5 * $desk + vw;
+            background: rgba(93, 198, 153, 0.1);
+            margin-top: 12 * $desk + vw;
+            .textPrice {
+                font-family: "Lato";
+                font-weight: 800;
+                font-size: 32 * $desk + vw;
+                line-height: 20 * $desk + vw;
+                margin-bottom: 13 * $desk + vw;
+                letter-spacing: 0.15 * $desk + vw;
+                color: #3ec68c;
+                margin-top: 7 * $desk + vw;
+            }
+            .subTextPrice {
+                font-family: "Lato";
+                font-weight: 600;
+                font-size: 14 * $desk + vw;
+                line-height: 20 * $desk + vw;
+                letter-spacing: 0.15 * $desk + vw;
+            }
+        }
+        .listOfTextAmountContainer {
+            width: 230 * $desk + vw;
+            display: flex;
+            justify-content: space-between;
+            margin-top: 12 * $desk + vw;
+            .textPrice {
+                font-family: "Lato";
+                font-weight: 600;
+                font-size: 14 * $desk + vw;
+                line-height: 20 * $desk + vw;
+                letter-spacing: 0.15 * $desk + vw;
+            }
+            .subTextPrice {
+                font-family: "Lato";
+                font-weight: 600;
+                font-size: 14 * $desk + vw;
+                line-height: 20 * $desk + vw;
+                letter-spacing: 0.15 * $desk + vw;
+            }
+        }
+        .showEMITableBtn {
+            width: 230 * $desk + vw;
+            height: 48 * $desk + vw;
+            background-color: #3ec68c;
+            margin-top: 16 * $desk + vw;
+            font-family: "Lato";
+            border-radius: 5 * $desk + vw;
+            box-shadow: none;
+            font-size: 14 * $desk + vw;
+        }
+    }
+}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { fade, makeStyles, useTheme } from "@material-ui/core/styles";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation, useHistory } from "react-router-dom";
 import './menu.css';
 // List menu item
 import List from '@material-ui/core/List';
@@ -23,6 +23,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import IconButton from '@material-ui/core/IconButton';
 import PhoneCallbackOutlinedIcon from '@material-ui/icons/PhoneCallbackOutlined';
 import MenuIcon from '@material-ui/icons/Menu';
+import CalculatorIcon from '../../images/calculator.svg';
 import { Drawer } from '@material-ui/core';
 import clsx from 'clsx';
 const useStyles = makeStyles((theme) => ({
@@ -101,6 +102,7 @@ export default function Menu(props) {
     const theme = useTheme();
     const [openen, setOpen] = React.useState(true);
     const [uploadOpen, setuploadOpen] = useState(true);
+    const [calculatorOpen, setcalculatorOpen] = useState(true);
     const [drawerOpen, setdrawerOpen] = React.useState(true);
     const [dashboardPage, setdashboardPage] = useState(false);
     const [newLeadPage, setnewLeadPage] = useState(false);
@@ -114,11 +116,16 @@ export default function Menu(props) {
     const [reportPage, setreportPage] = useState(false);
     const [isHiddenTab, setIsHiddenTab] = useState(false);
     const [isUserTab, setIsUserTab] = useState(false);
+    const [isCalculatorTab, setIsCalculatorTab] = useState(false);
+    let location = useLocation();
     const handleClick = () => {
         setOpen(!openen);
     };
     const uploadHandleClick = () => {
         setuploadOpen(!uploadOpen);
+    }
+    const calculatorHandleClick = () => {
+        setcalculatorOpen(!calculatorOpen)
     }
     let profileData = JSON.parse(localStorage.getItem("user_info"));
     useEffect(() => {
@@ -325,6 +332,27 @@ export default function Menu(props) {
                         <ListItemText className={classes.color} primary="Reports" />
                     </ListItem>
                 </NavLink> : ''}
+                {isCalculatorTab ? null : <React.Fragment><ListItem button className={classes.color} onClick={calculatorHandleClick}>
+                    <ListItemIcon className='calImageContainer'>
+                        <img src={CalculatorIcon} className={classes.color} alt="" />
+                        {/* <PeopleAltOutlinedIcon className={classes.color} /> */}
+                    </ListItemIcon>
+                    <ListItemText primary="Calculators" />
+                    {calculatorOpen ? <ExpandLess /> : <ExpandMore />}
+                </ListItem>
+                    <Collapse in={calculatorOpen} timeout="auto" unmountOnExit>
+                        <List component="div" disablePadding>
+                            {location.pathname === '/dashboards/EMIcalculator' ? <NavLink to="/dashboards/EMIcalculator" activeClassName="active"><ListItem button className={classes.nested + " selected"}>
+                                <ListItemText primary="EMI Calculator" />
+                            </ListItem></NavLink> : <ListItem button className={classes.nested + " selected"} onClick={props.EmiCalculate}>
+                                <ListItemText primary="EMI Calculator" />
+                            </ListItem>}
+                            {/* <ListItem button className={classes.nested + " selected"}>
+                                <ListItemText primary="Loan Calculator" />
+                            </ListItem> */}
+                        </List>
+                    </Collapse>
+                </React.Fragment>}
             </List>
         </Drawer >
     );
