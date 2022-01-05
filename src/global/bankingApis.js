@@ -1,0 +1,1 @@
+export const hdfcBankApi = "http://3.108.39.125:9005/leads/sendHdfcLead";

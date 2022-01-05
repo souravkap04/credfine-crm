@@ -129,7 +129,7 @@ function App() {
           <PrivateRoute exact path="/dashboards/addusers" component={AddUsers} />
           <PrivateRoute exact path="/dashboards/pricing" component={PricingPopup} />
           <PrivateRoute exact path="/dashboards/PersonalLoanForm/:leadid" component={PersonalLoanForm} />
-          <PrivateRoute exact path="/dashboards/HDFCForm" component={HDFCForm} />
+          <PrivateRoute exact path="/dashboards/HDFCForm/:leadid" component={HDFCForm} />
           <PrivateRoute exact path="/dashboards/EMIcalculator" component={CalculatorTable} />
         </Switch>
       </Router>

@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import axios from "axios";
+import {hdfcBankApi} from "../../global/bankingApis";
 import './HDFC.css';
 import logo from '../../images/forms/hdfc.svg';
 import back from '../../images/forms/back.svg';
@@ -8,10 +10,11 @@ import Checkbox from '@material-ui/core/Checkbox';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import uploadSRC from '../../images/forms/fileUpload.svg';
 import List from '@material-ui/core/List';
-import { useHistory } from 'react-router-dom';
+import { useHistory , useParams} from 'react-router-dom';
 import phoneCall from '../../images/forms/phoneCall.svg';
 export default function HDFCFrom() {
     const history = useHistory();
+    const {leadid} = useParams();
     const [isPersonalDetail, setisPersonalDetail] = useState(true);
     const [isPersonalProgress, setisPersonalProgress] = useState(false);
     const [isCurrentResidentialDetail, setisCurrentResidentialDetail] = useState(false);
@@ -25,6 +28,118 @@ export default function HDFCFrom() {
     const [isBankStatement, setisBankStatement] = useState(false);
     const [isApprovalStatus, setisApprovalStatus] = useState(false);
     const [isApprovalStatusProgress, setisApprovalStatusProgress] = useState(false);
+    const [firstName,setFirstName] = useState("");
+    const [lastName,setLastName] = useState("");
+    const [gender,setGender] = useState("");
+    const [dob,setDob] = useState("");
+    const [loanAmount,setLoanAmount] = useState("");
+    const [officeAddressType,setOfficeAddressType] = useState("");
+    const [monthlyTakeHomeSalary,setmonthlyTakeHomeSalary] = useState("");
+    const [residanceType,setResidanceType] = useState("");
+    const [employmentType,setEmploymentType] = useState("");
+    const [residanceAddressType,setResidanceAddressType] = useState("");
+    const [maritalStatus,setMaritalStatus] = useState("");
+    const [highestQualification,setHighestQualification] = useState("");
+    const [totalDependent,setTotalDependent] = useState("");
+    const [yearsInCurrentResidence,setYearsInCurrentResidence] = useState("");
+    const [yearsInCurrentCity,setyYearsInCurrentCity] = useState("");
+    const [panCardNo,setPanCardNo] = useState("");
+    const [purposeOfLoan,setPurposeOfLoan] = useState("");
+    const [qualification,setQualification] = useState("");
+    const [emailId,setEmailId] = useState("");
+    const [addressLineOne,setAddressLineOne] = useState("");
+    const [addressLineTwo,setAddressLineTwo] = useState("");
+    const [addressLineThree,setAddressLineThree] = useState("");
+    const [city,setCity] = useState("");
+    const [state,setState] = useState("");
+    const [pincode,setPincode] = useState("");
+    const [mobileNo,setMobileNo] = useState("");
+    const [residentialEmailId,setResidentialEmailId] = useState("");
+    const [employerName,setEmployerName] = useState("");
+    const [officeAddressOne,setofficeAddressOne] = useState("");
+    const [officeAddressTwo,setofficeAddressTwo] = useState("");
+    const [officeState,setOfficeState] = useState("");
+    const [officeCity,setOfficeCity] = useState("");
+    const [officePincode,setOfficePincode] = useState("");
+    const [addressType,setAddressType] = useState("");
+    const [hdfcBankAccNo,setHdfcBankAccNo] = useState("");
+    const [hdfcBranch,setHdfcBranch] = useState("");
+    const [refFirstName,setRefFirstName] = useState("");
+    const [refLastName,setRefLastName] = useState("");
+    const [refMobileNo,setRefMobileNo] = useState("");
+
+    useEffect(() => {
+         fetchHdfcData(leadid);
+         fetchPersonalReferenceData(leadid);
+    }, [])
+    const fetchHdfcData = async (leadId)=>{
+        await axios.get(`${hdfcBankApi}/${leadId}/2`)
+                 .then((response)=>{
+                     console.log("hdfcform:"+response.data.applyLoan.Phone1_Work);
+                     setFirstName(response.data.applyLoan.First_Name__req);
+                     setLastName(response.data.applyLoan.Last_Name__req);
+                     setGender(response.data.applyLoan.Gender__req);
+                     setDob(response.data.applyLoan.Date_Of_Birth__req);
+                     setLoanAmount(response.data.applyLoan.Loan_Amount__req);
+                     setOfficeAddressType(response.data.applyLoan.Address_Type_Work__req);
+                     setmonthlyTakeHomeSalary(response.data.applyLoan.Monthly_take_home_Salary__req);
+                     setResidanceType(response.data.applyLoan.residence_type_dap__req);
+                     setEmploymentType(response.data.applyLoan.employment_type__req);
+                     setResidanceAddressType(response.data.applyLoan.Address_Type_Resi__req);
+                     //setMaritalStatus(response.data.applyLoan.);
+                     setHighestQualification(response.data.applyLoan.Educational_Qualification__req);
+                     setTotalDependent(response.data.applyLoan.No_of_Dependent__req);
+                     setYearsInCurrentResidence(response.data.applyLoan.Year_at_Current_Address);
+                     setyYearsInCurrentCity(response.data.applyLoan.Year_at_City);
+                     setPanCardNo(response.data.applyLoan.PAN_AC_No__req);
+                     //setPurposeOfLoan(response.data.applyLoan.)
+                     setAddressLineOne(response.data.applyLoan.Address1_Resi__req);
+                     setAddressLineTwo(response.data.applyLoan.Address2_Resi__req);
+                     setAddressLineThree(response.data.applyLoan.Address3_Resi__req);
+                     setCity(response.data.applyLoan.City_Resi__req);
+                     setState(response.data.applyLoan.State_Resi__req);
+                     setPincode(response.data.applyLoan.Pin_Code_Resi__req);
+                     setMobileNo(response.data.applyLoan.Mobile1_Resi__req);
+                     setResidentialEmailId(response.data.applyLoan.Email_Resi__req);
+                     setEmployerName(response.data.applyLoan.Employer_Name__req);
+                     setofficeAddressOne(response.data.applyLoan.Address1_Work__req);
+                     setofficeAddressTwo(response.data.applyLoan.Address2_Work__req);
+                     setOfficeState(response.data.applyLoan.State_Work);
+                     setOfficeCity(response.data.applyLoan.City_Work__req);
+                     setOfficePincode(response.data.applyLoan.Pin_Code_Work__req);
+                     setAddressType();
+                     setHdfcBankAccNo();
+                     setHdfcBranch();
+                 }).catch((error)=>{
+                     console.log(error);
+                 })
+ };
+ const fetchPersonalReferenceData = async (leadId) =>{
+            await axios.get(`${hdfcBankApi}/${leadId}/3`)
+            .then((response)=>{
+                setRefFirstName(response.data.ref_1_FirstName__req);
+                setRefLastName(response.data.ref_1_LastName);
+                setRefMobileNo(response.data.ref_1_Mobile__req);
+            }).catch((error)=>{
+                console.log(error);
+            })
+ }
+ const hdfcLoanDataSubmitHandler = async (leadId) =>{
+     console.log("hdfcLoanDataSubmitHandler");
+
+     let applyLoanData = {First_Name : firstName,Last_Name : lastName,Gender : gender,Date_Of_Birth : dob,Educational_Qualification : highestQualification,
+        Loan_Amount : loanAmount,PAN_AC_No : panCardNo,
+        City_Resi : city,Pin_Code_Resi : pincode,Address1_Resi : addressLineOne,Address2_Resi : addressLineTwo,Address3_Resi : addressLineThree,State_Resi : state,Mobile1_Resi : mobileNo,
+        Email_Resi : emailId,Year_at_Current_Address : yearsInCurrentResidence,Year_at_City : yearsInCurrentCity,Employer_Name : employerName,Address1_Work : officeAddressOne,
+        Address2_Work : officeAddressTwo,
+        Pin_Code_Work : officePincode,Address_Type_Work : officeAddressType,City_Work :officeCity,State_Work : officeState,Monthly_take_home_Salary : monthlyTakeHomeSalary,residence_type_dap : residanceType,
+        employment_type : employmentType,No_of_Dependent : totalDependent,Address_Type_Resi : residanceAddressType, }
+    let loanData = {applyLoanData};
+    let items = {loanData};
+
+    //await axios.post(`${hdfcBankApi}/${leadId}`)
+
+ }
     return <div className="HDFCFormContainer">
         <div className="leftSection">
             <div className="logoContainer">
@@ -143,11 +258,7 @@ export default function HDFCFrom() {
                     </div>
                 </div>
                 <div className="offerBorder"></div>
-                <FormContainer Name="Personal Details" onClick={() => {
-                    setisPersonalDetail(false)
-                    setisCurrentResidentialDetail(true)
-                    setisPersonalProgress(true)
-                }}>
+                <FormContainer Name="Personal Details">
                     <TextField
                         className="textField fullName"
                         id="outlined-full-width"
@@ -158,8 +269,8 @@ export default function HDFCFrom() {
                         }}
                         variant="outlined"
                         size="small"
-                    // value={name}
-                    // onChange={(e) => setname(e.target.value)}
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
                     />
                     <TextField
                         className="textField fullName"
@@ -171,8 +282,8 @@ export default function HDFCFrom() {
                         }}
                         variant="outlined"
                         size="small"
-                    // value={name}
-                    // onChange={(e) => setname(e.target.value)}
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
                     />
                     <TextField
                         select
@@ -188,20 +299,15 @@ export default function HDFCFrom() {
                         }}
                         variant="outlined"
                         size="small"
-                    // value={loanAmount}
-                    // onChange={(e) => {
-                    //     const re = /^[0-9\b]+$/;
-                    //     if (e.target.value === '' || re.test(e.target.value)) {
-                    //         setLoanAmount(e.target.value)
-                    //     }
-                    // }}
+                    value={gender}
+                    onChange={(e) => setGender(e.target.value)}
                     >
                         <option value="">Select One</option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
+                        <option value="M">Male</option>
+                        <option value="F">Female</option>
                         <option value="LGBT">LGBT</option>
                     </TextField>
-                    <TextField
+                    {/* <TextField
                         select
                         className="textField"
                         id="outlined-full-width"
@@ -215,8 +321,8 @@ export default function HDFCFrom() {
                         }}
                         variant="outlined"
                         size="small"
-                    // value={date}
-                    // onChange={(e) => setDate(e.target.value)}
+                    value={maritalStatus}
+                    onChange={(e) => setMaritalStatus(e.target.value)}
                     >
                         <option value="">Select Marital Status</option>
                         <option value="Single">Single</option>
@@ -224,7 +330,7 @@ export default function HDFCFrom() {
                         <option value="Widowed">Widowed</option>
                         <option value="Separated">Separated</option>
                         <option value="Divorced">Divorced</option>
-                    </TextField>
+                    </TextField> */}
                     <TextField
                         select
                         className="textField"
@@ -239,14 +345,15 @@ export default function HDFCFrom() {
                         }}
                         variant="outlined"
                         size="small"
-                    // value={pancardNo}
-                    // onChange={(e) => setPancardNo(e.target.value.toUpperCase())}
+                    value={highestQualification}
+                    onChange={(e) => setHighestQualification(e.target.value)}
                     >
                         <option value="">Select One</option>
-                        <option value="">SSC</option>
-                        <option value="">HSC / Dilopma</option>
-                        <option value="">Degree</option>
-                        <option value="">Masters Degree</option>
+                        <option value="SSC">SSC</option>
+                        <option value="HSC / DIPLOMA">HSC / Dilopma</option>
+                        <option value="DEGREE">Degree</option>
+                        <option value="MASTERS DEGREE">Masters Degree</option>
+                        <option value="OTHER">Other</option>
                     </TextField>
                     <TextField
                         select
@@ -262,8 +369,8 @@ export default function HDFCFrom() {
                         }}
                         variant="outlined"
                         size="small"
-                    // value={email}
-                    // onChange={(e) => setEmail(e.target.value)}
+                    value={totalDependent}
+                    onChange={(e) => setTotalDependent(e.target.value)}
                     >
                         <option value="">Select One</option>
                         <option value="1">1</option>
@@ -276,56 +383,31 @@ export default function HDFCFrom() {
                         <option value="8">8</option>
                     </TextField>
                     <TextField
-                        select
                         className="textField"
                         id="outlined-full-width"
-                        label="Total Years in Current Residence"
+                        label="Years in Current Residence"
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
                         }}
-                        SelectProps={{
-                            native: true
-                        }}
                         variant="outlined"
                         size="small"
-                    // value={maskPhoneNo(mobileNo)}
-                    // disabled
-                    >
-                        <option value="">Select One</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                    </TextField>
+                        value={yearsInCurrentResidence}
+                        onChange={(e)=>setYearsInCurrentResidence(e.target.value)}
+                    />
                     <TextField
-                        select
                         className="textField"
                         id="outlined-full-width"
-                        label="Total Years in Current City"
+                        label="Years in Current City"
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
                         }}
-                        SelectProps={{
-                            native: true
-                        }}
                         variant="outlined"
                         size="small"
-                    // value={maskPhoneNo(mobileNo)}
-                    // disabled
-                    >
-                        <option value="">Select One</option>
-                        <option value="5">5</option>
-                        <option value="10">10</option>
-                        <option value="15">15</option>
-                        <option value="20">20</option>
-                        <option value="25+">25+</option>
-                    </TextField>
+                        value={yearsInCurrentCity}
+                        onChange={(e)=>setyYearsInCurrentCity(e.target.value)}
+                    />
                     <TextField
                         className="textField"
                         id="outlined-full-width"
@@ -338,8 +420,10 @@ export default function HDFCFrom() {
                         variant="outlined"
                         size="small"
                         maxLength="10"
+                        value={panCardNo}
+                        onChange={(e)=>setPanCardNo(e.target.value)}
                     />
-                    <TextField
+                    {/* <TextField
                         select
                         className="textField"
                         id="outlined-full-width"
@@ -353,11 +437,13 @@ export default function HDFCFrom() {
                         }}
                         variant="outlined"
                         size="small"
+                        value={purposeOfLoan}
+                        onChange={(e)=>setPurposeOfLoan(e.target.value)}
                     >
                         <option value="">Select One</option>
                         <option value="Renovation">Renovation</option>
-                    </TextField>
-                    <TextField
+                    </TextField> */}
+                    {/* <TextField
                         select
                         className="textField"
                         id="outlined-full-width"
@@ -371,12 +457,14 @@ export default function HDFCFrom() {
                         }}
                         variant="outlined"
                         size="small"
+                        value={qualification}
+                        onChange={(e)=>setQualification(e.target.value)}
                     >
                         <option value="">Select One</option>
                         <option value="MBA">MBA</option>
                         <option value="MCOM">MCOM</option>
-                    </TextField>
-                    <TextField
+                    </TextField> */}
+                    {/* <TextField
                         className="textField"
                         id="outlined-full-width"
                         label="Email ID"
@@ -386,15 +474,11 @@ export default function HDFCFrom() {
                         }}
                         variant="outlined"
                         size="small"
-                    // value={email}
-                    // onChange={(e) => setEmail(e.target.value)}
-                    />
+                    value={emailId}
+                    onChange={(e) => setEmailId(e.target.value)}
+                    /> */}
                 </FormContainer>
-                <FormContainer Name="Residential Details" onClick={() => {
-                    setisCurrentResidentialDetail(false)
-                    setisBusinessDetail(true)
-                    setisCurrentProgress(true)
-                }}>
+                <FormContainer Name="Residential Details" >
                     <TextField
                         className="textField"
                         id="outlined-full-width"
@@ -405,8 +489,8 @@ export default function HDFCFrom() {
                         }}
                         variant="outlined"
                         size="small"
-                    // value={pincode}
-                    // onChange={(e) => getPincodeHandler(e)}
+                    value={addressLineOne}
+                    onChange={(e) => setAddressLineOne(e.target.value)}
                     />
                     <TextField
                         className="textField"
@@ -418,8 +502,8 @@ export default function HDFCFrom() {
                         }}
                         variant="outlined"
                         size="small"
-                    // value={city}
-                    // disabled
+                        value={addressLineTwo}
+                        onChange={(e)=> setAddressLineTwo(e.target.value)}
                     />
                     <TextField
                         className="textField"
@@ -431,225 +515,47 @@ export default function HDFCFrom() {
                         }}
                         variant="outlined"
                         size="small"
-                    // value={states}
-                    // disabled
+                        value={addressLineThree}
+                        onChange={(e)=>setAddressLineThree}
                     />
                     <TextField
                         className="textField"
                         id="outlined-full-width"
-                        select
                         label="City"
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
                         }}
-                        SelectProps={{
-                            native: true,
-                        }}
                         variant="outlined"
                         size="small"
-                    // value={currentResidentType}
-                    // onChange={(e) => setCurrentResidentType(e.target.value)}
-                    >
-                        <option key="" value="">Select</option>
-                    </TextField>
+                        value={city}
+                        onChange={(e) => setCity(e.target.value)}
+                    />
                     <TextField
                         className="textField"
                         id="outlined-full-width"
-                        select
+                        label="State"
+                        margin="normal"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        variant="outlined"
+                        size="small"
+                        value={state}
+                        onChange={(e) => setState(e.target.value)}
+                    />
+                    <TextField
+                        className="textField"
+                        id="outlined-full-width"
                         label="Pincode"
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
                         }}
-                        SelectProps={{
-                            native: true,
-                        }}
                         variant="outlined"
                         size="small"
-                    // value={currentResidentType}
-                    // onChange={(e) => setCurrentResidentType(e.target.value)}
-                    >
-                        <option key="" value="">Select</option>
-                    </TextField>
-                </FormContainer>
-                <FormContainer Name="Business Details" onClick={() => {
-                    setisBusinessDetail(false)
-                    setisPersonalReference(true)
-                    setisBusinessProgress(true)
-                }}>
-                    <TextField
-                        className="textField"
-                        id="outlined-full-width"
-                        label="Employer Name"
-                        margin="normal"
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        variant="outlined"
-                        size="small"
-                    // value={employmentType}
-                    // onChange={(e) => setEmploymentType(e.target.value)}
-                    />
-                    <TextField
-                        className="textField"
-                        id="outlined-full-width"
-                        label="Office Address 1"
-                        margin="normal"
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        variant="outlined"
-                        size="small"
-                    // value={companyName}
-                    // onChange={(e) => searchCompanyHandler(e)}
-                    />
-                    <TextField
-                        className="textField"
-                        id="outlined-full-width"
-                        label="Office Address 2"
-                        margin="normal"
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        variant="outlined"
-                        size="small"
-                    // value={companyName}
-                    // onChange={(e) => searchCompanyHandler(e)}
-                    />
-                    <TextField
-                        select
-                        className="textField"
-                        id="outlined-full-width"
-                        label="Office State"
-                        margin="normal"
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        SelectProps={{
-                            native: true
-                        }}
-                        variant="outlined"
-                        size="small"
-                    // value={designation}
-                    // onChange={(e) => setDesignation(e.target.value)}
-                    >
-                        <option value="">Select One</option>
-                    </TextField>
-                    <TextField
-                        className="textField"
-                        id="outlined-full-width"
-                        select
-                        label="Office City"
-                        margin="normal"
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        SelectProps={{
-                            native: true
-                        }}
-                        variant="outlined"
-                        size="small"
-                    // value={currentWorkExp}
-                    // onChange={(e) => setCurrentWorkExp(e.target.value)}
-                    >
-                        <option key="" value="">Select</option>
-                    </TextField>
-                    <TextField
-                        className="textField"
-                        id="outlined-full-width"
-                        label="Office Pincode"
-                        margin="normal"
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        variant="outlined"
-                        size="small"
-                    // value={totalWorkExp}
-                    // onChange={(e) => setTotalWorkExp(e.target.value)}
-                    />
-                    <TextField
-                        select
-                        className="textField"
-                        id="outlined-full-width"
-                        label="Mailing Address"
-                        margin="normal"
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        SelectProps={{
-                            native: true
-                        }}
-                        variant="outlined"
-                        size="small"
-                    // value={monthlyIncome}
-                    // onChange={(e) => {
-                    //     const re = /^[0-9\b]+$/;
-                    //     if (e.target.value === '' || re.test(e.target.value)) {
-                    //         setMonthlyIncome(e.target.value)
-                    //     }
-                    // }}
-                    >
-                        <option value="">Select One</option>
-                    </TextField>
-                    <TextField
-                        className="textField"
-                        id="outlined-full-width"
-                        label="HDFC Bank Account Number"
-                        margin="normal"
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        variant="outlined"
-                        size="small"
-                    // value={salaryCreditMode}
-                    // onChange={(e) => setSalaryCreditMode(e.target.value)}
-                    />
-                    <TextField
-                        className="textField"
-                        id="outlined-full-width"
-                        label="HDFC Bank Branch"
-                        margin="normal"
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        variant="outlined"
-                        size="small"
-                    // value={salaryBankAcc}
-                    // onChange={(e) => setSalaryBankAcc(e.target.value)}
-                    />
-                </FormContainer>
-                <FormContainer Name="Personal Reference" onClick={() => {
-                    setisPersonalReference(false)
-                    setisUploadDocument(true)
-                    setisReferenceProgress(true)
-                    setisBankStatement(true)
-                }}>
-                    <TextField
-                        className="textField"
-                        id="outlined-full-width"
-                        label="First Name"
-                        margin="normal"
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        variant="outlined"
-                        size="small"
-                    // value={currentEMI}
-                    // onChange={(e) => setCurrentEMI(e.target.value)}
-                    />
-                    <TextField
-                        className="textField"
-                        id="outlined-full-width"
-                        label="Last Name"
-                        margin="normal"
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        variant="outlined"
-                        size="small"
-                    // value={creditCardOutstanding}
-                    // onChange={(e) => setcreditCardOutstanding(e.target.value)}
+                        value={pincode}
+                        onChange={(e) => setPincode(e.target.value)}
                     />
                     <TextField
                         className="textField"
@@ -661,13 +567,187 @@ export default function HDFCFrom() {
                         }}
                         variant="outlined"
                         size="small"
-                    // value={creditCardbalanceTransfer}
-                    // onChange={(e) => {
-                    //     const re = /^[0-9\b]+$/;
-                    //     if (e.target.value === '' || re.test(e.target.value)) {
-                    //         setcreditCardOutstanding(e.target.value)
-                    //     }
-                    // }}
+                        value={mobileNo}
+                        onChange={(e) => setMobileNo(e.target.value)}
+                    />
+                    <TextField
+                        className="textField"
+                        id="outlined-full-width"
+                        label="Email ID"
+                        margin="normal"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        variant="outlined"
+                        size="small"
+                        value={residentialEmailId}
+                        onChange={(e) => setResidentialEmailId(e.target.value)}
+                    />
+                </FormContainer>
+                <FormContainer Name="Business Details" >
+                    <TextField
+                        className="textField"
+                        id="outlined-full-width"
+                        label="Employer Name"
+                        margin="normal"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        variant="outlined"
+                        size="small"
+                        value={employerName}
+                        onChange={(e) => setEmployerName(e.target.value)}
+                    />
+                    <TextField
+                        className="textField"
+                        id="outlined-full-width"
+                        label="Office Address 1"
+                        margin="normal"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        variant="outlined"
+                        size="small"
+                        value={officeAddressOne}
+                        onChange={(e) => setofficeAddressOne(e.target.value)}
+                    />
+                    <TextField
+                        className="textField"
+                        id="outlined-full-width"
+                        label="Office Address 2"
+                        margin="normal"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        variant="outlined"
+                        size="small"
+                        value={officeAddressTwo}
+                        onChange={(e) => setofficeAddressTwo(e.target.value)}
+                    />
+                    <TextField
+                        className="textField"
+                        id="outlined-full-width"
+                        label="Office State"
+                        margin="normal"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        variant="outlined"
+                        size="small"
+                        value={officeState}
+                        onChange={(e) => setOfficeState(e.target.value)}
+                    />
+                    <TextField
+                        className="textField"
+                        id="outlined-full-width"
+                        label="Office City"
+                        margin="normal"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        variant="outlined"
+                        size="small"
+                        value={officeCity}
+                        onChange={(e) => setOfficeCity(e.target.value)}
+                    />
+                    <TextField
+                        className="textField"
+                        id="outlined-full-width"
+                        label="Office Pincode"
+                        margin="normal"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        variant="outlined"
+                        size="small"
+                        value={officePincode}
+                        onChange={(e) => setOfficePincode(e.target.value)}
+                    />
+                    <TextField
+                        select
+                        className="textField"
+                        id="outlined-full-width"
+                        label="Address Type"
+                        margin="normal"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        SelectProps={{
+                            native: true
+                        }}
+                        variant="outlined"
+                        size="small"
+                        value={addressType}
+                        onChange={(e) => setAddressType(e.target.value)}
+                    >
+                        <option value="">Select One</option>
+                    </TextField>
+                    {/* <TextField
+                        className="textField"
+                        id="outlined-full-width"
+                        label="HDFC Bank Account Number"
+                        margin="normal"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        variant="outlined"
+                        size="small"
+                        value={hdfcBankAccNo}
+                        onChange={(e) => setHdfcBankAccNo(e.target.value)}
+                    />
+                    <TextField
+                        className="textField"
+                        id="outlined-full-width"
+                        label="HDFC Bank Branch"
+                        margin="normal"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        variant="outlined"
+                        size="small"
+                        value={hdfcBranch}
+                        onChange={(e) => setHdfcBranch(e.target.value)}
+                    /> */}
+                </FormContainer>
+                <FormContainer Name="Personal Reference" >
+                    <TextField
+                        className="textField"
+                        id="outlined-full-width"
+                        label="First Name"
+                        margin="normal"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        variant="outlined"
+                        size="small"
+                        value={refFirstName}
+                        onChange={(e) => setRefFirstName(e.target.value)}
+                    />
+                    <TextField
+                        className="textField"
+                        id="outlined-full-width"
+                        label="Last Name"
+                        margin="normal"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        variant="outlined"
+                        size="small"
+                        value={refLastName}
+                        onChange={(e) => setRefLastName(e.target.value)}
+                    />
+                    <TextField
+                        className="textField"
+                        id="outlined-full-width"
+                        label="Mobile Number"
+                        margin="normal"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        variant="outlined"
+                        size="small"
+                        value={refMobileNo}
+                        onChange={(e) => setRefMobileNo(e.target.value)}
                     />
                 </FormContainer>
                 <div className="uploadContainer">
@@ -740,6 +820,7 @@ export default function HDFCFrom() {
                     setisCurrentProgress(true)
                     setisBusinessProgress(true)
                     setisReferenceProgress(true)
+                    hdfcLoanDataSubmitHandler(leadid);
                 }}>
                     <TextField
                         className="textField"

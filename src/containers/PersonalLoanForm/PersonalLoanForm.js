@@ -23,6 +23,7 @@ import {
     getSalaryModeType,
     getProfileData
 } from "../../global/leadsGlobalData";
+import {hdfcBankApi} from "../../global/bankingApis";
 import { ListGroup } from 'react-bootstrap';
 import axios from "axios";
 import baseUrl from "../../global/api";
@@ -168,7 +169,6 @@ export default function PersonalLoanForm() {
         }
     }
     useEffect(() => {
-        console.log(leadid)
         const fetchLeadDetaile = async (leadId) => {
             setisLoading(true)
             let headers = { 'Authorization': `Token ${profileData.token}` }
@@ -283,6 +283,18 @@ export default function PersonalLoanForm() {
         sethangUpSnacks(false);
         setIsLeadError(false);
         setIsLeadDetails(false);
+    }
+    const applyNowBtnHandler = async () => {
+        let item = {};
+        await axios.post(`${hdfcBankApi}/${leadId}/1`, item)
+            .then((response) => {
+                console.log(response.data)
+                if(response.data['response'].ToValidatePartnerResponse.ToValidatePartnerResult.error_msg === ""){
+                    history.push(`/dashboards/HDFCForm/${leadid}`);
+                }
+            }).catch((error)=>{
+                console.log(error);
+            })
     }
     return (
         <div className="personalFormContainer">
@@ -1002,11 +1014,9 @@ export default function PersonalLoanForm() {
                                 <div className="months">{item.MaxTenure} months</div>
                                 <div className="after12">After {item.PartPayment} EMIs</div>
                                 <div className="after18">After {item.Forclosure} EMIs</div>
-                                <NavLink to={item.url}>
                                     <div className="applyBtn">
-                                        <div className="btnText">APPLY NOW</div>
+                                        <div className="btnText" onClick={applyNowBtnHandler}>APPLY NOW</div>
                                     </div>
-                                </NavLink>
                             </div>
                         })}
                     </div> : ''}
@@ -1038,11 +1048,9 @@ export default function PersonalLoanForm() {
                                         <div className="after18">After {item.Forclosure} EMIs</div>
                                     </div>
                                 </div>
-                                <NavLink to={item.url}>
                                     <div className="applyBtn">
-                                        <div className="btnText">APPLY NOW</div>
+                                        <div className="btnText" onClick={applyNowBtnHandler}>APPLY NOW</div>
                                     </div>
-                                </NavLink>
                             </div>
                         })}
                     </div> : ''}

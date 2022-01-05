@@ -35,4 +35,3 @@ export const getDialer = ()=>{
     const dialer = ['HALOOCOM-Noida','HALOOCOM-Mumbai'];
     return dialer;
 }
-
