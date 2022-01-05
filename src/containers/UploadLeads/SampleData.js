@@ -17,7 +17,9 @@ const PLData = [
     name: "Naveen",
     companyName: "TCS",
     campaignCategory: "Low_credit",
-    vendor: "Dummy Vendor"
+    vendor: "Dummy Vendor",
+    panNumber:"BCDPA3088C",
+    roi:23
   },
 ];
 
@@ -33,7 +35,7 @@ var BLData = [
     name: "Naveen",
     pincode: 122001,
     campaignCategory: "Low_credit",
-    vendor: "Dummy Vendor"
+    vendor: "Dummy Vendor",
   },
 ];
 
@@ -54,6 +56,8 @@ export default function SampleData(props) {
           <ExcelColumn label="Company Name" value="companyName" />
           <ExcelColumn label="Campaign Category" value="campaignCategory" />
           <ExcelColumn label="Vendor" value="vendor" />
+          <ExcelColumn label="PanNumber" value="panNumber" />
+          <ExcelColumn label="ROI" value="roi" />
         </ExcelSheet> :
         <ExcelSheet data={BLData} name="Business Loan">
           <ExcelColumn label="Full Name" value="name" />
