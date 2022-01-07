@@ -132,7 +132,6 @@ export default function LeadDetailsNew(props) {
     const [companyName, setCompanyName] = useState("");
     const [searchCompany, setSearchCompany] = useState([]);
     const [pancardNo, setPancardNo] = useState("");
-    const [showingPancardNo,setShowingPancardNo] = useState("");
     const [totalWorkExp, setTotalWorkExp] = useState("");
     const [currentWorkExp, setCurrentWorkExp] = useState("");
     const [email, setEmail] = useState("");
@@ -242,7 +241,7 @@ export default function LeadDetailsNew(props) {
                         setCompanyName(response.data.lead_data["data"].current_company_name);
                         setLoanType(response.data.lead_data.loan_type);
                         setSource(response.data.lead_data.source);
-                        setShowingPancardNo(response.data.lead_data.data.pan_no);
+                        setPancardNo(response.data.lead_data.data.pan_no);
                         setEmploymentType(response.data.lead_data["data"].employment_type)
                         setTotalWorkExp(response.data.eligibility_data.total_work_exp);
                         setCurrentWorkExp(response.data.eligibility_data.current_work_exp);
@@ -365,7 +364,7 @@ export default function LeadDetailsNew(props) {
             setExpanded('panel1')
         }
         let data = {
-            dob: date, monthly_income: monthlyIncome,pan_no:showingPancardNo, current_company_name: companyName,
+            dob: date, monthly_income: monthlyIncome,pan_no:pancardNo, current_company_name: companyName,
             residential_pincode: pincode, city: city, state: states, current_company: currentCompany, employment_type: employmentType, credi_card_balance_transfer: creditCardbalanceTransfer
         };
         let lead_data = {
