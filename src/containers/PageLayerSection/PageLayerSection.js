@@ -24,7 +24,15 @@ export default function PageLayerSection(props) {
     userName = userName.replace(/^\s+|\s+$/g, "");
     userName = userName.replace(/\s+/g, " ");
     const [istimeOut, setIsTimeOut] = useState(false);
-    const timeout = 1000 * 60 * 30;
+    if (profileData.user_roles[0].user_type === 4 || profileData.user_roles[0].user_type === 1 || profileData.user_roles[0].user_type === 6 ) {
+       var  timeout = 1000 * 30 * 15 ;
+    }else if(profileData.user_roles[0].user_type === 2){
+        var  timeout = 1000 * 30 * 10;
+    }else if(profileData.user_roles[0].user_type === 3){
+        var  timeout = 1000 * 30 * 1;
+    }else if(profileData.user_roles[0].user_type === 5){
+        var  timeout = 1000 * 30 * 5;
+    }
     const onAction = (e) => {
         setIsTimeOut(false)
     }
@@ -33,9 +41,7 @@ export default function PageLayerSection(props) {
     }
     const onIdle = (e) => {
         if (istimeOut) {
-            props.history.push("/");
-            localStorage.removeItem('user_info');
-            localStorage.removeItem('status_info');
+            history.push("/");
         } else {
             reset();
             setIsTimeOut(true);
