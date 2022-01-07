@@ -35,7 +35,7 @@ export default function HDFCFrom() {
     const [loanAmount,setLoanAmount] = useState("");
     const [officeAddressType,setOfficeAddressType] = useState("");
     const [monthlyTakeHomeSalary,setmonthlyTakeHomeSalary] = useState("");
-    const [residanceType,setResidanceType] = useState("");
+    const [residanceTypeDap,setResidanceTypeDap] = useState("");
     const [employmentType,setEmploymentType] = useState("");
     const [residanceAddressType,setResidanceAddressType] = useState("");
     const [maritalStatus,setMaritalStatus] = useState("");
@@ -71,11 +71,11 @@ export default function HDFCFrom() {
     useEffect(() => {
          fetchHdfcData(leadid);
          fetchPersonalReferenceData(leadid);
+         console.log("dgdgdgd:"+officeAddressType);
     }, [])
     const fetchHdfcData = async (leadId)=>{
         await axios.get(`${hdfcBankApi}/${leadId}/2`)
                  .then((response)=>{
-                     console.log("hdfcform:"+response.data.applyLoan.Phone1_Work);
                      setFirstName(response.data.applyLoan.First_Name__req);
                      setLastName(response.data.applyLoan.Last_Name__req);
                      setGender(response.data.applyLoan.Gender__req);
@@ -83,7 +83,7 @@ export default function HDFCFrom() {
                      setLoanAmount(response.data.applyLoan.Loan_Amount__req);
                      setOfficeAddressType(response.data.applyLoan.Address_Type_Work__req);
                      setmonthlyTakeHomeSalary(response.data.applyLoan.Monthly_take_home_Salary__req);
-                     setResidanceType(response.data.applyLoan.residence_type_dap__req);
+                     setResidanceTypeDap(response.data.applyLoan.residence_type_dap__req);
                      setEmploymentType(response.data.applyLoan.employment_type__req);
                      setResidanceAddressType(response.data.applyLoan.Address_Type_Resi__req);
                      //setMaritalStatus(response.data.applyLoan.);
@@ -125,21 +125,34 @@ export default function HDFCFrom() {
             })
  }
  const hdfcLoanDataSubmitHandler = async (leadId) =>{
-     console.log("hdfcLoanDataSubmitHandler");
-
-     let applyLoanData = {First_Name : firstName,Last_Name : lastName,Gender : gender,Date_Of_Birth : dob,Educational_Qualification : highestQualification,
+     let applyLoan = {First_Name : firstName,Last_Name : lastName,Gender : gender,Date_Of_Birth : dob,Educational_Qualification : highestQualification,
         Loan_Amount : loanAmount,PAN_AC_No : panCardNo,
         City_Resi : city,Pin_Code_Resi : pincode,Address1_Resi : addressLineOne,Address2_Resi : addressLineTwo,Address3_Resi : addressLineThree,State_Resi : state,Mobile1_Resi : mobileNo,
-        Email_Resi : emailId,Year_at_Current_Address : yearsInCurrentResidence,Year_at_City : yearsInCurrentCity,Employer_Name : employerName,Address1_Work : officeAddressOne,
+        STD_Code_Resi:"", Email_Resi : residentialEmailId,Year_at_Current_Address : yearsInCurrentResidence,Year_at_City : yearsInCurrentCity,Employer_Name : employerName,Address1_Work : officeAddressOne,
         Address2_Work : officeAddressTwo,
-        Pin_Code_Work : officePincode,Address_Type_Work : officeAddressType,City_Work :officeCity,State_Work : officeState,Monthly_take_home_Salary : monthlyTakeHomeSalary,residence_type_dap : residanceType,
+        Pin_Code_Work : officePincode,Address_Type_Work : officeAddressType,City_Work :officeCity,State_Work : officeState,Monthly_take_home_Salary : monthlyTakeHomeSalary,residence_type_dap : residanceTypeDap,
         employment_type : employmentType,No_of_Dependent : totalDependent,Address_Type_Resi : residanceAddressType, }
-    let loanData = {applyLoanData};
-    let items = {loanData};
-
-    //await axios.post(`${hdfcBankApi}/${leadId}`)
-
- }
+        let items = {loan_data : {applyLoan}};
+        console.log("items:"+items);
+        const headers = {'Content-Type': 'application/json'};
+        await axios.post(`${hdfcBankApi}/${leadId}/2`,items ,{headers})
+        .then((response)=>{
+        console.log(response.data.status);
+        hdfcPersonalReferenceHandler(leadId);
+        }).catch((error)=>{
+        console.log(error);
+        })
+}
+const hdfcPersonalReferenceHandler = async leadId =>{
+    let loan_data = {ref_1_FirstName__req : refFirstName,ref_1_LastName : refLastName,ref_1_Mobile__req : refMobileNo}
+    let items = {loan_data};
+    await axios.post(`${hdfcBankApi}/${leadId}/3`,items)
+        .then((response)=>{
+            console.log(response.data.status)
+        }).catch((error)=>{
+            console.log(error)
+        })
+}
     return <div className="HDFCFormContainer">
         <div className="leftSection">
             <div className="logoContainer">
@@ -516,7 +529,7 @@ export default function HDFCFrom() {
                         variant="outlined"
                         size="small"
                         value={addressLineThree}
-                        onChange={(e)=>setAddressLineThree}
+                        onChange={(e)=>setAddressLineThree(e.target.value)}
                     />
                     <TextField
                         className="textField"
@@ -582,6 +595,32 @@ export default function HDFCFrom() {
                         size="small"
                         value={residentialEmailId}
                         onChange={(e) => setResidentialEmailId(e.target.value)}
+                    />
+                    <TextField
+                        className="textField"
+                        id="outlined-full-width"
+                        label="Residence Type"
+                        margin="normal"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        variant="outlined"
+                        size="small"
+                        value={residanceAddressType}
+                        onChange={(e) => setResidanceAddressType(e.target.value)}
+                    />
+                    <TextField
+                        className="textField"
+                        id="outlined-full-width"
+                        label="Residence Type Dap"
+                        margin="normal"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        variant="outlined"
+                        size="small"
+                        value={residanceTypeDap}
+                        onChange={(e) => setResidanceTypeDap(e.target.value)}
                     />
                 </FormContainer>
                 <FormContainer Name="Business Details" >
@@ -667,7 +706,7 @@ export default function HDFCFrom() {
                         select
                         className="textField"
                         id="outlined-full-width"
-                        label="Address Type"
+                        label="Office Address Type"
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
@@ -677,10 +716,11 @@ export default function HDFCFrom() {
                         }}
                         variant="outlined"
                         size="small"
-                        value={addressType}
-                        onChange={(e) => setAddressType(e.target.value)}
+                        value={officeAddressType}
+                        onChange={(e) => setOfficeAddressType(e.target.value)}
                     >
-                        <option value="">Select One</option>
+                        <option value="">select One</option>
+                        <option value="Office">Office</option>
                     </TextField>
                     {/* <TextField
                         className="textField"
