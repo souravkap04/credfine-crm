@@ -18,7 +18,7 @@ const PLData = [
     companyName: "TCS",
     campaignCategory: "Low_credit",
     vendor: "Dummy Vendor",
-    panNumber:"BCDPA3088C",
+    panNumber:"BCDPXXXXXC",
     roi:23
   },
 ];
