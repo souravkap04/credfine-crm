@@ -41,7 +41,7 @@ export default function PageLayerSection(props) {
     }
     const onIdle = (e) => {
         if (istimeOut) {
-            history.push("/");
+           // history.push("/");
         } else {
             reset();
             setIsTimeOut(true);
