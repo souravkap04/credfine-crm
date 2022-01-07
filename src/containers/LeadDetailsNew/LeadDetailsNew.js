@@ -31,6 +31,7 @@ import { useParams, useHistory, useLocation } from 'react-router-dom';
 import EmiCalculator from '../Emicalculator/EmiCalculator';
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
+import moment from 'moment';
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -230,6 +231,9 @@ export default function LeadDetailsNew(props) {
                 await axios
                     .get(`${baseUrl}/leads/lead_detail/${leadId}`, { headers })
                     .then((response) => {
+                        let dateFromApi = response.data.lead_data["data"].dob;
+                        let changeDateFormat = moment(dateFromApi).format("DD/MM/YYYY");
+                       // console.log("changeDateFormat:"+changeDateFormat);
                         setMobileNo(response.data.lead_data.phone_no);
                         setStatus(response.data.lead_data.status);
                         setSubStatus(response.data.lead_data.sub_status);
@@ -237,7 +241,7 @@ export default function LeadDetailsNew(props) {
                         setLoanAmount(response.data.lead_data.loan_amount);
                         setMonthlyIncome(response.data.lead_data["data"].monthly_income);
                         setCurrentCompany(response.data.lead_data['data'].current_company);
-                        setDate(response.data.lead_data["data"].dob);
+                        setDate(changeDateFormat);
                         setPincode(response.data.lead_data["data"].residential_pincode);
                         setcity(response.data.lead_data["data"].city);
                         setstates(response.data.lead_data["data"].state);
@@ -245,7 +249,7 @@ export default function LeadDetailsNew(props) {
                         setCompanyName(response.data.lead_data["data"].current_company_name);
                         setLoanType(response.data.lead_data.loan_type);
                         setSource(response.data.lead_data.source);
-                        setPancardNo(response.data.eligibility_data.pan_no);
+                        setPancardNo(response.data.lead_data.data.pan_no);
                         setEmploymentType(response.data.lead_data["data"].employment_type)
                         setTotalWorkExp(response.data.eligibility_data.total_work_exp);
                         setCurrentWorkExp(response.data.eligibility_data.current_work_exp);
@@ -368,7 +372,7 @@ export default function LeadDetailsNew(props) {
             setExpanded('panel1')
         }
         let data = {
-            dob: date, monthly_income: monthlyIncome, current_company_name: companyName,
+            dob: date, monthly_income: monthlyIncome,pan_no:pancardNo, current_company_name: companyName,
             residential_pincode: pincode, city: city, state: states, current_company: currentCompany, employment_type: employmentType, credi_card_balance_transfer: creditCardbalanceTransfer
         };
         let lead_data = {
