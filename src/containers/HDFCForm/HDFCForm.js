@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
-import {hdfcBankApi} from "../../global/bankingApis";
+import { hdfcBankApi } from "../../global/bankingApis";
 import './HDFC.css';
 import logo from '../../images/forms/hdfc.svg';
 import back from '../../images/forms/back.svg';
@@ -10,11 +10,16 @@ import Checkbox from '@material-ui/core/Checkbox';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import uploadSRC from '../../images/forms/fileUpload.svg';
 import List from '@material-ui/core/List';
-import { useHistory , useParams} from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import phoneCall from '../../images/forms/phoneCall.svg';
+import MuiAlert from '@material-ui/lab/Alert';
+import Snackbar from '@material-ui/core/Snackbar';
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 export default function HDFCFrom() {
     const history = useHistory();
-    const {leadid} = useParams();
+    const { leadid } = useParams();
     const [isPersonalDetail, setisPersonalDetail] = useState(true);
     const [isPersonalProgress, setisPersonalProgress] = useState(false);
     const [isCurrentResidentialDetail, setisCurrentResidentialDetail] = useState(false);
@@ -28,132 +33,164 @@ export default function HDFCFrom() {
     const [isBankStatement, setisBankStatement] = useState(false);
     const [isApprovalStatus, setisApprovalStatus] = useState(false);
     const [isApprovalStatusProgress, setisApprovalStatusProgress] = useState(false);
-    const [firstName,setFirstName] = useState("");
-    const [lastName,setLastName] = useState("");
-    const [gender,setGender] = useState("");
-    const [dob,setDob] = useState("");
-    const [loanAmount,setLoanAmount] = useState("");
-    const [officeAddressType,setOfficeAddressType] = useState("");
-    const [monthlyTakeHomeSalary,setmonthlyTakeHomeSalary] = useState("");
-    const [residanceTypeDap,setResidanceTypeDap] = useState("");
-    const [employmentType,setEmploymentType] = useState("");
-    const [residanceAddressType,setResidanceAddressType] = useState("");
-    const [maritalStatus,setMaritalStatus] = useState("");
-    const [highestQualification,setHighestQualification] = useState("");
-    const [totalDependent,setTotalDependent] = useState("");
-    const [yearsInCurrentResidence,setYearsInCurrentResidence] = useState("");
-    const [yearsInCurrentCity,setyYearsInCurrentCity] = useState("");
-    const [panCardNo,setPanCardNo] = useState("");
-    const [purposeOfLoan,setPurposeOfLoan] = useState("");
-    const [qualification,setQualification] = useState("");
-    const [emailId,setEmailId] = useState("");
-    const [addressLineOne,setAddressLineOne] = useState("");
-    const [addressLineTwo,setAddressLineTwo] = useState("");
-    const [addressLineThree,setAddressLineThree] = useState("");
-    const [city,setCity] = useState("");
-    const [state,setState] = useState("");
-    const [pincode,setPincode] = useState("");
-    const [mobileNo,setMobileNo] = useState("");
-    const [residentialEmailId,setResidentialEmailId] = useState("");
-    const [employerName,setEmployerName] = useState("");
-    const [officeAddressOne,setofficeAddressOne] = useState("");
-    const [officeAddressTwo,setofficeAddressTwo] = useState("");
-    const [officeState,setOfficeState] = useState("");
-    const [officeCity,setOfficeCity] = useState("");
-    const [officePincode,setOfficePincode] = useState("");
-    const [addressType,setAddressType] = useState("");
-    const [hdfcBankAccNo,setHdfcBankAccNo] = useState("");
-    const [hdfcBranch,setHdfcBranch] = useState("");
-    const [refFirstName,setRefFirstName] = useState("");
-    const [refLastName,setRefLastName] = useState("");
-    const [refMobileNo,setRefMobileNo] = useState("");
+    const [isHdfcData,setIsHdfcData] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+    const [isError, setIsError] = useState(false);
+    const [hangUpSnacks, sethangUpSnacks] = useState(false);
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [gender, setGender] = useState("");
+    const [dob, setDob] = useState("");
+    const [loanAmount, setLoanAmount] = useState("");
+    const [officeAddressType, setOfficeAddressType] = useState("");
+    const [monthlyTakeHomeSalary, setmonthlyTakeHomeSalary] = useState("");
+    const [residanceTypeDap, setResidanceTypeDap] = useState("");
+    const [employmentType, setEmploymentType] = useState("");
+    const [residanceAddressType, setResidanceAddressType] = useState("");
+    const [maritalStatus, setMaritalStatus] = useState("");
+    const [highestQualification, setHighestQualification] = useState("");
+    const [totalDependent, setTotalDependent] = useState("");
+    const [yearsInCurrentResidence, setYearsInCurrentResidence] = useState("");
+    const [yearsInCurrentCity, setyYearsInCurrentCity] = useState("");
+    const [panCardNo, setPanCardNo] = useState("");
+    const [purposeOfLoan, setPurposeOfLoan] = useState("");
+    const [qualification, setQualification] = useState("");
+    const [emailId, setEmailId] = useState("");
+    const [addressLineOne, setAddressLineOne] = useState("");
+    const [addressLineTwo, setAddressLineTwo] = useState("");
+    const [addressLineThree, setAddressLineThree] = useState("");
+    const [city, setCity] = useState("");
+    const [state, setState] = useState("");
+    const [pincode, setPincode] = useState("");
+    const [mobileNo, setMobileNo] = useState("");
+    const [residentialEmailId, setResidentialEmailId] = useState("");
+    const [employerName, setEmployerName] = useState("");
+    const [officeAddressOne, setofficeAddressOne] = useState("");
+    const [officeAddressTwo, setofficeAddressTwo] = useState("");
+    const [officeState, setOfficeState] = useState("");
+    const [officeCity, setOfficeCity] = useState("");
+    const [officePincode, setOfficePincode] = useState("");
+    const [addressType, setAddressType] = useState("");
+    const [hdfcBankAccNo, setHdfcBankAccNo] = useState("");
+    const [hdfcBranch, setHdfcBranch] = useState("");
+    const [refFirstName, setRefFirstName] = useState("");
+    const [refLastName, setRefLastName] = useState("");
+    const [refMobileNo, setRefMobileNo] = useState("");
 
     useEffect(() => {
-         fetchHdfcData(leadid);
-         fetchPersonalReferenceData(leadid);
-         console.log("dgdgdgd:"+officeAddressType);
+        fetchHdfcData(leadid);
+        fetchPersonalReferenceData(leadid);
     }, [])
-    const fetchHdfcData = async (leadId)=>{
+    const fetchHdfcData = async (leadId) => {
         await axios.get(`${hdfcBankApi}/${leadId}/2`)
-                 .then((response)=>{
-                     setFirstName(response.data.applyLoan.First_Name__req);
-                     setLastName(response.data.applyLoan.Last_Name__req);
-                     setGender(response.data.applyLoan.Gender__req);
-                     setDob(response.data.applyLoan.Date_Of_Birth__req);
-                     setLoanAmount(response.data.applyLoan.Loan_Amount__req);
-                     setOfficeAddressType(response.data.applyLoan.Address_Type_Work__req);
-                     setmonthlyTakeHomeSalary(response.data.applyLoan.Monthly_take_home_Salary__req);
-                     setResidanceTypeDap(response.data.applyLoan.residence_type_dap__req);
-                     setEmploymentType(response.data.applyLoan.employment_type__req);
-                     setResidanceAddressType(response.data.applyLoan.Address_Type_Resi__req);
-                     //setMaritalStatus(response.data.applyLoan.);
-                     setHighestQualification(response.data.applyLoan.Educational_Qualification__req);
-                     setTotalDependent(response.data.applyLoan.No_of_Dependent__req);
-                     setYearsInCurrentResidence(response.data.applyLoan.Year_at_Current_Address);
-                     setyYearsInCurrentCity(response.data.applyLoan.Year_at_City);
-                     setPanCardNo(response.data.applyLoan.PAN_AC_No__req);
-                     //setPurposeOfLoan(response.data.applyLoan.)
-                     setAddressLineOne(response.data.applyLoan.Address1_Resi__req);
-                     setAddressLineTwo(response.data.applyLoan.Address2_Resi__req);
-                     setAddressLineThree(response.data.applyLoan.Address3_Resi__req);
-                     setCity(response.data.applyLoan.City_Resi__req);
-                     setState(response.data.applyLoan.State_Resi__req);
-                     setPincode(response.data.applyLoan.Pin_Code_Resi__req);
-                     setMobileNo(response.data.applyLoan.Mobile1_Resi__req);
-                     setResidentialEmailId(response.data.applyLoan.Email_Resi__req);
-                     setEmployerName(response.data.applyLoan.Employer_Name__req);
-                     setofficeAddressOne(response.data.applyLoan.Address1_Work__req);
-                     setofficeAddressTwo(response.data.applyLoan.Address2_Work__req);
-                     setOfficeState(response.data.applyLoan.State_Work);
-                     setOfficeCity(response.data.applyLoan.City_Work__req);
-                     setOfficePincode(response.data.applyLoan.Pin_Code_Work__req);
-                     setAddressType();
-                     setHdfcBankAccNo();
-                     setHdfcBranch();
-                 }).catch((error)=>{
-                     console.log(error);
-                 })
- };
- const fetchPersonalReferenceData = async (leadId) =>{
-            await axios.get(`${hdfcBankApi}/${leadId}/3`)
-            .then((response)=>{
+            .then((response) => {
+                setFirstName(response.data.applyLoan.First_Name__req);
+                setLastName(response.data.applyLoan.Last_Name__req);
+                setGender(response.data.applyLoan.Gender__req);
+                setDob(response.data.applyLoan.Date_Of_Birth__req);
+                setLoanAmount(response.data.applyLoan.Loan_Amount__req);
+                setOfficeAddressType(response.data.applyLoan.Address_Type_Work__req);
+                setmonthlyTakeHomeSalary(response.data.applyLoan.Monthly_take_home_Salary__req);
+                setResidanceTypeDap(response.data.applyLoan.residence_type_dap__req);
+                setEmploymentType(response.data.applyLoan.employment_type__req);
+                setResidanceAddressType(response.data.applyLoan.Address_Type_Resi__req);
+                //setMaritalStatus(response.data.applyLoan.);
+                setHighestQualification(response.data.applyLoan.Educational_Qualification__req);
+                setTotalDependent(response.data.applyLoan.No_of_Dependent__req);
+                setYearsInCurrentResidence(response.data.applyLoan.Year_at_Current_Address);
+                setyYearsInCurrentCity(response.data.applyLoan.Year_at_City);
+                setPanCardNo(response.data.applyLoan.PAN_AC_No__req);
+                //setPurposeOfLoan(response.data.applyLoan.)
+                setAddressLineOne(response.data.applyLoan.Address1_Resi__req);
+                setAddressLineTwo(response.data.applyLoan.Address2_Resi__req);
+                setAddressLineThree(response.data.applyLoan.Address3_Resi__req);
+                setCity(response.data.applyLoan.City_Resi__req);
+                setState(response.data.applyLoan.State_Resi__req);
+                setPincode(response.data.applyLoan.Pin_Code_Resi__req);
+                setMobileNo(response.data.applyLoan.Mobile1_Resi__req);
+                setResidentialEmailId(response.data.applyLoan.Email_Resi__req);
+                setEmployerName(response.data.applyLoan.Employer_Name__req);
+                setofficeAddressOne(response.data.applyLoan.Address1_Work__req);
+                setofficeAddressTwo(response.data.applyLoan.Address2_Work__req);
+                setOfficeState(response.data.applyLoan.State_Work);
+                setOfficeCity(response.data.applyLoan.City_Work__req);
+                setOfficePincode(response.data.applyLoan.Pin_Code_Work__req);
+                setAddressType();
+                setHdfcBankAccNo();
+                setHdfcBranch();
+            }).catch((error) => {
+                console.log(error);
+            })
+    };
+    const fetchPersonalReferenceData = async (leadId) => {
+        await axios.get(`${hdfcBankApi}/${leadId}/3`)
+            .then((response) => {
                 setRefFirstName(response.data.ref_1_FirstName__req);
                 setRefLastName(response.data.ref_1_LastName);
                 setRefMobileNo(response.data.ref_1_Mobile__req);
-            }).catch((error)=>{
+            }).catch((error) => {
                 console.log(error);
             })
- }
- const hdfcLoanDataSubmitHandler = async (leadId) =>{
-     let applyLoan = {First_Name : firstName,Last_Name : lastName,Gender : gender,Date_Of_Birth : dob,Educational_Qualification : highestQualification,
-        Loan_Amount : loanAmount,PAN_AC_No : panCardNo,
-        City_Resi : city,Pin_Code_Resi : pincode,Address1_Resi : addressLineOne,Address2_Resi : addressLineTwo,Address3_Resi : addressLineThree,State_Resi : state,Mobile1_Resi : mobileNo,
-        STD_Code_Resi:"", Email_Resi : residentialEmailId,Year_at_Current_Address : yearsInCurrentResidence,Year_at_City : yearsInCurrentCity,Employer_Name : employerName,Address1_Work : officeAddressOne,
-        Address2_Work : officeAddressTwo,
-        Pin_Code_Work : officePincode,Address_Type_Work : officeAddressType,City_Work :officeCity,State_Work : officeState,Monthly_take_home_Salary : monthlyTakeHomeSalary,residence_type_dap : residanceTypeDap,
-        employment_type : employmentType,No_of_Dependent : totalDependent,Address_Type_Resi : residanceAddressType, }
-        let items = {loan_data : {applyLoan}};
-        console.log("items:"+items);
-        const headers = {'Content-Type': 'application/json'};
-        await axios.post(`${hdfcBankApi}/${leadId}/2`,items ,{headers})
-        .then((response)=>{
-        console.log(response.data.status);
-        hdfcPersonalReferenceHandler(leadId);
-        }).catch((error)=>{
-        console.log(error);
-        })
-}
-const hdfcPersonalReferenceHandler = async leadId =>{
-    let loan_data = {ref_1_FirstName__req : refFirstName,ref_1_LastName : refLastName,ref_1_Mobile__req : refMobileNo}
-    let items = {loan_data};
-    await axios.post(`${hdfcBankApi}/${leadId}/3`,items)
-        .then((response)=>{
-            console.log(response.data.status)
-        }).catch((error)=>{
-            console.log(error)
-        })
-}
+    }
+    const hdfcLoanDataSubmitHandler = async (leadId) => {
+        let applyLoan = {
+            First_Name: firstName, Last_Name: lastName, Gender: gender, Date_Of_Birth: dob, Educational_Qualification: highestQualification,
+            Loan_Amount: loanAmount, PAN_AC_No: panCardNo,
+            City_Resi: city, Pin_Code_Resi: pincode, Address1_Resi: addressLineOne, Address2_Resi: addressLineTwo, Address3_Resi: addressLineThree, State_Resi: state, Mobile1_Resi: mobileNo,
+            STD_Code_Resi: "", Email_Resi: residentialEmailId, Year_at_Current_Address: yearsInCurrentResidence, Year_at_City: yearsInCurrentCity, Employer_Name: employerName, Address1_Work: officeAddressOne,
+            Address2_Work: officeAddressTwo,
+            Pin_Code_Work: officePincode, Address_Type_Work: officeAddressType, City_Work: officeCity, State_Work: officeState, Monthly_take_home_Salary: monthlyTakeHomeSalary, residence_type_dap: residanceTypeDap,
+            employment_type: employmentType, No_of_Dependent: totalDependent, Address_Type_Resi: residanceAddressType,
+        }
+        let items = { loan_data: { applyLoan } };
+        console.log("items:" + items);
+        const headers = { 'Content-Type': 'application/json' };
+        await axios.post(`${hdfcBankApi}/${leadId}/2`, items, { headers })
+            .then((response) => {
+                console.log(response.data.status);
+                if(response.data.status){
+                    setIsHdfcData(true);
+                }
+            }).catch((error) => {
+                console.log(error);
+                // setAlertMessage("something wrong");
+                // setIsError(true);
+            })
+    }
+    const hdfcPersonalReferenceHandler = async leadId => {
+        let loan_data = { ref_1_FirstName__req: refFirstName, ref_1_LastName: refLastName, ref_1_Mobile__req: refMobileNo }
+        let items = { loan_data };
+        await axios.post(`${hdfcBankApi}/${leadId}/3`, items)
+            .then((response) => {
+                console.log(response.data.status)
+            }).catch((error) => {
+                console.log(error)
+            })
+    }
+    const hdfcFormErrorHandler = () => {
+        let panRegex = /[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(panCardNo);
+        if(panCardNo === '' || !panRegex){
+            setAlertMessage("Invalid Pan Number");
+            setIsError(true);
+            return;
+        }
+    }
+    const disableHangUpSnacks = () => {
+        sethangUpSnacks(false);
+        setIsError(false);
+        setIsHdfcData(false);
+    }
     return <div className="HDFCFormContainer">
+        <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isHdfcData} autoHideDuration={1500} onClose={disableHangUpSnacks}>
+                <Alert onClose={disableHangUpSnacks} severity="success">
+                    Hdfc Data Successfully Updated
+                </Alert>
+            </Snackbar>
+            <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isError} autoHideDuration={1500} onClose={disableHangUpSnacks}>
+                <Alert onClose={disableHangUpSnacks} severity="error">
+                    {alertMessage}
+                </Alert>
+            </Snackbar>
         <div className="leftSection">
             <div className="logoContainer">
                 <div className="logoImage">
@@ -282,8 +319,8 @@ const hdfcPersonalReferenceHandler = async leadId =>{
                         }}
                         variant="outlined"
                         size="small"
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
                     />
                     <TextField
                         className="textField fullName"
@@ -295,8 +332,8 @@ const hdfcPersonalReferenceHandler = async leadId =>{
                         }}
                         variant="outlined"
                         size="small"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
                     />
                     <TextField
                         select
@@ -312,8 +349,8 @@ const hdfcPersonalReferenceHandler = async leadId =>{
                         }}
                         variant="outlined"
                         size="small"
-                    value={gender}
-                    onChange={(e) => setGender(e.target.value)}
+                        value={gender}
+                        onChange={(e) => setGender(e.target.value)}
                     >
                         <option value="">Select One</option>
                         <option value="M">Male</option>
@@ -358,8 +395,8 @@ const hdfcPersonalReferenceHandler = async leadId =>{
                         }}
                         variant="outlined"
                         size="small"
-                    value={highestQualification}
-                    onChange={(e) => setHighestQualification(e.target.value)}
+                        value={highestQualification}
+                        onChange={(e) => setHighestQualification(e.target.value)}
                     >
                         <option value="">Select One</option>
                         <option value="SSC">SSC</option>
@@ -382,8 +419,8 @@ const hdfcPersonalReferenceHandler = async leadId =>{
                         }}
                         variant="outlined"
                         size="small"
-                    value={totalDependent}
-                    onChange={(e) => setTotalDependent(e.target.value)}
+                        value={totalDependent}
+                        onChange={(e) => setTotalDependent(e.target.value)}
                     >
                         <option value="">Select One</option>
                         <option value="1">1</option>
@@ -406,7 +443,7 @@ const hdfcPersonalReferenceHandler = async leadId =>{
                         variant="outlined"
                         size="small"
                         value={yearsInCurrentResidence}
-                        onChange={(e)=>setYearsInCurrentResidence(e.target.value)}
+                        onChange={(e) => setYearsInCurrentResidence(e.target.value)}
                     />
                     <TextField
                         className="textField"
@@ -419,7 +456,7 @@ const hdfcPersonalReferenceHandler = async leadId =>{
                         variant="outlined"
                         size="small"
                         value={yearsInCurrentCity}
-                        onChange={(e)=>setyYearsInCurrentCity(e.target.value)}
+                        onChange={(e) => setyYearsInCurrentCity(e.target.value)}
                     />
                     <TextField
                         className="textField"
@@ -434,7 +471,7 @@ const hdfcPersonalReferenceHandler = async leadId =>{
                         size="small"
                         maxLength="10"
                         value={panCardNo}
-                        onChange={(e)=>setPanCardNo(e.target.value)}
+                        onChange={(e) => setPanCardNo(e.target.value)}
                     />
                     {/* <TextField
                         select
@@ -502,8 +539,8 @@ const hdfcPersonalReferenceHandler = async leadId =>{
                         }}
                         variant="outlined"
                         size="small"
-                    value={addressLineOne}
-                    onChange={(e) => setAddressLineOne(e.target.value)}
+                        value={addressLineOne}
+                        onChange={(e) => setAddressLineOne(e.target.value)}
                     />
                     <TextField
                         className="textField"
@@ -516,7 +553,7 @@ const hdfcPersonalReferenceHandler = async leadId =>{
                         variant="outlined"
                         size="small"
                         value={addressLineTwo}
-                        onChange={(e)=> setAddressLineTwo(e.target.value)}
+                        onChange={(e) => setAddressLineTwo(e.target.value)}
                     />
                     <TextField
                         className="textField"
@@ -529,7 +566,7 @@ const hdfcPersonalReferenceHandler = async leadId =>{
                         variant="outlined"
                         size="small"
                         value={addressLineThree}
-                        onChange={(e)=>setAddressLineThree(e.target.value)}
+                        onChange={(e) => setAddressLineThree(e.target.value)}
                     />
                     <TextField
                         className="textField"
@@ -623,7 +660,15 @@ const hdfcPersonalReferenceHandler = async leadId =>{
                         onChange={(e) => setResidanceTypeDap(e.target.value)}
                     />
                 </FormContainer>
-                <FormContainer Name="Business Details" >
+                <FormContainer Name="Business Details" isSaveNextButton={true} onClick={() => {
+                    setisPersonalDetail(false)
+                    setisPersonalProgress(true)
+                    setisCurrentProgress(true)
+                    setisBusinessProgress(true)
+                    setisPersonalReference(true)
+                    hdfcFormErrorHandler();
+                    hdfcLoanDataSubmitHandler(leadid);
+                }}>
                     <TextField
                         className="textField"
                         id="outlined-full-width"
@@ -749,8 +794,62 @@ const hdfcPersonalReferenceHandler = async leadId =>{
                         onChange={(e) => setHdfcBranch(e.target.value)}
                     /> */}
                 </FormContainer>
-                <FormContainer Name="Personal Reference" >
+            </div> : ''}
+            {isPersonalReference ? <div className="adjustBackground">
+                <div className="headerContainer">
+                    <div className="backButton" onClick={() => {
+                        setisPersonalProgress(false)
+                        setisCurrentProgress(false)
+                        setisBusinessProgress(false)
+                        setisPersonalReference(false)
+                        setisPersonalDetail(true)
+                    }}>
+                        <img src={back} alt="" />
+                    </div>
+                    <div className="needHelpContainer">
+                        <div className="needHelpText">Need Help?</div>
+                        <div className="rightPart">
+                            <div className="phoneCall">
+                                <img src={phoneCall} alt="" />
+                            </div>
+                            <div className="numberText">7045330702</div>
+                        </div>
+                    </div>
+                </div>
+                <div className="texualContainer">
+                    <div className="headText"><strong>Congratulations!</strong> your personal loan is a few steps away…</div>
+                    <div className="offerContainer">
+                        <div className="offerBox">
+                            <div className="offerHead">Loan Amount</div>
+                            <div className="offerText">₹ 15,00,000</div>
+                        </div>
+                        <div className="offerBox">
+                            <div className="offerHead">Loan Tenure</div>
+                            <div className="offerText">5 Years</div>
+                        </div>
+                        <div className="offerBox">
+                            <div className="offerHead">Interest Rate</div>
+                            <div className="offerText">10.25%</div>
+                        </div>
+                        <div className="offerBox">
+                            <div className="offerHead">EMI</div>
+                            <div className="offerText">₹ 27,575</div>
+                        </div>
+                        <div className="offerBox">
+                            <div className="offerHead">Processing Fee</div>
+                            <div className="offerText">₹ 1,999</div>
+                        </div>
+                    </div>
+                </div>
+                <div className="offerBorder"></div>
+                <FormContainer Name="Personal Reference" isSaveNextButton={true} onClick={() => {
+                    setisUploadDocument(true)
+                    setisPersonalReference(false)
+                    setisReferenceProgress(true)
+                    hdfcPersonalReferenceHandler(leadid);
+                }}>
                     <TextField
+                        autoFocus
                         className="textField"
                         id="outlined-full-width"
                         label="First Name"
@@ -790,6 +889,52 @@ const hdfcPersonalReferenceHandler = async leadId =>{
                         onChange={(e) => setRefMobileNo(e.target.value)}
                     />
                 </FormContainer>
+            </div> : ''}
+            {isUploadDocument ? <div className="adjustBackground">
+                <div className="headerContainer">
+                    <div className="backButton" onClick={() => {
+                        setisReferenceProgress(false)
+                        setisUploadDocument(false)
+                        setisPersonalReference(true)
+                    }}>
+                        <img src={back} alt="" />
+                    </div>
+                    <div className="needHelpContainer">
+                        <div className="needHelpText">Need Help?</div>
+                        <div className="rightPart">
+                            <div className="phoneCall">
+                                <img src={phoneCall} alt="" />
+                            </div>
+                            <div className="numberText">7045330702</div>
+                        </div>
+                    </div>
+                </div>
+                <div className="texualContainer">
+                    <div className="headText"><strong>Congratulations!</strong> your personal loan is a few steps away…</div>
+                    <div className="offerContainer">
+                        <div className="offerBox">
+                            <div className="offerHead">Loan Amount</div>
+                            <div className="offerText">₹ 15,00,000</div>
+                        </div>
+                        <div className="offerBox">
+                            <div className="offerHead">Loan Tenure</div>
+                            <div className="offerText">5 Years</div>
+                        </div>
+                        <div className="offerBox">
+                            <div className="offerHead">Interest Rate</div>
+                            <div className="offerText">10.25%</div>
+                        </div>
+                        <div className="offerBox">
+                            <div className="offerHead">EMI</div>
+                            <div className="offerText">₹ 27,575</div>
+                        </div>
+                        <div className="offerBox">
+                            <div className="offerHead">Processing Fee</div>
+                            <div className="offerText">₹ 1,999</div>
+                        </div>
+                    </div>
+                </div>
+                <div className="offerBorder"></div>
                 <div className="uploadContainer">
                     <div className="uploadBankStatementContainer">
                         <div className="titleContainer">
@@ -852,15 +997,10 @@ const hdfcPersonalReferenceHandler = async leadId =>{
                 </div>
                 <FormContainer isSaveNextButton={true} className="uploadDocumentFormContainer" onClick={() => {
                     setisApprovalStatus(true)
-                    setisPersonalDetail(false)
                     setisApprovalStatusProgress(true)
+                    setisUploadDocument(false)
                     setisUploadProgress(true)
                     setisBankStatement(true)
-                    setisPersonalProgress(true)
-                    setisCurrentProgress(true)
-                    setisBusinessProgress(true)
-                    setisReferenceProgress(true)
-                    hdfcLoanDataSubmitHandler(leadid);
                 }}>
                     <TextField
                         className="textField"
