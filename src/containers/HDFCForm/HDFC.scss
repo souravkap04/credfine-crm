@@ -249,211 +249,107 @@ $mob: 100 / 375;
             width: 851 * $desk + rem;
             // margin-left: 38 * $desk + rem;
             display: flex;
-            .uploadBankStatementContainer {
+            .uploadDocumentContainer {
                 position: relative;
                 margin-right: 48 * $desk + rem;
-                .titleContainer {
+                .headText {
+                    font-size: 21 * $desk + rem;
+                    font-weight: 300;
+                    color: #000;
+                    margin-bottom: 10 * $desk + rem;
+                }
+                .uploadDocumentTextRow {
+                    width: 845 * $desk + rem;
+                    height: 37 * $desk + rem;
                     display: flex;
                     align-items: center;
-                    .headText {
-                        font-size: 21 * $desk + rem;
-                        font-weight: 300;
-                        color: #000;
-                        margin-right: 8 * $desk + rem;
-                    }
-                    .tickCircle {
-                        color: #bcbcbc;
-                        font-size: 23 * $desk + rem;
-                    }
                 }
-                .subText {
-                    font-size: 14 * $desk + rem;
-                    font-weight: 600;
-                    color: #07498e;
+                .documentType {
+                    margin-left: 24 * $desk + rem;
+                    margin-right: 57 * $desk + rem;
                 }
-                .uploadMainBox {
-                    margin-top: 16 * $desk + rem;
-                    width: 245 * $desk + rem;
-                    height: 132 * $desk + rem;
-                    border-radius: 6 * $desk + rem;
-                    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
-                    background-color: #fff;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    .boxBorder {
-                        width: 223 * $desk + rem;
-                        height: 114 * $desk + rem;
-                        border-radius: 6 * $desk + rem;
-                        border: dashed 1px #727272;
-                        background-color: #fff;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        .uploadImage {
-                            width: 22 * $desk + rem;
-                            height: 29 * $desk + rem;
-                            img {
-                                width: 100%;
-                                height: 100%;
-                            }
-                        }
-                    }
+                .selectFromEach {
+                    margin-right: 167 * $desk + rem;
                 }
-            }
-            .uploadSalaryslipContainer {
-                position: relative;
-                margin-right: 48 * $desk + rem;
-                .titleContainer {
+                .fileName {
+                    margin-right: 158 * $desk + rem;
+                }
+                .uploadDocumentRow {
+                    width: 845 * $desk + rem;
+                    height: auto;
                     display: flex;
                     align-items: center;
-                    .headText {
-                        font-size: 21 * $desk + rem;
-                        font-weight: 300;
-                        color: #000;
-                        margin-right: 8 * $desk + rem;
+                    background-color: #f5f5f5;
+                    margin-bottom: 4 * $desk + rem;
+                    padding-top: 14 * $desk + rem;
+                    padding-bottom: 14 * $desk + rem;
+                    .documentTypeText {
+                        letter-spacing: 0.13 * $desk + rem;
+                        color: #000000;
+                        font-size: 14 * $desk + rem;
+                        margin-left: 24 * $desk + rem;
+                        margin-right: 33 * $desk + rem;
+                        margin-top: 0;
+                        margin-bottom: 0;
+                        font-weight: bold;
+                        width: 135 * $desk + rem;
                     }
-                    .tickCircle {
-                        color: #bcbcbc;
-                        font-size: 23 * $desk + rem;
-                    }
-                }
-                .subText {
-                    font-size: 14 * $desk + rem;
-                    font-weight: 600;
-                    color: #07498e;
-                }
-                .uploadMainBox {
-                    margin-top: 16 * $desk + rem;
-                    width: 245 * $desk + rem;
-                    height: 132 * $desk + rem;
-                    border-radius: 6 * $desk + rem;
-                    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
-                    background-color: #fff;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    .boxBorder {
-                        width: 223 * $desk + rem;
-                        height: 114 * $desk + rem;
-                        border-radius: 6 * $desk + rem;
-                        border: dashed 1px #727272;
-                        background-color: #fff;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        .uploadImage {
-                            width: 22 * $desk + rem;
-                            height: 29 * $desk + rem;
-                            img {
-                                width: 100%;
-                                height: 100%;
-                            }
-                        }
-                    }
-                }
-            }
-            .uploadAddressProof {
-                position: relative;
-                .titleContainer {
-                    display: flex;
-                    align-items: center;
-                    .headText {
-                        font-size: 21 * $desk + rem;
-                        font-weight: 300;
-                        color: #000;
-                        margin-right: 8 * $desk + rem;
-                    }
-                    .tickCircle {
-                        color: #bcbcbc;
-                        font-size: 23 * $desk + rem;
-                    }
-                }
-                .subText {
-                    font-size: 14 * $desk + rem;
-                    font-weight: 600;
-                    color: #07498e;
-                }
-                .uploadAdjustContainer {
-                    display: flex;
-                    .leftPart {
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                        .uploadMainBox {
-                            margin-top: 16 * $desk + rem;
-                            width: 122.5 * $desk + rem;
-                            height: 132 * $desk + rem;
-                            border-radius: 6 * $desk + rem;
-                            box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
-                            background-color: #fff;
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                            margin-right: 7 * $desk + rem;
-                            .boxBorder {
-                                width: 102.5 * $desk + rem;
-                                height: 114 * $desk + rem;
-                                border-radius: 6 * $desk + rem;
-                                border: dashed 1px #727272;
-                                background-color: #fff;
-                                display: flex;
-                                justify-content: center;
-                                align-items: center;
-                                .uploadImage {
-                                    width: 22 * $desk + rem;
-                                    height: 29 * $desk + rem;
-                                    img {
-                                        width: 100%;
-                                        height: 100%;
-                                    }
-                                }
-                            }
-                        }
-                        .front {
-                            margin-top: 6 * $desk + rem;
-                            font-size: 12 * $desk + rem;
+                    .documentTypeSelect {
+                        width: 160 * $desk + rem;
+                        height: 32 * $desk + rem;
+                        outline: none;
+                        border: 1px solid #bcbcbc;
+                        border-radius: 2 * $desk + rem;
+                        color: #727272;
+                        option {
+                            font-size: 14 * $desk + rem;
+                            letter-spacing: 0.13 * $desk + rem;
                             color: #727272;
                         }
                     }
-                    .rightPart {
+                    .fileButton {
                         display: flex;
-                        flex-direction: column;
+                        justify-content: center;
                         align-items: center;
-                        .uploadMainBox {
-                            margin-top: 16 * $desk + rem;
-                            width: 122.5 * $desk + rem;
-                            height: 132 * $desk + rem;
-                            border-radius: 6 * $desk + rem;
-                            box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
-                            background-color: #fff;
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                            margin-left: 7 * $desk + rem;
-                            .boxBorder {
-                                width: 102.5 * $desk + rem;
-                                height: 114 * $desk + rem;
-                                border-radius: 6 * $desk + rem;
-                                border: dashed 1px #727272;
-                                background-color: #fff;
-                                display: flex;
-                                justify-content: center;
-                                align-items: center;
-                                .uploadImage {
-                                    width: 22 * $desk + rem;
-                                    height: 29 * $desk + rem;
-                                    img {
-                                        width: 100%;
-                                        height: 100%;
-                                    }
-                                }
-                            }
-                        }
-                        .back {
-                            margin-top: 6 * $desk + rem;
+                        width: 83 * $desk + rem;
+                        height: 32 * $desk + rem;
+                        border-radius: 2 * $desk + rem;
+                        background-color: #1c86fc;
+                        margin-left: 14 * $desk + rem;
+                        margin-right: 47 * $desk + rem;
+                        margin-bottom: 0;
+                        cursor: pointer;
+                        .fileText {
+                            color: #ffffff;
                             font-size: 12 * $desk + rem;
-                            color: #727272;
+                            letter-spacing: 0.4 * $desk + rem;
+                        }
+                        .plus {
+                            color: #ffffff;
+                            font-size: 17 * $desk + rem;
+                            margin-left: 8 * $desk + rem;
+                        }
+                    }
+                    #file-chosen {
+                        font-size: 13 * $desk + rem;
+                        color: #07498e;
+                        letter-spacing: 0.43 * $desk + rem;
+                        width: 200 * $desk + rem;
+                    }
+                    .uploadStatusButton {
+                        width: 99 * $desk + rem;
+                        height: 28 * $desk + rem;
+                        border-radius: 14 * $desk + rem;
+                        background-color: #65be7a;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        position: absolute;
+                        right: 24 * $desk + rem;
+                        .uploadStatusText {
+                            letter-spacing: 0.4 * $desk + rem;
+                            color: #ffffff;
+                            font-size: 12 * $desk + rem;
                         }
                     }
                 }

@@ -34,7 +34,7 @@ export default function HDFCFrom() {
     const [isApprovalStatus, setisApprovalStatus] = useState(false);
     const [isApprovalStatusProgress, setisApprovalStatusProgress] = useState(false);
     const [isHdfcData, setIsHdfcData] = useState(false);
-    const [isHdfcPersonalRefData,setIsHdfcPersonalRefData] = useState(false);
+    const [isHdfcPersonalRefData, setIsHdfcPersonalRefData] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
     const [isError, setIsError] = useState(false);
     const [hangUpSnacks, sethangUpSnacks] = useState(false);
@@ -77,10 +77,13 @@ export default function HDFCFrom() {
     const [refFirstName, setRefFirstName] = useState("");
     const [refLastName, setRefLastName] = useState("");
     const [refMobileNo, setRefMobileNo] = useState("");
-
+    const [uploadDocumentGet, setuploadDocumentGet] = useState([]);
+    const actualBtn = document.getElementById('actual-btn');
+    const fileChosen = document.getElementById('file-chosen');
     useEffect(() => {
         fetchHdfcData(leadid);
         fetchPersonalReferenceData(leadid);
+        hdfcUploadDocumentGetHandler(leadid);
     }, [])
     const fetchHdfcData = async (leadId) => {
         await axios.get(`${hdfcBankApi}/${leadId}/2`)
@@ -178,23 +181,23 @@ export default function HDFCFrom() {
             setAlertMessage('Invalid State')
             setIsError(true);
             return;
-        }if (pincode === '' || !pinCodeRegex) {
+        } if (pincode === '' || !pinCodeRegex) {
             setAlertMessage('Invalid Pincode')
             setIsError(true);
             return;
-        }if (mobileNo === '' || !mobRegex) {
+        } if (mobileNo === '' || !mobRegex) {
             setAlertMessage('Invalid MobileNo')
             setIsError(true);
             return;
-        }if (residentialEmailId === '') {
+        } if (residentialEmailId === '') {
             setAlertMessage('Invalid EmailId')
             setIsError(true);
             return;
-        }if (residanceAddressType === '') {
+        } if (residanceAddressType === '') {
             setAlertMessage('Invalid Residance Type')
             setIsError(true);
             return;
-        }if (employerName === '') {
+        } if (employerName === '') {
             setAlertMessage('Invalid Employer Name')
             setIsError(true);
         }
@@ -207,7 +210,7 @@ export default function HDFCFrom() {
             setAlertMessage('Invalid Office Address2')
             setIsError(true);
             return;
-        }if (officeCity === '') {
+        } if (officeCity === '') {
             setAlertMessage('Invalid Office City')
             setIsError(true);
             return;
@@ -215,7 +218,7 @@ export default function HDFCFrom() {
             setAlertMessage('Invalid Office State')
             setIsError(true);
             return;
-        }if (officePincode === '' || !officePinRegex) {
+        } if (officePincode === '' || !officePinRegex) {
             setAlertMessage('Invalid Office Pincode')
             setIsError(true);
             return;
@@ -273,12 +276,20 @@ export default function HDFCFrom() {
         let items = { loan_data };
         await axios.post(`${hdfcBankApi}/${leadId}/3`, items)
             .then((response) => {
-                if(response.data.status){
-                setisUploadDocument(true)
-                setisPersonalReference(false)
-                setisReferenceProgress(true)
-                setIsHdfcPersonalRefData(true)
+                if (response.data.status) {
+                    setisUploadDocument(true)
+                    setisPersonalReference(false)
+                    setisReferenceProgress(true)
+                    setIsHdfcPersonalRefData(true)
                 }
+            }).catch((error) => {
+                console.log(error)
+            })
+    }
+    const hdfcUploadDocumentGetHandler = async (leadId) => {
+        await axios.get(`${hdfcBankApi}/${leadId}/4`)
+            .then((response) => {
+                setuploadDocumentGet(response.data.documents.Parent_Doc)
             }).catch((error) => {
                 console.log(error)
             })
@@ -1039,63 +1050,143 @@ export default function HDFCFrom() {
                 </div>
                 <div className="offerBorder"></div>
                 <div className="uploadContainer">
-                    <div className="uploadBankStatementContainer">
-                        <div className="titleContainer">
-                            <div className="headText">Upload Bank Statement</div>
-                            <CheckCircleIcon className="tickCircle" />
+                    <div className="uploadDocumentContainer">
+                        <div className="headText">Upload Bank Statement</div>
+                        <div className='uploadDocumentTextRow'>
+                            <div className="uploadDocumentText documentType">Document Type</div>
+                            <div className="uploadDocumentText selectFromEach">Select (1 from each)</div>
+                            <div className="uploadDocumentText fileName">File Name</div>
+                            <div className="uploadDocumentText uploadStatus">Upload Status</div>
                         </div>
-                        <div className="subText">Last 3 months </div>
-                        <div className="uploadMainBox">
-                            <div className="boxBorder">
-                                <div className="uploadImage">
-                                    <img src={uploadSRC} alt="" />
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div className="uploadSalaryslipContainer">
-                        <div className="titleContainer">
-                            <div className="headText">Upload Salary Slip</div>
-                            <CheckCircleIcon className="tickCircle" />
-                        </div>
-                        <div className="subText">Last 2 months</div>
-                        <div className="uploadMainBox">
-                            <div className="boxBorder">
-                                <div className="uploadImage">
-                                    <img src={uploadSRC} alt="" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="uploadAddressProof">
-                        <div className="titleContainer">
-                            <div className="headText">Upload Address Proof</div>
-                            <CheckCircleIcon className="tickCircle" />
-                        </div>
-                        <div className="subText">Address proof as mentioned here</div>
-                        <div className="uploadAdjustContainer">
-                            <div className="leftPart">
-                                <div className="uploadMainBox">
-                                    <div className="boxBorder">
-                                        <div className="uploadImage">
-                                            <img src={uploadSRC} alt="" />
+                        {uploadDocumentGet.map((item) => {
+                            if (uploadDocumentGet.length !== 0) {
+                                if (item.Parent_Doc_Desc === "ADDRESS PROOF") {
+                                    return (
+                                        <div className="uploadDocumentRow">
+                                            <h3 className='documentTypeText'>{item.Parent_Doc_Desc}</h3>
+                                            <select className='documentTypeSelect'>
+                                                {item.ChildDocMaster.Child_Doc.map(item => {
+                                                    return <option value={item.Child_Doc_Id}>{item.Child_Doc_Desc}</option>
+                                                })}
+                                            </select>
+                                            <input type="file" id="actual-btn" hidden onClick={() => {
+                                                actualBtn.addEventListener('change', function () {
+                                                    fileChosen.textContent = this.files[0].name
+                                                })
+                                            }} />
+                                            <label className='fileButton' for="actual-btn">
+                                                <div className='fileText'>Upload</div>
+                                                <div className='plus'>+</div>
+                                            </label>
+                                            <div id="file-chosen">No file chosen</div>
+                                            <div className='uploadStatusButton'>
+                                                <div className='uploadStatusText'>Uploaded</div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div className="front">Front</div>
-                            </div>
-                            <div className="rightPart">
-                                <div className="uploadMainBox">
-                                    <div className="boxBorder">
-                                        <div className="uploadImage">
-                                            <img src={uploadSRC} alt="" />
+                                    )
+                                }
+                                if (item.Parent_Doc_Desc === "INCOME PROOF") {
+                                    return (
+                                        <div className="uploadDocumentRow">
+                                            <h3 className='documentTypeText'>{item.Parent_Doc_Desc}</h3>
+                                            <select className='documentTypeSelect'>
+                                                {item.ChildDocMaster.Child_Doc.map(item => {
+                                                    return <option value={item.Child_Doc_Id}>{item.Child_Doc_Desc}</option>
+                                                })}
+                                            </select>
+                                            <input type="file" id="actual-btn" hidden onClick={() => {
+                                                actualBtn.addEventListener('change', function () {
+                                                    fileChosen.textContent = this.files[0].name
+                                                })
+                                            }} />
+                                            <label className='fileButton' for="actual-btn">
+                                                <div className='fileText'>Upload</div>
+                                                <div className='plus'>+</div>
+                                            </label>
+                                            <div id="file-chosen">No file chosen</div>
+                                            <div className='uploadStatusButton'>
+                                                <div className='uploadStatusText'>Uploaded</div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div className="back">Back</div>
-                            </div>
-                        </div>
+                                    )
+                                }
+                                if (item.Parent_Doc_Desc === "BANK STATEMENT") {
+                                    return (
+                                        <div className="uploadDocumentRow">
+                                            <h3 className='documentTypeText'>{item.Parent_Doc_Desc}</h3>
+                                            <select className='documentTypeSelect'>
+                                                {item.ChildDocMaster.Child_Doc.map(item => {
+                                                    return <option value={item.Child_Doc_Id}>{item.Child_Doc_Desc}</option>
+                                                })}
+                                            </select>
+                                            <input type="file" id="actual-btn" hidden onClick={() => {
+                                                actualBtn.addEventListener('change', function () {
+                                                    fileChosen.textContent = this.files[0].name
+                                                })
+                                            }} />
+                                            <label className='fileButton' for="actual-btn">
+                                                <div className='fileText'>Upload</div>
+                                                <div className='plus'>+</div>
+                                            </label>
+                                            <div id="file-chosen">No file chosen</div>
+                                            <div className='uploadStatusButton'>
+                                                <div className='uploadStatusText'>Uploaded</div>
+                                            </div>
+                                        </div>
+                                    )
+                                }
+                                if (item.Parent_Doc_Desc === "IDENTITY PROOF") {
+                                    return (
+                                        <div className="uploadDocumentRow">
+                                            <h3 className='documentTypeText'>{item.Parent_Doc_Desc}</h3>
+                                            <select className='documentTypeSelect'>
+                                                {item.ChildDocMaster.Child_Doc.map(item => {
+                                                    return <option value={item.Child_Doc_Id}>{item.Child_Doc_Desc}</option>
+                                                })}
+                                            </select>
+                                            <input type="file" id="actual-btn" hidden onClick={() => {
+                                                actualBtn.addEventListener('change', function () {
+                                                    fileChosen.textContent = this.files[0].name
+                                                })
+                                            }} />
+                                            <label className='fileButton' for="actual-btn">
+                                                <div className='fileText'>Upload</div>
+                                                <div className='plus'>+</div>
+                                            </label>
+                                            <div id="file-chosen">No file chosen</div>
+                                            <div className='uploadStatusButton'>
+                                                <div className='uploadStatusText'>Uploaded</div>
+                                            </div>
+                                        </div>
+                                    )
+                                }
+                                if (item.Parent_Doc_Desc === "LOAN TRANSFER DOCUMENTS(ONLY FOR LOAN TRANSFER APPLICANTS)") {
+                                    return (
+                                        <div className="uploadDocumentRow">
+                                            <h3 className='documentTypeText'>{item.Parent_Doc_Desc}</h3>
+                                            <select className='documentTypeSelect'>
+                                                {item.ChildDocMaster.Child_Doc.map(item => {
+                                                    return <option value={item.Child_Doc_Id}>{item.Child_Doc_Desc}</option>
+                                                })}
+                                            </select>
+                                            <input type="file" id="actual-btn" hidden onClick={() => {
+                                                actualBtn.addEventListener('change', function () {
+                                                    fileChosen.textContent = this.files[0].name
+                                                })
+                                            }} />
+                                            <label className='fileButton' for="actual-btn">
+                                                <div className='fileText'>Upload</div>
+                                                <div className='plus'>+</div>
+                                            </label>
+                                            <div id="file-chosen">No file chosen</div>
+                                            <div className='uploadStatusButton'>
+                                                <div className='uploadStatusText'>Uploaded</div>
+                                            </div>
+                                        </div>
+                                    )
+                                }
+                            }
+                        })}
                     </div>
                 </div>
                 <FormContainer isSaveNextButton={true} className="uploadDocumentFormContainer" onClick={() => {
@@ -1105,52 +1196,6 @@ export default function HDFCFrom() {
                     setisUploadProgress(true)
                     setisBankStatement(true)
                 }}>
-                    <TextField
-                        className="textField"
-                        id="outlined-full-width"
-                        label="Document Password"
-                        margin="normal"
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        variant="outlined"
-                        size="small"
-                    // value={currentEMI}
-                    // onChange={(e) => setCurrentEMI(e.target.value)}
-                    />
-                    <TextField
-                        className="textField"
-                        id="outlined-full-width"
-                        label="Document Password"
-                        margin="normal"
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        variant="outlined"
-                        size="small"
-                    // value={creditCardOutstanding}
-                    // onChange={(e) => setcreditCardOutstanding(e.target.value)}
-                    />
-                    <TextField
-                        select
-                        className="textField"
-                        id="outlined-full-width"
-                        label="Document Type"
-                        margin="normal"
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        SelectProps={{
-                            native: true
-                        }}
-                        variant="outlined"
-                        size="small"
-                    // value={creditCardbalanceTransfer}
-                    // onChange={(e) => setcreditCardOutstanding(e.target.value)}
-                    >
-                        <option value="">Select One</option>
-                        <option value="voterId">Voter ID</option>
-                    </TextField>
                     <div className="checkboxContainer">
                         <Checkbox className="check" />
                         <p>By submitting I provide my consent to retrieve my credit information from Credit Bureaus including CIBIL to check eligibility for this application. I understand that this may impact my credit score.</p>

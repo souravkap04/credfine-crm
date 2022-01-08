@@ -349,329 +349,145 @@
   display: flex;
 }
 
-.HDFCFormContainer .rightSection .uploadContainer .uploadBankStatementContainer {
+.HDFCFormContainer .rightSection .uploadContainer .uploadDocumentContainer {
   position: relative;
   margin-right: 3.024rem;
 }
 
-.HDFCFormContainer .rightSection .uploadContainer .uploadBankStatementContainer .titleContainer {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-
-.HDFCFormContainer .rightSection .uploadContainer .uploadBankStatementContainer .titleContainer .headText {
+.HDFCFormContainer .rightSection .uploadContainer .uploadDocumentContainer .headText {
   font-size: 1.323rem;
   font-weight: 300;
   color: #000;
-  margin-right: 0.504rem;
+  margin-bottom: 0.63rem;
 }
 
-.HDFCFormContainer .rightSection .uploadContainer .uploadBankStatementContainer .titleContainer .tickCircle {
-  color: #bcbcbc;
-  font-size: 1.449rem;
+.HDFCFormContainer .rightSection .uploadContainer .uploadDocumentContainer .uploadDocumentTextRow {
+  width: 53.235rem;
+  height: 2.331rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
-.HDFCFormContainer .rightSection .uploadContainer .uploadBankStatementContainer .subText {
+.HDFCFormContainer .rightSection .uploadContainer .uploadDocumentContainer .documentType {
+  margin-left: 1.512rem;
+  margin-right: 3.591rem;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadDocumentContainer .selectFromEach {
+  margin-right: 10.521rem;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadDocumentContainer .fileName {
+  margin-right: 9.954rem;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadDocumentContainer .uploadDocumentRow {
+  width: 53.235rem;
+  height: auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background-color: #f5f5f5;
+  margin-bottom: 0.252rem;
+  padding-top: 0.882rem;
+  padding-bottom: 0.882rem;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadDocumentContainer .uploadDocumentRow .documentTypeText {
+  letter-spacing: 0.00819rem;
+  color: #000000;
   font-size: 0.882rem;
-  font-weight: 600;
-  color: #07498e;
+  margin-left: 1.512rem;
+  margin-right: 2.079rem;
+  margin-top: 0;
+  margin-bottom: 0;
+  font-weight: bold;
+  width: 8.505rem;
 }
 
-.HDFCFormContainer .rightSection .uploadContainer .uploadBankStatementContainer .uploadMainBox {
-  margin-top: 1.008rem;
-  width: 15.435rem;
-  height: 8.316rem;
-  border-radius: 0.378rem;
-  -webkit-box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
-          box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
-  background-color: #fff;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-
-.HDFCFormContainer .rightSection .uploadContainer .uploadBankStatementContainer .uploadMainBox .boxBorder {
-  width: 14.049rem;
-  height: 7.182rem;
-  border-radius: 0.378rem;
-  border: dashed 1px #727272;
-  background-color: #fff;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-
-.HDFCFormContainer .rightSection .uploadContainer .uploadBankStatementContainer .uploadMainBox .boxBorder .uploadImage {
-  width: 1.386rem;
-  height: 1.827rem;
-}
-
-.HDFCFormContainer .rightSection .uploadContainer .uploadBankStatementContainer .uploadMainBox .boxBorder .uploadImage img {
-  width: 100%;
-  height: 100%;
-}
-
-.HDFCFormContainer .rightSection .uploadContainer .uploadSalaryslipContainer {
-  position: relative;
-  margin-right: 3.024rem;
-}
-
-.HDFCFormContainer .rightSection .uploadContainer .uploadSalaryslipContainer .titleContainer {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-
-.HDFCFormContainer .rightSection .uploadContainer .uploadSalaryslipContainer .titleContainer .headText {
-  font-size: 1.323rem;
-  font-weight: 300;
-  color: #000;
-  margin-right: 0.504rem;
-}
-
-.HDFCFormContainer .rightSection .uploadContainer .uploadSalaryslipContainer .titleContainer .tickCircle {
-  color: #bcbcbc;
-  font-size: 1.449rem;
-}
-
-.HDFCFormContainer .rightSection .uploadContainer .uploadSalaryslipContainer .subText {
-  font-size: 0.882rem;
-  font-weight: 600;
-  color: #07498e;
-}
-
-.HDFCFormContainer .rightSection .uploadContainer .uploadSalaryslipContainer .uploadMainBox {
-  margin-top: 1.008rem;
-  width: 15.435rem;
-  height: 8.316rem;
-  border-radius: 0.378rem;
-  -webkit-box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
-          box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
-  background-color: #fff;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-
-.HDFCFormContainer .rightSection .uploadContainer .uploadSalaryslipContainer .uploadMainBox .boxBorder {
-  width: 14.049rem;
-  height: 7.182rem;
-  border-radius: 0.378rem;
-  border: dashed 1px #727272;
-  background-color: #fff;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-
-.HDFCFormContainer .rightSection .uploadContainer .uploadSalaryslipContainer .uploadMainBox .boxBorder .uploadImage {
-  width: 1.386rem;
-  height: 1.827rem;
-}
-
-.HDFCFormContainer .rightSection .uploadContainer .uploadSalaryslipContainer .uploadMainBox .boxBorder .uploadImage img {
-  width: 100%;
-  height: 100%;
-}
-
-.HDFCFormContainer .rightSection .uploadContainer .uploadAddressProof {
-  position: relative;
-}
-
-.HDFCFormContainer .rightSection .uploadContainer .uploadAddressProof .titleContainer {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-
-.HDFCFormContainer .rightSection .uploadContainer .uploadAddressProof .titleContainer .headText {
-  font-size: 1.323rem;
-  font-weight: 300;
-  color: #000;
-  margin-right: 0.504rem;
-}
-
-.HDFCFormContainer .rightSection .uploadContainer .uploadAddressProof .titleContainer .tickCircle {
-  color: #bcbcbc;
-  font-size: 1.449rem;
-}
-
-.HDFCFormContainer .rightSection .uploadContainer .uploadAddressProof .subText {
-  font-size: 0.882rem;
-  font-weight: 600;
-  color: #07498e;
-}
-
-.HDFCFormContainer .rightSection .uploadContainer .uploadAddressProof .uploadAdjustContainer {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-}
-
-.HDFCFormContainer .rightSection .uploadContainer .uploadAddressProof .uploadAdjustContainer .leftPart {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-
-.HDFCFormContainer .rightSection .uploadContainer .uploadAddressProof .uploadAdjustContainer .leftPart .uploadMainBox {
-  margin-top: 1.008rem;
-  width: 7.7175rem;
-  height: 8.316rem;
-  border-radius: 0.378rem;
-  -webkit-box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
-          box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
-  background-color: #fff;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  margin-right: 0.441rem;
-}
-
-.HDFCFormContainer .rightSection .uploadContainer .uploadAddressProof .uploadAdjustContainer .leftPart .uploadMainBox .boxBorder {
-  width: 6.4575rem;
-  height: 7.182rem;
-  border-radius: 0.378rem;
-  border: dashed 1px #727272;
-  background-color: #fff;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-
-.HDFCFormContainer .rightSection .uploadContainer .uploadAddressProof .uploadAdjustContainer .leftPart .uploadMainBox .boxBorder .uploadImage {
-  width: 1.386rem;
-  height: 1.827rem;
-}
-
-.HDFCFormContainer .rightSection .uploadContainer .uploadAddressProof .uploadAdjustContainer .leftPart .uploadMainBox .boxBorder .uploadImage img {
-  width: 100%;
-  height: 100%;
-}
-
-.HDFCFormContainer .rightSection .uploadContainer .uploadAddressProof .uploadAdjustContainer .leftPart .front {
-  margin-top: 0.378rem;
-  font-size: 0.756rem;
+.HDFCFormContainer .rightSection .uploadContainer .uploadDocumentContainer .uploadDocumentRow .documentTypeSelect {
+  width: 10.08rem;
+  height: 2.016rem;
+  outline: none;
+  border: 1px solid #bcbcbc;
+  border-radius: 0.126rem;
   color: #727272;
 }
 
-.HDFCFormContainer .rightSection .uploadContainer .uploadAddressProof .uploadAdjustContainer .rightPart {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-
-.HDFCFormContainer .rightSection .uploadContainer .uploadAddressProof .uploadAdjustContainer .rightPart .uploadMainBox {
-  margin-top: 1.008rem;
-  width: 7.7175rem;
-  height: 8.316rem;
-  border-radius: 0.378rem;
-  -webkit-box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
-          box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
-  background-color: #fff;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  margin-left: 0.441rem;
-}
-
-.HDFCFormContainer .rightSection .uploadContainer .uploadAddressProof .uploadAdjustContainer .rightPart .uploadMainBox .boxBorder {
-  width: 6.4575rem;
-  height: 7.182rem;
-  border-radius: 0.378rem;
-  border: dashed 1px #727272;
-  background-color: #fff;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-
-.HDFCFormContainer .rightSection .uploadContainer .uploadAddressProof .uploadAdjustContainer .rightPart .uploadMainBox .boxBorder .uploadImage {
-  width: 1.386rem;
-  height: 1.827rem;
-}
-
-.HDFCFormContainer .rightSection .uploadContainer .uploadAddressProof .uploadAdjustContainer .rightPart .uploadMainBox .boxBorder .uploadImage img {
-  width: 100%;
-  height: 100%;
-}
-
-.HDFCFormContainer .rightSection .uploadContainer .uploadAddressProof .uploadAdjustContainer .rightPart .back {
-  margin-top: 0.378rem;
-  font-size: 0.756rem;
+.HDFCFormContainer .rightSection .uploadContainer .uploadDocumentContainer .uploadDocumentRow .documentTypeSelect option {
+  font-size: 0.882rem;
+  letter-spacing: 0.00819rem;
   color: #727272;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadDocumentContainer .uploadDocumentRow .fileButton {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 5.229rem;
+  height: 2.016rem;
+  border-radius: 0.126rem;
+  background-color: #1c86fc;
+  margin-left: 0.882rem;
+  margin-right: 2.961rem;
+  margin-bottom: 0;
+  cursor: pointer;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadDocumentContainer .uploadDocumentRow .fileButton .fileText {
+  color: #ffffff;
+  font-size: 0.756rem;
+  letter-spacing: 0.0252rem;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadDocumentContainer .uploadDocumentRow .fileButton .plus {
+  color: #ffffff;
+  font-size: 1.071rem;
+  margin-left: 0.504rem;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadDocumentContainer .uploadDocumentRow #file-chosen {
+  font-size: 0.819rem;
+  color: #07498e;
+  letter-spacing: 0.02709rem;
+  width: 12.6rem;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadDocumentContainer .uploadDocumentRow .uploadStatusButton {
+  width: 6.237rem;
+  height: 1.764rem;
+  border-radius: 0.882rem;
+  background-color: #65be7a;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  position: absolute;
+  right: 1.512rem;
+}
+
+.HDFCFormContainer .rightSection .uploadContainer .uploadDocumentContainer .uploadDocumentRow .uploadStatusButton .uploadStatusText {
+  letter-spacing: 0.0252rem;
+  color: #ffffff;
+  font-size: 0.756rem;
 }
 
 .HDFCFormContainer .rightSection .iconTextContainer {
