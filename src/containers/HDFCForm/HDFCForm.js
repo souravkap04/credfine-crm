@@ -33,7 +33,8 @@ export default function HDFCFrom() {
     const [isBankStatement, setisBankStatement] = useState(false);
     const [isApprovalStatus, setisApprovalStatus] = useState(false);
     const [isApprovalStatusProgress, setisApprovalStatusProgress] = useState(false);
-    const [isHdfcData,setIsHdfcData] = useState(false);
+    const [isHdfcData, setIsHdfcData] = useState(false);
+    const [isHdfcPersonalRefData,setIsHdfcPersonalRefData] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
     const [isError, setIsError] = useState(false);
     const [hangUpSnacks, sethangUpSnacks] = useState(false);
@@ -133,6 +134,97 @@ export default function HDFCFrom() {
             })
     }
     const hdfcLoanDataSubmitHandler = async (leadId) => {
+        let panRegex = /[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(panCardNo);
+        let mobRegex = /^[0-9]{10}$/g.test(mobileNo);
+        let pinCodeRegex = /^[0-9]{6}$/g.test(pincode);
+        let officePinRegex = /^[0-9]{6}$/g.test(officePincode);
+        if (panCardNo === '' || !panRegex) {
+            setAlertMessage("Invalid Pan Number");
+            setIsError(true);
+            return;
+        } if (firstName === '') {
+            setAlertMessage('Invalid First Name')
+            setIsError(true);
+            return;
+        } if (lastName === '') {
+            setAlertMessage('Invalid Last Name')
+            setIsError(true);
+            return;
+        } if (gender === '') {
+            setAlertMessage('Invalid Gender')
+            setIsError(true);
+            return;
+        } if (highestQualification === '') {
+            setAlertMessage('Invalid Highest Qualification')
+            setIsError(true);
+            return;
+        } if (addressLineOne === '') {
+            setAlertMessage('Invalid Address Line 1')
+            setIsError(true);
+            return;
+        } if (addressLineTwo === '') {
+            setAlertMessage('Invalid Address Line 2')
+            setIsError(true);
+            return;
+        } if (addressLineThree === '') {
+            setAlertMessage('Invalid Address Line 3')
+            setIsError(true);
+            return;
+        } if (city === '') {
+            setAlertMessage('Invalid City')
+            setIsError(true);
+            return;
+        } if (state === '') {
+            setAlertMessage('Invalid State')
+            setIsError(true);
+            return;
+        }if (pincode === '' || !pinCodeRegex) {
+            setAlertMessage('Invalid Pincode')
+            setIsError(true);
+            return;
+        }if (mobileNo === '' || !mobRegex) {
+            setAlertMessage('Invalid MobileNo')
+            setIsError(true);
+            return;
+        }if (residentialEmailId === '') {
+            setAlertMessage('Invalid EmailId')
+            setIsError(true);
+            return;
+        }if (residanceAddressType === '') {
+            setAlertMessage('Invalid Residance Type')
+            setIsError(true);
+            return;
+        }if (employerName === '') {
+            setAlertMessage('Invalid Employer Name')
+            setIsError(true);
+        }
+        if (officeAddressOne === '') {
+            setAlertMessage('Invalid Office Address 1')
+            setIsError(true);
+            return;
+        }
+        if (officeAddressTwo === '') {
+            setAlertMessage('Invalid Office Address2')
+            setIsError(true);
+            return;
+        }if (officeCity === '') {
+            setAlertMessage('Invalid Office City')
+            setIsError(true);
+            return;
+        } if (officeState === '') {
+            setAlertMessage('Invalid Office State')
+            setIsError(true);
+            return;
+        }if (officePincode === '' || !officePinRegex) {
+            setAlertMessage('Invalid Office Pincode')
+            setIsError(true);
+            return;
+        }
+        if (officeAddressType === '') {
+            setAlertMessage('Invalid Office Address Type')
+            setIsError(true);
+            return;
+        }
         let applyLoan = {
             First_Name: firstName, Last_Name: lastName, Gender: gender, Date_Of_Birth: dob, Educational_Qualification: highestQualification,
             Loan_Amount: loanAmount, PAN_AC_No: panCardNo,
@@ -148,49 +240,71 @@ export default function HDFCFrom() {
         await axios.post(`${hdfcBankApi}/${leadId}/2`, items, { headers })
             .then((response) => {
                 console.log(response.data.status);
-                if(response.data.status){
+                if (response.data.status) {
                     setIsHdfcData(true);
+                    setisPersonalDetail(false)
+                    setisPersonalProgress(true)
+                    setisCurrentProgress(true)
+                    setisBusinessProgress(true)
+                    setisPersonalReference(true)
                 }
             }).catch((error) => {
                 console.log(error);
-                // setAlertMessage("something wrong");
-                // setIsError(true);
+                setAlertMessage("something wrong");
+                setIsError(true);
             })
     }
-    const hdfcPersonalReferenceHandler = async leadId => {
+    const hdfcPersonalReferenceHandler = async (leadId) => {
+        let mobRegex = /^[0-9]{10}$/g.test(refMobileNo);
+        if (refFirstName === '') {
+            setAlertMessage('Invalid First Name')
+            setIsError(true);
+            return;
+        } if (refLastName === '') {
+            setAlertMessage('Invalid Last Name')
+            setIsError(true);
+            return;
+        } if (refMobileNo === '' || !mobRegex) {
+            setAlertMessage('Invalid Mobile Number')
+            setIsError(true);
+            return;
+        }
         let loan_data = { ref_1_FirstName__req: refFirstName, ref_1_LastName: refLastName, ref_1_Mobile__req: refMobileNo }
         let items = { loan_data };
         await axios.post(`${hdfcBankApi}/${leadId}/3`, items)
             .then((response) => {
-                console.log(response.data.status)
+                if(response.data.status){
+                setisUploadDocument(true)
+                setisPersonalReference(false)
+                setisReferenceProgress(true)
+                setIsHdfcPersonalRefData(true)
+                }
             }).catch((error) => {
                 console.log(error)
             })
-    }
-    const hdfcFormErrorHandler = () => {
-        let panRegex = /[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(panCardNo);
-        if(panCardNo === '' || !panRegex){
-            setAlertMessage("Invalid Pan Number");
-            setIsError(true);
-            return;
-        }
     }
     const disableHangUpSnacks = () => {
         sethangUpSnacks(false);
         setIsError(false);
         setIsHdfcData(false);
+        setIsHdfcPersonalRefData(false);
     }
     return <div className="HDFCFormContainer">
         <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isHdfcData} autoHideDuration={1500} onClose={disableHangUpSnacks}>
-                <Alert onClose={disableHangUpSnacks} severity="success">
-                    Hdfc Data Successfully Updated
+            <Alert onClose={disableHangUpSnacks} severity="success">
+                Hdfc Data Successfully Updated
                 </Alert>
-            </Snackbar>
-            <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isError} autoHideDuration={1500} onClose={disableHangUpSnacks}>
-                <Alert onClose={disableHangUpSnacks} severity="error">
-                    {alertMessage}
+        </Snackbar>
+        <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isHdfcPersonalRefData} autoHideDuration={1500} onClose={disableHangUpSnacks}>
+            <Alert onClose={disableHangUpSnacks} severity="success">
+                Personal Reference Data Successfully Updated
                 </Alert>
-            </Snackbar>
+        </Snackbar>
+        <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isError} autoHideDuration={1500} onClose={disableHangUpSnacks}>
+            <Alert onClose={disableHangUpSnacks} severity="error">
+                {alertMessage}
+            </Alert>
+        </Snackbar>
         <div className="leftSection">
             <div className="logoContainer">
                 <div className="logoImage">
@@ -466,12 +580,10 @@ export default function HDFCFrom() {
                         InputLabelProps={{
                             shrink: true,
                         }}
-                        // helperText="Invalid PAN"
                         variant="outlined"
                         size="small"
-                        maxLength="10"
                         value={panCardNo}
-                        onChange={(e) => setPanCardNo(e.target.value)}
+                        onChange={(e) => setPanCardNo(e.target.value.toUpperCase())}
                     />
                     {/* <TextField
                         select
@@ -661,12 +773,6 @@ export default function HDFCFrom() {
                     />
                 </FormContainer>
                 <FormContainer Name="Business Details" isSaveNextButton={true} onClick={() => {
-                    setisPersonalDetail(false)
-                    setisPersonalProgress(true)
-                    setisCurrentProgress(true)
-                    setisBusinessProgress(true)
-                    setisPersonalReference(true)
-                    hdfcFormErrorHandler();
                     hdfcLoanDataSubmitHandler(leadid);
                 }}>
                     <TextField
@@ -843,9 +949,6 @@ export default function HDFCFrom() {
                 </div>
                 <div className="offerBorder"></div>
                 <FormContainer Name="Personal Reference" isSaveNextButton={true} onClick={() => {
-                    setisUploadDocument(true)
-                    setisPersonalReference(false)
-                    setisReferenceProgress(true)
                     hdfcPersonalReferenceHandler(leadid);
                 }}>
                     <TextField
