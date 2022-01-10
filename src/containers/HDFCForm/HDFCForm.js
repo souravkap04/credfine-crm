@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import { hdfcBankApi } from "../../global/bankingApis";
 import './HDFC.css';
+import Grid from '@material-ui/core/Grid';
 import logo from '../../images/forms/hdfc.svg';
 import back from '../../images/forms/back.svg';
 import TextField from '@material-ui/core/TextField';
@@ -14,6 +15,8 @@ import { useHistory, useParams } from 'react-router-dom';
 import phoneCall from '../../images/forms/phoneCall.svg';
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
+import { ListItem } from '@material-ui/core';
+import { ListGroup } from 'react-bootstrap';
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -80,13 +83,40 @@ export default function HDFCFrom() {
     const [uploadDocumentGet, setuploadDocumentGet] = useState([]);
     const actualBtn = document.getElementById('actual-btn');
     const fileChosen = document.getElementById('file-chosen');
+    const [addressProof, setAddressProof] = useState("");
+    const [incomeProof, setIncomeProof] = useState("");
+    const [bankStatement, setBankstatement] = useState("");
+    const [identityProof, setIdentityProof] = useState("");
+    const [loanTransferDoc, setLoanTransferDoc] = useState("");
+    const [showHdfcCompany, setShowHdfcCompany] = useState(false);
+    const [searchHdfcCompany, setSearchHdfcCompany] = useState([]);
     useEffect(() => {
         fetchHdfcData(leadid);
         fetchPersonalReferenceData(leadid);
         hdfcUploadDocumentGetHandler(leadid);
     }, [])
+    const getHdfcCompany = async (e) => {
+        setEmployerName(e.target.value);
+        let item = { search_key: employerName, type: 'company' }
+        const headers = { 'Content-Type': 'application/json' };
+        if (employerName.length >= 4) {
+            await axios.post(`${hdfcBankApi}/getHdfcCompanies/`, item, { headers })
+                .then((response) => {
+                    setSearchHdfcCompany(response.data)
+                    setShowHdfcCompany(true);
+                }).catch((error) => {
+                    console.log(error)
+                })
+        }
+    }
+    const selectHdfcCompany = (companyID) => {
+        console.log(companyID);
+        setEmployerName(companyID)
+        setShowHdfcCompany(false);
+
+    }
     const fetchHdfcData = async (leadId) => {
-        await axios.get(`${hdfcBankApi}/${leadId}/2`)
+        await axios.get(`${hdfcBankApi}/sendHdfcLead/${leadId}/2`)
             .then((response) => {
                 setFirstName(response.data.applyLoan.First_Name__req);
                 setLastName(response.data.applyLoan.Last_Name__req);
@@ -127,7 +157,7 @@ export default function HDFCFrom() {
             })
     };
     const fetchPersonalReferenceData = async (leadId) => {
-        await axios.get(`${hdfcBankApi}/${leadId}/3`)
+        await axios.get(`${hdfcBankApi}/sendHdfcLead/${leadId}/3`)
             .then((response) => {
                 setRefFirstName(response.data.ref_1_FirstName__req);
                 setRefLastName(response.data.ref_1_LastName);
@@ -240,7 +270,7 @@ export default function HDFCFrom() {
         let items = { loan_data: { applyLoan } };
         console.log("items:" + items);
         const headers = { 'Content-Type': 'application/json' };
-        await axios.post(`${hdfcBankApi}/${leadId}/2`, items, { headers })
+        await axios.post(`${hdfcBankApi}/sendHdfcLead/${leadId}/2`, items, { headers })
             .then((response) => {
                 console.log(response.data.status);
                 if (response.data.status) {
@@ -274,7 +304,7 @@ export default function HDFCFrom() {
         }
         let loan_data = { ref_1_FirstName__req: refFirstName, ref_1_LastName: refLastName, ref_1_Mobile__req: refMobileNo }
         let items = { loan_data };
-        await axios.post(`${hdfcBankApi}/${leadId}/3`, items)
+        await axios.post(`${hdfcBankApi}/sendHdfcLead/${leadId}/3`, items)
             .then((response) => {
                 if (response.data.status) {
                     setisUploadDocument(true)
@@ -287,7 +317,7 @@ export default function HDFCFrom() {
             })
     }
     const hdfcUploadDocumentGetHandler = async (leadId) => {
-        await axios.get(`${hdfcBankApi}/${leadId}/4`)
+        await axios.get(`${hdfcBankApi}/sendHdfcLead/${leadId}/4`)
             .then((response) => {
                 setuploadDocumentGet(response.data.documents.Parent_Doc)
             }).catch((error) => {
@@ -786,19 +816,28 @@ export default function HDFCFrom() {
                 <FormContainer Name="Business Details" isSaveNextButton={true} onClick={() => {
                     hdfcLoanDataSubmitHandler(leadid);
                 }}>
-                    <TextField
-                        className="textField"
-                        id="outlined-full-width"
-                        label="Employer Name"
-                        margin="normal"
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        variant="outlined"
-                        size="small"
-                        value={employerName}
-                        onChange={(e) => setEmployerName(e.target.value)}
-                    />
+                    <div>
+                        <TextField
+                            className="textField3"
+                            id="outlined-full-width"
+                            label="Employer Name"
+                            margin="normal"
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            variant="outlined"
+                            size="small"
+                            value={employerName}
+                            onChange={(e) => getHdfcCompany(e)}
+                        />
+                        <ListGroup className="listGroup">
+                            {showHdfcCompany ? searchHdfcCompany.map((company) => (
+                                <ListGroup.Item key={company.company_id}
+                                    onClick={() => selectHdfcCompany(company.company_id)}
+                                >{company.company_name}</ListGroup.Item>
+                            )) : null}
+                        </ListGroup>
+                    </div>
                     <TextField
                         className="textField"
                         id="outlined-full-width"

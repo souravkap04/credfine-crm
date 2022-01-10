@@ -368,6 +368,45 @@ $mob: 100 / 375;
                 color: #000;
                 font-size: 22 * $desk + rem;
             }
+            .textField3 {
+                width: 244 * $desk + rem;
+                margin-right: 20 * $desk + rem !important;
+                margin-bottom: 10 * $desk + rem !important;
+                margin-top: 0 !important;
+                @media only screen and (max-width: 800px) {
+                    width: 312 * $mob + vw;
+                    margin-right: 31 * $mob + vw !important;
+                    margin-left: 32 * $mob + vw !important;
+                    margin-bottom: 19 * $mob + vw !important;
+                }
+                label {
+                    color: #07498e;
+                    letter-spacing: 0.4 * $desk + rem;
+                    font-size: 15.5 * $desk + rem;
+                    @media only screen and (max-width: 800px) {
+                        letter-spacing: 0.4 * $mob + vw;
+                        font-size: 15.5 * $mob + vw;
+                    }
+                }
+                .MuiOutlinedInput-root {
+                    height: 56 * $desk + rem;
+                    @media only screen and (max-width: 800px) {
+                        height: 56 * $mob + vw;
+                    }
+                }
+                .MuiOutlinedInput-notchedOutline {
+                    border: 1px solid #bababa;
+                }
+                .MuiInputAdornment-root {
+                    opacity: 0.6;
+                }
+                .MuiInputBase-input {
+                    font-size: 16 * $desk + rem;
+                    @media only screen and (max-width: 800px) {
+                        font-size: 16 * $mob + vw;
+                    }
+                }
+            }
             .checkboxContainer {
                 display: flex;
                 align-items: flex-start;
@@ -403,6 +442,7 @@ $mob: 100 / 375;
                 }
             }
         }
+
         .uploadDocumentFormContainer {
             width: 851 * $desk + rem;
             margin: auto;
@@ -460,4 +500,21 @@ $mob: 100 / 375;
             }
         }
     }
+}
+.listGroup {
+    position: absolute;
+    z-index: 100;
+    max-width: 300 * $desk + vw;
+    max-height: 250 * $desk + vw;
+    overflow-y: scroll;
+    .list-group-item {
+        cursor: pointer;
+    }
+}
+.listGroup::-webkit-scrollbar {
+    width: 8 * $desk + vw;
+}
+.listGroup::-webkit-scrollbar-thumb {
+    background-color: #f7f9fc;
+    border-radius: 8 * $desk + vw;
 }

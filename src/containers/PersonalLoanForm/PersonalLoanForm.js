@@ -286,7 +286,7 @@ export default function PersonalLoanForm() {
     }
     const applyNowBtnHandler = async () => {
         let item = {};
-        await axios.post(`${hdfcBankApi}/${leadId}/1`, item)
+        await axios.post(`${hdfcBankApi}/sendHdfcLead/${leadId}/1`, item)
             .then((response) => {
                 console.log(response.data)
                 if(response.data.status){
