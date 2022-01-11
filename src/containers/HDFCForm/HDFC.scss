@@ -1,0 +1,520 @@
+$desk: 0.063;
+$mob: 100 / 375;
+.HDFCFormContainer {
+    position: relative;
+    .leftSection {
+        position: fixed;
+        width: 238 * $desk + rem;
+        background-color: #074a8e;
+        height: 100%;
+        .logoContainer {
+            width: 100%;
+            height: 70 * $desk + rem;
+            background-color: #fafafa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            @media only screen and (max-width: 800px) {
+                display: none;
+            }
+            .logoImage {
+                width: 140.45 * $desk + rem;
+                height: 40 * $desk + rem;
+                img {
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+        }
+        .list {
+            height: 88% !important;
+            overflow-y: auto !important;
+            .progressContainer {
+                margin-top: 45 * $desk + rem;
+                margin-bottom: 45 * $desk + rem;
+                .progressBox {
+                    display: flex;
+                    .progressIconBox {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        margin-left: 31 * $desk + rem;
+                        .iconBar {
+                            width: 18 * $desk + rem;
+                            height: 18 * $desk + rem;
+                            background-color: #2b72ba;
+                            border-radius: 50%;
+                            transition: 0.3s;
+                        }
+                        .activeCurrent {
+                            background-color: #fff;
+                        }
+                        .activeiconBar {
+                            background-color: #1cb980;
+                        }
+                        .bottomProgress {
+                            width: 0;
+                            height: 51 * $desk + rem;
+                            border: solid 1px #1c86fc;
+                            transition: 0.3s;
+                        }
+                        .activebottomProgress {
+                            border: solid 1px #1c86fc;
+                        }
+                    }
+                    .subProgressIconBox {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        margin-left: 34 * $desk + rem;
+                        .subIconBar {
+                            width: 12 * $desk + rem;
+                            height: 12 * $desk + rem;
+                            background-color: #2b72ba;
+                            border-radius: 50%;
+                            transition: 0.3s;
+                        }
+                        .activeCurrent {
+                            background-color: #fff;
+                        }
+                        .activeiconBar {
+                            background-color: #1cb980;
+                        }
+                        .bottomProgress {
+                            width: 0;
+                            height: 51 * $desk + rem;
+                            border: solid 1px #1c86fc;
+                            transition: 0.3s;
+                        }
+                        .activebottomProgress {
+                            border: solid 1px #1c86fc;
+                        }
+                    }
+                    .iconText {
+                        font-size: 15 * $desk + rem;
+                        font-weight: 500;
+                        margin-left: 8 * $desk + rem;
+                        margin-top: 1 * $desk + rem;
+                        color: #e5e9ff;
+                    }
+                    .subIconText {
+                        font-size: 14 * $desk + rem;
+                        font-weight: 500;
+                        margin-left: 11 * $desk + rem;
+                        margin-top: -4.7 * $desk + rem;
+                        color: #e5e9ff;
+                    }
+                }
+            }
+        }
+        .list::-webkit-scrollbar {
+            width: 8 * $desk + vw;
+        }
+        .list::-webkit-scrollbar-thumb {
+            background-color: rgba(143, 155, 179, 0.4);
+            border-radius: 8 * $desk + vw;
+        }
+    }
+    .rightSection {
+        position: relative;
+        width: auto;
+        height: auto;
+        margin-left: 238 * $desk + rem;
+        background-color: #fff;
+        .adjustBackground {
+            height: 290vh;
+            background-color: #fff;
+        }
+        .headerContainer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            height: 70 * $desk + rem;
+            // margin: auto;
+            background-color: #fcfcfc;
+            @media only screen and (max-width: 800px) {
+                width: 100%;
+                height: 50 * $mob + vw;
+            }
+            .backButton {
+                margin-left: 47 * $desk + rem;
+                width: 24 * $desk + rem;
+                height: 24 * $desk + rem;
+                cursor: pointer;
+                @media only screen and (max-width: 800px) {
+                    margin-left: 15 * $mob + vw;
+                    width: 19 * $mob + vw;
+                    height: 19 * $mob + vw;
+                }
+                img {
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+            .needHelpContainer {
+                margin-right: 43 * $desk + rem;
+                @media only screen and (max-width: 800px) {
+                    display: none;
+                }
+                .needHelpText {
+                    font-size: 12 * $desk + rem;
+                    color: #535ad1;
+                    // font-family: Lato-regular;
+                    line-height: 14 * $desk + rem;
+                    margin-left: 22 * $desk + rem;
+                }
+                .rightPart {
+                    display: flex;
+                    justify-content: center;
+                    // align-items: center;
+                    .phoneCall {
+                        width: 18 * $desk + rem;
+                        height: 18 * $desk + rem;
+                        margin-right: 4 * $desk + rem;
+                        img {
+                            width: 100%;
+                            height: 100%;
+                        }
+                    }
+                    .numberText {
+                        font-size: 18 * $desk + rem;
+                        // font-family: Lato-regular;
+                        font-weight: bold;
+                        color: #535ad1;
+                    }
+                }
+            }
+        }
+        .texualContainer {
+            margin: auto;
+            margin-top: 23 * $desk + rem;
+            width: 851 * $desk + rem;
+            .headText {
+                font-size: 32 * $desk + rem;
+                color: #07498e;
+                margin-bottom: 20 * $desk + rem;
+            }
+            .headText2 {
+                font-size: 32 * $desk + rem;
+                color: #07498e;
+            }
+            .subText {
+                font-size: 16 * $desk + rem;
+                color: #727272;
+                margin-bottom: 80 * $desk + rem;
+            }
+            .trackStatus {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 200 * $desk + rem;
+                height: 50 * $desk + rem;
+                border-radius: 33 * $desk + rem;
+                background-color: #1c86fc;
+                cursor: pointer;
+                .btnText {
+                    font-size: 16 * $desk + rem;
+                    font-weight: 500;
+                    color: #fff;
+                }
+            }
+        }
+        .offerContainer {
+            display: flex;
+            .offerBox {
+                margin-right: 40 * $desk + rem;
+                .offerHead {
+                    font-size: 16 * $desk + rem;
+                    color: #fc001b;
+                }
+                .offerText {
+                    font-size: 24 * $desk + rem;
+                    color: #07498e;
+                    margin-bottom: 16 * $desk + rem;
+                }
+            }
+        }
+        .offerBorder {
+            margin: auto;
+            width: 851 * $desk + rem;
+            height: 0;
+            // margin-left: 38 * $desk + rem;
+            border: solid 1px #d1d1d1;
+        }
+        .uploadContainer {
+            position: relative;
+            margin: auto;
+            margin-top: 32 * $desk + rem;
+            width: 851 * $desk + rem;
+            // margin-left: 38 * $desk + rem;
+            display: flex;
+            .uploadDocumentContainer {
+                position: relative;
+                margin-right: 48 * $desk + rem;
+                .headText {
+                    font-size: 21 * $desk + rem;
+                    font-weight: 300;
+                    color: #000;
+                    margin-bottom: 10 * $desk + rem;
+                }
+                .uploadDocumentTextRow {
+                    width: 845 * $desk + rem;
+                    height: 37 * $desk + rem;
+                    display: flex;
+                    align-items: center;
+                }
+                .documentType {
+                    margin-left: 24 * $desk + rem;
+                    margin-right: 57 * $desk + rem;
+                }
+                .selectFromEach {
+                    margin-right: 167 * $desk + rem;
+                }
+                .fileName {
+                    margin-right: 158 * $desk + rem;
+                }
+                .uploadDocumentRow {
+                    width: 845 * $desk + rem;
+                    height: auto;
+                    display: flex;
+                    align-items: center;
+                    background-color: #f5f5f5;
+                    margin-bottom: 4 * $desk + rem;
+                    padding-top: 14 * $desk + rem;
+                    padding-bottom: 14 * $desk + rem;
+                    .documentTypeText {
+                        letter-spacing: 0.13 * $desk + rem;
+                        color: #000000;
+                        font-size: 14 * $desk + rem;
+                        margin-left: 24 * $desk + rem;
+                        margin-right: 33 * $desk + rem;
+                        margin-top: 0;
+                        margin-bottom: 0;
+                        font-weight: bold;
+                        width: 135 * $desk + rem;
+                    }
+                    .documentTypeSelect {
+                        width: 160 * $desk + rem;
+                        height: 32 * $desk + rem;
+                        outline: none;
+                        border: 1px solid #bcbcbc;
+                        border-radius: 2 * $desk + rem;
+                        color: #727272;
+                        option {
+                            font-size: 14 * $desk + rem;
+                            letter-spacing: 0.13 * $desk + rem;
+                            color: #727272;
+                        }
+                    }
+                    .fileButton {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        width: 83 * $desk + rem;
+                        height: 32 * $desk + rem;
+                        border-radius: 2 * $desk + rem;
+                        background-color: #1c86fc;
+                        margin-left: 14 * $desk + rem;
+                        margin-right: 47 * $desk + rem;
+                        margin-bottom: 0;
+                        cursor: pointer;
+                        .fileText {
+                            color: #ffffff;
+                            font-size: 12 * $desk + rem;
+                            letter-spacing: 0.4 * $desk + rem;
+                        }
+                        .plus {
+                            color: #ffffff;
+                            font-size: 17 * $desk + rem;
+                            margin-left: 8 * $desk + rem;
+                        }
+                    }
+                    #file-chosen {
+                        font-size: 13 * $desk + rem;
+                        color: #07498e;
+                        letter-spacing: 0.43 * $desk + rem;
+                        width: 200 * $desk + rem;
+                    }
+                    .uploadStatusButton {
+                        width: 99 * $desk + rem;
+                        height: 28 * $desk + rem;
+                        border-radius: 14 * $desk + rem;
+                        background-color: #65be7a;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        position: absolute;
+                        right: 24 * $desk + rem;
+                        .uploadStatusText {
+                            letter-spacing: 0.4 * $desk + rem;
+                            color: #ffffff;
+                            font-size: 12 * $desk + rem;
+                        }
+                    }
+                }
+            }
+        }
+        .iconTextContainer {
+            display: none;
+        }
+        .formMainContainer {
+            width: 851 * $desk + rem;
+            margin: auto;
+            margin-top: 22 * $desk + rem;
+            // margin-left: 38 * $desk + rem;
+            h3 {
+                font-weight: 400;
+                color: #000;
+                font-size: 22 * $desk + rem;
+            }
+            .textField3 {
+                width: 244 * $desk + rem;
+                margin-right: 20 * $desk + rem !important;
+                margin-bottom: 10 * $desk + rem !important;
+                margin-top: 0 !important;
+                @media only screen and (max-width: 800px) {
+                    width: 312 * $mob + vw;
+                    margin-right: 31 * $mob + vw !important;
+                    margin-left: 32 * $mob + vw !important;
+                    margin-bottom: 19 * $mob + vw !important;
+                }
+                label {
+                    color: #07498e;
+                    letter-spacing: 0.4 * $desk + rem;
+                    font-size: 15.5 * $desk + rem;
+                    @media only screen and (max-width: 800px) {
+                        letter-spacing: 0.4 * $mob + vw;
+                        font-size: 15.5 * $mob + vw;
+                    }
+                }
+                .MuiOutlinedInput-root {
+                    height: 56 * $desk + rem;
+                    @media only screen and (max-width: 800px) {
+                        height: 56 * $mob + vw;
+                    }
+                }
+                .MuiOutlinedInput-notchedOutline {
+                    border: 1px solid #bababa;
+                }
+                .MuiInputAdornment-root {
+                    opacity: 0.6;
+                }
+                .MuiInputBase-input {
+                    font-size: 16 * $desk + rem;
+                    @media only screen and (max-width: 800px) {
+                        font-size: 16 * $mob + vw;
+                    }
+                }
+            }
+            .checkboxContainer {
+                display: flex;
+                align-items: flex-start;
+                .check {
+                    margin-top: -5 * $desk + rem;
+                    margin-left: -10 * $desk + rem;
+                }
+                p {
+                    width: 713 * $desk + rem;
+                    font-size: 14 * $desk + rem;
+                    font-weight: 300;
+                    color: #000;
+                }
+            }
+            .saveButton {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 200 * $desk + rem;
+                height: 50 * $desk + rem;
+                border-radius: 33 * $desk + rem;
+                background-color: #1c86fc;
+                cursor: pointer;
+                margin-top: 20.5 * $desk + rem;
+                margin-left: 576 * $desk + rem;
+                .btnText {
+                    font-size: 16 * $desk + rem;
+                    font-weight: 500;
+                    color: #fff;
+                }
+                .arrowIcon {
+                    display: none;
+                }
+            }
+        }
+
+        .uploadDocumentFormContainer {
+            width: 851 * $desk + rem;
+            margin: auto;
+            .formContainer {
+                display: flex;
+                flex-wrap: wrap;
+                width: 895 * $desk + rem;
+                .textField {
+                    width: 244 * $desk + rem;
+                    margin-right: 48 * $desk + rem !important;
+                    margin-bottom: 31 * $desk + rem !important;
+                    margin-top: 0 !important;
+                    label {
+                        color: #07498e;
+                        letter-spacing: 0.4 * $desk + rem;
+                        font-size: 15.5 * $desk + rem;
+                    }
+                    .MuiOutlinedInput-root {
+                        height: 56 * $desk + rem;
+                    }
+                    .MuiOutlinedInput-notchedOutline {
+                        border: 1px solid #bababa;
+                    }
+                    .MuiInputAdornment-root {
+                        opacity: 0.6;
+                    }
+                    .MuiInputBase-input {
+                        font-size: 16 * $desk + rem;
+                    }
+                }
+            }
+            .borderBottom {
+                width: 851 * $desk + rem;
+                border-bottom: solid 1px #eaeaea;
+            }
+            .saveButton {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 200 * $desk + rem;
+                height: 50 * $desk + rem;
+                border-radius: 33 * $desk + rem;
+                background-color: #1c86fc;
+                cursor: pointer;
+                margin-top: 20.5 * $desk + rem;
+                margin-left: 650 * $desk + rem;
+                .btnText {
+                    font-size: 16 * $desk + rem;
+                    font-weight: 500;
+                    color: #fff;
+                }
+                .arrowIcon {
+                    display: none;
+                }
+            }
+        }
+    }
+}
+.listGroup {
+    position: absolute;
+    z-index: 100;
+    max-width: 300 * $desk + vw;
+    max-height: 250 * $desk + vw;
+    overflow-y: scroll;
+    .list-group-item {
+        cursor: pointer;
+    }
+}
+.listGroup::-webkit-scrollbar {
+    width: 8 * $desk + vw;
+}
+.listGroup::-webkit-scrollbar-thumb {
+    background-color: #f7f9fc;
+    border-radius: 8 * $desk + vw;
+}

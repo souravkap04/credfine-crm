@@ -3,7 +3,7 @@ import PageLayerSection from '../PageLayerSection/PageLayerSection';
 import './leadDetailsNew.css';
 import axios from "axios";
 import baseUrl from "../../global/api";
-import {haloocomNoidaDialerApi, haloocomMumbaiDialerApi } from "../../global/callApi";
+import { haloocomNoidaDialerApi, haloocomMumbaiDialerApi } from "../../global/callApi";
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import MuiAccordion from '@material-ui/core/Accordion';
@@ -27,7 +27,8 @@ import {
     getProfileData,
     getStatusData
 } from "../../global/leadsGlobalData";
-import { useParams, useHistory, useLocation } from 'react-router-dom';
+import { useParams, useHistory, useLocation, NavLink } from 'react-router-dom';
+import EmiCalculator from '../Emicalculator/EmiCalculator';
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import moment from 'moment';
@@ -113,6 +114,13 @@ export default function LeadDetailsNew(props) {
     const handleChange = (panel) => (event, newExpanded) => {
         setExpanded(newExpanded ? panel : false);
     };
+    const [openCalculate, setopenCalculate] = useState(false);
+    const openCalculator = () => {
+        setopenCalculate(true);
+    }
+    const closeCalculator = () => {
+        setopenCalculate(false);
+    }
     const profileData = getProfileData();
     const banks = getBank();
     const residentType = getResidentType();
@@ -181,7 +189,7 @@ export default function LeadDetailsNew(props) {
     const [Roi, setRoi] = useState('');
     const [disbursedError, setdisbursedError] = useState([false, false]);
     const [colorRed, setcolorRed] = useState([false, false, false, false]);
-    const [isAutoDialerEnd,setIsAutoDialerEnd] = useState(false);
+    const [isAutoDialerEnd, setIsAutoDialerEnd] = useState(false);
     let statusData = getStatusData();
     let { leadid } = useParams();
     let history = useHistory();
@@ -567,7 +575,7 @@ export default function LeadDetailsNew(props) {
         setIsAutoDialerEnd(false);
     }
     const clickToCall = async (customerNo, leadID) => {
-         if (profileData.dialer === 'HALOOCOM-Noida') {
+        if (profileData.dialer === 'HALOOCOM-Noida') {
             await axios.post(`${haloocomNoidaDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`)
                 .then((response) => {
                     setDialerCall(true);
@@ -636,12 +644,13 @@ export default function LeadDetailsNew(props) {
         setDialerCall(false)
         setDisableHangupBtn(false)
     }
-    const endAutoDialerBtnHandler = ()=>{
+    const endAutoDialerBtnHandler = () => {
         setIsAutoDialerEnd(true);
         localStorage.removeItem('auto_dialer');
     }
     return (
-        <PageLayerSection isDisplaySearchBar={true} pageTitle="Lead Details" className={classes.scrollEnable} offerButton={true} isWhatsapp={true} whatsappNumber={mobileNo} endAutoDialerBtn={true} endAutoDialerClick={()=>endAutoDialerBtnHandler()}>
+        <PageLayerSection isDisplaySearchBar={true} pageTitle="Lead Details" className={classes.scrollEnable} offerButton={true} isWhatsapp={true} whatsappNumber={mobileNo} endAutoDialerBtn={true} endAutoDialerClick={() => endAutoDialerBtnHandler()} ActualEmiCalculate={openCalculator}>
+            <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
             {/* Errors SnackBars Start */}
             <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={hangUpSnacks} autoHideDuration={1500} onClose={disableHangUpSnacks}>
                 <Alert onClose={disableHangUpSnacks} severity="success">
@@ -1243,12 +1252,14 @@ export default function LeadDetailsNew(props) {
                         </AccordionDetails>
                     </Accordion>
                     <Grid className="completeJourneyContainer">
-                        <Button
-                            className="journeyBtn"
-                            color="primary"
-                            variant="contained">
-                            COMPLETE JOURNEY
-                        </Button>
+                        <NavLink to={`/dashboards/PersonalLoanForm/${leadid}`}>
+                            <Button
+                                className="journeyBtn"
+                                color="primary"
+                                variant="contained">
+                                COMPLETE JOURNEY
+                            </Button>
+                        </NavLink>
                         <Button
                             className="journeyBtn"
                             color="primary"
@@ -1295,7 +1306,7 @@ export default function LeadDetailsNew(props) {
                 </Grid>
                 <Grid className="callConatiner" lg={3}>
                     <Grid className="callAdjustContainer">
-                         <div className="buttonAdjust"><Button
+                        <div className="buttonAdjust"><Button
                             className="callBtn"
                             color="primary"
                             variant="contained"
@@ -1312,7 +1323,7 @@ export default function LeadDetailsNew(props) {
                                 onClick={hangupCallHandler}>
                                 End
                             </Button>
-                            </div>
+                        </div>
                         <Grid>
                             <TextField
                                 className="textField"
