@@ -90,6 +90,10 @@ export default function HDFCFrom() {
     const [loanTransferDoc, setLoanTransferDoc] = useState("");
     const [showHdfcCompany, setShowHdfcCompany] = useState(false);
     const [searchHdfcCompany, setSearchHdfcCompany] = useState([]);
+    const [showHdfcCity,setShowHdfcCity] = useState(false);
+    const [searchHdfcCity,setSearchHdfcCity] = useState([]);
+    const [showHdfcOfficeCity,setShowHdfcOfficeCity] = useState(false);
+    const [searchHdfcOfficeCity,setSearchHdfcOfficeCity] = useState([]);
     useEffect(() => {
         fetchHdfcData(leadid);
         fetchPersonalReferenceData(leadid);
@@ -99,7 +103,7 @@ export default function HDFCFrom() {
         setEmployerName(e.target.value);
         let item = { search_key: employerName, type: 'company' }
         const headers = { 'Content-Type': 'application/json' };
-        if (employerName.length >= 4) {
+        if (employerName.length >= 2) {
             await axios.post(`${hdfcBankApi}/getHdfcCompanies/`, item, { headers })
                 .then((response) => {
                     setSearchHdfcCompany(response.data)
@@ -109,11 +113,46 @@ export default function HDFCFrom() {
                 })
         }
     }
+    const getHdfcCity = async (e) =>{
+        setCity(e.target.value);
+        let item =  { search_key: city, type: 'city_name'}
+        if (city.length >= 2){
+            await axios.post(`${hdfcBankApi}/getHdfcCompanies/`,item)
+                .then((response)=>{
+                    setSearchHdfcCity(response.data);
+                    setShowHdfcCity(true);
+                }).catch((error)=>{
+                    console.log(error)
+                })
+        }
+    }
+    const getHdfcOfficeCity = async (e) =>{
+        setOfficeCity(e.target.value);
+        let item =  { search_key: officeCity, type: 'city_name'}
+        if (officeCity.length >= 2){
+            await axios.post(`${hdfcBankApi}/getHdfcCompanies/`,item)
+                .then((response)=>{
+                    setSearchHdfcOfficeCity(response.data);
+                    setShowHdfcOfficeCity(true);
+                }).catch((error)=>{
+                    console.log(error)
+                })
+        }
+    }
     const selectHdfcCompany = (companyID) => {
-        console.log(companyID);
         setEmployerName(companyID)
         setShowHdfcCompany(false);
 
+    }
+    const selectHdfcCity = (cityId,stateId) =>{
+        setCity(cityId);
+        setShowHdfcCity(false);
+        setState(stateId)
+    }
+    const selectHdfcOfficeCity = (cityId,stateId) =>{
+        setOfficeCity(cityId)
+        setShowHdfcOfficeCity(false);
+        setOfficeState(stateId)
     }
     const fetchHdfcData = async (leadId) => {
         await axios.get(`${hdfcBankApi}/sendHdfcLead/${leadId}/2`)
@@ -721,8 +760,9 @@ export default function HDFCFrom() {
                         value={addressLineThree}
                         onChange={(e) => setAddressLineThree(e.target.value)}
                     />
+                    <div>
                     <TextField
-                        className="textField"
+                        className="textField3"
                         id="outlined-full-width"
                         label="City"
                         margin="normal"
@@ -732,8 +772,16 @@ export default function HDFCFrom() {
                         variant="outlined"
                         size="small"
                         value={city}
-                        onChange={(e) => setCity(e.target.value)}
+                        onChange={(e) => getHdfcCity(e)}
                     />
+                    <ListGroup className="listGroup">
+                            {showHdfcCity ? searchHdfcCity.map((city) => (
+                                <ListGroup.Item key={city.value.city_id}
+                                   onClick={()=>selectHdfcCity(city.value.city_id,city.value.state_id)}
+                                >{city.city_name}</ListGroup.Item>
+                            )) : ''}
+                        </ListGroup>
+                        </div>
                     <TextField
                         className="textField"
                         id="outlined-full-width"
@@ -877,8 +925,9 @@ export default function HDFCFrom() {
                         value={officeState}
                         onChange={(e) => setOfficeState(e.target.value)}
                     />
+                    <div>
                     <TextField
-                        className="textField"
+                        className="textField3"
                         id="outlined-full-width"
                         label="Office City"
                         margin="normal"
@@ -888,8 +937,16 @@ export default function HDFCFrom() {
                         variant="outlined"
                         size="small"
                         value={officeCity}
-                        onChange={(e) => setOfficeCity(e.target.value)}
+                        onChange={(e) => getHdfcOfficeCity(e)}
                     />
+                    <ListGroup className="listGroup">
+                            {showHdfcOfficeCity ? searchHdfcOfficeCity.map((city) => (
+                                <ListGroup.Item key={city.value.city_id}
+                                   onClick={()=>selectHdfcOfficeCity(city.value.city_id,city.value.state_id)}
+                                >{city.city_name}</ListGroup.Item>
+                            )) : ''}
+                        </ListGroup>
+                        </div>
                     <TextField
                         className="textField"
                         id="outlined-full-width"
