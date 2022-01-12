@@ -35,3 +35,11 @@ export const getDialer = ()=>{
     const dialer = ['HALOOCOM-Noida','HALOOCOM-Mumbai'];
     return dialer;
 }
+export const getGender = ()=>{
+    const gender = ['Male','Female','LGBT'];
+    return gender;
+}
+export const getHighestQualification = () =>{
+    const highestQualification = ['SSC','HSC/Diploma','Degree','Masters Degree','Other'];
+    return highestQualification;
+}

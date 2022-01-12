@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import { hdfcBankApi } from "../../global/bankingApis";
+import {getResidentType,getGender,getHighestQualification} from "../../global/leadsGlobalData"
 import './HDFC.css';
 import Grid from '@material-ui/core/Grid';
 import logo from '../../images/forms/hdfc.svg';
@@ -23,6 +24,9 @@ function Alert(props) {
 export default function HDFCFrom() {
     const history = useHistory();
     const { leadid } = useParams();
+    const residenceType = getResidentType();
+    const genderType = getGender();
+    const educationQualification = getHighestQualification();
     const [isPersonalDetail, setisPersonalDetail] = useState(true);
     const [isPersonalProgress, setisPersonalProgress] = useState(false);
     const [isCurrentResidentialDetail, setisCurrentResidentialDetail] = useState(false);
@@ -63,16 +67,16 @@ export default function HDFCFrom() {
     const [addressLineOne, setAddressLineOne] = useState("");
     const [addressLineTwo, setAddressLineTwo] = useState("");
     const [addressLineThree, setAddressLineThree] = useState("");
-    const [city, setCity] = useState("");
-    const [state, setState] = useState("");
+    const [city, setCity] = useState({});
+    const [state, setState] = useState({});
     const [pincode, setPincode] = useState("");
     const [mobileNo, setMobileNo] = useState("");
     const [residentialEmailId, setResidentialEmailId] = useState("");
     const [employerName, setEmployerName] = useState("");
     const [officeAddressOne, setofficeAddressOne] = useState("");
     const [officeAddressTwo, setofficeAddressTwo] = useState("");
-    const [officeState, setOfficeState] = useState("");
-    const [officeCity, setOfficeCity] = useState("");
+    const [officeState, setOfficeState] = useState({});
+    const [officeCity, setOfficeCity] = useState({});
     const [officePincode, setOfficePincode] = useState("");
     const [addressType, setAddressType] = useState("");
     const [hdfcBankAccNo, setHdfcBankAccNo] = useState("");
@@ -140,9 +144,8 @@ export default function HDFCFrom() {
         }
     }
     const selectHdfcCompany = (companyID) => {
-        setEmployerName(companyID)
         setShowHdfcCompany(false);
-
+        setEmployerName(companyID)
     }
     const selectHdfcCity = (cityId,stateId) =>{
         setCity(cityId);
@@ -300,10 +303,10 @@ export default function HDFCFrom() {
         let applyLoan = {
             First_Name: firstName, Last_Name: lastName, Gender: gender, Date_Of_Birth: dob, Educational_Qualification: highestQualification,
             Loan_Amount: loanAmount, PAN_AC_No: panCardNo,
-            City_Resi: city, Pin_Code_Resi: pincode, Address1_Resi: addressLineOne, Address2_Resi: addressLineTwo, Address3_Resi: addressLineThree, State_Resi: state, Mobile1_Resi: mobileNo,
+            City_Resi: city.id, Pin_Code_Resi: pincode, Address1_Resi: addressLineOne, Address2_Resi: addressLineTwo, Address3_Resi: addressLineThree, State_Resi: state.id, Mobile1_Resi: mobileNo,
             STD_Code_Resi: "", Email_Resi: residentialEmailId, Year_at_Current_Address: yearsInCurrentResidence, Year_at_City: yearsInCurrentCity, Employer_Name: employerName, Address1_Work: officeAddressOne,
             Address2_Work: officeAddressTwo,
-            Pin_Code_Work: officePincode, Address_Type_Work: officeAddressType, City_Work: officeCity, State_Work: officeState, Monthly_take_home_Salary: monthlyTakeHomeSalary, residence_type_dap: residanceTypeDap,
+            Pin_Code_Work: officePincode, Address_Type_Work: officeAddressType, City_Work: officeCity.id, State_Work: officeState.id, Monthly_take_home_Salary: monthlyTakeHomeSalary, residence_type_dap: residanceTypeDap,
             employment_type: employmentType, No_of_Dependent: totalDependent, Address_Type_Resi: residanceAddressType,
         }
         let items = { loan_data: { applyLoan } };
@@ -546,10 +549,10 @@ export default function HDFCFrom() {
                         value={gender}
                         onChange={(e) => setGender(e.target.value)}
                     >
-                        <option value="">Select One</option>
-                        <option value="M">Male</option>
-                        <option value="F">Female</option>
-                        <option value="LGBT">LGBT</option>
+                        <option key="">Select One</option>
+                        {genderType.map((gender)=>(
+                            <option value={gender}>{gender}</option>
+                        ))}
                     </TextField>
                     {/* <TextField
                         select
@@ -592,12 +595,10 @@ export default function HDFCFrom() {
                         value={highestQualification}
                         onChange={(e) => setHighestQualification(e.target.value)}
                     >
-                        <option value="">Select One</option>
-                        <option value="SSC">SSC</option>
-                        <option value="HSC / DIPLOMA">HSC / Dilopma</option>
-                        <option value="DEGREE">Degree</option>
-                        <option value="MASTERS DEGREE">Masters Degree</option>
-                        <option value="OTHER">Other</option>
+                        <option key="">Select One</option>
+                        {educationQualification.map((education)=>(
+                            <option value={education}>{education}</option>
+                        ))}
                     </TextField>
                     <TextField
                         select
@@ -771,7 +772,7 @@ export default function HDFCFrom() {
                         }}
                         variant="outlined"
                         size="small"
-                        value={city}
+                        value={city.name}
                         onChange={(e) => getHdfcCity(e)}
                     />
                     <ListGroup className="listGroup">
@@ -792,7 +793,7 @@ export default function HDFCFrom() {
                         }}
                         variant="outlined"
                         size="small"
-                        value={state}
+                        value={state.name}
                         onChange={(e) => setState(e.target.value)}
                     />
                     <TextField
@@ -835,6 +836,7 @@ export default function HDFCFrom() {
                         onChange={(e) => setResidentialEmailId(e.target.value)}
                     />
                     <TextField
+                        select
                         className="textField"
                         id="outlined-full-width"
                         label="Residence Type"
@@ -842,11 +844,19 @@ export default function HDFCFrom() {
                         InputLabelProps={{
                             shrink: true,
                         }}
+                        SelectProps={{
+                            native:true
+                        }}
                         variant="outlined"
                         size="small"
                         value={residanceAddressType}
                         onChange={(e) => setResidanceAddressType(e.target.value)}
-                    />
+                    >
+                        <option key="">select One</option>
+                        {residenceType.map((residence)=>(
+                            <option value={residence}>{residence}</option>
+                        ))}
+                    </TextField>
                     <TextField
                         className="textField"
                         id="outlined-full-width"
@@ -883,7 +893,7 @@ export default function HDFCFrom() {
                                 <ListGroup.Item key={company.company_id}
                                     onClick={() => selectHdfcCompany(company.company_id)}
                                 >{company.company_name}</ListGroup.Item>
-                            )) : null}
+                            )) : ''}
                         </ListGroup>
                     </div>
                     <TextField
@@ -922,7 +932,7 @@ export default function HDFCFrom() {
                         }}
                         variant="outlined"
                         size="small"
-                        value={officeState}
+                        value={officeState.name}
                         onChange={(e) => setOfficeState(e.target.value)}
                     />
                     <div>
@@ -936,7 +946,7 @@ export default function HDFCFrom() {
                         }}
                         variant="outlined"
                         size="small"
-                        value={officeCity}
+                        value={officeCity.name}
                         onChange={(e) => getHdfcOfficeCity(e)}
                     />
                     <ListGroup className="listGroup">
