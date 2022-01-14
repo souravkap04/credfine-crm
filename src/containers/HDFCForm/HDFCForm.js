@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
+import { uploadFile } from 'react-s3';
 import { hdfcBankApi } from "../../global/bankingApis";
-import {getResidentType,getGender,getHighestQualification} from "../../global/leadsGlobalData"
+import { getResidentType, getGender, getHighestQualification } from "../../global/leadsGlobalData"
 import './HDFC.css';
 import Grid from '@material-ui/core/Grid';
 import logo from '../../images/forms/hdfc.svg';
@@ -18,6 +19,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import { ListItem } from '@material-ui/core';
 import { ListGroup } from 'react-bootstrap';
+import { data } from 'jquery';
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -67,16 +69,20 @@ export default function HDFCFrom() {
     const [addressLineOne, setAddressLineOne] = useState("");
     const [addressLineTwo, setAddressLineTwo] = useState("");
     const [addressLineThree, setAddressLineThree] = useState("");
-    const [city, setCity] = useState({});
-    const [state, setState] = useState({});
+    const [cityIdd, setCityIdd] = useState("");
+    const [cityName, setCityName] = useState("");
+    const [stateIdd, setStateIdd] = useState("");
+    const [stateName, setStateName] = useState("");
     const [pincode, setPincode] = useState("");
     const [mobileNo, setMobileNo] = useState("");
     const [residentialEmailId, setResidentialEmailId] = useState("");
     const [employerName, setEmployerName] = useState("");
     const [officeAddressOne, setofficeAddressOne] = useState("");
     const [officeAddressTwo, setofficeAddressTwo] = useState("");
-    const [officeState, setOfficeState] = useState({});
-    const [officeCity, setOfficeCity] = useState({});
+    const [officeStateIdd, setOfficeStateIdd] = useState("");
+    const [officeStateName, setOfficeStateName] = useState("");
+    const [officeCityIdd, setOfficeCityIdd] = useState("");
+    const [officeCityName, setOfficeCityName] = useState("");
     const [officePincode, setOfficePincode] = useState("");
     const [addressType, setAddressType] = useState("");
     const [hdfcBankAccNo, setHdfcBankAccNo] = useState("");
@@ -94,15 +100,25 @@ export default function HDFCFrom() {
     const [loanTransferDoc, setLoanTransferDoc] = useState("");
     const [showHdfcCompany, setShowHdfcCompany] = useState(false);
     const [searchHdfcCompany, setSearchHdfcCompany] = useState([]);
-    const [showHdfcCity,setShowHdfcCity] = useState(false);
-    const [searchHdfcCity,setSearchHdfcCity] = useState([]);
-    const [showHdfcOfficeCity,setShowHdfcOfficeCity] = useState(false);
-    const [searchHdfcOfficeCity,setSearchHdfcOfficeCity] = useState([]);
+    const [showHdfcCity, setShowHdfcCity] = useState(false);
+    const [searchHdfcCity, setSearchHdfcCity] = useState([]);
+    const [showHdfcOfficeCity, setShowHdfcOfficeCity] = useState(false);
+    const [searchHdfcOfficeCity, setSearchHdfcOfficeCity] = useState([]);
+    const [selectedFile, setSelectedFile] = useState(null);
     useEffect(() => {
         fetchHdfcData(leadid);
         fetchPersonalReferenceData(leadid);
         hdfcUploadDocumentGetHandler(leadid);
     }, [])
+
+    const config = {
+        bucketName: 'cred-lead-docs-uat',
+        dirName: `${leadid}/hdfcDocs`,
+        region: 'ap-south-1',
+        accessKeyId: 'AKIA6KIAPG76SEOLIPN6',
+        secretAccessKey: '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',
+    }
+
     const getHdfcCompany = async (e) => {
         setEmployerName(e.target.value);
         let item = { search_key: employerName, type: 'company' }
@@ -117,28 +133,28 @@ export default function HDFCFrom() {
                 })
         }
     }
-    const getHdfcCity = async (e) =>{
-        setCity(e.target.value);
-        let item =  { search_key: city, type: 'city_name'}
-        if (city.length >= 2){
-            await axios.post(`${hdfcBankApi}/getHdfcCompanies/`,item)
-                .then((response)=>{
+    const getHdfcCity = async (e) => {
+        setCityName(e.target.value);
+        let item = { search_key: cityName, type: 'city_name' }
+        if (cityName.length >= 2) {
+            await axios.post(`${hdfcBankApi}/getHdfcCompanies/`, item)
+                .then((response) => {
                     setSearchHdfcCity(response.data);
                     setShowHdfcCity(true);
-                }).catch((error)=>{
+                }).catch((error) => {
                     console.log(error)
                 })
         }
     }
-    const getHdfcOfficeCity = async (e) =>{
-        setOfficeCity(e.target.value);
-        let item =  { search_key: officeCity, type: 'city_name'}
-        if (officeCity.length >= 2){
-            await axios.post(`${hdfcBankApi}/getHdfcCompanies/`,item)
-                .then((response)=>{
+    const getHdfcOfficeCity = async (e) => {
+        setOfficeCityName(e.target.value);
+        let item = { search_key: officeCityName, type: 'city_name' }
+        if (officeCityName.length >= 2) {
+            await axios.post(`${hdfcBankApi}/getHdfcCompanies/`, item)
+                .then((response) => {
                     setSearchHdfcOfficeCity(response.data);
                     setShowHdfcOfficeCity(true);
-                }).catch((error)=>{
+                }).catch((error) => {
                     console.log(error)
                 })
         }
@@ -147,15 +163,15 @@ export default function HDFCFrom() {
         setShowHdfcCompany(false);
         setEmployerName(companyID)
     }
-    const selectHdfcCity = (cityId,stateId) =>{
-        setCity(cityId);
+    const selectHdfcCity = (cityId, stateId) => {
+        setCityIdd(cityId);
         setShowHdfcCity(false);
-        setState(stateId)
+        setStateIdd(stateId)
     }
-    const selectHdfcOfficeCity = (cityId,stateId) =>{
-        setOfficeCity(cityId)
+    const selectHdfcOfficeCity = (cityId, stateId) => {
+        setOfficeCityIdd(cityId)
         setShowHdfcOfficeCity(false);
-        setOfficeState(stateId)
+        setOfficeStateIdd(stateId)
     }
     const fetchHdfcData = async (leadId) => {
         await axios.get(`${hdfcBankApi}/sendHdfcLead/${leadId}/2`)
@@ -180,16 +196,20 @@ export default function HDFCFrom() {
                 setAddressLineOne(response.data.applyLoan.Address1_Resi__req);
                 setAddressLineTwo(response.data.applyLoan.Address2_Resi__req);
                 setAddressLineThree(response.data.applyLoan.Address3_Resi__req);
-                setCity(response.data.applyLoan.City_Resi__req);
-                setState(response.data.applyLoan.State_Resi__req);
+                setCityIdd(response.data.applyLoan.City_Resi__req.id);
+                setCityName(response.data.applyLoan.City_Resi__req.name);
+                setStateIdd(response.data.applyLoan.State_Resi__req.id);
+                setStateName(response.data.applyLoan.State_Resi__req.name);
                 setPincode(response.data.applyLoan.Pin_Code_Resi__req);
                 setMobileNo(response.data.applyLoan.Mobile1_Resi__req);
                 setResidentialEmailId(response.data.applyLoan.Email_Resi__req);
                 setEmployerName(response.data.applyLoan.Employer_Name__req);
                 setofficeAddressOne(response.data.applyLoan.Address1_Work__req);
                 setofficeAddressTwo(response.data.applyLoan.Address2_Work__req);
-                setOfficeState(response.data.applyLoan.State_Work);
-                setOfficeCity(response.data.applyLoan.City_Work__req);
+                setOfficeStateIdd(response.data.applyLoan.State_Work.id);
+                setOfficeStateName(response.data.applyLoan.State_Work.name);
+                setOfficeCityIdd(response.data.applyLoan.City_Work__req.id);
+                setOfficeCityName(response.data.applyLoan.City_Work__req.name);
                 setOfficePincode(response.data.applyLoan.Pin_Code_Work__req);
                 setAddressType();
                 setHdfcBankAccNo();
@@ -245,11 +265,11 @@ export default function HDFCFrom() {
             setAlertMessage('Invalid Address Line 3')
             setIsError(true);
             return;
-        } if (city === '') {
+        } if (cityName === '') {
             setAlertMessage('Invalid City')
             setIsError(true);
             return;
-        } if (state === '') {
+        } if (stateName === '') {
             setAlertMessage('Invalid State')
             setIsError(true);
             return;
@@ -282,11 +302,11 @@ export default function HDFCFrom() {
             setAlertMessage('Invalid Office Address2')
             setIsError(true);
             return;
-        } if (officeCity === '') {
+        } if (officeCityName === '') {
             setAlertMessage('Invalid Office City')
             setIsError(true);
             return;
-        } if (officeState === '') {
+        } if (officeStateName === '') {
             setAlertMessage('Invalid Office State')
             setIsError(true);
             return;
@@ -303,10 +323,10 @@ export default function HDFCFrom() {
         let applyLoan = {
             First_Name: firstName, Last_Name: lastName, Gender: gender, Date_Of_Birth: dob, Educational_Qualification: highestQualification,
             Loan_Amount: loanAmount, PAN_AC_No: panCardNo,
-            City_Resi: city.id, Pin_Code_Resi: pincode, Address1_Resi: addressLineOne, Address2_Resi: addressLineTwo, Address3_Resi: addressLineThree, State_Resi: state.id, Mobile1_Resi: mobileNo,
+            City_Resi: cityIdd, Pin_Code_Resi: pincode, Address1_Resi: addressLineOne, Address2_Resi: addressLineTwo, Address3_Resi: addressLineThree, State_Resi: stateIdd, Mobile1_Resi: mobileNo,
             STD_Code_Resi: "", Email_Resi: residentialEmailId, Year_at_Current_Address: yearsInCurrentResidence, Year_at_City: yearsInCurrentCity, Employer_Name: employerName, Address1_Work: officeAddressOne,
             Address2_Work: officeAddressTwo,
-            Pin_Code_Work: officePincode, Address_Type_Work: officeAddressType, City_Work: officeCity.id, State_Work: officeState.id, Monthly_take_home_Salary: monthlyTakeHomeSalary, residence_type_dap: residanceTypeDap,
+            Pin_Code_Work: officePincode, Address_Type_Work: officeAddressType, City_Work: officeCityIdd, State_Work: officeStateIdd, Monthly_take_home_Salary: monthlyTakeHomeSalary, residence_type_dap: residanceTypeDap,
             employment_type: employmentType, No_of_Dependent: totalDependent, Address_Type_Resi: residanceAddressType,
         }
         let items = { loan_data: { applyLoan } };
@@ -372,16 +392,25 @@ export default function HDFCFrom() {
         setIsHdfcData(false);
         setIsHdfcPersonalRefData(false);
     }
+    const handleUpload = async (filedata) => {
+        console.log("file:" + filedata)
+        uploadFile(filedata, config)
+            .then((data) => {
+                console.log(data)
+            }).catch((error) => {
+                console.log(error)
+            })
+    }
     return <div className="HDFCFormContainer">
         <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isHdfcData} autoHideDuration={1500} onClose={disableHangUpSnacks}>
             <Alert onClose={disableHangUpSnacks} severity="success">
                 Hdfc Data Successfully Updated
-                </Alert>
+            </Alert>
         </Snackbar>
         <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isHdfcPersonalRefData} autoHideDuration={1500} onClose={disableHangUpSnacks}>
             <Alert onClose={disableHangUpSnacks} severity="success">
                 Personal Reference Data Successfully Updated
-                </Alert>
+            </Alert>
         </Snackbar>
         <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isError} autoHideDuration={1500} onClose={disableHangUpSnacks}>
             <Alert onClose={disableHangUpSnacks} severity="error">
@@ -550,7 +579,7 @@ export default function HDFCFrom() {
                         onChange={(e) => setGender(e.target.value)}
                     >
                         <option key="">Select One</option>
-                        {genderType.map((gender)=>(
+                        {genderType.map((gender) => (
                             <option value={gender}>{gender}</option>
                         ))}
                     </TextField>
@@ -596,7 +625,7 @@ export default function HDFCFrom() {
                         onChange={(e) => setHighestQualification(e.target.value)}
                     >
                         <option key="">Select One</option>
-                        {educationQualification.map((education)=>(
+                        {educationQualification.map((education) => (
                             <option value={education}>{education}</option>
                         ))}
                     </TextField>
@@ -762,27 +791,27 @@ export default function HDFCFrom() {
                         onChange={(e) => setAddressLineThree(e.target.value)}
                     />
                     <div>
-                    <TextField
-                        className="textField3"
-                        id="outlined-full-width"
-                        label="City"
-                        margin="normal"
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        variant="outlined"
-                        size="small"
-                        value={city.name}
-                        onChange={(e) => getHdfcCity(e)}
-                    />
-                    <ListGroup className="listGroup">
+                        <TextField
+                            className="textField3"
+                            id="outlined-full-width"
+                            label="City"
+                            margin="normal"
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            variant="outlined"
+                            size="small"
+                            value={cityName}
+                            onChange={(e) => getHdfcCity(e)}
+                        />
+                        <ListGroup className="listGroup">
                             {showHdfcCity ? searchHdfcCity.map((city) => (
                                 <ListGroup.Item key={city.value.city_id}
-                                   onClick={()=>selectHdfcCity(city.value.city_id,city.value.state_id)}
+                                    onClick={() => selectHdfcCity(city.value.city_id, city.value.state_id)}
                                 >{city.city_name}</ListGroup.Item>
                             )) : ''}
                         </ListGroup>
-                        </div>
+                    </div>
                     <TextField
                         className="textField"
                         id="outlined-full-width"
@@ -793,8 +822,8 @@ export default function HDFCFrom() {
                         }}
                         variant="outlined"
                         size="small"
-                        value={state.name}
-                        onChange={(e) => setState(e.target.value)}
+                        value={stateName}
+                        onChange={(e) => setStateName(e.target.value)}
                     />
                     <TextField
                         className="textField"
@@ -845,7 +874,7 @@ export default function HDFCFrom() {
                             shrink: true,
                         }}
                         SelectProps={{
-                            native:true
+                            native: true
                         }}
                         variant="outlined"
                         size="small"
@@ -853,7 +882,7 @@ export default function HDFCFrom() {
                         onChange={(e) => setResidanceAddressType(e.target.value)}
                     >
                         <option key="">select One</option>
-                        {residenceType.map((residence)=>(
+                        {residenceType.map((residence) => (
                             <option value={residence}>{residence}</option>
                         ))}
                     </TextField>
@@ -932,31 +961,31 @@ export default function HDFCFrom() {
                         }}
                         variant="outlined"
                         size="small"
-                        value={officeState.name}
-                        onChange={(e) => setOfficeState(e.target.value)}
+                        value={officeStateName}
+                        onChange={(e) => setOfficeStateName(e.target.value)}
                     />
                     <div>
-                    <TextField
-                        className="textField3"
-                        id="outlined-full-width"
-                        label="Office City"
-                        margin="normal"
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        variant="outlined"
-                        size="small"
-                        value={officeCity.name}
-                        onChange={(e) => getHdfcOfficeCity(e)}
-                    />
-                    <ListGroup className="listGroup">
+                        <TextField
+                            className="textField3"
+                            id="outlined-full-width"
+                            label="Office City"
+                            margin="normal"
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            variant="outlined"
+                            size="small"
+                            value={officeCityName}
+                            onChange={(e) => getHdfcOfficeCity(e)}
+                        />
+                        <ListGroup className="listGroup">
                             {showHdfcOfficeCity ? searchHdfcOfficeCity.map((city) => (
                                 <ListGroup.Item key={city.value.city_id}
-                                   onClick={()=>selectHdfcOfficeCity(city.value.city_id,city.value.state_id)}
+                                    onClick={() => selectHdfcOfficeCity(city.value.city_id, city.value.state_id)}
                                 >{city.city_name}</ListGroup.Item>
                             )) : ''}
                         </ListGroup>
-                        </div>
+                    </div>
                     <TextField
                         className="textField"
                         id="outlined-full-width"
@@ -1170,7 +1199,11 @@ export default function HDFCFrom() {
                                     return (
                                         <div className="uploadDocumentRow">
                                             <h3 className='documentTypeText'>{item.Parent_Doc_Desc}</h3>
-                                            <select className='documentTypeSelect'>
+                                            <select
+                                                className='documentTypeSelect'
+                                                value={addressProof}
+                                                onChange={(e) => setAddressProof(e.target.value)}
+                                            >
                                                 {item.ChildDocMaster.Child_Doc.map(item => {
                                                     return <option value={item.Child_Doc_Id}>{item.Child_Doc_Desc}</option>
                                                 })}
@@ -1179,14 +1212,18 @@ export default function HDFCFrom() {
                                                 actualBtn.addEventListener('change', function () {
                                                     fileChosen.textContent = this.files[0].name
                                                 })
-                                            }} />
+                                            }}
+                                                onChange={(e) => setSelectedFile(e.target.files[0])} />
                                             <label className='fileButton' for="actual-btn">
                                                 <div className='fileText'>Upload</div>
                                                 <div className='plus'>+</div>
                                             </label>
                                             <div id="file-chosen">No file chosen</div>
                                             <div className='uploadStatusButton'>
-                                                <div className='uploadStatusText'>Uploaded</div>
+                                                <div
+                                                    className='uploadStatusText'
+                                                    onClick={() => handleUpload(selectedFile)}
+                                                >Uploaded</div>
                                             </div>
                                         </div>
                                     )
@@ -1195,7 +1232,10 @@ export default function HDFCFrom() {
                                     return (
                                         <div className="uploadDocumentRow">
                                             <h3 className='documentTypeText'>{item.Parent_Doc_Desc}</h3>
-                                            <select className='documentTypeSelect'>
+                                            <select
+                                                className='documentTypeSelect'
+                                                value={incomeProof}
+                                                onChange={(e) => setIncomeProof(e.target.value)}>
                                                 {item.ChildDocMaster.Child_Doc.map(item => {
                                                     return <option value={item.Child_Doc_Id}>{item.Child_Doc_Desc}</option>
                                                 })}
@@ -1220,7 +1260,9 @@ export default function HDFCFrom() {
                                     return (
                                         <div className="uploadDocumentRow">
                                             <h3 className='documentTypeText'>{item.Parent_Doc_Desc}</h3>
-                                            <select className='documentTypeSelect'>
+                                            <select className='documentTypeSelect'
+                                                value={bankStatement}
+                                                onChange={(e) => setBankstatement(e.target.value)}>
                                                 {item.ChildDocMaster.Child_Doc.map(item => {
                                                     return <option value={item.Child_Doc_Id}>{item.Child_Doc_Desc}</option>
                                                 })}
@@ -1245,7 +1287,9 @@ export default function HDFCFrom() {
                                     return (
                                         <div className="uploadDocumentRow">
                                             <h3 className='documentTypeText'>{item.Parent_Doc_Desc}</h3>
-                                            <select className='documentTypeSelect'>
+                                            <select className='documentTypeSelect'
+                                                value={identityProof}
+                                                onChange={(e) => setIdentityProof(e.target.value)}>
                                                 {item.ChildDocMaster.Child_Doc.map(item => {
                                                     return <option value={item.Child_Doc_Id}>{item.Child_Doc_Desc}</option>
                                                 })}
@@ -1270,7 +1314,9 @@ export default function HDFCFrom() {
                                     return (
                                         <div className="uploadDocumentRow">
                                             <h3 className='documentTypeText'>{item.Parent_Doc_Desc}</h3>
-                                            <select className='documentTypeSelect'>
+                                            <select className='documentTypeSelect'
+                                                value={loanTransferDoc}
+                                                onChange={(e) => setLoanTransferDoc(e.target.value)}>
                                                 {item.ChildDocMaster.Child_Doc.map(item => {
                                                     return <option value={item.Child_Doc_Id}>{item.Child_Doc_Desc}</option>
                                                 })}
