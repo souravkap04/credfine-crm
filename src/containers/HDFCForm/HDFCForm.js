@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
-import { uploadFile } from 'react-s3';
+import S3FileUpload from 'react-s3';
+import AWS from 'aws-sdk'
 import { hdfcBankApi } from "../../global/bankingApis";
 import { getResidentType, getGender, getHighestQualification } from "../../global/leadsGlobalData"
 import './HDFC.css';
@@ -91,8 +92,16 @@ export default function HDFCFrom() {
     const [refLastName, setRefLastName] = useState("");
     const [refMobileNo, setRefMobileNo] = useState("");
     const [uploadDocumentGet, setuploadDocumentGet] = useState([]);
-    const actualBtn = document.getElementById('actual-btn');
-    const fileChosen = document.getElementById('file-chosen');
+    const addressProofBtn = document.getElementById('addressProof-btn');
+    const incomeProofBtn = document.getElementById('incomeProof-btn');
+    const bankStatementBtn = document.getElementById('bankStatement-btn');
+    const identityProofBtn = document.getElementById('identityProof-btn');
+    const loanTransferDocBtn = document.getElementById('loanTransferDoc-btn');
+    const actualProofFileChosen = document.getElementById('actualProof-file-chosen');
+    const incomeProofFileChosen = document.getElementById('incomeProof-file-chosen');
+    const bankStatementFileChosen = document.getElementById('bankStatement-file-chosen');
+    const identityProofFileChosen = document.getElementById('identityProof-file-chosen');
+    const loanTransferDocFileChosen = document.getElementById('loanTransferDoc-file-chosen');
     const [addressProof, setAddressProof] = useState("");
     const [incomeProof, setIncomeProof] = useState("");
     const [bankStatement, setBankstatement] = useState("");
@@ -104,20 +113,20 @@ export default function HDFCFrom() {
     const [searchHdfcCity, setSearchHdfcCity] = useState([]);
     const [showHdfcOfficeCity, setShowHdfcOfficeCity] = useState(false);
     const [searchHdfcOfficeCity, setSearchHdfcOfficeCity] = useState([]);
-    const [selectedFile, setSelectedFile] = useState(null);
     useEffect(() => {
         fetchHdfcData(leadid);
         fetchPersonalReferenceData(leadid);
         hdfcUploadDocumentGetHandler(leadid);
     }, [])
 
-    const config = {
-        bucketName: 'cred-lead-docs-uat',
-        dirName: `${leadid}/hdfcDocs`,
+    AWS.config.update({
+        accessKeyId : 'AKIA6KIAPG76SEOLIPN6',
+        secretAccessKey : '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'
+    })
+    const myBucket = new AWS.S3({
+        params : { Bucket : 'cred-lead-docs-uat'},
         region: 'ap-south-1',
-        accessKeyId: 'AKIA6KIAPG76SEOLIPN6',
-        secretAccessKey: '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',
-    }
+    })
 
     const getHdfcCompany = async (e) => {
         setEmployerName(e.target.value);
@@ -392,13 +401,19 @@ export default function HDFCFrom() {
         setIsHdfcData(false);
         setIsHdfcPersonalRefData(false);
     }
-    const handleUpload = async (filedata) => {
-        console.log("file:" + filedata)
-        uploadFile(filedata, config)
-            .then((data) => {
-                console.log(data)
-            }).catch((error) => {
-                console.log(error)
+    const handleUpload = (file,folderName) =>{
+        const params = {
+            Body: file,
+            Bucket: 'cred-lead-docs-uat',
+            Key: `${leadid}/hdfcDocs/${folderName}/${file.name}`
+        };
+        myBucket.putObject(params)
+            .on('httpUploadProgress', (evt) => {
+                console.log(evt)
+            })
+            .send((err) => {
+                if (err)
+                console.log(err);
             })
     }
     return <div className="HDFCFormContainer">
@@ -1208,22 +1223,22 @@ export default function HDFCFrom() {
                                                     return <option value={item.Child_Doc_Id}>{item.Child_Doc_Desc}</option>
                                                 })}
                                             </select>
-                                            <input type="file" id="actual-btn" hidden onClick={() => {
-                                                actualBtn.addEventListener('change', function () {
-                                                    fileChosen.textContent = this.files[0].name
+                                            <input type="file" id="addressProof-btn" hidden onClick={() => {
+                                                addressProofBtn.addEventListener('change', function () {
+                                                    actualProofFileChosen.textContent = this.files[0].name
+                                                    if(this.files[0] != ''){
+                                                        handleUpload(this.files[0],item.Parent_Doc_Desc)
+                                                    }
                                                 })
-                                            }}
-                                                onChange={(e) => setSelectedFile(e.target.files[0])} />
-                                            <label className='fileButton' for="actual-btn">
+                                            }} />
+                                            <label className='fileButton' for="addressProof-btn">
                                                 <div className='fileText'>Upload</div>
                                                 <div className='plus'>+</div>
                                             </label>
-                                            <div id="file-chosen">No file chosen</div>
+                                            <div className='fileChosen' id="actualProof-file-chosen">No file chosen</div>
                                             <div className='uploadStatusButton'>
                                                 <div
-                                                    className='uploadStatusText'
-                                                    onClick={() => handleUpload(selectedFile)}
-                                                >Uploaded</div>
+                                                    className='uploadStatusText'>Uploaded</div>
                                             </div>
                                         </div>
                                     )
@@ -1240,16 +1255,19 @@ export default function HDFCFrom() {
                                                     return <option value={item.Child_Doc_Id}>{item.Child_Doc_Desc}</option>
                                                 })}
                                             </select>
-                                            <input type="file" id="actual-btn" hidden onClick={() => {
-                                                actualBtn.addEventListener('change', function () {
-                                                    fileChosen.textContent = this.files[0].name
+                                            <input type="file" id="incomeProof-btn" hidden onClick={() => {
+                                                incomeProofBtn.addEventListener('change', function () {
+                                                    incomeProofFileChosen.textContent = this.files[0].name
+                                                    if(this.files[0] != ''){
+                                                        handleUpload(this.files[0],item.Parent_Doc_Desc)
+                                                    }
                                                 })
-                                            }} />
-                                            <label className='fileButton' for="actual-btn">
+                                            }}/>
+                                            <label className='fileButton' for="incomeProof-btn">
                                                 <div className='fileText'>Upload</div>
                                                 <div className='plus'>+</div>
                                             </label>
-                                            <div id="file-chosen">No file chosen</div>
+                                            <div className='fileChosen' id="incomeProof-file-chosen">No file chosen</div>
                                             <div className='uploadStatusButton'>
                                                 <div className='uploadStatusText'>Uploaded</div>
                                             </div>
@@ -1267,16 +1285,19 @@ export default function HDFCFrom() {
                                                     return <option value={item.Child_Doc_Id}>{item.Child_Doc_Desc}</option>
                                                 })}
                                             </select>
-                                            <input type="file" id="actual-btn" hidden onClick={() => {
-                                                actualBtn.addEventListener('change', function () {
-                                                    fileChosen.textContent = this.files[0].name
+                                            <input type="file" id="bankStatement-btn" hidden onClick={() => {
+                                                bankStatementBtn.addEventListener('change', function () {
+                                                    bankStatementFileChosen.textContent = this.files[0].name
+                                                    if(this.files[0] != ''){
+                                                        handleUpload(this.files[0],item.Parent_Doc_Desc)
+                                                    }
                                                 })
                                             }} />
-                                            <label className='fileButton' for="actual-btn">
+                                            <label className='fileButton' for="bankStatement-btn">
                                                 <div className='fileText'>Upload</div>
                                                 <div className='plus'>+</div>
                                             </label>
-                                            <div id="file-chosen">No file chosen</div>
+                                            <div className='fileChosen' id="bankStatement-file-chosen">No file chosen</div>
                                             <div className='uploadStatusButton'>
                                                 <div className='uploadStatusText'>Uploaded</div>
                                             </div>
@@ -1294,16 +1315,19 @@ export default function HDFCFrom() {
                                                     return <option value={item.Child_Doc_Id}>{item.Child_Doc_Desc}</option>
                                                 })}
                                             </select>
-                                            <input type="file" id="actual-btn" hidden onClick={() => {
-                                                actualBtn.addEventListener('change', function () {
-                                                    fileChosen.textContent = this.files[0].name
+                                            <input type="file" id="identityProof-btn" hidden onClick={() => {
+                                                identityProofBtn.addEventListener('change', function () {
+                                                    identityProofFileChosen.textContent = this.files[0].name
+                                                    if(this.files[0] != ''){
+                                                        handleUpload(this.files[0],item.Parent_Doc_Desc)
+                                                    }
                                                 })
                                             }} />
-                                            <label className='fileButton' for="actual-btn">
+                                            <label className='fileButton' for="identityProof-btn">
                                                 <div className='fileText'>Upload</div>
                                                 <div className='plus'>+</div>
                                             </label>
-                                            <div id="file-chosen">No file chosen</div>
+                                            <div className='fileChosen' id="identityProof-file-chosen">No file chosen</div>
                                             <div className='uploadStatusButton'>
                                                 <div className='uploadStatusText'>Uploaded</div>
                                             </div>
@@ -1321,16 +1345,19 @@ export default function HDFCFrom() {
                                                     return <option value={item.Child_Doc_Id}>{item.Child_Doc_Desc}</option>
                                                 })}
                                             </select>
-                                            <input type="file" id="actual-btn" hidden onClick={() => {
-                                                actualBtn.addEventListener('change', function () {
-                                                    fileChosen.textContent = this.files[0].name
+                                            <input type="file" id="loanTransferDoc-btn" hidden onClick={() => {
+                                                loanTransferDocBtn.addEventListener('change', function () {
+                                                    loanTransferDocFileChosen.textContent = this.files[0].name
+                                                    if(this.files[0] != ''){
+                                                        handleUpload(this.files[0],item.Parent_Doc_Desc)
+                                                    }
                                                 })
                                             }} />
-                                            <label className='fileButton' for="actual-btn">
+                                            <label className='fileButton' for="loanTransferDoc-btn">
                                                 <div className='fileText'>Upload</div>
                                                 <div className='plus'>+</div>
                                             </label>
-                                            <div id="file-chosen">No file chosen</div>
+                                            <div className='fileChosen' id="loanTransferDoc-file-chosen">No file chosen</div>
                                             <div className='uploadStatusButton'>
                                                 <div className='uploadStatusText'>Uploaded</div>
                                             </div>

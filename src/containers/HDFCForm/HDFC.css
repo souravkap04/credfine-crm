@@ -459,7 +459,7 @@
   margin-left: 0.504rem;
 }
 
-.HDFCFormContainer .rightSection .uploadContainer .uploadDocumentContainer .uploadDocumentRow #file-chosen {
+.HDFCFormContainer .rightSection .uploadContainer .uploadDocumentContainer .uploadDocumentRow .fileChosen {
   font-size: 0.819rem;
   color: #07498e;
   letter-spacing: 0.02709rem;
