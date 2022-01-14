@@ -20,7 +20,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import { ListItem } from '@material-ui/core';
 import { ListGroup } from 'react-bootstrap';
-import { data } from 'jquery';
+import { data} from 'jquery';
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -401,19 +401,40 @@ export default function HDFCFrom() {
         setIsHdfcData(false);
         setIsHdfcPersonalRefData(false);
     }
-    const handleUpload = (file,folderName) =>{
+    const handleUpload = (file,folderName,parentId,childId) =>{
         const params = {
             Body: file,
             Bucket: 'cred-lead-docs-uat',
             Key: `${leadid}/hdfcDocs/${folderName}/${file.name}`
         };
-        myBucket.putObject(params)
-            .on('httpUploadProgress', (evt) => {
-                console.log(evt)
-            })
-            .send((err) => {
-                if (err)
-                console.log(err);
+        myBucket.upload(params,function(err,data){
+            if (err) console.log(err, err.stack);
+            else {
+                let getUrl = data.Location;
+                let loan_data = {s3_url : getUrl,fileName:'images.png',ContentType:'image/png',Parent_Doc_Id:parentId,Child_Doc_Id:childId} ;
+                let items = {loan_data};
+                axios.post(`${hdfcBankApi}/sendHdfcLead/${leadid}/4`,items)
+                    .then((response)=>{
+                        console.log(response.data)
+                    }).catch((error)=>{
+                        console.log(error)
+                    })
+            }
+        })
+    }
+    const uploadAllDocumentsHandler = async () =>{
+        let item = {}
+        await axios.post(`${hdfcBankApi}/sendHdfcLead/${leadid}/5`,{item})
+            .then((response)=>{
+                if(response.data.status){
+                    setisApprovalStatus(true)
+                    setisApprovalStatusProgress(true)
+                    setisUploadDocument(false)
+                    setisUploadProgress(true)
+                    setisBankStatement(true)
+                }
+            }).catch((error)=>{
+                console.log(error);
             })
     }
     return <div className="HDFCFormContainer">
@@ -1227,7 +1248,7 @@ export default function HDFCFrom() {
                                                 addressProofBtn.addEventListener('change', function () {
                                                     actualProofFileChosen.textContent = this.files[0].name
                                                     if(this.files[0] != ''){
-                                                        handleUpload(this.files[0],item.Parent_Doc_Desc)
+                                                        handleUpload(this.files[0],item.Parent_Doc_Desc,item.Parent_Doc_Id,addressProof)
                                                     }
                                                 })
                                             }} />
@@ -1259,7 +1280,7 @@ export default function HDFCFrom() {
                                                 incomeProofBtn.addEventListener('change', function () {
                                                     incomeProofFileChosen.textContent = this.files[0].name
                                                     if(this.files[0] != ''){
-                                                        handleUpload(this.files[0],item.Parent_Doc_Desc)
+                                                        handleUpload(this.files[0],item.Parent_Doc_Desc,item.Parent_Doc_Id,incomeProof)
                                                     }
                                                 })
                                             }}/>
@@ -1289,7 +1310,7 @@ export default function HDFCFrom() {
                                                 bankStatementBtn.addEventListener('change', function () {
                                                     bankStatementFileChosen.textContent = this.files[0].name
                                                     if(this.files[0] != ''){
-                                                        handleUpload(this.files[0],item.Parent_Doc_Desc)
+                                                        handleUpload(this.files[0],item.Parent_Doc_Desc,item.Parent_Doc_Id,bankStatement)
                                                     }
                                                 })
                                             }} />
@@ -1319,7 +1340,7 @@ export default function HDFCFrom() {
                                                 identityProofBtn.addEventListener('change', function () {
                                                     identityProofFileChosen.textContent = this.files[0].name
                                                     if(this.files[0] != ''){
-                                                        handleUpload(this.files[0],item.Parent_Doc_Desc)
+                                                        handleUpload(this.files[0],item.Parent_Doc_Desc,item.Parent_Doc_Id,identityProof)
                                                     }
                                                 })
                                             }} />
@@ -1349,7 +1370,7 @@ export default function HDFCFrom() {
                                                 loanTransferDocBtn.addEventListener('change', function () {
                                                     loanTransferDocFileChosen.textContent = this.files[0].name
                                                     if(this.files[0] != ''){
-                                                        handleUpload(this.files[0],item.Parent_Doc_Desc)
+                                                        handleUpload(this.files[0],item.Parent_Doc_Desc,item.Parent_Doc_Id,loanTransferDoc)
                                                     }
                                                 })
                                             }} />
@@ -1369,11 +1390,7 @@ export default function HDFCFrom() {
                     </div>
                 </div>
                 <FormContainer isSaveNextButton={true} className="uploadDocumentFormContainer" onClick={() => {
-                    setisApprovalStatus(true)
-                    setisApprovalStatusProgress(true)
-                    setisUploadDocument(false)
-                    setisUploadProgress(true)
-                    setisBankStatement(true)
+                    uploadAllDocumentsHandler();
                 }}>
                     <div className="checkboxContainer">
                         <Checkbox className="check" />
