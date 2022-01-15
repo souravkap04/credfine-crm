@@ -215,8 +215,8 @@ export default function HDFCFrom() {
                 setEmployerName(response.data.applyLoan.Employer_Name__req);
                 setofficeAddressOne(response.data.applyLoan.Address1_Work__req);
                 setofficeAddressTwo(response.data.applyLoan.Address2_Work__req);
-                setOfficeStateIdd(response.data.applyLoan.State_Work.id);
-                setOfficeStateName(response.data.applyLoan.State_Work.name);
+                setOfficeStateIdd(response.data.applyLoan.State_Work__req.id);
+                setOfficeStateName(response.data.applyLoan.State_Work__req.name);
                 setOfficeCityIdd(response.data.applyLoan.City_Work__req.id);
                 setOfficeCityName(response.data.applyLoan.City_Work__req.name);
                 setOfficePincode(response.data.applyLoan.Pin_Code_Work__req);
@@ -335,7 +335,7 @@ export default function HDFCFrom() {
             City_Resi: cityIdd, Pin_Code_Resi: pincode, Address1_Resi: addressLineOne, Address2_Resi: addressLineTwo, Address3_Resi: addressLineThree, State_Resi: stateIdd, Mobile1_Resi: mobileNo,
             STD_Code_Resi: "", Email_Resi: residentialEmailId, Year_at_Current_Address: yearsInCurrentResidence, Year_at_City: yearsInCurrentCity, Employer_Name: employerName, Address1_Work: officeAddressOne,
             Address2_Work: officeAddressTwo,
-            Pin_Code_Work: officePincode, Address_Type_Work: officeAddressType, City_Work: officeCityIdd, State_Work: officeStateIdd, Monthly_take_home_Salary: monthlyTakeHomeSalary, residence_type_dap: residanceTypeDap,
+            Pin_Code_Work: officePincode, Address_Type_Work: officeAddressType, City_Work: officeCityIdd, State_Work__req: officeStateIdd, Monthly_take_home_Salary: monthlyTakeHomeSalary, residence_type_dap: residanceTypeDap,
             employment_type: employmentType, No_of_Dependent: totalDependent, Address_Type_Resi: residanceAddressType,
         }
         let items = { loan_data: { applyLoan } };
