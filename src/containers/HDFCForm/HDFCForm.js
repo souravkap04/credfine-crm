@@ -85,6 +85,12 @@ export default function HDFCFrom() {
     const [officeCityIdd, setOfficeCityIdd] = useState("");
     const [officeCityName, setOfficeCityName] = useState("");
     const [officePincode, setOfficePincode] = useState("");
+    const [brabchCodeIdd,setbranchCodeIdd] = useState("");
+    const [brabchCodeName,setbranchCodeName] = useState("");
+    const [rmCodeIdd,setRmCodeIdd] = useState("");
+    const [rmCodeName,setRmCodeName] = useState("");
+    const [seCodeIdd,setSeCodeIdd] = useState("");
+    const [seCodeName,setSeCodeName] = useState("");
     const [addressType, setAddressType] = useState("");
     const [hdfcBankAccNo, setHdfcBankAccNo] = useState("");
     const [hdfcBranch, setHdfcBranch] = useState("");
@@ -219,6 +225,12 @@ export default function HDFCFrom() {
                 setOfficeStateName(response.data.applyLoan.State_Work__req.name);
                 setOfficeCityIdd(response.data.applyLoan.City_Work__req.id);
                 setOfficeCityName(response.data.applyLoan.City_Work__req.name);
+                setbranchCodeIdd(response.data.applyLoan.Branch_code__req.id);
+                setbranchCodeName(response.data.applyLoan.Branch_code__req.name);
+                setRmCodeIdd(response.data.applyLoan.RM_code.id);
+                setRmCodeName(response.data.applyLoan.RM_code.name);
+                setSeCodeIdd(response.data.applyLoan.SE_code.id);
+                setSeCodeName(response.data.applyLoan.SE_code.name);
                 setOfficePincode(response.data.applyLoan.Pin_Code_Work__req);
                 setAddressType();
                 setHdfcBankAccNo();
@@ -323,6 +335,14 @@ export default function HDFCFrom() {
             setAlertMessage('Invalid Office Pincode')
             setIsError(true);
             return;
+        } if (brabchCodeName === '') {
+            setAlertMessage('Invalid Branch Code Name');
+            setIsError(true);
+            return;
+        } if (rmCodeName === '') {
+            setAlertMessage('Invalid RM Code Name');
+            setIsError(true);
+            return;
         }
         if (officeAddressType === '') {
             setAlertMessage('Invalid Office Address Type')
@@ -335,15 +355,14 @@ export default function HDFCFrom() {
             City_Resi: cityIdd, Pin_Code_Resi: pincode, Address1_Resi: addressLineOne, Address2_Resi: addressLineTwo, Address3_Resi: addressLineThree, State_Resi: stateIdd, Mobile1_Resi: mobileNo,
             STD_Code_Resi: "", Email_Resi: residentialEmailId, Year_at_Current_Address: yearsInCurrentResidence, Year_at_City: yearsInCurrentCity, Employer_Name: employerName, Address1_Work: officeAddressOne,
             Address2_Work: officeAddressTwo,
-            Pin_Code_Work: officePincode, Address_Type_Work: officeAddressType, City_Work: officeCityIdd, State_Work__req: officeStateIdd, Monthly_take_home_Salary: monthlyTakeHomeSalary, residence_type_dap: residanceTypeDap,
-            employment_type: employmentType, No_of_Dependent: totalDependent, Address_Type_Resi: residanceAddressType,
+            Pin_Code_Work: officePincode, Address_Type_Work: officeAddressType, City_Work: officeCityIdd, State_Work: officeStateIdd, Monthly_take_home_Salary: monthlyTakeHomeSalary, residence_type_dap: residanceTypeDap,
+            employment_type: employmentType, No_of_Dependent: totalDependent, Address_Type_Resi: residanceAddressType,Branch_code : brabchCodeIdd , RM_code:rmCodeIdd,SE_code:seCodeIdd
         }
         let items = { loan_data: { applyLoan } };
         console.log("items:" + items);
         const headers = { 'Content-Type': 'application/json' };
         await axios.post(`${hdfcBankApi}/sendHdfcLead/${leadId}/2`, items, { headers })
             .then((response) => {
-                console.log(response.data.status);
                 if (response.data.status) {
                     setIsHdfcData(true);
                     setisPersonalDetail(false)
@@ -373,7 +392,7 @@ export default function HDFCFrom() {
             setIsError(true);
             return;
         }
-        let loan_data = { ref_1_FirstName__req: refFirstName, ref_1_LastName: refLastName, ref_1_Mobile__req: refMobileNo }
+        let loan_data = { ref_1_FirstName: refFirstName, ref_1_LastName: refLastName, ref_1_Mobile: refMobileNo }
         let items = { loan_data };
         await axios.post(`${hdfcBankApi}/sendHdfcLead/${leadId}/3`, items)
             .then((response) => {
@@ -435,6 +454,14 @@ export default function HDFCFrom() {
                 }
             }).catch((error)=>{
                 console.log(error);
+            })
+    }
+    const trackStatusHandler = async() =>{
+        await axios.get(`${hdfcBankApi}/trackHdfcApi/${leadid}`)
+            .then((response)=>{
+                console.log(response.data.response)
+            }).catch((error)=>{
+                console.log(error)
             })
     }
     return <div className="HDFCFormContainer">
@@ -1036,6 +1063,45 @@ export default function HDFCFrom() {
                         onChange={(e) => setOfficePincode(e.target.value)}
                     />
                     <TextField
+                        className="textField"
+                        id="outlined-full-width"
+                        label="Branch Code"
+                        margin="normal"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        variant="outlined"
+                        size="small"
+                        value={brabchCodeName}
+                        onChange={(e) => setbranchCodeName(e.target.value)}
+                    />
+                    <TextField
+                        className="textField"
+                        id="outlined-full-width"
+                        label="RM Code"
+                        margin="normal"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        variant="outlined"
+                        size="small"
+                        value={rmCodeName}
+                        onChange={(e) => setRmCodeName}
+                    />
+                    <TextField
+                        className="textField"
+                        id="outlined-full-width"
+                        label="SE Code"
+                        margin="normal"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        variant="outlined"
+                        size="small"
+                        value={seCodeName}
+                        onChange={(e) => setSeCodeName(e.target.value)}
+                    />
+                    <TextField
                         select
                         className="textField"
                         id="outlined-full-width"
@@ -1427,7 +1493,7 @@ export default function HDFCFrom() {
                     <div className="headText2"><strong>Congratulations!</strong></div>
                     <div className="subText">Your Application has been <strong>successfully submitted.</strong> Our Team will get back to you in 24-48 hours.</div>
                     <div className="trackStatus">
-                        <div className="btnText">TRACK STATUS</div>
+                        <div className="btnText" onClick={trackStatusHandler}>TRACK STATUS</div>
                     </div>
                 </div>
             </div> : ''}
