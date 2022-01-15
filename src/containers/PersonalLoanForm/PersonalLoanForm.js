@@ -288,8 +288,7 @@ export default function PersonalLoanForm() {
         let item = {};
         await axios.post(`${hdfcBankApi}/sendHdfcLead/${leadId}/1`, item)
             .then((response) => {
-                console.log(response.data)
-                if(response.data.status){
+                if(response.data.response_status === "Success"){
                     history.push(`/dashboards/HDFCForm/${leadid}`);
                 }
             }).catch((error)=>{

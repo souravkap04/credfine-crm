@@ -122,7 +122,6 @@ export default function HDFCFrom() {
     useEffect(() => {
         fetchHdfcData(leadid);
         fetchPersonalReferenceData(leadid);
-        hdfcUploadDocumentGetHandler(leadid);
     }, [])
 
     AWS.config.update({
@@ -363,16 +362,18 @@ export default function HDFCFrom() {
         const headers = { 'Content-Type': 'application/json' };
         await axios.post(`${hdfcBankApi}/sendHdfcLead/${leadId}/2`, items, { headers })
             .then((response) => {
-                if (response.data.status) {
+                if (response.data.response_status === 'Success') {
                     setIsHdfcData(true);
                     setisPersonalDetail(false)
                     setisPersonalProgress(true)
                     setisCurrentProgress(true)
                     setisBusinessProgress(true)
                     setisPersonalReference(true)
+                }if (response.data.response_status == 'failed') {
+                    setAlertMessage(response.data.message);
+                    setIsError(true);
                 }
             }).catch((error) => {
-                console.log(error);
                 setAlertMessage("something wrong");
                 setIsError(true);
             })
@@ -396,11 +397,15 @@ export default function HDFCFrom() {
         let items = { loan_data };
         await axios.post(`${hdfcBankApi}/sendHdfcLead/${leadId}/3`, items)
             .then((response) => {
-                if (response.data.status) {
+                if (response.data.response_status === 'Success') {
                     setisUploadDocument(true)
                     setisPersonalReference(false)
                     setisReferenceProgress(true)
                     setIsHdfcPersonalRefData(true)
+                    hdfcUploadDocumentGetHandler(leadid);
+                } if (response.data.response_status === 'failed') {
+                    setAlertMessage(response.data.message);
+                    setIsError(true);
                 }
             }).catch((error) => {
                 console.log(error)
@@ -409,7 +414,11 @@ export default function HDFCFrom() {
     const hdfcUploadDocumentGetHandler = async (leadId) => {
         await axios.get(`${hdfcBankApi}/sendHdfcLead/${leadId}/4`)
             .then((response) => {
-                setuploadDocumentGet(response.data.documents.Parent_Doc)
+                if (response.data.documents === ""){
+                     history.goBack();
+                }else{
+                    setuploadDocumentGet(response.data.documents.Parent_Doc)
+                }
             }).catch((error) => {
                 console.log(error)
             })
@@ -445,12 +454,15 @@ export default function HDFCFrom() {
         let item = {}
         await axios.post(`${hdfcBankApi}/sendHdfcLead/${leadid}/5`,{item})
             .then((response)=>{
-                if(response.data.status){
+                if(response.data.response_status === 'Success'){
                     setisApprovalStatus(true)
                     setisApprovalStatusProgress(true)
                     setisUploadDocument(false)
                     setisUploadProgress(true)
                     setisBankStatement(true)
+                }if(response.data.response_status === 'failed'){
+                    setAlertMessage("something wrong please check");
+                    setIsError(true);
                 }
             }).catch((error)=>{
                 console.log(error);
@@ -1086,7 +1098,7 @@ export default function HDFCFrom() {
                         variant="outlined"
                         size="small"
                         value={rmCodeName}
-                        onChange={(e) => setRmCodeName}
+                        onChange={(e) => setRmCodeName(e.target.value)}
                     />
                     <TextField
                         className="textField"
@@ -1306,6 +1318,7 @@ export default function HDFCFrom() {
                                                 value={addressProof}
                                                 onChange={(e) => setAddressProof(e.target.value)}
                                             >
+                                                <option value="">select one</option>
                                                 {item.ChildDocMaster.Child_Doc.map(item => {
                                                     return <option value={item.Child_Doc_Id}>{item.Child_Doc_Desc}</option>
                                                 })}
@@ -1337,7 +1350,9 @@ export default function HDFCFrom() {
                                             <select
                                                 className='documentTypeSelect'
                                                 value={incomeProof}
-                                                onChange={(e) => setIncomeProof(e.target.value)}>
+                                                onChange={(e) => setIncomeProof(e.target.value)}
+                                                >
+                                                 <option value="">select one</option>   
                                                 {item.ChildDocMaster.Child_Doc.map(item => {
                                                     return <option value={item.Child_Doc_Id}>{item.Child_Doc_Desc}</option>
                                                 })}
@@ -1367,7 +1382,9 @@ export default function HDFCFrom() {
                                             <h3 className='documentTypeText'>{item.Parent_Doc_Desc}</h3>
                                             <select className='documentTypeSelect'
                                                 value={bankStatement}
-                                                onChange={(e) => setBankstatement(e.target.value)}>
+                                                onChange={(e) => setBankstatement(e.target.value)}
+                                                >
+                                                 <option value="">select one</option>   
                                                 {item.ChildDocMaster.Child_Doc.map(item => {
                                                     return <option value={item.Child_Doc_Id}>{item.Child_Doc_Desc}</option>
                                                 })}
@@ -1397,7 +1414,9 @@ export default function HDFCFrom() {
                                             <h3 className='documentTypeText'>{item.Parent_Doc_Desc}</h3>
                                             <select className='documentTypeSelect'
                                                 value={identityProof}
-                                                onChange={(e) => setIdentityProof(e.target.value)}>
+                                                onChange={(e) => setIdentityProof(e.target.value)}
+                                                >
+                                                 <option value="">select one</option>    
                                                 {item.ChildDocMaster.Child_Doc.map(item => {
                                                     return <option value={item.Child_Doc_Id}>{item.Child_Doc_Desc}</option>
                                                 })}
@@ -1427,7 +1446,9 @@ export default function HDFCFrom() {
                                             <h3 className='documentTypeText'>{item.Parent_Doc_Desc}</h3>
                                             <select className='documentTypeSelect'
                                                 value={loanTransferDoc}
-                                                onChange={(e) => setLoanTransferDoc(e.target.value)}>
+                                                onChange={(e) => setLoanTransferDoc(e.target.value)}
+                                                >
+                                                 <option value="">select one</option>    
                                                 {item.ChildDocMaster.Child_Doc.map(item => {
                                                     return <option value={item.Child_Doc_Id}>{item.Child_Doc_Desc}</option>
                                                 })}
