@@ -21,6 +21,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import { ListItem } from '@material-ui/core';
 import { ListGroup } from 'react-bootstrap';
 import { data} from 'jquery';
+import Moment from 'moment';
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -192,10 +193,14 @@ export default function HDFCFrom() {
     const fetchHdfcData = async (leadId) => {
         await axios.get(`${hdfcBankApi}/sendHdfcLead/${leadId}/2`)
             .then((response) => {
+                let dateFromApi = (response.data.applyLoan.Date_Of_Birth__req).toString();
+                let changedateFormat = Moment(dateFromApi.toString()).format("YYYY/MM/DD");
+                console.log("dataFormat:"+dateFromApi);
+                console.log("dataFormat1:"+changedateFormat);
                 setFirstName(response.data.applyLoan.First_Name__req);
                 setLastName(response.data.applyLoan.Last_Name__req);
                 setGender(response.data.applyLoan.Gender__req);
-                setDob(response.data.applyLoan.Date_Of_Birth__req);
+                setDob(changedateFormat);
                 setLoanAmount(response.data.applyLoan.Loan_Amount__req);
                 setOfficeAddressType(response.data.applyLoan.Address_Type_Work__req);
                 setmonthlyTakeHomeSalary(response.data.applyLoan.Monthly_take_home_Salary__req);
@@ -357,7 +362,7 @@ export default function HDFCFrom() {
             STD_Code_Resi: "", Email_Resi: residentialEmailId, Year_at_Current_Address: yearsInCurrentResidence, Year_at_City: yearsInCurrentCity, Employer_Name: employerIdd, Address1_Work: officeAddressOne,
             Address2_Work: officeAddressTwo,
             Pin_Code_Work: officePincode, Address_Type_Work: officeAddressType, City_Work: 474, State_Work: 1, Monthly_take_home_Salary: monthlyTakeHomeSalary, residence_type_dap: residanceTypeDap,
-            employment_type: employmentType, No_of_Dependent: totalDependent, Address_Type_Resi: residanceAddressType,Branch_code : brabchCodeIdd , RM_code:rmCodeIdd,SE_code:seCodeIdd
+            employment_type: employmentType, No_of_Dependent: totalDependent, Address_Type_Resi: residanceAddressType,Branch_code : 214 , RM_code:rmCodeIdd,SE_code:seCodeIdd
         }
         let items = { loan_data: { applyLoan } };
         console.log("items:" + items);
