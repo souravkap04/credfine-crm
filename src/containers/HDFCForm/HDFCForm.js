@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
-import S3FileUpload from 'react-s3';
 import AWS from 'aws-sdk'
 import { hdfcBankApi } from "../../global/bankingApis";
 import { getResidentType, getGender, getHighestQualification } from "../../global/leadsGlobalData"
@@ -20,8 +19,6 @@ import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import { ListItem } from '@material-ui/core';
 import { ListGroup } from 'react-bootstrap';
-import { data} from 'jquery';
-import Moment from 'moment';
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -193,14 +190,10 @@ export default function HDFCFrom() {
     const fetchHdfcData = async (leadId) => {
         await axios.get(`${hdfcBankApi}/sendHdfcLead/${leadId}/2`)
             .then((response) => {
-                let dateFromApi = (response.data.applyLoan.Date_Of_Birth__req).toString();
-                let changedateFormat = Moment(dateFromApi.toString()).format("YYYY/MM/DD");
-                console.log("dataFormat:"+dateFromApi);
-                console.log("dataFormat1:"+changedateFormat);
                 setFirstName(response.data.applyLoan.First_Name__req);
                 setLastName(response.data.applyLoan.Last_Name__req);
                 setGender(response.data.applyLoan.Gender__req);
-                setDob(changedateFormat);
+                setDob(response.data.applyLoan.Date_Of_Birth__req);
                 setLoanAmount(response.data.applyLoan.Loan_Amount__req);
                 setOfficeAddressType(response.data.applyLoan.Address_Type_Work__req);
                 setmonthlyTakeHomeSalary(response.data.applyLoan.Monthly_take_home_Salary__req);
