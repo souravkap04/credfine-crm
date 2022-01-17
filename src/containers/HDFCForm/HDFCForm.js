@@ -77,6 +77,7 @@ export default function HDFCFrom() {
     const [pincode, setPincode] = useState("");
     const [mobileNo, setMobileNo] = useState("");
     const [residentialEmailId, setResidentialEmailId] = useState("");
+    const [employerIdd,setEmployerIdd] = useState("");
     const [employerName, setEmployerName] = useState("");
     const [officeAddressOne, setofficeAddressOne] = useState("");
     const [officeAddressTwo, setofficeAddressTwo] = useState("");
@@ -173,9 +174,10 @@ export default function HDFCFrom() {
                 })
         }
     }
-    const selectHdfcCompany = (companyID) => {
+    const selectHdfcCompany = (companyID,companyName) => {
         setShowHdfcCompany(false);
-        setEmployerName(companyID)
+        setEmployerIdd(companyID);
+        setEmployerName(companyName);
     }
     const selectHdfcCity = (cityId, stateId) => {
         setCityIdd(cityId);
@@ -351,10 +353,10 @@ export default function HDFCFrom() {
         let applyLoan = {
             First_Name: firstName, Last_Name: lastName, Gender: gender, Date_Of_Birth: dob, Educational_Qualification: highestQualification,
             Loan_Amount: loanAmount, PAN_AC_No: panCardNo,
-            City_Resi: cityIdd, Pin_Code_Resi: pincode, Address1_Resi: addressLineOne, Address2_Resi: addressLineTwo, Address3_Resi: addressLineThree, State_Resi: stateIdd, Mobile1_Resi: mobileNo,
-            STD_Code_Resi: "", Email_Resi: residentialEmailId, Year_at_Current_Address: yearsInCurrentResidence, Year_at_City: yearsInCurrentCity, Employer_Name: employerName, Address1_Work: officeAddressOne,
+            City_Resi: 474, Pin_Code_Resi: pincode, Address1_Resi: addressLineOne, Address2_Resi: addressLineTwo, Address3_Resi: addressLineThree, State_Resi: 1, Mobile1_Resi: mobileNo,
+            STD_Code_Resi: "", Email_Resi: residentialEmailId, Year_at_Current_Address: yearsInCurrentResidence, Year_at_City: yearsInCurrentCity, Employer_Name: employerIdd, Address1_Work: officeAddressOne,
             Address2_Work: officeAddressTwo,
-            Pin_Code_Work: officePincode, Address_Type_Work: officeAddressType, City_Work: officeCityIdd, State_Work: officeStateIdd, Monthly_take_home_Salary: monthlyTakeHomeSalary, residence_type_dap: residanceTypeDap,
+            Pin_Code_Work: officePincode, Address_Type_Work: officeAddressType, City_Work: 474, State_Work: 1, Monthly_take_home_Salary: monthlyTakeHomeSalary, residence_type_dap: residanceTypeDap,
             employment_type: employmentType, No_of_Dependent: totalDependent, Address_Type_Resi: residanceAddressType,Branch_code : brabchCodeIdd , RM_code:rmCodeIdd,SE_code:seCodeIdd
         }
         let items = { loan_data: { applyLoan } };
@@ -995,7 +997,7 @@ export default function HDFCFrom() {
                         <ListGroup className="listGroup">
                             {showHdfcCompany ? searchHdfcCompany.map((company) => (
                                 <ListGroup.Item key={company.company_id}
-                                    onClick={() => selectHdfcCompany(company.company_id)}
+                                    onClick={() => selectHdfcCompany(company.company_id,company.company_name)}
                                 >{company.company_name}</ListGroup.Item>
                             )) : ''}
                         </ListGroup>
