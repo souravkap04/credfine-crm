@@ -194,11 +194,17 @@ export default function HDFCFrom() {
         await axios.get(`${hdfcBankApi}/sendHdfcLead/${leadId}/2`)
             .then((response) => {
                 let getDobfromApi = response.data.applyLoan.Date_Of_Birth__req;
-                let changeDateFormat = Moment(getDobfromApi,'DDMMYYYY').format("YYYY-MM-DD");
+                let dateRegex = /^\d{4}-\d{2}-\d{2}$/.test(getDobfromApi) ;
+                if(dateRegex){
+                    setDob(response.data.applyLoan.Date_Of_Birth__req);
+                }else{
+                    let changeDateFormat = Moment(getDobfromApi,'DDMMYYYY').format("YYYY-MM-DD");
+                    setDob(changeDateFormat);
+                }
+                
                 setFirstName(response.data.applyLoan.First_Name__req);
                 setLastName(response.data.applyLoan.Last_Name__req);
                 setGender(response.data.applyLoan.Gender__req);
-                setDob(changeDateFormat);
                 setLoanAmount(response.data.applyLoan.Loan_Amount__req);
                 setEmi(response.data.applyLoan.EMI);
                 setOfficeAddressType(response.data.applyLoan.Address_Type_Work__req);
