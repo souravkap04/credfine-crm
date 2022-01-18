@@ -36,10 +36,10 @@ export const getDialer = ()=>{
     return dialer;
 }
 export const getGender = ()=>{
-    const gender = ['Male','Female','LGBT'];
+    const gender = ['M','F','LGBT'];
     return gender;
 }
 export const getHighestQualification = () =>{
-    const highestQualification = ['SSC','HSC/Diploma','Degree','Masters Degree','Other'];
+    const highestQualification = ['GRAD','OTHERS','DOCTRATE','POSTGRAD'];
     return highestQualification;
 }

@@ -19,6 +19,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import { ListItem } from '@material-ui/core';
 import { ListGroup } from 'react-bootstrap';
+import Moment from 'moment';
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -68,14 +69,16 @@ export default function HDFCFrom() {
     const [addressLineOne, setAddressLineOne] = useState("");
     const [addressLineTwo, setAddressLineTwo] = useState("");
     const [addressLineThree, setAddressLineThree] = useState("");
+    const [emi, setEmi] = useState("")
     const [cityIdd, setCityIdd] = useState("");
     const [cityName, setCityName] = useState("");
     const [stateIdd, setStateIdd] = useState("");
     const [stateName, setStateName] = useState("");
     const [pincode, setPincode] = useState("");
     const [mobileNo, setMobileNo] = useState("");
+    const [phoneNoWork,setPhoneNoWork] = useState("")
     const [residentialEmailId, setResidentialEmailId] = useState("");
-    const [employerIdd,setEmployerIdd] = useState("");
+    const [employerIdd, setEmployerIdd] = useState("");
     const [employerName, setEmployerName] = useState("");
     const [officeAddressOne, setofficeAddressOne] = useState("");
     const [officeAddressTwo, setofficeAddressTwo] = useState("");
@@ -84,12 +87,12 @@ export default function HDFCFrom() {
     const [officeCityIdd, setOfficeCityIdd] = useState("");
     const [officeCityName, setOfficeCityName] = useState("");
     const [officePincode, setOfficePincode] = useState("");
-    const [brabchCodeIdd,setbranchCodeIdd] = useState("");
-    const [brabchCodeName,setbranchCodeName] = useState("");
-    const [rmCodeIdd,setRmCodeIdd] = useState("");
-    const [rmCodeName,setRmCodeName] = useState("");
-    const [seCodeIdd,setSeCodeIdd] = useState("");
-    const [seCodeName,setSeCodeName] = useState("");
+    const [brabchCodeIdd, setbranchCodeIdd] = useState("");
+    const [brabchCodeName, setbranchCodeName] = useState("");
+    const [rmCodeIdd, setRmCodeIdd] = useState("");
+    const [rmCodeName, setRmCodeName] = useState("");
+    const [seCodeIdd, setSeCodeIdd] = useState("");
+    const [seCodeName, setSeCodeName] = useState("");
     const [addressType, setAddressType] = useState("");
     const [hdfcBankAccNo, setHdfcBankAccNo] = useState("");
     const [hdfcBranch, setHdfcBranch] = useState("");
@@ -124,11 +127,11 @@ export default function HDFCFrom() {
     }, [])
 
     AWS.config.update({
-        accessKeyId : 'AKIA6KIAPG76SEOLIPN6',
-        secretAccessKey : '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'
+        accessKeyId: 'AKIA6KIAPG76SEOLIPN6',
+        secretAccessKey: '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'
     })
     const myBucket = new AWS.S3({
-        params : { Bucket : 'cred-lead-docs-uat'},
+        params: { Bucket: 'cred-lead-docs-uat' },
         region: 'ap-south-1',
     })
 
@@ -172,7 +175,7 @@ export default function HDFCFrom() {
                 })
         }
     }
-    const selectHdfcCompany = (companyID,companyName) => {
+    const selectHdfcCompany = (companyID, companyName) => {
         setShowHdfcCompany(false);
         setEmployerIdd(companyID);
         setEmployerName(companyName);
@@ -190,11 +193,14 @@ export default function HDFCFrom() {
     const fetchHdfcData = async (leadId) => {
         await axios.get(`${hdfcBankApi}/sendHdfcLead/${leadId}/2`)
             .then((response) => {
+                let getDobfromApi = response.data.applyLoan.Date_Of_Birth__req;
+                let changeDateFormat = Moment(getDobfromApi,'DDMMYYYY').format("YYYY-MM-DD");
                 setFirstName(response.data.applyLoan.First_Name__req);
                 setLastName(response.data.applyLoan.Last_Name__req);
                 setGender(response.data.applyLoan.Gender__req);
-                setDob(response.data.applyLoan.Date_Of_Birth__req);
+                setDob(changeDateFormat);
                 setLoanAmount(response.data.applyLoan.Loan_Amount__req);
+                setEmi(response.data.applyLoan.EMI);
                 setOfficeAddressType(response.data.applyLoan.Address_Type_Work__req);
                 setmonthlyTakeHomeSalary(response.data.applyLoan.Monthly_take_home_Salary__req);
                 setResidanceTypeDap(response.data.applyLoan.residence_type_dap__req);
@@ -216,6 +222,7 @@ export default function HDFCFrom() {
                 setStateName(response.data.applyLoan.State_Resi__req.name);
                 setPincode(response.data.applyLoan.Pin_Code_Resi__req);
                 setMobileNo(response.data.applyLoan.Mobile1_Resi__req);
+                setPhoneNoWork(response.data.applyLoan.Phone1_Work);
                 setResidentialEmailId(response.data.applyLoan.Email_Resi__req);
                 setEmployerName(response.data.applyLoan.Employer_Name__req);
                 setofficeAddressOne(response.data.applyLoan.Address1_Work__req);
@@ -349,13 +356,15 @@ export default function HDFCFrom() {
             return;
         }
         let applyLoan = {
-            First_Name: firstName, Last_Name: lastName, Gender: gender, Date_Of_Birth: dob, Educational_Qualification: highestQualification,
-            Loan_Amount: loanAmount, PAN_AC_No: panCardNo,
+            First_Name: firstName, Last_Name: lastName, Gender: gender, Date_Of_Birth: dob, Educational_Qualification: "GRAD",
+            Loan_Amount: loanAmount, PAN_AC_No: panCardNo, EMI: emi,Landmark_Resi:"",Landmark_Work:"",Passport_no:"",Voter_iD:"",
             City_Resi: 474, Pin_Code_Resi: pincode, Address1_Resi: addressLineOne, Address2_Resi: addressLineTwo, Address3_Resi: addressLineThree, State_Resi: 1, Mobile1_Resi: mobileNo,
-            STD_Code_Resi: "", Email_Resi: residentialEmailId, Year_at_Current_Address: yearsInCurrentResidence, Year_at_City: yearsInCurrentCity, Employer_Name: employerIdd, Address1_Work: officeAddressOne,
-            Address2_Work: officeAddressTwo,
-            Pin_Code_Work: officePincode, Address_Type_Work: officeAddressType, City_Work: 474, State_Work: 1, Monthly_take_home_Salary: monthlyTakeHomeSalary, residence_type_dap: residanceTypeDap,
-            employment_type: employmentType, No_of_Dependent: totalDependent, Address_Type_Resi: residanceAddressType,Branch_code : 214 , RM_code:rmCodeIdd,SE_code:seCodeIdd
+            STD_Code_Resi: "", Email_Resi: residentialEmailId, Year_at_Current_Address: yearsInCurrentResidence, Year_at_City: yearsInCurrentCity, Employer_Name: employerIdd,
+            Employer_Name_other: "", Address1_Work: officeAddressOne,
+            Address2_Work: officeAddressTwo,Phone1_Work:phoneNoWork,
+            Pin_Code_Work: officePincode, City_Work: 474, State_Work: 1, Monthly_take_home_Salary: monthlyTakeHomeSalary, residence_type_dap: residanceTypeDap,
+            employment_type: employmentType, No_of_Dependent: totalDependent, Branch_code: 214, RM_code: rmCodeIdd, SE_code: seCodeIdd,
+            Aadhar: "", Driving_License: "",
         }
         let items = { loan_data: { applyLoan } };
         console.log("items:" + items);
@@ -369,7 +378,7 @@ export default function HDFCFrom() {
                     setisCurrentProgress(true)
                     setisBusinessProgress(true)
                     setisPersonalReference(true)
-                }if (response.data.response_status == 'failed') {
+                } if (response.data.response_status == 'failed') {
                     setAlertMessage(response.data.message);
                     setIsError(true);
                 }
@@ -393,7 +402,7 @@ export default function HDFCFrom() {
             setIsError(true);
             return;
         }
-        let loan_data = { ref_1_FirstName: refFirstName, ref_1_LastName: refLastName, ref_1_Mobile: refMobileNo }
+        let loan_data = { ref_1_FirstName: refFirstName, ref_1_LastName: refLastName, ref_1_Mobile: refMobileNo ,ref_1_Relationship:""}
         let items = { loan_data };
         await axios.post(`${hdfcBankApi}/sendHdfcLead/${leadId}/3`, items)
             .then((response) => {
@@ -414,9 +423,9 @@ export default function HDFCFrom() {
     const hdfcUploadDocumentGetHandler = async (leadId) => {
         await axios.get(`${hdfcBankApi}/sendHdfcLead/${leadId}/4`)
             .then((response) => {
-                if (response.data.documents === ""){
-                     history.goBack();
-                }else{
+                if (response.data.documents === "") {
+                    history.goBack();
+                } else {
                     setuploadDocumentGet(response.data.documents.Parent_Doc)
                 }
             }).catch((error) => {
@@ -429,50 +438,50 @@ export default function HDFCFrom() {
         setIsHdfcData(false);
         setIsHdfcPersonalRefData(false);
     }
-    const handleUpload = (file,folderName,parentId,childId) =>{
+    const handleUpload = (file, folderName, parentId, childId) => {
         const params = {
             Body: file,
             Bucket: 'cred-lead-docs-uat',
             Key: `${leadid}/hdfcDocs/${folderName}/${file.name}`
         };
-        myBucket.upload(params,function(err,data){
+        myBucket.upload(params, function (err, data) {
             if (err) console.log(err, err.stack);
             else {
                 let getUrl = data.Location;
-                let loan_data = {s3_url : getUrl,fileName:'images.png',ContentType:'image/png',Parent_Doc_Id:parentId,Child_Doc_Id:childId} ;
-                let items = {loan_data};
-                axios.post(`${hdfcBankApi}/sendHdfcLead/${leadid}/4`,items)
-                    .then((response)=>{
+                let loan_data = { s3_url: getUrl, fileName: 'images.png', ContentType: 'image/png', Parent_Doc_Id: parentId, Child_Doc_Id: childId };
+                let items = { loan_data };
+                axios.post(`${hdfcBankApi}/sendHdfcLead/${leadid}/4`, items)
+                    .then((response) => {
                         console.log(response.data)
-                    }).catch((error)=>{
+                    }).catch((error) => {
                         console.log(error)
                     })
             }
         })
     }
-    const uploadAllDocumentsHandler = async () =>{
+    const uploadAllDocumentsHandler = async () => {
         let item = {}
-        await axios.post(`${hdfcBankApi}/sendHdfcLead/${leadid}/5`,{item})
-            .then((response)=>{
-                if(response.data.response_status === 'Success'){
+        await axios.post(`${hdfcBankApi}/sendHdfcLead/${leadid}/5`, { item })
+            .then((response) => {
+                if (response.data.response_status === 'Success') {
                     setisApprovalStatus(true)
                     setisApprovalStatusProgress(true)
                     setisUploadDocument(false)
                     setisUploadProgress(true)
                     setisBankStatement(true)
-                }if(response.data.response_status === 'failed'){
+                } if (response.data.response_status === 'failed') {
                     setAlertMessage("something wrong please check");
                     setIsError(true);
                 }
-            }).catch((error)=>{
+            }).catch((error) => {
                 console.log(error);
             })
     }
-    const trackStatusHandler = async() =>{
+    const trackStatusHandler = async () => {
         await axios.get(`${hdfcBankApi}/trackHdfcApi/${leadid}`)
-            .then((response)=>{
+            .then((response) => {
                 console.log(response.data.response)
-            }).catch((error)=>{
+            }).catch((error) => {
                 console.log(error)
             })
     }
@@ -995,7 +1004,7 @@ export default function HDFCFrom() {
                         <ListGroup className="listGroup">
                             {showHdfcCompany ? searchHdfcCompany.map((company) => (
                                 <ListGroup.Item key={company.company_id}
-                                    onClick={() => selectHdfcCompany(company.company_id,company.company_name)}
+                                    onClick={() => selectHdfcCompany(company.company_id, company.company_name)}
                                 >{company.company_name}</ListGroup.Item>
                             )) : ''}
                         </ListGroup>
@@ -1326,8 +1335,8 @@ export default function HDFCFrom() {
                                             <input type="file" id="addressProof-btn" hidden onClick={() => {
                                                 addressProofBtn.addEventListener('change', function () {
                                                     actualProofFileChosen.textContent = this.files[0].name
-                                                    if(this.files[0] != ''){
-                                                        handleUpload(this.files[0],item.Parent_Doc_Desc,item.Parent_Doc_Id,addressProof)
+                                                    if (this.files[0] != '') {
+                                                        handleUpload(this.files[0], item.Parent_Doc_Desc, item.Parent_Doc_Id, addressProof)
                                                     }
                                                 })
                                             }} />
@@ -1351,8 +1360,8 @@ export default function HDFCFrom() {
                                                 className='documentTypeSelect'
                                                 value={incomeProof}
                                                 onChange={(e) => setIncomeProof(e.target.value)}
-                                                >
-                                                 <option value="">select one</option>   
+                                            >
+                                                <option value="">select one</option>
                                                 {item.ChildDocMaster.Child_Doc.map(item => {
                                                     return <option value={item.Child_Doc_Id}>{item.Child_Doc_Desc}</option>
                                                 })}
@@ -1360,11 +1369,11 @@ export default function HDFCFrom() {
                                             <input type="file" id="incomeProof-btn" hidden onClick={() => {
                                                 incomeProofBtn.addEventListener('change', function () {
                                                     incomeProofFileChosen.textContent = this.files[0].name
-                                                    if(this.files[0] != ''){
-                                                        handleUpload(this.files[0],item.Parent_Doc_Desc,item.Parent_Doc_Id,incomeProof)
+                                                    if (this.files[0] != '') {
+                                                        handleUpload(this.files[0], item.Parent_Doc_Desc, item.Parent_Doc_Id, incomeProof)
                                                     }
                                                 })
-                                            }}/>
+                                            }} />
                                             <label className='fileButton' for="incomeProof-btn">
                                                 <div className='fileText'>Upload</div>
                                                 <div className='plus'>+</div>
@@ -1383,8 +1392,8 @@ export default function HDFCFrom() {
                                             <select className='documentTypeSelect'
                                                 value={bankStatement}
                                                 onChange={(e) => setBankstatement(e.target.value)}
-                                                >
-                                                 <option value="">select one</option>   
+                                            >
+                                                <option value="">select one</option>
                                                 {item.ChildDocMaster.Child_Doc.map(item => {
                                                     return <option value={item.Child_Doc_Id}>{item.Child_Doc_Desc}</option>
                                                 })}
@@ -1392,8 +1401,8 @@ export default function HDFCFrom() {
                                             <input type="file" id="bankStatement-btn" hidden onClick={() => {
                                                 bankStatementBtn.addEventListener('change', function () {
                                                     bankStatementFileChosen.textContent = this.files[0].name
-                                                    if(this.files[0] != ''){
-                                                        handleUpload(this.files[0],item.Parent_Doc_Desc,item.Parent_Doc_Id,bankStatement)
+                                                    if (this.files[0] != '') {
+                                                        handleUpload(this.files[0], item.Parent_Doc_Desc, item.Parent_Doc_Id, bankStatement)
                                                     }
                                                 })
                                             }} />
@@ -1415,8 +1424,8 @@ export default function HDFCFrom() {
                                             <select className='documentTypeSelect'
                                                 value={identityProof}
                                                 onChange={(e) => setIdentityProof(e.target.value)}
-                                                >
-                                                 <option value="">select one</option>    
+                                            >
+                                                <option value="">select one</option>
                                                 {item.ChildDocMaster.Child_Doc.map(item => {
                                                     return <option value={item.Child_Doc_Id}>{item.Child_Doc_Desc}</option>
                                                 })}
@@ -1424,8 +1433,8 @@ export default function HDFCFrom() {
                                             <input type="file" id="identityProof-btn" hidden onClick={() => {
                                                 identityProofBtn.addEventListener('change', function () {
                                                     identityProofFileChosen.textContent = this.files[0].name
-                                                    if(this.files[0] != ''){
-                                                        handleUpload(this.files[0],item.Parent_Doc_Desc,item.Parent_Doc_Id,identityProof)
+                                                    if (this.files[0] != '') {
+                                                        handleUpload(this.files[0], item.Parent_Doc_Desc, item.Parent_Doc_Id, identityProof)
                                                     }
                                                 })
                                             }} />
@@ -1447,8 +1456,8 @@ export default function HDFCFrom() {
                                             <select className='documentTypeSelect'
                                                 value={loanTransferDoc}
                                                 onChange={(e) => setLoanTransferDoc(e.target.value)}
-                                                >
-                                                 <option value="">select one</option>    
+                                            >
+                                                <option value="">select one</option>
                                                 {item.ChildDocMaster.Child_Doc.map(item => {
                                                     return <option value={item.Child_Doc_Id}>{item.Child_Doc_Desc}</option>
                                                 })}
@@ -1456,8 +1465,8 @@ export default function HDFCFrom() {
                                             <input type="file" id="loanTransferDoc-btn" hidden onClick={() => {
                                                 loanTransferDocBtn.addEventListener('change', function () {
                                                     loanTransferDocFileChosen.textContent = this.files[0].name
-                                                    if(this.files[0] != ''){
-                                                        handleUpload(this.files[0],item.Parent_Doc_Desc,item.Parent_Doc_Id,loanTransferDoc)
+                                                    if (this.files[0] != '') {
+                                                        handleUpload(this.files[0], item.Parent_Doc_Desc, item.Parent_Doc_Id, loanTransferDoc)
                                                     }
                                                 })
                                             }} />
