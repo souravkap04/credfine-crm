@@ -383,6 +383,13 @@ $mob: 100 / 375;
                     color: #07498e;
                     letter-spacing: 0.4 * $desk + rem;
                     font-size: 15.5 * $desk + rem;
+                    span {
+                        position:absolute;
+                        color: red;
+                        font-size: 22px;
+                        top: -25px;
+                        margin-left: 2px;
+                    }
                     @media only screen and (max-width: 800px) {
                         letter-spacing: 0.4 * $mob + vw;
                         font-size: 15.5 * $mob + vw;

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import AWS from 'aws-sdk'
 import { hdfcBankApi } from "../../global/bankingApis";
-import { getResidentType, getGender, getHighestQualification } from "../../global/leadsGlobalData"
 import './HDFC.css';
 import Grid from '@material-ui/core/Grid';
 import logo from '../../images/forms/hdfc.svg';
@@ -26,9 +25,6 @@ function Alert(props) {
 export default function HDFCFrom() {
     const history = useHistory();
     const { leadid } = useParams();
-    const residenceType = getResidentType();
-    const genderType = getGender();
-    const educationQualification = getHighestQualification();
     const [isPersonalDetail, setisPersonalDetail] = useState(true);
     const [isPersonalProgress, setisPersonalProgress] = useState(false);
     const [isCurrentResidentialDetail, setisCurrentResidentialDetail] = useState(false);
@@ -52,20 +48,14 @@ export default function HDFCFrom() {
     const [gender, setGender] = useState("");
     const [dob, setDob] = useState("");
     const [loanAmount, setLoanAmount] = useState("");
-    const [officeAddressType, setOfficeAddressType] = useState("");
     const [monthlyTakeHomeSalary, setmonthlyTakeHomeSalary] = useState("");
     const [residanceTypeDap, setResidanceTypeDap] = useState("");
     const [employmentType, setEmploymentType] = useState("");
-    const [residanceAddressType, setResidanceAddressType] = useState("");
-    const [maritalStatus, setMaritalStatus] = useState("");
     const [highestQualification, setHighestQualification] = useState("");
     const [totalDependent, setTotalDependent] = useState("");
     const [yearsInCurrentResidence, setYearsInCurrentResidence] = useState("");
     const [yearsInCurrentCity, setyYearsInCurrentCity] = useState("");
     const [panCardNo, setPanCardNo] = useState("");
-    const [purposeOfLoan, setPurposeOfLoan] = useState("");
-    const [qualification, setQualification] = useState("");
-    const [emailId, setEmailId] = useState("");
     const [addressLineOne, setAddressLineOne] = useState("");
     const [addressLineTwo, setAddressLineTwo] = useState("");
     const [addressLineThree, setAddressLineThree] = useState("");
@@ -76,7 +66,7 @@ export default function HDFCFrom() {
     const [stateName, setStateName] = useState("");
     const [pincode, setPincode] = useState("");
     const [mobileNo, setMobileNo] = useState("");
-    const [phoneNoWork,setPhoneNoWork] = useState("")
+    const [phoneNoWork, setPhoneNoWork] = useState("")
     const [residentialEmailId, setResidentialEmailId] = useState("");
     const [employerIdd, setEmployerIdd] = useState("");
     const [employerName, setEmployerName] = useState("");
@@ -93,9 +83,6 @@ export default function HDFCFrom() {
     const [rmCodeName, setRmCodeName] = useState("");
     const [seCodeIdd, setSeCodeIdd] = useState("");
     const [seCodeName, setSeCodeName] = useState("");
-    const [addressType, setAddressType] = useState("");
-    const [hdfcBankAccNo, setHdfcBankAccNo] = useState("");
-    const [hdfcBranch, setHdfcBranch] = useState("");
     const [refFirstName, setRefFirstName] = useState("");
     const [refLastName, setRefLastName] = useState("");
     const [refMobileNo, setRefMobileNo] = useState("");
@@ -194,31 +181,27 @@ export default function HDFCFrom() {
         await axios.get(`${hdfcBankApi}/sendHdfcLead/${leadId}/2`)
             .then((response) => {
                 let getDobfromApi = response.data.applyLoan.Date_Of_Birth__req;
-                let dateRegex = /^\d{4}-\d{2}-\d{2}$/.test(getDobfromApi) ;
-                if(dateRegex){
+                let dateRegex = /^\d{4}-\d{2}-\d{2}$/.test(getDobfromApi);
+                if (dateRegex) {
                     setDob(response.data.applyLoan.Date_Of_Birth__req);
-                }else{
-                    let changeDateFormat = Moment(getDobfromApi,'DDMMYYYY').format("YYYY-MM-DD");
+                } else {
+                    let changeDateFormat = Moment(getDobfromApi, 'DDMMYYYY').format("YYYY-MM-DD");
                     setDob(changeDateFormat);
                 }
-                
+
                 setFirstName(response.data.applyLoan.First_Name__req);
                 setLastName(response.data.applyLoan.Last_Name__req);
                 setGender(response.data.applyLoan.Gender__req);
                 setLoanAmount(response.data.applyLoan.Loan_Amount__req);
                 setEmi(response.data.applyLoan.EMI);
-                setOfficeAddressType(response.data.applyLoan.Address_Type_Work__req);
                 setmonthlyTakeHomeSalary(response.data.applyLoan.Monthly_take_home_Salary__req);
                 setResidanceTypeDap(response.data.applyLoan.residence_type_dap__req);
                 setEmploymentType(response.data.applyLoan.employment_type__req);
-                setResidanceAddressType(response.data.applyLoan.Address_Type_Resi__req);
-                //setMaritalStatus(response.data.applyLoan.);
                 setHighestQualification(response.data.applyLoan.Educational_Qualification__req);
                 setTotalDependent(response.data.applyLoan.No_of_Dependent__req);
                 setYearsInCurrentResidence(response.data.applyLoan.Year_at_Current_Address);
                 setyYearsInCurrentCity(response.data.applyLoan.Year_at_City);
                 setPanCardNo(response.data.applyLoan.PAN_AC_No__req);
-                //setPurposeOfLoan(response.data.applyLoan.)
                 setAddressLineOne(response.data.applyLoan.Address1_Resi__req);
                 setAddressLineTwo(response.data.applyLoan.Address2_Resi__req);
                 setAddressLineThree(response.data.applyLoan.Address3_Resi__req);
@@ -244,9 +227,6 @@ export default function HDFCFrom() {
                 setSeCodeIdd(response.data.applyLoan.SE_code.id);
                 setSeCodeName(response.data.applyLoan.SE_code.name);
                 setOfficePincode(response.data.applyLoan.Pin_Code_Work__req);
-                setAddressType();
-                setHdfcBankAccNo();
-                setHdfcBranch();
             }).catch((error) => {
                 console.log(error);
             })
@@ -286,7 +266,13 @@ export default function HDFCFrom() {
             setAlertMessage('Invalid Highest Qualification')
             setIsError(true);
             return;
-        } if (addressLineOne === '') {
+        } if (totalDependent === '') {
+            setAlertMessage('Invalid Total Dependents')
+            setIsError(true);
+            return;
+
+        }
+        if (addressLineOne === '') {
             setAlertMessage('Invalid Address Line 1')
             setIsError(true);
             return;
@@ -318,11 +304,7 @@ export default function HDFCFrom() {
             setAlertMessage('Invalid EmailId')
             setIsError(true);
             return;
-        } if (residanceAddressType === '') {
-            setAlertMessage('Invalid Residance Type')
-            setIsError(true);
-            return;
-        } if (employerName === '') {
+        }  if (employerName === '') {
             setAlertMessage('Invalid Employer Name')
             setIsError(true);
         }
@@ -356,18 +338,18 @@ export default function HDFCFrom() {
             setIsError(true);
             return;
         }
-        if (officeAddressType === '') {
-            setAlertMessage('Invalid Office Address Type')
+        if (employmentType === '') {
+            setAlertMessage('Invalid Employment Type')
             setIsError(true);
             return;
         }
         let applyLoan = {
             First_Name: firstName, Last_Name: lastName, Gender: gender, Date_Of_Birth: dob, Educational_Qualification: "GRAD",
-            Loan_Amount: loanAmount, PAN_AC_No: panCardNo, EMI: emi,Landmark_Resi:"",Landmark_Work:"",Passport_no:"",Voter_iD:"",
+            Loan_Amount: loanAmount, PAN_AC_No: panCardNo, EMI: emi, Landmark_Resi: "", Landmark_Work: "", Passport_no: "", Voter_iD: "",
             City_Resi: 474, Pin_Code_Resi: pincode, Address1_Resi: addressLineOne, Address2_Resi: addressLineTwo, Address3_Resi: addressLineThree, State_Resi: 1, Mobile1_Resi: mobileNo,
             STD_Code_Resi: "", Email_Resi: residentialEmailId, Year_at_Current_Address: yearsInCurrentResidence, Year_at_City: yearsInCurrentCity, Employer_Name: employerIdd,
             Employer_Name_other: "", Address1_Work: officeAddressOne,
-            Address2_Work: officeAddressTwo,Phone1_Work:phoneNoWork,
+            Address2_Work: officeAddressTwo, Phone1_Work: phoneNoWork,
             Pin_Code_Work: officePincode, City_Work: 474, State_Work: 1, Monthly_take_home_Salary: monthlyTakeHomeSalary, residence_type_dap: residanceTypeDap,
             employment_type: employmentType, No_of_Dependent: totalDependent, Branch_code: 214, RM_code: rmCodeIdd, SE_code: seCodeIdd,
             Aadhar: "", Driving_License: "",
@@ -408,7 +390,7 @@ export default function HDFCFrom() {
             setIsError(true);
             return;
         }
-        let loan_data = { ref_1_FirstName: refFirstName, ref_1_LastName: refLastName, ref_1_Mobile: refMobileNo ,ref_1_Relationship:""}
+        let loan_data = { ref_1_FirstName: refFirstName, ref_1_LastName: refLastName, ref_1_Mobile: refMobileNo, ref_1_Relationship: "" }
         let items = { loan_data };
         await axios.post(`${hdfcBankApi}/sendHdfcLead/${leadId}/3`, items)
             .then((response) => {
@@ -632,6 +614,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
+                            required: true
                         }}
                         variant="outlined"
                         size="small"
@@ -645,6 +628,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
+                            required: true
                         }}
                         variant="outlined"
                         size="small"
@@ -659,6 +643,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
+                            required:true
                         }}
                         SelectProps={{
                             native: true
@@ -668,35 +653,11 @@ export default function HDFCFrom() {
                         value={gender}
                         onChange={(e) => setGender(e.target.value)}
                     >
-                        <option key="">Select One</option>
-                        {genderType.map((gender) => (
-                            <option value={gender}>{gender}</option>
-                        ))}
+                        <option value="">Select One</option>
+                        <option value="M">Male</option>
+                        <option value="F">Female</option>
+
                     </TextField>
-                    {/* <TextField
-                        select
-                        className="textField"
-                        id="outlined-full-width"
-                        label="Marital Status"
-                        margin="normal"
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        SelectProps={{
-                            native: true
-                        }}
-                        variant="outlined"
-                        size="small"
-                    value={maritalStatus}
-                    onChange={(e) => setMaritalStatus(e.target.value)}
-                    >
-                        <option value="">Select Marital Status</option>
-                        <option value="Single">Single</option>
-                        <option value="Married">Married</option>
-                        <option value="Widowed">Widowed</option>
-                        <option value="Separated">Separated</option>
-                        <option value="Divorced">Divorced</option>
-                    </TextField> */}
                     <TextField
                         select
                         className="textField"
@@ -705,6 +666,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
+                            required:true
                         }}
                         SelectProps={{
                             native: true
@@ -714,10 +676,11 @@ export default function HDFCFrom() {
                         value={highestQualification}
                         onChange={(e) => setHighestQualification(e.target.value)}
                     >
-                        <option key="">Select One</option>
-                        {educationQualification.map((education) => (
-                            <option value={education}>{education}</option>
-                        ))}
+                        <option value="">Select One</option>
+                        <option value="GRAD">Graduation</option>
+                        <option value="POSTGRAD">Post Graduation</option>
+                        <option value="DOCTRATE">Doctrate</option>
+                        <option value="OTHERS">Others</option>
                     </TextField>
                     <TextField
                         select
@@ -727,6 +690,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
+                            required:true
                         }}
                         SelectProps={{
                             native: true
@@ -753,6 +717,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
+                            required:false
                         }}
                         variant="outlined"
                         size="small"
@@ -766,6 +731,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
+                            required:false
                         }}
                         variant="outlined"
                         size="small"
@@ -779,66 +745,13 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
+                            required:true
                         }}
                         variant="outlined"
                         size="small"
                         value={panCardNo}
                         onChange={(e) => setPanCardNo(e.target.value.toUpperCase())}
                     />
-                    {/* <TextField
-                        select
-                        className="textField"
-                        id="outlined-full-width"
-                        label="Purpose of Loan"
-                        margin="normal"
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        SelectProps={{
-                            native: true
-                        }}
-                        variant="outlined"
-                        size="small"
-                        value={purposeOfLoan}
-                        onChange={(e)=>setPurposeOfLoan(e.target.value)}
-                    >
-                        <option value="">Select One</option>
-                        <option value="Renovation">Renovation</option>
-                    </TextField> */}
-                    {/* <TextField
-                        select
-                        className="textField"
-                        id="outlined-full-width"
-                        label="Qualification"
-                        margin="normal"
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        SelectProps={{
-                            native: true
-                        }}
-                        variant="outlined"
-                        size="small"
-                        value={qualification}
-                        onChange={(e)=>setQualification(e.target.value)}
-                    >
-                        <option value="">Select One</option>
-                        <option value="MBA">MBA</option>
-                        <option value="MCOM">MCOM</option>
-                    </TextField> */}
-                    {/* <TextField
-                        className="textField"
-                        id="outlined-full-width"
-                        label="Email ID"
-                        margin="normal"
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        variant="outlined"
-                        size="small"
-                    value={emailId}
-                    onChange={(e) => setEmailId(e.target.value)}
-                    /> */}
                 </FormContainer>
                 <FormContainer Name="Residential Details" >
                     <TextField
@@ -848,6 +761,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
+                            required:true
                         }}
                         variant="outlined"
                         size="small"
@@ -861,6 +775,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
+                            required:true
                         }}
                         variant="outlined"
                         size="small"
@@ -874,6 +789,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
+                            required:true
                         }}
                         variant="outlined"
                         size="small"
@@ -888,6 +804,7 @@ export default function HDFCFrom() {
                             margin="normal"
                             InputLabelProps={{
                                 shrink: true,
+                                required:true
                             }}
                             variant="outlined"
                             size="small"
@@ -909,6 +826,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
+                            required:true
                         }}
                         variant="outlined"
                         size="small"
@@ -922,6 +840,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
+                            required:true
                         }}
                         variant="outlined"
                         size="small"
@@ -935,6 +854,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
+                            required:true
                         }}
                         variant="outlined"
                         size="small"
@@ -948,6 +868,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
+                            required:true
                         }}
                         variant="outlined"
                         size="small"
@@ -955,34 +876,13 @@ export default function HDFCFrom() {
                         onChange={(e) => setResidentialEmailId(e.target.value)}
                     />
                     <TextField
-                        select
-                        className="textField"
-                        id="outlined-full-width"
-                        label="Residence Type"
-                        margin="normal"
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        SelectProps={{
-                            native: true
-                        }}
-                        variant="outlined"
-                        size="small"
-                        value={residanceAddressType}
-                        onChange={(e) => setResidanceAddressType(e.target.value)}
-                    >
-                        <option key="">select One</option>
-                        {residenceType.map((residence) => (
-                            <option value={residence}>{residence}</option>
-                        ))}
-                    </TextField>
-                    <TextField
                         className="textField"
                         id="outlined-full-width"
                         label="Residence Type Dap"
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
+                            required:false
                         }}
                         variant="outlined"
                         size="small"
@@ -1001,6 +901,7 @@ export default function HDFCFrom() {
                             margin="normal"
                             InputLabelProps={{
                                 shrink: true,
+                                required:true
                             }}
                             variant="outlined"
                             size="small"
@@ -1022,6 +923,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
+                            required:true
                         }}
                         variant="outlined"
                         size="small"
@@ -1035,6 +937,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
+                            required:true
                         }}
                         variant="outlined"
                         size="small"
@@ -1048,6 +951,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
+                            required:true
                         }}
                         variant="outlined"
                         size="small"
@@ -1062,6 +966,7 @@ export default function HDFCFrom() {
                             margin="normal"
                             InputLabelProps={{
                                 shrink: true,
+                                required:true
                             }}
                             variant="outlined"
                             size="small"
@@ -1083,6 +988,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
+                            required:true
                         }}
                         variant="outlined"
                         size="small"
@@ -1096,6 +1002,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
+                            required:true
                         }}
                         variant="outlined"
                         size="small"
@@ -1109,6 +1016,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
+                            required:true
                         }}
                         variant="outlined"
                         size="small"
@@ -1122,6 +1030,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
+                            required:false
                         }}
                         variant="outlined"
                         size="small"
@@ -1132,48 +1041,24 @@ export default function HDFCFrom() {
                         select
                         className="textField"
                         id="outlined-full-width"
-                        label="Office Address Type"
+                        label="Employment Type"
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
+                            required:true
                         }}
                         SelectProps={{
                             native: true
                         }}
                         variant="outlined"
                         size="small"
-                        value={officeAddressType}
-                        onChange={(e) => setOfficeAddressType(e.target.value)}
+                        value={employmentType}
+                        onChange={(e) => setEmploymentType(e.target.value)}
                     >
                         <option value="">select One</option>
-                        <option value="Office">Office</option>
+                        <option value="S">Salaried</option>
+                        <option value="E">Self Employed</option>
                     </TextField>
-                    {/* <TextField
-                        className="textField"
-                        id="outlined-full-width"
-                        label="HDFC Bank Account Number"
-                        margin="normal"
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        variant="outlined"
-                        size="small"
-                        value={hdfcBankAccNo}
-                        onChange={(e) => setHdfcBankAccNo(e.target.value)}
-                    />
-                    <TextField
-                        className="textField"
-                        id="outlined-full-width"
-                        label="HDFC Bank Branch"
-                        margin="normal"
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        variant="outlined"
-                        size="small"
-                        value={hdfcBranch}
-                        onChange={(e) => setHdfcBranch(e.target.value)}
-                    /> */}
                 </FormContainer>
             </div> : ''}
             {isPersonalReference ? <div className="adjustBackground">
@@ -1234,6 +1119,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
+                            required:true
                         }}
                         variant="outlined"
                         size="small"
@@ -1247,6 +1133,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
+                            required:true
                         }}
                         variant="outlined"
                         size="small"
@@ -1260,6 +1147,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
+                            required:true
                         }}
                         variant="outlined"
                         size="small"

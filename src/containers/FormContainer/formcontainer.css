@@ -108,6 +108,14 @@
   font-size: 0.9765rem;
 }
 
+.formMainContainer .formContainer .textField label span {
+  position: absolute;
+  color: red;
+  font-size: 22px;
+  top: -25px;
+  margin-left: 2px;
+}
+
 @media only screen and (max-width: 800px) {
   .formMainContainer .formContainer .textField label {
     letter-spacing: 0.10667vw;

@@ -528,6 +528,14 @@
   font-size: 0.9765rem;
 }
 
+.HDFCFormContainer .rightSection .formMainContainer .textField3 label span {
+  position: absolute;
+  color: red;
+  font-size: 22px;
+  top: -25px;
+  margin-left: 2px;
+}
+
 @media only screen and (max-width: 800px) {
   .HDFCFormContainer .rightSection .formMainContainer .textField3 label {
     letter-spacing: 0.10667vw;
