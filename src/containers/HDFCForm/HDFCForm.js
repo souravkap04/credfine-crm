@@ -866,7 +866,6 @@ export default function HDFCFrom() {
                         variant="outlined"
                         size="small"
                         value={mobileNo}
-                        onChange={(e) => setMobileNo(e.target.value)}
                     />
                     <TextField
                         className="textField"
