@@ -434,6 +434,7 @@ export default function HDFCFrom() {
         setIsHdfcPersonalRefData(false);
     }
     const handleUpload = (file, folderName, parentId, childId) => {
+        let fileExt = file.name.split('.').pop();
         const params = {
             Body: file,
             Bucket: 'cred-lead-docs-uat',
@@ -443,7 +444,7 @@ export default function HDFCFrom() {
             if (err) console.log(err, err.stack);
             else {
                 let getUrl = data.Location;
-                let loan_data = { s3_url: getUrl, fileName: 'images.png', ContentType: 'image/png', Parent_Doc_Id: parentId, Child_Doc_Id: childId };
+                let loan_data = { s3_url: getUrl, fileName: `images.${fileExt}`, ContentType: `image/${fileExt}`, Parent_Doc_Id: parentId, Child_Doc_Id: childId };
                 let items = { loan_data };
                 axios.post(`${hdfcBankApi}/sendHdfcLead/${leadid}/4`, items)
                     .then((response) => {
