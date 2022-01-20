@@ -123,7 +123,7 @@ export default function LeadDetailsNew(props) {
     const [employmentType, setEmploymentType] = useState("");
     const [monthlyIncome, setMonthlyIncome] = useState("");
     const [currentCompany, setCurrentCompany] = useState("");
-    const [date, setDate] = useState(new Date());
+    const [date, setDate] = useState("");
     const [mobileNo, setMobileNo] = useState("");
     const [pincode, setPincode] = useState("");
     const [city, setcity] = useState("");
@@ -223,9 +223,14 @@ export default function LeadDetailsNew(props) {
                 await axios
                     .get(`${baseUrl}/leads/lead_detail/${leadId}`, { headers })
                     .then((response) => {
-                        let dateFromApi = response.data.lead_data["data"].dob;
-                        let changeDateFormat = moment(dateFromApi).format("DD/MM/YYYY");
-                       // console.log("changeDateFormat:"+changeDateFormat);
+                        let getDobfromApi = response.data.lead_data.data.dob;
+                        let dateRegex = /^\d{4}-\d{2}-\d{2}$/.test(getDobfromApi);
+                        if (dateRegex) {
+                        setDate(response.data.lead_data.data.dob);
+                        } else {
+                        let changeDateFormat = moment(getDobfromApi, 'DDMMYYYY').format("YYYY-MM-DD");
+                        setDate(changeDateFormat);
+                        }
                         setMobileNo(response.data.lead_data.phone_no);
                         setStatus(response.data.lead_data.status);
                         setSubStatus(response.data.lead_data.sub_status);
@@ -233,7 +238,6 @@ export default function LeadDetailsNew(props) {
                         setLoanAmount(response.data.lead_data.loan_amount);
                         setMonthlyIncome(response.data.lead_data["data"].monthly_income);
                         setCurrentCompany(response.data.lead_data['data'].current_company);
-                        setDate(changeDateFormat);
                         setPincode(response.data.lead_data["data"].residential_pincode);
                         setcity(response.data.lead_data["data"].city);
                         setstates(response.data.lead_data["data"].state);
