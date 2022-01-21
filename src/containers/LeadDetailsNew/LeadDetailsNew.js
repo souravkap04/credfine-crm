@@ -137,12 +137,14 @@ export default function LeadDetailsNew(props) {
     const [email, setEmail] = useState("");
     const [designation, setDesignation] = useState("");
     const [currentEMI, setCurrentEMI] = useState("");
+    const [noOfCreditCard,setNoOfCreditCard] = useState("");
     const [creditCardOutstanding, setCreditCardOutstanding] = useState("");
     const [creditCardbalanceTransfer, setcreditCardbalanceTransfer] = useState("");
     const [salaryCreditMode, setSalaryCreditMode] = useState("");
     const [salaryBankAcc, setSalaryBankAcc] = useState("");
     const [currentResidentType, setCurrentResidentType] = useState("");
     const [yearsInCurrentCity, setYearsInCurrentCity] = useState("");
+    const [gender,setGender] = useState("");
     const [tenure,setTenure] = useState("");
     const [Roi, setRoi] = useState('');
     const [fatherName,setFatherName] = useState("");
@@ -294,6 +296,7 @@ export default function LeadDetailsNew(props) {
                         setscheme(response.data.lead_extra_details.scheme);
                         setdisbursedDate(response.data.lead_extra_details.disbursed_date)
                         setRoi(response.data.lead_extra_details.roi)
+                        setGender();
                         setTenure();
                         setFatherName();
                         setMotherName();
@@ -793,7 +796,7 @@ export default function LeadDetailsNew(props) {
                 <Grid className="accordianContainer" lg={9}>
                     <Accordion square defaultExpanded={true} expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
                         <AccordionSummary expandIcon={<ArrowRightIcon />} aria-controls="panel1d-content" id="panel1d-header">
-                            <Typography className={classes.headerText}>Personal Details</Typography>
+                            <Typography className={classes.headerText}>Personal & Loan Details</Typography>
                             {colorRed[0] ? <CheckCircleIcon className={colorRed[0] ? classes.activeColorTickRed : classes.circleTick} /> : <CheckCircleIcon className={colorTick ? classes.activeColorTick : classes.circleTick} />}
                         </AccordionSummary>
                         <AccordionDetails>
@@ -865,7 +868,7 @@ export default function LeadDetailsNew(props) {
                                     <TextField
                                         className="textField"
                                         id="outlined-full-width"
-                                        label="Tenure"
+                                        label="Tenure in years"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
@@ -886,23 +889,31 @@ export default function LeadDetailsNew(props) {
                                     <TextField
                                         className="textField"
                                         id="outlined-full-width"
-                                        label="Roi"
+                                        label="Roi %"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
+                                        inputProps={{
+                                            maxLength: 5
+                                        }}
                                         variant="outlined"
                                         size="small"
                                         value={Roi}
-                                        onChange={(e) => setRoi(e.target.value)}
+                                        onChange={(e) => {
+                                            const re = /^[0-9\b.]+$/;
+                                            if (e.target.value === '' || re.test(e.target.value)) {
+                                                setRoi(e.target.value)
+                                            }
+                                        }}
                                     />
                                 </Grid>
                                 <Grid lg={4}>
                                     <TextField
                                         className="textField fullName"
                                         id="outlined-full-width"
-                                        label="Full Name"
+                                        label="Full Name as Per Pancard"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
@@ -916,6 +927,31 @@ export default function LeadDetailsNew(props) {
                                         value={name}
                                         onChange={(e) => setname(e.target.value)}
                                     />
+                                </Grid>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField fullName"
+                                        select
+                                        id="outlined-full-width"
+                                        label="Gender"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        SelectProps={{
+                                            native: true,
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={gender}
+                                        onChange={(e)=>setGender(e.target.value)}
+                                    >
+                                        <option key="" value="">Select One</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="LGBT">LGBT</option>
+                                    </TextField>
                                 </Grid>
                                 <Grid lg={4}>
                                     <TextField
@@ -978,7 +1014,6 @@ export default function LeadDetailsNew(props) {
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
-                                        // helperText="Invalid PAN"
                                         variant="outlined"
                                         size="small"
                                         maxLength="10"
@@ -1038,8 +1073,10 @@ export default function LeadDetailsNew(props) {
                                         onChange={(e)=>setMaritalStatus(e.target.value)}
                                     >
                                         <option key="" value=""> Select One</option>
+                                        <option value="Single">Single </option>
                                         <option value="Married">Married </option>
-                                        <option value="UnMarried">UnMarried </option>
+                                        <option value="Divorce">Divorce</option>
+                                        <option value="Widow">Widow</option>
                                     </TextField>
                                 </Grid>
                                 <Grid lg={4}>
@@ -1068,8 +1105,12 @@ export default function LeadDetailsNew(props) {
                                         <option value="3">3</option>
                                         <option value="4">4</option>
                                         <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="7+">7+</option>
                                     </TextField>
                                 </Grid>
+                                <Grid container style={{direction: 'row', justifyContent:'space-between', alignItems:'center' }}>
                                     <Grid lg={4}>
                                     <TextField
                                         className="textField"
@@ -1080,13 +1121,20 @@ export default function LeadDetailsNew(props) {
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
+                                        inputProps={{
+                                            maxLength: 12
+                                        }}
                                         variant="outlined"
                                         size="small"
                                         value={adhaarNo}
-                                        onChange={(e)=>setAdhaarNo(e.target.value)}
+                                        onChange={(e) => {
+                                            const re = /^[0-9\b]+$/;
+                                            if(e.target.value === '' || re.test(e.target.value)){
+                                                setAdhaarNo(e.target.value)
+                                            }
+                                        }}
                                     />
                                     </Grid>
-                                    <Grid container style={{ direction: 'row', justifyContent: 'flex-end', alignItems: 'center'}}>
                                 <Grid lg={4} style={{ display: 'flex', alignItems: 'center' }}>
                                     <Button onClick={() => updateLeadDetails(leadid)} className="saveAndNextBtn" color='primary' variant='contained'>SAVE &amp; NEXT</Button>
                                 </Grid>
@@ -1231,6 +1279,7 @@ export default function LeadDetailsNew(props) {
                                     <Grid lg={4}>
                                     <TextField
                                         className="textField"
+                                        select
                                         id="outlined-full-width"
                                         label="Current Address Vintage"
                                         style={{ margin: 8 }}
@@ -1238,11 +1287,24 @@ export default function LeadDetailsNew(props) {
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
+                                        SelectProps={{
+                                            native: true,
+                                        }}
                                         variant="outlined"
                                         size="small"
                                         value={currentAddressVintage}
                                         onChange={(e)=>setCurrentAddressVintage(e.target.value)}
-                                    />
+                                    >
+                                        <option key="" value="">Select One</option>
+                                        <option value="0-6 months">0-6 months</option>
+                                        <option value="6-12 months">6-12 months</option>
+                                        <option value="12-24 months">12-24 months</option>
+                                        <option value="24-36 months">24-36 months</option>
+                                        <option value="36-48 months">36-48 months</option>
+                                        <option value="48-60 months">48-60 months</option>
+                                        <option value="60+ months">60+ months</option>
+                                        <option value="since birth">since birth</option>
+                                    </TextField>
                                 </Grid>
                                     <Grid lg={4} style={{ display: 'flex', alignItems: 'center' }}>
                                         <Button className="saveAndNextBtn" color='primary' variant='contained' onClick={() => updateLeadDetails(leadid)}>SAVE &amp; NEXT</Button>
@@ -1361,6 +1423,7 @@ export default function LeadDetailsNew(props) {
                                     <Grid lg={4}>
                                     <TextField
                                         className="textField"
+                                        select
                                         id="outlined-full-width"
                                         label="Permanent Address Vintage"
                                         style={{ margin: 8 }}
@@ -1368,11 +1431,24 @@ export default function LeadDetailsNew(props) {
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
+                                        SelectProps={{
+                                            native: true
+                                        }}
                                         variant="outlined"
                                         size="small"
                                         value={permanentAddressVintage}
                                         onChange={(e)=>setPermanentAddressVintage(e.target.value)}
-                                    />
+                                    >
+                                         <option key="" value="">Select One</option>
+                                        <option value="0-6 months">0-6 months</option>
+                                        <option value="6-12 months">6-12 months</option>
+                                        <option value="12-24 months">12-24 months</option>
+                                        <option value="24-36 months">24-36 months</option>
+                                        <option value="36-48 months">36-48 months</option>
+                                        <option value="48-60 months">48-60 months</option>
+                                        <option value="60+ months">60+ months</option>
+                                        <option value="since birth">since birth</option>
+                                    </TextField>
                                 </Grid>
                                     <Grid lg={4} style={{ display: 'flex', alignItems: 'center' }}>
                                         <Button className="saveAndNextBtn" color='primary' variant='contained' onClick={()=>updateLeadDetails(leadid)}>SAVE &amp; NEXT</Button>
@@ -1516,6 +1592,27 @@ export default function LeadDetailsNew(props) {
                                     <TextField
                                         className="textField"
                                         id="outlined-full-width"
+                                        label="Gross Income"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={grossIncome}
+                                        onChange={(e) => {
+                                            const re = /^[0-9\b]+$/;
+                                            if (e.target.value === '' || re.test(e.target.value)) {
+                                                setGrossIncome(e.target.value)
+                                            }
+                                        }}
+                                    />
+                                </Grid>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField"
+                                        id="outlined-full-width"
                                         label="Net Monthly Income"
                                         style={{ margin: 8 }}
                                         margin="normal"
@@ -1540,7 +1637,7 @@ export default function LeadDetailsNew(props) {
                                     <TextField
                                         className="textField"
                                         id="outlined-full-width"
-                                        label="Gross Income"
+                                        label="Pincode"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
@@ -1548,13 +1645,8 @@ export default function LeadDetailsNew(props) {
                                         }}
                                         variant="outlined"
                                         size="small"
-                                        value={grossIncome}
-                                        onChange={(e) => {
-                                            const re = /^[0-9\b]+$/;
-                                            if (e.target.value === '' || re.test(e.target.value)) {
-                                                setGrossIncome(e.target.value)
-                                            }
-                                        }}
+                                        value={officePincode}
+                                        onChange={(e) => getOfficePincodeHandler(e)}
                                     />
                                 </Grid>
                                 <Grid lg={4}>
@@ -1588,22 +1680,6 @@ export default function LeadDetailsNew(props) {
                                         size="small"
                                         value={officeStates}
                                         disabled
-                                    />
-                                </Grid>
-                                <Grid lg={4}>
-                                    <TextField
-                                        className="textField"
-                                        id="outlined-full-width"
-                                        label="Pincode"
-                                        style={{ margin: 8 }}
-                                        margin="normal"
-                                        InputLabelProps={{
-                                            shrink: true,
-                                        }}
-                                        variant="outlined"
-                                        size="small"
-                                        value={officePincode}
-                                        onChange={(e) => getOfficePincodeHandler(e)}
                                     />
                                 </Grid>
                                 <Grid lg={4}>
@@ -1705,7 +1781,7 @@ export default function LeadDetailsNew(props) {
                                     <TextField
                                         className="textField"
                                         id="outlined-full-width"
-                                        label="Total EMI"
+                                        label="Total EMI Excluded Credit Card"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
@@ -1725,6 +1801,39 @@ export default function LeadDetailsNew(props) {
                                         }
                                         }
                                     />
+                                </Grid>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField"
+                                        select
+                                        id="outlined-full-width"
+                                        label="No Of Credit Card"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        SelectProps={{
+                                            native: true
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={noOfCreditCard}
+                                        onChange={(e)=>setNoOfCreditCard(e.target.value)}
+                                    >
+                                        <option key="" value=" ">Select One</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                        <option value="10+">10+</option>
+                                    </TextField>
                                 </Grid>
                                 <Grid lg={4}>
                                     <TextField
@@ -1750,6 +1859,7 @@ export default function LeadDetailsNew(props) {
                                         }}
                                     />
                                 </Grid>
+                                <Grid container style={{ flexDirection: 'row', justifyContent: "space-between", alignItems: "center" }}>
                                 <Grid lg={4}>
                                     <TextField
                                         className="textField"
@@ -1774,7 +1884,6 @@ export default function LeadDetailsNew(props) {
                                         <option value="No">No</option>
                                     </TextField>
                                 </Grid>
-                                <Grid container style={{ flexDirection: 'row', justifyContent: "flex-end", alignItems: "center" }}>
                                     <Grid lg={4} style={{ display: 'flex', alignItems: 'center' }}>
                                         <Button className="saveAndNextBtn" color='primary' variant='contained' onClick={() => updateLeadDetails(leadid)}>SAVE & NEXT</Button>
                                     </Grid>
