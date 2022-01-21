@@ -266,7 +266,7 @@ export default function Users() {
     const headers = {
       'Authorization': `Token ${profileData.token}`,
     }
-    await axios.get(`${baseUrl}/common/getLocations`, { headers })
+    await axios.get(`${baseUrl}/common/getLocations/`, { headers })
       .then((response) => {
         setpullLocation(response.data)
       }).catch((error) => {
