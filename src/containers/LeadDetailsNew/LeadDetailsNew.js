@@ -19,6 +19,7 @@ import { Button } from '@material-ui/core';
 import CallIcon from '@material-ui/icons/Call';
 import SendIcon from '@material-ui/icons/Send';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Checkbox from '@material-ui/core/Checkbox';
 import { ListGroup } from 'react-bootstrap';
 import {
     getBank,
@@ -162,6 +163,7 @@ export default function LeadDetailsNew(props) {
     const [permanentPincode, setPermanentPincode] = useState("");
     const [permanentCity, setPermanentCity] = useState("");
     const [permanentStates, setPermanentStates] = useState("");
+    const [permanentResidentType,setPermanentResidentType] = useState("");
     const [permanentAddressVintage,setPermanentAddressVintage] = useState();
     const [grossIncome,setGrossIncome] = useState("");
     const [officePincode, setOfficePincode] = useState("");
@@ -1422,6 +1424,33 @@ export default function LeadDetailsNew(props) {
                                 <Grid container style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }} >
                                     <Grid lg={4}>
                                     <TextField
+                                            className="textField"
+                                            id="outlined-full-width"
+                                            select
+                                            label="Resident Type"
+                                            style={{ margin: 8 }}
+                                            margin="normal"
+                                            InputLabelProps={{
+                                                shrink: true,
+                                            }}
+                                            SelectProps={{
+                                                native: true,
+                                            }}
+                                            variant="outlined"
+                                            size="small"
+                                            value={permanentResidentType}
+                                            onChange={(e) => setPermanentResidentType(e.target.value)}
+                                        >
+                                            <option key="" value="">
+                                                Select One
+                                            </option>
+                                            {residentType.map((resident) => (
+                                                <option value={resident}>{resident}</option>
+                                            ))}
+                                        </TextField>
+                                    </Grid>
+                                    <Grid lg={4}>
+                                    <TextField
                                         className="textField"
                                         select
                                         id="outlined-full-width"
@@ -1453,6 +1482,10 @@ export default function LeadDetailsNew(props) {
                                     <Grid lg={4} style={{ display: 'flex', alignItems: 'center' }}>
                                         <Button className="saveAndNextBtn" color='primary' variant='contained' onClick={()=>updateLeadDetails(leadid)}>SAVE &amp; NEXT</Button>
                                     </Grid>
+                                    <Grid lg={4}>
+                                    <Checkbox/>
+                                    <p>Click if Permanent Address Same As Current Address</p>
+                                </Grid>
                                 </Grid>
                             </Grid>
                         </AccordionDetails>
