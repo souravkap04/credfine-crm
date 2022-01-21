@@ -16,6 +16,7 @@ import axios from 'axios';
 import baseUrl from '../../global/api';
 import { getProfileData } from '../../global/leadsGlobalData'
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
+import EmiCalculator from '../Emicalculator/EmiCalculator';
 import clsx from 'clsx';
 const useStyles = makeStyles({
   container: {
@@ -219,12 +220,20 @@ export default function FreshLead() {
         console.log(error);
       })
   }
-  const decryptedData = (encryptData) =>{
-   const phoneNo = decodeURIComponent(window.atob(encryptData));
-   return phoneNo;
+  const decryptedData = (encryptData) => {
+    const phoneNo = decodeURIComponent(window.atob(encryptData));
+    return phoneNo;
+  }
+  const [openCalculate, setopenCalculate] = useState(false);
+  const openCalculator = () => {
+    setopenCalculate(true);
+  }
+  const closeCalculator = () => {
+    setopenCalculate(false);
   }
   return (
-    <PageLayerSection>
+    <PageLayerSection ActualEmiCalculate={openCalculator}>
+      <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
       <TableContainer className={classes.container}>
         <Table className={classes.table} aria-label="simple table">
           <TableHead className={classes.tableheading}>
@@ -253,7 +262,7 @@ export default function FreshLead() {
                     <TableCell className={classes.tabledata}>{index + 1}</TableCell>
                     <TableCell className={classes.tabledata}>{lead.lead_crm_id}</TableCell>
                     <TableCell className={classes.tabledata}>{lead.name ? lead.name : 'NA'}</TableCell>
-                    <TableCell className={classes.tabledata}>{lead.phone_no_encrypt ? decryptedData(lead.phone_no_encrypt ) : 'NA'}</TableCell>
+                    <TableCell className={classes.tabledata}>{lead.phone_no_encrypt ? decryptedData(lead.phone_no_encrypt) : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>{lead.loan_amount ? lead.loan_amount : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>{lead.data.monthly_income ? lead.data.monthly_income : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>{lead.data.current_company_name ? lead.data.current_company_name : 'NA'}</TableCell>
