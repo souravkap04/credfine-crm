@@ -200,6 +200,8 @@ export default function LeadDetailsNew(props) {
     const [colorTick2, setcolorTick2] = useState(false);
     const [colorTick3, setcolorTick3] = useState(false);
     const [colorTick4, setcolorTick4] = useState(false);
+    const [colorTick5, setcolorTick5] = useState(false);
+    const [colorTick6, setcolorTick6] = useState(false);
     const [appID, setappID] = useState('');
     const [bankNBFC, setbankNBFC] = useState('');
     const [scheme, setscheme] = useState('');
@@ -209,7 +211,7 @@ export default function LeadDetailsNew(props) {
     const [isCopy, setisCopy] = useState(false);
     const [disbursedDate, setdisbursedDate] = useState(new Date());
     const [disbursedError, setdisbursedError] = useState([false, false]);
-    const [colorRed, setcolorRed] = useState([false, false, false, false]);
+    const [colorRed, setcolorRed] = useState([false, false, false, false,false,false]);
     const [isAutoDialerEnd,setIsAutoDialerEnd] = useState(false);
     let statusData = getStatusData();
     let { leadid } = useParams();
@@ -323,10 +325,10 @@ export default function LeadDetailsNew(props) {
                             setcolorTick2(true)
                         }
                         if (response.data.lead_data["data"].employment_type !== '' && response.data.lead_data["data"].current_company_name !== '' && response.data.eligibility_data.designation !== '' && response.data.eligibility_data.current_work_exp !== '' && response.data.eligibility_data.total_work_exp !== '' && response.data.lead_data["data"].monthly_income !== '' && response.data.eligibility_data.salary_mode !== '' && response.data.eligibility_data.salary_bank !== '') {
-                            setcolorTick3(true)
+                            setcolorTick4(true)
                         }
                         if (response.data.eligibility_data.current_emi !== '' && response.data.eligibility_data.credit_card_outstanding !== '' && response.data.lead_data["data"].credi_card_balance_transfer !== '') {
-                            setcolorTick4(true)
+                            setcolorTick5(true)
                         }
                     });
             } catch (error) {
@@ -399,23 +401,41 @@ export default function LeadDetailsNew(props) {
                 setcolorTick2(false)
             }
             setExpanded('panel3')
-        }
+        }   
         if (expanded === 'panel3') {
-            if (employmentType !== '' && companyName !== '' && designation !== '' && currentWorkExp !== '' && totalWorkExp !== '' && monthlyIncome !== '' && salaryCreditMode !== '' && salaryBankAcc !== '') {
+            if (permanentPincode !== '' && permanentCity !== '' && permanentStates !== '' && permanentAddressVintage !== '') {
                 colorRed[2] = false;
                 setcolorTick3(true)
             } else {
                 setcolorTick3(false)
             }
             setExpanded('panel4')
-
         }
         if (expanded === 'panel4') {
-            if (currentEMI !== '' && creditCardOutstanding !== '' && creditCardbalanceTransfer !== '') {
+            if (employmentType !== '' && companyName !== '' && designation !== '' && currentWorkExp !== '' && totalWorkExp !== '' && monthlyIncome !== '' && salaryCreditMode !== '' && salaryBankAcc !== '') {
                 colorRed[3] = false;
                 setcolorTick4(true)
             } else {
                 setcolorTick4(false)
+            }
+            setExpanded('panel5')
+
+        }
+        if (expanded === 'panel5') {
+            if (currentEMI !== '' && creditCardOutstanding !== '' && creditCardbalanceTransfer !== '') {
+                colorRed[4] = false;
+                setcolorTick5(true)
+            } else {
+                setcolorTick6(false)
+            }
+            setExpanded('panel6')
+        }
+        if (expanded === 'panel6') {
+            if (ref1FirstName !== '' && ref1LastName !== '' && ref1MobileNo !== '') {
+                colorRed[5] = false;
+                setcolorTick6(true)
+            } else {
+                setcolorTick6(false)
             }
             setExpanded('panel1')
         }
@@ -856,7 +876,7 @@ export default function LeadDetailsNew(props) {
                                         value={tenure}
                                         onChange={(e) => {
                                             const re = /^[0-9\b]+$/;
-                                            if(e.target.value === '' || re.rest(e.target.value)){
+                                            if(e.target.value === '' || re.test(e.target.value)){
                                                 setTenure(e.target.value)
                                             }
                                         }}
@@ -1234,7 +1254,7 @@ export default function LeadDetailsNew(props) {
                     <Accordion square expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
                         <AccordionSummary expandIcon={<ArrowRightIcon />} aria-controls="panel3d-content" id="panel3d-header">
                             <Typography className={classes.headerText}>Permanent Residential Details</Typography>
-                            {colorRed[1] ? <CheckCircleIcon className={colorRed[1] ? classes.activeColorTickRed : classes.circleTick} /> : <CheckCircleIcon className={colorTick2 ? classes.activeColorTick : classes.circleTick} />}
+                            {colorRed[1] ? <CheckCircleIcon className={colorRed[1] ? classes.activeColorTickRed : classes.circleTick} /> : <CheckCircleIcon className={colorTick3 ? classes.activeColorTick : classes.circleTick} />}
                         </AccordionSummary>
                         <AccordionDetails>
                             <Grid container style={{ justifyContent: "center", flexDirection: 'row' }}>
@@ -1364,7 +1384,7 @@ export default function LeadDetailsNew(props) {
                     <Accordion square expanded={expanded === 'panel4'} onChange={handleChange('panel4')}>
                         <AccordionSummary expandIcon={<ArrowRightIcon />} expanded={expanded === 'panel4'} onChange={handleChange('panel4')} aria-controls="panel4d-content" id="panel4d-header">
                             <Typography className={classes.headerText}>Employment &amp; Income Details</Typography>
-                            {colorRed[2] ? <CheckCircleIcon className={colorRed[2] ? classes.activeColorTickRed : classes.circleTick} /> : <CheckCircleIcon className={colorTick3 ? classes.activeColorTick : classes.circleTick} />}
+                            {colorRed[2] ? <CheckCircleIcon className={colorRed[2] ? classes.activeColorTickRed : classes.circleTick} /> : <CheckCircleIcon className={colorTick4 ? classes.activeColorTick : classes.circleTick} />}
                         </AccordionSummary>
                         <AccordionDetails>
                             <Grid container style={{ flexDirection: "row", justifyContent: "center" }}>
@@ -1677,7 +1697,7 @@ export default function LeadDetailsNew(props) {
                     <Accordion square expanded={expanded === 'panel5'} onChange={handleChange('panel5')}>
                         <AccordionSummary expandIcon={<ArrowRightIcon />} expanded={expanded === 'panel5'} onChange={handleChange('panel5')} aria-controls="panel5d-content" id="panel5-header">
                             <Typography className={classes.headerText}>Obligation Details</Typography>
-                            {colorRed[3] ? <CheckCircleIcon className={colorRed[3] ? classes.activeColorTickRed : classes.circleTick} /> : <CheckCircleIcon className={colorTick4 ? classes.activeColorTick : classes.circleTick} />}
+                            {colorRed[3] ? <CheckCircleIcon className={colorRed[3] ? classes.activeColorTickRed : classes.circleTick} /> : <CheckCircleIcon className={colorTick5 ? classes.activeColorTick : classes.circleTick} />}
                         </AccordionSummary>
                         <AccordionDetails>
                             <Grid container style={{ flexDirection: "row", justifyContent: "center" }}>
@@ -1765,7 +1785,7 @@ export default function LeadDetailsNew(props) {
                     <Accordion square expanded={expanded === 'panel6'} onChange={handleChange('panel6')}>
                         <AccordionSummary expandIcon={<ArrowRightIcon />} expanded={expanded === 'panel6'} onChange={handleChange('panel6')} aria-controls="panel6d-content" id="panel6-header">
                             <Typography className={classes.headerText}>Reference Details</Typography>
-                            {colorRed[3] ? <CheckCircleIcon className={colorRed[3] ? classes.activeColorTickRed : classes.circleTick} /> : <CheckCircleIcon className={colorTick4 ? classes.activeColorTick : classes.circleTick} />}
+                            {colorRed[3] ? <CheckCircleIcon className={colorRed[3] ? classes.activeColorTickRed : classes.circleTick} /> : <CheckCircleIcon className={colorTick6 ? classes.activeColorTick : classes.circleTick} />}
                         </AccordionSummary>
                         <AccordionDetails>
                             <Grid container style={{ flexDirection: "row", justifyContent: "center" }}>
