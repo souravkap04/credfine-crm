@@ -17,6 +17,14 @@
   font-family: "Lato";
 }
 
+.accordianContainer .textField label span {
+  position: absolute;
+  color: red;
+  font-size: 22px;
+  top: -25px;
+  margin-left: 2px;
+}
+
 .accordianContainer .textField .MuiOutlinedInput-root {
   height: 3.33333vw;
 }

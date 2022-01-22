@@ -104,7 +104,7 @@ const AccordionSummary = withStyles({
 const AccordionDetails = withStyles((theme) => ({
     root: {
         padding: theme.spacing(2),
-        height: '32.45vw',
+       // height: '32.45vw',
         alignItems: 'flex-start'
     },
 }))(MuiAccordionDetails);
@@ -812,6 +812,7 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required:true
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -829,6 +830,7 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required:true
                                         }}
                                         SelectProps={{
                                             native: true,
@@ -854,6 +856,7 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required:true
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -920,6 +923,7 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required:true
                                         }}
                                         InputProps={{
                                             startAdornment: <InputAdornment position="start"><PersonIcon /></InputAdornment>,
@@ -998,6 +1002,7 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required:true
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -1015,10 +1020,13 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required:true
+                                        }}
+                                        inputProps={{
+                                            maxLength: 10
                                         }}
                                         variant="outlined"
                                         size="small"
-                                        maxLength="10"
                                         value={pancardNo}
                                         onChange={(e) => setPancardNo(e.target.value.toUpperCase())}
                                     />
@@ -1032,6 +1040,7 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required:true
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -1048,6 +1057,7 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required: true
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -1208,6 +1218,7 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required:true
                                         }}
                                         inputProps={{
                                             maxLength: 6
@@ -1227,6 +1238,7 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required:true
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -1243,6 +1255,7 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required:true
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -1261,6 +1274,7 @@ export default function LeadDetailsNew(props) {
                                             margin="normal"
                                             InputLabelProps={{
                                                 shrink: true,
+                                                required:true
                                             }}
                                             SelectProps={{
                                                 native: true,
@@ -1482,9 +1496,9 @@ export default function LeadDetailsNew(props) {
                                     <Grid lg={4} style={{ display: 'flex', alignItems: 'center' }}>
                                         <Button className="saveAndNextBtn" color='primary' variant='contained' onClick={()=>updateLeadDetails(leadid)}>SAVE &amp; NEXT</Button>
                                     </Grid>
-                                    <Grid lg={4}>
+                                    <Grid container style={{ display: 'flex' , alignItems: 'center',}}>
                                     <Checkbox/>
-                                    <p>Click if Permanent Address Same As Current Address</p>
+                                    <div>Click if Permanent Address Same As Current Address</div>
                                 </Grid>
                                 </Grid>
                             </Grid>
@@ -1507,6 +1521,7 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required:true
                                         }}
                                         SelectProps={{
                                             native: true,
@@ -1531,6 +1546,7 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required:true
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -1554,6 +1570,7 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required:true
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -1571,6 +1588,7 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required:true
                                         }}
                                         SelectProps={{
                                             native: true
@@ -1601,6 +1619,7 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required:true
                                         }}
                                         SelectProps={{
                                             native: true
@@ -1651,6 +1670,7 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required:true
                                         }}
                                         inputProps={{
                                             maxLength: 7
@@ -1670,7 +1690,7 @@ export default function LeadDetailsNew(props) {
                                     <TextField
                                         className="textField"
                                         id="outlined-full-width"
-                                        label="Pincode"
+                                        label="Office Pincode"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
@@ -1686,7 +1706,7 @@ export default function LeadDetailsNew(props) {
                                     <TextField
                                         className="textField"
                                         id="outlined-full-width"
-                                        label="city"
+                                        label="Office city"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
@@ -1703,7 +1723,7 @@ export default function LeadDetailsNew(props) {
                                     <TextField
                                         className="textField"
                                         id="outlined-full-width"
-                                        label="State"
+                                        label="Office State"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
@@ -1757,6 +1777,7 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required:true
                                         }}
                                         SelectProps={{
                                             native: true,
@@ -1782,6 +1803,7 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required:true
                                         }}
                                         SelectProps={{
                                             native: true,
@@ -1819,6 +1841,7 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required:true
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -1877,6 +1900,7 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required:true
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -1903,6 +1927,7 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required:true
                                         }}
                                         SelectProps={{
                                             native: true
@@ -1930,12 +1955,12 @@ export default function LeadDetailsNew(props) {
                             {colorRed[3] ? <CheckCircleIcon className={colorRed[3] ? classes.activeColorTickRed : classes.circleTick} /> : <CheckCircleIcon className={colorTick6 ? classes.activeColorTick : classes.circleTick} />}
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Grid container style={{ flexDirection: "row", justifyContent: "center" }}>
+                            <Grid container style={{flexDirection: 'row', justifyContent: 'center'}}>
                                 <Grid lg={4}>
                                     <TextField
                                         className="textField"
                                         id="outlined-full-width"
-                                        label="First Name"
+                                        label="Relative's First Name"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
@@ -1951,7 +1976,7 @@ export default function LeadDetailsNew(props) {
                                     <TextField
                                         className="textField"
                                         id="outlined-full-width"
-                                        label="Last Name"
+                                        label="Relative's Last Name"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
@@ -1967,7 +1992,7 @@ export default function LeadDetailsNew(props) {
                                     <TextField
                                         className="textField"
                                         id="outlined-full-width"
-                                        label="Mobile No"
+                                        label="Relative's Mobile No"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
@@ -1987,7 +2012,7 @@ export default function LeadDetailsNew(props) {
                                     <TextField
                                         className="textField"
                                         id="outlined-full-width"
-                                        label="First Name"
+                                        label="Firend's First Name"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
@@ -2003,7 +2028,7 @@ export default function LeadDetailsNew(props) {
                                     <TextField
                                         className="textField"
                                         id="outlined-full-width"
-                                        label="Last Name"
+                                        label="Friend's Last Name"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
@@ -2019,7 +2044,7 @@ export default function LeadDetailsNew(props) {
                                     <TextField
                                         className="textField"
                                         id="outlined-full-width"
-                                        label="Mobile No"
+                                        label="Friend's Mobile No"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{

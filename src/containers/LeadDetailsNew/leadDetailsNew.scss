@@ -12,6 +12,13 @@ $desk: 100 / 1440;
             letter-spacing: 0.4px;
             font-size: 15.5px;
             font-family: "Lato";
+            span {
+                position: absolute;
+                color: red;
+                font-size: 22px;
+                top: -25px;
+                margin-left: 2px;
+            }
         }
         .MuiOutlinedInput-root {
             height: 48 * $desk + vw;
