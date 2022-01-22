@@ -20,6 +20,12 @@ import CallIcon from '@material-ui/icons/Call';
 import SendIcon from '@material-ui/icons/Send';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Checkbox from '@material-ui/core/Checkbox';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 import { ListGroup } from 'react-bootstrap';
 import {
     getBank,
@@ -29,9 +35,12 @@ import {
     getStatusData
 } from "../../global/leadsGlobalData";
 import { useParams, useHistory, useLocation } from 'react-router-dom';
+import EmiCalculator from '../Emicalculator/EmiCalculator';
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import moment from 'moment';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable'
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -114,6 +123,13 @@ export default function LeadDetailsNew(props) {
     const handleChange = (panel) => (event, newExpanded) => {
         setExpanded(newExpanded ? panel : false);
     };
+    const [openCalculate, setopenCalculate] = useState(false);
+    const openCalculator = () => {
+        setopenCalculate(true);
+    }
+    const closeCalculator = () => {
+        setopenCalculate(false);
+    }
     const profileData = getProfileData();
     const banks = getBank();
     const residentType = getResidentType();
@@ -177,6 +193,7 @@ export default function LeadDetailsNew(props) {
     const [ref2FirstName,setRef2FirstName] = useState("");
     const [ref2LastName,setRef2LastName] = useState("");
     const [ref2MobileNo,setRef2MobileNo] = useState("");
+    const [display, setDisplay] = useState("none");
     const [status, setStatus] = useState('');
     const [subStatus, setSubStatus] = useState([]);
     const [loanType, setLoanType] = useState("");
@@ -753,8 +770,21 @@ export default function LeadDetailsNew(props) {
         setIsAutoDialerEnd(true);
         localStorage.removeItem('auto_dialer');
     }
+    const downloadPdfHandler = () =>{
+        console.log("download pdf");
+        setDisplay('block');
+        const doc = new jsPDF("p", "pt", "a4");
+        // autoTable(doc, { html: '#leadDetails-table' })
+        // doc.save('lead_details.pdf');
+        doc.html(document.getElementById('leadDetails-table'))
+        .then(()=>{
+            doc.save('lead_details.pdf');
+            setDisplay('none');
+        })
+    }
     return (
-        <PageLayerSection isDisplaySearchBar={true} pageTitle="Lead Details" className={classes.scrollEnable} offerButton={true} isWhatsapp={true} whatsappNumber={mobileNo} endAutoDialerBtn={true} endAutoDialerClick={()=>endAutoDialerBtnHandler()}>
+        <PageLayerSection isDisplaySearchBar={true} pageTitle="Lead Details" className={classes.scrollEnable} offerButton={true} isWhatsapp={true} whatsappNumber={mobileNo} endAutoDialerBtn={true} endAutoDialerClick={()=>endAutoDialerBtnHandler()} ActualEmiCalculate={openCalculator} downloadPdf = {()=>downloadPdfHandler()}>
+            <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
             {/* Errors SnackBars Start */}
             <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={hangUpSnacks} autoHideDuration={1500} onClose={disableHangUpSnacks}>
                 <Alert onClose={disableHangUpSnacks} severity="success">
@@ -2446,6 +2476,35 @@ export default function LeadDetailsNew(props) {
                     </Alert>
                 </Snackbar>
             </div>
+             <div id="leadDetails-table" style={{display}} >
+                 <TableContainer>
+                        <Table aria-label="simple table" >
+                            <TableHead>
+                                <TableRow><TableCell>Personal & Loan Details</TableCell></TableRow>
+                                <TableRow>
+                                    <TableCell>Lead Id : {leadId}</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                    <TableCell>Product Type : {loanType}</TableCell>
+                                    </TableRow>
+                                    <TableRow><TableCell>Loan Amount : {loanAmount}</TableCell></TableRow>
+                                    <TableRow><TableCell>Tenure In Years : {tenure}</TableCell></TableRow>
+                                    <TableRow><TableCell>ROI : {Roi}</TableCell></TableRow>
+                                    <TableRow><TableCell>Full Name As Pancard : {name}</TableCell></TableRow>
+                                    <TableRow><TableCell>Gender : {gender}</TableCell></TableRow>
+                                    <TableRow><TableCell>Father's Name : {fatherName}</TableCell></TableRow>
+                                    <TableRow><TableCell>Mother's Name : {motherName}</TableCell></TableRow>
+                                    <TableRow><TableCell>DOB : {date}</TableCell></TableRow>
+                                    <TableRow><TableCell>PAN No : {pancardNo}</TableCell></TableRow>
+                                    <TableRow><TableCell>Email Id : {email}</TableCell></TableRow>
+                                    <TableRow><TableCell>Mobile No : {mobileNo}</TableCell></TableRow>
+                                    <TableRow><TableCell>Marital Status : {maritalStatus}</TableCell></TableRow>
+                                    <TableRow><TableCell>No Of Dependence : {noOfDependent}</TableCell></TableRow>
+                                    <TableRow><TableCell>Adhaar No : {adhaarNo}</TableCell></TableRow>
+                                    </TableHead>
+                        </Table>
+                    </TableContainer>
+                </div>
         </PageLayerSection>
     )
 }

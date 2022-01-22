@@ -7,10 +7,11 @@ import SearchIcon from "@material-ui/icons/Search";
 import { InputBase, MenuItem, Menu, IconButton } from '@material-ui/core';
 import { useIdleTimer } from 'react-idle-timer';
 import ArrowDropDownOutlinedIcon from '@material-ui/icons/ArrowDropDownOutlined';
-import { NavLink, useHistory,useLocation} from 'react-router-dom';
+import { NavLink, useHistory, useLocation } from 'react-router-dom';
 import { Button } from '@material-ui/core';
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
 import WhatsAppIcon from '@material-ui/icons/WhatsApp';
+import GetAppIcon from '@material-ui/icons/GetApp';
 import Badge from '@material-ui/core/Badge';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { haloocomNoidaDialerApi, haloocomMumbaiDialerApi } from '../../global/callApi';
@@ -72,6 +73,10 @@ export default function PageLayerSection(props) {
         localStorage.removeItem('status_info');
         localStorage.removeItem('notification');
         localStorage.removeItem('callHangUp');
+        localStorage.removeItem('EMI')
+        localStorage.removeItem('Interest')
+        localStorage.removeItem('LoanAmount')
+        localStorage.removeItem('LoanTenure')
         if (profileData.dialer === "HALOOCOM-Noida") {
             await axios.post(`${haloocomNoidaDialerApi}/action.php?user=${profileData.vertage_id}&type=Logout`)
                 .then((response) => {
@@ -91,62 +96,62 @@ export default function PageLayerSection(props) {
     return (
         <div className="pageAdjustSection">
             <div className="leftSection">
-                <MenuMain />
+                <MenuMain EmiCalculate={props.ActualEmiCalculate} />
             </div>
             <div className="rightSection">
                 <div className="appBarContainer">
                     <div className="searchMainContainer">
-                        {props.isDisplaySearchBar ? 
-                        <div className="searchContainer">
-                            <div className="searchIconContainer">
-                                <SearchIcon className="searchIcon" />
-                            </div>
-                            {props.isMyLeadsSearch || (location.pathname === `/dashboards/myleads/edit/${searchInput}`) ? 
-                             <InputBase
-                             placeholder="Lead ID / Mobile"
-                             className="inputContainer"
-                             inputProps={{ "aria-label": "search" }}
-                             value={searchInput}
-                             onChange={(e) => setSearchInput((e.target.value).toUpperCase().trim())}
-                             onKeyPress={(event) => {
-                                 if (event.key === "Enter") {
-                                     if (searchInput !== "" && searchValidation(searchInput)) {
-                                         history.push("/dashboards/myleads?query=" + searchInput);
-                                     } else if (searchInput === "") {
-                                         history.push("/dashboards/myleads");
-                                         window.location.reload();
-                                     }
-                                 }
-                             }}
-                         />  :
-                            <InputBase
-                                placeholder="Lead ID / Mobile"
-                                className="inputContainer"
-                                inputProps={{ "aria-label": "search" }}
-                                value={searchInput}
-                                onChange={(e) => setSearchInput((e.target.value).toUpperCase().trim())}
-                                onKeyPress={(event) => {
-                                    if (event.key === "Enter") {
-                                        if (searchInput !== "" && searchValidation(searchInput)) {
-                                            history.push("/dashboards/leads?query=" + searchInput);
-                                        } else if (searchInput === "") {
-                                            history.push("/dashboards/leads");
-                                            window.location.reload();
-                                        }
-                                    }
-                                }}
-                            /> }
-                        </div> : ''}
+                        {props.isDisplaySearchBar ?
+                            <div className="searchContainer">
+                                <div className="searchIconContainer">
+                                    <SearchIcon className="searchIcon" />
+                                </div>
+                                {props.isMyLeadsSearch || (location.pathname === `/dashboards/myleads/edit/${searchInput}`) ?
+                                    <InputBase
+                                        placeholder="Lead ID / Mobile"
+                                        className="inputContainer"
+                                        inputProps={{ "aria-label": "search" }}
+                                        value={searchInput}
+                                        onChange={(e) => setSearchInput((e.target.value).toUpperCase().trim())}
+                                        onKeyPress={(event) => {
+                                            if (event.key === "Enter") {
+                                                if (searchInput !== "" && searchValidation(searchInput)) {
+                                                    history.push("/dashboards/myleads?query=" + searchInput);
+                                                } else if (searchInput === "") {
+                                                    history.push("/dashboards/myleads");
+                                                    window.location.reload();
+                                                }
+                                            }
+                                        }}
+                                    /> :
+                                    <InputBase
+                                        placeholder="Lead ID / Mobile"
+                                        className="inputContainer"
+                                        inputProps={{ "aria-label": "search" }}
+                                        value={searchInput}
+                                        onChange={(e) => setSearchInput((e.target.value).toUpperCase().trim())}
+                                        onKeyPress={(event) => {
+                                            if (event.key === "Enter") {
+                                                if (searchInput !== "" && searchValidation(searchInput)) {
+                                                    history.push("/dashboards/leads?query=" + searchInput);
+                                                } else if (searchInput === "") {
+                                                    history.push("/dashboards/leads");
+                                                    window.location.reload();
+                                                }
+                                            }
+                                        }}
+                                    />}
+                            </div> : ''}
                         <div className="headerSection">
                             <h3>{props.pageTitle}</h3>
                         </div>
                     </div>
                     <div className="rightAppBarSection">
-                        {props.startAutoDialerButton ? <Button 
-                        className="autoDialerStartBtn"
-                        color="primary"
-                        variant="contained"
-                        onClick={props.startAutoDialerClick}
+                        {props.startAutoDialerButton ? <Button
+                            className="autoDialerStartBtn"
+                            color="primary"
+                            variant="contained"
+                            onClick={props.startAutoDialerClick}
                         > start</Button> : ''}
                         {props.addLeadButton ? <Button
                             className="addBtn"
@@ -157,6 +162,9 @@ export default function PageLayerSection(props) {
                         >
                             Add New Lead
                         </Button> : null}
+                        <IconButton onClick={props.downloadPdf}>
+                            <GetAppIcon/>
+                        </IconButton>
                         {props.isWhatsapp ? <a href={`https://api.whatsapp.com/send?phone=+91${props.whatsappNumber}&text=Hi...`} target="_blank"><WhatsAppIcon className="whatsapp" /></a> : ''}
                         {props.offerButton ? <NavLink to="/dashboards/pricing" target="_blank"><Button
                             className="addBtn"
@@ -166,14 +174,14 @@ export default function PageLayerSection(props) {
                         >
                             BANK INTEREST CHART
                         </Button></NavLink> : null}
-                        {props.endAutoDialerBtn ? <Button 
-                        className="autoDialerEndBtn" 
-                        disabled={!localStorage.getItem('auto_dialer')}
-                        color="secondary"
-                        variant="contained"
-                        onClick={props.endAutoDialerClick}
+                        {props.endAutoDialerBtn ? <Button
+                            className="autoDialerEndBtn"
+                            disabled={!localStorage.getItem('auto_dialer')}
+                            color="secondary"
+                            variant="contained"
+                            onClick={props.endAutoDialerClick}
                         >
-                        Stop</Button>:''}
+                            Stop</Button> : ''}
                         {profileData.user_roles[0].user_type === 1 || profileData.user_roles[0].user_type === 2 || profileData.user_roles[0].user_type === 4 || profileData.user_roles[0].user_type === 6 ? '' : <NavLink to="/dashboards/followup" activeClassName="active"><Badge className="notificationContainer" badgeContent={localStorage.getItem('notification') !== 0 ? localStorage.getItem('notification') : 0} max={5000} color="secondary">
                             <NotificationsIcon className="notificationIcon" />
                         </Badge></NavLink>}
