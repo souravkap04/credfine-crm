@@ -315,30 +315,37 @@ export default function LeadDetailsNew(props) {
                         setscheme(response.data.lead_extra_details.scheme);
                         setdisbursedDate(response.data.lead_extra_details.disbursed_date)
                         setRoi(response.data.lead_extra_details.roi)
-                        setGender();
-                        setTenure();
-                        setFatherName();
-                        setMotherName();
-                        setMaritalStatus();
-                        setNoOfDependent();
-                        setAdhaarNo();
-                        setAddressOne();
-                        setAddressTwo();
-                        setAddressThree();
-                        setCurrentAddressVintage();
-                        setPermanentAddressOne();
-                        setPermanentAddressTwo();
-                        setPermanentAddressThree();
-                        setPermanentCity();
-                        setPermanentStates();
-                        setPermanentPincode();
-                        setPermanentAddressVintage();
-                        setGrossIncome();
-                        setOfficeCity();
-                        setOfficeStates();
-                        setOfficePincode();
-                        setOfficialMailid();
-                        setLandlineNo();
+                        setGender(response.data.lead_data.data.gender);
+                        setTenure(response.data.lead_data.data.tenure);
+                        setFatherName(response.data.lead_data.data.father_name);
+                        setMotherName(response.data.lead_data.data.mother_name);
+                        setMaritalStatus(response.data.lead_data.data.marital_status);
+                        setNoOfDependent(response.data.lead_data.data.no_of_dependence);
+                        setAdhaarNo(response.data.lead_data.data.adhaar_no);
+                        setAddressOne(response.data.lead_data.data.address_one);
+                        setAddressTwo(response.data.lead_data.data.address_two);
+                        setAddressThree(response.data.lead_data.data.address_three);
+                        setCurrentAddressVintage(response.data.lead_data.data.current_address_vintage);
+                        setPermanentAddressOne(response.data.lead_data.data.permanent_address.one);
+                        setPermanentAddressTwo(response.data.lead_data.data.permanent_address.two);
+                        setPermanentAddressThree(response.data.lead_data.data.permanent_address_three);
+                        setPermanentCity(response.data.lead_data.data.permanent_city);
+                        setPermanentStates(response.data.lead_data.data.permanent_state);
+                        setPermanentPincode(response.data.lead_data.data_permanent_pincode);
+                        setPermanentAddressVintage(response.data.lead_data.data.permanent_address_vintage);
+                        setGrossIncome(response.data.lead_data.data.gross_income);
+                        setOfficeCity(response.data.lead_data.data.office_city);
+                        setOfficeStates(response.data.lead_data.data_office_state);
+                        setOfficePincode(response.data.lead_data.data.office_pincode);
+                        setOfficialMailid(response.data.lead_data.data.official_mail);
+                        setLandlineNo(response.data.lead_data.data.landline_no);
+                        setNoOfCreditCard(response.data.lead_data.data.no_of_creditcard);
+                        setRef1FirstName(response.data.lead_data.data.ref1_first_name);
+                        setRef1LastName(response.data.lead_data.data.ref1_last_name);
+                        setRef1MobileNo(response.data.lead_data.data.ref1_mobile_no);
+                        setRef2FirstName(response.data.lead_data.ref2_first_name);
+                        setRef2LastName(response.data.lead_data.data.ref2_last_name);
+                        setRef2MobileNo(response.data.lead_data.data.ref2_mobile_no);
                         setisLoading(false)
                         if (response.data.lead_data.lead_crm_id !== '' && response.data.lead_data.loan_type !== '' && response.data.lead_data.loan_amount !== '' && response.data.lead_data.name !== '' && response.data.lead_data["data"].dob !== '' && response.data.eligibility_data.pan_no !== '' && response.data.eligibility_data.email_id !== '' && response.data.lead_data.phone_no !== '') {
                             setcolorTick(true)
@@ -463,7 +470,11 @@ export default function LeadDetailsNew(props) {
         }
         let data = {
             dob: date, monthly_income: monthlyIncome,pan_no:pancardNo, current_company_name: companyName,
-            residential_pincode: pincode, city: city, state: states, current_company: currentCompany, employment_type: employmentType, credi_card_balance_transfer: creditCardbalanceTransfer
+            residential_pincode: pincode, city: city, state: states, current_company: currentCompany, 
+            employment_type: employmentType, credi_card_balance_transfer: creditCardbalanceTransfer,
+            gender:gender , tenure:tenure, father_name:fatherName, mother_name:motherName,marital_status:maritalStatus,
+            adhaar_no:adhaarNo, no_of_dependence:noOfDependent,address_one:addressOne,address_two:addressTwo,
+            address_three:addressThree,
         };
         let lead_data = {
             lead_crm_id: leadId, loan_amount: loanAmount,
