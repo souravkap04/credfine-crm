@@ -234,6 +234,7 @@ export default function LeadDetailsNew(props) {
     const [disbursedError, setdisbursedError] = useState([false, false]);
     const [colorRed, setcolorRed] = useState([false, false, false, false,false,false]);
     const [isAutoDialerEnd,setIsAutoDialerEnd] = useState(false);
+    const [checked, setChecked] = React.useState(false);
     let statusData = getStatusData();
     let { leadid } = useParams();
     let history = useHistory();
@@ -332,6 +333,7 @@ export default function LeadDetailsNew(props) {
                         setPermanentCity(response.data.lead_data.data.permanent_city);
                         setPermanentStates(response.data.lead_data.data.permanent_state);
                         setPermanentPincode(response.data.lead_data.data.permanent_pincode);
+                        setPermanentResidentType(response.data.lead_data.data.permanent_resident_Type);
                         setPermanentAddressVintage(response.data.lead_data.data.permanent_address_vintage);
                         setGrossIncome(response.data.lead_data.data.gross_income);
                         setOfficeCity(response.data.lead_data.data.office_city);
@@ -343,7 +345,7 @@ export default function LeadDetailsNew(props) {
                         setRef1FirstName(response.data.lead_data.data.ref1_first_name);
                         setRef1LastName(response.data.lead_data.data.ref1_last_name);
                         setRef1MobileNo(response.data.lead_data.data.ref1_mobile_no);
-                        setRef2FirstName(response.data.lead_data.ref2_first_name);
+                        setRef2FirstName(response.data.lead_data.data.ref2_first_name);
                         setRef2LastName(response.data.lead_data.data.ref2_last_name);
                         setRef2MobileNo(response.data.lead_data.data.ref2_mobile_no);
                         setisLoading(false)
@@ -480,7 +482,7 @@ export default function LeadDetailsNew(props) {
             gross_income:grossIncome,office_pincode:officePincode,office_city:officeCity,office_state:officeStates,
             official_mail:officialMailid,landline_no:landlineNo,no_of_creditcard:noOfCreditCard,ref1_first_name:ref1FirstName,
             ref1_last_name:ref1LastName,ref1_mobile_no:ref1MobileNo,ref2_first_name:ref2FirstName,ref2_last_name:ref2LastName,
-            ref2_mobile_no:ref2MobileNo
+            ref2_mobile_no:ref2MobileNo,permanent_resident_Type:permanentResidentType
         };
         let lead_data = {
             lead_crm_id: leadId, loan_amount: loanAmount,
@@ -799,6 +801,19 @@ export default function LeadDetailsNew(props) {
             setDisplay('none');
         })
     }
+    const checkboxHandler = (e)=>{
+        setChecked(e.target.checked);
+        if(e.target.checked){
+            setPermanentAddressOne(addressOne);
+            setPermanentAddressTwo(addressTwo)
+            setPermanentAddressThree(addressThree);
+            setPermanentCity(city);
+            setPermanentStates(states);
+            setPermanentPincode(pincode);
+            setPermanentResidentType(currentResidentType);
+            setPermanentAddressVintage(currentAddressVintage);
+        }
+    }
     return (
         <PageLayerSection isDisplaySearchBar={true} pageTitle="Lead Details" className={classes.scrollEnable} offerButton={true} isWhatsapp={true} whatsappNumber={mobileNo} endAutoDialerBtn={true} endAutoDialerClick={()=>endAutoDialerBtnHandler()} ActualEmiCalculate={openCalculator} downloadPdf = {()=>downloadPdfHandler()}>
             <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
@@ -983,7 +998,7 @@ export default function LeadDetailsNew(props) {
                                 </Grid>
                                 <Grid lg={4}>
                                     <TextField
-                                        className="textField fullName"
+                                        className="textField"
                                         select
                                         id="outlined-full-width"
                                         label="Gender"
@@ -1008,7 +1023,7 @@ export default function LeadDetailsNew(props) {
                                 </Grid>
                                 <Grid lg={4}>
                                     <TextField
-                                        className="textField"
+                                        className="textField fullName"
                                         id="outlined-full-width"
                                         label="Father's Name"
                                         style={{ margin: 8 }}
@@ -1024,7 +1039,7 @@ export default function LeadDetailsNew(props) {
                                     </Grid>
                                     <Grid lg={4}>
                                     <TextField
-                                        className="textField"
+                                        className="textField fullName"
                                         id="outlined-full-width"
                                         label="Mother's Name"
                                         style={{ margin: 8 }}
@@ -1544,7 +1559,10 @@ export default function LeadDetailsNew(props) {
                                         <Button className="saveAndNextBtn" color='primary' variant='contained' onClick={()=>updateLeadDetails(leadid)}>SAVE &amp; NEXT</Button>
                                     </Grid>
                                     <Grid container style={{ display: 'flex' , alignItems: 'center',}}>
-                                    <Checkbox/>
+                                    <Checkbox
+                                    checked={checked}
+                                    onChange={(e)=>checkboxHandler(e)}
+                                    />
                                     <div>Click if Permanent Address Same As Current Address</div>
                                 </Grid>
                                 </Grid>
@@ -2045,6 +2063,9 @@ export default function LeadDetailsNew(props) {
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
+                                        inputProps={{
+                                            maxLength:10
+                                        }}
                                         variant="outlined"
                                         size="small"
                                         value={ref1MobileNo}
@@ -2080,6 +2101,9 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                        }}
+                                        inputProps={{
+                                            maxLength:10
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -2521,6 +2545,93 @@ export default function LeadDetailsNew(props) {
                                     </TableHead>
                         </Table>
                     </TableContainer>
+                    <TableContainer>
+                        <Table aria-label="simple table" >
+                            <TableHead>
+                                <TableRow><TableCell>Current Residetial Details</TableCell></TableRow>
+                                <TableRow>
+                                    <TableCell>Address 1 : {addressOne}</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                    <TableCell>Address 2 : {addressTwo}</TableCell>
+                                    </TableRow>
+                                    <TableRow><TableCell>Address 1 : {addressThree}</TableCell></TableRow>
+                                    <TableRow><TableCell>Pincode : {pincode}</TableCell></TableRow>
+                                    <TableRow><TableCell>City : {city}</TableCell></TableRow>
+                                    <TableRow><TableCell>State : {states}</TableCell></TableRow>
+                                    <TableRow><TableCell>Resident Type : {currentResidentType}</TableCell></TableRow>
+                                    <TableRow><TableCell>Current Address Vintage : {currentAddressVintage}</TableCell></TableRow>
+                                    </TableHead>
+                        </Table>
+                    </TableContainer>
+                    <TableContainer>
+                        <Table aria-label="simple table" >
+                            <TableHead>
+                                <TableRow><TableCell>Permanent Residetial Details</TableCell></TableRow>
+                                <TableRow>
+                                    <TableCell>Address 1 : {permanentAddressOne}</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                    <TableCell>Address 2 : {permanentAddressTwo}</TableCell>
+                                    </TableRow>
+                                    <TableRow><TableCell>Address 1 : {permanentAddressThree}</TableCell></TableRow>
+                                    <TableRow><TableCell>Pincode : {permanentPincode}</TableCell></TableRow>
+                                    <TableRow><TableCell>City : {permanentCity}</TableCell></TableRow>
+                                    <TableRow><TableCell>State : {permanentStates}</TableCell></TableRow>
+                                    <TableRow><TableCell>Resident Type : {permanentResidentType}</TableCell></TableRow>
+                                    <TableRow><TableCell>Permanent Address Vintage : {permanentAddressVintage}</TableCell></TableRow>
+                                    </TableHead>
+                        </Table>
+                    </TableContainer>
+                    <TableContainer>
+                        <Table aria-label="simple table" >
+                            <TableHead>
+                                <TableRow><TableCell>Employment & Income Details</TableCell></TableRow>
+                                <TableRow>
+                                    <TableCell>Employment Type : {employmentType}</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                    <TableCell>Company Name : {companyName}</TableCell>
+                                    </TableRow>
+                                    <TableRow><TableCell>Designation : {designation}</TableCell></TableRow>
+                                    <TableRow><TableCell>Vintage in Current Company : {currentWorkExp}</TableCell></TableRow>
+                                    <TableRow><TableCell>Total Work Experience : {totalWorkExp}</TableCell></TableRow>
+                                    <TableRow><TableCell>Gross Income : {grossIncome}</TableCell></TableRow>
+                                    <TableRow><TableCell>Net Monthly Income : {monthlyIncome}</TableCell></TableRow>
+                                    <TableRow><TableCell>Office Pincode : {officePincode}</TableCell></TableRow>
+                                    <TableRow><TableCell>Office City : {officeCity}</TableCell></TableRow>
+                                    <TableRow><TableCell>Office State : {officeStates}</TableCell></TableRow>
+                                    <TableRow><TableCell>Official MailId : {officialMailid}</TableCell></TableRow>
+                                    <TableRow><TableCell>Landline No : {landlineNo}</TableCell></TableRow>
+                                    <TableRow><TableCell>Mode Of Salary : {salaryCreditMode}</TableCell></TableRow>
+                                    <TableRow><TableCell>Salary Credit Bank Name : {salaryBankAcc}</TableCell></TableRow>
+                                    </TableHead>
+                        </Table>
+                    </TableContainer>
+                    <TableContainer>
+                        <Table aria-label="simple table" >
+                            <TableHead>
+                                <TableRow><TableCell>Obligation Details</TableCell></TableRow>
+                                <TableRow><TableCell>Total EMI Exclude Credit Card : {currentEMI}</TableCell></TableRow>
+                                <TableRow><TableCell>No Of Credit Card : {noOfCreditCard}</TableCell></TableRow>
+                                <TableRow><TableCell>Credit Card Outstanding : {creditCardOutstanding}</TableCell></TableRow>
+                                <TableRow><TableCell>Credit Card Balance Transfer : {creditCardbalanceTransfer}</TableCell></TableRow>
+                            </TableHead>
+                        </Table>
+                    </TableContainer> 
+                    <TableContainer>
+                        <Table aria-label="simple table" >
+                            <TableHead>
+                                <TableRow><TableCell>Reference Details</TableCell></TableRow>
+                                <TableRow><TableCell>Relative's First Name : {ref1FirstName}</TableCell></TableRow>
+                                <TableRow><TableCell>Relative's Last Name : {ref1LastName}</TableCell></TableRow>
+                                <TableRow><TableCell>Realtive's Mobile No : {ref1MobileNo}</TableCell></TableRow>
+                                <TableRow><TableCell>Friend's First Name : {ref2FirstName}</TableCell></TableRow>
+                                <TableRow><TableCell>Friend's Last Name : {ref2LastName}</TableCell></TableRow>
+                                <TableRow><TableCell>Friend's Mobile No : {ref2MobileNo}</TableCell></TableRow>
+                            </TableHead>
+                        </Table>
+                    </TableContainer>           
                 </div>
         </PageLayerSection>
     )
