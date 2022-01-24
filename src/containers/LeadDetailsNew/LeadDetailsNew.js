@@ -326,16 +326,16 @@ export default function LeadDetailsNew(props) {
                         setAddressTwo(response.data.lead_data.data.address_two);
                         setAddressThree(response.data.lead_data.data.address_three);
                         setCurrentAddressVintage(response.data.lead_data.data.current_address_vintage);
-                        setPermanentAddressOne(response.data.lead_data.data.permanent_address.one);
-                        setPermanentAddressTwo(response.data.lead_data.data.permanent_address.two);
+                        setPermanentAddressOne(response.data.lead_data.data.permanent_address_one);
+                        setPermanentAddressTwo(response.data.lead_data.data.permanent_address_two);
                         setPermanentAddressThree(response.data.lead_data.data.permanent_address_three);
                         setPermanentCity(response.data.lead_data.data.permanent_city);
                         setPermanentStates(response.data.lead_data.data.permanent_state);
-                        setPermanentPincode(response.data.lead_data.data_permanent_pincode);
+                        setPermanentPincode(response.data.lead_data.data.permanent_pincode);
                         setPermanentAddressVintage(response.data.lead_data.data.permanent_address_vintage);
                         setGrossIncome(response.data.lead_data.data.gross_income);
                         setOfficeCity(response.data.lead_data.data.office_city);
-                        setOfficeStates(response.data.lead_data.data_office_state);
+                        setOfficeStates(response.data.lead_data.data.office_state);
                         setOfficePincode(response.data.lead_data.data.office_pincode);
                         setOfficialMailid(response.data.lead_data.data.official_mail);
                         setLandlineNo(response.data.lead_data.data.landline_no);
@@ -474,7 +474,13 @@ export default function LeadDetailsNew(props) {
             employment_type: employmentType, credi_card_balance_transfer: creditCardbalanceTransfer,
             gender:gender , tenure:tenure, father_name:fatherName, mother_name:motherName,marital_status:maritalStatus,
             adhaar_no:adhaarNo, no_of_dependence:noOfDependent,address_one:addressOne,address_two:addressTwo,
-            address_three:addressThree,
+            address_three:addressThree,current_address_vintage:currentAddressVintage,permanent_address_one:permanentAddressOne,
+            permanent_address_two:permanentAddressTwo,permanent_address_three:permanentAddressThree,permanent_pincode:permanentPincode,
+            permanent_city:permanentCity,permanent_state:permanentStates,permanent_address_vintage:permanentAddressVintage,
+            gross_income:grossIncome,office_pincode:officePincode,office_city:officeCity,office_state:officeStates,
+            official_mail:officialMailid,landline_no:landlineNo,no_of_creditcard:noOfCreditCard,ref1_first_name:ref1FirstName,
+            ref1_last_name:ref1LastName,ref1_mobile_no:ref1MobileNo,ref2_first_name:ref2FirstName,ref2_last_name:ref2LastName,
+            ref2_mobile_no:ref2MobileNo
         };
         let lead_data = {
             lead_crm_id: leadId, loan_amount: loanAmount,
@@ -664,8 +670,8 @@ export default function LeadDetailsNew(props) {
             await axios.post(`${baseUrl}/common/fetchPincode/`, item, { header })
                 .then((response) => {
                     if (response.data[0].pin === e.target.value) {
-                        setPermanentCity();
-                        setPermanentStates();
+                        setPermanentCity(response.data[0].city_name);
+                        setPermanentStates(response.data[0].state_name);
                     }
                 }).catch((error) => {
                     console.log(error)
@@ -680,8 +686,8 @@ export default function LeadDetailsNew(props) {
             await axios.post(`${baseUrl}/common/fetchPincode/`, item, { header })
                 .then((response) => {
                     if (response.data[0].pin === e.target.value) {
-                        setOfficeCity();
-                        setOfficeStates();
+                        setOfficeCity(response.data[0].city_name);
+                        setOfficeStates(response.data[0].state_name);
                     }
                 }).catch((error) => {
                     console.log(error)
@@ -1877,7 +1883,7 @@ export default function LeadDetailsNew(props) {
                                     <TextField
                                         className="textField"
                                         id="outlined-full-width"
-                                        label="Total EMI Excluded Credit Card"
+                                        label="Total EMI Xclude Credit Card"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
