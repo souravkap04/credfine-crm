@@ -320,7 +320,7 @@ $desk: 100 / 1440;
     .tableName{
         width: 100%;
         margin-bottom: 20 * $desk + vw;
-        margin-left: 190 * $desk + vw;
+        margin-left: 50 * $desk + vw;
         .tableText{
             font-size: 20 * $desk + vw;
         }
@@ -328,12 +328,14 @@ $desk: 100 / 1440;
     .pdfTable {
         border-collapse: collapse;
         margin-bottom: 20 * $desk + vw;
-        margin-left: 170 * $desk + vw;
+        margin-left: 50 * $desk + vw;
         .tableTitle {
             font-size: 15 * $desk + vw;
+            width: 200 * $desk + vw;
         }
         .tableDescription {
             font-size: 15 * $desk + vw;
+            width: 250 * $desk + vw;
         }
     }
 }

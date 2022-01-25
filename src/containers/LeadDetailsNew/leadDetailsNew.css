@@ -409,7 +409,7 @@
 #leadDetails-table .tableName {
   width: 100%;
   margin-bottom: 1.38889vw;
-  margin-left: 13.19444vw;
+  margin-left: 3.47222vw;
 }
 
 #leadDetails-table .tableName .tableText {
@@ -419,14 +419,16 @@
 #leadDetails-table .pdfTable {
   border-collapse: collapse;
   margin-bottom: 1.38889vw;
-  margin-left: 11.80556vw;
+  margin-left: 3.47222vw;
 }
 
 #leadDetails-table .pdfTable .tableTitle {
   font-size: 1.04167vw;
+  width: 13.88889vw;
 }
 
 #leadDetails-table .pdfTable .tableDescription {
   font-size: 1.04167vw;
+  width: 17.36111vw;
 }
 /*# sourceMappingURL=leadDetailsNew.css.map */

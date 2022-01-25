@@ -816,7 +816,7 @@ export default function LeadDetailsNew(props) {
     const downloadPdfHandler = () => {
         console.log("download pdf");
         setDisplay('block');
-        const doc = new jsPDF("p", "pt", "b4");
+        const doc = new jsPDF("p", "pt", "a4");
         // autoTable(doc, { html: '#leadDetails-table' })
         // doc.save('lead_details.pdf');
         doc.html(document.getElementById('leadDetails-table'))
