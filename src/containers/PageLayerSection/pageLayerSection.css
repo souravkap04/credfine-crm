@@ -129,6 +129,13 @@
   cursor: pointer;
 }
 
+.pageAdjustSection .rightSection .appBarContainer .rightAppBarSection .pdfBtn {
+  font-size: 2.43056vw;
+  margin-right: 0.69444vw;
+  color: #535ad1;
+  cursor: pointer;
+}
+
 .pageAdjustSection .rightSection .appBarContainer .rightAppBarSection .autoDialerEndBtn {
   margin-right: 1.38889vw;
   -webkit-box-shadow: none;

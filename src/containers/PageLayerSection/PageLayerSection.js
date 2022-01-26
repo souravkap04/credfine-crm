@@ -162,9 +162,7 @@ export default function PageLayerSection(props) {
                         >
                             Add New Lead
                         </Button> : null}
-                        <IconButton onClick={props.downloadPdf}>
-                            <GetAppIcon/>
-                        </IconButton>
+                        {props.isDownloadPdf && (profileData.user_roles[0].user_type === 4 || profileData.user_roles[0].user_type === 6) ? <IconButton className="pdfBtn" onClick={props.downloadPdf}><GetAppIcon/></IconButton> : ''}
                         {props.isWhatsapp ? <a href={`https://api.whatsapp.com/send?phone=+91${props.whatsappNumber}&text=Hi...`} target="_blank"><WhatsAppIcon className="whatsapp" /></a> : ''}
                         {props.offerButton ? <NavLink to="/dashboards/pricing" target="_blank"><Button
                             className="addBtn"
