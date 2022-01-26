@@ -815,15 +815,20 @@ export default function LeadDetailsNew(props) {
     }
     const downloadPdfHandler = () => {
         console.log("download pdf");
-        setDisplay('block');
+        //setDisplay('block');
         const doc = new jsPDF("p", "pt", "a4");
-        // autoTable(doc, { html: '#leadDetails-table' })
-        // doc.save('lead_details.pdf');
-        doc.html(document.getElementById('leadDetails-table'))
-            .then(() => {
-                doc.save('lead_details.pdf');
-                setDisplay('none');
-            })
+        autoTable(doc, { html: '#leadDetails-table' })
+        autoTable(doc, { html: '#leadDetails-table1' })
+        autoTable(doc, { html: '#leadDetails-table2' })
+        autoTable(doc, { html: '#leadDetails-table3' })
+        autoTable(doc, { html: '#leadDetails-table4' })
+        autoTable(doc, { html: '#leadDetails-table5' })
+        doc.save('lead_details.pdf');
+        // doc.html(document.getElementById('leadDetails-table'))
+        //     .then(() => {
+        //         doc.save('lead_details.pdf');
+        //         setDisplay('none');
+        //     })
     }
     const checkboxHandler = (e) => {
         setChecked(e.target.checked);
@@ -2563,11 +2568,11 @@ export default function LeadDetailsNew(props) {
                     </Alert>
                 </Snackbar>
             </div>
-            <div id="leadDetails-table" style={{ display }} >
+            <div  style={{ display }} >
                 <div className='tableName'>
                     <div className='tableText'>Personal &amp; Loan Details</div>
                 </div>
-                <table className='pdfTable'>
+                <table className='pdfTable' id="leadDetails-table" style={{display:'none'}}>
                     <tr>
                         <td className='tableTitle'>Lead Id</td>
                         <td className='tableDescription'>{leadId}</td>
@@ -2636,7 +2641,7 @@ export default function LeadDetailsNew(props) {
                 <div className='tableName'>
                     <div className='tableText'>Current Residetial Details</div>
                 </div>
-                <table className='pdfTable'>
+                <table className='pdfTable' id="leadDetails-table1" style={{display:'none'}}>
                     <tr>
                         <td className='tableTitle'>Address 1</td>
                         <td className='tableDescription'>{addressOne}</td>
@@ -2673,7 +2678,7 @@ export default function LeadDetailsNew(props) {
                 <div className='tableName'>
                     <div className='tableText'>Permanent Residetial Details</div>
                 </div>
-                <table className='pdfTable'>
+                <table className='pdfTable' id="leadDetails-table2" style={{display:'none'}}>
                     <tr>
                         <td className='tableTitle'>Address 1</td>
                         <td className='tableDescription'>{permanentAddressOne}</td>
@@ -2710,7 +2715,7 @@ export default function LeadDetailsNew(props) {
                 <div className='tableName'>
                     <div className='tableText'>Employment &amp; Income Details</div>
                 </div>
-                <table className='pdfTable'>
+                <table className='pdfTable' id="leadDetails-table3" style={{display:'none'}}>
                     <tr>
                         <td className='tableTitle'>Employment Type</td>
                         <td className='tableDescription'>{employmentType}</td>
@@ -2771,7 +2776,7 @@ export default function LeadDetailsNew(props) {
                 <div className='tableName'>
                     <div className='tableText'>Obligation Details</div>
                 </div>
-                <table className='pdfTable'>
+                <table className='pdfTable' id="leadDetails-table4" style={{display:'none'}}>
                     <tr>
                         <td className='tableTitle'>Total EMI Exclude Credit Card</td>
                         <td className='tableDescription'>{currentEMI}</td>
@@ -2792,7 +2797,7 @@ export default function LeadDetailsNew(props) {
                     <div className='tableName'>
                     <div className='tableText'>Reference Details</div>
                 </div>
-                <table className='pdfTable'>
+                <table className='pdfTable' id="leadDetails-table5" style={{display:'none'}}>
                     <tr>
                         <td className='tableTitle'>Relative's First Name</td>
                         <td className='tableDescription'>{ref1FirstName}</td>
