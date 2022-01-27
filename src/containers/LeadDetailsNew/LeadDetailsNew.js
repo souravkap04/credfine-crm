@@ -2680,7 +2680,7 @@ export default function LeadDetailsNew(props) {
                         <td className='tableDescription'>{currentResidentType}</td>
                     </tr>
                     <tr>
-                        <td className='tableTitle'>Curent Address Vintage</td>
+                        <td className='tableTitle'>Current Address Vintage</td>
                         <td className='tableDescription'>{currentAddressVintage}</td>
                     </tr>
                 </table>    
