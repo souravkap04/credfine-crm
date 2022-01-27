@@ -11,11 +11,13 @@ import { NavLink, useHistory, useLocation } from 'react-router-dom';
 import { Button } from '@material-ui/core';
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
 import WhatsAppIcon from '@material-ui/icons/WhatsApp';
+import EmailIcon from '@material-ui/icons/Email';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import Badge from '@material-ui/core/Badge';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { haloocomNoidaDialerApi, haloocomMumbaiDialerApi } from '../../global/callApi';
 export default function PageLayerSection(props) {
+    const shareurl = "https://mail.google.com/mail/u/0/#inbox";
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [searchInput, setSearchInput] = useState("");
     let history = useHistory()
@@ -162,6 +164,17 @@ export default function PageLayerSection(props) {
                         >
                             Add New Lead
                         </Button> : null}
+                        {props.isShareThroughEmail && (profileData.user_roles[0].user_type === 4 || profileData.user_roles[0].user_type === 6) ? 
+                        <a href={`mailto:${props.emailId}?body=Hello Sir/Ma’am
+
+                        Please find attached PDF of your Personal  and loan application details. kindly check all information captured is correct or not. 
+                        
+                        If all details are correct then kindly reply ok to process.
+                        
+                        If any correction needed please reply with correct details. 
+                        
+                        Regards 
+                        Team CredFine`} target="_blank"><EmailIcon/></a> : ''}
                         {props.isDownloadPdf && (profileData.user_roles[0].user_type === 4 || profileData.user_roles[0].user_type === 6) ? <IconButton className="pdfBtn" onClick={props.downloadPdf}><GetAppIcon/></IconButton> : ''}
                         {props.isWhatsapp ? <a href={`https://api.whatsapp.com/send?phone=+91${props.whatsappNumber}&text=Hi...`} target="_blank"><WhatsAppIcon className="whatsapp" /></a> : ''}
                         {props.offerButton ? <NavLink to="/dashboards/pricing" target="_blank"><Button

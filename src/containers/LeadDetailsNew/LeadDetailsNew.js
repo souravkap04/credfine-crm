@@ -859,7 +859,7 @@ export default function LeadDetailsNew(props) {
         }
     }
     return (
-        <PageLayerSection isDisplaySearchBar={true} pageTitle="Lead Details" className={classes.scrollEnable} offerButton={true} isWhatsapp={true} whatsappNumber={mobileNo} endAutoDialerBtn={true} endAutoDialerClick={() => endAutoDialerBtnHandler()} ActualEmiCalculate={openCalculator} isDownloadPdf={true} downloadPdf={() => downloadPdfHandler()}>
+        <PageLayerSection isDisplaySearchBar={true} pageTitle="Lead Details" className={classes.scrollEnable} offerButton={true} isWhatsapp={true} whatsappNumber={mobileNo} endAutoDialerBtn={true} endAutoDialerClick={() => endAutoDialerBtnHandler()} ActualEmiCalculate={openCalculator} isDownloadPdf={true} downloadPdf={() => downloadPdfHandler()} isShareThroughEmail={true} emailId={email}>
             <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
             {/* Errors SnackBars Start */}
             <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={hangUpSnacks} autoHideDuration={1500} onClose={disableHangUpSnacks}>
