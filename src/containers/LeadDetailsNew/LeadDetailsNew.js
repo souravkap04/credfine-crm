@@ -193,7 +193,6 @@ export default function LeadDetailsNew(props) {
     const [ref2FirstName, setRef2FirstName] = useState("");
     const [ref2LastName, setRef2LastName] = useState("");
     const [ref2MobileNo, setRef2MobileNo] = useState("");
-    const [display, setDisplay] = useState("none");
     const [status, setStatus] = useState('');
     const [subStatus, setSubStatus] = useState([]);
     const [loanType, setLoanType] = useState("");
@@ -814,21 +813,37 @@ export default function LeadDetailsNew(props) {
         localStorage.removeItem('auto_dialer');
     }
     const downloadPdfHandler = () => {
-        console.log("download pdf");
-        //setDisplay('block');
         const doc = new jsPDF("p", "pt", "a4");
-        autoTable(doc, { html: '#leadDetails-table' })
-        autoTable(doc, { html: '#leadDetails-table1' })
-        autoTable(doc, { html: '#leadDetails-table2' })
-        autoTable(doc, { html: '#leadDetails-table3' })
-        autoTable(doc, { html: '#leadDetails-table4' })
-        autoTable(doc, { html: '#leadDetails-table5' })
+        doc.autoTable({ 
+            html: '#leadDetails-table' ,
+            theme:"grid",
+            didDrawCell:function(data){
+                doc.setFontSize(15);
+                doc.setTextColor(0);
+                doc.text("Customer Personal And Loan Details", data.settings.margin.left, 22);            
+             }
+        })
+        doc.autoTable({ 
+            html: '#leadDetails-table1',
+            theme:'grid',
+        })
+        doc.autoTable({
+             html: '#leadDetails-table2',
+            theme:'grid'
+        })
+        doc.autoTable({
+             html: '#leadDetails-table3',
+            theme:'grid'
+        })
+        doc.autoTable({
+             html: '#leadDetails-table4',
+            theme:'grid'
+        })
+        doc.autoTable({
+             html: '#leadDetails-table5',
+            theme:'grid'
+        })
         doc.save('lead_details.pdf');
-        // doc.html(document.getElementById('leadDetails-table'))
-        //     .then(() => {
-        //         doc.save('lead_details.pdf');
-        //         setDisplay('none');
-        //     })
     }
     const checkboxHandler = (e) => {
         setChecked(e.target.checked);
@@ -965,7 +980,7 @@ export default function LeadDetailsNew(props) {
                                         select
                                         className="textField"
                                         id="outlined-full-width"
-                                        label="Tenure in years"
+                                        label=" Req Tenure in years"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
@@ -994,7 +1009,7 @@ export default function LeadDetailsNew(props) {
                                     <TextField
                                         className="textField"
                                         id="outlined-full-width"
-                                        label="Roi %"
+                                        label="Required Roi %"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
@@ -2568,10 +2583,7 @@ export default function LeadDetailsNew(props) {
                     </Alert>
                 </Snackbar>
             </div>
-            <div  style={{ display }} >
-                <div className='tableName'>
-                    <div className='tableText'>Personal &amp; Loan Details</div>
-                </div>
+            <div>
                 <table className='pdfTable' id="leadDetails-table" style={{display:'none'}}>
                     <tr>
                         <td className='tableTitle'>Lead Id</td>
@@ -2586,11 +2598,11 @@ export default function LeadDetailsNew(props) {
                         <td className='tableDescription'>{loanAmount}</td>
                     </tr>
                     <tr>
-                        <td className='tableTitle'>Tenure In Years</td>
+                        <td className='tableTitle'>Req Tenure In Years</td>
                         <td className='tableDescription'>{tenure}</td>
                     </tr>
                     <tr>
-                        <td className='tableTitle'>ROI</td>
+                        <td className='tableTitle'>Required ROI</td>
                         <td className='tableDescription'>{Roi}</td>
                     </tr>
                     <tr>
@@ -2638,36 +2650,33 @@ export default function LeadDetailsNew(props) {
                         <td className='tableDescription'>{adhaarNo}</td>
                     </tr>
                 </table>
-                <div className='tableName'>
-                    <div className='tableText'>Current Residetial Details</div>
-                </div>
                 <table className='pdfTable' id="leadDetails-table1" style={{display:'none'}}>
                     <tr>
-                        <td className='tableTitle'>Address 1</td>
+                        <td className='tableTitle'>Current Address 1</td>
                         <td className='tableDescription'>{addressOne}</td>
                     </tr>
                     <tr>
-                        <td className='tableTitle'>Address 2</td>
+                        <td className='tableTitle'>Current Address 2</td>
                         <td className='tableDescription'>{addressTwo}</td>
                     </tr>
                     <tr>
-                        <td className='tableTitle'>Address 3</td>
+                        <td className='tableTitle'>Current Address 3</td>
                         <td className='tableDescription'>{addressThree}</td>
                     </tr>
                     <tr>
-                        <td className='tableTitle'>Pincode</td>
+                        <td className='tableTitle'>Current Pincode</td>
                         <td className='tableDescription'>{pincode}</td>
                     </tr>
                     <tr>
-                        <td className='tableTitle'>City</td>
+                        <td className='tableTitle'>Current City</td>
                         <td className='tableDescription'>{city}</td>
                     </tr>
                     <tr>
-                        <td className='tableTitle'>State</td>
+                        <td className='tableTitle'>Current State</td>
                         <td className='tableDescription'>{states}</td>
                     </tr>
                     <tr>
-                        <td className='tableTitle'>Residence Type</td>
+                        <td className='tableTitle'>Current Residence Type</td>
                         <td className='tableDescription'>{currentResidentType}</td>
                     </tr>
                     <tr>
@@ -2675,36 +2684,33 @@ export default function LeadDetailsNew(props) {
                         <td className='tableDescription'>{currentAddressVintage}</td>
                     </tr>
                 </table>    
-                <div className='tableName'>
-                    <div className='tableText'>Permanent Residetial Details</div>
-                </div>
                 <table className='pdfTable' id="leadDetails-table2" style={{display:'none'}}>
                     <tr>
-                        <td className='tableTitle'>Address 1</td>
+                        <td className='tableTitle'>Permanent Address 1</td>
                         <td className='tableDescription'>{permanentAddressOne}</td>
                     </tr>
                     <tr>
-                        <td className='tableTitle'>Address 2</td>
+                        <td className='tableTitle'>Permanent Address 2</td>
                         <td className='tableDescription'>{permanentAddressTwo}</td>
                     </tr>
                     <tr>
-                        <td className='tableTitle'>Address 3</td>
+                        <td className='tableTitle'>Permanent Address 3</td>
                         <td className='tableDescription'>{permanentAddressThree}</td>
                     </tr>
                     <tr>
-                        <td className='tableTitle'>Pincode</td>
+                        <td className='tableTitle'>Permanent Pincode</td>
                         <td className='tableDescription'>{permanentPincode}</td>
                     </tr>
                     <tr>
-                        <td className='tableTitle'>City</td>
+                        <td className='tableTitle'>Permanent City</td>
                         <td className='tableDescription'>{permanentCity}</td>
                     </tr>
                     <tr>
-                        <td className='tableTitle'>State</td>
+                        <td className='tableTitle'>Permanent State</td>
                         <td className='tableDescription'>{permanentStates}</td>
                     </tr>
                     <tr>
-                        <td className='tableTitle'>Residence Type</td>
+                        <td className='tableTitle'>Permanent Residence Type</td>
                         <td className='tableDescription'>{permanentResidentType}</td>
                     </tr>
                     <tr>
@@ -2712,9 +2718,6 @@ export default function LeadDetailsNew(props) {
                         <td className='tableDescription'>{permanentAddressVintage}</td>
                     </tr>
                 </table>
-                <div className='tableName'>
-                    <div className='tableText'>Employment &amp; Income Details</div>
-                </div>
                 <table className='pdfTable' id="leadDetails-table3" style={{display:'none'}}>
                     <tr>
                         <td className='tableTitle'>Employment Type</td>
@@ -2773,9 +2776,6 @@ export default function LeadDetailsNew(props) {
                         <td className='tableDescription'>{salaryBankAcc}</td>
                     </tr>
                     </table>
-                <div className='tableName'>
-                    <div className='tableText'>Obligation Details</div>
-                </div>
                 <table className='pdfTable' id="leadDetails-table4" style={{display:'none'}}>
                     <tr>
                         <td className='tableTitle'>Total EMI Exclude Credit Card</td>
@@ -2794,9 +2794,6 @@ export default function LeadDetailsNew(props) {
                         <td className='tableDescription'>{creditCardbalanceTransfer}</td>
                     </tr>
                     </table>
-                    <div className='tableName'>
-                    <div className='tableText'>Reference Details</div>
-                </div>
                 <table className='pdfTable' id="leadDetails-table5" style={{display:'none'}}>
                     <tr>
                         <td className='tableTitle'>Relative's First Name</td>
