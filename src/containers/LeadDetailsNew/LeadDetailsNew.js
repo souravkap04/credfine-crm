@@ -202,7 +202,7 @@ export default function LeadDetailsNew(props) {
             maskData += 'x';
         }
         let leadPhoneNo = maskData + unMaskdata;
-        if (profileData.user_roles[0].user_type === 3 && profileData.dialer === 'HALOOCOM-Noida') {
+        if (profileData.user_roles[0].user_type === 3) {
             return leadPhoneNo;
         } else {
             return data;
