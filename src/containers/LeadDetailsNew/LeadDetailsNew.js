@@ -164,6 +164,7 @@ export default function LeadDetailsNew(props) {
     const [yearsInCurrentCity, setYearsInCurrentCity] = useState("");
     const [gender, setGender] = useState("");
     const [tenure, setTenure] = useState("");
+    const [requiredRoi,setRequiredRoi] = useState("");
     const [Roi, setRoi] = useState('');
     const [fatherName, setFatherName] = useState("");
     const [motherName, setMotherName] = useState("");
@@ -315,7 +316,8 @@ export default function LeadDetailsNew(props) {
                         setbankNBFC(response.data.lead_extra_details.bank);
                         setscheme(response.data.lead_extra_details.scheme);
                         setdisbursedDate(response.data.lead_extra_details.disbursed_date)
-                        setRoi(response.data.lead_extra_details.roi)
+                        setRoi(response.data.lead_extra_details.roi);
+                        setRequiredRoi(response.data.lead_data.data.req_roi)
                         setGender(response.data.lead_data.data.gender);
                         setTenure(response.data.lead_data.data.tenure);
                         setFatherName(response.data.lead_data.data.father_name);
@@ -414,7 +416,7 @@ export default function LeadDetailsNew(props) {
     const updateLeadDetails = async (id) => {
         let regex = /[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(pancardNo);
         if (expanded === 'panel1') {
-            if (leadId !== '' && loanType !== '' && loanAmount !== '' && name !== '' && date !== '' && pancardNo !== '' && email !== '' && mobileNo !== '' && tenure !== '' && Roi !== '') {
+            if (leadId !== '' && loanType !== '' && loanAmount !== '' && name !== '' && date !== '' && pancardNo !== '' && email !== '' && mobileNo !== '' && tenure !== '' && requiredRoi !== '') {
                 colorRed[0] = false;
                 setcolorTick(true)
             } else {
@@ -477,7 +479,7 @@ export default function LeadDetailsNew(props) {
             dob: date, monthly_income: monthlyIncome, pan_no: pancardNo, current_company_name: companyName,
             residential_pincode: pincode, city: city, state: states, current_company: currentCompany,
             employment_type: employmentType, credi_card_balance_transfer: creditCardbalanceTransfer,
-            gender: gender, tenure: tenure, father_name: fatherName, mother_name: motherName, marital_status: maritalStatus,
+            gender: gender,req_roi:requiredRoi, tenure: tenure, father_name: fatherName, mother_name: motherName, marital_status: maritalStatus,
             adhaar_no: adhaarNo, no_of_dependence: noOfDependent, address_one: addressOne, address_two: addressTwo,
             address_three: addressThree, current_address_vintage: currentAddressVintage, permanent_address_one: permanentAddressOne,
             permanent_address_two: permanentAddressTwo, permanent_address_three: permanentAddressThree, permanent_pincode: permanentPincode,
@@ -556,8 +558,8 @@ export default function LeadDetailsNew(props) {
             if (email === '') colorRedError[0] = true;
             if (loanAmount === '') colorRedError[0] = true;
             if (tenure === '') colorRedError[0] = true;
-            if (Roi === '') colorRedError[0] = true;
-            if (date === '' || pancardNo === '' || email === '' || leadId === '' || mobileNo === '' || loanType === '' || name === ''|| loanAmount === ''||tenure === ''||Roi === '')  {
+            if (requiredRoi === '') colorRedError[0] = true;
+            if (date === '' || pancardNo === '' || email === '' || leadId === '' || mobileNo === '' || loanType === '' || name === ''|| loanAmount === ''||tenure === ''||requiredRoi === '')  {
                 setcolorRed(colorRedError)
                 return;
             }
@@ -1046,11 +1048,11 @@ export default function LeadDetailsNew(props) {
                                         }}
                                         variant="outlined"
                                         size="small"
-                                        value={Roi}
+                                        value={requiredRoi}
                                         onChange={(e) => {
                                             const re = /^[0-9\b.]+$/;
                                             if (e.target.value === '' || re.test(e.target.value)) {
-                                                setRoi(e.target.value)
+                                                setRequiredRoi(e.target.value)
                                             }
                                         }}
                                     />
@@ -2627,8 +2629,8 @@ export default function LeadDetailsNew(props) {
                         <td className='tableDescription'>{tenure}</td>
                     </tr>
                     <tr>
-                        <td className='tableTitle'>Required ROI</td>
-                        <td className='tableDescription'>{Roi}</td>
+                        <td className='tableTitle'>Required ROI(%)</td>
+                        <td className='tableDescription'>{requiredRoi}</td>
                     </tr>
                     <tr>
                         <td className='tableTitle'>Full Name As Pancard</td>
@@ -2655,7 +2657,7 @@ export default function LeadDetailsNew(props) {
                         <td className='tableDescription'>{pancardNo}</td>
                     </tr>
                     <tr>
-                        <td className='tableTitle'>Email Id</td>
+                        <td className='tableTitle'>Personal Email Id</td>
                         <td className='tableDescription'>{email}</td>
                     </tr>
                     <tr>
