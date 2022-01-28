@@ -12,6 +12,13 @@ $desk: 100 / 1440;
             letter-spacing: 0.4px;
             font-size: 15.5px;
             font-family: "Lato";
+            span {
+                position: absolute;
+                color: red;
+                font-size: 22px;
+                top: -25px;
+                margin-left: 2px;
+            }
         }
         .MuiOutlinedInput-root {
             height: 48 * $desk + vw;
@@ -300,6 +307,35 @@ $desk: 100 / 1440;
         .autoScroll::-webkit-scrollbar-thumb {
             background-color: #f7f9fc;
             border-radius: 8 * $desk + vw;
+        }
+    }
+}
+#leadDetails-table {
+    table,
+    td,
+    th {
+        border: 1px solid #707070;
+        padding: 8 * $desk + vw;
+    }
+    .tableName{
+        width: 100%;
+        margin-bottom: 20 * $desk + vw;
+        margin-left: 50 * $desk + vw;
+        .tableText{
+            font-size: 20 * $desk + vw;
+        }
+    }
+    .pdfTable {
+        border-collapse: collapse;
+        margin-bottom: 20 * $desk + vw;
+        margin-left: 50 * $desk + vw;
+        .tableTitle {
+            font-size: 15 * $desk + vw;
+            width: 200 * $desk + vw;
+        }
+        .tableDescription {
+            font-size: 15 * $desk + vw;
+            width: 250 * $desk + vw;
         }
     }
 }
