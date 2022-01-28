@@ -3,7 +3,7 @@ import PageLayerSection from '../PageLayerSection/PageLayerSection';
 import './leadDetailsNew.css';
 import axios from "axios";
 import baseUrl from "../../global/api";
-import {haloocomNoidaDialerApi, haloocomMumbaiDialerApi } from "../../global/callApi";
+import { haloocomNoidaDialerApi, haloocomMumbaiDialerApi } from "../../global/callApi";
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import MuiAccordion from '@material-ui/core/Accordion';
@@ -19,6 +19,13 @@ import { Button } from '@material-ui/core';
 import CallIcon from '@material-ui/icons/Call';
 import SendIcon from '@material-ui/icons/Send';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Checkbox from '@material-ui/core/Checkbox';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 import { ListGroup } from 'react-bootstrap';
 import {
     getBank,
@@ -32,6 +39,9 @@ import EmiCalculator from '../Emicalculator/EmiCalculator';
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import moment from 'moment';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable'
+import { Column } from 'jspdf-react';
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -104,7 +114,7 @@ const AccordionSummary = withStyles({
 const AccordionDetails = withStyles((theme) => ({
     root: {
         padding: theme.spacing(2),
-        height: '19.45vw',
+        // height: '32.45vw',
         alignItems: 'flex-start'
     },
 }))(MuiAccordionDetails);
@@ -145,12 +155,46 @@ export default function LeadDetailsNew(props) {
     const [email, setEmail] = useState("");
     const [designation, setDesignation] = useState("");
     const [currentEMI, setCurrentEMI] = useState("");
+    const [noOfCreditCard, setNoOfCreditCard] = useState("");
     const [creditCardOutstanding, setCreditCardOutstanding] = useState("");
     const [creditCardbalanceTransfer, setcreditCardbalanceTransfer] = useState("");
     const [salaryCreditMode, setSalaryCreditMode] = useState("");
     const [salaryBankAcc, setSalaryBankAcc] = useState("");
     const [currentResidentType, setCurrentResidentType] = useState("");
     const [yearsInCurrentCity, setYearsInCurrentCity] = useState("");
+    const [gender, setGender] = useState("");
+    const [tenure, setTenure] = useState("");
+    const [requiredRoi,setRequiredRoi] = useState("");
+    const [Roi, setRoi] = useState('');
+    const [fatherName, setFatherName] = useState("");
+    const [motherName, setMotherName] = useState("");
+    const [noOfDependent, setNoOfDependent] = useState("");
+    const [maritalStatus, setMaritalStatus] = useState("");
+    const [adhaarNo, setAdhaarNo] = useState("");
+    const [addressOne, setAddressOne] = useState("");
+    const [addressTwo, setAddressTwo] = useState("");
+    const [addressThree, setAddressThree] = useState("");
+    const [currentAddressVintage, setCurrentAddressVintage] = useState();
+    const [permanentAddressOne, setPermanentAddressOne] = useState("");
+    const [permanentAddressTwo, setPermanentAddressTwo] = useState("");
+    const [permanentAddressThree, setPermanentAddressThree] = useState("");
+    const [permanentPincode, setPermanentPincode] = useState("");
+    const [permanentCity, setPermanentCity] = useState("");
+    const [permanentStates, setPermanentStates] = useState("");
+    const [permanentResidentType, setPermanentResidentType] = useState("");
+    const [permanentAddressVintage, setPermanentAddressVintage] = useState();
+    const [grossIncome, setGrossIncome] = useState("");
+    const [officePincode, setOfficePincode] = useState("");
+    const [officeCity, setOfficeCity] = useState("");
+    const [officeStates, setOfficeStates] = useState("");
+    const [officialMailid, setOfficialMailid] = useState("");
+    const [landlineNo, setLandlineNo] = useState("");
+    const [ref1FirstName, setRef1FirstName] = useState("");
+    const [ref1LastName, setRef1LastName] = useState("");
+    const [ref1MobileNo, setRef1MobileNo] = useState("");
+    const [ref2FirstName, setRef2FirstName] = useState("");
+    const [ref2LastName, setRef2LastName] = useState("");
+    const [ref2MobileNo, setRef2MobileNo] = useState("");
     const [status, setStatus] = useState('');
     const [subStatus, setSubStatus] = useState([]);
     const [loanType, setLoanType] = useState("");
@@ -178,6 +222,8 @@ export default function LeadDetailsNew(props) {
     const [colorTick2, setcolorTick2] = useState(false);
     const [colorTick3, setcolorTick3] = useState(false);
     const [colorTick4, setcolorTick4] = useState(false);
+    const [colorTick5, setcolorTick5] = useState(false);
+    const [colorTick6, setcolorTick6] = useState(false);
     const [appID, setappID] = useState('');
     const [bankNBFC, setbankNBFC] = useState('');
     const [scheme, setscheme] = useState('');
@@ -186,10 +232,10 @@ export default function LeadDetailsNew(props) {
     const [isLoading, setisLoading] = useState(false);
     const [isCopy, setisCopy] = useState(false);
     const [disbursedDate, setdisbursedDate] = useState(new Date());
-    const [Roi, setRoi] = useState('');
     const [disbursedError, setdisbursedError] = useState([false, false]);
-    const [colorRed, setcolorRed] = useState([false, false, false, false]);
-    const [isAutoDialerEnd,setIsAutoDialerEnd] = useState(false);
+    const [colorRed, setcolorRed] = useState([false, false, false, false, false, false]);
+    const [isAutoDialerEnd, setIsAutoDialerEnd] = useState(false);
+    const [checked, setChecked] = React.useState(false);
     let statusData = getStatusData();
     let { leadid } = useParams();
     let history = useHistory();
@@ -234,10 +280,10 @@ export default function LeadDetailsNew(props) {
                         let getDobfromApi = response.data.lead_data.data.dob;
                         let dateRegex = /^\d{4}-\d{2}-\d{2}$/.test(getDobfromApi);
                         if (dateRegex) {
-                        setDate(response.data.lead_data.data.dob);
+                            setDate(response.data.lead_data.data.dob);
                         } else {
-                        let changeDateFormat = moment(getDobfromApi, 'DDMMYYYY').format("YYYY-MM-DD");
-                        setDate(changeDateFormat);
+                            let changeDateFormat = moment(getDobfromApi, 'DDMMYYYY').format("YYYY-MM-DD");
+                            setDate(changeDateFormat);
                         }
                         setMobileNo(response.data.lead_data.phone_no);
                         setStatus(response.data.lead_data.status);
@@ -270,7 +316,40 @@ export default function LeadDetailsNew(props) {
                         setbankNBFC(response.data.lead_extra_details.bank);
                         setscheme(response.data.lead_extra_details.scheme);
                         setdisbursedDate(response.data.lead_extra_details.disbursed_date)
-                        setRoi(response.data.lead_extra_details.roi)
+                        setRoi(response.data.lead_extra_details.roi);
+                        setRequiredRoi(response.data.lead_data.data.req_roi)
+                        setGender(response.data.lead_data.data.gender);
+                        setTenure(response.data.lead_data.data.tenure);
+                        setFatherName(response.data.lead_data.data.father_name);
+                        setMotherName(response.data.lead_data.data.mother_name);
+                        setMaritalStatus(response.data.lead_data.data.marital_status);
+                        setNoOfDependent(response.data.lead_data.data.no_of_dependence);
+                        setAdhaarNo(response.data.lead_data.data.adhaar_no);
+                        setAddressOne(response.data.lead_data.data.address_one);
+                        setAddressTwo(response.data.lead_data.data.address_two);
+                        setAddressThree(response.data.lead_data.data.address_three);
+                        setCurrentAddressVintage(response.data.lead_data.data.current_address_vintage);
+                        setPermanentAddressOne(response.data.lead_data.data.permanent_address_one);
+                        setPermanentAddressTwo(response.data.lead_data.data.permanent_address_two);
+                        setPermanentAddressThree(response.data.lead_data.data.permanent_address_three);
+                        setPermanentCity(response.data.lead_data.data.permanent_city);
+                        setPermanentStates(response.data.lead_data.data.permanent_state);
+                        setPermanentPincode(response.data.lead_data.data.permanent_pincode);
+                        setPermanentResidentType(response.data.lead_data.data.permanent_resident_Type);
+                        setPermanentAddressVintage(response.data.lead_data.data.permanent_address_vintage);
+                        setGrossIncome(response.data.lead_data.data.gross_income);
+                        setOfficeCity(response.data.lead_data.data.office_city);
+                        setOfficeStates(response.data.lead_data.data.office_state);
+                        setOfficePincode(response.data.lead_data.data.office_pincode);
+                        setOfficialMailid(response.data.lead_data.data.official_mail);
+                        setLandlineNo(response.data.lead_data.data.landline_no);
+                        setNoOfCreditCard(response.data.lead_data.data.no_of_creditcard);
+                        setRef1FirstName(response.data.lead_data.data.ref1_first_name);
+                        setRef1LastName(response.data.lead_data.data.ref1_last_name);
+                        setRef1MobileNo(response.data.lead_data.data.ref1_mobile_no);
+                        setRef2FirstName(response.data.lead_data.data.ref2_first_name);
+                        setRef2LastName(response.data.lead_data.data.ref2_last_name);
+                        setRef2MobileNo(response.data.lead_data.data.ref2_mobile_no);
                         setisLoading(false)
                         if (response.data.lead_data.lead_crm_id !== '' && response.data.lead_data.loan_type !== '' && response.data.lead_data.loan_amount !== '' && response.data.lead_data.name !== '' && response.data.lead_data["data"].dob !== '' && response.data.eligibility_data.pan_no !== '' && response.data.eligibility_data.email_id !== '' && response.data.lead_data.phone_no !== '') {
                             setcolorTick(true)
@@ -278,11 +357,14 @@ export default function LeadDetailsNew(props) {
                         if (response.data.lead_data["data"].residential_pincode !== '' && response.data.lead_data["data"].city !== '' && response.data.lead_data["data"].state !== '' && response.data.eligibility_data.residence_type !== '') {
                             setcolorTick2(true)
                         }
-                        if (response.data.lead_data["data"].employment_type !== '' && response.data.lead_data["data"].current_company_name !== '' && response.data.eligibility_data.designation !== '' && response.data.eligibility_data.current_work_exp !== '' && response.data.eligibility_data.total_work_exp !== '' && response.data.lead_data["data"].monthly_income !== '' && response.data.eligibility_data.salary_mode !== '' && response.data.eligibility_data.salary_bank !== '') {
+                        if (response.data.lead_data["data"].permanent_pincode !== '' && response.data.lead_data["data"].permanent_city !== '' && response.data.lead_data['data'].permanent_state!== '' && response.data.lead_data['data'].permanent_resident_Type) {
                             setcolorTick3(true)
                         }
-                        if (response.data.eligibility_data.current_emi !== '' && response.data.eligibility_data.credit_card_outstanding !== '' && response.data.lead_data["data"].credi_card_balance_transfer !== '') {
+                        if (response.data.lead_data["data"].employment_type !== '' && response.data.lead_data["data"].current_company_name !== '' && response.data.eligibility_data.designation !== '' && response.data.eligibility_data.current_work_exp !== '' && response.data.eligibility_data.total_work_exp !== '' && response.data.lead_data["data"].monthly_income !== '' && response.data.eligibility_data.salary_mode !== '' && response.data.eligibility_data.salary_bank !== '') {
                             setcolorTick4(true)
+                        }
+                        if (response.data.eligibility_data.current_emi !== '' && response.data.eligibility_data.credit_card_outstanding !== '' && response.data.lead_data["data"].credi_card_balance_transfer !== '') {
+                            setcolorTick5(true)
                         }
                     });
             } catch (error) {
@@ -334,7 +416,7 @@ export default function LeadDetailsNew(props) {
     const updateLeadDetails = async (id) => {
         let regex = /[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(pancardNo);
         if (expanded === 'panel1') {
-            if (leadId !== '' && loanType !== '' && loanAmount !== '' && name !== '' && date !== '' && pancardNo !== '' && email !== '' && mobileNo !== '') {
+            if (leadId !== '' && loanType !== '' && loanAmount !== '' && name !== '' && date !== '' && pancardNo !== '' && email !== '' && mobileNo !== '' && tenure !== '' && requiredRoi !== '') {
                 colorRed[0] = false;
                 setcolorTick(true)
             } else {
@@ -348,7 +430,7 @@ export default function LeadDetailsNew(props) {
             setExpanded('panel2')
         }
         if (expanded === 'panel2') {
-            if (pincode !== '' && city !== '' && states !== '' && currentResidentType !== '') {
+            if (pincode !== '' && city !== '' && states !== '' && currentResidentType !== '' && addressOne !== '' && addressTwo !== '' && addressThree !== '' && currentAddressVintage !== '') {
                 colorRed[1] = false;
                 setcolorTick2(true)
             } else {
@@ -357,27 +439,55 @@ export default function LeadDetailsNew(props) {
             setExpanded('panel3')
         }
         if (expanded === 'panel3') {
-            if (employmentType !== '' && companyName !== '' && designation !== '' && currentWorkExp !== '' && totalWorkExp !== '' && monthlyIncome !== '' && salaryCreditMode !== '' && salaryBankAcc !== '') {
+            if (permanentPincode !== '' && permanentCity !== '' && permanentStates !== '' && permanentResidentType !== '' && permanentAddressOne !== '' && permanentAddressTwo !== '' && permanentAddressTwo !== '' && permanentAddressThree !== '' && permanentAddressVintage !== '') {
                 colorRed[2] = false;
                 setcolorTick3(true)
             } else {
                 setcolorTick3(false)
             }
             setExpanded('panel4')
-
         }
         if (expanded === 'panel4') {
-            if (currentEMI !== '' && creditCardOutstanding !== '' && creditCardbalanceTransfer !== '') {
+            if (employmentType !== '' && companyName !== '' && designation !== '' && currentWorkExp !== '' && totalWorkExp !== '' && monthlyIncome !== '' && salaryCreditMode !== '' && salaryBankAcc !== '') {
                 colorRed[3] = false;
                 setcolorTick4(true)
             } else {
                 setcolorTick4(false)
             }
+            setExpanded('panel5')
+
+        }
+        if (expanded === 'panel5') {
+            if (currentEMI !== '') {
+                colorRed[4] = false;
+                setcolorTick5(true)
+            } else {
+                setcolorTick6(false)
+            }
+            setExpanded('panel6')
+        }
+        if (expanded === 'panel6') {
+            if (ref1FirstName !== '' && ref1LastName !== '' && ref1MobileNo !== '') {
+                colorRed[5] = false;
+                setcolorTick6(true)
+            } else {
+                setcolorTick6(false)
+            }
             setExpanded('panel1')
         }
         let data = {
-            dob: date, monthly_income: monthlyIncome,pan_no:pancardNo, current_company_name: companyName,
-            residential_pincode: pincode, city: city, state: states, current_company: currentCompany, employment_type: employmentType, credi_card_balance_transfer: creditCardbalanceTransfer
+            dob: date, monthly_income: monthlyIncome, pan_no: pancardNo, current_company_name: companyName,
+            residential_pincode: pincode, city: city, state: states, current_company: currentCompany,
+            employment_type: employmentType, credi_card_balance_transfer: creditCardbalanceTransfer,
+            gender: gender,req_roi:requiredRoi, tenure: tenure, father_name: fatherName, mother_name: motherName, marital_status: maritalStatus,
+            adhaar_no: adhaarNo, no_of_dependence: noOfDependent, address_one: addressOne, address_two: addressTwo,
+            address_three: addressThree, current_address_vintage: currentAddressVintage, permanent_address_one: permanentAddressOne,
+            permanent_address_two: permanentAddressTwo, permanent_address_three: permanentAddressThree, permanent_pincode: permanentPincode,
+            permanent_city: permanentCity, permanent_state: permanentStates, permanent_address_vintage: permanentAddressVintage,
+            gross_income: grossIncome, office_pincode: officePincode, office_city: officeCity, office_state: officeStates,
+            official_mail: officialMailid, landline_no: landlineNo, no_of_creditcard: noOfCreditCard, ref1_first_name: ref1FirstName,
+            ref1_last_name: ref1LastName, ref1_mobile_no: ref1MobileNo, ref2_first_name: ref2FirstName, ref2_last_name: ref2LastName,
+            ref2_mobile_no: ref2MobileNo, permanent_resident_Type: permanentResidentType
         };
         let lead_data = {
             lead_crm_id: leadId, loan_amount: loanAmount,
@@ -439,10 +549,17 @@ export default function LeadDetailsNew(props) {
                 return;
             }
             let colorRedError = [...colorRed];
+            if (leadId === '') colorRedError[0] = true;
+            if (mobileNo === '') colorRedError[0] = true;
+            if (loanType === '') colorRedError[0] = true;
+            if (name === '') colorRedError[0] = true;
             if (date === '') colorRedError[0] = true;
             if (pancardNo === '') colorRedError[0] = true;
             if (email === '') colorRedError[0] = true;
-            if (date === '' || pancardNo === '' || email === '') {
+            if (loanAmount === '') colorRedError[0] = true;
+            if (tenure === '') colorRedError[0] = true;
+            if (requiredRoi === '') colorRedError[0] = true;
+            if (date === '' || pancardNo === '' || email === '' || leadId === '' || mobileNo === '' || loanType === '' || name === ''|| loanAmount === ''||tenure === ''||requiredRoi === '')  {
                 setcolorRed(colorRedError)
                 return;
             }
@@ -450,7 +567,11 @@ export default function LeadDetailsNew(props) {
             if (city === '') colorRedError[1] = true;
             if (states === '') colorRedError[1] = true;
             if (currentResidentType === '') colorRedError[1] = true;
-            if (pincode === '' || city === '' || states === '' || currentResidentType === '') {
+            if (addressOne === '') colorRedError[1] = true;
+            if (addressTwo === '') colorRedError[1] = true;
+            if (addressThree === '') colorRedError[1] = true;
+            if (currentAddressVintage === '') colorRedError[1] = true
+            if (pincode === '' || city === '' || states === '' || currentResidentType === '' || addressOne === '' || addressTwo === '' || addressThree === '' || currentAddressVintage === '') {
                 setcolorRed(colorRedError)
                 return;
             }
@@ -467,9 +588,19 @@ export default function LeadDetailsNew(props) {
                 return;
             }
             if (currentEMI === '') colorRedError[3] = true;
-            if (creditCardOutstanding === '') colorRedError[3] = true;
-            if (creditCardbalanceTransfer === '') colorRedError[3] = true;
-            if (currentEMI === '' || creditCardOutstanding === '' || creditCardbalanceTransfer === '') {
+            if (currentEMI === '') {
+                setcolorRed(colorRedError)
+                return;
+            }
+            if (permanentPincode === '') colorRedError[4] = true;
+            if (permanentCity === '') colorRedError[4] = true;
+            if (permanentStates === '') colorRedError[4] = true;
+            if (permanentResidentType === '') colorRedError[4] = true;
+            if (permanentAddressOne === '') colorRedError[4] = true;
+            if (permanentAddressTwo === '') colorRedError[4] = true;
+            if (permanentAddressThree === '') colorRedError[4] = true;
+            if (permanentAddressVintage === '') colorRedError[4] = true
+            if (permanentPincode === '' || permanentCity === '' || permanentStates === '' || permanentResidentType === '' || permanentAddressOne === '' || permanentAddressTwo === '' || permanentAddressThree === '' || permanentAddressVintage === '') {
                 setcolorRed(colorRedError)
                 return;
             }
@@ -559,6 +690,38 @@ export default function LeadDetailsNew(props) {
                 })
         }
     }
+    const getPermanentPincodeHandler = async (e) => {
+        setPermanentPincode(e.target.value);
+        let item = { pincode: e.target.value };
+        const header = { 'Content-Type': 'application/json' }
+        if (e.target.value >= 6) {
+            await axios.post(`${baseUrl}/common/fetchPincode/`, item, { header })
+                .then((response) => {
+                    if (response.data[0].pin === e.target.value) {
+                        setPermanentCity(response.data[0].city_name);
+                        setPermanentStates(response.data[0].state_name);
+                    }
+                }).catch((error) => {
+                    console.log(error)
+                })
+        }
+    }
+    const getOfficePincodeHandler = async (e) => {
+        setOfficePincode(e.target.value);
+        let item = { pincode: e.target.value };
+        const header = { 'Content-Type': 'application/json' }
+        if (e.target.value >= 6) {
+            await axios.post(`${baseUrl}/common/fetchPincode/`, item, { header })
+                .then((response) => {
+                    if (response.data[0].pin === e.target.value) {
+                        setOfficeCity(response.data[0].city_name);
+                        setOfficeStates(response.data[0].state_name);
+                    }
+                }).catch((error) => {
+                    console.log(error)
+                })
+        }
+    }
     const selectCompany = (company) => {
         setCompanyName(company);
         setShowCompany(false);
@@ -579,7 +742,7 @@ export default function LeadDetailsNew(props) {
         setIsAutoDialerEnd(false);
     }
     const clickToCall = async (customerNo, leadID) => {
-         if (profileData.dialer === 'HALOOCOM-Noida') {
+        if (profileData.dialer === 'HALOOCOM-Noida') {
             await axios.post(`${haloocomNoidaDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`)
                 .then((response) => {
                     setDialerCall(true);
@@ -648,12 +811,82 @@ export default function LeadDetailsNew(props) {
         setDialerCall(false)
         setDisableHangupBtn(false)
     }
-    const endAutoDialerBtnHandler = ()=>{
+    const endAutoDialerBtnHandler = () => {
         setIsAutoDialerEnd(true);
         localStorage.removeItem('auto_dialer');
     }
+    const downloadPdfHandler = () => {
+        const doc = new jsPDF("p", "pt", "a4");
+        doc.autoTable({ 
+            html: '#leadDetails-table' ,
+            theme:"grid",
+            styles: {
+                overflow: 'linebreak',
+                columnWidth: 260,
+            },
+            didDrawCell:function(data){
+                doc.setFontSize(15);
+                doc.setTextColor(0);
+                doc.text("Customer Personal And Loan Details", data.settings.margin.left, 22);            
+             },
+        })
+        doc.autoTable({ 
+            html: '#leadDetails-table1',
+            theme:'grid',
+            styles: {
+                overflow: 'linebreak',
+                columnWidth: 260,
+            },
+        })
+        doc.autoTable({
+             html: '#leadDetails-table2',
+            theme:'grid',
+            styles: {
+                overflow: 'linebreak',
+                columnWidth: 260,
+            },
+        })
+        doc.autoTable({
+             html: '#leadDetails-table3',
+            theme:'grid',
+            styles: {
+                overflow: 'linebreak',
+                columnWidth: 260,
+            },
+        })
+        doc.autoTable({
+             html: '#leadDetails-table4',
+            theme:'grid',
+            styles: {
+                overflow: 'linebreak',
+                columnWidth: 260,
+            },
+        })
+        doc.autoTable({
+             html: '#leadDetails-table5',
+            theme:'grid',
+            styles: {
+                overflow: 'linebreak',
+                columnWidth: 260,
+            },
+        })
+        doc.save(`${name}-${leadId}.pdf`);
+    }
+    const checkboxHandler = (e) => {
+        setChecked(e.target.checked);
+        if (e.target.checked) {
+            setPermanentAddressOne(addressOne);
+            setPermanentAddressTwo(addressTwo)
+            setPermanentAddressThree(addressThree);
+            setPermanentCity(city);
+            setPermanentStates(states);
+            setPermanentPincode(pincode);
+            setPermanentResidentType(currentResidentType);
+            setPermanentAddressVintage(currentAddressVintage);
+        }
+    }
     return (
-        <PageLayerSection isDisplaySearchBar={true} pageTitle="Lead Details" className={classes.scrollEnable} offerButton={true} isWhatsapp={true} whatsappNumber={mobileNo} endAutoDialerBtn={true} endAutoDialerClick={()=>endAutoDialerBtnHandler()} ActualEmiCalculate={openCalculator}>
+        <PageLayerSection isDisplaySearchBar={true} pageTitle="Lead Details" className={classes.scrollEnable} offerButton={true} isWhatsapp={true} whatsappNumber={mobileNo} endAutoDialerBtn={true} endAutoDialerClick={() => endAutoDialerBtnHandler()} ActualEmiCalculate={openCalculator} isDownloadPdf={true} downloadPdf={() => downloadPdfHandler()} isShareThroughEmail={true} emailId={email}>
             <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
             {/* Errors SnackBars Start */}
             <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={hangUpSnacks} autoHideDuration={1500} onClose={disableHangUpSnacks}>
@@ -698,7 +931,7 @@ export default function LeadDetailsNew(props) {
                 <Grid className="accordianContainer" lg={9}>
                     <Accordion square defaultExpanded={true} expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
                         <AccordionSummary expandIcon={<ArrowRightIcon />} aria-controls="panel1d-content" id="panel1d-header">
-                            <Typography className={classes.headerText}>Personal Details</Typography>
+                            <Typography className={classes.headerText}>Personal & Loan Details</Typography>
                             {colorRed[0] ? <CheckCircleIcon className={colorRed[0] ? classes.activeColorTickRed : classes.circleTick} /> : <CheckCircleIcon className={colorTick ? classes.activeColorTick : classes.circleTick} />}
                         </AccordionSummary>
                         <AccordionDetails>
@@ -712,6 +945,7 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required: true
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -729,6 +963,7 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required: true
                                         }}
                                         SelectProps={{
                                             native: true,
@@ -754,9 +989,7 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
-                                        }}
-                                        InputProps={{
-                                            startAdornment: <InputAdornment position="start"><PersonIcon /></InputAdornment>,
+                                            required: true
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -771,13 +1004,69 @@ export default function LeadDetailsNew(props) {
                                 </Grid>
                                 <Grid lg={4}>
                                     <TextField
-                                        className="textField fullName"
+                                        select
+                                        className="textField"
                                         id="outlined-full-width"
-                                        label="Full Name"
+                                        label=" Req Tenure in years"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required: true
+                                        }}
+                                        SelectProps={{
+                                            native: true
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={tenure}
+                                        onChange={(e) => setTenure(e.target.value)}
+                                    >
+                                        <option key="" value="">Select One</option>
+                                        <option value="1 year">1 year</option>
+                                        <option value="2 years">2 years</option>
+                                        <option value="3 years">3 years</option>
+                                        <option value="4 years">4 years</option>
+                                        <option value="5 years">5 years</option>
+                                        <option value="6 years">6 years</option>
+                                        <option value="7 years">7 years</option>
+                                    </TextField>
+                                </Grid>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField"
+                                        id="outlined-full-width"
+                                        label="Required Roi %"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                            required: true
+                                        }}
+                                        inputProps={{
+                                            maxLength: 5
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={requiredRoi}
+                                        onChange={(e) => {
+                                            const re = /^[0-9\b.]+$/;
+                                            if (e.target.value === '' || re.test(e.target.value)) {
+                                                setRequiredRoi(e.target.value)
+                                            }
+                                        }}
+                                    />
+                                </Grid>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField fullName"
+                                        id="outlined-full-width"
+                                        label="Full Name as Per Pancard"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                            required: true
                                         }}
                                         InputProps={{
                                             startAdornment: <InputAdornment position="start"><PersonIcon /></InputAdornment>,
@@ -786,6 +1075,63 @@ export default function LeadDetailsNew(props) {
                                         size="small"
                                         value={name}
                                         onChange={(e) => setname(e.target.value)}
+                                    />
+                                </Grid>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField"
+                                        select
+                                        id="outlined-full-width"
+                                        label="Gender"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        SelectProps={{
+                                            native: true,
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={gender}
+                                        onChange={(e) => setGender(e.target.value)}
+                                    >
+                                        <option key="" value="">Select One</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="LGBT">LGBT</option>
+                                    </TextField>
+                                </Grid>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField fullName"
+                                        id="outlined-full-width"
+                                        label="Father's Name"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={fatherName}
+                                        onChange={(e) => setFatherName(e.target.value)}
+                                    />
+                                </Grid>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField fullName"
+                                        id="outlined-full-width"
+                                        label="Mother's Name"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={motherName}
+                                        onChange={(e) => setMotherName(e.target.value)}
                                     />
                                 </Grid>
                                 <Grid lg={4}>
@@ -799,6 +1145,7 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required: true
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -816,11 +1163,13 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required: true
                                         }}
-                                        // helperText="Invalid PAN"
+                                        inputProps={{
+                                            maxLength: 10
+                                        }}
                                         variant="outlined"
                                         size="small"
-                                        maxLength="10"
                                         value={pancardNo}
                                         onChange={(e) => setPancardNo(e.target.value.toUpperCase())}
                                     />
@@ -829,11 +1178,12 @@ export default function LeadDetailsNew(props) {
                                     <TextField
                                         className="textField"
                                         id="outlined-full-width"
-                                        label="Email ID"
+                                        label="Personal Email ID"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required: true
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -850,6 +1200,7 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required: true
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -857,8 +1208,91 @@ export default function LeadDetailsNew(props) {
                                         disabled
                                     />
                                 </Grid>
-                                <Grid lg={4} style={{ display: 'flex', alignItems: 'center' }}>
-                                    <Button onClick={() => updateLeadDetails(leadid)} className="saveAndNextBtn" color='primary' variant='contained'>SAVE &amp; NEXT</Button>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField"
+                                        select
+                                        id="outlined-full-width"
+                                        label="Marital Status"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        SelectProps={{
+                                            native: true,
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={maritalStatus}
+                                        onChange={(e) => setMaritalStatus(e.target.value)}
+                                    >
+                                        <option key="" value=""> Select One</option>
+                                        <option value="Single">Single </option>
+                                        <option value="Married">Married </option>
+                                        <option value="Divorce">Divorce</option>
+                                        <option value="Widow">Widow</option>
+                                    </TextField>
+                                </Grid>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField"
+                                        select
+                                        id="outlined-full-width"
+                                        label="No of Dependence"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        SelectProps={{
+                                            native: true,
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={noOfDependent}
+                                        onChange={(e) => setNoOfDependent(e.target.value)}
+                                    >
+                                        <option key="" value=""> Select One</option>
+                                        <option value="0">0</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="7+">7+</option>
+                                    </TextField>
+                                </Grid>
+                                <Grid container style={{ direction: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <Grid lg={4}>
+                                        <TextField
+                                            className="textField"
+                                            id="outlined-full-width"
+                                            label="Adhaar No"
+                                            style={{ margin: 8 }}
+                                            margin="normal"
+                                            InputLabelProps={{
+                                                shrink: true,
+                                            }}
+                                            inputProps={{
+                                                maxLength: 12
+                                            }}
+                                            variant="outlined"
+                                            size="small"
+                                            value={adhaarNo}
+                                            onChange={(e) => {
+                                                const re = /^[0-9\b]+$/;
+                                                if (e.target.value === '' || re.test(e.target.value)) {
+                                                    setAdhaarNo(e.target.value)
+                                                }
+                                            }}
+                                        />
+                                    </Grid>
+                                    <Grid lg={4} style={{ display: 'flex', alignItems: 'center' }}>
+                                        <Button onClick={() => updateLeadDetails(leadid)} className="saveAndNextBtn" color='primary' variant='contained'>SAVE &amp; NEXT</Button>
+                                    </Grid>
                                 </Grid>
                             </Grid>
                         </AccordionDetails>
@@ -874,11 +1308,63 @@ export default function LeadDetailsNew(props) {
                                     <TextField
                                         className="textField"
                                         id="outlined-full-width"
+                                        label="Address 1"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                            required: true
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={addressOne}
+                                        onChange={(e) => setAddressOne(e.target.value)}
+                                    />
+                                </Grid>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField"
+                                        id="outlined-full-width"
+                                        label="Address 2"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                            required: true
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={addressTwo}
+                                        onChange={(e) => setAddressTwo(e.target.value)}
+                                    />
+                                </Grid>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField"
+                                        id="outlined-full-width"
+                                        label="Address 3"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                            required: true
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={addressThree}
+                                        onChange={(e) => setAddressThree(e.target.value)}
+                                    />
+                                </Grid>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField"
+                                        id="outlined-full-width"
                                         label="Pincode"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required: true
                                         }}
                                         inputProps={{
                                             maxLength: 6
@@ -898,6 +1384,7 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required: true
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -914,6 +1401,7 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required: true
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -932,6 +1420,7 @@ export default function LeadDetailsNew(props) {
                                             margin="normal"
                                             InputLabelProps={{
                                                 shrink: true,
+                                                required: true
                                             }}
                                             SelectProps={{
                                                 native: true,
@@ -949,6 +1438,37 @@ export default function LeadDetailsNew(props) {
                                             ))}
                                         </TextField>
                                     </Grid>
+                                    <Grid lg={4}>
+                                        <TextField
+                                            className="textField"
+                                            select
+                                            id="outlined-full-width"
+                                            label="Current Address Vintage"
+                                            style={{ margin: 8 }}
+                                            margin="normal"
+                                            InputLabelProps={{
+                                                shrink: true,
+                                                required: true
+                                            }}
+                                            SelectProps={{
+                                                native: true,
+                                            }}
+                                            variant="outlined"
+                                            size="small"
+                                            value={currentAddressVintage}
+                                            onChange={(e) => setCurrentAddressVintage(e.target.value)}
+                                        >
+                                            <option key="" value="">Select One</option>
+                                            <option value="0-6 months">0-6 months</option>
+                                            <option value="6-12 months">6-12 months</option>
+                                            <option value="12-24 months">12-24 months</option>
+                                            <option value="24-36 months">24-36 months</option>
+                                            <option value="36-48 months">36-48 months</option>
+                                            <option value="48-60 months">48-60 months</option>
+                                            <option value="60+ months">60+ months</option>
+                                            <option value="since birth">since birth</option>
+                                        </TextField>
+                                    </Grid>
                                     <Grid lg={4} style={{ display: 'flex', alignItems: 'center' }}>
                                         <Button className="saveAndNextBtn" color='primary' variant='contained' onClick={() => updateLeadDetails(leadid)}>SAVE &amp; NEXT</Button>
                                     </Grid>
@@ -957,9 +1477,195 @@ export default function LeadDetailsNew(props) {
                         </AccordionDetails>
                     </Accordion>
                     <Accordion square expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
-                        <AccordionSummary expandIcon={<ArrowRightIcon />} expanded={expanded === 'panel3'} onChange={handleChange('panel3')} aria-controls="panel3d-content" id="panel3d-header">
+                        <AccordionSummary expandIcon={<ArrowRightIcon />} aria-controls="panel3d-content" id="panel3d-header">
+                            <Typography className={classes.headerText}>Permanent Residential Details</Typography>
+                            {colorRed[1] ? <CheckCircleIcon className={colorRed[1] ? classes.activeColorTickRed : classes.circleTick} /> : <CheckCircleIcon className={colorTick3 ? classes.activeColorTick : classes.circleTick} />}
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Grid container style={{ justifyContent: "center", flexDirection: 'row' }}>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField"
+                                        id="outlined-full-width"
+                                        label="Address 1"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                            required: true
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={permanentAddressOne}
+                                        onChange={(e) => setPermanentAddressOne(e.target.value)}
+                                    />
+                                </Grid>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField"
+                                        id="outlined-full-width"
+                                        label="Address 2"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                            required: true
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={permanentAddressTwo}
+                                        onChange={(e) => setPermanentAddressTwo(e.target.value)}
+                                    />
+                                </Grid>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField"
+                                        id="outlined-full-width"
+                                        label="Address 3"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                            required: true
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={permanentAddressThree}
+                                        onChange={(e) => setPermanentAddressThree(e.target.value)}
+                                    />
+                                </Grid>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField"
+                                        id="outlined-full-width"
+                                        label="Pincode"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                            required: true
+                                        }}
+                                        inputProps={{
+                                            maxLength: 6
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={permanentPincode}
+                                        onChange={(e) => getPermanentPincodeHandler(e)}
+                                    />
+                                </Grid>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField"
+                                        id="outlined-full-width"
+                                        label="City"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                            required: true
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={permanentCity}
+                                        disabled
+                                    />
+                                </Grid>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField"
+                                        id="outlined-full-width"
+                                        label="State"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                            required: true
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={permanentStates}
+                                        disabled
+                                    />
+                                </Grid>
+                                <Grid container style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }} >
+                                    <Grid lg={4}>
+                                        <TextField
+                                            className="textField"
+                                            id="outlined-full-width"
+                                            select
+                                            label="Resident Type"
+                                            style={{ margin: 8 }}
+                                            margin="normal"
+                                            InputLabelProps={{
+                                                shrink: true,
+                                                required: true
+                                            }}
+                                            SelectProps={{
+                                                native: true,
+                                            }}
+                                            variant="outlined"
+                                            size="small"
+                                            value={permanentResidentType}
+                                            onChange={(e) => setPermanentResidentType(e.target.value)}
+                                        >
+                                            <option key="" value="">
+                                                Select One
+                                            </option>
+                                            {residentType.map((resident) => (
+                                                <option value={resident}>{resident}</option>
+                                            ))}
+                                        </TextField>
+                                    </Grid>
+                                    <Grid lg={4}>
+                                        <TextField
+                                            className="textField"
+                                            select
+                                            id="outlined-full-width"
+                                            label="Permanent Address Vintage"
+                                            style={{ margin: 8 }}
+                                            margin="normal"
+                                            InputLabelProps={{
+                                                shrink: true,
+                                                required: true
+                                            }}
+                                            SelectProps={{
+                                                native: true
+                                            }}
+                                            variant="outlined"
+                                            size="small"
+                                            value={permanentAddressVintage}
+                                            onChange={(e) => setPermanentAddressVintage(e.target.value)}
+                                        >
+                                            <option key="" value="">Select One</option>
+                                            <option value="0-6 months">0-6 months</option>
+                                            <option value="6-12 months">6-12 months</option>
+                                            <option value="12-24 months">12-24 months</option>
+                                            <option value="24-36 months">24-36 months</option>
+                                            <option value="36-48 months">36-48 months</option>
+                                            <option value="48-60 months">48-60 months</option>
+                                            <option value="60+ months">60+ months</option>
+                                            <option value="since birth">since birth</option>
+                                        </TextField>
+                                    </Grid>
+                                    <Grid lg={4} style={{ display: 'flex', alignItems: 'center' }}>
+                                        <Button className="saveAndNextBtn" color='primary' variant='contained' onClick={() => updateLeadDetails(leadid)}>SAVE &amp; NEXT</Button>
+                                    </Grid>
+                                    <Grid container style={{ display: 'flex', alignItems: 'center', }}>
+                                        <Checkbox
+                                            checked={checked}
+                                            onChange={(e) => checkboxHandler(e)}
+                                        />
+                                        <div>Click if Permanent Address Same As Current Address</div>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                        </AccordionDetails>
+                    </Accordion>
+                    <Accordion square expanded={expanded === 'panel4'} onChange={handleChange('panel4')}>
+                        <AccordionSummary expandIcon={<ArrowRightIcon />} expanded={expanded === 'panel4'} onChange={handleChange('panel4')} aria-controls="panel4d-content" id="panel4d-header">
                             <Typography className={classes.headerText}>Employment &amp; Income Details</Typography>
-                            {colorRed[2] ? <CheckCircleIcon className={colorRed[2] ? classes.activeColorTickRed : classes.circleTick} /> : <CheckCircleIcon className={colorTick3 ? classes.activeColorTick : classes.circleTick} />}
+                            {colorRed[2] ? <CheckCircleIcon className={colorRed[2] ? classes.activeColorTickRed : classes.circleTick} /> : <CheckCircleIcon className={colorTick4 ? classes.activeColorTick : classes.circleTick} />}
                         </AccordionSummary>
                         <AccordionDetails>
                             <Grid container style={{ flexDirection: "row", justifyContent: "center" }}>
@@ -973,6 +1679,7 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required: true
                                         }}
                                         SelectProps={{
                                             native: true,
@@ -997,6 +1704,7 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required: true
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -1020,6 +1728,7 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required: true
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -1037,6 +1746,7 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required: true
                                         }}
                                         SelectProps={{
                                             native: true
@@ -1067,6 +1777,7 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required: true
                                         }}
                                         SelectProps={{
                                             native: true
@@ -1091,11 +1802,33 @@ export default function LeadDetailsNew(props) {
                                     <TextField
                                         className="textField"
                                         id="outlined-full-width"
+                                        label="Gross Income"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={grossIncome}
+                                        onChange={(e) => {
+                                            const re = /^[0-9\b]+$/;
+                                            if (e.target.value === '' || re.test(e.target.value)) {
+                                                setGrossIncome(e.target.value)
+                                            }
+                                        }}
+                                    />
+                                </Grid>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField"
+                                        id="outlined-full-width"
                                         label="Net Monthly Income"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required: true
                                         }}
                                         inputProps={{
                                             maxLength: 7
@@ -1114,6 +1847,87 @@ export default function LeadDetailsNew(props) {
                                 <Grid lg={4}>
                                     <TextField
                                         className="textField"
+                                        id="outlined-full-width"
+                                        label="Office Pincode"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={officePincode}
+                                        onChange={(e) => getOfficePincodeHandler(e)}
+                                    />
+                                </Grid>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField"
+                                        id="outlined-full-width"
+                                        label="Office city"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={officeCity}
+                                        disabled
+
+                                    />
+                                </Grid>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField"
+                                        id="outlined-full-width"
+                                        label="Office State"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={officeStates}
+                                        disabled
+                                    />
+                                </Grid>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField"
+                                        id="outlined-full-width"
+                                        label="Official Mail Id"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={officialMailid}
+                                        onChange={(e) => setOfficialMailid(e.target.value)}
+                                    />
+                                </Grid>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField"
+                                        id="outlined-full-width"
+                                        label="Landline No"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={landlineNo}
+                                        onChange={(e) => setLandlineNo(e.target.value)}
+                                    />
+                                </Grid>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField"
                                         select
                                         id="outlined-full-width"
                                         label="Mode of Salary"
@@ -1121,6 +1935,7 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required: true
                                         }}
                                         SelectProps={{
                                             native: true,
@@ -1146,6 +1961,7 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required: true
                                         }}
                                         SelectProps={{
                                             native: true,
@@ -1167,10 +1983,10 @@ export default function LeadDetailsNew(props) {
                             </Grid>
                         </AccordionDetails>
                     </Accordion>
-                    <Accordion square expanded={expanded === 'panel4'} onChange={handleChange('panel4')}>
-                        <AccordionSummary expandIcon={<ArrowRightIcon />} expanded={expanded === 'panel4'} onChange={handleChange('panel4')} aria-controls="panel4d-content" id="panel4-header">
+                    <Accordion square expanded={expanded === 'panel5'} onChange={handleChange('panel5')}>
+                        <AccordionSummary expandIcon={<ArrowRightIcon />} expanded={expanded === 'panel5'} onChange={handleChange('panel5')} aria-controls="panel5d-content" id="panel5-header">
                             <Typography className={classes.headerText}>Obligation Details</Typography>
-                            {colorRed[3] ? <CheckCircleIcon className={colorRed[3] ? classes.activeColorTickRed : classes.circleTick} /> : <CheckCircleIcon className={colorTick4 ? classes.activeColorTick : classes.circleTick} />}
+                            {colorRed[3] ? <CheckCircleIcon className={colorRed[3] ? classes.activeColorTickRed : classes.circleTick} /> : <CheckCircleIcon className={colorTick5 ? classes.activeColorTick : classes.circleTick} />}
                         </AccordionSummary>
                         <AccordionDetails>
                             <Grid container style={{ flexDirection: "row", justifyContent: "center" }}>
@@ -1178,11 +1994,12 @@ export default function LeadDetailsNew(props) {
                                     <TextField
                                         className="textField"
                                         id="outlined-full-width"
-                                        label="Total EMI"
+                                        label="Total EMI Xclude Credit Card"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required: true
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -1198,6 +2015,40 @@ export default function LeadDetailsNew(props) {
                                         }
                                         }
                                     />
+                                </Grid>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField"
+                                        select
+                                        id="outlined-full-width"
+                                        label="No Of Credit Card"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        SelectProps={{
+                                            native: true
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={noOfCreditCard}
+                                        onChange={(e) => setNoOfCreditCard(e.target.value)}
+                                    >
+                                        <option key="" value=" ">Select One</option>
+                                        <option value="0">0</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                        <option value="10+">10+</option>
+                                    </TextField>
                                 </Grid>
                                 <Grid lg={4}>
                                     <TextField
@@ -1223,29 +2074,157 @@ export default function LeadDetailsNew(props) {
                                         }}
                                     />
                                 </Grid>
+                                <Grid container style={{ flexDirection: 'row', justifyContent: "space-between", alignItems: "center" }}>
+                                    <Grid lg={4}>
+                                        <TextField
+                                            className="textField"
+                                            select
+                                            id="outlined-full-width"
+                                            label="Credit Card Balance Transfer"
+                                            style={{ margin: 8 }}
+                                            margin="normal"
+                                            InputLabelProps={{
+                                                shrink: true,
+                                            }}
+                                            SelectProps={{
+                                                native: true
+                                            }}
+                                            variant="outlined"
+                                            size="small"
+                                            value={creditCardbalanceTransfer}
+                                            onChange={(e) => setcreditCardbalanceTransfer(e.target.value)}
+                                        >
+                                            <option value="">Select</option>
+                                            <option value="Yes">Yes</option>
+                                            <option value="No">No</option>
+                                        </TextField>
+                                    </Grid>
+                                    <Grid lg={4} style={{ display: 'flex', alignItems: 'center' }}>
+                                        <Button className="saveAndNextBtn" color='primary' variant='contained' onClick={() => updateLeadDetails(leadid)}>SAVE & NEXT</Button>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                        </AccordionDetails>
+                    </Accordion>
+                    <Accordion square expanded={expanded === 'panel6'} onChange={handleChange('panel6')}>
+                        <AccordionSummary expandIcon={<ArrowRightIcon />} expanded={expanded === 'panel6'} onChange={handleChange('panel6')} aria-controls="panel6d-content" id="panel6-header">
+                            <Typography className={classes.headerText}>Reference Details</Typography>
+                            {colorRed[3] ? <CheckCircleIcon className={colorRed[3] ? classes.activeColorTickRed : classes.circleTick} /> : <CheckCircleIcon className={colorTick6 ? classes.activeColorTick : classes.circleTick} />}
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Grid container style={{ flexDirection: 'row', justifyContent: 'center' }}>
                                 <Grid lg={4}>
                                     <TextField
                                         className="textField"
-                                        select
                                         id="outlined-full-width"
-                                        label="Credit Card Balance Transfer"
+                                        label="Relative's First Name"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
-                                        SelectProps={{
-                                            native: true
+                                        variant="outlined"
+                                        size="small"
+                                        value={ref1FirstName}
+                                        onChange={(e) => setRef1FirstName(e.target.value)}
+                                    />
+                                </Grid>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField"
+                                        id="outlined-full-width"
+                                        label="Relative's Last Name"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
                                         }}
                                         variant="outlined"
                                         size="small"
-                                        value={creditCardbalanceTransfer}
-                                        onChange={(e) => setcreditCardbalanceTransfer(e.target.value)}
-                                    >
-                                        <option value="">Select</option>
-                                        <option value="Yes">Yes</option>
-                                        <option value="No">No</option>
-                                    </TextField>
+                                        value={ref1LastName}
+                                        onChange={(e) => setRef1LastName(e.target.value)}
+                                    />
+                                </Grid>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField"
+                                        id="outlined-full-width"
+                                        label="Relative's Mobile No"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        inputProps={{
+                                            maxLength: 10
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={ref1MobileNo}
+                                        onChange={(e) => {
+                                            const re = /^[0-9\b]+$/;
+                                            if (e.target.value === '' || re.test(e.target.value)) {
+                                                setRef1MobileNo(e.target.value)
+                                            }
+                                        }}
+                                    />
+                                </Grid>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField"
+                                        id="outlined-full-width"
+                                        label="Firend's First Name"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={ref2FirstName}
+                                        onChange={(e) => setRef2FirstName(e.target.value)}
+                                    />
+                                </Grid>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField"
+                                        id="outlined-full-width"
+                                        label="Friend's Last Name"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        inputProps={{
+                                            maxLength: 10
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={ref2LastName}
+                                        onChange={(e) => setRef2LastName(e.target.value)}
+                                    />
+                                </Grid>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField"
+                                        id="outlined-full-width"
+                                        label="Friend's Mobile No"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={ref2MobileNo}
+                                        onChange={(e) => {
+                                            const re = /^[0-9\b]+$/;
+                                            if (e.target.value === '' || re.test(e.target.value)) {
+                                                setRef2MobileNo(e.target.value)
+                                            }
+                                        }}
+
+                                    />
                                 </Grid>
                                 <Grid container style={{ flexDirection: 'row', justifyContent: "flex-end", alignItems: "center" }}>
                                     <Grid lg={4} style={{ display: 'flex', alignItems: 'center' }}>
@@ -1308,7 +2287,7 @@ export default function LeadDetailsNew(props) {
                 </Grid>
                 <Grid className="callConatiner" lg={3}>
                     <Grid className="callAdjustContainer">
-                         <div className="buttonAdjust"><Button
+                        <div className="buttonAdjust"><Button
                             className="callBtn"
                             color="primary"
                             variant="contained"
@@ -1325,7 +2304,7 @@ export default function LeadDetailsNew(props) {
                                 onClick={hangupCallHandler}>
                                 End
                             </Button>
-                            </div>
+                        </div>
                         <Grid>
                             <TextField
                                 className="textField"
@@ -1630,6 +2609,244 @@ export default function LeadDetailsNew(props) {
                         Calling...
                     </Alert>
                 </Snackbar>
+            </div>
+            <div>
+                <table className='pdfTable' id="leadDetails-table" style={{display:'none'}}>
+                    <tr>
+                        <td className='tableTitle'>Lead Id</td>
+                        <td className='tableDescription'>{leadId}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Product Type</td>
+                        <td className='tableDescription'>{loanType}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Loan Amount</td>
+                        <td className='tableDescription'>{loanAmount}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Req Tenure In Years</td>
+                        <td className='tableDescription'>{tenure}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Required ROI(%)</td>
+                        <td className='tableDescription'>{requiredRoi}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Full Name As Pancard</td>
+                        <td className='tableDescription'>{name}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Gender</td>
+                        <td className='tableDescription'>{gender}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Father's Name</td>
+                        <td className='tableDescription'>{fatherName}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Mother's Name</td>
+                        <td className='tableDescription'>{motherName}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>DOB</td>
+                        <td className='tableDescription'>{date}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>PAN No</td>
+                        <td className='tableDescription'>{pancardNo}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Personal Email Id</td>
+                        <td className='tableDescription'>{email}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Mobile No</td>
+                        <td className='tableDescription'>{mobileNo}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Marital Status</td>
+                        <td className='tableDescription'>{maritalStatus}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>No Of Dependence</td>
+                        <td className='tableDescription'>{noOfDependent}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Adhaar No</td>
+                        <td className='tableDescription'>{adhaarNo}</td>
+                    </tr>
+                </table>
+                <table className='pdfTable' id="leadDetails-table1" style={{display:'none'}}>
+                    <tr>
+                        <td className='tableTitle'>Current Address 1</td>
+                        <td className='tableDescription'>{addressOne}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Current Address 2</td>
+                        <td className='tableDescription'>{addressTwo}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Current Address 3</td>
+                        <td className='tableDescription'>{addressThree}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Current Pincode</td>
+                        <td className='tableDescription'>{pincode}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Current City</td>
+                        <td className='tableDescription'>{city}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Current State</td>
+                        <td className='tableDescription'>{states}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Current Residence Type</td>
+                        <td className='tableDescription'>{currentResidentType}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Current Address Vintage</td>
+                        <td className='tableDescription'>{currentAddressVintage}</td>
+                    </tr>
+                </table>    
+                <table className='pdfTable' id="leadDetails-table2" style={{display:'none'}}>
+                    <tr>
+                        <td className='tableTitle'>Permanent Address 1</td>
+                        <td className='tableDescription'>{permanentAddressOne}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Permanent Address 2</td>
+                        <td className='tableDescription'>{permanentAddressTwo}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Permanent Address 3</td>
+                        <td className='tableDescription'>{permanentAddressThree}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Permanent Pincode</td>
+                        <td className='tableDescription'>{permanentPincode}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Permanent City</td>
+                        <td className='tableDescription'>{permanentCity}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Permanent State</td>
+                        <td className='tableDescription'>{permanentStates}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Permanent Residence Type</td>
+                        <td className='tableDescription'>{permanentResidentType}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Permanent Address Vintage</td>
+                        <td className='tableDescription'>{permanentAddressVintage}</td>
+                    </tr>
+                </table>
+                <table className='pdfTable' id="leadDetails-table3" style={{display:'none'}}>
+                    <tr>
+                        <td className='tableTitle'>Employment Type</td>
+                        <td className='tableDescription'>{employmentType}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Company Name</td>
+                        <td className='tableDescription'>{companyName}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Designation</td>
+                        <td className='tableDescription'>{designation}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Vintage in Current Company</td>
+                        <td className='tableDescription'>{currentWorkExp}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Total Work Experience</td>
+                        <td className='tableDescription'>{totalWorkExp}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Gross Income</td>
+                        <td className='tableDescription'>{grossIncome}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Net Monthly Income</td>
+                        <td className='tableDescription'>{monthlyIncome}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Office Pincode</td>
+                        <td className='tableDescription'>{officePincode}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Office City </td>
+                        <td className='tableDescription'>{officeCity}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Office State </td>
+                        <td className='tableDescription'>{officeStates}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Official MailId</td>
+                        <td className='tableDescription'>{officialMailid}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Landline No </td>
+                        <td className='tableDescription'>{landlineNo}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Mode Of Salary</td>
+                        <td className='tableDescription'>{salaryCreditMode}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Salary Credit Bank Name</td>
+                        <td className='tableDescription'>{salaryBankAcc}</td>
+                    </tr>
+                    </table>
+                <table className='pdfTable' id="leadDetails-table4" style={{display:'none'}}>
+                    <tr>
+                        <td className='tableTitle'>Total EMI Exclude Credit Card</td>
+                        <td className='tableDescription'>{currentEMI}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>No Of Credit Card</td>
+                        <td className='tableDescription'>{noOfCreditCard}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Credit Card Outstanding</td>
+                        <td className='tableDescription'>{creditCardOutstanding}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Credit Card Balance Transfer</td>
+                        <td className='tableDescription'>{creditCardbalanceTransfer}</td>
+                    </tr>
+                    </table>
+                <table className='pdfTable' id="leadDetails-table5" style={{display:'none'}}>
+                    <tr>
+                        <td className='tableTitle'>Relative's First Name</td>
+                        <td className='tableDescription'>{ref1FirstName}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Relative's Last Name</td>
+                        <td className='tableDescription'>{ref1LastName}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Relative's Mobile No</td>
+                        <td className='tableDescription'>{ref1MobileNo}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Friend's First Name</td>
+                        <td className='tableDescription'>{ref2FirstName}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Friend's Last Name</td>
+                        <td className='tableDescription'>{ref2LastName}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Friend's Mobile No</td>
+                        <td className='tableDescription'>{ref2MobileNo}</td>
+                    </tr>
+                    </table>
             </div>
         </PageLayerSection>
     )
