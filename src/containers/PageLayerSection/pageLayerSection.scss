@@ -76,8 +76,14 @@ $desk: 100 / 1440;
                     cursor: pointer;
                 }
                 .pdfBtn {
-                    font-size: 35 * $desk + vw;
-                    margin-right: 10 * $desk + vw;
+                    font-size: 30 * $desk + vw;
+                    margin-right: 15 * $desk + vw;
+                    color: #535ad1;
+                    cursor: pointer;
+                 }
+                 .emailBtn {
+                    font-size: 30 * $desk + vw;
+                    margin-right: 15 * $desk + vw;
                     color: #535ad1;
                     cursor: pointer;
                  }

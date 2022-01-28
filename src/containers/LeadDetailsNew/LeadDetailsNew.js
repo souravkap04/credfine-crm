@@ -41,6 +41,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import moment from 'moment';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable'
+import { Column } from 'jspdf-react';
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -817,33 +818,57 @@ export default function LeadDetailsNew(props) {
         doc.autoTable({ 
             html: '#leadDetails-table' ,
             theme:"grid",
+            styles: {
+                overflow: 'linebreak',
+                columnWidth: 260,
+            },
             didDrawCell:function(data){
                 doc.setFontSize(15);
                 doc.setTextColor(0);
                 doc.text("Customer Personal And Loan Details", data.settings.margin.left, 22);            
-             }
+             },
         })
         doc.autoTable({ 
             html: '#leadDetails-table1',
             theme:'grid',
+            styles: {
+                overflow: 'linebreak',
+                columnWidth: 260,
+            },
         })
         doc.autoTable({
              html: '#leadDetails-table2',
-            theme:'grid'
+            theme:'grid',
+            styles: {
+                overflow: 'linebreak',
+                columnWidth: 260,
+            },
         })
         doc.autoTable({
              html: '#leadDetails-table3',
-            theme:'grid'
+            theme:'grid',
+            styles: {
+                overflow: 'linebreak',
+                columnWidth: 260,
+            },
         })
         doc.autoTable({
              html: '#leadDetails-table4',
-            theme:'grid'
+            theme:'grid',
+            styles: {
+                overflow: 'linebreak',
+                columnWidth: 260,
+            },
         })
         doc.autoTable({
              html: '#leadDetails-table5',
-            theme:'grid'
+            theme:'grid',
+            styles: {
+                overflow: 'linebreak',
+                columnWidth: 260,
+            },
         })
-        doc.save('lead_details.pdf');
+        doc.save(`${name}-${leadId}.pdf`);
     }
     const checkboxHandler = (e) => {
         setChecked(e.target.checked);
