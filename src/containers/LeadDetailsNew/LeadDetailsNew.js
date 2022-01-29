@@ -191,7 +191,6 @@ export default function LeadDetailsNew(props) {
     const [ref1MobileNo, setRef1MobileNo] = useState("");
     const [ref1Address1,setRef1Address1] = useState('');
     const [ref1Address2,setRef1Address2] = useState('');
-    const [ref1Address3,setRef1Address3] = useState('');
     const [ref1Pincode,setRef1Pincode] = useState('');
     const [ref1City,setRef1City] = useState('');
     const [ref1States,setRef1States] = useState('');
@@ -200,7 +199,6 @@ export default function LeadDetailsNew(props) {
     const [ref2MobileNo, setRef2MobileNo] = useState("");
     const [ref2Address1,setRef2Address1] = useState('');
     const [ref2Address2,setRef2Address2] = useState('');
-    const [ref2Address3,setRef2Address3] = useState('');
     const [ref2Pincode,setRef2Pincode] = useState('');
     const [ref2City,setRef2City] = useState('');
     const [ref2States,setRef2States] = useState('');
@@ -361,13 +359,11 @@ export default function LeadDetailsNew(props) {
                         setRef1MobileNo(response.data.lead_data.data.ref1_mobile_no);
                         setRef1Address1(response.data.lead_data.data.ref1_address1);
                         setRef1Address2(response.data.lead_data.data.ref1_address2)
-                        setRef1Address3(response.data.lead_data.data.ref1_address3);
                         setRef1Pincode(response.data.lead_data.data.ref1_pincode);
                         setRef1City(response.data.lead_data.data.ref1_city);
                         setRef1States(response.data.lead_data.data.ref1_state);
                         setRef2Address1(response.data.lead_data.data.ref2_address1);
                         setRef2Address2(response.data.lead_data.data.ref2_address2);
-                        setRef2Address3(response.data.lead_data.data.ref2_address3);
                         setRef2Pincode(response.data.lead_data.data.ref2_pincode);
                         setRef2City(response.data.lead_data.data.ref2_city);
                         setRef2States(response.data.lead_data.data.ref2_state);
@@ -490,7 +486,7 @@ export default function LeadDetailsNew(props) {
             setExpanded('panel6')
         }
         if (expanded === 'panel6') {
-            if (ref1FirstName !== '' && ref1LastName !== '' && ref1MobileNo !== '' && ref1Address1 !== '' && ref1Address2 !== '' && ref1Address3 !== '' && ref1Pincode !== '' ) {
+            if (ref1FirstName !== '' && ref1LastName !== '' && ref1MobileNo !== '' && ref1Address1 !== '' && ref1Address2 !== '' && ref1Pincode !== '' ) {
                 colorRed[5] = false;
                 setcolorTick6(true)
             } else {
@@ -499,7 +495,7 @@ export default function LeadDetailsNew(props) {
             setExpanded('panel7')
         }
         if (expanded === 'panel7') {
-            if (ref2FirstName !== '' && ref2LastName !== '' && ref2MobileNo !== '' && ref2Address1 !== '' && ref2Address2 !== '' && ref2Address3 !== '' && ref2Pincode !== '' ) {
+            if (ref2FirstName !== '' && ref2LastName !== '' && ref2MobileNo !== '' && ref2Address1 !== '' && ref2Address2 !== '' && ref2Pincode !== '' ) {
                 colorRed[6] = false;
                 setcolorTick7(true)
             } else {
@@ -520,9 +516,9 @@ export default function LeadDetailsNew(props) {
              office_pincode: officePincode, office_city: officeCity, office_state: officeStates,
             official_mail: officialMailid, landline_no: landlineNo, no_of_creditcard: noOfCreditCard, ref1_first_name: ref1FirstName,
             ref1_last_name: ref1LastName, ref1_mobile_no: ref1MobileNo, ref1_address1:ref1Address1,ref1_address2:ref1Address2,
-            ref1_address3:ref1Address3,ref1_pincode:ref1Pincode,ref1_city:ref1City,ref1_state:ref1States,
+            ref1_pincode:ref1Pincode,ref1_city:ref1City,ref1_state:ref1States,
             ref2_first_name: ref2FirstName, ref2_last_name: ref2LastName,ref2_mobile_no: ref2MobileNo, permanent_resident_Type: permanentResidentType,
-            ref2_address1:ref2Address1,ref2_address2:ref2Address2,ref2_address3:ref2Address3,ref2_pincode:ref2Pincode,
+            ref2_address1:ref2Address1,ref2_address2:ref2Address2,ref2_pincode:ref2Pincode,
             ref2_city:ref2City,ref2_state:ref2States
         };
         let lead_data = {
@@ -1391,6 +1387,9 @@ export default function LeadDetailsNew(props) {
                                             shrink: true,
                                             required: true
                                         }}
+                                        inputProps={{
+                                            maxLength:30
+                                        }}
                                         variant="outlined"
                                         size="small"
                                         value={addressOne}
@@ -1418,7 +1417,7 @@ export default function LeadDetailsNew(props) {
                                     <TextField
                                         className="textField"
                                         id="outlined-full-width"
-                                        label="Address 3"
+                                        label="Landmark"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
@@ -1570,6 +1569,9 @@ export default function LeadDetailsNew(props) {
                                             shrink: true,
                                             required: true
                                         }}
+                                        inputProps={{
+                                            maxLength:30
+                                        }}
                                         variant="outlined"
                                         size="small"
                                         value={permanentAddressOne}
@@ -1597,12 +1599,15 @@ export default function LeadDetailsNew(props) {
                                     <TextField
                                         className="textField"
                                         id="outlined-full-width"
-                                        label="Address 3"
+                                        label="Landmark"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
                                             required: true
+                                        }}
+                                        inputProps={{
+                                            maxLength:30
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -1930,6 +1935,9 @@ export default function LeadDetailsNew(props) {
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
+                                        inputProps={{
+                                            maxLength:30
+                                        }}
                                         variant="outlined"
                                         size="small"
                                         value={officeAddress1}
@@ -1956,11 +1964,14 @@ export default function LeadDetailsNew(props) {
                                     <TextField
                                         className="textField"
                                         id="outlined-full-width"
-                                        label="Office Address 3"
+                                        label="Office Landmark"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                        }}
+                                        inputProps={{
+                                            maxLength:30
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -2303,6 +2314,9 @@ export default function LeadDetailsNew(props) {
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
+                                        inputProps={{
+                                            maxLength:30
+                                        }}
                                         variant="outlined"
                                         size="small"
                                         value={ref1Address1}
@@ -2327,22 +2341,6 @@ export default function LeadDetailsNew(props) {
                                         value={ref1Address2}
                                         onChange={(e) => setRef1Address2(e.target.value)}
                                     />
-                                </Grid>
-                                <Grid lg={4}>
-                                    <TextField
-                                        className="textField"
-                                        id="outlined-full-width"
-                                        label="Address 3"
-                                        style={{ margin: 8 }}
-                                        margin="normal"
-                                        InputLabelProps={{
-                                            shrink: true,
-                                        }}
-                                        variant="outlined"
-                                        size="small"
-                                        value={ref1Address3}
-                                        onChange={(e) => setRef1Address3(e.target.value)}
-                                        />
                                 </Grid>
                                 <Grid lg={4}>
                                     <TextField
@@ -2393,11 +2391,9 @@ export default function LeadDetailsNew(props) {
                                         disabled
                                     />
                                 </Grid>
-                                <Grid container style={{ flexDirection: 'row', justifyContent: "flex-end", alignItems: "center" }}>
                                     <Grid lg={4} style={{ display: 'flex', alignItems: 'center' }}>
                                         <Button className="saveAndNextBtn" color='primary' variant='contained' onClick={() => updateLeadDetails(leadid)}>SAVE &amp; NEXT</Button>
                                     </Grid>
-                                </Grid>
                             </Grid>
                         </AccordionDetails>                
                     </Accordion>
@@ -2474,6 +2470,9 @@ export default function LeadDetailsNew(props) {
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
+                                        inputProps={{
+                                            maxLength:30
+                                        }}
                                         variant="outlined"
                                         size="small"
                                         value={ref2Address1}
@@ -2498,22 +2497,6 @@ export default function LeadDetailsNew(props) {
                                         value={ref2Address2}
                                         onChange={(e) => setRef2Address2(e.target.value)}
                                     />
-                                </Grid>
-                                <Grid lg={4}>
-                                    <TextField
-                                        className="textField"
-                                        id="outlined-full-width"
-                                        label="Address 3"
-                                        style={{ margin: 8 }}
-                                        margin="normal"
-                                        InputLabelProps={{
-                                            shrink: true,
-                                        }}
-                                        variant="outlined"
-                                        size="small"
-                                        value={ref2Address3}
-                                        onChange={(e) => setRef2Address3(e.target.value)}
-                                        />
                                 </Grid>
                                 <Grid lg={4}>
                                     <TextField
@@ -2564,11 +2547,9 @@ export default function LeadDetailsNew(props) {
                                         disabled
                                     />
                                 </Grid>
-                                <Grid container style={{ flexDirection: 'row', justifyContent: "flex-end", alignItems: "center" }}>
                                     <Grid lg={4} style={{ display: 'flex', alignItems: 'center' }}>
                                         <Button className="saveAndNextBtn" color='primary' variant='contained' onClick={() => updateLeadDetails(leadid)}>SAVE</Button>
                                     </Grid>
-                                </Grid>
                             </Grid>
                         </AccordionDetails>                
                     </Accordion>
@@ -3025,7 +3006,7 @@ export default function LeadDetailsNew(props) {
                         <td className='tableDescription'>{addressTwo}</td>
                     </tr>
                     <tr>
-                        <td className='tableTitle'>Current Address 3</td>
+                        <td className='tableTitle'>Current Landmark</td>
                         <td className='tableDescription'>{addressThree}</td>
                     </tr>
                     <tr>
@@ -3059,7 +3040,7 @@ export default function LeadDetailsNew(props) {
                         <td className='tableDescription'>{permanentAddressTwo}</td>
                     </tr>
                     <tr>
-                        <td className='tableTitle'>Permanent Address 3</td>
+                        <td className='tableTitle'>Permanent Landmark</td>
                         <td className='tableDescription'>{permanentAddressThree}</td>
                     </tr>
                     <tr>
@@ -3111,6 +3092,18 @@ export default function LeadDetailsNew(props) {
                     <tr>
                         <td className='tableTitle'>Net Monthly Income</td>
                         <td className='tableDescription'>{monthlyIncome}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Office Address 1</td>
+                        <td className='tableDescription'>{officeAddress1}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Office Address 2</td>
+                        <td className='tableDescription'>{officeAddress2}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Office Landmark</td>
+                        <td className='tableDescription'>{officeAddress3}</td>
                     </tr>
                     <tr>
                         <td className='tableTitle'>Office Pincode</td>
@@ -3181,10 +3174,6 @@ export default function LeadDetailsNew(props) {
                         <td className='tableDescription'>{ref1Address2}</td>
                     </tr>
                     <tr>
-                        <td className='tableTitle'>Relative's Address 3</td>
-                        <td className='tableDescription'>{ref1Address3}</td>
-                    </tr>
-                    <tr>
                         <td className='tableTitle'>Relative's Pincode</td>
                         <td className='tableDescription'>{ref1Pincode}</td>
                     </tr>
@@ -3217,10 +3206,6 @@ export default function LeadDetailsNew(props) {
                     <tr>
                         <td className='tableTitle'>Friend's Address 2</td>
                         <td className='tableDescription'>{ref2Address2}</td>
-                    </tr>
-                    <tr>
-                        <td className='tableTitle'>Relative's Address 3</td>
-                        <td className='tableDescription'>{ref2Address3}</td>
                     </tr>
                     <tr>
                         <td className='tableTitle'>Friend's Pincode</td>
