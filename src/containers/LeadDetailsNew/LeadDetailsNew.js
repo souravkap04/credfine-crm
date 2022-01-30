@@ -20,12 +20,6 @@ import CallIcon from '@material-ui/icons/Call';
 import SendIcon from '@material-ui/icons/Send';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Checkbox from '@material-ui/core/Checkbox';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
 import { ListGroup } from 'react-bootstrap';
 import {
     getBank,
@@ -184,6 +178,9 @@ export default function LeadDetailsNew(props) {
     const [permanentResidentType, setPermanentResidentType] = useState("");
     const [permanentAddressVintage, setPermanentAddressVintage] = useState();
     const [grossIncome, setGrossIncome] = useState("");
+    const [officeAddress1,setOfficeAddress1] = useState("");
+    const [officeAddress2,setOfficeAddress2] = useState("");
+    const [officeAddress3,setOfficeAddress3] = useState("");
     const [officePincode, setOfficePincode] = useState("");
     const [officeCity, setOfficeCity] = useState("");
     const [officeStates, setOfficeStates] = useState("");
@@ -192,9 +189,19 @@ export default function LeadDetailsNew(props) {
     const [ref1FirstName, setRef1FirstName] = useState("");
     const [ref1LastName, setRef1LastName] = useState("");
     const [ref1MobileNo, setRef1MobileNo] = useState("");
+    const [ref1Address1,setRef1Address1] = useState('');
+    const [ref1Address2,setRef1Address2] = useState('');
+    const [ref1Pincode,setRef1Pincode] = useState('');
+    const [ref1City,setRef1City] = useState('');
+    const [ref1States,setRef1States] = useState('');
     const [ref2FirstName, setRef2FirstName] = useState("");
     const [ref2LastName, setRef2LastName] = useState("");
     const [ref2MobileNo, setRef2MobileNo] = useState("");
+    const [ref2Address1,setRef2Address1] = useState('');
+    const [ref2Address2,setRef2Address2] = useState('');
+    const [ref2Pincode,setRef2Pincode] = useState('');
+    const [ref2City,setRef2City] = useState('');
+    const [ref2States,setRef2States] = useState('');
     const [status, setStatus] = useState('');
     const [subStatus, setSubStatus] = useState([]);
     const [loanType, setLoanType] = useState("");
@@ -224,6 +231,7 @@ export default function LeadDetailsNew(props) {
     const [colorTick4, setcolorTick4] = useState(false);
     const [colorTick5, setcolorTick5] = useState(false);
     const [colorTick6, setcolorTick6] = useState(false);
+    const [colorTick7, setcolorTick7] = useState(false);
     const [appID, setappID] = useState('');
     const [bankNBFC, setbankNBFC] = useState('');
     const [scheme, setscheme] = useState('');
@@ -233,7 +241,7 @@ export default function LeadDetailsNew(props) {
     const [isCopy, setisCopy] = useState(false);
     const [disbursedDate, setdisbursedDate] = useState(new Date());
     const [disbursedError, setdisbursedError] = useState([false, false]);
-    const [colorRed, setcolorRed] = useState([false, false, false, false, false, false]);
+    const [colorRed, setcolorRed] = useState([false, false, false, false, false, false,false]);
     const [isAutoDialerEnd, setIsAutoDialerEnd] = useState(false);
     const [checked, setChecked] = React.useState(false);
     let statusData = getStatusData();
@@ -273,7 +281,6 @@ export default function LeadDetailsNew(props) {
         const fetchLeadDetaile = async (leadId) => {
             setisLoading(true)
             let headers = { 'Authorization': `Token ${profileData.token}` }
-            try {
                 await axios
                     .get(`${baseUrl}/leads/lead_detail/${leadId}`, { headers })
                     .then((response) => {
@@ -338,6 +345,9 @@ export default function LeadDetailsNew(props) {
                         setPermanentResidentType(response.data.lead_data.data.permanent_resident_Type);
                         setPermanentAddressVintage(response.data.lead_data.data.permanent_address_vintage);
                         setGrossIncome(response.data.lead_data.data.gross_income);
+                        setOfficeAddress1(response.data.lead_data.data.office_address_one);
+                        setOfficeAddress2(response.data.lead_data.data.office_address_two);
+                        setOfficeAddress3(response.data.lead_data.data.office_address_three);
                         setOfficeCity(response.data.lead_data.data.office_city);
                         setOfficeStates(response.data.lead_data.data.office_state);
                         setOfficePincode(response.data.lead_data.data.office_pincode);
@@ -347,6 +357,16 @@ export default function LeadDetailsNew(props) {
                         setRef1FirstName(response.data.lead_data.data.ref1_first_name);
                         setRef1LastName(response.data.lead_data.data.ref1_last_name);
                         setRef1MobileNo(response.data.lead_data.data.ref1_mobile_no);
+                        setRef1Address1(response.data.lead_data.data.ref1_address1);
+                        setRef1Address2(response.data.lead_data.data.ref1_address2)
+                        setRef1Pincode(response.data.lead_data.data.ref1_pincode);
+                        setRef1City(response.data.lead_data.data.ref1_city);
+                        setRef1States(response.data.lead_data.data.ref1_state);
+                        setRef2Address1(response.data.lead_data.data.ref2_address1);
+                        setRef2Address2(response.data.lead_data.data.ref2_address2);
+                        setRef2Pincode(response.data.lead_data.data.ref2_pincode);
+                        setRef2City(response.data.lead_data.data.ref2_city);
+                        setRef2States(response.data.lead_data.data.ref2_state);
                         setRef2FirstName(response.data.lead_data.data.ref2_first_name);
                         setRef2LastName(response.data.lead_data.data.ref2_last_name);
                         setRef2MobileNo(response.data.lead_data.data.ref2_mobile_no);
@@ -363,13 +383,12 @@ export default function LeadDetailsNew(props) {
                         if (response.data.lead_data["data"].employment_type !== '' && response.data.lead_data["data"].current_company_name !== '' && response.data.eligibility_data.designation !== '' && response.data.eligibility_data.current_work_exp !== '' && response.data.eligibility_data.total_work_exp !== '' && response.data.lead_data["data"].monthly_income !== '' && response.data.eligibility_data.salary_mode !== '' && response.data.eligibility_data.salary_bank !== '') {
                             setcolorTick4(true)
                         }
-                        if (response.data.eligibility_data.current_emi !== '' && response.data.eligibility_data.credit_card_outstanding !== '' && response.data.lead_data["data"].credi_card_balance_transfer !== '') {
+                        if (response.data.eligibility_data.current_emi !== '') {
                             setcolorTick5(true)
                         }
+                    }).catch((error)=>{
+                        console.log(error)
                     });
-            } catch (error) {
-                console.log(error);
-            }
         };
         fetchLeadDetaile(leadid);
     }, []);
@@ -462,16 +481,25 @@ export default function LeadDetailsNew(props) {
                 colorRed[4] = false;
                 setcolorTick5(true)
             } else {
-                setcolorTick6(false)
+                setcolorTick5(false)
             }
             setExpanded('panel6')
         }
         if (expanded === 'panel6') {
-            if (ref1FirstName !== '' && ref1LastName !== '' && ref1MobileNo !== '') {
+            if (ref1FirstName !== '' && ref1LastName !== '' && ref1MobileNo !== '' && ref1Address1 !== '' && ref1Address2 !== '' && ref1Pincode !== '' ) {
                 colorRed[5] = false;
                 setcolorTick6(true)
             } else {
                 setcolorTick6(false)
+            }
+            setExpanded('panel7')
+        }
+        if (expanded === 'panel7') {
+            if (ref2FirstName !== '' && ref2LastName !== '' && ref2MobileNo !== '' && ref2Address1 !== '' && ref2Address2 !== '' && ref2Pincode !== '' ) {
+                colorRed[6] = false;
+                setcolorTick7(true)
+            } else {
+                setcolorTick7(false)
             }
             setExpanded('panel1')
         }
@@ -484,10 +512,14 @@ export default function LeadDetailsNew(props) {
             address_three: addressThree, current_address_vintage: currentAddressVintage, permanent_address_one: permanentAddressOne,
             permanent_address_two: permanentAddressTwo, permanent_address_three: permanentAddressThree, permanent_pincode: permanentPincode,
             permanent_city: permanentCity, permanent_state: permanentStates, permanent_address_vintage: permanentAddressVintage,
-            gross_income: grossIncome, office_pincode: officePincode, office_city: officeCity, office_state: officeStates,
+            gross_income: grossIncome,office_address_one:officeAddress1,office_address_two:officeAddress2,office_address_three:officeAddress3,
+             office_pincode: officePincode, office_city: officeCity, office_state: officeStates,
             official_mail: officialMailid, landline_no: landlineNo, no_of_creditcard: noOfCreditCard, ref1_first_name: ref1FirstName,
-            ref1_last_name: ref1LastName, ref1_mobile_no: ref1MobileNo, ref2_first_name: ref2FirstName, ref2_last_name: ref2LastName,
-            ref2_mobile_no: ref2MobileNo, permanent_resident_Type: permanentResidentType
+            ref1_last_name: ref1LastName, ref1_mobile_no: ref1MobileNo, ref1_address1:ref1Address1,ref1_address2:ref1Address2,
+            ref1_pincode:ref1Pincode,ref1_city:ref1City,ref1_state:ref1States,
+            ref2_first_name: ref2FirstName, ref2_last_name: ref2LastName,ref2_mobile_no: ref2MobileNo, permanent_resident_Type: permanentResidentType,
+            ref2_address1:ref2Address1,ref2_address2:ref2Address2,ref2_pincode:ref2Pincode,
+            ref2_city:ref2City,ref2_state:ref2States
         };
         let lead_data = {
             lead_crm_id: leadId, loan_amount: loanAmount,
@@ -722,6 +754,38 @@ export default function LeadDetailsNew(props) {
                 })
         }
     }
+    const getRelativesPincodeHandler = async (e) => {
+        setRef1Pincode(e.target.value);
+        let item = { pincode: e.target.value };
+        const header = { 'Content-Type': 'application/json' }
+        if (e.target.value >= 6) {
+            await axios.post(`${baseUrl}/common/fetchPincode/`, item, { header })
+                .then((response) => {
+                    if (response.data[0].pin === e.target.value) {
+                        setRef1City(response.data[0].city_name);
+                        setRef1States(response.data[0].state_name);
+                    }
+                }).catch((error) => {
+                    console.log(error)
+                })
+        }
+    }
+    const getFriendnsPincodeHandler = async (e) => {
+        setRef2Pincode(e.target.value);
+        let item = { pincode: e.target.value };
+        const header = { 'Content-Type': 'application/json' }
+        if (e.target.value >= 6) {
+            await axios.post(`${baseUrl}/common/fetchPincode/`, item, { header })
+                .then((response) => {
+                    if (response.data[0].pin === e.target.value) {
+                        setRef2City(response.data[0].city_name);
+                        setRef2States(response.data[0].state_name);
+                    }
+                }).catch((error) => {
+                    console.log(error)
+                })
+        }
+    }
     const selectCompany = (company) => {
         setCompanyName(company);
         setShowCompany(false);
@@ -870,6 +934,14 @@ export default function LeadDetailsNew(props) {
                 columnWidth: 260,
             },
         })
+        doc.autoTable({
+            html: '#leadDetails-table6',
+           theme:'grid',
+           styles: {
+               overflow: 'linebreak',
+               columnWidth: 260,
+           },
+       })
         doc.save(`${name}-${leadId}.pdf`);
     }
     const checkboxHandler = (e) => {
@@ -1315,6 +1387,9 @@ export default function LeadDetailsNew(props) {
                                             shrink: true,
                                             required: true
                                         }}
+                                        inputProps={{
+                                            maxLength:30
+                                        }}
                                         variant="outlined"
                                         size="small"
                                         value={addressOne}
@@ -1342,7 +1417,7 @@ export default function LeadDetailsNew(props) {
                                     <TextField
                                         className="textField"
                                         id="outlined-full-width"
-                                        label="Address 3"
+                                        label="Landmark"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
@@ -1479,7 +1554,7 @@ export default function LeadDetailsNew(props) {
                     <Accordion square expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
                         <AccordionSummary expandIcon={<ArrowRightIcon />} aria-controls="panel3d-content" id="panel3d-header">
                             <Typography className={classes.headerText}>Permanent Residential Details</Typography>
-                            {colorRed[1] ? <CheckCircleIcon className={colorRed[1] ? classes.activeColorTickRed : classes.circleTick} /> : <CheckCircleIcon className={colorTick3 ? classes.activeColorTick : classes.circleTick} />}
+                            {colorRed[2] ? <CheckCircleIcon className={colorRed[2] ? classes.activeColorTickRed : classes.circleTick} /> : <CheckCircleIcon className={colorTick3 ? classes.activeColorTick : classes.circleTick} />}
                         </AccordionSummary>
                         <AccordionDetails>
                             <Grid container style={{ justifyContent: "center", flexDirection: 'row' }}>
@@ -1493,6 +1568,9 @@ export default function LeadDetailsNew(props) {
                                         InputLabelProps={{
                                             shrink: true,
                                             required: true
+                                        }}
+                                        inputProps={{
+                                            maxLength:30
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -1521,12 +1599,15 @@ export default function LeadDetailsNew(props) {
                                     <TextField
                                         className="textField"
                                         id="outlined-full-width"
-                                        label="Address 3"
+                                        label="Landmark"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
                                             required: true
+                                        }}
+                                        inputProps={{
+                                            maxLength:30
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -1665,7 +1746,7 @@ export default function LeadDetailsNew(props) {
                     <Accordion square expanded={expanded === 'panel4'} onChange={handleChange('panel4')}>
                         <AccordionSummary expandIcon={<ArrowRightIcon />} expanded={expanded === 'panel4'} onChange={handleChange('panel4')} aria-controls="panel4d-content" id="panel4d-header">
                             <Typography className={classes.headerText}>Employment &amp; Income Details</Typography>
-                            {colorRed[2] ? <CheckCircleIcon className={colorRed[2] ? classes.activeColorTickRed : classes.circleTick} /> : <CheckCircleIcon className={colorTick4 ? classes.activeColorTick : classes.circleTick} />}
+                            {colorRed[3] ? <CheckCircleIcon className={colorRed[3] ? classes.activeColorTickRed : classes.circleTick} /> : <CheckCircleIcon className={colorTick4 ? classes.activeColorTick : classes.circleTick} />}
                         </AccordionSummary>
                         <AccordionDetails>
                             <Grid container style={{ flexDirection: "row", justifyContent: "center" }}>
@@ -1848,6 +1929,60 @@ export default function LeadDetailsNew(props) {
                                     <TextField
                                         className="textField"
                                         id="outlined-full-width"
+                                        label="Office Address 1"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        inputProps={{
+                                            maxLength:30
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={officeAddress1}
+                                        onChange={(e) => setOfficeAddress1(e.target.value)}
+                                    />
+                                </Grid>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField"
+                                        id="outlined-full-width"
+                                        label="Office Address 2"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={officeAddress2}
+                                        onChange={(e) => setOfficeAddress2(e.target.value)}
+                                    />
+                                </Grid>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField"
+                                        id="outlined-full-width"
+                                        label="Office Landmark"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        inputProps={{
+                                            maxLength:30
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={officeAddress3}
+                                        onChange={(e) => setOfficeAddress3(e.target.value)}
+                                    />
+                                </Grid>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField"
+                                        id="outlined-full-width"
                                         label="Office Pincode"
                                         style={{ margin: 8 }}
                                         margin="normal"
@@ -1986,7 +2121,7 @@ export default function LeadDetailsNew(props) {
                     <Accordion square expanded={expanded === 'panel5'} onChange={handleChange('panel5')}>
                         <AccordionSummary expandIcon={<ArrowRightIcon />} expanded={expanded === 'panel5'} onChange={handleChange('panel5')} aria-controls="panel5d-content" id="panel5-header">
                             <Typography className={classes.headerText}>Obligation Details</Typography>
-                            {colorRed[3] ? <CheckCircleIcon className={colorRed[3] ? classes.activeColorTickRed : classes.circleTick} /> : <CheckCircleIcon className={colorTick5 ? classes.activeColorTick : classes.circleTick} />}
+                            {colorRed[4] ? <CheckCircleIcon className={colorRed[4] ? classes.activeColorTickRed : classes.circleTick} /> : <CheckCircleIcon className={colorTick5 ? classes.activeColorTick : classes.circleTick} />}
                         </AccordionSummary>
                         <AccordionDetails>
                             <Grid container style={{ flexDirection: "row", justifyContent: "center" }}>
@@ -1994,7 +2129,7 @@ export default function LeadDetailsNew(props) {
                                     <TextField
                                         className="textField"
                                         id="outlined-full-width"
-                                        label="Total EMI Xclude Credit Card"
+                                        label="Total EMI Exclude Credit Card"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
@@ -2108,8 +2243,8 @@ export default function LeadDetailsNew(props) {
                     </Accordion>
                     <Accordion square expanded={expanded === 'panel6'} onChange={handleChange('panel6')}>
                         <AccordionSummary expandIcon={<ArrowRightIcon />} expanded={expanded === 'panel6'} onChange={handleChange('panel6')} aria-controls="panel6d-content" id="panel6-header">
-                            <Typography className={classes.headerText}>Reference Details</Typography>
-                            {colorRed[3] ? <CheckCircleIcon className={colorRed[3] ? classes.activeColorTickRed : classes.circleTick} /> : <CheckCircleIcon className={colorTick6 ? classes.activeColorTick : classes.circleTick} />}
+                            <Typography className={classes.headerText}> Relative's Reference Details</Typography>
+                            {colorRed[5] ? <CheckCircleIcon className={colorRed[5] ? classes.activeColorTickRed : classes.circleTick} /> : <CheckCircleIcon className={colorTick6 ? classes.activeColorTick : classes.circleTick} />}
                         </AccordionSummary>
                         <AccordionDetails>
                             <Grid container style={{ flexDirection: 'row', justifyContent: 'center' }}>
@@ -2117,7 +2252,7 @@ export default function LeadDetailsNew(props) {
                                     <TextField
                                         className="textField"
                                         id="outlined-full-width"
-                                        label="Relative's First Name"
+                                        label="First Name"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
@@ -2133,7 +2268,7 @@ export default function LeadDetailsNew(props) {
                                     <TextField
                                         className="textField"
                                         id="outlined-full-width"
-                                        label="Relative's Last Name"
+                                        label="Last Name"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
@@ -2149,7 +2284,7 @@ export default function LeadDetailsNew(props) {
                                     <TextField
                                         className="textField"
                                         id="outlined-full-width"
-                                        label="Relative's Mobile No"
+                                        label="Mobile No"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
@@ -2173,7 +2308,107 @@ export default function LeadDetailsNew(props) {
                                     <TextField
                                         className="textField"
                                         id="outlined-full-width"
-                                        label="Firend's First Name"
+                                        label="Address 1"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        inputProps={{
+                                            maxLength:30
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={ref1Address1}
+                                        onChange={(e) =>setRef1Address1(e.target.value)}
+                                    />
+                                </Grid>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField"
+                                        id="outlined-full-width"
+                                        label="Address 2"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        inputProps={{
+                                            maxLength: 10
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={ref1Address2}
+                                        onChange={(e) => setRef1Address2(e.target.value)}
+                                    />
+                                </Grid>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField"
+                                        id="outlined-full-width"
+                                        label="Pincode"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={ref1Pincode}
+                                        onChange={(e)=>getRelativesPincodeHandler(e)}
+                                    />
+                                </Grid>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField"
+                                        id="outlined-full-width"
+                                        label="city"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={ref1City}
+                                        disabled
+
+                                    />
+                                </Grid>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField"
+                                        id="outlined-full-width"
+                                        label="State"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={ref1States}
+                                        disabled
+                                    />
+                                </Grid>
+                                    <Grid lg={4} style={{ display: 'flex', alignItems: 'center' }}>
+                                        <Button className="saveAndNextBtn" color='primary' variant='contained' onClick={() => updateLeadDetails(leadid)}>SAVE &amp; NEXT</Button>
+                                    </Grid>
+                            </Grid>
+                        </AccordionDetails>                
+                    </Accordion>
+                    <Accordion square expanded={expanded === 'panel7'} onChange={handleChange('panel7')}>
+                        <AccordionSummary expandIcon={<ArrowRightIcon />} expanded={expanded === 'panel7'} onChange={handleChange('panel7')} aria-controls="panel7d-content" id="panel7-header">
+                            <Typography className={classes.headerText}>Friend's Reference Details</Typography>
+                            {colorRed[6] ? <CheckCircleIcon className={colorRed[6] ? classes.activeColorTickRed : classes.circleTick} /> : <CheckCircleIcon className={colorTick6 ? classes.activeColorTick : classes.circleTick} />}
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Grid container style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField"
+                                        id="outlined-full-width"
+                                        label="First Name"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
@@ -2189,14 +2424,11 @@ export default function LeadDetailsNew(props) {
                                     <TextField
                                         className="textField"
                                         id="outlined-full-width"
-                                        label="Friend's Last Name"
+                                        label="Last Name"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
-                                        }}
-                                        inputProps={{
-                                            maxLength: 10
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -2208,11 +2440,14 @@ export default function LeadDetailsNew(props) {
                                     <TextField
                                         className="textField"
                                         id="outlined-full-width"
-                                        label="Friend's Mobile No"
+                                        label="Mobile No"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                        }}
+                                        inputProps={{
+                                            maxLength: 10
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -2223,16 +2458,100 @@ export default function LeadDetailsNew(props) {
                                                 setRef2MobileNo(e.target.value)
                                             }
                                         }}
+                                    />
+                                </Grid>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField"
+                                        id="outlined-full-width"
+                                        label="Address 1"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        inputProps={{
+                                            maxLength:30
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={ref2Address1}
+                                        onChange={(e) =>setRef2Address1(e.target.value)}
+                                    />
+                                </Grid>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField"
+                                        id="outlined-full-width"
+                                        label="Address 2"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        inputProps={{
+                                            maxLength: 10
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={ref2Address2}
+                                        onChange={(e) => setRef2Address2(e.target.value)}
+                                    />
+                                </Grid>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField"
+                                        id="outlined-full-width"
+                                        label="Pincode"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={ref2Pincode}
+                                        onChange={(e)=>getFriendnsPincodeHandler(e)}
+                                    />
+                                </Grid>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField"
+                                        id="outlined-full-width"
+                                        label="city"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={ref2City}
+                                        disabled
 
                                     />
                                 </Grid>
-                                <Grid container style={{ flexDirection: 'row', justifyContent: "flex-end", alignItems: "center" }}>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField"
+                                        id="outlined-full-width"
+                                        label="State"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={ref2States}
+                                        disabled
+                                    />
+                                </Grid>
                                     <Grid lg={4} style={{ display: 'flex', alignItems: 'center' }}>
                                         <Button className="saveAndNextBtn" color='primary' variant='contained' onClick={() => updateLeadDetails(leadid)}>SAVE</Button>
                                     </Grid>
-                                </Grid>
                             </Grid>
-                        </AccordionDetails>
+                        </AccordionDetails>                
                     </Accordion>
                     <Grid className="completeJourneyContainer">
                         <Button
@@ -2687,7 +3006,7 @@ export default function LeadDetailsNew(props) {
                         <td className='tableDescription'>{addressTwo}</td>
                     </tr>
                     <tr>
-                        <td className='tableTitle'>Current Address 3</td>
+                        <td className='tableTitle'>Current Landmark</td>
                         <td className='tableDescription'>{addressThree}</td>
                     </tr>
                     <tr>
@@ -2721,7 +3040,7 @@ export default function LeadDetailsNew(props) {
                         <td className='tableDescription'>{permanentAddressTwo}</td>
                     </tr>
                     <tr>
-                        <td className='tableTitle'>Permanent Address 3</td>
+                        <td className='tableTitle'>Permanent Landmark</td>
                         <td className='tableDescription'>{permanentAddressThree}</td>
                     </tr>
                     <tr>
@@ -2773,6 +3092,18 @@ export default function LeadDetailsNew(props) {
                     <tr>
                         <td className='tableTitle'>Net Monthly Income</td>
                         <td className='tableDescription'>{monthlyIncome}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Office Address 1</td>
+                        <td className='tableDescription'>{officeAddress1}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Office Address 2</td>
+                        <td className='tableDescription'>{officeAddress2}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Office Landmark</td>
+                        <td className='tableDescription'>{officeAddress3}</td>
                     </tr>
                     <tr>
                         <td className='tableTitle'>Office Pincode</td>
@@ -2835,6 +3166,28 @@ export default function LeadDetailsNew(props) {
                         <td className='tableDescription'>{ref1MobileNo}</td>
                     </tr>
                     <tr>
+                        <td className='tableTitle'>Relative's Address 1</td>
+                        <td className='tableDescription'>{ref1Address1}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Relative's Address 2</td>
+                        <td className='tableDescription'>{ref1Address2}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Relative's Pincode</td>
+                        <td className='tableDescription'>{ref1Pincode}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Relative's City</td>
+                        <td className='tableDescription'>{ref1City}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Relative's State</td>
+                        <td className='tableDescription'>{ref1States}</td>
+                    </tr>
+                    </table>
+                    <table className='pdfTable' id="leadDetails-table6" style={{display:'none'}}>
+                    <tr>
                         <td className='tableTitle'>Friend's First Name</td>
                         <td className='tableDescription'>{ref2FirstName}</td>
                     </tr>
@@ -2845,6 +3198,26 @@ export default function LeadDetailsNew(props) {
                     <tr>
                         <td className='tableTitle'>Friend's Mobile No</td>
                         <td className='tableDescription'>{ref2MobileNo}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Friend's Address 1</td>
+                        <td className='tableDescription'>{ref2Address1}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Friend's Address 2</td>
+                        <td className='tableDescription'>{ref2Address2}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Friend's Pincode</td>
+                        <td className='tableDescription'>{ref2Pincode}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Friend's City</td>
+                        <td className='tableDescription'>{ref2City}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Friend's State</td>
+                        <td className='tableDescription'>{ref2States}</td>
                     </tr>
                     </table>
             </div>
