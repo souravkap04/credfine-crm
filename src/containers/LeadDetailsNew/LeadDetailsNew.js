@@ -607,35 +607,36 @@ export default function LeadDetailsNew(props) {
                 setcolorRed(colorRedError)
                 return;
             }
-            if (employmentType === '') colorRedError[2] = true;
-            if (companyName === '') colorRedError[2] = true;
-            if (designation === '') colorRedError[2] = true;
-            if (currentWorkExp === '') colorRedError[2] = true;
-            if (totalWorkExp === '') colorRedError[2] = true;
-            if (monthlyIncome === '') colorRedError[2] = true;
-            if (salaryCreditMode === '') colorRedError[2] = true;
-            if (salaryBankAcc === '') colorRedError[2] = true;
-            if (employmentType === '' || companyName === '' || designation === '' || currentWorkExp === '' || totalWorkExp === '' || monthlyIncome === '' || salaryCreditMode === '' || salaryBankAcc === '') {
-                setcolorRed(colorRedError)
-                return;
-            }
-            if (currentEMI === '') colorRedError[3] = true;
-            if (currentEMI === '') {
-                setcolorRed(colorRedError)
-                return;
-            }
-            if (permanentPincode === '') colorRedError[4] = true;
-            if (permanentCity === '') colorRedError[4] = true;
-            if (permanentStates === '') colorRedError[4] = true;
-            if (permanentResidentType === '') colorRedError[4] = true;
-            if (permanentAddressOne === '') colorRedError[4] = true;
-            if (permanentAddressTwo === '') colorRedError[4] = true;
-            if (permanentAddressThree === '') colorRedError[4] = true;
-            if (permanentAddressVintage === '') colorRedError[4] = true
+            if (permanentPincode === '') colorRedError[2] = true;
+            if (permanentCity === '') colorRedError[2] = true;
+            if (permanentStates === '') colorRedError[2] = true;
+            if (permanentResidentType === '') colorRedError[2] = true;
+            if (permanentAddressOne === '') colorRedError[2] = true;
+            if (permanentAddressTwo === '') colorRedError[2] = true;
+            if (permanentAddressThree === '') colorRedError[2] = true;
+            if (permanentAddressVintage === '') colorRedError[2] = true
             if (permanentPincode === '' || permanentCity === '' || permanentStates === '' || permanentResidentType === '' || permanentAddressOne === '' || permanentAddressTwo === '' || permanentAddressThree === '' || permanentAddressVintage === '') {
                 setcolorRed(colorRedError)
                 return;
             }
+            if (employmentType === '') colorRedError[3] = true;
+            if (companyName === '') colorRedError[3] = true;
+            if (designation === '') colorRedError[3] = true;
+            if (currentWorkExp === '') colorRedError[3] = true;
+            if (totalWorkExp === '') colorRedError[3] = true;
+            if (monthlyIncome === '') colorRedError[3] = true;
+            if (salaryCreditMode === '') colorRedError[3] = true;
+            if (salaryBankAcc === '') colorRedError[3] = true;
+            if (employmentType === '' || companyName === '' || designation === '' || currentWorkExp === '' || totalWorkExp === '' || monthlyIncome === '' || salaryCreditMode === '' || salaryBankAcc === '') {
+                setcolorRed(colorRedError)
+                return;
+            }
+            if (currentEMI === '') colorRedError[4] = true;
+            if (currentEMI === '') {
+                setcolorRed(colorRedError)
+                return;
+            }
+            
         }
         if (status === 'Valid Follow-Up' || status === 'Cold Follow-Up' || status === 'Hot Follow-Up' || (status === 'Punched' && subStatus === 'Eligible')) {
             let followData = [...followUpDateError];
