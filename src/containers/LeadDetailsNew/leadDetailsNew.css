@@ -17,6 +17,14 @@
   font-family: "Lato";
 }
 
+.accordianContainer .textField label span {
+  position: absolute;
+  color: red;
+  font-size: 22px;
+  top: -25px;
+  margin-left: 2px;
+}
+
 .accordianContainer .textField .MuiOutlinedInput-root {
   height: 3.33333vw;
 }
@@ -389,5 +397,38 @@
 .callConatiner .allremarksContainer .autoScroll::-webkit-scrollbar-thumb {
   background-color: #f7f9fc;
   border-radius: 0.55556vw;
+}
+
+#leadDetails-table table,
+#leadDetails-table td,
+#leadDetails-table th {
+  border: 1px solid #707070;
+  padding: 0.55556vw;
+}
+
+#leadDetails-table .tableName {
+  width: 100%;
+  margin-bottom: 1.38889vw;
+  margin-left: 3.47222vw;
+}
+
+#leadDetails-table .tableName .tableText {
+  font-size: 1.38889vw;
+}
+
+#leadDetails-table .pdfTable {
+  border-collapse: collapse;
+  margin-bottom: 1.38889vw;
+  margin-left: 3.47222vw;
+}
+
+#leadDetails-table .pdfTable .tableTitle {
+  font-size: 1.04167vw;
+  width: 13.88889vw;
+}
+
+#leadDetails-table .pdfTable .tableDescription {
+  font-size: 1.04167vw;
+  width: 17.36111vw;
 }
 /*# sourceMappingURL=leadDetailsNew.css.map */

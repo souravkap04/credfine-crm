@@ -75,6 +75,18 @@ $desk: 100 / 1440;
                     color: #25D366;
                     cursor: pointer;
                 }
+                .pdfBtn {
+                    font-size: 30 * $desk + vw;
+                    margin-right: 15 * $desk + vw;
+                    color: #535ad1;
+                    cursor: pointer;
+                 }
+                 .emailBtn {
+                    font-size: 30 * $desk + vw;
+                    margin-right: 15 * $desk + vw;
+                    color: #535ad1;
+                    cursor: pointer;
+                 }
                 .autoDialerEndBtn {
                     margin-right: 20 * $desk + vw;
                     box-shadow: none;
