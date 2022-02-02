@@ -124,7 +124,7 @@ export default function HDFCFrom() {
 
     const getHdfcCompany = async (e) => {
         setEmployerName(e.target.value);
-        let item = { search_key: employerName, type: 'company' }
+        let item = { search_key: employerName, type: 'hdfc_company' }
         const headers = { 'Content-Type': 'application/json' };
         if (employerName.length >= 2) {
             await axios.post(`${hdfcBankApi}/getHdfcCompanies/`, item, { headers })
@@ -917,9 +917,9 @@ export default function HDFCFrom() {
                         />
                         <ListGroup className="listGroup">
                             {showHdfcCompany ? searchHdfcCompany.map((company) => (
-                                <ListGroup.Item key={company.company_id}
-                                    onClick={() => selectHdfcCompany(company.company_id, company.company_name)}
-                                >{company.company_name}</ListGroup.Item>
+                                <ListGroup.Item key={company.value.id}
+                                    onClick={() => selectHdfcCompany(company.value.id, company.city_name)}
+                                >{company.city_name}</ListGroup.Item>
                             )) : ''}
                         </ListGroup>
                     </div>
