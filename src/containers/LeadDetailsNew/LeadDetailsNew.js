@@ -788,7 +788,6 @@ export default function LeadDetailsNew(props) {
         }
     }
     const selectCompany = (company) => {
-        console.log(company);
         setCompanyName(company);
         setShowCompany(false);
     }

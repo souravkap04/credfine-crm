@@ -362,7 +362,6 @@ export default function HDFCFrom() {
             Aadhar: "", Driving_License: "",
         }
         let items = { loan_data: { applyLoan } };
-        console.log("items:" + items);
         const headers = { 'Content-Type': 'application/json' };
         await axios.post(`${hdfcBankApi}/sendHdfcLead/${leadId}/2`, items, { headers })
             .then((response) => {
