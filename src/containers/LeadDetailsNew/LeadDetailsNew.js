@@ -697,7 +697,7 @@ export default function LeadDetailsNew(props) {
         const searchCompanyUrl = "https://backend.credfine.com/common/search_company";
         let item = { company: companyName };
         const header = { 'Content-Type': 'application/json' }
-        if (companyName.length >= 2) {
+        if (e.target.value.length >= 2) {
             await axios.post(`${searchCompanyUrl}`, item, { header })
                 .then((response) => {
                     setSearchCompany(response.data);
@@ -788,6 +788,7 @@ export default function LeadDetailsNew(props) {
         }
     }
     const selectCompany = (company) => {
+        console.log(company);
         setCompanyName(company);
         setShowCompany(false);
     }

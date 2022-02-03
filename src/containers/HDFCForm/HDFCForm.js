@@ -351,14 +351,14 @@ export default function HDFCFrom() {
         }
         let applyLoan = {
             Employer_Name : chechEmployerType ? employerIdd : '',  Employer_Name_other: chechEmployerType ? '' : employerName,
-            First_Name: firstName, Last_Name: lastName, Gender: gender, Date_Of_Birth: dob, Educational_Qualification: "GRAD",
+            First_Name: firstName, Last_Name: lastName, Gender: gender, Date_Of_Birth: dob, Educational_Qualification: highestQualification,
             Loan_Amount: loanAmount, PAN_AC_No: panCardNo, EMI: emi, Landmark_Resi: "", Landmark_Work: "", Passport_no: "", Voter_iD: "",
-            City_Resi: 474, Pin_Code_Resi: pincode, Address1_Resi: addressLineOne, Address2_Resi: addressLineTwo, Address3_Resi: addressLineThree, State_Resi: 1, Mobile1_Resi: mobileNo,
-            STD_Code_Resi: "", Email_Resi: residentialEmailId, Year_at_Current_Address: yearsInCurrentResidence, Year_at_City: yearsInCurrentCity,
-            Address1_Work: officeAddressOne,
-            Address2_Work: officeAddressTwo, Phone1_Work: phoneNoWork,
-            Pin_Code_Work: officePincode, City_Work: 474, State_Work: 1, Monthly_take_home_Salary: monthlyTakeHomeSalary, residence_type_dap: residanceTypeDap,
-            employment_type: employmentType, No_of_Dependent: totalDependent, Branch_code: 214, RM_code: rmCodeIdd, SE_code: seCodeIdd,
+            City_Resi: cityIdd,State_Resi: stateIdd, Pin_Code_Resi: pincode, Address1_Resi: addressLineOne, Address2_Resi: addressLineTwo, 
+            Address3_Resi: addressLineThree,Mobile1_Resi: mobileNo,STD_Code_Resi: "", Email_Resi: residentialEmailId, 
+            Year_at_Current_Address: yearsInCurrentResidence,Year_at_City: yearsInCurrentCity,Address1_Work: officeAddressOne,
+            Address2_Work: officeAddressTwo, Phone1_Work: phoneNoWork,Pin_Code_Work: officePincode, City_Work: officeCityIdd,
+             State_Work: officeStateIdd, Monthly_take_home_Salary: monthlyTakeHomeSalary,  residence_type_dap: residanceTypeDap,
+            employment_type: employmentType, No_of_Dependent: totalDependent, Branch_code: brabchCodeIdd, RM_code: rmCodeIdd, SE_code: seCodeIdd,
             Aadhar: "", Driving_License: "",
         }
         let items = { loan_data: { applyLoan } };
