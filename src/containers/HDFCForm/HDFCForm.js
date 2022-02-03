@@ -9,14 +9,11 @@ import back from '../../images/forms/back.svg';
 import TextField from '@material-ui/core/TextField';
 import FormContainer from '../FormContainer/FormContainer';
 import Checkbox from '@material-ui/core/Checkbox';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import uploadSRC from '../../images/forms/fileUpload.svg';
 import List from '@material-ui/core/List';
 import { useHistory, useParams } from 'react-router-dom';
 import phoneCall from '../../images/forms/phoneCall.svg';
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
-import { ListItem } from '@material-ui/core';
 import { ListGroup } from 'react-bootstrap';
 import Moment from 'moment';
 function Alert(props) {

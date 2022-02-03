@@ -34,8 +34,6 @@ import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import moment from 'moment';
 import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable'
-import { Column } from 'jspdf-react';
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
