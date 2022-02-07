@@ -220,6 +220,13 @@ export default function MyLeads(props) {
   let campaignData = getCampaign();
   const queryy = useQueryy();
   const myLeadQuery = queryy.get("query") || "";
+  const datetype = queryy.get("datetype") || "";
+  const filterstatus = queryy.get("status") || "";
+  const startDate = queryy.get("start_date") || "";
+  const endDate = queryy.get("end_date") || "";
+  const sub_status = queryy.get("sub_status") || "";
+  const campaign_category = queryy.get("campaign_category") || "";
+  const user_id = queryy.get("user_id") || "";
   const splitUrl = (data) => {
     if (data !== null) {
       const [url, pager] = data.split("?");
@@ -232,27 +239,7 @@ export default function MyLeads(props) {
     const headers = { Authorization: `Token ${profileData.token}` };
     await axios
       .get(
-        `${baseUrl}/leads/fetchUpdatedLeadsUserWise/`, { headers }
-      )
-      .then((response) => {
-        setRowsPerPage(response.data.results.length);
-        settotalDataPerPage(response.data.results.length);
-        setPrevPage(response.data.previous);
-        setNextPage(response.data.next);
-        setMyLeads(response.data.results);
-        setTotalLeads(response.data.count);
-        setisLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-  const fetchFilteredMyLeads = async () => {
-    setisLoading(true);
-    const headers = { Authorization: `Token ${profileData.token}` };
-    await axios
-      .get(
-        `${baseUrl}/leads/fetchUpdatedLeadsUserWise/?datetype=${dateType}&status=${status}&start_date=${startdate}&end_date=${enddate}&sub_status=${subStatus}&campaign_category=${campaign}&user_id=${users_id}`,
+        `${baseUrl}/leads/fetchUpdatedLeadsUserWise/?datetype=${datetype}&status=${filterstatus}&start_date=${startDate}&end_date=${endDate}&sub_status=${sub_status}&campaign_category=${campaign_category}&user_id=${user_id}`,
         { headers }
       )
       .then((response) => {
@@ -285,7 +272,16 @@ export default function MyLeads(props) {
   useEffect(() => {
     myLeadQuery ? fetchMyLeadsSearchData(myLeadQuery) : fetchMyLeads();
     listOfUsers();
-  }, [myLeadQuery]);
+  }, [
+    datetype,
+    filterstatus,
+    startDate,
+    endDate,
+    subStatus,
+    campaign_category,
+    user_id,
+    myLeadQuery,
+  ]);
   const listOfUsers = async () => {
     const headers = {
       Authorization: `Token ${profileData.token}`,
@@ -442,8 +438,7 @@ export default function MyLeads(props) {
     setmanualState(true);
   };
 
-  const filterSubmit = (event) => {
-    event.preventDefault();
+  const filterSubmit = () => {
     if (startdate !== "" && enddate === "") {
       setisError(true);
       return;
@@ -451,7 +446,6 @@ export default function MyLeads(props) {
     history.push(
       `/dashboards/myleads/?datetype=${dateType}&status=${status}&start_date=${startdate}&end_date=${enddate}&sub_status=${subStatus}&campaign_category=${campaign}&user_id=${users_id}`
     );
-    fetchFilteredMyLeads();
     closeDrawer();
   };
   const closeDrawer = () => {
@@ -548,7 +542,7 @@ export default function MyLeads(props) {
       <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
       <Drawer anchor="right" open={state} onClose={closeDrawer}>
         <div className="rightContainerForm">
-          <form onSubmit={filterSubmit}>
+          <form>
             <Grid container justifyContent="flex-start">
               <h4>Search Here</h4>
             </Grid>
@@ -741,7 +735,7 @@ export default function MyLeads(props) {
             </Grid>
             <Grid>
               <Button
-                type="submit"
+                onClick={() => filterSubmit()}
                 className="submitBtn"
                 color="primary"
                 variant="contained"
