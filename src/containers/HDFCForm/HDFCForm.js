@@ -39,6 +39,7 @@ export default function HDFCFrom() {
     const [isHdfcPersonalRefData, setIsHdfcPersonalRefData] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
     const [isError, setIsError] = useState(false);
+    const [isCopy, setisCopy] = useState(false);
     const [hangUpSnacks, sethangUpSnacks] = useState(false);
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
@@ -105,6 +106,7 @@ export default function HDFCFrom() {
     const [searchHdfcCity, setSearchHdfcCity] = useState([]);
     const [showHdfcOfficeCity, setShowHdfcOfficeCity] = useState(false);
     const [searchHdfcOfficeCity, setSearchHdfcOfficeCity] = useState([]);
+    const [losNo,setLosNo] = useState('');
     useEffect(() => {
         fetchHdfcData(leadid);
         fetchPersonalReferenceData(leadid);
@@ -428,6 +430,7 @@ export default function HDFCFrom() {
         setIsError(false);
         setIsHdfcData(false);
         setIsHdfcPersonalRefData(false);
+        setisCopy(false);
     }
     const handleUpload = (file, folderName, parentId, childId) => {
         let fileExt = file.name.split('.').pop();
@@ -461,6 +464,7 @@ export default function HDFCFrom() {
                     setisUploadDocument(false)
                     setisUploadProgress(true)
                     setisBankStatement(true)
+                    setLosNo(response.data.los_no)
                 } if (response.data.response_status === 'failed') {
                     setAlertMessage("something wrong please check");
                     setIsError(true);
@@ -468,6 +472,14 @@ export default function HDFCFrom() {
             }).catch((error) => {
                 console.log(error);
             })
+    }
+    const copyLosNumber = (clip) =>{
+        navigator.clipboard.writeText(clip).then(function(){
+            setisCopy(true)
+        },function(){
+            setAlertMessage('Los No not copied!');
+            setIsError(true)
+        })
     }
     const trackStatusHandler = async () => {
         await axios.get(`${hdfcBankApi}/trackHdfcApi/${leadid}`)
@@ -493,6 +505,11 @@ export default function HDFCFrom() {
                 {alertMessage}
             </Alert>
         </Snackbar>
+        <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isCopy} autoHideDuration={1500} onClose={disableHangUpSnacks}>
+                <Alert onClose={disableHangUpSnacks} severity="success">
+                    Successfully copied to clipboard
+                </Alert>
+            </Snackbar>
         <div className="leftSection">
             <div className="logoContainer">
                 <div className="logoImage">
@@ -1417,9 +1434,19 @@ export default function HDFCFrom() {
                         </div>
                     </div>
                 </div>
-                <div className="texualContainer">
+                <div className="texualContainer" style={{paddingRight:'104px'}}>
                     <div className="headText2"><strong>Congratulations!</strong></div>
                     <div className="subText">Your Application has been <strong>successfully submitted.</strong> Our Team will get back to you in 24-48 hours.</div>
+                    <div className='subText2'>CredFine.com doesn’t charge any money from customers for it’s Loan or Credit Card offerings. In case you<br/>
+                             receive such communication from anyone claiming to be a CredFine representative, please contact us at <strong>care@credfine.com</strong></div>
+                    <div className='losContainer'>
+                        <div className='losHeader'><strong>Loan Tracking Number</strong></div>
+                        <div className='losNumber'>{losNo}</div>
+                        <div className='copyIcon' onClick={()=>copyLosNumber(losNo)}>
+                            <i class="far fa-copy"></i>
+                        </div>
+                    </div>
+                    <hr/>
                     <div className="trackStatus">
                         <div className="btnText" onClick={trackStatusHandler}>TRACK STATUS</div>
                     </div>

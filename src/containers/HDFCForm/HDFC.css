@@ -274,18 +274,60 @@
 .HDFCFormContainer .rightSection .texualContainer .headText {
   font-size: 2.016rem;
   color: #07498e;
-  margin-bottom: 1.26rem;
+  margin-bottom: 0.882rem;
 }
 
 .HDFCFormContainer .rightSection .texualContainer .headText2 {
   font-size: 2.016rem;
   color: #07498e;
+  margin-bottom: 0.882rem;
 }
 
 .HDFCFormContainer .rightSection .texualContainer .subText {
   font-size: 1.008rem;
   color: #727272;
-  margin-bottom: 5.04rem;
+  margin-bottom: 1.449rem;
+}
+
+.HDFCFormContainer .rightSection .texualContainer .subText2 {
+  font-size: 1.008rem;
+  color: #727272;
+  line-height: 1.512rem;
+}
+
+.HDFCFormContainer .rightSection .texualContainer .subText2 strong {
+  color: #07498E;
+}
+
+.HDFCFormContainer .rightSection .texualContainer .losContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-top: 2.079rem;
+}
+
+.HDFCFormContainer .rightSection .texualContainer .losContainer .losHeader {
+  margin-right: 0.63rem;
+  color: #000000;
+  font-size: 1.008rem;
+}
+
+.HDFCFormContainer .rightSection .texualContainer .losContainer .losNumber {
+  width: 6.93rem;
+  height: 2.016rem;
+  background-color: #535AD1;
+  color: #FFFFFF;
+  padding: 0.378rem 0.819rem 0.441rem 0.819rem;
+  text-align: center;
+  border-radius: 0.252rem;
+}
+
+.HDFCFormContainer .rightSection .texualContainer .losContainer .copyIcon {
+  margin-left: 0.40068rem;
+  cursor: pointer;
 }
 
 .HDFCFormContainer .rightSection .texualContainer .trackStatus {

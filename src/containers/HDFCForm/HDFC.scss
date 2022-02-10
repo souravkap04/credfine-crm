@@ -187,22 +187,57 @@ $mob: 100 / 375;
             }
         }
         .texualContainer {
+            // margin-left: 38 * $desk + rem;
+            // padding-right: 228 * $desk + rem;
             margin: auto;
             margin-top: 23 * $desk + rem;
-            width: 851 * $desk + rem;
+             width: 851 * $desk + rem;
             .headText {
                 font-size: 32 * $desk + rem;
                 color: #07498e;
-                margin-bottom: 20 * $desk + rem;
+                margin-bottom: 14 * $desk + rem;
             }
             .headText2 {
                 font-size: 32 * $desk + rem;
                 color: #07498e;
+                margin-bottom: 14 * $desk + rem;
             }
             .subText {
                 font-size: 16 * $desk + rem;
                 color: #727272;
-                margin-bottom: 80 * $desk + rem;
+                margin-bottom: 23 * $desk + rem;
+            }
+            .subText2 {
+                font-size: 16 * $desk + rem;
+                color: #727272;
+                line-height: 24 * $desk + rem;
+                strong{
+                    color: #07498E;
+                }
+            }
+            .losContainer {
+                display: flex;
+                align-items: center;
+                margin-top: 33 * $desk + rem;
+                .losHeader{
+                    margin-right: 10 * $desk + rem;
+                    color: #000000;
+                    font-size: 16 * $desk + rem;
+                    
+                }
+                .losNumber{
+                    width: 110 * $desk + rem;
+                    height: 32 * $desk + rem;
+                    background-color: #535AD1;
+                    color: #FFFFFF;
+                    padding: 6 * $desk + rem 13 * $desk + rem 7 * $desk + rem 13 * $desk + rem;
+                    text-align: center;
+                    border-radius: 4 * $desk + rem;
+                }
+                .copyIcon{
+                    margin-left: 6.36 * $desk + rem;
+                    cursor: pointer;
+                }
             }
             .trackStatus {
                 display: flex;
