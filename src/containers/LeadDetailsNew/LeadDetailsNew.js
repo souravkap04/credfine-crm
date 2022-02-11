@@ -2553,7 +2553,7 @@ export default function LeadDetailsNew(props) {
                         </AccordionDetails>                
                     </Accordion>
                     <Grid className="completeJourneyContainer">
-                        <NavLink to={`/dashboards/PersonalLoanForm/${leadid}`}>
+                        <NavLink to={`/dashboards/PersonalLoanForm/${leadid}`} target="_blank">
                             <Button
                                 className="journeyBtn"
                                 color="primary"
