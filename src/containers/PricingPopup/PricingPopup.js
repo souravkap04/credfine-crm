@@ -30,7 +30,7 @@ const useStyles = makeStyles({
     },
     tableheadingBorder: {
         backgroundColor: '#535AD1',
-        padding: '0 !important'
+        padding: '0px !important'
     },
     tableInputLabel: {
         color: '#ffffff',
@@ -72,7 +72,8 @@ const useStyles = makeStyles({
         fontWeight: '600',
         color: '#656565',
         backgroundColor: '#FFFBF2',
-        borderBottom: '2px solid #fff !important'
+        borderBottom: '2px solid #fff !important',
+        wordBreak:'break-word'
     },
     tabledataBorder: {
         // borderLeft: '10px solid #FFBD14',
@@ -105,7 +106,8 @@ export default function PricingPopup(props) {
             loan_charges: 'Up to 2.5% of the loan amount include insurance ',
             part_payment: 'Part-payment allowed after 3 EMI up to 40% of principal outstanding nill charges. This is allowed only once in a principle year.',
             force_clousre: "Foreclosure allowed after 3 EMI's 4% charges plus GST",
-            firms_not_allowed: 'PROP/Partnership/NGO/LLP Only if Listed'
+            firms_not_allowed: 'PROP/Partnership/NGO/LLP Only if Listed',
+            doc_req:'Photo KYC 3 Month Salary Slip 6 Month Bank Statement Rent Agreement if Rented Electricity Bill Own Housed Proof'
         },
         {
             banks_nbfc: 'IDFC PL',
@@ -118,7 +120,8 @@ export default function PricingPopup(props) {
             loan_charges: 'Up to 2.5% of the loan amount include insurance',
             part_payment: 'Part-payment not allowed',
             force_clousre: "Foreclosure allowed after 12 EMI's 5% charges plus GST",
-            firms_not_allowed: 'PROP/Partnership/NGO/LLP Only if Listed'
+            firms_not_allowed: 'PROP/Partnership/NGO/LLP Only if Listed',
+            doc_req:'Photo KYC 3 Month Salary Slip 6 Month Bank Statement Rent Agreement if Rented Electricity Bill Own Housed Proof'
         },
         {
             banks_nbfc: 'ABFL PL',
@@ -131,7 +134,8 @@ export default function PricingPopup(props) {
             loan_charges: 'Up to 2.5% of the loan amount include insurance ',
             part_payment: 'Part-payment allowed after 6 EMI up to 20% of principal outstanding nill charges. This is allowed only once in a principle year.',
             force_clousre: "Foreclosure allowed after 12 EMI's 4% charges plus GST",
-            firms_not_allowed: 'PROP/Partnership/NGO/LLP Only if Listed'
+            firms_not_allowed: 'PROP/Partnership/NGO/LLP Only if Listed',
+            doc_req:'Photo KYC 3 Month Salary Slip 6 Month Bank Statement Rent Agreement if Rented Electricity Bill Own Housed Proof'
         },
         {
             banks_nbfc: 'Incred PL',
@@ -144,7 +148,8 @@ export default function PricingPopup(props) {
             loan_charges: 'Up to 2.5% of the loan amount include insurance',
             part_payment: 'Part-payment not allowed',
             force_clousre: "Foreclosure allowed after 6 EMI's 4% charges plus GST",
-            firms_not_allowed: 'PROP/Partnership/NGO/LLP Only if Listed'
+            firms_not_allowed: 'PROP/Partnership/NGO/LLP Only if Listed',
+            doc_req:'Photo KYC 3 Month Salary Slip 6 Month Bank Statement Rent Agreement if Rented Electricity Bill Own Housed Proof'
         },
         {
             banks_nbfc: 'Fullerton PL',
@@ -157,7 +162,8 @@ export default function PricingPopup(props) {
             loan_charges: 'Up to 3% of the loan amount include insurance',
             part_payment: 'Part-payment not allowed',
             force_clousre: "6 EMI 7% 18 EMI 5% 24 EMI 3% 36 EMI NILL",
-            firms_not_allowed: 'All Firm Allowed'
+            firms_not_allowed: 'All Firm Allowed',
+            doc_req:'Photo KYC 3 Month Salary Slip 6 Month Bank Statement Rent Agreement if Rented Electricity Bill Own Housed Proof'
         },
         {
             banks_nbfc: 'Axis PL',
@@ -170,7 +176,8 @@ export default function PricingPopup(props) {
             loan_charges: 'Up to 2% of the loan amount include insurance',
             part_payment: 'Part-payment allowed after 1 EMI 5% 0-12 months 4% 13 to 24 months 3% 25 to 36 months',
             force_clousre: 'Foreclosure allowed after 1 EMI 5% 0-12 months 4% 13 to 24 months 3% 25 to 36 months',
-            firms_not_allowed: 'PROP/Partnership/NGO/LLP Only if Listed'
+            firms_not_allowed: 'PROP/Partnership/NGO/LLP Only if Listed',
+            doc_req:'Photo KYC 3 Month Salary Slip 6 Month Bank Statement Rent Agreement if Rented Electricity Bill Own Housed Proof'
         },
         {
             banks_nbfc: 'TATA PL',
@@ -183,7 +190,8 @@ export default function PricingPopup(props) {
             loan_charges: 'Up to 2% of the loan amount include insurance',
             part_payment: 'Part-payment allowed after 6 EMI up to 25% of principal outstanding nill charges above 25% partpayment 2.5% charges applicable. A maximum of 50% of the principle outstanding is allowed during a single year',
             force_clousre: "Foreclosure allowed after 6 EMI's 4.5% charges plus GST",
-            firms_not_allowed: 'PROP/Partnership/NGO/LLP Only if Listed'
+            firms_not_allowed: 'PROP/Partnership/NGO/LLP Only if Listed',
+            doc_req:'Photo KYC 3 Month Salary Slip 6 Month Bank Statement Rent Agreement if Rented Electricity Bill Own Housed Proof'
         },
         {
             banks_nbfc: 'YES BANK PL',
@@ -196,7 +204,8 @@ export default function PricingPopup(props) {
             loan_charges: 'Up to 2% of the loan amount include insurance',
             part_payment: 'Part-payment allowed after 12 EMI up to 20% of principal outstanding nill charges. This is allowed only once in a principle year.',
             force_clousre: 'Foreclosure allowed after 12 EMI. 4% 13-24 months. 3% 25 to 36 months. 2% 37 to 48 months. nill above 48 months',
-            firms_not_allowed: 'PROP/Partnership/NGO/LLP Only if Listed'
+            firms_not_allowed: 'PROP/Partnership/NGO/LLP Only if Listed',
+            doc_req:'Photo KYC 3 Month Salary Slip 6 Month Bank Statement Rent Agreement if Rented Electricity Bill Own Housed Proof'
         },
         {
             banks_nbfc: 'HDFC BANK PL',
@@ -209,7 +218,8 @@ export default function PricingPopup(props) {
             loan_charges: 'Up to 2.50% of the loan amount subject to a minimum of Rs. 2,999 & maximum of Rs. 25,000 for salaried customers',
             part_payment: 'Part-payment allowed after 12 EMI up to 25% of principal outstanding. This is allowed only once in a financial year and twice during the entire loan tenure.',
             force_clousre: "13-24 months – 4% of loan principal outstanding 25-36 months – 3% of loan principal outstanding >36 months – 2% of loan principal outstanding",
-            firms_not_allowed: 'PROP/Partnership/NGO/LLP Only if Listed'
+            firms_not_allowed: 'PROP/Partnership/NGO/LLP Only if Listed',
+            doc_req:'Photo KYC 3 Month Salary Slip 6 Month Bank Statement Rent Agreement if Rented Electricity Bill Own Housed Proof'
         },
         {
             banks_nbfc: 'KOTAK Bank PL',
@@ -223,6 +233,7 @@ export default function PricingPopup(props) {
             part_payment: 'Part-payment allowed after 12 EMI up to 20% of principal outstanding nill charges. This is allowed only once in a principle year.',
             force_clousre: 'Foreclosure allowed after 12 EMI. 1 to 3 years – 4% of loan principal outstanding after 3 years – 2% of loan principal outstanding >10 lakh 999/- after completion of locking period (Only if closing through own funds)',
             firms_not_allowed: 'PROP/Partnership/NGO/LLP Only if Listed',
+            doc_req:'Photo KYC 3 Month Salary Slip 6 Month Bank Statement Rent Agreement if Rented Electricity Bill Own Housed Proof'
         },
         {
             banks_nbfc: 'ICICI Bank PL',
@@ -236,6 +247,7 @@ export default function PricingPopup(props) {
             part_payment: 'Part-payment not allowed',
             force_clousre: "Foreclosure allowed after 12 EMI's 5% charges plus GST",
             firms_not_allowed: 'PROP/Partnership/NGO/LLP Only if Listed',
+            doc_req:'Photo KYC 3 Month Salary Slip 6 Month Bank Statement Rent Agreement if Rented Electricity Bill Own Housed Proof'
         },
         {
             banks_nbfc: 'BAJAJ PL',
@@ -249,6 +261,7 @@ export default function PricingPopup(props) {
             part_payment: 'Part-payment allowed after 1 EMI upto 75% with 2% charges',
             force_clousre: "Foreclosure allowed after 1 EMI's 4% charges plus GST",
             firms_not_allowed: 'PROP/Partnership/NGO/LLP/Construction Company Only if Listed',
+            doc_req:'Photo KYC 3 Month Salary Slip 6 Month Bank Statement Rent Agreement if Rented Electricity Bill Own Housed Proof'
         },
         {
             banks_nbfc: 'BAJAJ OD',
@@ -262,6 +275,7 @@ export default function PricingPopup(props) {
             part_payment: 'Part-payment allowed after 1 day with nill charges',
             force_clousre: "Foreclosure allowed after 6 EMI's 4.72% charges plus GST",
             firms_not_allowed: 'PROP/Partnership/NGO/LLP Only if Listed',
+            doc_req:'Photo KYC 3 Month Salary Slip 6 Month Bank Statement Rent Agreement if Rented Electricity Bill Own Housed Proof'
         },
         {
             banks_nbfc: 'TATA OD',
@@ -275,6 +289,7 @@ export default function PricingPopup(props) {
             part_payment: 'Part-payment allowed after 1 day with nill charges',
             force_clousre: "Foreclosure allowed after 6 EMI's 4.5% charges plus GST",
             firms_not_allowed: 'PROP/PARTNERSHIP/NGO/LLP ONLY IF LISTED',
+            doc_req:'Photo KYC 3 Month Salary Slip 6 Month Bank Statement Rent Agreement if Rented Electricity Bill Own Housed Proof'
         },
         {
             banks_nbfc: 'INDUSIND Bank PL',
@@ -288,6 +303,7 @@ export default function PricingPopup(props) {
             part_payment: 'Part-payment not allowed',
             force_clousre: "Foreclosure allowed after 12 EMI's 4% charges",
             firms_not_allowed: 'PROP/PARTNERSHIP/NGO/LLP ONLY IF LISTED',
+            doc_req:'Photo KYC 3 Month Salary Slip 6 Month Bank Statement Rent Agreement if Rented Electricity Bill Own Housed Proof'
         },
         {
             banks_nbfc: 'STANCY Bank PL',
@@ -301,6 +317,7 @@ export default function PricingPopup(props) {
             part_payment: 'Part-payment allowed after 6 EMI upto 25% with 2% charges',
             force_clousre: "Foreclosure allowed after 1 EMI's 4% charges",
             firms_not_allowed: 'PROP/PARTNERSHIP/NGO/LLP ONLY IF LISTED',
+            doc_req:'Photo KYC 3 Month Salary Slip 6 Month Bank Statement Rent Agreement if Rented Electricity Bill Own Housed Proof'
         }
     ]);
     const [age, setAge] = useState('');
@@ -346,6 +363,7 @@ export default function PricingPopup(props) {
                         <TableCell className={classes.tableheading}>PARTPAYMENT</TableCell>
                         <TableCell className={classes.tableheading}>FORECLOSURE</TableCell>
                         <TableCell className={classes.tableheading}>FIRMS NOT ALLOWED</TableCell>
+                        <TableCell className={classes.tableheading}>DOCUMENTS REQUIRED</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -365,6 +383,7 @@ export default function PricingPopup(props) {
                                     <TableCell className={classes.tabledataRed}>{item.part_payment}</TableCell>
                                     <TableCell className={classes.tabledataRed}>{item.force_clousre}</TableCell>
                                     <TableCell className={classes.tabledataRed}>{item.firms_not_allowed}</TableCell>
+                                    <TableCell className={classes.tabledataRed}>{item.doc_req}</TableCell>
                                 </TableRow>
                             } else if (index === 12 || index === 13) {
                                 return <TableRow className={classes.oddEvenRow}>
@@ -380,6 +399,7 @@ export default function PricingPopup(props) {
                                     <TableCell className={classes.tabledataGreen}>{item.part_payment}</TableCell>
                                     <TableCell className={classes.tabledataGreen}>{item.force_clousre}</TableCell>
                                     <TableCell className={classes.tabledataGreen}>{item.firms_not_allowed}</TableCell>
+                                    <TableCell className={classes.tabledataGreen}>{item.doc_req}</TableCell>
                                 </TableRow>
                             } else {
                                 return <TableRow className={classes.oddEvenRow}>
@@ -395,6 +415,7 @@ export default function PricingPopup(props) {
                                     <TableCell className={classes.tabledata}>{item.part_payment}</TableCell>
                                     <TableCell className={classes.tabledata}>{item.force_clousre}</TableCell>
                                     <TableCell className={classes.tabledata}>{item.firms_not_allowed}</TableCell>
+                                    <TableCell className={classes.tabledata}>{item.doc_req}</TableCell>
                                 </TableRow>
                             }
                         } else if (age === item.salary) {
@@ -412,6 +433,7 @@ export default function PricingPopup(props) {
                                     <TableCell className={classes.tabledataRed}>{item.part_payment}</TableCell>
                                     <TableCell className={classes.tabledataRed}>{item.force_clousre}</TableCell>
                                     <TableCell className={classes.tabledataRed}>{item.firms_not_allowed}</TableCell>
+                                    <TableCell className={classes.tabledataRed}>{item.doc_req}</TableCell>
                                 </TableRow>
                             } else if (index === 12 || index === 13) {
                                 return <TableRow className={classes.oddEvenRow}>
@@ -427,6 +449,7 @@ export default function PricingPopup(props) {
                                     <TableCell className={classes.tabledataGreen}>{item.part_payment}</TableCell>
                                     <TableCell className={classes.tabledataGreen}>{item.force_clousre}</TableCell>
                                     <TableCell className={classes.tabledataGreen}>{item.firms_not_allowed}</TableCell>
+                                    <TableCell className={classes.tabledataGreen}>{item.doc_req}</TableCell>
                                 </TableRow>
                             } else {
                                 return <TableRow className={classes.oddEvenRow}>
@@ -442,6 +465,7 @@ export default function PricingPopup(props) {
                                     <TableCell className={classes.tabledata}>{item.part_payment}</TableCell>
                                     <TableCell className={classes.tabledata}>{item.force_clousre}</TableCell>
                                     <TableCell className={classes.tabledata}>{item.firms_not_allowed}</TableCell>
+                                    <TableCell className={classes.tabledata}>{item.doc_req}</TableCell>
                                 </TableRow>
                             }
                         }
