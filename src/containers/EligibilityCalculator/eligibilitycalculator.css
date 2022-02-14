@@ -43,11 +43,4 @@
   font-size: 1.008vw;
   font-family: "Lato";
 }
-
-.eligibilityContainer .multiplierContainer {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  width: 7.245vw;
-}
 /*# sourceMappingURL=eligibilitycalculator.css.map */
