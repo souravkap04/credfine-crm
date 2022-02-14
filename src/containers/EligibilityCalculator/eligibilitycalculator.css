@@ -1,0 +1,53 @@
+.eligibilityContainer {
+  width: 18.9vw;
+  padding-top: 1.26vw;
+  padding-left: 2.331vw;
+}
+
+.eligibilityContainer h4 {
+  margin-left: 1.26vw;
+  font-size: 1.386vw;
+  font-weight: bold;
+  letter-spacing: 0.00945vw;
+  color: #535ad1;
+  margin-bottom: 0.441vw;
+  font-family: "Lato";
+}
+
+.eligibilityContainer .eligibilityTextField {
+  width: 14.49vw !important;
+  margin-top: 0.945vw !important;
+  margin-bottom: 0 !important;
+}
+
+.eligibilityContainer .eligibilityTextField label {
+  color: #535ad1;
+  letter-spacing: 0.4px;
+  font-size: 15.5px;
+  font-family: "Lato";
+}
+
+.eligibilityContainer .eligibilityTextField .MuiOutlinedInput-root {
+  height: 3.024vw;
+}
+
+.eligibilityContainer .eligibilityTextField .MuiOutlinedInput-notchedOutline {
+  border: 2px solid #c5cee0;
+}
+
+.eligibilityContainer .eligibilityTextField .MuiInputAdornment-root {
+  opacity: 0.6;
+}
+
+.eligibilityContainer .eligibilityTextField .MuiInputBase-input {
+  font-size: 1.008vw;
+  font-family: "Lato";
+}
+
+.eligibilityContainer .multiplierContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 7.245vw;
+}
+/*# sourceMappingURL=eligibilitycalculator.css.map */
