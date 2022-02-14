@@ -394,7 +394,7 @@ export default function PricingPopup(props) {
                             </Select>
                         </TableCell>
                         <TableCell className={classes.tableheading}>SAL REQ IF NOT LISTED</TableCell>
-                        <TableCell className={classes.tableheading}>ROI %</TableCell>
+                        <TableCell className={classes.tableheading}>Bank Policy</TableCell>
                         <TableCell className={classes.tableheading}>LAON TENURE</TableCell>
                         <TableCell className={classes.tableheading}>MAX LOAN AMT</TableCell>
                         <TableCell className={classes.tableheading}>LOAN CHARGES</TableCell>
@@ -408,9 +408,9 @@ export default function PricingPopup(props) {
                     {pricingData.filter((item)=>{
                         if(searchData === ''){
                             return item;
-                        }else if (item.banks_nbfc.includes(searchData)){
+                        }else if (item.banks_nbfc.toLowerCase().includes(searchData.toLowerCase())){
                             return item;
-                        }else if (item.firms_allowed.includes(searchData)){
+                        }else if (item.firms_allowed.toLowerCase().includes(searchData.toLowerCase())){
                             return item;
                         }
                     }).map((item, index) => {
