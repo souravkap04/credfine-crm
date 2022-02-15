@@ -26,7 +26,7 @@ const EligibilityCalculator = (props) => {
             getEligibleEmiAsPerFoir();
             getEligibleEmiAsPerMultiplier();
         }
-    },[customerSalary,tenure,foir,multiplier,allEmi,creditcardOutstanding,creditCardMinDue,totalEmi,eligibleEmiForFoir])
+    },[customerSalary,tenure,foir,multiplier,allEmi,creditcardOutstanding,creditCardMinDue,totalEmi,eligibleEmiForFoir,eligibleEmiForMultiplier])
     const claculateMinDue = (data) =>{
         const  minimumDue = (data * 5)/100;
         setCreditCardMinDue(minimumDue);
@@ -44,10 +44,32 @@ const EligibilityCalculator = (props) => {
         setEligibleEmiForMultiplier(eligible_emi_multiplier)
     }
     const getEligibleEmiAsPerFoir = () =>{
-        const eligible_As_per_foir = (eligibleEmiForFoir/2400);
+        if(tenure === 1){
+            const eligible_As_per_foir = (eligibleEmiForFoir/9073).toFixed(2);
         setEligibleAsPerFoir(eligible_As_per_foir);
+        }else if(tenure === 2){
+            const eligible_As_per_foir = (eligibleEmiForFoir/4896).toFixed(2);
+        setEligibleAsPerFoir(eligible_As_per_foir);
+        }else if(tenure === 3){
+            const eligible_As_per_foir = (eligibleEmiForFoir/3516).toFixed(2);
+        setEligibleAsPerFoir(eligible_As_per_foir);
+        }else if(tenure === 4){
+            const eligible_As_per_foir = (eligibleEmiForFoir/2834).toFixed(2);
+        setEligibleAsPerFoir(eligible_As_per_foir);
+        }else if(tenure === 5){
+            const eligible_As_per_foir = (eligibleEmiForFoir/2400).toFixed(2);
+        setEligibleAsPerFoir(eligible_As_per_foir);
+        }else if(tenure === 6){
+            const eligible_As_per_foir = (eligibleEmiForFoir/2169).toFixed(2);
+        setEligibleAsPerFoir(eligible_As_per_foir);
+        }else if(tenure === 7){
+            const eligible_As_per_foir = (eligibleEmiForFoir/1986).toFixed(2);
+        setEligibleAsPerFoir(eligible_As_per_foir);
+        }
+        // const eligible_As_per_foir = (eligibleEmiForFoir/2400).toFixed(2);
+        // setEligibleAsPerFoir(eligible_As_per_foir);
     }
-    const getEligibleEmiAsPerMultiplier = (data) => {
+    const getEligibleEmiAsPerMultiplier = () => {
         const eligible_As_per_multiplier = eligibleEmiForMultiplier * multiplier;
         setEligibleAsPerMultiplier(eligible_As_per_multiplier);
     }
@@ -93,7 +115,7 @@ const EligibilityCalculator = (props) => {
                         variant="outlined"
                         size="small"
                         value={tenure}
-                        onChange={(e)=>setTenure(e.target.value)}
+                        onChange={(e)=>setTenure(parseInt(e.target.value,10))}
                         >
                         <option value="1">1 year</option>
                         <option value="2">2 year</option>

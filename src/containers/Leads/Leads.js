@@ -32,6 +32,7 @@ import MuiAlert from "@material-ui/lab/Alert";
 import Snackbar from "@material-ui/core/Snackbar";
 import { findAllByTestId } from "@testing-library/react";
 import EmiCalculator from '../Emicalculator/EmiCalculator';
+import EligibilityCalculator from "../EligibilityCalculator/EligibilityCalculator";
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -147,6 +148,13 @@ export default function Leads() {
   const [monthlyIncome, setmonthlyIncome] = useState("");
   const [formError, setformError] = useState([false, false, false]);
   const [openCalculate, setopenCalculate] = useState(false);
+  const [checkEligibility, setCheckEligibility] = useState(false);
+    const openEligibility = () => {
+        setCheckEligibility(true);
+    }
+    const closeEligibility = () => {
+        setCheckEligibility(false);
+    }
   const openCalculator = () => {
     setopenCalculate(true);
   }
@@ -350,7 +358,9 @@ export default function Leads() {
       startAutoDialerButton={true}
       startAutoDialerClick={() => autoDialerHandler()}
       ActualEmiCalculate={openCalculator}
+      ActualEligibilityCalculate={openEligibility}
     >
+      <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility}/>
       <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
       <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
