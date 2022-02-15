@@ -33,11 +33,11 @@ const EligibilityCalculator = (props) => {
         setCreditCardMinDue(minimumDue);
      }
     const getTotalEmi = () => {
-        const emi = allEmi + creditCardMinDue;
+        const emi = parseInt(allEmi,10) + parseInt(creditCardMinDue,10);
         setTotalEmi(emi)
     }
     const getEligibleEmiForFoir = () => {
-        const eligible_emi_foir = (70 /100 * creditcardOutstanding) - totalEmi;
+        const eligible_emi_foir = (foir /100 * customerSalary) - totalEmi;
         setEligibleEmiForFoir(eligible_emi_foir)
     }
     const getEligibleEmiForMultiplier = () => {
