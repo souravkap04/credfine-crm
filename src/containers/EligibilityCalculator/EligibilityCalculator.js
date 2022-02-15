@@ -27,6 +27,7 @@ const EligibilityCalculator = (props) => {
             getEligibleEmiAsPerMultiplier();
         }
     },[customerSalary,tenure,foir,multiplier,allEmi,creditcardOutstanding,creditCardMinDue,totalEmi,eligibleEmiForFoir,eligibleEmiForMultiplier])
+   
     const claculateMinDue = (data) =>{
         const  minimumDue = (data * 5)/100;
         setCreditCardMinDue(minimumDue);
