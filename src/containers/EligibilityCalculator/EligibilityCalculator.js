@@ -66,8 +66,6 @@ const EligibilityCalculator = (props) => {
             const eligible_As_per_foir = (eligibleEmiForFoir/1986).toFixed(2);
         setEligibleAsPerFoir(eligible_As_per_foir);
         }
-        // const eligible_As_per_foir = (eligibleEmiForFoir/2400).toFixed(2);
-        // setEligibleAsPerFoir(eligible_As_per_foir);
     }
     const getEligibleEmiAsPerMultiplier = () => {
         const eligible_As_per_multiplier = eligibleEmiForMultiplier * multiplier;
