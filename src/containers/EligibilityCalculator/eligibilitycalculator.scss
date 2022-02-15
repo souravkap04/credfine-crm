@@ -1,10 +1,11 @@
 $desk: 0.063;
 .eligibilityContainer{
-    width: 300 * $desk + vw;
+    width: 600 * $desk + vw;
     padding-top: 20 * $desk + vw;
     padding-left: 37 * $desk + vw;
+    padding-right: 37 * $desk + vw;
         h4 {
-             margin-left: 20 * $desk + vw;
+            margin-left: 20 * $desk + vw;
             font-size: 22 * $desk + vw;
             font-weight: bold;
             letter-spacing: 0.15 * $desk + vw;
@@ -13,7 +14,8 @@ $desk: 0.063;
             font-family: "Lato";
         }
         .eligibilityTextField {
-            width: 230 * $desk + vw !important;
+            // width: 230 * $desk + vw !important;
+            width: 100%;
             margin-top: 15 * $desk + vw !important;
             margin-bottom: 0 !important;
             label {

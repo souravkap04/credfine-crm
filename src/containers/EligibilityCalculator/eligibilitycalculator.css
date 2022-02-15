@@ -1,7 +1,8 @@
 .eligibilityContainer {
-  width: 18.9vw;
+  width: 37.8vw;
   padding-top: 1.26vw;
   padding-left: 2.331vw;
+  padding-right: 2.331vw;
 }
 
 .eligibilityContainer h4 {
@@ -15,7 +16,7 @@
 }
 
 .eligibilityContainer .eligibilityTextField {
-  width: 14.49vw !important;
+  width: 100%;
   margin-top: 0.945vw !important;
   margin-bottom: 0 !important;
 }

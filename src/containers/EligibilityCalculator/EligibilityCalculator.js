@@ -77,9 +77,11 @@ const EligibilityCalculator = (props) => {
     return (
         <Drawer anchor='right' open={props.isOpenEligibilityCalculator} onClose={props.isCloseEligibilityCalculator}>
             <div className='eligibilityContainer'>
-                <Grid container >
-                    <Grid><h4>Eligibility Calculator</h4></Grid>
-                    <Grid >
+                <Grid container spacing={2}>
+                    <Grid item lg={12}>
+                        <h4>Eligibility Calculator</h4>
+                    </Grid>
+                    <Grid item lg={6}>
                         <TextField
                         className='eligibilityTextField'
                         id="outlined-full-width"
@@ -99,7 +101,7 @@ const EligibilityCalculator = (props) => {
                         }}
                         />
                     </Grid>
-                    <Grid >
+                    <Grid item lg={6}>
                         <TextField
                         select
                         className='eligibilityTextField'
@@ -126,8 +128,7 @@ const EligibilityCalculator = (props) => {
                         <option value="7">7 year</option>
                         </TextField>
                     </Grid>
-                    <Grid container>
-                    <Grid >
+                    <Grid item lg={6}>
                         <TextField
                         className='eligibilityTextField'
                         id="outlined-full-width"
@@ -147,7 +148,7 @@ const EligibilityCalculator = (props) => {
                         }}
                          />
                     </Grid>
-                    <Grid >
+                    <Grid item lg={6}>
                         <TextField
                         className='eligibilityTextField'
                         id="outlined-full-width"
@@ -167,12 +168,11 @@ const EligibilityCalculator = (props) => {
                         }}
                         />
                     </Grid>
-                    </Grid>
-                    <Grid >
+                    <Grid item lg={12}>
                         <TextField
                         className='eligibilityTextField'
                         id="outlined-full-width"
-                        label="All Emi Exclude Credit Card"
+                        label="Total Monthly Emi Exclude Credit Card"
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
@@ -188,7 +188,7 @@ const EligibilityCalculator = (props) => {
                         }}
                         />
                     </Grid>
-                    <Grid >
+                    <Grid item lg={6}>
                         <TextField
                         className='eligibilityTextField'
                         id="outlined-full-width"
@@ -208,7 +208,7 @@ const EligibilityCalculator = (props) => {
                         }}
                         />
                     </Grid>
-                    <Grid >
+                    <Grid item lg={6}>
                         <TextField
                         className='eligibilityTextField'
                         id="outlined-full-width"
@@ -223,11 +223,11 @@ const EligibilityCalculator = (props) => {
                         onChange={(e)=>setCreditCardMinDue(e.target.value)}
                         />
                     </Grid>
-                    <Grid >
+                    <Grid item lg={12}>
                         <TextField
                         className='eligibilityTextField'
                         id="outlined-full-width"
-                        label="Total Emi"
+                        label="Total Monthly Emi"
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
@@ -238,7 +238,7 @@ const EligibilityCalculator = (props) => {
                         onChange={(e)=>setTotalEmi(e.target.value)}
                         />
                     </Grid>
-                    <Grid >
+                    <Grid item lg={6}>
                         <TextField
                         className='eligibilityTextField'
                         id="outlined-full-width"
@@ -253,7 +253,7 @@ const EligibilityCalculator = (props) => {
                         onChange={(e)=>setEligibleEmiForFoir(e.target.value)}
                         />
                     </Grid>
-                    <Grid >
+                    <Grid item lg={6}>
                         <TextField
                         className='eligibilityTextField'
                         id="outlined-full-width"
@@ -268,7 +268,7 @@ const EligibilityCalculator = (props) => {
                         onChange={(e)=>setEligibleEmiForMultiplier(e.target.value)}
                         />
                     </Grid>
-                    <Grid >
+                    <Grid item lg={12}>
                         <TextField
                         className='eligibilityTextField'
                         id="outlined-full-width"
@@ -283,7 +283,7 @@ const EligibilityCalculator = (props) => {
                         onChange={(e)=>setEligibleAsPerFoir(e.target.value)}
                         />
                     </Grid>
-                    <Grid >
+                    <Grid item lg={12}>
                         <TextField
                         className='eligibilityTextField'
                         id="outlined-full-width"
