@@ -28,6 +28,14 @@
   font-family: "Lato";
 }
 
+.eligibilityContainer .eligibilityTextField label span {
+  position: absolute;
+  color: red;
+  font-size: 22px;
+  top: -25px;
+  margin-left: 2px;
+}
+
 .eligibilityContainer .eligibilityTextField .MuiOutlinedInput-root {
   height: 3.024vw;
 }

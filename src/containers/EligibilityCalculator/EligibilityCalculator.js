@@ -88,6 +88,7 @@ const EligibilityCalculator = (props) => {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
+                            required: true
                         }}
                         variant="outlined"
                         size="small"
@@ -109,6 +110,7 @@ const EligibilityCalculator = (props) => {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
+                            required: true
                         }}
                         SelectProps={{
                             native: true,
@@ -135,6 +137,7 @@ const EligibilityCalculator = (props) => {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
+                            required: true
                         }}
                         variant="outlined"
                         size="small"
@@ -155,6 +158,7 @@ const EligibilityCalculator = (props) => {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
+                            required: true
                         }}
                         variant="outlined"
                         size="small"
@@ -175,6 +179,7 @@ const EligibilityCalculator = (props) => {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
+                            required: true
                         }}
                         variant="outlined"
                         size="small"
@@ -195,6 +200,7 @@ const EligibilityCalculator = (props) => {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
+                            required: true
                         }}
                         variant="outlined"
                         size="small"

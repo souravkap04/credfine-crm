@@ -15,7 +15,7 @@ $desk: 0.063;
         }
         .eligibilityTextField {
             // width: 230 * $desk + vw !important;
-            width: 100%;
+             width: 100%;
             margin-top: 15 * $desk + vw !important;
             margin-bottom: 0 !important;
             label {
@@ -23,6 +23,13 @@ $desk: 0.063;
                 letter-spacing: 0.4px;
                 font-size: 15.5px;
                 font-family: "Lato";
+                span {
+                    position: absolute;
+                    color: red;
+                    font-size: 22px;
+                    top: -25px;
+                    margin-left: 2px;
+                }
             }
             .MuiOutlinedInput-root {
                 height: 48 * $desk + vw;
