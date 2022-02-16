@@ -117,6 +117,7 @@ export default function Menu(props) {
     const [isHiddenTab, setIsHiddenTab] = useState(false);
     const [isUserTab, setIsUserTab] = useState(false);
     const [isCalculatorTab, setIsCalculatorTab] = useState(false);
+    const [isEligibleCalculator,setIsEligibleCalculator] = useState(false);
     let location = useLocation();
     const handleClick = () => {
         setOpen(!openen);
@@ -342,6 +343,11 @@ export default function Menu(props) {
                 </ListItem>
                     <Collapse in={calculatorOpen} timeout="auto" unmountOnExit>
                         <List component="div" disablePadding>
+                        {location.pathname === '/dashboards/eligibilitycalculator' ? <NavLink to="/dashboards/eligibilitycalculator" activeClassName='active'><ListItem button className={classes.nested + " selected"}>
+                        <ListItemText primary="Eligibility Calculator" />
+                            </ListItem></NavLink>:<ListItem button className={classes.nested + " selected"} onClick={props.eligibilityCalculate}>
+                                <ListItemText primary="Eligibility Calculator" />
+                        </ListItem>}
                             {location.pathname === '/dashboards/EMIcalculator' ? <NavLink to="/dashboards/EMIcalculator" activeClassName="active"><ListItem button className={classes.nested + " selected"}>
                                 <ListItemText primary="EMI Calculator" />
                             </ListItem></NavLink> : <ListItem button className={classes.nested + " selected"} onClick={props.EmiCalculate}>

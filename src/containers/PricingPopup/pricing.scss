@@ -45,6 +45,21 @@ $desk: 100 / 1440;
             background-color: #eb5757;
         }
     }
+    .searchField{
+        margin-left: 26 * $desk + vw;
+        .MuiOutlinedInput-root {
+            height: 40 * $desk + vw;
+        }
+        .MuiOutlinedInput-notchedOutline {
+            border: 2px solid #c5cee0;
+        }
+        .MuiInputAdornment-root {
+            opacity: 0.6;
+        }
+        .MuiInputBase-input {
+            font-size: 16 * $desk + vw;
+        }
+    }
 }
 .menuItem {
     color: #fff !important;

@@ -11,6 +11,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
+import  TextField  from '@material-ui/core/TextField';
 import clsx from 'clsx';
 import './pricing.css';
 const useStyles = makeStyles({
@@ -106,7 +107,7 @@ export default function PricingPopup(props) {
             loan_charges: 'Up to 1.5% of the loan amount include insurance ',
             part_payment: 'Part-payment allowed after 1 year up to 20% of principal outstanding nill charges. This is allowed only once in a principle year.',
             force_clousre: "Foreclosure allowed after 12 EMI's 4% charges plus GST",
-            firms_not_allowed: 'Pvt Ltd / Ltd / Goverment / LLP Only if Listed',
+            firms_allowed: 'Pvt Ltd / Ltd / Goverment / LLP Only if Listed',
             doc_req: ['Photo', 'KYC', '3 Month Salary Slip', '4 Month Bank Statement', 'Rent Agreement if Rented and Electricity Bill','Own Housed Proof']
         },
         {
@@ -120,7 +121,7 @@ export default function PricingPopup(props) {
             loan_charges: 'Up to 1.5% of the loan amount include insurance',
             part_payment: 'Part-payment not allowed',
             force_clousre: "Foreclosure allowed after 12 EMI's 5% charges plus GST",
-            firms_not_allowed: 'Pvt Ltd / Ltd / Goverment / LLP Only if Listed',
+            firms_allowed: 'Pvt Ltd / Ltd / Goverment / LLP Only if Listed',
             doc_req: ['Photo', 'KYC', '3 Month Salary Slip', '4 Month Bank Statement', 'Rent Agreement if Rented and Electricity Bill', 'Own Housed Proof']
         },
         {
@@ -134,7 +135,7 @@ export default function PricingPopup(props) {
             loan_charges: 'Up to 2.5% of the loan amount include insurance ',
             part_payment: 'Part-payment allowed after 6 EMI up to 20% of principal outstanding nill charges. This is allowed only once in a principle year.',
             force_clousre: "Foreclosure allowed after 12 EMI's 4% charges plus GST",
-            firms_not_allowed: 'PROP / Partnership / NGO / LLP Only if Listed',
+            firms_allowed: 'PROP / Partnership / NGO / LLP Only if Listed',
             doc_req: ['Photo', 'KYC', '3 Month Salary Slip', '6 Month Bank Statement', 'Rent Agreement if Rented and Electricity Bill', 'Own Housed Proof']
         },
         {
@@ -148,7 +149,7 @@ export default function PricingPopup(props) {
             loan_charges: 'Up to 2.5% of the loan amount include insurance',
             part_payment: 'Part-payment not allowed',
             force_clousre: "Foreclosure allowed after 6 EMI's 4% charges plus GST",
-            firms_not_allowed: 'Pvt Ltd / Ltd / Goverment / LLP / PROP / Partnership / NGO',
+            firms_allowed: 'Pvt Ltd / Ltd / Goverment / LLP / PROP / Partnership / NGO',
             doc_req: ['Photo', 'KYC', '3 Month Salary Slip', '6 Month Bank Statement', 'Rent Agreement if Rented and Electricity Bill', 'Own Housed Proof']
         },
         {
@@ -162,7 +163,7 @@ export default function PricingPopup(props) {
             loan_charges: 'Up to 3% of the loan amount include insurance',
             part_payment: 'Part-payment not allowed',
             force_clousre: "6 EMI 7% 18 EMI 5% 24 EMI 3% 36 EMI NILL",
-            firms_not_allowed: 'Pvt Ltd / Ltd / Goverment / LLP / PROP / Partnership / NGO',
+            firms_allowed: 'Pvt Ltd / Ltd / Goverment / LLP / PROP / Partnership / NGO',
             doc_req: ['Photo', 'KYC', '3 Month Salary Slip', '4 Month Bank Statement', 'Rent Agreement if Rented and Electricity Bill', 'Own Housed Proof']
         },
         {
@@ -176,7 +177,7 @@ export default function PricingPopup(props) {
             loan_charges: 'Up to 1.25% of the loan amount include insurance',
             part_payment: 'Part-payment allowed after 1 EMI 5% 0-12 months 4% 13 to 24 months 3% 25 to 36 months',
             force_clousre: 'Foreclosure allowed after 1 EMI 5% 0-12 months 4% 13 to 24 months 3% 25 to 36 months',
-            firms_not_allowed: 'Pvt Ltd / Ltd / Goverment / LLP Only if Listed',
+            firms_allowed: 'Pvt Ltd / Ltd / Goverment / LLP Only if Listed',
             doc_req: ['Photo', 'KYC', '3 Month Salary Slip', '6 Month Bank Statement', 'Rent Agreement if Rented and Electricity Bill', 'Own Housed Proof']
         },
         {
@@ -190,7 +191,7 @@ export default function PricingPopup(props) {
             loan_charges: 'Up to 1.25% of the loan amount include insurance',
             part_payment: 'Part-payment allowed after 6 EMI up to 25% of principal outstanding nill charges above 25% partpayment 2.5% charges applicable. A maximum of 50% of the principle outstanding is allowed during a single year',
             force_clousre: "Foreclosure allowed after 6 EMI's 4.5% charges plus GST",
-            firms_not_allowed: 'Pvt Ltd / Ltd / Goverment / LLP Only if Listed',
+            firms_allowed: 'Pvt Ltd / Ltd / Goverment / LLP Only if Listed',
             doc_req: ['Photo', 'KYC', '3 Month Salary Slip', '6 Month Bank Statement', 'Rent Agreement if Rented and Electricity Bill', 'Own Housed Proof','2 years Job Stability Proof']
         },
         {
@@ -204,7 +205,7 @@ export default function PricingPopup(props) {
             loan_charges: 'Up to 1.25% of the loan amount include insurance',
             part_payment: 'Part-payment allowed after 12 EMI up to 20% of principal outstanding nill charges. This is allowed only once in a principle year.',
             force_clousre: 'Foreclosure allowed after 12 EMI. 4% 13-24 months. 3% 25 to 36 months. 2% 37 to 48 months. nill above 48 months',
-            firms_not_allowed: 'Pvt Ltd / Ltd / Goverment / LLP Only if Listed',
+            firms_allowed: 'Pvt Ltd / Ltd / Goverment / LLP Only if Listed',
             doc_req: ['Photo', 'KYC', '3 Month Salary Slip', '4 Month Bank Statement', 'Rent Agreement if Rented and Electricity Bill', 'Own Housed Proof']
         },
         {
@@ -218,7 +219,7 @@ export default function PricingPopup(props) {
             loan_charges: 'Up to 1.50% of the loan amount subject to a minimum of Rs. 2,999 & maximum of Rs. 25,000 for salaried customers',
             part_payment: 'Part-payment allowed after 12 EMI up to 25% of principal outstanding. This is allowed only once in a financial year and twice during the entire loan tenure.',
             force_clousre: "Nill for Customer Salary >75k Loan Amount 10L & Above or (4% After 13-24 months – of loan principal outstanding) (3% After 25-36 months – of loan principal outstanding) (2% Above >36 months – of loan principal outstanding)",
-            firms_not_allowed: 'Pvt Ltd / Ltd / Goverment / LLP Only if Listed',
+            firms_allowed: 'Pvt Ltd / Ltd / Goverment / LLP Only if Listed',
             doc_req: ['Photo', 'KYC', '3 Month Salary Slip', '6 Month Bank Statement', 'Current Address Original Verified Document Required','Company ID Card']
         },
         {
@@ -232,7 +233,7 @@ export default function PricingPopup(props) {
             loan_charges: 'Up to 1.25% of the loan amount include insurance',
             part_payment: 'Part-payment allowed after 12 EMI up to 20% of principal outstanding nill charges. This is allowed only once in a principle year.',
             force_clousre: 'Foreclosure allowed after 12 EMI. 1 to 3 years – 4% of loan principal outstanding after 3 years – 2% of loan principal outstanding >10 lakh 999/- after completion of locking period (Only if closing through own funds)',
-            firms_not_allowed: 'Pvt Ltd / Ltd / Goverment / LLP Only if Listed',
+            firms_allowed: 'Pvt Ltd / Ltd / Goverment / LLP Only if Listed',
             doc_req: ['Photo', 'KYC', '3 Month Salary Slip', '4 Month Bank Statement', 'Rent Agreement if Rented and Electricity Bill', 'Own Housed Proof']
         },
         {
@@ -246,7 +247,7 @@ export default function PricingPopup(props) {
             loan_charges: 'Up to 1.5% of the loan amount include insurance',
             part_payment: 'Part-payment not allowed',
             force_clousre: "Foreclosure allowed after 12 EMI's 5% charges plus GST",
-            firms_not_allowed: 'Pvt Ltd / Ltd / Goverment / LLP Only if Listed',
+            firms_allowed: 'Pvt Ltd / Ltd / Goverment / LLP Only if Listed',
             doc_req: ['Photo', 'KYC', '3 Month Salary Slip', '6 Month Bank Statement', 'Rent Agreement if Rented and Electricity Bill', 'Own Housed Proof']
         },
         {
@@ -260,7 +261,7 @@ export default function PricingPopup(props) {
             loan_charges: 'Up to 1.25% of the loan amount include insurance',
             part_payment: 'Part-payment allowed after 1 EMI upto 75% with 2% charges',
             force_clousre: "Foreclosure allowed after 1 EMI's 4% charges plus GST",
-            firms_not_allowed: 'Pvt Ltd / Ltd / Goverment / LLP Only if Listed',
+            firms_allowed: 'Pvt Ltd / Ltd / Goverment / LLP Only if Listed',
             doc_req: ['Photo', 'KYC', '3 Month Salary Slip', '4 Month Bank Statement', 'Rent Agreement if Rented', 'Own Housed Proof']
         },
         {
@@ -274,7 +275,7 @@ export default function PricingPopup(props) {
             loan_charges: 'Up to 1.25% of the loan amount include insurance',
             part_payment: 'Part-payment allowed after 1 day with nill charges',
             force_clousre: "Foreclosure allowed after 6 EMI's 4.72% charges plus GST",
-            firms_not_allowed: 'Pvt Ltd / Ltd / Goverment / LLP Only if Listed',
+            firms_allowed: 'Pvt Ltd / Ltd / Goverment / LLP Only if Listed',
             doc_req: ['Photo', 'KYC', '3 Month Salary Slip', '4 Month Bank Statement', 'Rent Agreement if Rented', 'Own Housed Proof']
         },
         {
@@ -288,7 +289,7 @@ export default function PricingPopup(props) {
             loan_charges: 'Up to 1.25% of the loan amount include insurance',
             part_payment: 'Part-payment allowed after 1 day with nill charges',
             force_clousre: "Foreclosure allowed after 6 EMI's 4.5% charges plus GST",
-            firms_not_allowed: 'PROP / Partnership / NGO / LLP Only if Listed',
+            firms_allowed: 'PROP / Partnership / NGO / LLP Only if Listed',
             doc_req: ['Photo', 'KYC', '3 Month Salary Slip', '6 Month Bank Statement', 'Rent Agreement if Rented and Electricity Bill', 'Own Housed Proof','2 years Job Stability Proof']
         },
         {
@@ -302,7 +303,7 @@ export default function PricingPopup(props) {
             loan_charges: 'Up to 1.25% of the loan amount include insurance',
             part_payment: 'Part-payment not allowed',
             force_clousre: "Foreclosure allowed after 12 EMI's 4% charges",
-            firms_not_allowed: 'Pvt Ltd / Ltd / Goverment / LLP Only if Listed',
+            firms_allowed: 'Pvt Ltd / Ltd / Goverment / LLP Only if Listed',
             doc_req: ['Photo', 'KYC', '3 Month Salary Slip', '4 Month Bank Statement', 'Rent Agreement if Rented and Electricity Bill', 'Own Housed Proof']
         },
         {
@@ -316,7 +317,7 @@ export default function PricingPopup(props) {
             loan_charges: 'Up to 2% of the loan amount include insurance',
             part_payment: 'Part-payment allowed after 6 EMI upto 25% with 2% charges',
             force_clousre: "Foreclosure allowed after 1 EMI's 4% charges",
-            firms_not_allowed: 'Pvt Ltd / Ltd / Goverment / LLP Only if Listed',
+            firms_allowed: 'Pvt Ltd / Ltd / Goverment / LLP Only if Listed',
             doc_req: ['Photo', 'KYC', '3 Month Salary Slip', '6 Month Bank Statement', 'Rent Agreement if Rented and Electricity Bill', 'Own Housed Proof']
         },
         {
@@ -330,7 +331,7 @@ export default function PricingPopup(props) {
             loan_charges: 'Up to 4% of the loan amount include insurance',
             part_payment: 'Not Allowed',
             force_clousre: "Foreclosure allowed after 6 EMI's 6% charges",
-            firms_not_allowed: 'Pvt ltd / Ltd / Goverment / LLP',
+            firms_allowed: 'Pvt ltd / Ltd / Goverment / LLP',
             doc_req:['Photo', 'KYC', '3 Month Salary Slip', '6 Month Bank Statement']
         },
         {
@@ -344,19 +345,28 @@ export default function PricingPopup(props) {
             loan_charges: 'Up to 1.5% of the loan amount include insurance',
             part_payment: 'Not Allowed',
             force_clousre: "Foreclosure allowed after 6 EMI's 4% charges After 12 Months 2% Charges",
-            firms_not_allowed: 'Pvt ltd / Ltd / Goverment / LLP if Listed',
+            firms_allowed: 'Pvt ltd / Ltd / Goverment / LLP if Listed',
             doc_req:['Photo', 'KYC', '3 Month Salary Slip', '6 Month Bank Statement','Current Address Original Verified Document Required']
         }
     ]);
     const [age, setAge] = useState('');
+    const [searchData,setSearchData] = useState('');
     const Transition = React.forwardRef(function Transition(props, ref) {
         return <Slide direction="up" ref={ref} {...props} />;
     });
-    return <Dialog fullScreen open={true} TransitionComponent={Transition}>
+    return <Dialog fullScreen open={true} >
         <div className="guideContainer">
             <div className="textGreen"><span></span>Allow Part-payment from 2nd day with nil charges</div>
             <div className="textBlack"><span></span>Allow Part-payment after the lock-in period &amp; limitation</div>
             <div className="textRed"><span></span>Part-Payment Not Allowed</div>
+            <div>
+                <TextField
+                className='searchField'
+                variant='outlined'
+                placeholder='search...'
+                value={searchData}
+                onChange={(e) => setSearchData(e.target.value)}/>
+            </div>
         </div>
         <TableContainer className={classes.container}>
             <Table className={classes.table} aria-label="simple table" stickyHeader>
@@ -384,7 +394,7 @@ export default function PricingPopup(props) {
                             </Select>
                         </TableCell>
                         <TableCell className={classes.tableheading}>SAL REQ IF NOT LISTED</TableCell>
-                        <TableCell className={classes.tableheading}>ROI %</TableCell>
+                        <TableCell className={classes.tableheading}>Bank Policy</TableCell>
                         <TableCell className={classes.tableheading}>LAON TENURE</TableCell>
                         <TableCell className={classes.tableheading}>MAX LOAN AMT</TableCell>
                         <TableCell className={classes.tableheading}>LOAN CHARGES</TableCell>
@@ -395,10 +405,18 @@ export default function PricingPopup(props) {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {pricingData.map((item, index) => {
+                    {pricingData.filter((item)=>{
+                        if(searchData === ''){
+                            return item;
+                        }else if (item.banks_nbfc.toLowerCase().includes(searchData.toLowerCase())){
+                            return item;
+                        }else if (item.firms_allowed.toLowerCase().includes(searchData.toLowerCase())){
+                            return item;
+                        }
+                    }).map((item, index) => {
                         if (age === '') {
                             if (index === 1 || index === 3 || index === 4 || index === 10 || index === 14 || index === 16 || index === 17) {
-                                return <TableRow className={classes.oddEvenRow}>
+                                return <TableRow className={classes.oddEvenRow} key={index}>
                                     <TableCell className={classes.tabledataRedBorder}></TableCell>
                                     <TableCell className={clsx(classes.tabledataRed, classes.banksNBFC)}>{item.banks_nbfc}</TableCell>
                                     <TableCell className={clsx(classes.tabledataRed, classes.tableAge)}>{item.age}</TableCell>
@@ -410,7 +428,7 @@ export default function PricingPopup(props) {
                                     <TableCell className={classes.tabledataRed}>{item.loan_charges}</TableCell>
                                     <TableCell className={classes.tabledataRed}>{item.part_payment}</TableCell>
                                     <TableCell className={classes.tabledataRed}>{item.force_clousre}</TableCell>
-                                    <TableCell className={classes.tabledataRed}>{item.firms_not_allowed}</TableCell>
+                                    <TableCell className={classes.tabledataRed}>{item.firms_allowed}</TableCell>
                                     <TableCell className={classes.tabledataRed}><ul>
                                             {item.doc_req.map(item => {
                                                 return <li style={{ whiteSpace: 'nowrap' }}>{item}</li>
@@ -418,7 +436,7 @@ export default function PricingPopup(props) {
                                         </ul></TableCell>
                                 </TableRow>
                             } else if (index === 12 || index === 13) {
-                                return <TableRow className={classes.oddEvenRow}>
+                                return <TableRow className={classes.oddEvenRow} key={index}>
                                     <TableCell className={classes.tabledataGreenBorder}></TableCell>
                                     <TableCell className={clsx(classes.tabledataGreen, classes.banksNBFC)}>{item.banks_nbfc}</TableCell>
                                     <TableCell className={clsx(classes.tabledataGreen, classes.tableAge)}>{item.age}</TableCell>
@@ -430,7 +448,7 @@ export default function PricingPopup(props) {
                                     <TableCell className={classes.tabledataGreen}>{item.loan_charges}</TableCell>
                                     <TableCell className={classes.tabledataGreen}>{item.part_payment}</TableCell>
                                     <TableCell className={classes.tabledataGreen}>{item.force_clousre}</TableCell>
-                                    <TableCell className={classes.tabledataGreen}>{item.firms_not_allowed}</TableCell>
+                                    <TableCell className={classes.tabledataGreen}>{item.firms_allowed}</TableCell>
                                     <TableCell className={classes.tabledataGreen}><ul>
                                             {item.doc_req.map(item => {
                                                 return <li style={{ whiteSpace: 'nowrap' }}>{item}</li>
@@ -438,7 +456,7 @@ export default function PricingPopup(props) {
                                         </ul></TableCell>
                                 </TableRow>
                             } else {
-                                return <TableRow className={classes.oddEvenRow}>
+                                return <TableRow className={classes.oddEvenRow} key={index}>
                                     <TableCell className={classes.tabledataBorder}></TableCell>
                                     <TableCell className={clsx(classes.tabledata, classes.banksNBFC)}>{item.banks_nbfc}</TableCell>
                                     <TableCell className={clsx(classes.tabledata, classes.tableAge)}>{item.age}</TableCell>
@@ -450,7 +468,7 @@ export default function PricingPopup(props) {
                                     <TableCell className={classes.tabledata}>{item.loan_charges}</TableCell>
                                     <TableCell className={classes.tabledata}>{item.part_payment}</TableCell>
                                     <TableCell className={classes.tabledata}>{item.force_clousre}</TableCell>
-                                    <TableCell className={classes.tabledata}>{item.firms_not_allowed}</TableCell>
+                                    <TableCell className={classes.tabledata}>{item.firms_allowed}</TableCell>
                                     <TableCell className={classes.tabledata}>
                                         <ul>
                                             {item.doc_req.map(item => {
@@ -462,7 +480,7 @@ export default function PricingPopup(props) {
                             }
                         } else if (age === item.salary) {
                             if (index === 1 || index === 3 || index === 4 || index === 10 || index === 14) {
-                                return <TableRow className={classes.oddEvenRow}>
+                                return <TableRow className={classes.oddEvenRow} key={index}>
                                     <TableCell className={classes.tabledataRedBorder}></TableCell>
                                     <TableCell className={clsx(classes.tabledataRed, classes.banksNBFC)}>{item.banks_nbfc}</TableCell>
                                     <TableCell className={clsx(classes.tabledataRed, classes.tableAge)}>{item.age}</TableCell>
@@ -474,7 +492,7 @@ export default function PricingPopup(props) {
                                     <TableCell className={classes.tabledataRed}>{item.loan_charges}</TableCell>
                                     <TableCell className={classes.tabledataRed}>{item.part_payment}</TableCell>
                                     <TableCell className={classes.tabledataRed}>{item.force_clousre}</TableCell>
-                                    <TableCell className={classes.tabledataRed}>{item.firms_not_allowed}</TableCell>
+                                    <TableCell className={classes.tabledataRed}>{item.firms_allowed}</TableCell>
                                     <TableCell className={classes.tabledata}><ul>
                                             {item.doc_req.map(item => {
                                                 return <li style={{ whiteSpace: 'nowrap' }}>{item}</li>
@@ -482,7 +500,7 @@ export default function PricingPopup(props) {
                                         </ul></TableCell>
                                 </TableRow>
                             } else if (index === 12 || index === 13) {
-                                return <TableRow className={classes.oddEvenRow}>
+                                return <TableRow className={classes.oddEvenRow} key={index}>
                                     <TableCell className={classes.tabledataGreenBorder}></TableCell>
                                     <TableCell className={clsx(classes.tabledataGreen, classes.banksNBFC)}>{item.banks_nbfc}</TableCell>
                                     <TableCell className={clsx(classes.tabledataGreen, classes.tableAge)}>{item.age}</TableCell>
@@ -494,7 +512,7 @@ export default function PricingPopup(props) {
                                     <TableCell className={classes.tabledataGreen}>{item.loan_charges}</TableCell>
                                     <TableCell className={classes.tabledataGreen}>{item.part_payment}</TableCell>
                                     <TableCell className={classes.tabledataGreen}>{item.force_clousre}</TableCell>
-                                    <TableCell className={classes.tabledataGreen}>{item.firms_not_allowed}</TableCell>
+                                    <TableCell className={classes.tabledataGreen}>{item.firms_allowed}</TableCell>
                                     <TableCell className={classes.tabledataGreen}><ul>
                                             {item.doc_req.map(item => {
                                                 return <li style={{ whiteSpace: 'nowrap' }}>{item}</li>
@@ -502,7 +520,7 @@ export default function PricingPopup(props) {
                                         </ul></TableCell>
                                 </TableRow>
                             } else {
-                                return <TableRow className={classes.oddEvenRow}>
+                                return <TableRow className={classes.oddEvenRow} key={index}>
                                     <TableCell className={classes.tabledataBorder}></TableCell>
                                     <TableCell className={clsx(classes.tabledata, classes.banksNBFC)}>{item.banks_nbfc}</TableCell>
                                     <TableCell className={clsx(classes.tabledata, classes.tableAge)}>{item.age}</TableCell>
@@ -514,7 +532,7 @@ export default function PricingPopup(props) {
                                     <TableCell className={classes.tabledata}>{item.loan_charges}</TableCell>
                                     <TableCell className={classes.tabledata}>{item.part_payment}</TableCell>
                                     <TableCell className={classes.tabledata}>{item.force_clousre}</TableCell>
-                                    <TableCell className={classes.tabledata}>{item.firms_not_allowed}</TableCell>
+                                    <TableCell className={classes.tabledata}>{item.firms_allowed}</TableCell>
                                     <TableCell className={classes.tabledata}><ul>
                                             {item.doc_req.map(item => {
                                                 return <li style={{ whiteSpace: 'nowrap' }}>{item}</li>

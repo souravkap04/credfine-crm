@@ -7,6 +7,7 @@ import { getProfileData } from '../../global/leadsGlobalData'
 import SampleData from './SampleData';
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
 import EmiCalculator from '../Emicalculator/EmiCalculator';
+import EligibilityCalculator from '../EligibilityCalculator/EligibilityCalculator';
 export default function UploadLeads() {
   const profileData = getProfileData();
   const [loanType, setLoanType] = useState('');
@@ -41,6 +42,14 @@ export default function UploadLeads() {
     }
   }
   const [openCalculate, setopenCalculate] = useState(false);
+  const [checkEligibility,setCheckEligibility] = useState(false);
+  
+  const openEligibility = () =>{
+    setCheckEligibility(true);
+  }
+  const closeEligibility = () =>{
+    setCheckEligibility(false);
+  }
   const openCalculator = () => {
     setopenCalculate(true);
   }
@@ -48,7 +57,8 @@ export default function UploadLeads() {
     setopenCalculate(false);
   }
   return (
-    <PageLayerSection ActualEmiCalculate={openCalculator}>
+    <PageLayerSection ActualEmiCalculate={openCalculator} ActualEligibilityCalculate={openEligibility}>
+      <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility}/>
       <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
       <div >
         <Form noValidate validated={validated} onSubmit={leadsSubmitHandler}>

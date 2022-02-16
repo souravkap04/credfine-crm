@@ -25,6 +25,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { Button } from '@material-ui/core';
 import Badge from '@material-ui/core/Badge';
 import EmiCalculator from '../Emicalculator/EmiCalculator';
+import EligibilityCalculator from '../EligibilityCalculator/EligibilityCalculator';
 // import NoDataFound from '../NoDataFound/NoDataFound';
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -120,6 +121,8 @@ export default function FollowUp(props) {
     const [isLoading, setisLoading] = useState(false);
     const [currentDateTime, setcurrentDateTime] = useState('');
     const [isAutoDialerStart, setIsAutoDialerStart] = useState(false);
+    const [openCalculate, setopenCalculate] = useState(false);
+    const [checkEligibility, setCheckEligibility] = useState(false);
     const fetchLeadsData = async () => {
         setisLoading(true);
         const headers = {
@@ -228,7 +231,13 @@ export default function FollowUp(props) {
             clickToCall(leadData.lead.phone_no, leadData.lead.lead_crm_id)
         }
     }, [leadData]);
-    const [openCalculate, setopenCalculate] = useState(false);
+    
+    const openEligibility = () => {
+        setCheckEligibility(true);
+    }
+    const closeEligibility = () => {
+        setCheckEligibility(false);
+    }
     const openCalculator = () => {
         setopenCalculate(true);
     }
@@ -236,7 +245,8 @@ export default function FollowUp(props) {
         setopenCalculate(false);
     }
     return (
-        <PageLayerSection isDisplaySearchBar={false} ActualEmiCalculate={openCalculator}>
+        <PageLayerSection isDisplaySearchBar={false} ActualEmiCalculate={openCalculator} ActualEligibilityCalculate={openEligibility}>
+            <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility} />
             <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
             {/* <NoDataFound text="Coming Soon" /> */}
             <div className="followUpBtnContainer">

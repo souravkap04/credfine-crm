@@ -38,6 +38,7 @@ import filter from "../../images/filter.png";
 import { useQueryy } from "../../global/query";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import EmiCalculator from '../Emicalculator/EmiCalculator';
+import EligibilityCalculator from "../EligibilityCalculator/EligibilityCalculator";
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -531,14 +532,22 @@ export default function MyLeads(props) {
     setCallHangUpState(true);
   };
   const [openCalculate, setopenCalculate] = useState(false);
+  const [checkEligibility,setCheckEligibility] = useState(false);
   const openCalculator = () => {
     setopenCalculate(true);
   }
   const closeCalculator = () => {
     setopenCalculate(false);
   }
+  const openEligibility = () =>{
+    setCheckEligibility(true);
+  }
+  const closeEligibility = () =>{
+    setCheckEligibility(false);
+  }
   return (
-    <PageLayerSection isDisplaySearchBar={true} isMyLeadsSearch={true} ActualEmiCalculate={openCalculator}>
+    <PageLayerSection isDisplaySearchBar={true} isMyLeadsSearch={true} ActualEmiCalculate={openCalculator} ActualEligibilityCalculate={openEligibility}>
+      <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility}/>
       <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
       <Drawer anchor="right" open={state} onClose={closeDrawer}>
         <div className="rightContainerForm">

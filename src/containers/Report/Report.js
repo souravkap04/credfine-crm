@@ -18,6 +18,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import EmiCalculator from '../Emicalculator/EmiCalculator';
 import './reportdata.css';
+import EligibilityCalculator from '../EligibilityCalculator/EligibilityCalculator';
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -71,6 +72,14 @@ const useStyles = makeStyles({
 });
 export default function Report() {
   const [openCalculate, setopenCalculate] = useState(false);
+  const [checkEligibility,setCheckEligibility] = useState(false);
+  
+  const openEligibility = () =>{
+    setCheckEligibility(true);
+  }
+  const closeEligibility = () =>{
+    setCheckEligibility(false);
+  }
   const openCalculator = () => {
     setopenCalculate(true);
   }
@@ -159,7 +168,8 @@ export default function Report() {
     leadReportHistory()
   }, []);
   return (
-    <PageLayerSection ActualEmiCalculate={openCalculator}>
+    <PageLayerSection ActualEmiCalculate={openCalculator} ActualEligibilityCalculate={openEligibility}>
+      <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility}/>
       <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
       <div>
         <Form onSubmit={reportSubmit}>

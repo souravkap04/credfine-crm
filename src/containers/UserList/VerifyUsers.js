@@ -7,6 +7,7 @@ import baseUrl from '../../global/api';
 import { getProfileData } from '../../global/leadsGlobalData'
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
 import EmiCalculator from '../Emicalculator/EmiCalculator';
+import EligibilityCalculator from '../EligibilityCalculator/EligibilityCalculator';
 const useStyles = makeStyles({
     container: {
         overflow: 'auto',
@@ -74,6 +75,14 @@ export default function VerifyUsers() {
             })
     }
     const [openCalculate, setopenCalculate] = useState(false);
+    const [checkEligibility,setCheckEligibility] = useState(false);
+  
+  const openEligibility = () =>{
+    setCheckEligibility(true);
+  }
+  const closeEligibility = () =>{
+    setCheckEligibility(false);
+  }
     const openCalculator = () => {
         setopenCalculate(true);
     }
@@ -81,7 +90,8 @@ export default function VerifyUsers() {
         setopenCalculate(false);
     }
     return (
-        <PageLayerSection ActualEmiCalculate={openCalculator}>
+        <PageLayerSection ActualEmiCalculate={openCalculator} ActualEligibilityCalculate={openEligibility}>
+            <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility}/>
             <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
             <TableContainer component={Paper} className={classes.container}>
                 <Table className={classes.table} aria-label="user table">

@@ -1,0 +1,47 @@
+$desk: 0.063;
+.eligibilityContainer{
+    width: 469 * $desk + vw;
+    padding-top: 20 * $desk + vw;
+    padding-left: 37 * $desk + vw;
+    padding-right: 37 * $desk + vw;
+        h4 {
+            font-size: 22 * $desk + vw;
+            font-weight: bold;
+            letter-spacing: 0.15 * $desk + vw;
+            color: #535ad1;
+            margin-bottom: 7 * $desk + vw;
+            font-family: "Lato";
+        }
+        .eligibilityTextField {
+            // width: 230 * $desk + vw !important;
+             width: 100%;
+            margin-top: 15 * $desk + vw !important;
+            margin-bottom: 0 !important;
+            label {
+                color: #535ad1;
+                letter-spacing: 0.4px;
+                font-size: 15.5px;
+                font-family: "Lato";
+                span {
+                    position: absolute;
+                    color: red;
+                    font-size: 22px;
+                    top: -25px;
+                    margin-left: 2px;
+                }
+            }
+            .MuiOutlinedInput-root {
+                height: 48 * $desk + vw;
+            }
+            .MuiOutlinedInput-notchedOutline {
+                border: 2px solid #c5cee0;
+            }
+            .MuiInputAdornment-root {
+                opacity: 0.6;
+            }
+            .MuiInputBase-input {
+                font-size: 16 * $desk + vw;
+                font-family: "Lato";
+            }
+        }
+}
