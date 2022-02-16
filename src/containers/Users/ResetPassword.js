@@ -40,6 +40,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import { haloocomNoidaDialerApi, haloocomMumbaiDialerApi } from "../../global/callApi";
 import EmiCalculator from '../Emicalculator/EmiCalculator';
 import './resetpassword.css';
+import EligibilityCalculator from "../EligibilityCalculator/EligibilityCalculator";
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -144,6 +145,14 @@ const useStyles = makeStyles({
 });
 export default function Users() {
   const [openCalculate, setopenCalculate] = useState(false);
+  const [checkEligibility,setCheckEligibility] = useState(false);
+  
+  const openEligibility = () =>{
+    setCheckEligibility(true);
+  }
+  const closeEligibility = () =>{
+    setCheckEligibility(false);
+  }
   const openCalculator = () => {
     setopenCalculate(true);
   }
@@ -418,7 +427,8 @@ export default function Users() {
     }
   }
   return (
-    <PageLayerSection ActualEmiCalculate={openCalculator}>
+    <PageLayerSection ActualEmiCalculate={openCalculator} ActualEligibilityCalculate={openEligibility}>
+      <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility}/>
       <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
       <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isDisplay} autoHideDuration={1500} onClose={closeSnankBar}>
         <Alert>
