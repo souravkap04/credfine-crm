@@ -76,7 +76,7 @@ const EligibilityCalculator = (props) => {
     return (
         <Drawer anchor='right' open={props.isOpenEligibilityCalculator} onClose={props.isCloseEligibilityCalculator}>
             <div className='eligibilityContainer'>
-                <Grid container spacing={2}>
+                <Grid container spacing={1}>
                     <Grid item lg={12}>
                         <h4>Eligibility Calculator</h4>
                     </Grid>
