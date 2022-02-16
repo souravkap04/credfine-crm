@@ -225,7 +225,7 @@ const EligibilityCalculator = (props) => {
                         variant="outlined"
                         size="small"
                         value={creditCardMinDue}
-                        onChange={(e)=>setCreditCardMinDue(e.target.value)}
+                        disabled
                         />
                     </Grid>
                     <Grid item lg={12}>
@@ -240,7 +240,7 @@ const EligibilityCalculator = (props) => {
                         variant="outlined"
                         size="small"
                         value={totalEmi}
-                        onChange={(e)=>setTotalEmi(e.target.value)}
+                        disabled
                         />
                     </Grid>
                     <Grid item lg={6}>
@@ -255,7 +255,7 @@ const EligibilityCalculator = (props) => {
                         variant="outlined"
                         size="small"
                         value={eligibleEmiForFoir}
-                        onChange={(e)=>setEligibleEmiForFoir(e.target.value)}
+                        disabled
                         />
                     </Grid>
                     <Grid item lg={6}>
@@ -270,7 +270,7 @@ const EligibilityCalculator = (props) => {
                         variant="outlined"
                         size="small"
                         value={eligibleEmiForMultiplier}
-                        onChange={(e)=>setEligibleEmiForMultiplier(e.target.value)}
+                        disabled
                         />
                     </Grid>
                     <Grid item lg={12}>
@@ -285,7 +285,7 @@ const EligibilityCalculator = (props) => {
                         variant="outlined"
                         size="small"
                         value={eligibleAsPerFoir}
-                        onChange={(e)=>setEligibleAsPerFoir(e.target.value)}
+                        disabled
                         />
                     </Grid>
                     <Grid item lg={12}>
@@ -300,7 +300,7 @@ const EligibilityCalculator = (props) => {
                         variant="outlined"
                         size="small"
                         value={eligibleAsPerMultiplier}
-                        onChange={(e)=>setEligibleAsPerMultiplier(e.target.value)}
+                        disabled
                         />
                     </Grid>
                 </Grid>
