@@ -4,21 +4,21 @@ import Drawer from '@material-ui/core/Drawer';
 import Grid from '@material-ui/core/Grid'
 import TextField from '@material-ui/core/TextField';
 const EligibilityCalculator = (props) => {
-    const [customerSalary,setCustomerSalary] = useState(100000);
+    const [customerSalary,setCustomerSalary] = useState('');
     const [tenure,setTenure] =useState(5);
     const [foir,setFoir] = useState(70);
     const [multiplier,setMultiplier] = useState(10);
-    const [allEmi,setAllEmi] = useState(20000);
-    const [creditcardOutstanding,setCreditcardOutstanding] = useState(100000)
-    const [creditCardMinDue,setCreditCardMinDue] = useState(0);
-    const [totalEmi,setTotalEmi] = useState(0);
-    const [eligibleEmiForFoir,setEligibleEmiForFoir] = useState(0);
-    const [eligibleEmiForMultiplier,setEligibleEmiForMultiplier] = useState(0)
-    const [eligibleAsPerFoir,setEligibleAsPerFoir] = useState(0)
-    const [eligibleAsPerMultiplier,setEligibleAsPerMultiplier] = useState(0)
+    const [allEmi,setAllEmi] = useState('');
+    const [creditcardOutstanding,setCreditcardOutstanding] = useState('')
+    const [creditCardMinDue,setCreditCardMinDue] = useState();
+    const [totalEmi,setTotalEmi] = useState();
+    const [eligibleEmiForFoir,setEligibleEmiForFoir] = useState();
+    const [eligibleEmiForMultiplier,setEligibleEmiForMultiplier] = useState()
+    const [eligibleAsPerFoir,setEligibleAsPerFoir] = useState()
+    const [eligibleAsPerMultiplier,setEligibleAsPerMultiplier] = useState()
 
     useEffect(() =>{
-        if(creditcardOutstanding !== ''){
+        if(customerSalary !== '' && allEmi !== '' && creditcardOutstanding !== ''){
             claculateMinDue(creditcardOutstanding);
             getTotalEmi();
             getEligibleEmiForFoir();
