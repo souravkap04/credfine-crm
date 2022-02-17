@@ -217,6 +217,7 @@ export default function MyLeads(props) {
   const [hangUpSnacks, sethangUpSnacks] = useState(false);
   const [myLeadSearchData, setMyLeadSearchData] = useState([]);
   const [isMyLeadsSearchData, setisMyLeadsSearchData] = useState(false);
+  const [leadConflictPopUp,setLeadConflictPopUp] = useState(false);
   let statusData = getStatusData();
   let campaignData = getCampaign();
   const queryy = useQueryy();
@@ -299,6 +300,9 @@ export default function MyLeads(props) {
   const leadDetailsHandler = (leadId) => {
     history.push(`/dashboards/myleads/edit/${leadId}`);
   };
+  const leadConflictHandler = () => {
+      setLeadConflictPopUp(true);
+        }
   const nextPageHandler = async () => {
     setisLoading(true);
     const headers = { Authorization: `Token ${profileData.token}` };
@@ -431,6 +435,7 @@ export default function MyLeads(props) {
   const disableDialerPopUp = () => {
     setDialerCall(false);
     setDisableHangupBtn(false);
+    setLeadConflictPopUp(false);
   };
   const openDrawer = () => {
     setState(true);
@@ -889,12 +894,19 @@ export default function MyLeads(props) {
                       <TableCell className={classes.tabledata}>
                         {index + 1}
                       </TableCell>
+                      {profileData.username === search.lead_agent_name ?
                       <TableCell
                         className={(classes.tabledata, classes.leadid)}
                         onClick={() => leadDetailsHandler(search.lead_crm_id)}
                       >
                         {search.lead_crm_id}
+                      </TableCell> : 
+                        <TableCell className={classes.tabledata, classes.leadid} 
+                        onClick={() => leadConflictHandler()}
+                       >
+                         {search.lead_crm_id}
                       </TableCell>
+                      }
                       <TableCell className={classes.tabledata}>
                         {search.name ? search.name : "NA"}
                       </TableCell>
@@ -928,6 +940,7 @@ export default function MyLeads(props) {
                       <TableCell className={classes.tabledata}>
                         {search.lead_agent_name ? search.lead_agent_name : "NA"}
                       </TableCell>
+                      {profileData.username === search.lead_agent_name ? 
                       <TableCell className={classes.tabledata}>
                         <Tooltip title="Call Customer">
                           <IconButton
@@ -942,7 +955,15 @@ export default function MyLeads(props) {
                             <CallIcon className={classes.callIcon} />
                           </IconButton>
                         </Tooltip>
-                      </TableCell>
+                      </TableCell> : 
+                      <TableCell className={classes.tabledata}>
+                          <Tooltip title="Call Customer">
+                            <IconButton className={classes.callButton} onClick={() => leadConflictHandler()}>
+                              <CallIcon className={classes.callIcon} />
+                            </IconButton>
+                          </Tooltip>
+                    </TableCell>
+                      }
                     </TableRow>
                   );
                 })
@@ -1058,6 +1079,11 @@ export default function MyLeads(props) {
           >
             <Alert onClose={disableDialerPopUp} severity="info">
               Calling...
+            </Alert>
+          </Snackbar>
+          <Snackbar anchorOrigin={{ vertical: "top", horizontal: "center" }} open={leadConflictPopUp} autoHideDuration={1500} onClose={disableDialerPopUp}>
+            <Alert onClose={disableDialerPopUp} severity="error">
+              Insufficient privilege
             </Alert>
           </Snackbar>
         </div>
