@@ -155,7 +155,7 @@ export default function LeadDetailsNew(props) {
     };
     const [journeyStatus, setjourneyStatus] = useState('');
     const handleJourneyStatusChange = (name) => {
-        setjourneyStatus(name ? name : false);
+        setjourneyStatus(name ? false : false);
     };
     const [openCalculate, setopenCalculate] = useState(false);
     const openCalculator = () => {
