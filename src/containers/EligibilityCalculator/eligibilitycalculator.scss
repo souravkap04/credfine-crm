@@ -1,6 +1,6 @@
-$desk: 0.063;
+$desk: 100 / 1440;
 .eligibilityContainer{
-    width: 469 * $desk + vw;
+    width: 450 * $desk + vw;
     padding-top: 20 * $desk + vw;
     padding-left: 37 * $desk + vw;
     padding-right: 37 * $desk + vw;
@@ -19,15 +19,15 @@ $desk: 0.063;
             margin-bottom: 0 !important;
             label {
                 color: #535ad1;
-                letter-spacing: 0.4px;
-                font-size: 15.5px;
+                letter-spacing: 0.4 * $desk + vw;
+                font-size: 17;
+                white-space: nowrap;
                 font-family: "Lato";
                 span {
                     position: absolute;
                     color: red;
                     font-size: 22px;
-                    top: -25px;
-                    margin-left: 2px;
+                    top: -4px;
                 }
             }
             .MuiOutlinedInput-root {
