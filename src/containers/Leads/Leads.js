@@ -562,7 +562,8 @@ export default function Leads() {
                   let leadPhoneNo = maskPhoneNo(search.phone_no_encrypt);
                   return (
                     <TableRow className={classes.oddEvenRow} key={index}>
-                      {profileData.username === search.lead_agent_name ?
+                      { (profileData.user_roles[0].user_type === 3 || profileData.user_roles[0].user_type === 5) ?
+                      profileData.username === search.lead_agent_name ?
                       <TableCell
                         className={(classes.tabledata, classes.click)}
                         onClick={() => routeChangeHAndler(search.lead_crm_id)}
@@ -574,7 +575,14 @@ export default function Leads() {
                       onClick={() => leadConflictHandler()}
                     >
                       {search.lead_crm_id}
-                    </TableCell>}
+                    </TableCell> : 
+                      <TableCell
+                      className={(classes.tabledata, classes.click)}
+                      onClick={() => routeChangeHAndler(search.lead_crm_id)}
+                    >
+                      {search.lead_crm_id}
+                    </TableCell>
+                    }
                       <TableCell className={classes.tabledata}>
                         {search.name ? search.name : "NA"}
                       </TableCell>
@@ -612,7 +620,8 @@ export default function Leads() {
                       <TableCell className={classes.tabledata}>
                         {search.sub_status ? search.sub_status : "NA"}
                       </TableCell>
-                      {profileData.username === search.lead_agent_name ?
+                      { (profileData.user_roles[0].user_type === 3 || profileData.user_roles[0].user_type === 5)?
+                      profileData.username === search.lead_agent_name ?
                       <TableCell>
                         <Tooltip title="Call Customer">
                           <IconButton
@@ -637,7 +646,22 @@ export default function Leads() {
                                       <CallIcon className={classes.callIcon} />
                                     </IconButton>
                             </Tooltip>
-                      </TableCell>
+                      </TableCell> :
+                      <TableCell>
+                      <Tooltip title="Call Customer">
+                        <IconButton
+                          className={classes.callButton}
+                          onClick={() =>
+                            clickToCall(
+                              search.phone_no_encrypt,
+                              search.lead_crm_id
+                            )
+                          }
+                        >
+                          <CallIcon className={classes.callIcon} />
+                        </IconButton>
+                      </Tooltip>
+                    </TableCell>
                       }
                     </TableRow>
                   );
