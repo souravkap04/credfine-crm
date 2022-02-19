@@ -155,7 +155,7 @@ export default function LeadDetailsNew(props) {
     };
     const [journeyStatus, setjourneyStatus] = useState('');
     const handleJourneyStatusChange = (name) => {
-        setjourneyStatus(name ? false : false);
+        setjourneyStatus(name ? name : false);
     };
     const [openCalculate, setopenCalculate] = useState(false);
     const openCalculator = () => {
@@ -2680,20 +2680,20 @@ export default function LeadDetailsNew(props) {
                             <TableBody >
                                 <TableRow className={classes.oddEvenRow}>
                                     <TableCell className={classes.tabledata}>{leadid}</TableCell>
-                                    <TableCell className={classes.tabledata}>12/05/2022</TableCell>
                                     <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
                                     <TableCell className={classes.tabledata}>RNR</TableCell>
-                                    <TableCell className={classes.tabledata}>tree</TableCell>
-                                    <TableCell className={classes.tabledata}>tree</TableCell>
+                                    <TableCell className={classes.tabledata}>xyz</TableCell>
+                                    <TableCell className={classes.tabledata}>12/05/2022</TableCell>
+                                    <TableCell className={classes.tabledata}>test</TableCell>
                                     <TableCell className={classes.tabledata}></TableCell>
                                 </TableRow>
                                 <TableRow className={classes.oddEvenRow}>
                                     <TableCell className={classes.tabledata}>{leadid}</TableCell>
-                                    <TableCell className={classes.tabledata}>12/05/2022</TableCell>
                                     <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
                                     <TableCell className={classes.tabledata}>RNR</TableCell>
-                                    <TableCell className={classes.tabledata}>tree</TableCell>
-                                    <TableCell className={classes.tabledata}>tree</TableCell>
+                                    <TableCell className={classes.tabledata}>xyz</TableCell>
+                                    <TableCell className={classes.tabledata}>12/05/2022</TableCell>
+                                    <TableCell className={classes.tabledata}>test</TableCell>
                                     <TableCell className={classes.tabledata}></TableCell>
                                 </TableRow>
                             </TableBody>
@@ -2729,9 +2729,9 @@ export default function LeadDetailsNew(props) {
                                     <TableCell className={classes.tabledata}>PL</TableCell>
                                     <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
                                     <TableCell className={classes.tabledata}>RNR</TableCell>
-                                    <TableCell className={classes.tabledata}>tree</TableCell>
-                                    <TableCell className={classes.tabledata}>tree</TableCell>
-                                    <TableCell className={classes.tabledata}>tree</TableCell>
+                                    <TableCell className={classes.tabledata}>xyz</TableCell>
+                                    <TableCell className={classes.tabledata}>12/02/2022</TableCell>
+                                    <TableCell className={classes.tabledata}>test</TableCell>
                                     <TableCell className={classes.tabledata}></TableCell>
                                 </TableRow>
                                 <TableRow className={classes.oddEvenRow}>
@@ -2739,9 +2739,9 @@ export default function LeadDetailsNew(props) {
                                     <TableCell className={classes.tabledata}>PL</TableCell>
                                     <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
                                     <TableCell className={classes.tabledata}>RNR</TableCell>
-                                    <TableCell className={classes.tabledata}>tree</TableCell>
-                                    <TableCell className={classes.tabledata}>tree</TableCell>
-                                    <TableCell className={classes.tabledata}>tree</TableCell>
+                                    <TableCell className={classes.tabledata}>xyz</TableCell>
+                                    <TableCell className={classes.tabledata}>12/02/2022</TableCell>
+                                    <TableCell className={classes.tabledata}>test</TableCell>
                                     <TableCell className={classes.tabledata}></TableCell>
                                 </TableRow>
                             </TableBody>
@@ -2776,8 +2776,8 @@ export default function LeadDetailsNew(props) {
                                     <TableCell className={classes.tabledata}>PL</TableCell>
                                     <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
                                     <TableCell className={classes.tabledata}>RNR</TableCell>
-                                    <TableCell className={classes.tabledata}>tree</TableCell>
-                                    <TableCell className={classes.tabledata}>tree</TableCell>
+                                    <TableCell className={classes.tabledata}>xyz</TableCell>
+                                    <TableCell className={classes.tabledata}>12/02/2022</TableCell>
                                     <TableCell className={classes.tabledata}></TableCell>
                                 </TableRow>
                                 <TableRow className={classes.oddEvenRow}>
@@ -2785,8 +2785,8 @@ export default function LeadDetailsNew(props) {
                                     <TableCell className={classes.tabledata}>PL</TableCell>
                                     <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
                                     <TableCell className={classes.tabledata}>RNR</TableCell>
-                                    <TableCell className={classes.tabledata}>tree</TableCell>
-                                    <TableCell className={classes.tabledata}>tree</TableCell>
+                                    <TableCell className={classes.tabledata}>xyz</TableCell>
+                                    <TableCell className={classes.tabledata}>12/02/22</TableCell>
                                     <TableCell className={classes.tabledata}></TableCell>
                                 </TableRow>
                                 <TableRow className={classes.oddEvenRow}>
@@ -2794,8 +2794,8 @@ export default function LeadDetailsNew(props) {
                                     <TableCell className={classes.tabledata}>PL</TableCell>
                                     <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
                                     <TableCell className={classes.tabledata}>RNR</TableCell>
-                                    <TableCell className={classes.tabledata}>tree</TableCell>
-                                    <TableCell className={classes.tabledata}>tree</TableCell>
+                                    <TableCell className={classes.tabledata}>xyz</TableCell>
+                                    <TableCell className={classes.tabledata}>12/02/22</TableCell>
                                     <TableCell className={classes.tabledata}></TableCell>
                                 </TableRow>
                                 <TableRow className={classes.oddEvenRow}>
@@ -2803,8 +2803,8 @@ export default function LeadDetailsNew(props) {
                                     <TableCell className={classes.tabledata}>PL</TableCell>
                                     <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
                                     <TableCell className={classes.tabledata}>RNR</TableCell>
-                                    <TableCell className={classes.tabledata}>tree</TableCell>
-                                    <TableCell className={classes.tabledata}>tree</TableCell>
+                                    <TableCell className={classes.tabledata}>xyz</TableCell>
+                                    <TableCell className={classes.tabledata}>12/02/22</TableCell>
                                     <TableCell className={classes.tabledata}></TableCell>
                                 </TableRow>
                                 <TableRow className={classes.oddEvenRow}>
@@ -2812,8 +2812,8 @@ export default function LeadDetailsNew(props) {
                                     <TableCell className={classes.tabledata}>PL</TableCell>
                                     <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
                                     <TableCell className={classes.tabledata}>RNR</TableCell>
-                                    <TableCell className={classes.tabledata}>tree</TableCell>
-                                    <TableCell className={classes.tabledata}>tree</TableCell>
+                                    <TableCell className={classes.tabledata}>xyz</TableCell>
+                                    <TableCell className={classes.tabledata}>12/02/22</TableCell>
                                     <TableCell className={classes.tabledata}></TableCell>
                                 </TableRow>
                                 <TableRow className={classes.oddEvenRow}>
@@ -2821,8 +2821,8 @@ export default function LeadDetailsNew(props) {
                                     <TableCell className={classes.tabledata}>PL</TableCell>
                                     <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
                                     <TableCell className={classes.tabledata}>RNR</TableCell>
-                                    <TableCell className={classes.tabledata}>tree</TableCell>
-                                    <TableCell className={classes.tabledata}>tree</TableCell>
+                                    <TableCell className={classes.tabledata}>xyz</TableCell>
+                                    <TableCell className={classes.tabledata}>12/02/22</TableCell>
                                     <TableCell className={classes.tabledata}></TableCell>
                                 </TableRow>
                             </TableBody>
