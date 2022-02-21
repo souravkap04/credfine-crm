@@ -562,7 +562,14 @@ export default function Leads() {
                   let leadPhoneNo = maskPhoneNo(search.phone_no_encrypt);
                   return (
                     <TableRow className={classes.oddEvenRow} key={index}>
-                      { (profileData.user_roles[0].user_type === 3 || profileData.user_roles[0].user_type === 5) ?
+                      { search.status === 'OPEN' ?
+                        <TableCell
+                        className={(classes.tabledata, classes.click)}
+                        onClick={() => routeChangeHAndler(search.lead_crm_id)}
+                      >
+                        {search.lead_crm_id}
+                      </TableCell> : 
+                      (profileData.user_roles[0].user_type === 3 || profileData.user_roles[0].user_type === 5) ?
                       profileData.username === search.lead_agent_name ?
                       <TableCell
                         className={(classes.tabledata, classes.click)}
