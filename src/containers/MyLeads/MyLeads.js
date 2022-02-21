@@ -900,7 +900,7 @@ export default function MyLeads(props) {
                       <TableCell className={classes.tabledata}>
                         {index + 1}
                       </TableCell>
-                      { search.status === 'OPEN' ? 
+                      { search.status === 'OPEN' && search.lead_agent_name === null ? 
                         <TableCell
                         className={(classes.tabledata, classes.leadid)}
                         onClick={() => leadDetailsHandler(search.lead_crm_id)}
@@ -960,7 +960,23 @@ export default function MyLeads(props) {
                       <TableCell className={classes.tabledata}>
                         {search.lead_agent_name ? search.lead_agent_name : "NA"}
                       </TableCell>
-                      { (profileData.user_roles[0].user_type === 3 || profileData.user_roles[0].user_type === 5) ?
+                      { search.status === 'OPEN' && search.lead_agent_name === null ?
+                       <TableCell className={classes.tabledata}>
+                       <Tooltip title="Call Customer">
+                         <IconButton
+                           className={classes.callButton}
+                           onClick={() =>
+                             clickToCall(
+                               search.phone_no_encrypt,
+                               search.lead_crm_id
+                             )
+                           }
+                         >
+                           <CallIcon className={classes.callIcon} />
+                         </IconButton>
+                       </Tooltip>
+                     </TableCell> :
+                      (profileData.user_roles[0].user_type === 3 || profileData.user_roles[0].user_type === 5) ?
                       profileData.username === search.lead_agent_name ? 
                       <TableCell className={classes.tabledata}>
                         <Tooltip title="Call Customer">
