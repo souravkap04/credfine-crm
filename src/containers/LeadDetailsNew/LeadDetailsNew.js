@@ -72,29 +72,35 @@ const useStyles = makeStyles({
     container: {
         overflow: "auto",
         marginTop: "10px",
-        maxHeight:'375px'
-      },
-      table: {
+        maxHeight: '375px'
+    },
+    table: {
         width: "100%",
-      },
+    },
     tableheading: {
         backgroundColor: "#8f9bb3",
         color: "#ffffff",
         fontSize: "14px",
-      },
-      tabledata: {
+    },
+    tabledata: {
         padding: "15px",
         fontSize: "12px",
         overflowWrap: "break-word",
-      },
-      oddEvenRow: {
+    },
+    oddEvenRow: {
         "&:nth-of-type(odd)": {
-          backgroundColor: "#f7f9fc",
+            backgroundColor: "#f7f9fc",
         },
         "&:nth-of-type(even)": {
-          backgroundColor: "#fff",
+            backgroundColor: "#fff",
         },
-      },
+    },
+    emptydata:{
+        position: "relative",
+        left: "26rem",
+        fontSize: "12px",
+        whiteSpace:'nowrap'
+    }
 });
 const Accordion = withStyles({
     root: {
@@ -155,7 +161,16 @@ export default function LeadDetailsNew(props) {
     };
     const [journeyStatus, setjourneyStatus] = useState('');
     const handleJourneyStatusChange = (name) => {
-        setjourneyStatus(name ? false : false);
+        setjourneyStatus(name ? name : false);
+        if (name === 'leadHistory') {
+            getLeadHistoryData();
+        }
+        if(name === 'leadJourney'){
+            getLeadJourneyData();
+        }
+        if (name === 'dispositionHistory') {
+            getDispositionHistoryData();
+        }
     };
     const [openCalculate, setopenCalculate] = useState(false);
     const openCalculator = () => {
@@ -283,14 +298,50 @@ export default function LeadDetailsNew(props) {
     const [colorRed, setcolorRed] = useState([false, false, false, false, false, false, false]);
     const [isAutoDialerEnd, setIsAutoDialerEnd] = useState(false);
     const [checked, setChecked] = React.useState(false);
-    const [checkEligibility,setCheckEligibility] = useState(false);
-  
-  const openEligibility = () =>{
-    setCheckEligibility(true);
-  }
-  const closeEligibility = () =>{
-    setCheckEligibility(false);
-  }
+    const [checkEligibility, setCheckEligibility] = useState(false);
+    const [leadHistoryData, setLeadHistoryData] = useState([]);
+    const [leadJourneyData,setLeadJourneyData] = useState([]);
+    const [dispositionHistoryData,setDispositionHistoryData] = useState([]);
+
+    const getDispositionHistoryData = async () => {
+        const headers = {
+            'Authorization': `Token ${profileData.token}`,
+        };
+        await axios.get(`${baseUrl}/leads/LeadStatusHistory/LD00000234`,{ headers })
+            .then((response) => {
+                setDispositionHistoryData(response.data.lead_history);
+            }).catch((error)=>{
+                console.log(error);
+            })
+    }
+    const getLeadJourneyData = async () => {
+        const headers = {
+            'Authorization': `Token ${profileData.token}`,
+        };
+        await axios.get(`${baseUrl}/leads/LeadHistory/LD00000234`,{ headers })
+            .then((response) => {
+                setLeadJourneyData(response.data.lead_history);
+            }).catch((error) => {
+                console.log(error);
+            })
+    }
+    const getLeadHistoryData = async () => {
+        const headers = {
+            'Authorization': `Token ${profileData.token}`,
+        };
+        await axios.get(`${baseUrl}/leads/LeadLoanHistory/LD00000174`, { headers })
+            .then((response) => {
+                setLeadHistoryData(response.data.lead_loan_history)
+            }).catch((error) => {
+                console.log(error);
+            })
+    }
+    const openEligibility = () => {
+        setCheckEligibility(true);
+    }
+    const closeEligibility = () => {
+        setCheckEligibility(false);
+    }
     let statusData = getStatusData();
     let { leadid } = useParams();
     let history = useHistory();
@@ -1007,7 +1058,7 @@ export default function LeadDetailsNew(props) {
     }
     return (
         <PageLayerSection isDisplaySearchBar={true} pageTitle="Lead Details" className={classes.scrollEnable} offerButton={true} isWhatsapp={true} whatsappNumber={mobileNo} endAutoDialerBtn={true} endAutoDialerClick={() => endAutoDialerBtnHandler()} ActualEmiCalculate={openCalculator} isDownloadPdf={true} downloadPdf={() => downloadPdfHandler()} isShareThroughEmail={true} emailId={email} ActualEligibilityCalculate={openEligibility}>
-            <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility}/>
+            <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility} />
             <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
             {/* Errors SnackBars Start */}
             <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={hangUpSnacks} autoHideDuration={1500} onClose={disableHangUpSnacks}>
@@ -2612,14 +2663,14 @@ export default function LeadDetailsNew(props) {
                         <Button
                             className="journeyBtn"
                             color="primary"
-                            variant="contained" 
+                            variant="contained"
                             onClick={() => handleJourneyStatusChange('leadJourney')}>
                             LEAD JOURNEY
                         </Button>
                         <Button
                             className="journeyBtn"
                             color="primary"
-                            variant="contained" 
+                            variant="contained"
                             onClick={() => handleJourneyStatusChange('leadHistory')}>
                             LEAD HISTORY
                         </Button>
@@ -2655,179 +2706,140 @@ export default function LeadDetailsNew(props) {
                             SOURCE
                         </Button>
                     </Grid>
-                     {journeyStatus === 'leadJourney' ? <Grid>
-                    <TableContainer className={classes.container}>
-                        <Table className={classes.table} stickyHeader>
-                            <TableHead className={classes.tableheading}>
-                                <TableRow>
-                                    <TableCell className={classes.tableheading}>Lead Id</TableCell>
-                                    <TableCell className={classes.tableheading}>Stage</TableCell>
-                                    <TableCell className={classes.tableheading}>Sub Stage</TableCell>
-                                    <TableCell className={classes.tableheading}>Updated By</TableCell>
-                                    <TableCell className={classes.tableheading}>Updated Date and Time</TableCell>
-                                    <TableCell className={classes.tableheading}>Change Log</TableCell>
-                                    <TableCell className={classes.tableheading}>
-                                        <div className={classes.closeContainer}>
-                                            <Toolbar className={classes.Toolbar}>
-                                                <IconButton edge="end" className={classes.closeBtn} color="inherit" onClick={() => handleJourneyStatusChange('')} aria-label="close">
-                                                    <CloseIcon />
-                                                </IconButton>
-                                            </Toolbar>
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody >
-                                <TableRow className={classes.oddEvenRow}>
-                                    <TableCell className={classes.tabledata}>{leadid}</TableCell>
-                                    <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
-                                    <TableCell className={classes.tabledata}>RNR</TableCell>
-                                    <TableCell className={classes.tabledata}>xyz</TableCell>
-                                    <TableCell className={classes.tabledata}>12/05/2022</TableCell>
-                                    <TableCell className={classes.tabledata}>test</TableCell>
-                                    <TableCell className={classes.tabledata}></TableCell>
-                                </TableRow>
-                                <TableRow className={classes.oddEvenRow}>
-                                    <TableCell className={classes.tabledata}>{leadid}</TableCell>
-                                    <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
-                                    <TableCell className={classes.tabledata}>RNR</TableCell>
-                                    <TableCell className={classes.tabledata}>xyz</TableCell>
-                                    <TableCell className={classes.tabledata}>12/05/2022</TableCell>
-                                    <TableCell className={classes.tabledata}>test</TableCell>
-                                    <TableCell className={classes.tabledata}></TableCell>
-                                </TableRow>
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                </Grid> : ''}
+                    {journeyStatus === 'leadJourney' ? <Grid>
+                        <TableContainer className={classes.container}>
+                            <Table className={classes.table} stickyHeader>
+                                <TableHead className={classes.tableheading}>
+                                    <TableRow>
+                                        <TableCell className={classes.tableheading}>Lead Id</TableCell>
+                                        <TableCell className={classes.tableheading}>Stage</TableCell>
+                                        <TableCell className={classes.tableheading}>Sub Stage</TableCell>
+                                        <TableCell className={classes.tableheading}>Updated By</TableCell>
+                                        <TableCell className={classes.tableheading}>Updated Date and Time</TableCell>
+                                        <TableCell className={classes.tableheading}>Change Log</TableCell>
+                                        <TableCell className={classes.tableheading}>
+                                            <div className={classes.closeContainer}>
+                                                <Toolbar className={classes.Toolbar}>
+                                                    <IconButton edge="end" className={classes.closeBtn} color="inherit" onClick={() => handleJourneyStatusChange('')} aria-label="close">
+                                                        <CloseIcon />
+                                                    </IconButton>
+                                                </Toolbar>
+                                            </div>
+                                        </TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody >
+                                    {isLoading ? <div className="loader">
+                                        <CircularProgress size={100} thickness={3} />
+                                    </div> : leadJourneyData.length !== 0 ? 
+                                        leadJourneyData.map((item,index)=>{
+                                            return (
+                                                <TableRow className={classes.oddEvenRow} key={index}>
+                                                    <TableCell className={classes.tabledata}>{item.lead_crm_id ? item.lead_crm_id : 'NA'}</TableCell>
+                                                    <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
+                                                    <TableCell className={classes.tabledata}>RNR</TableCell>
+                                                    <TableCell className={classes.tabledata}>xyz</TableCell>
+                                                    <TableCell className={classes.tabledata}>12/05/2022</TableCell>
+                                                    <TableCell className={classes.tabledata}>test</TableCell>
+                                                    <TableCell className={classes.tabledata}></TableCell>
+                                                </TableRow>
+                                            )
+                                        }) : <div className={classes.emptydata}>No Data Found</div>
+                                    }
+                                    
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Grid> : ''}
                     {journeyStatus === 'leadHistory' ? <Grid>
-                    <TableContainer className={classes.container}>
-                        <Table className={classes.table} stickyHeader>
-                            <TableHead className={classes.tableheading}>
-                                <TableRow>
-                                    <TableCell className={classes.tableheading}>Lead Id</TableCell>
-                                    <TableCell className={classes.tableheading}>Product</TableCell>
-                                    <TableCell className={classes.tableheading}>Final Status</TableCell>
-                                    <TableCell className={classes.tableheading}>Final Sub Status</TableCell>
-                                    <TableCell className={classes.tableheading}>Updated By</TableCell>
-                                    <TableCell className={classes.tableheading}>Updated Date and Time</TableCell>
-                                    <TableCell className={classes.tableheading}>Remarks</TableCell>
-                                    <TableCell className={classes.tableheading}>
-                                        <div className={classes.closeContainer}>
-                                            <Toolbar className={classes.Toolbar}>
-                                                <IconButton edge="end" className={classes.closeBtn} color="inherit" onClick={() => handleJourneyStatusChange('')} aria-label="close">
-                                                    <CloseIcon />
-                                                </IconButton>
-                                            </Toolbar>
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody >
-                                <TableRow className={classes.oddEvenRow}>
-                                    <TableCell className={classes.tabledata}>{leadid}</TableCell>
-                                    <TableCell className={classes.tabledata}>PL</TableCell>
-                                    <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
-                                    <TableCell className={classes.tabledata}>RNR</TableCell>
-                                    <TableCell className={classes.tabledata}>xyz</TableCell>
-                                    <TableCell className={classes.tabledata}>12/02/2022</TableCell>
-                                    <TableCell className={classes.tabledata}>test</TableCell>
-                                    <TableCell className={classes.tabledata}></TableCell>
-                                </TableRow>
-                                <TableRow className={classes.oddEvenRow}>
-                                <TableCell className={classes.tabledata}>{leadid}</TableCell>
-                                    <TableCell className={classes.tabledata}>PL</TableCell>
-                                    <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
-                                    <TableCell className={classes.tabledata}>RNR</TableCell>
-                                    <TableCell className={classes.tabledata}>xyz</TableCell>
-                                    <TableCell className={classes.tabledata}>12/02/2022</TableCell>
-                                    <TableCell className={classes.tabledata}>test</TableCell>
-                                    <TableCell className={classes.tabledata}></TableCell>
-                                </TableRow>
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+                        <TableContainer className={classes.container}>
+                            <Table className={classes.table} stickyHeader>
+                                <TableHead className={classes.tableheading}>
+                                    <TableRow>
+                                        <TableCell className={classes.tableheading}>Lead Id</TableCell>
+                                        <TableCell className={classes.tableheading}>Product</TableCell>
+                                        <TableCell className={classes.tableheading}>Final Status</TableCell>
+                                        <TableCell className={classes.tableheading}>Final Sub Status</TableCell>
+                                        <TableCell className={classes.tableheading}>Updated By</TableCell>
+                                        <TableCell className={classes.tableheading}>Updated Date and Time</TableCell>
+                                        <TableCell className={classes.tableheading}>Remarks</TableCell>
+                                        <TableCell className={classes.tableheading}>
+                                            <div className={classes.closeContainer}>
+                                                <Toolbar className={classes.Toolbar}>
+                                                    <IconButton edge="end" className={classes.closeBtn} color="inherit" onClick={() => handleJourneyStatusChange('')} aria-label="close">
+                                                        <CloseIcon />
+                                                    </IconButton>
+                                                </Toolbar>
+                                            </div>
+                                        </TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody >
+                                    {isLoading ? <div className="loader">
+                                        <CircularProgress size={100} thickness={3} />
+                                    </div> : leadHistoryData.length !== 0 ?
+                                        leadHistoryData.map((item,index) => {
+                                            return (
+                                                <TableRow className={classes.oddEvenRow} key={index}>
+                                                    <TableCell className={classes.tabledata}>{item.lead_id ? item.lead_id : 'NA'}</TableCell>
+                                                    <TableCell className={classes.tabledata}>{item.loan_type ? item.loan_type : 'NA'}</TableCell>
+                                                    <TableCell className={classes.tabledata}>{item.status ? item.status : 'NA'}</TableCell>
+                                                    <TableCell className={classes.tabledata}>{item.sub_status ? item.sub_status : 'NA'}</TableCell>
+                                                    <TableCell className={classes.tabledata}>{item.updated_by ? item.updated_by : 'NA'}</TableCell>
+                                                    <TableCell className={classes.tabledata}>{item.updated_time ? item.updated_time : 'NA'}</TableCell>
+                                                    <TableCell className={classes.tabledata}>{item.remarks ? item.remarks : 'NA'}</TableCell>
+                                                    <TableCell className={classes.tabledata}></TableCell>
+                                                </TableRow>
+                                            )
+                                        }) : <div className={classes.emptydata}>No Data Found</div>}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
                     </Grid> : ''}
                     {journeyStatus === 'dispositionHistory' ? <Grid>
-                    <TableContainer className={classes.container}>
-                        <Table className={classes.table} stickyHeader>
-                            <TableHead className={classes.tableheading}>
-                                <TableRow>
-                                    <TableCell className={classes.tableheading}>Lead Id</TableCell>
-                                    <TableCell className={classes.tableheading}>Product</TableCell>
-                                    <TableCell className={classes.tableheading}>Status</TableCell>
-                                    <TableCell className={classes.tableheading}>Sub Status</TableCell>
-                                    <TableCell className={classes.tableheading}>Updated By</TableCell>
-                                    <TableCell className={classes.tableheading}>Updated Date and Time</TableCell>
-                                    <TableCell className={classes.tableheading}>
-                                        <div className={classes.closeContainer}>
-                                            <Toolbar className={classes.Toolbar}>
-                                                <IconButton edge="end" className={classes.closeBtn} color="inherit" onClick={() => handleJourneyStatusChange('')} aria-label="close">
-                                                    <CloseIcon />
-                                                </IconButton>
-                                            </Toolbar>
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody >
-                                <TableRow className={classes.oddEvenRow}>
-                                    <TableCell className={classes.tabledata}>{leadid}</TableCell>
-                                    <TableCell className={classes.tabledata}>PL</TableCell>
-                                    <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
-                                    <TableCell className={classes.tabledata}>RNR</TableCell>
-                                    <TableCell className={classes.tabledata}>xyz</TableCell>
-                                    <TableCell className={classes.tabledata}>12/02/2022</TableCell>
-                                    <TableCell className={classes.tabledata}></TableCell>
-                                </TableRow>
-                                <TableRow className={classes.oddEvenRow}>
-                                <TableCell className={classes.tabledata}>{leadid}</TableCell>
-                                    <TableCell className={classes.tabledata}>PL</TableCell>
-                                    <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
-                                    <TableCell className={classes.tabledata}>RNR</TableCell>
-                                    <TableCell className={classes.tabledata}>xyz</TableCell>
-                                    <TableCell className={classes.tabledata}>12/02/22</TableCell>
-                                    <TableCell className={classes.tabledata}></TableCell>
-                                </TableRow>
-                                <TableRow className={classes.oddEvenRow}>
-                                <TableCell className={classes.tabledata}>{leadid}</TableCell>
-                                    <TableCell className={classes.tabledata}>PL</TableCell>
-                                    <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
-                                    <TableCell className={classes.tabledata}>RNR</TableCell>
-                                    <TableCell className={classes.tabledata}>xyz</TableCell>
-                                    <TableCell className={classes.tabledata}>12/02/22</TableCell>
-                                    <TableCell className={classes.tabledata}></TableCell>
-                                </TableRow>
-                                <TableRow className={classes.oddEvenRow}>
-                                <TableCell className={classes.tabledata}>{leadid}</TableCell>
-                                    <TableCell className={classes.tabledata}>PL</TableCell>
-                                    <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
-                                    <TableCell className={classes.tabledata}>RNR</TableCell>
-                                    <TableCell className={classes.tabledata}>xyz</TableCell>
-                                    <TableCell className={classes.tabledata}>12/02/22</TableCell>
-                                    <TableCell className={classes.tabledata}></TableCell>
-                                </TableRow>
-                                <TableRow className={classes.oddEvenRow}>
-                                <TableCell className={classes.tabledata}>{leadid}</TableCell>
-                                    <TableCell className={classes.tabledata}>PL</TableCell>
-                                    <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
-                                    <TableCell className={classes.tabledata}>RNR</TableCell>
-                                    <TableCell className={classes.tabledata}>xyz</TableCell>
-                                    <TableCell className={classes.tabledata}>12/02/22</TableCell>
-                                    <TableCell className={classes.tabledata}></TableCell>
-                                </TableRow>
-                                <TableRow className={classes.oddEvenRow}>
-                                <TableCell className={classes.tabledata}>{leadid}</TableCell>
-                                    <TableCell className={classes.tabledata}>PL</TableCell>
-                                    <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
-                                    <TableCell className={classes.tabledata}>RNR</TableCell>
-                                    <TableCell className={classes.tabledata}>xyz</TableCell>
-                                    <TableCell className={classes.tabledata}>12/02/22</TableCell>
-                                    <TableCell className={classes.tabledata}></TableCell>
-                                </TableRow>
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+                        <TableContainer className={classes.container}>
+                            <Table className={classes.table} stickyHeader>
+                                <TableHead className={classes.tableheading}>
+                                    <TableRow>
+                                    <TableCell className={classes.tableheading}>SL No</TableCell>
+                                        <TableCell className={classes.tableheading}>Lead Id</TableCell>
+                                        <TableCell className={classes.tableheading}>Product</TableCell>
+                                        <TableCell className={classes.tableheading}>Status</TableCell>
+                                        <TableCell className={classes.tableheading}>Sub Status</TableCell>
+                                        <TableCell className={classes.tableheading}>Updated By</TableCell>
+                                        <TableCell className={classes.tableheading}>Updated Date and Time</TableCell>
+                                        <TableCell className={classes.tableheading}>
+                                            <div className={classes.closeContainer}>
+                                                <Toolbar className={classes.Toolbar}>
+                                                    <IconButton edge="end" className={classes.closeBtn} color="inherit" onClick={() => handleJourneyStatusChange('')} aria-label="close">
+                                                        <CloseIcon />
+                                                    </IconButton>
+                                                </Toolbar>
+                                            </div>
+                                        </TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody >
+                                {isLoading ? <div className="loader">
+                                        <CircularProgress size={100} thickness={3} />
+                                    </div> : dispositionHistoryData.length !== 0 ? 
+                                    dispositionHistoryData.map((item,index)=>{
+                                        return(
+                                        <TableRow className={classes.oddEvenRow} key={index}>
+                                            <TableCell className={classes.tabledata}>{index+1}</TableCell>
+                                        <TableCell className={classes.tabledata}>{leadid}</TableCell>
+                                        <TableCell className={classes.tabledata}>PL</TableCell>
+                                        <TableCell className={classes.tabledata}>{item.status ? item.status : 'NA' }</TableCell>
+                                        <TableCell className={classes.tabledata}>{item.sub_status ? item.sub_status : 'NA' }</TableCell>
+                                        <TableCell className={classes.tabledata}>{item.updated_by ? item.updated_by : 'NA' }</TableCell>
+                                        <TableCell className={classes.tabledata}>{item.updated_date ? item.updated_date : 'NA'}</TableCell>
+                                        <TableCell className={classes.tabledata}></TableCell>
+                                    </TableRow>
+                                        )
+                                    }) : <div className={classes.emptydata}>No Data Found</div>}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
                     </Grid> : ''}
                 </Grid>
                 <Grid className="callConatiner" lg={3}>

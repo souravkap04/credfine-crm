@@ -63,7 +63,7 @@ const useStyles = makeStyles({
   emptydata: {
     position: "relative",
     left: "30rem",
-    fontSize: "12px",
+    fontSize: "14px",
     whiteSpace:'nowrap'
   },
   click: {
@@ -209,9 +209,7 @@ export default function Leads() {
   const routeChangeHAndler = (leadId) => {
     history.push(`/dashboards/leads/edit/${leadId}`);
   };
-  const leadConflictHandler = () => {
-    setLeadConflictPopUp(true);
- }
+
   const clickToCall = async (encryptData, leadID) => {
     const customerNo = decodeURIComponent(window.atob(encryptData));
     if (profileData.dialer === "HALOOCOM-Noida") {
