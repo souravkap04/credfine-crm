@@ -105,6 +105,7 @@ const useStyles = makeStyles({
     position: "relative",
     left: "30rem",
     fontSize: "12px",
+    whiteSpace:'nowrap'
   },
   leadid: {
     cursor: "pointer",
@@ -218,6 +219,7 @@ export default function MyLeads(props) {
   const [myLeadSearchData, setMyLeadSearchData] = useState([]);
   const [isMyLeadsSearchData, setisMyLeadsSearchData] = useState(false);
   const [leadConflictPopUp,setLeadConflictPopUp] = useState(false);
+  const [responseStatus,setResponseStatus] = useState("");
   let statusData = getStatusData();
   let campaignData = getCampaign();
   const queryy = useQueryy();
@@ -281,6 +283,10 @@ export default function MyLeads(props) {
         setisLoading(false);
       })
       .catch((error) => {
+        if(error.response.status === 400){
+          setResponseStatus('This Leads Owned By Someone Else Kindliy Connect Your Product Team');
+          setisLoading(false);
+        }
         console.log(error);
       });
   };
@@ -900,33 +906,12 @@ export default function MyLeads(props) {
                       <TableCell className={classes.tabledata}>
                         {index + 1}
                       </TableCell>
-                      { search.status === 'OPEN' && search.lead_agent_name === null ? 
-                        <TableCell
-                        className={(classes.tabledata, classes.leadid)}
-                        onClick={() => leadDetailsHandler(search.lead_crm_id)}
-                      >
-                        {search.lead_crm_id}
-                      </TableCell> :
-                      (profileData.user_roles[0].user_type === 3 || profileData.user_roles[0].user_type === 5)  ?
-                         (profileData.username === search.lead_agent_name) ?
-                      <TableCell
-                        className={(classes.tabledata, classes.leadid)}
-                        onClick={() => leadDetailsHandler(search.lead_crm_id)}
-                      >
-                        {search.lead_crm_id}
-                      </TableCell> : 
-                        <TableCell className={classes.tabledata, classes.leadid} 
-                        onClick={() => leadConflictHandler()}
-                       >
-                         {search.lead_crm_id}
-                      </TableCell> :
                       <TableCell
                       className={(classes.tabledata, classes.leadid)}
                       onClick={() => leadDetailsHandler(search.lead_crm_id)}
                     >
                       {search.lead_crm_id}
                     </TableCell>
-                      }
                       <TableCell className={classes.tabledata}>
                         {search.name ? search.name : "NA"}
                       </TableCell>
@@ -960,46 +945,6 @@ export default function MyLeads(props) {
                       <TableCell className={classes.tabledata}>
                         {search.lead_agent_name ? search.lead_agent_name : "NA"}
                       </TableCell>
-                      { search.status === 'OPEN' && search.lead_agent_name === null ?
-                       <TableCell className={classes.tabledata}>
-                       <Tooltip title="Call Customer">
-                         <IconButton
-                           className={classes.callButton}
-                           onClick={() =>
-                             clickToCall(
-                               search.phone_no_encrypt,
-                               search.lead_crm_id
-                             )
-                           }
-                         >
-                           <CallIcon className={classes.callIcon} />
-                         </IconButton>
-                       </Tooltip>
-                     </TableCell> :
-                      (profileData.user_roles[0].user_type === 3 || profileData.user_roles[0].user_type === 5) ?
-                      profileData.username === search.lead_agent_name ? 
-                      <TableCell className={classes.tabledata}>
-                        <Tooltip title="Call Customer">
-                          <IconButton
-                            className={classes.callButton}
-                            onClick={() =>
-                              clickToCall(
-                                search.phone_no_encrypt,
-                                search.lead_crm_id
-                              )
-                            }
-                          >
-                            <CallIcon className={classes.callIcon} />
-                          </IconButton>
-                        </Tooltip>
-                      </TableCell> : 
-                      <TableCell className={classes.tabledata}>
-                          <Tooltip title="Call Customer">
-                            <IconButton className={classes.callButton} onClick={() => leadConflictHandler()}>
-                              <CallIcon className={classes.callIcon} />
-                            </IconButton>
-                          </Tooltip>
-                    </TableCell> :
                     <TableCell className={classes.tabledata}>
                     <Tooltip title="Call Customer">
                       <IconButton
@@ -1015,12 +960,11 @@ export default function MyLeads(props) {
                       </IconButton>
                     </Tooltip>
                   </TableCell>
-                      }
                     </TableRow>
                   );
                 })
               ) : (
-                <span className={classes.emptydata}>No Data Found</span>
+                <span className={classes.emptydata}>{responseStatus}</span>
               )
             ) : myLeads.length !== 0 ? (
               myLeads.map((my_leads, index) => {

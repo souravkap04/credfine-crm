@@ -64,6 +64,7 @@ const useStyles = makeStyles({
     position: "relative",
     left: "30rem",
     fontSize: "12px",
+    whiteSpace:'nowrap'
   },
   click: {
     cursor: "pointer",
@@ -150,6 +151,7 @@ export default function Leads() {
   const [openCalculate, setopenCalculate] = useState(false);
   const [checkEligibility, setCheckEligibility] = useState(false);
   const [leadConflictPopUp,setLeadConflictPopUp] = useState(false);
+  const [responseStatus,setResponseStatus] = useState("");
     const openEligibility = () => {
         setCheckEligibility(true);
     }
@@ -172,10 +174,16 @@ export default function Leads() {
     await axios
       .get(`${baseUrl}/leads/search/${key}`, { headers })
       .then((response) => {
+        if(response.status === 200){
         setSearchData(response.data);
         setisLoading(false);
+        } 
       })
       .catch((error) => {
+        if(error.response.status === 400){
+          setResponseStatus('This Leads Owned By Someone Else Kindliy Connect Your Product Team');
+          setisLoading(false);
+        }
         console.log(error);
       });
   };
@@ -562,34 +570,12 @@ export default function Leads() {
                   let leadPhoneNo = maskPhoneNo(search.phone_no_encrypt);
                   return (
                     <TableRow className={classes.oddEvenRow} key={index}>
-                      { search.status === 'OPEN' && search.lead_agent_name === null ?
-                        <TableCell
-                        className={(classes.tabledata, classes.click)}
-                        onClick={() => routeChangeHAndler(search.lead_crm_id)}
-                      >
-                        {search.lead_crm_id}
-                      </TableCell> : 
-                      (profileData.user_roles[0].user_type === 3 || profileData.user_roles[0].user_type === 5) ?
-                      profileData.username === search.lead_agent_name ?
-                      <TableCell
-                        className={(classes.tabledata, classes.click)}
-                        onClick={() => routeChangeHAndler(search.lead_crm_id)}
-                      >
-                        {search.lead_crm_id}
-                      </TableCell> : 
-                      <TableCell
-                      className={(classes.tabledata, classes.click)}
-                      onClick={() => leadConflictHandler()}
-                    >
-                      {search.lead_crm_id}
-                    </TableCell> : 
                       <TableCell
                       className={(classes.tabledata, classes.click)}
                       onClick={() => routeChangeHAndler(search.lead_crm_id)}
                     >
                       {search.lead_crm_id}
                     </TableCell>
-                    }
                       <TableCell className={classes.tabledata}>
                         {search.name ? search.name : "NA"}
                       </TableCell>
@@ -627,49 +613,6 @@ export default function Leads() {
                       <TableCell className={classes.tabledata}>
                         {search.sub_status ? search.sub_status : "NA"}
                       </TableCell>
-                      { search.status === 'OPEN' && search.lead_agent_name === null ?
-                      <TableCell>
-                      <Tooltip title="Call Customer">
-                        <IconButton
-                          className={classes.callButton}
-                          onClick={() =>
-                            clickToCall(
-                              search.phone_no_encrypt,
-                              search.lead_crm_id
-                            )
-                          }
-                        >
-                          <CallIcon className={classes.callIcon} />
-                        </IconButton>
-                      </Tooltip>
-                    </TableCell> :
-                    (profileData.user_roles[0].user_type === 3 || profileData.user_roles[0].user_type === 5)?
-                      profileData.username === search.lead_agent_name ?
-                      <TableCell>
-                        <Tooltip title="Call Customer">
-                          <IconButton
-                            className={classes.callButton}
-                            onClick={() =>
-                              clickToCall(
-                                search.phone_no_encrypt,
-                                search.lead_crm_id
-                              )
-                            }
-                          >
-                            <CallIcon className={classes.callIcon} />
-                          </IconButton>
-                        </Tooltip>
-                      </TableCell> :
-                      <TableCell>
-                            <Tooltip title="Call Customer">
-                                  <IconButton
-                                    className={classes.callButton}
-                                      onClick={() => leadConflictHandler()}
-                                    >
-                                      <CallIcon className={classes.callIcon} />
-                                    </IconButton>
-                            </Tooltip>
-                      </TableCell> :
                       <TableCell>
                       <Tooltip title="Call Customer">
                         <IconButton
@@ -685,12 +628,11 @@ export default function Leads() {
                         </IconButton>
                       </Tooltip>
                     </TableCell>
-                      }
                     </TableRow>
                   );
                 })
               ) : (
-                <span className={classes.emptydata}> No Data Found </span>
+                <div className={classes.emptydata}> {responseStatus} </div>
               )
             ) : Object.keys(leadData).length !== 0 ? (
               <TableRow className={classes.oddEvenRow}>
