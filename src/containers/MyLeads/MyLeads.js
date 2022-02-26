@@ -104,8 +104,8 @@ const useStyles = makeStyles({
   emptydata: {
     position: "relative",
     left: "30rem",
-    fontSize: "12px",
-    whiteSpace:'nowrap'
+    fontSize: "16px",
+    whiteSpace: 'nowrap'
   },
   leadid: {
     cursor: "pointer",
@@ -193,10 +193,6 @@ export default function MyLeads(props) {
   const [prevPage, setPrevPage] = useState(null);
   const [nextPage, setNextPage] = useState(null);
   const [totalLeads, setTotalLeads] = useState(null);
-  const [isCalling, setIsCalling] = useState(false);
-  const [isCallConnect, setIsCallConnect] = useState(false);
-  const [onGoingCall, setOnGoingCall] = useState(false);
-  const [isCallNotConnected, setIsCallNotConnected] = useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(100);
   const [totalDataPerPage, settotalDataPerPage] = useState(0);
   const [dialerCall, setDialerCall] = useState(false);
@@ -218,7 +214,7 @@ export default function MyLeads(props) {
   const [hangUpSnacks, sethangUpSnacks] = useState(false);
   const [myLeadSearchData, setMyLeadSearchData] = useState([]);
   const [isMyLeadsSearchData, setisMyLeadsSearchData] = useState(false);
-  const [responseStatus,setResponseStatus] = useState("");
+  const [responseStatus, setResponseStatus] = useState("");
   let statusData = getStatusData();
   let campaignData = getCampaign();
   const queryy = useQueryy();
@@ -282,11 +278,16 @@ export default function MyLeads(props) {
         setisLoading(false);
       })
       .catch((error) => {
-        if(error.response.status === 400){
+        if (error.response.status === 403) {
           setResponseStatus('This Leads Owned By Someone Else Kindliy Connect Your Product Team');
           setisLoading(false);
         }
-        console.log(error);
+        if (error.response.status === 400) {
+          setResponseStatus('Something Wrong');
+          setisLoading(false);
+        } else {
+          console.log(error);
+        }
       });
   };
   useEffect(() => {
@@ -430,14 +431,6 @@ export default function MyLeads(props) {
       }, 1500);
     }
   };
-  const disablePopup = () => {
-    setIsCalling(false);
-    setOnGoingCall(false);
-  };
-  const callConnectHandler = () => {
-    setIsCallConnect(false);
-    setIsCallNotConnected(false);
-  };
   const disableDialerPopUp = () => {
     setDialerCall(false);
     setDisableHangupBtn(false);
@@ -544,23 +537,33 @@ export default function MyLeads(props) {
     setCallHangUpState(true);
   };
   const [openCalculate, setopenCalculate] = useState(false);
-  const [checkEligibility,setCheckEligibility] = useState(false);
+  const [checkEligibility, setCheckEligibility] = useState(false);
   const openCalculator = () => {
     setopenCalculate(true);
   }
   const closeCalculator = () => {
     setopenCalculate(false);
   }
-  const openEligibility = () =>{
+  const openEligibility = () => {
     setCheckEligibility(true);
   }
-  const closeEligibility = () =>{
+  const closeEligibility = () => {
     setCheckEligibility(false);
   }
   return (
     <PageLayerSection isDisplaySearchBar={true} isMyLeadsSearch={true} ActualEmiCalculate={openCalculator} ActualEligibilityCalculate={openEligibility}>
-      <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility}/>
+      <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility} />
       <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={dialerCall}
+        autoHideDuration={1500}
+        onClose={disableDialerPopUp}
+      >
+        <Alert onClose={disableDialerPopUp} severity="info">
+          Calling...
+        </Alert>
+      </Snackbar>
       <Drawer anchor="right" open={state} onClose={closeDrawer}>
         <div className="rightContainerForm">
           <form onSubmit={filterSubmit}>
@@ -902,11 +905,11 @@ export default function MyLeads(props) {
                         {index + 1}
                       </TableCell>
                       <TableCell
-                      className={(classes.tabledata, classes.leadid)}
-                      onClick={() => leadDetailsHandler(search.lead_crm_id)}
-                    >
-                      {search.lead_crm_id}
-                    </TableCell>
+                        className={(classes.tabledata, classes.leadid)}
+                        onClick={() => leadDetailsHandler(search.lead_crm_id)}
+                      >
+                        {search.lead_crm_id}
+                      </TableCell>
                       <TableCell className={classes.tabledata}>
                         {search.name ? search.name : "NA"}
                       </TableCell>
@@ -940,21 +943,21 @@ export default function MyLeads(props) {
                       <TableCell className={classes.tabledata}>
                         {search.lead_agent_name ? search.lead_agent_name : "NA"}
                       </TableCell>
-                    <TableCell className={classes.tabledata}>
-                    <Tooltip title="Call Customer">
-                      <IconButton
-                        className={classes.callButton}
-                        onClick={() =>
-                          clickToCall(
-                            search.phone_no_encrypt,
-                            search.lead_crm_id
-                          )
-                        }
-                      >
-                        <CallIcon className={classes.callIcon} />
-                      </IconButton>
-                    </Tooltip>
-                  </TableCell>
+                      <TableCell className={classes.tabledata}>
+                        <Tooltip title="Call Customer">
+                          <IconButton
+                            className={classes.callButton}
+                            onClick={() =>
+                              clickToCall(
+                                search.phone_no_encrypt,
+                                search.lead_crm_id
+                              )
+                            }
+                          >
+                            <CallIcon className={classes.callIcon} />
+                          </IconButton>
+                        </Tooltip>
+                      </TableCell>
                     </TableRow>
                   );
                 })
@@ -1051,28 +1054,6 @@ export default function MyLeads(props) {
             )}
           </TableBody>
         </Table>
-        <div>
-          <CallerDialogBox
-            onGoingCall={onGoingCall}
-            isCalling={isCalling}
-            isCallConnect={isCallConnect}
-            isCallNotConnected={isCallNotConnected}
-            callConnectHandler={callConnectHandler}
-            disablePopup={disablePopup}
-          />
-        </div>
-        <div>
-          <Snackbar
-            anchorOrigin={{ vertical: "top", horizontal: "right" }}
-            open={dialerCall}
-            autoHideDuration={1500}
-            onClose={disableDialerPopUp}
-          >
-            <Alert onClose={disableDialerPopUp} severity="info">
-              Calling...
-            </Alert>
-          </Snackbar>
-        </div>
       </TableContainer>
       {isLoading ? (
         ""

@@ -63,8 +63,8 @@ const useStyles = makeStyles({
   emptydata: {
     position: "relative",
     left: "30rem",
-    fontSize: "14px",
-    whiteSpace:'nowrap'
+    fontSize: "16px",
+    whiteSpace: 'nowrap'
   },
   click: {
     cursor: "pointer",
@@ -123,10 +123,6 @@ export default function Leads() {
   const profileData = getProfileData();
   const [leadData, setLeadData] = useState({});
   const [searchData, setSearchData] = useState([]);
-  const [isCalling, setIsCalling] = useState(false);
-  const [isCallConnect, setIsCallConnect] = useState(false);
-  const [onGoingCall, setOnGoingCall] = useState(false);
-  const [isCallNotConnected, setIsCallNotConnected] = useState(false);
   const [isSearchData, setisSearchData] = useState(false);
   const [dialerCall, setDialerCall] = useState(false);
   const [disableHangupBtn, setDisableHangupBtn] = useState(true);
@@ -150,14 +146,13 @@ export default function Leads() {
   const [formError, setformError] = useState([false, false, false]);
   const [openCalculate, setopenCalculate] = useState(false);
   const [checkEligibility, setCheckEligibility] = useState(false);
-  const [leadConflictPopUp,setLeadConflictPopUp] = useState(false);
-  const [responseStatus,setResponseStatus] = useState("");
-    const openEligibility = () => {
-        setCheckEligibility(true);
-    }
-    const closeEligibility = () => {
-        setCheckEligibility(false);
-    }
+  const [responseStatus, setResponseStatus] = useState("");
+  const openEligibility = () => {
+    setCheckEligibility(true);
+  }
+  const closeEligibility = () => {
+    setCheckEligibility(false);
+  }
   const openCalculator = () => {
     setopenCalculate(true);
   }
@@ -174,17 +169,22 @@ export default function Leads() {
     await axios
       .get(`${baseUrl}/leads/search/${key}`, { headers })
       .then((response) => {
-        if(response.status === 200){
-        setSearchData(response.data);
-        setisLoading(false);
-        } 
+        if (response.status === 200) {
+          setSearchData(response.data);
+          setisLoading(false);
+        }
       })
       .catch((error) => {
-        if(error.response.status === 400){
+        if (error.response.status === 403) {
           setResponseStatus('This Leads Owned By Someone Else Kindliy Connect Your Product Team');
           setisLoading(false);
         }
-        console.log(error);
+        if (error.response.status === 400) {
+          setResponseStatus('Something Wrong');
+          setisLoading(false);
+        } else {
+          console.log(error);
+        }
       });
   };
   const fetchLeadsData = async () => {
@@ -250,14 +250,6 @@ export default function Leads() {
       }, 1500);
     }
   };
-  const disablePopup = () => {
-    setIsCalling(false);
-    setOnGoingCall(false);
-  };
-  const callConnectHandler = () => {
-    setIsCallConnect(false);
-    setIsCallNotConnected(false);
-  };
   const maskPhoneNo = (phoneNo) => {
     let data = decodeURIComponent(window.atob(phoneNo));
     let unMaskdata = data.slice(-4);
@@ -280,7 +272,6 @@ export default function Leads() {
   const disableDialerPopUp = () => {
     setDialerCall(false);
     setDisableHangupBtn(false);
-    setLeadConflictPopUp(false);
   };
   const personalLoanSubmitHandler = async () => {
     let formErrorData = [...formError];
@@ -371,7 +362,7 @@ export default function Leads() {
       ActualEmiCalculate={openCalculator}
       ActualEligibilityCalculate={openEligibility}
     >
-      <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility}/>
+      <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility} />
       <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
       <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
@@ -381,6 +372,16 @@ export default function Leads() {
       >
         <Alert onClose={closeSnankBar} severity="info">
           Auto dialer mode is on
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={dialerCall}
+        autoHideDuration={3000}
+        onClose={disableDialerPopUp}
+      >
+        <Alert onClose={disableDialerPopUp} severity="info">
+          Calling...
         </Alert>
       </Snackbar>
       <Snackbar
@@ -569,11 +570,11 @@ export default function Leads() {
                   return (
                     <TableRow className={classes.oddEvenRow} key={index}>
                       <TableCell
-                      className={(classes.tabledata, classes.click)}
-                      onClick={() => routeChangeHAndler(search.lead_crm_id)}
-                    >
-                      {search.lead_crm_id}
-                    </TableCell>
+                        className={(classes.tabledata, classes.click)}
+                        onClick={() => routeChangeHAndler(search.lead_crm_id)}
+                      >
+                        {search.lead_crm_id}
+                      </TableCell>
                       <TableCell className={classes.tabledata}>
                         {search.name ? search.name : "NA"}
                       </TableCell>
@@ -612,25 +613,25 @@ export default function Leads() {
                         {search.sub_status ? search.sub_status : "NA"}
                       </TableCell>
                       <TableCell>
-                      <Tooltip title="Call Customer">
-                        <IconButton
-                          className={classes.callButton}
-                          onClick={() =>
-                            clickToCall(
-                              search.phone_no_encrypt,
-                              search.lead_crm_id
-                            )
-                          }
-                        >
-                          <CallIcon className={classes.callIcon} />
-                        </IconButton>
-                      </Tooltip>
-                    </TableCell>
+                        <Tooltip title="Call Customer">
+                          <IconButton
+                            className={classes.callButton}
+                            onClick={() =>
+                              clickToCall(
+                                search.phone_no_encrypt,
+                                search.lead_crm_id
+                              )
+                            }
+                          >
+                            <CallIcon className={classes.callIcon} />
+                          </IconButton>
+                        </Tooltip>
+                      </TableCell>
                     </TableRow>
                   );
                 })
               ) : (
-                <div className={classes.emptydata}> {responseStatus} </div>
+                <div > no data found 1233yyyyyyyyy</div>
               )
             ) : Object.keys(leadData).length !== 0 ? (
               <TableRow className={classes.oddEvenRow}>
@@ -695,38 +696,6 @@ export default function Leads() {
             ) : (
               <span className={classes.emptydata}> No Data Found </span>
             )}
-            <div>
-              <CallerDialogBox
-                onGoingCall={onGoingCall}
-                isCalling={isCalling}
-                isCallConnect={isCallConnect}
-                isCallNotConnected={isCallNotConnected}
-                callConnectHandler={callConnectHandler}
-                disablePopup={disablePopup}
-              />
-            </div>
-            <div>
-              <Snackbar
-                anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                open={dialerCall}
-                autoHideDuration={3000}
-                onClose={disableDialerPopUp}
-              >
-                <Alert onClose={disableDialerPopUp} severity="info">
-                  Calling...
-                </Alert>
-              </Snackbar>
-              <Snackbar
-                anchorOrigin={{ vertical: "top", horizontal: "center" }}
-                open={leadConflictPopUp}
-                autoHideDuration={3000}
-                onClose={disableDialerPopUp}
-              >
-                <Alert onClose={disableDialerPopUp} severity="error">
-                  Insufficient privilege
-                </Alert>
-              </Snackbar>
-            </div>
           </TableBody>
         </Table>
       </TableContainer>
