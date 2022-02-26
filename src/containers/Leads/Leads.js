@@ -176,11 +176,15 @@ export default function Leads() {
       })
       .catch((error) => {
         if (error.response.status === 403) {
-          setResponseStatus('This Leads Owned By Someone Else Kindliy Connect Your Product Team');
+          setResponseStatus('This Leads Owned By Someone Else Kindliy Connect Your Product Team swati@credfine.com');
+          setAlertMessage('Lead Already Exist');
+          setIsError(true);
           setisLoading(false);
         }
         if (error.response.status === 400) {
-          setResponseStatus('Something Wrong');
+          setResponseStatus('No Data Found In Our CRM You Can Create a New Lead From Manual Lead Creation');
+          setAlertMessage('No Record Found');
+          setIsError(true);
           setisLoading(false);
         } else {
           console.log(error);

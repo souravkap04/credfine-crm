@@ -215,6 +215,7 @@ export default function MyLeads(props) {
   const [myLeadSearchData, setMyLeadSearchData] = useState([]);
   const [isMyLeadsSearchData, setisMyLeadsSearchData] = useState(false);
   const [responseStatus, setResponseStatus] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
   let statusData = getStatusData();
   let campaignData = getCampaign();
   const queryy = useQueryy();
@@ -279,11 +280,15 @@ export default function MyLeads(props) {
       })
       .catch((error) => {
         if (error.response.status === 403) {
-          setResponseStatus('This Leads Owned By Someone Else Kindliy Connect Your Product Team');
+          setResponseStatus('This Leads Owned By Someone Else Kindliy Connect Your Product Team swati@credfine.com');
+          setAlertMessage('Lead Already Exist');
+          setisError(true);
           setisLoading(false);
         }
         if (error.response.status === 400) {
-          setResponseStatus('Something Wrong');
+          setResponseStatus('No Data Found In Our CRM You Can Create a New Lead From Manual Lead Creation');
+          setAlertMessage('No Record Found');
+          setisError(true);
           setisLoading(false);
         } else {
           console.log(error);
@@ -434,6 +439,7 @@ export default function MyLeads(props) {
   const disableDialerPopUp = () => {
     setDialerCall(false);
     setDisableHangupBtn(false);
+    setisError(false);
   };
   const openDrawer = () => {
     setState(true);
@@ -562,6 +568,16 @@ export default function MyLeads(props) {
       >
         <Alert onClose={disableDialerPopUp} severity="info">
           Calling...
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={isError}
+        autoHideDuration={1500}
+        onClose={disableDialerPopUp}
+      >
+        <Alert onClose={disableDialerPopUp} severity="error">
+          {alertMessage}
         </Alert>
       </Snackbar>
       <Drawer anchor="right" open={state} onClose={closeDrawer}>
