@@ -64,7 +64,7 @@ const useStyles = makeStyles({
     backgroundColor: "#ffffff",
     width: "100%",
     height: "64px",
-    marginTop: "8px",
+    marginTop: "25px",
     marginBottom: "25px",
     display: "flex",
     justifyContent: "flex-end",
@@ -102,10 +102,10 @@ const useStyles = makeStyles({
     overflowWrap: "break-word",
   },
   emptydata: {
-    position: "relative",
-    left: "30rem",
+    position: "absolute",
+    left: "40rem",
     fontSize: "16px",
-    whiteSpace: 'nowrap'
+    whiteSpace: 'nowrap',
   },
   leadid: {
     cursor: "pointer",

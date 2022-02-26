@@ -61,8 +61,8 @@ const useStyles = makeStyles({
     fontSize: "12px",
   },
   emptydata: {
-    position: "relative",
-    left: "30rem",
+    position: "absolute",
+    left: "40rem",
     fontSize: "16px",
     whiteSpace: 'nowrap'
   },
@@ -631,7 +631,7 @@ export default function Leads() {
                   );
                 })
               ) : (
-                <div > no data found 1233yyyyyyyyy</div>
+                <span className={classes.emptydata}>{responseStatus}</span>
               )
             ) : Object.keys(leadData).length !== 0 ? (
               <TableRow className={classes.oddEvenRow}>
