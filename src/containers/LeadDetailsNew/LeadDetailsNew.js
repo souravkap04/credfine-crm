@@ -86,6 +86,7 @@ const useStyles = makeStyles({
         backgroundColor: "#8f9bb3",
         color: "#ffffff",
         fontSize: "14px",
+        whiteSpace: 'nowrap'
     },
     tabledata: {
         padding: "15px",
@@ -109,7 +110,7 @@ const useStyles = makeStyles({
     click: {
         cursor: "pointer",
         color: "blue",
-      },
+    },
 });
 const Accordion = withStyles({
     root: {
@@ -311,7 +312,7 @@ export default function LeadDetailsNew(props) {
     const [leadHistoryData, setLeadHistoryData] = useState([]);
     const [leadJourneyData, setLeadJourneyData] = useState([]);
     const [dispositionHistoryData, setDispositionHistoryData] = useState([]);
-    const [isLogPopup,setIsLogPopup] = useState(false);
+    const [isLogPopup, setIsLogPopup] = useState(false);
 
     const openEligibility = () => {
         setCheckEligibility(true);
@@ -2727,20 +2728,18 @@ export default function LeadDetailsNew(props) {
                             <Table className={classes.table} stickyHeader>
                                 <TableHead className={classes.tableheading}>
                                     <TableRow>
-                                        <TableCell className={classes.tableheading}>Lead Id</TableCell>
+                                        <TableCell className={classes.tableheading}>SL No</TableCell>
                                         <TableCell className={classes.tableheading}>Status</TableCell>
                                         <TableCell className={classes.tableheading}>Sub Status</TableCell>
                                         <TableCell className={classes.tableheading}>Updated By</TableCell>
                                         <TableCell className={classes.tableheading}>Updated Date and Time</TableCell>
                                         <TableCell className={classes.tableheading}>Change Log</TableCell>
                                         <TableCell className={classes.tableheading}>
-                                            <div className={classes.closeContainer}>
-                                                <Toolbar className={classes.Toolbar}>
-                                                    <IconButton edge="end" className={classes.closeBtn} color="inherit" onClick={() => handleJourneyStatusChange('')} aria-label="close">
-                                                        <CloseIcon />
-                                                    </IconButton>
-                                                </Toolbar>
-                                            </div>
+                                            <Toolbar>
+                                                <IconButton edge="end" color="inherit" onClick={() => handleJourneyStatusChange('')} aria-label="close">
+                                                    <CloseIcon />
+                                                </IconButton>
+                                            </Toolbar>
                                         </TableCell>
                                     </TableRow>
                                 </TableHead>
@@ -2754,12 +2753,12 @@ export default function LeadDetailsNew(props) {
                                                 moment(updatedDate.toLocaleTimeString(), "HH:mm:ss a").format("hh:mm A");
                                             return (
                                                 <TableRow className={classes.oddEvenRow} key={index}>
-                                                    <TableCell className={classes.tabledata}>{item.lead_crm_id ? item.lead_crm_id : 'NA'}</TableCell>
+                                                    <TableCell className={classes.tabledata}>{index + 1}</TableCell>
                                                     <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
                                                     <TableCell className={classes.tabledata}>RNR</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.updated_by_user ? item.updated_by_user : 'NA' }</TableCell>
+                                                    <TableCell className={classes.tabledata}>{item.updated_by_user ? item.updated_by_user : 'NA'}</TableCell>
                                                     <TableCell className={classes.tabledata}>{currentUpdatedDate ? currentUpdatedDate : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata,classes.click} onClick={changeLogHandler}>Updated Log</TableCell>
+                                                    <TableCell className={classes.tabledata, classes.click} onClick={changeLogHandler}>Updated Log</TableCell>
                                                     <TableCell className={classes.tabledata}></TableCell>
                                                 </TableRow>
                                             )
@@ -2780,16 +2779,14 @@ export default function LeadDetailsNew(props) {
                                         <TableCell className={classes.tableheading}>Final Status</TableCell>
                                         <TableCell className={classes.tableheading}>Final Sub Status</TableCell>
                                         <TableCell className={classes.tableheading}>Updated By</TableCell>
-                                        <TableCell className={classes.tableheading}>Updated Date and Time</TableCell>
+                                        <TableCell className={classes.tableheading}>Updated Date</TableCell>
                                         <TableCell className={classes.tableheading}>Remarks</TableCell>
                                         <TableCell className={classes.tableheading}>
-                                            <div className={classes.closeContainer}>
-                                                <Toolbar className={classes.Toolbar}>
-                                                    <IconButton edge="end" className={classes.closeBtn} color="inherit" onClick={() => handleJourneyStatusChange('')} aria-label="close">
-                                                        <CloseIcon />
-                                                    </IconButton>
-                                                </Toolbar>
-                                            </div>
+                                            <Toolbar >
+                                                <IconButton edge="end" color="inherit" onClick={() => handleJourneyStatusChange('')} aria-label="close">
+                                                    <CloseIcon />
+                                                </IconButton>
+                                            </Toolbar>
                                         </TableCell>
                                     </TableRow>
                                 </TableHead>
@@ -2808,7 +2805,7 @@ export default function LeadDetailsNew(props) {
                                                     <TableCell className={classes.tabledata}>{item.status ? item.status : 'NA'}</TableCell>
                                                     <TableCell className={classes.tabledata}>{item.sub_status ? item.sub_status : 'NA'}</TableCell>
                                                     <TableCell className={classes.tabledata}>{item.updated_by ? item.updated_by : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{currentUpdatedDate ? currentUpdatedDate: 'NA'}</TableCell>
+                                                    <TableCell className={classes.tabledata}>{currentUpdatedDate ? currentUpdatedDate : 'NA'}</TableCell>
                                                     <TableCell className={classes.tabledata}>{item.remarks ? item.remarks : 'NA'}</TableCell>
                                                     <TableCell className={classes.tabledata}></TableCell>
                                                 </TableRow>
@@ -2821,7 +2818,7 @@ export default function LeadDetailsNew(props) {
                     {journeyStatus === 'dispositionHistory' ? <Grid>
                         <TableContainer className={classes.container}>
                             <Table className={classes.table} stickyHeader>
-                                <TableHead className={classes.tableheading}>
+                                <TableHead className={classes.tableheading} >
                                     <TableRow>
                                         <TableCell className={classes.tableheading}>SL No</TableCell>
                                         <TableCell className={classes.tableheading}>Lead Id</TableCell>
@@ -2831,13 +2828,11 @@ export default function LeadDetailsNew(props) {
                                         <TableCell className={classes.tableheading}>Updated Date and Time</TableCell>
                                         <TableCell className={classes.tableheading}>Lead Stage</TableCell>
                                         <TableCell className={classes.tableheading}>
-                                            <div className={classes.closeContainer}>
-                                                <Toolbar className={classes.Toolbar}>
-                                                    <IconButton edge="end" className={classes.closeBtn} color="inherit" onClick={() => handleJourneyStatusChange('')} aria-label="close">
-                                                        <CloseIcon />
-                                                    </IconButton>
-                                                </Toolbar>
-                                            </div>
+                                            <Toolbar>
+                                                <IconButton edge="end" color="inherit" onClick={() => handleJourneyStatusChange('')} aria-label="close">
+                                                    <CloseIcon />
+                                                </IconButton>
+                                            </Toolbar>
                                         </TableCell>
                                     </TableRow>
                                 </TableHead>
@@ -3484,174 +3479,171 @@ export default function LeadDetailsNew(props) {
                     </tr>
                 </table>
             </div>
-            <Dialog open={isLogPopup}  fullScreen >
-            <Toolbar>
-            <IconButton edge="start" color="inherit" onClick={closeLogPopup} aria-label="close">
-              <CloseIcon />
-            </IconButton>
-                <DialogTitle></DialogTitle>
-            </Toolbar>
+            <Dialog open={isLogPopup} fullScreen >
+                <Toolbar>
+                    <CloseIcon className='dialogCloseBtn' fontSize='large' onClick={closeLogPopup}/>
+                </Toolbar>
                 <DialogContent>
-                        <TableContainer className={classes.popupContainer}>
-                            <Table className={classes.table} stickyHeader>
-                                <TableHead className={classes.tableheading}>
-                                    <TableRow>
-                                        <TableCell className={classes.tableheading}>SL No</TableCell>
-                                        <TableCell className={classes.tableheading}>Name</TableCell>
-                                        <TableCell className={classes.tableheading}>Loan Amt</TableCell>
-                                        <TableCell className={classes.tableheading}>Income</TableCell>
-                                        <TableCell className={classes.tableheading}>Company</TableCell>
-                                        <TableCell className={classes.tableheading}>Loan Type</TableCell>
-                                        <TableCell className={classes.tableheading}>Tenure</TableCell>
-                                        <TableCell className={classes.tableheading}>Req ROI</TableCell>
-                                        <TableCell className={classes.tableheading}>Gender</TableCell>
-                                        <TableCell className={classes.tableheading}>Father's Name</TableCell>
-                                        <TableCell className={classes.tableheading}>Mother's Name</TableCell>
-                                        <TableCell className={classes.tableheading}>DOB</TableCell>
-                                        <TableCell className={classes.tableheading}>Pancard</TableCell>
-                                        <TableCell className={classes.tableheading}>EmailID</TableCell>
-                                        <TableCell className={classes.tableheading}>Marital Status</TableCell>
-                                        <TableCell className={classes.tableheading}>Dependence</TableCell>
-                                        <TableCell className={classes.tableheading}>Adhaar No</TableCell>
-                                        <TableCell className={classes.tableheading}>Current Address1</TableCell>
-                                        <TableCell className={classes.tableheading}>Current Address2</TableCell>
-                                        <TableCell className={classes.tableheading}>Current Landmark</TableCell>
-                                        <TableCell className={classes.tableheading}>Current Pincode</TableCell>
-                                        <TableCell className={classes.tableheading}>Current City</TableCell>
-                                        <TableCell className={classes.tableheading}>Current State</TableCell>
-                                        <TableCell className={classes.tableheading}>Resident Type</TableCell>
-                                        <TableCell className={classes.tableheading}>Current Address Vintage</TableCell>
-                                        <TableCell className={classes.tableheading}>Permanent Address1</TableCell>
-                                        <TableCell className={classes.tableheading}>Permanent Address2</TableCell>
-                                        <TableCell className={classes.tableheading}>Permanent Landmark</TableCell>
-                                        <TableCell className={classes.tableheading}>Permanent Pincode</TableCell>
-                                        <TableCell className={classes.tableheading}>Permanent City</TableCell>
-                                        <TableCell className={classes.tableheading}>Permanent State</TableCell>
-                                        <TableCell className={classes.tableheading}>Permanent Resident Type</TableCell>
-                                        <TableCell className={classes.tableheading}>Permanent Address Vintage</TableCell>
-                                        <TableCell className={classes.tableheading}>Employment Type</TableCell>
-                                        <TableCell className={classes.tableheading}>Designation</TableCell>
-                                        <TableCell className={classes.tableheading}>Vintage in Current Company</TableCell>
-                                        <TableCell className={classes.tableheading}>Total Work Exp</TableCell>
-                                        <TableCell className={classes.tableheading}>Gross Income</TableCell>
-                                        <TableCell className={classes.tableheading}>Net Income</TableCell>
-                                        <TableCell className={classes.tableheading}>Office Address1</TableCell>
-                                        <TableCell className={classes.tableheading}>Office Address2</TableCell>
-                                        <TableCell className={classes.tableheading}>Office Landmark</TableCell>
-                                        <TableCell className={classes.tableheading}>Office Pincode</TableCell>
-                                        <TableCell className={classes.tableheading}>Office City</TableCell>
-                                        <TableCell className={classes.tableheading}>Office State</TableCell>
-                                        <TableCell className={classes.tableheading}>Official MailID</TableCell>
-                                        <TableCell className={classes.tableheading}>Landline No</TableCell>
-                                        <TableCell className={classes.tableheading}>Salary Mode</TableCell>
-                                        <TableCell className={classes.tableheading}>Salary Bank</TableCell>
-                                        <TableCell className={classes.tableheading}>Total EMI</TableCell>
-                                        <TableCell className={classes.tableheading}>No of Credit Card</TableCell>
-                                        <TableCell className={classes.tableheading}>Credit card Outstanding</TableCell>
-                                        <TableCell className={classes.tableheading}>Credit Card Balence Transfer</TableCell>
-                                        <TableCell className={classes.tableheading}>Relativ's First Name</TableCell>
-                                        <TableCell className={classes.tableheading}>Relativ's Last Name</TableCell>
-                                        <TableCell className={classes.tableheading}>Relativ's MobileNo</TableCell>
-                                        <TableCell className={classes.tableheading}>Relativ's Address1</TableCell>
-                                        <TableCell className={classes.tableheading}>Relativ's Address2</TableCell>
-                                        <TableCell className={classes.tableheading}>Relativ's Pincode</TableCell>
-                                        <TableCell className={classes.tableheading}>Relativ's City</TableCell>
-                                        <TableCell className={classes.tableheading}>Relativ's state</TableCell>
-                                        <TableCell className={classes.tableheading}>Friend's First Name</TableCell>
-                                        <TableCell className={classes.tableheading}>Friend's Last Name</TableCell>
-                                        <TableCell className={classes.tableheading}>Friend's MobileNo</TableCell>
-                                        <TableCell className={classes.tableheading}>Friend's Address1</TableCell>
-                                        <TableCell className={classes.tableheading}>Friend's Address2</TableCell>
-                                        <TableCell className={classes.tableheading}>Friend's Pincode</TableCell>
-                                        <TableCell className={classes.tableheading}>Friend's City</TableCell>
-                                        <TableCell className={classes.tableheading}>Friend's state</TableCell>
-                                        <TableCell className={classes.tableheading}></TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody >
-                                    {isLoading ? <div className="loader">
-                                        <CircularProgress size={100} thickness={3} />
-                                    </div> : leadJourneyData.length !== 0 ?
-                                        leadJourneyData.map((item, index) => {
-                                            return (
-                                                <TableRow className={classes.oddEvenRow} key={index}>
-                                                    <TableCell className={classes.tabledata}>{index+1}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.name ? item.lead_history.name :'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.loan_amount ? item.lead_history.loan_amount : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>NA</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.current_company_name ? item.lead_history.current_company_name : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.loan_type ? item.lead_history.loan_type : 'NA' }</TableCell>
-                                                    <TableCell className={classes.tabledata}>NA</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.req_roi ? item.lead_history.req_roi : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.gender ? item.lead_history.gender : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.father_name ? item.lead_history.father_name : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.mother_name ? item.lead_history.mother_name : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.dob ? item.lead_history.dob : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.pan_no ? item.lead_history.pan_no : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.email_id ? item.lead_history.email_id : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.marital_status ? item.lead_history.marital_status : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.no_of_dependence ? item.lead_history.no_of_dependence : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.adhaar_no ? item.lead_history.adhaar_no : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.address_one ? item.lead_history.address_one : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.address_two ? item.lead_history.address_two : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.address_three ? item.lead_history.address_three : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.residential_pincode ? item.lead_history.residential_pincode : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.city ? item.lead_history.city : "NA"}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.state ? item.lead_history.state : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>NA</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.current_address_vintage ? item.lead_history.current_address_vintage : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.permanent_address_one ? item.lead_history.permanent_address_one : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.permanent_address_two ? item.lead_history.permanent_address_two : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.permanent_address_three ? item.lead_history.permanent_address_three : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.permanent_pincode ? item.lead_history.permanent_pincode : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.permanent_city ? item.lead_history.permanent_city : "NA"}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.permanent_state ? item.lead_history.permanent_state : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.permanent_resident_Type ? item.lead_history.permanent_resident_Type : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.permanent_address_vintage ? item.lead_history.permanent_address_vintage : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.employment_type ? item.lead_history.employment_type : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.designation ? item.lead_history.designation : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.current_work_exp ? item.lead_history.current_work_exp : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.total_work_exp ? item.lead_history.total_work_exp : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.gross_income ? item.lead_history.gross_income : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.monthly_income ? item.lead_history.monthly_income : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.office_address_one ? item.lead_history.office_address_one : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.office_address_two ? item.lead_history.office_address_two : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.office_address_three ? item.lead_history.office_address_three : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.office_pincode ? item.lead_history.office_pincode : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.office_city ? item.lead_history.office_city : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.office_state ? item.lead_history.office_state : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.official_mail ? item.lead_history.official_mail : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.landline_no ? item.lead_history.landline_no : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.salary_mode ? item.lead_history.salary_mode : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.salary_bank ? item.lead_history.salary_bank : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.current_emi ? item.lead_history.current_emi : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.no_of_creditcard ? item.lead_history.no_of_creditcard : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.credit_card_outstanding ? item.lead_history.credit_card_outstanding : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.credi_card_balance_transfer ? item.lead_history.credi_card_balance_transfer : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.ref1_first_name ? item.lead_history.ref1_first_name : 'NA' }</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.ref1_last_name ? item.lead_history.ref1_last_name : 'NA' }</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.ref1_mobile_no ? item.lead_history.ref1_mobile_no : 'NA' }</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.ref1_address1 ? item.lead_history.ref1_address1 : 'NA' }</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.ref1_address2 ? item.lead_history.ref1_address2 : 'NA' }</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.ref1_pincode ? item.lead_history.ref1_pincode : 'NA' }</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.ref1_city ? item.lead_history.ref1_city : 'NA' }</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.ref1_state ? item.lead_history.ref1_state : 'NA' }</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.ref2_first_name ? item.lead_history.ref2_first_name : 'NA' }</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.ref2_last_name ? item.lead_history.ref2_last_name : 'NA' }</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.ref2_mobile_no ? item.lead_history.ref2_mobile_no : 'NA' }</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.ref2_address1 ? item.lead_history.ref2_address1 : 'NA' }</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.ref2_address2 ? item.lead_history.ref2_address2 : 'NA' }</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.ref2_pincode ? item.lead_history.ref2_pincode : 'NA' }</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.ref2_city ? item.lead_history.ref2_city : 'NA' }</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.lead_history.ref2_state ? item.lead_history.ref2_state : 'NA' }</TableCell>
-                                                </TableRow>
-                                            )
-                                        }) : <div className={classes.emptydata}>No Data Found</div>
-                                    }
+                    <TableContainer className={classes.popupContainer}>
+                        <Table className={classes.table} stickyHeader>
+                            <TableHead className={classes.tableheading}>
+                                <TableRow>
+                                    <TableCell className={classes.tableheading}>SL No</TableCell>
+                                    <TableCell className={classes.tableheading}>Name</TableCell>
+                                    <TableCell className={classes.tableheading}>Loan Amt</TableCell>
+                                    <TableCell className={classes.tableheading}>Income</TableCell>
+                                    <TableCell className={classes.tableheading}>Company</TableCell>
+                                    <TableCell className={classes.tableheading}>Loan Type</TableCell>
+                                    <TableCell className={classes.tableheading}>Tenure</TableCell>
+                                    <TableCell className={classes.tableheading}>Req ROI</TableCell>
+                                    <TableCell className={classes.tableheading}>Gender</TableCell>
+                                    <TableCell className={classes.tableheading}>Father's Name</TableCell>
+                                    <TableCell className={classes.tableheading}>Mother's Name</TableCell>
+                                    <TableCell className={classes.tableheading}>Date of Birth</TableCell>
+                                    <TableCell className={classes.tableheading}>Pancard</TableCell>
+                                    <TableCell className={classes.tableheading}>EmailID</TableCell>
+                                    <TableCell className={classes.tableheading}>Marital Status</TableCell>
+                                    <TableCell className={classes.tableheading}>Dependence</TableCell>
+                                    <TableCell className={classes.tableheading}>Adhaar No</TableCell>
+                                    <TableCell className={classes.tableheading}>Current Address1</TableCell>
+                                    <TableCell className={classes.tableheading}>Current Address2</TableCell>
+                                    <TableCell className={classes.tableheading}>Current Landmark</TableCell>
+                                    <TableCell className={classes.tableheading}>Current Pincode</TableCell>
+                                    <TableCell className={classes.tableheading}>Current City</TableCell>
+                                    <TableCell className={classes.tableheading}>Current State</TableCell>
+                                    <TableCell className={classes.tableheading}>Resident Type</TableCell>
+                                    <TableCell className={classes.tableheading}>Current Address Vintage</TableCell>
+                                    <TableCell className={classes.tableheading}>Permanent Address1</TableCell>
+                                    <TableCell className={classes.tableheading}>Permanent Address2</TableCell>
+                                    <TableCell className={classes.tableheading}>Permanent Landmark</TableCell>
+                                    <TableCell className={classes.tableheading}>Permanent Pincode</TableCell>
+                                    <TableCell className={classes.tableheading}>Permanent City</TableCell>
+                                    <TableCell className={classes.tableheading}>Permanent State</TableCell>
+                                    <TableCell className={classes.tableheading}>Permanent Resident Type</TableCell>
+                                    <TableCell className={classes.tableheading}>Permanent Address Vintage</TableCell>
+                                    <TableCell className={classes.tableheading}>Employment Type</TableCell>
+                                    <TableCell className={classes.tableheading}>Designation</TableCell>
+                                    <TableCell className={classes.tableheading}>Vintage in Current Company</TableCell>
+                                    <TableCell className={classes.tableheading}>Total Work Exp</TableCell>
+                                    <TableCell className={classes.tableheading}>Gross Income</TableCell>
+                                    <TableCell className={classes.tableheading}>Net Income</TableCell>
+                                    <TableCell className={classes.tableheading}>Office Address1</TableCell>
+                                    <TableCell className={classes.tableheading}>Office Address2</TableCell>
+                                    <TableCell className={classes.tableheading}>Office Landmark</TableCell>
+                                    <TableCell className={classes.tableheading}>Office Pincode</TableCell>
+                                    <TableCell className={classes.tableheading}>Office City</TableCell>
+                                    <TableCell className={classes.tableheading}>Office State</TableCell>
+                                    <TableCell className={classes.tableheading}>Official MailID</TableCell>
+                                    <TableCell className={classes.tableheading}>Landline No</TableCell>
+                                    <TableCell className={classes.tableheading}>Salary Mode</TableCell>
+                                    <TableCell className={classes.tableheading}>Salary Bank</TableCell>
+                                    <TableCell className={classes.tableheading}>Total EMI</TableCell>
+                                    <TableCell className={classes.tableheading}>No of Credit Card</TableCell>
+                                    <TableCell className={classes.tableheading}>Credit card Outstanding</TableCell>
+                                    <TableCell className={classes.tableheading}>Credit Card Balence Transfer</TableCell>
+                                    <TableCell className={classes.tableheading}>Relativ's First Name</TableCell>
+                                    <TableCell className={classes.tableheading}>Relativ's Last Name</TableCell>
+                                    <TableCell className={classes.tableheading}>Relativ's MobileNo</TableCell>
+                                    <TableCell className={classes.tableheading}>Relativ's Address1</TableCell>
+                                    <TableCell className={classes.tableheading}>Relativ's Address2</TableCell>
+                                    <TableCell className={classes.tableheading}>Relativ's Pincode</TableCell>
+                                    <TableCell className={classes.tableheading}>Relativ's City</TableCell>
+                                    <TableCell className={classes.tableheading}>Relativ's state</TableCell>
+                                    <TableCell className={classes.tableheading}>Friend's First Name</TableCell>
+                                    <TableCell className={classes.tableheading}>Friend's Last Name</TableCell>
+                                    <TableCell className={classes.tableheading}>Friend's MobileNo</TableCell>
+                                    <TableCell className={classes.tableheading}>Friend's Address1</TableCell>
+                                    <TableCell className={classes.tableheading}>Friend's Address2</TableCell>
+                                    <TableCell className={classes.tableheading}>Friend's Pincode</TableCell>
+                                    <TableCell className={classes.tableheading}>Friend's City</TableCell>
+                                    <TableCell className={classes.tableheading}>Friend's state</TableCell>
+                                    <TableCell className={classes.tableheading}></TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody >
+                                {isLoading ? <div className="loader">
+                                    <CircularProgress size={100} thickness={3} />
+                                </div> : leadJourneyData.length !== 0 ?
+                                    leadJourneyData.map((item, index) => {
+                                        return (
+                                            <TableRow className={classes.oddEvenRow} key={index}>
+                                                <TableCell className={classes.tabledata}>{index + 1}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.name ? item.lead_history.name : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.loan_amount ? item.lead_history.loan_amount : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>NA</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.current_company_name ? item.lead_history.current_company_name : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.loan_type ? item.lead_history.loan_type : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>NA</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.req_roi ? item.lead_history.req_roi : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.gender ? item.lead_history.gender : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.father_name ? item.lead_history.father_name : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.mother_name ? item.lead_history.mother_name : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.dob ? item.lead_history.dob : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.pan_no ? item.lead_history.pan_no : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.email_id ? item.lead_history.email_id : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.marital_status ? item.lead_history.marital_status : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.no_of_dependence ? item.lead_history.no_of_dependence : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.adhaar_no ? item.lead_history.adhaar_no : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.address_one ? item.lead_history.address_one : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.address_two ? item.lead_history.address_two : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.address_three ? item.lead_history.address_three : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.residential_pincode ? item.lead_history.residential_pincode : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.city ? item.lead_history.city : "NA"}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.state ? item.lead_history.state : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>NA</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.current_address_vintage ? item.lead_history.current_address_vintage : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.permanent_address_one ? item.lead_history.permanent_address_one : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.permanent_address_two ? item.lead_history.permanent_address_two : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.permanent_address_three ? item.lead_history.permanent_address_three : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.permanent_pincode ? item.lead_history.permanent_pincode : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.permanent_city ? item.lead_history.permanent_city : "NA"}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.permanent_state ? item.lead_history.permanent_state : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.permanent_resident_Type ? item.lead_history.permanent_resident_Type : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.permanent_address_vintage ? item.lead_history.permanent_address_vintage : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.employment_type ? item.lead_history.employment_type : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.designation ? item.lead_history.designation : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.current_work_exp ? item.lead_history.current_work_exp : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.total_work_exp ? item.lead_history.total_work_exp : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.gross_income ? item.lead_history.gross_income : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.monthly_income ? item.lead_history.monthly_income : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.office_address_one ? item.lead_history.office_address_one : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.office_address_two ? item.lead_history.office_address_two : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.office_address_three ? item.lead_history.office_address_three : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.office_pincode ? item.lead_history.office_pincode : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.office_city ? item.lead_history.office_city : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.office_state ? item.lead_history.office_state : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.official_mail ? item.lead_history.official_mail : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.landline_no ? item.lead_history.landline_no : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.salary_mode ? item.lead_history.salary_mode : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.salary_bank ? item.lead_history.salary_bank : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.current_emi ? item.lead_history.current_emi : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.no_of_creditcard ? item.lead_history.no_of_creditcard : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.credit_card_outstanding ? item.lead_history.credit_card_outstanding : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.credi_card_balance_transfer ? item.lead_history.credi_card_balance_transfer : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref1_first_name ? item.lead_history.ref1_first_name : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref1_last_name ? item.lead_history.ref1_last_name : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref1_mobile_no ? item.lead_history.ref1_mobile_no : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref1_address1 ? item.lead_history.ref1_address1 : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref1_address2 ? item.lead_history.ref1_address2 : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref1_pincode ? item.lead_history.ref1_pincode : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref1_city ? item.lead_history.ref1_city : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref1_state ? item.lead_history.ref1_state : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref2_first_name ? item.lead_history.ref2_first_name : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref2_last_name ? item.lead_history.ref2_last_name : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref2_mobile_no ? item.lead_history.ref2_mobile_no : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref2_address1 ? item.lead_history.ref2_address1 : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref2_address2 ? item.lead_history.ref2_address2 : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref2_pincode ? item.lead_history.ref2_pincode : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref2_city ? item.lead_history.ref2_city : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref2_state ? item.lead_history.ref2_state : 'NA'}</TableCell>
+                                            </TableRow>
+                                        )
+                                    }) : <div className={classes.emptydata}>No Data Found</div>
+                                }
 
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
                 </DialogContent>
             </Dialog>
         </PageLayerSection>

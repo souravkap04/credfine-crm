@@ -218,7 +218,6 @@ export default function MyLeads(props) {
   const [hangUpSnacks, sethangUpSnacks] = useState(false);
   const [myLeadSearchData, setMyLeadSearchData] = useState([]);
   const [isMyLeadsSearchData, setisMyLeadsSearchData] = useState(false);
-  const [leadConflictPopUp,setLeadConflictPopUp] = useState(false);
   const [responseStatus,setResponseStatus] = useState("");
   let statusData = getStatusData();
   let campaignData = getCampaign();
@@ -310,9 +309,6 @@ export default function MyLeads(props) {
   const leadDetailsHandler = (leadId) => {
     history.push(`/dashboards/myleads/edit/${leadId}`);
   };
-  const leadConflictHandler = () => {
-      setLeadConflictPopUp(true);
-        }
   const nextPageHandler = async () => {
     setisLoading(true);
     const headers = { Authorization: `Token ${profileData.token}` };
@@ -445,7 +441,6 @@ export default function MyLeads(props) {
   const disableDialerPopUp = () => {
     setDialerCall(false);
     setDisableHangupBtn(false);
-    setLeadConflictPopUp(false);
   };
   const openDrawer = () => {
     setState(true);
@@ -1075,11 +1070,6 @@ export default function MyLeads(props) {
           >
             <Alert onClose={disableDialerPopUp} severity="info">
               Calling...
-            </Alert>
-          </Snackbar>
-          <Snackbar anchorOrigin={{ vertical: "top", horizontal: "center" }} open={leadConflictPopUp} autoHideDuration={1500} onClose={disableDialerPopUp}>
-            <Alert onClose={disableDialerPopUp} severity="error">
-              Insufficient privilege
             </Alert>
           </Snackbar>
         </div>
