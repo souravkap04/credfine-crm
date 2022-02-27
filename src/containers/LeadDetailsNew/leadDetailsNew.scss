@@ -310,6 +310,10 @@ $desk: 100 / 1440;
         }
     }
 }
+.dialogCloseBtn {
+    margin-left: 1350 * $desk + vw;
+    cursor: pointer;
+}
 #leadDetails-table {
     table,
     td,

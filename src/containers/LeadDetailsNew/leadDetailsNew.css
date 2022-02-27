@@ -399,6 +399,11 @@
   border-radius: 0.55556vw;
 }
 
+.dialogCloseBtn {
+  margin-left: 93.75vw;
+  cursor: pointer;
+}
+
 #leadDetails-table table,
 #leadDetails-table td,
 #leadDetails-table th {
