@@ -23,7 +23,7 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import PersonIcon from '@material-ui/icons/Person';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import { Button } from '@material-ui/core';
+import { Button, Dialog, DialogContent, DialogTitle } from '@material-ui/core';
 import CallIcon from '@material-ui/icons/Call';
 import SendIcon from '@material-ui/icons/Send';
 import CloseIcon from '@material-ui/icons/Close';
@@ -72,29 +72,45 @@ const useStyles = makeStyles({
     container: {
         overflow: "auto",
         marginTop: "10px",
-        maxHeight:'375px'
-      },
-      table: {
+        maxHeight: '375px'
+    },
+    popupContainer: {
+        overflow: "auto",
+        marginTop: "10px",
+        maxHeight: '685px'
+    },
+    table: {
         width: "100%",
-      },
+    },
     tableheading: {
         backgroundColor: "#8f9bb3",
         color: "#ffffff",
         fontSize: "14px",
-      },
-      tabledata: {
+        whiteSpace: 'nowrap'
+    },
+    tabledata: {
         padding: "15px",
         fontSize: "12px",
         overflowWrap: "break-word",
-      },
-      oddEvenRow: {
+    },
+    oddEvenRow: {
         "&:nth-of-type(odd)": {
-          backgroundColor: "#f7f9fc",
+            backgroundColor: "#f7f9fc",
         },
         "&:nth-of-type(even)": {
-          backgroundColor: "#fff",
+            backgroundColor: "#fff",
         },
-      },
+    },
+    emptydata: {
+        position: "relative",
+        left: "26rem",
+        fontSize: "12px",
+        whiteSpace: 'nowrap'
+    },
+    click: {
+        cursor: "pointer",
+        color: "blue",
+    },
 });
 const Accordion = withStyles({
     root: {
@@ -155,7 +171,16 @@ export default function LeadDetailsNew(props) {
     };
     const [journeyStatus, setjourneyStatus] = useState('');
     const handleJourneyStatusChange = (name) => {
-        setjourneyStatus(name ? false : false);
+        setjourneyStatus(name ? name : false);
+        if (name === 'leadHistory') {
+            getLeadHistoryData();
+        }
+        if (name === 'leadJourney') {
+            getLeadJourneyData();
+        }
+        if (name === 'dispositionHistory') {
+            getDispositionHistoryData();
+        }
     };
     const [openCalculate, setopenCalculate] = useState(false);
     const openCalculator = () => {
@@ -283,14 +308,18 @@ export default function LeadDetailsNew(props) {
     const [colorRed, setcolorRed] = useState([false, false, false, false, false, false, false]);
     const [isAutoDialerEnd, setIsAutoDialerEnd] = useState(false);
     const [checked, setChecked] = React.useState(false);
-    const [checkEligibility,setCheckEligibility] = useState(false);
-  
-  const openEligibility = () =>{
-    setCheckEligibility(true);
-  }
-  const closeEligibility = () =>{
-    setCheckEligibility(false);
-  }
+    const [checkEligibility, setCheckEligibility] = useState(false);
+    const [leadHistoryData, setLeadHistoryData] = useState([]);
+    const [leadJourneyData, setLeadJourneyData] = useState([]);
+    const [dispositionHistoryData, setDispositionHistoryData] = useState([]);
+    const [isLogPopup, setIsLogPopup] = useState(false);
+
+    const openEligibility = () => {
+        setCheckEligibility(true);
+    }
+    const closeEligibility = () => {
+        setCheckEligibility(false);
+    }
     let statusData = getStatusData();
     let { leadid } = useParams();
     let history = useHistory();
@@ -1005,9 +1034,48 @@ export default function LeadDetailsNew(props) {
             setPermanentAddressVintage(currentAddressVintage);
         }
     }
+    const getDispositionHistoryData = async () => {
+        const headers = {
+            'Authorization': `Token ${profileData.token}`,
+        };
+        await axios.get(`${baseUrl}/leads/LeadStatusHistory/${leadid}`, { headers })
+            .then((response) => {
+                setDispositionHistoryData(response.data.lead_history);
+            }).catch((error) => {
+                console.log(error);
+            })
+    }
+    const getLeadJourneyData = async () => {
+        const headers = {
+            'Authorization': `Token ${profileData.token}`,
+        };
+        await axios.get(`${baseUrl}/leads/LeadHistory/${leadid}`, { headers })
+            .then((response) => {
+                setLeadJourneyData(response.data.lead_history);
+            }).catch((error) => {
+                console.log(error);
+            })
+    }
+    const getLeadHistoryData = async () => {
+        const headers = {
+            'Authorization': `Token ${profileData.token}`,
+        };
+        await axios.get(`${baseUrl}/leads/LeadLoanHistory/${leadid}`, { headers })
+            .then((response) => {
+                setLeadHistoryData(response.data.lead_loan_history)
+            }).catch((error) => {
+                console.log(error);
+            })
+    }
+    const changeLogHandler = () => {
+        setIsLogPopup(true);
+    }
+    const closeLogPopup = () => {
+        setIsLogPopup(false);
+    }
     return (
         <PageLayerSection isDisplaySearchBar={true} pageTitle="Lead Details" className={classes.scrollEnable} offerButton={true} isWhatsapp={true} whatsappNumber={mobileNo} endAutoDialerBtn={true} endAutoDialerClick={() => endAutoDialerBtnHandler()} ActualEmiCalculate={openCalculator} isDownloadPdf={true} downloadPdf={() => downloadPdfHandler()} isShareThroughEmail={true} emailId={email} ActualEligibilityCalculate={openEligibility}>
-            <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility}/>
+            <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility} />
             <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
             {/* Errors SnackBars Start */}
             <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={hangUpSnacks} autoHideDuration={1500} onClose={disableHangUpSnacks}>
@@ -2612,14 +2680,14 @@ export default function LeadDetailsNew(props) {
                         <Button
                             className="journeyBtn"
                             color="primary"
-                            variant="contained" 
+                            variant="contained"
                             onClick={() => handleJourneyStatusChange('leadJourney')}>
                             LEAD JOURNEY
                         </Button>
                         <Button
                             className="journeyBtn"
                             color="primary"
-                            variant="contained" 
+                            variant="contained"
                             onClick={() => handleJourneyStatusChange('leadHistory')}>
                             LEAD HISTORY
                         </Button>
@@ -2655,179 +2723,143 @@ export default function LeadDetailsNew(props) {
                             SOURCE
                         </Button>
                     </Grid>
-                     {journeyStatus === 'leadJourney' ? <Grid>
-                    <TableContainer className={classes.container}>
-                        <Table className={classes.table} stickyHeader>
-                            <TableHead className={classes.tableheading}>
-                                <TableRow>
-                                    <TableCell className={classes.tableheading}>Lead Id</TableCell>
-                                    <TableCell className={classes.tableheading}>Stage</TableCell>
-                                    <TableCell className={classes.tableheading}>Sub Stage</TableCell>
-                                    <TableCell className={classes.tableheading}>Updated By</TableCell>
-                                    <TableCell className={classes.tableheading}>Updated Date and Time</TableCell>
-                                    <TableCell className={classes.tableheading}>Change Log</TableCell>
-                                    <TableCell className={classes.tableheading}>
-                                        <div className={classes.closeContainer}>
-                                            <Toolbar className={classes.Toolbar}>
-                                                <IconButton edge="end" className={classes.closeBtn} color="inherit" onClick={() => handleJourneyStatusChange('')} aria-label="close">
+                    {journeyStatus === 'leadJourney' ? <Grid>
+                        <TableContainer className={classes.container}>
+                            <Table className={classes.table} stickyHeader>
+                                <TableHead className={classes.tableheading}>
+                                    <TableRow>
+                                        <TableCell className={classes.tableheading}>SL No</TableCell>
+                                        <TableCell className={classes.tableheading}>Status</TableCell>
+                                        <TableCell className={classes.tableheading}>Sub Status</TableCell>
+                                        <TableCell className={classes.tableheading}>Updated By</TableCell>
+                                        <TableCell className={classes.tableheading}>Updated Date and Time</TableCell>
+                                        <TableCell className={classes.tableheading}>Change Log</TableCell>
+                                        <TableCell className={classes.tableheading}>
+                                            <Toolbar>
+                                                <IconButton edge="end" color="inherit" onClick={() => handleJourneyStatusChange('')} aria-label="close">
                                                     <CloseIcon />
                                                 </IconButton>
                                             </Toolbar>
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody >
-                                <TableRow className={classes.oddEvenRow}>
-                                    <TableCell className={classes.tabledata}>{leadid}</TableCell>
-                                    <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
-                                    <TableCell className={classes.tabledata}>RNR</TableCell>
-                                    <TableCell className={classes.tabledata}>xyz</TableCell>
-                                    <TableCell className={classes.tabledata}>12/05/2022</TableCell>
-                                    <TableCell className={classes.tabledata}>test</TableCell>
-                                    <TableCell className={classes.tabledata}></TableCell>
-                                </TableRow>
-                                <TableRow className={classes.oddEvenRow}>
-                                    <TableCell className={classes.tabledata}>{leadid}</TableCell>
-                                    <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
-                                    <TableCell className={classes.tabledata}>RNR</TableCell>
-                                    <TableCell className={classes.tabledata}>xyz</TableCell>
-                                    <TableCell className={classes.tabledata}>12/05/2022</TableCell>
-                                    <TableCell className={classes.tabledata}>test</TableCell>
-                                    <TableCell className={classes.tabledata}></TableCell>
-                                </TableRow>
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                </Grid> : ''}
+                                        </TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody >
+                                    {isLoading ? <div className="loader">
+                                        <CircularProgress size={100} thickness={3} />
+                                    </div> : leadJourneyData.length !== 0 ?
+                                        leadJourneyData.map((item, index) => {
+                                            let updatedDate = new Date(item.updated_date);
+                                            let currentUpdatedDate = updatedDate.toLocaleDateString() + " " +
+                                                moment(updatedDate.toLocaleTimeString(), "HH:mm:ss a").format("hh:mm A");
+                                            return (
+                                                <TableRow className={classes.oddEvenRow} key={index}>
+                                                    <TableCell className={classes.tabledata}>{index + 1}</TableCell>
+                                                    <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
+                                                    <TableCell className={classes.tabledata}>RNR</TableCell>
+                                                    <TableCell className={classes.tabledata}>{item.updated_by_user ? item.updated_by_user : 'NA'}</TableCell>
+                                                    <TableCell className={classes.tabledata}>{currentUpdatedDate ? currentUpdatedDate : 'NA'}</TableCell>
+                                                    <TableCell className={classes.tabledata, classes.click} onClick={changeLogHandler}>Updated Log</TableCell>
+                                                    <TableCell className={classes.tabledata}></TableCell>
+                                                </TableRow>
+                                            )
+                                        }) : <div className={classes.emptydata}>No Data Found</div>
+                                    }
+
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Grid> : ''}
                     {journeyStatus === 'leadHistory' ? <Grid>
-                    <TableContainer className={classes.container}>
-                        <Table className={classes.table} stickyHeader>
-                            <TableHead className={classes.tableheading}>
-                                <TableRow>
-                                    <TableCell className={classes.tableheading}>Lead Id</TableCell>
-                                    <TableCell className={classes.tableheading}>Product</TableCell>
-                                    <TableCell className={classes.tableheading}>Final Status</TableCell>
-                                    <TableCell className={classes.tableheading}>Final Sub Status</TableCell>
-                                    <TableCell className={classes.tableheading}>Updated By</TableCell>
-                                    <TableCell className={classes.tableheading}>Updated Date and Time</TableCell>
-                                    <TableCell className={classes.tableheading}>Remarks</TableCell>
-                                    <TableCell className={classes.tableheading}>
-                                        <div className={classes.closeContainer}>
-                                            <Toolbar className={classes.Toolbar}>
-                                                <IconButton edge="end" className={classes.closeBtn} color="inherit" onClick={() => handleJourneyStatusChange('')} aria-label="close">
+                        <TableContainer className={classes.container}>
+                            <Table className={classes.table} stickyHeader>
+                                <TableHead className={classes.tableheading}>
+                                    <TableRow >
+                                        <TableCell className={classes.tableheading}>Lead Id</TableCell>
+                                        <TableCell className={classes.tableheading}>Product</TableCell>
+                                        <TableCell className={classes.tableheading}>Final Status</TableCell>
+                                        <TableCell className={classes.tableheading}>Final Sub Status</TableCell>
+                                        <TableCell className={classes.tableheading}>Updated By</TableCell>
+                                        <TableCell className={classes.tableheading}>Updated Date</TableCell>
+                                        <TableCell className={classes.tableheading}>Remarks</TableCell>
+                                        <TableCell className={classes.tableheading}>
+                                            <Toolbar >
+                                                <IconButton edge="end" color="inherit" onClick={() => handleJourneyStatusChange('')} aria-label="close">
                                                     <CloseIcon />
                                                 </IconButton>
                                             </Toolbar>
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody >
-                                <TableRow className={classes.oddEvenRow}>
-                                    <TableCell className={classes.tabledata}>{leadid}</TableCell>
-                                    <TableCell className={classes.tabledata}>PL</TableCell>
-                                    <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
-                                    <TableCell className={classes.tabledata}>RNR</TableCell>
-                                    <TableCell className={classes.tabledata}>xyz</TableCell>
-                                    <TableCell className={classes.tabledata}>12/02/2022</TableCell>
-                                    <TableCell className={classes.tabledata}>test</TableCell>
-                                    <TableCell className={classes.tabledata}></TableCell>
-                                </TableRow>
-                                <TableRow className={classes.oddEvenRow}>
-                                <TableCell className={classes.tabledata}>{leadid}</TableCell>
-                                    <TableCell className={classes.tabledata}>PL</TableCell>
-                                    <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
-                                    <TableCell className={classes.tabledata}>RNR</TableCell>
-                                    <TableCell className={classes.tabledata}>xyz</TableCell>
-                                    <TableCell className={classes.tabledata}>12/02/2022</TableCell>
-                                    <TableCell className={classes.tabledata}>test</TableCell>
-                                    <TableCell className={classes.tabledata}></TableCell>
-                                </TableRow>
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+                                        </TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody >
+                                    {isLoading ? <div className="loader">
+                                        <CircularProgress size={100} thickness={3} />
+                                    </div> : leadHistoryData.length !== 0 ?
+                                        leadHistoryData.map((item, index) => {
+                                            let updatedDate = new Date(item.updated_time);
+                                            let currentUpdatedDate = updatedDate.toLocaleDateString() + " " +
+                                                moment(updatedDate.toLocaleTimeString(), "HH:mm:ss a").format("hh:mm A");
+                                            return (
+                                                <TableRow className={classes.oddEvenRow} key={index}>
+                                                    <TableCell className={classes.tabledata}>{item.lead_id ? item.lead_id : 'NA'}</TableCell>
+                                                    <TableCell className={classes.tabledata}>{item.loan_type ? item.loan_type : 'NA'}</TableCell>
+                                                    <TableCell className={classes.tabledata}>{item.status ? item.status : 'NA'}</TableCell>
+                                                    <TableCell className={classes.tabledata}>{item.sub_status ? item.sub_status : 'NA'}</TableCell>
+                                                    <TableCell className={classes.tabledata}>{item.updated_by ? item.updated_by : 'NA'}</TableCell>
+                                                    <TableCell className={classes.tabledata}>{currentUpdatedDate ? currentUpdatedDate : 'NA'}</TableCell>
+                                                    <TableCell className={classes.tabledata}>{item.remarks ? item.remarks : 'NA'}</TableCell>
+                                                    <TableCell className={classes.tabledata}></TableCell>
+                                                </TableRow>
+                                            )
+                                        }) : <div className={classes.emptydata}>No Data Found</div>}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
                     </Grid> : ''}
                     {journeyStatus === 'dispositionHistory' ? <Grid>
-                    <TableContainer className={classes.container}>
-                        <Table className={classes.table} stickyHeader>
-                            <TableHead className={classes.tableheading}>
-                                <TableRow>
-                                    <TableCell className={classes.tableheading}>Lead Id</TableCell>
-                                    <TableCell className={classes.tableheading}>Product</TableCell>
-                                    <TableCell className={classes.tableheading}>Status</TableCell>
-                                    <TableCell className={classes.tableheading}>Sub Status</TableCell>
-                                    <TableCell className={classes.tableheading}>Updated By</TableCell>
-                                    <TableCell className={classes.tableheading}>Updated Date and Time</TableCell>
-                                    <TableCell className={classes.tableheading}>
-                                        <div className={classes.closeContainer}>
-                                            <Toolbar className={classes.Toolbar}>
-                                                <IconButton edge="end" className={classes.closeBtn} color="inherit" onClick={() => handleJourneyStatusChange('')} aria-label="close">
+                        <TableContainer className={classes.container}>
+                            <Table className={classes.table} stickyHeader>
+                                <TableHead className={classes.tableheading} >
+                                    <TableRow>
+                                        <TableCell className={classes.tableheading}>SL No</TableCell>
+                                        <TableCell className={classes.tableheading}>Lead Id</TableCell>
+                                        <TableCell className={classes.tableheading}>Status</TableCell>
+                                        <TableCell className={classes.tableheading}>Sub Status</TableCell>
+                                        <TableCell className={classes.tableheading}>Updated By</TableCell>
+                                        <TableCell className={classes.tableheading}>Updated Date and Time</TableCell>
+                                        <TableCell className={classes.tableheading}>Lead Stage</TableCell>
+                                        <TableCell className={classes.tableheading}>
+                                            <Toolbar>
+                                                <IconButton edge="end" color="inherit" onClick={() => handleJourneyStatusChange('')} aria-label="close">
                                                     <CloseIcon />
                                                 </IconButton>
                                             </Toolbar>
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody >
-                                <TableRow className={classes.oddEvenRow}>
-                                    <TableCell className={classes.tabledata}>{leadid}</TableCell>
-                                    <TableCell className={classes.tabledata}>PL</TableCell>
-                                    <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
-                                    <TableCell className={classes.tabledata}>RNR</TableCell>
-                                    <TableCell className={classes.tabledata}>xyz</TableCell>
-                                    <TableCell className={classes.tabledata}>12/02/2022</TableCell>
-                                    <TableCell className={classes.tabledata}></TableCell>
-                                </TableRow>
-                                <TableRow className={classes.oddEvenRow}>
-                                <TableCell className={classes.tabledata}>{leadid}</TableCell>
-                                    <TableCell className={classes.tabledata}>PL</TableCell>
-                                    <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
-                                    <TableCell className={classes.tabledata}>RNR</TableCell>
-                                    <TableCell className={classes.tabledata}>xyz</TableCell>
-                                    <TableCell className={classes.tabledata}>12/02/22</TableCell>
-                                    <TableCell className={classes.tabledata}></TableCell>
-                                </TableRow>
-                                <TableRow className={classes.oddEvenRow}>
-                                <TableCell className={classes.tabledata}>{leadid}</TableCell>
-                                    <TableCell className={classes.tabledata}>PL</TableCell>
-                                    <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
-                                    <TableCell className={classes.tabledata}>RNR</TableCell>
-                                    <TableCell className={classes.tabledata}>xyz</TableCell>
-                                    <TableCell className={classes.tabledata}>12/02/22</TableCell>
-                                    <TableCell className={classes.tabledata}></TableCell>
-                                </TableRow>
-                                <TableRow className={classes.oddEvenRow}>
-                                <TableCell className={classes.tabledata}>{leadid}</TableCell>
-                                    <TableCell className={classes.tabledata}>PL</TableCell>
-                                    <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
-                                    <TableCell className={classes.tabledata}>RNR</TableCell>
-                                    <TableCell className={classes.tabledata}>xyz</TableCell>
-                                    <TableCell className={classes.tabledata}>12/02/22</TableCell>
-                                    <TableCell className={classes.tabledata}></TableCell>
-                                </TableRow>
-                                <TableRow className={classes.oddEvenRow}>
-                                <TableCell className={classes.tabledata}>{leadid}</TableCell>
-                                    <TableCell className={classes.tabledata}>PL</TableCell>
-                                    <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
-                                    <TableCell className={classes.tabledata}>RNR</TableCell>
-                                    <TableCell className={classes.tabledata}>xyz</TableCell>
-                                    <TableCell className={classes.tabledata}>12/02/22</TableCell>
-                                    <TableCell className={classes.tabledata}></TableCell>
-                                </TableRow>
-                                <TableRow className={classes.oddEvenRow}>
-                                <TableCell className={classes.tabledata}>{leadid}</TableCell>
-                                    <TableCell className={classes.tabledata}>PL</TableCell>
-                                    <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
-                                    <TableCell className={classes.tabledata}>RNR</TableCell>
-                                    <TableCell className={classes.tabledata}>xyz</TableCell>
-                                    <TableCell className={classes.tabledata}>12/02/22</TableCell>
-                                    <TableCell className={classes.tabledata}></TableCell>
-                                </TableRow>
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+                                        </TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody >
+                                    {isLoading ? <div className="loader">
+                                        <CircularProgress size={100} thickness={3} />
+                                    </div> : dispositionHistoryData.length !== 0 ?
+                                        dispositionHistoryData.map((item, index) => {
+                                            let updatedDate = new Date(item.updated_date);
+                                            let currentUpdatedDate = updatedDate.toLocaleDateString() + " " +
+                                                moment(updatedDate.toLocaleTimeString(), "HH:mm:ss a").format("hh:mm A");
+                                            return (
+                                                <TableRow className={classes.oddEvenRow} key={index}>
+                                                    <TableCell className={classes.tabledata}>{index + 1}</TableCell>
+                                                    <TableCell className={classes.tabledata}>{leadid}</TableCell>
+                                                    <TableCell className={classes.tabledata}>{item.status ? item.status : 'NA'}</TableCell>
+                                                    <TableCell className={classes.tabledata}>{item.sub_status ? item.sub_status : 'NA'}</TableCell>
+                                                    <TableCell className={classes.tabledata}>{item.agent_user_name ? item.agent_user_name : 'NA'}</TableCell>
+                                                    <TableCell className={classes.tabledata}>{currentUpdatedDate ? currentUpdatedDate : 'NA'}</TableCell>
+                                                    <TableCell className={classes.tabledata}>{item.lead_stage ? item.lead_stage : 'NA'}</TableCell>
+                                                    <TableCell className={classes.tabledata}></TableCell>
+                                                </TableRow>
+                                            )
+                                        }) : <div className={classes.emptydata}>No Data Found</div>}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
                     </Grid> : ''}
                 </Grid>
                 <Grid className="callConatiner" lg={3}>
@@ -3447,6 +3479,173 @@ export default function LeadDetailsNew(props) {
                     </tr>
                 </table>
             </div>
+            <Dialog open={isLogPopup} fullScreen >
+                <Toolbar>
+                    <CloseIcon className='dialogCloseBtn' fontSize='large' onClick={closeLogPopup}/>
+                </Toolbar>
+                <DialogContent>
+                    <TableContainer className={classes.popupContainer}>
+                        <Table className={classes.table} stickyHeader>
+                            <TableHead className={classes.tableheading}>
+                                <TableRow>
+                                    <TableCell className={classes.tableheading}>SL No</TableCell>
+                                    <TableCell className={classes.tableheading}>Name</TableCell>
+                                    <TableCell className={classes.tableheading}>Loan Amt</TableCell>
+                                    <TableCell className={classes.tableheading}>Income</TableCell>
+                                    <TableCell className={classes.tableheading}>Company</TableCell>
+                                    <TableCell className={classes.tableheading}>Loan Type</TableCell>
+                                    <TableCell className={classes.tableheading}>Tenure</TableCell>
+                                    <TableCell className={classes.tableheading}>Req ROI</TableCell>
+                                    <TableCell className={classes.tableheading}>Gender</TableCell>
+                                    <TableCell className={classes.tableheading}>Father's Name</TableCell>
+                                    <TableCell className={classes.tableheading}>Mother's Name</TableCell>
+                                    <TableCell className={classes.tableheading}>Date of Birth</TableCell>
+                                    <TableCell className={classes.tableheading}>Pancard</TableCell>
+                                    <TableCell className={classes.tableheading}>EmailID</TableCell>
+                                    <TableCell className={classes.tableheading}>Marital Status</TableCell>
+                                    <TableCell className={classes.tableheading}>Dependence</TableCell>
+                                    <TableCell className={classes.tableheading}>Adhaar No</TableCell>
+                                    <TableCell className={classes.tableheading}>Current Address1</TableCell>
+                                    <TableCell className={classes.tableheading}>Current Address2</TableCell>
+                                    <TableCell className={classes.tableheading}>Current Landmark</TableCell>
+                                    <TableCell className={classes.tableheading}>Current Pincode</TableCell>
+                                    <TableCell className={classes.tableheading}>Current City</TableCell>
+                                    <TableCell className={classes.tableheading}>Current State</TableCell>
+                                    <TableCell className={classes.tableheading}>Resident Type</TableCell>
+                                    <TableCell className={classes.tableheading}>Current Address Vintage</TableCell>
+                                    <TableCell className={classes.tableheading}>Permanent Address1</TableCell>
+                                    <TableCell className={classes.tableheading}>Permanent Address2</TableCell>
+                                    <TableCell className={classes.tableheading}>Permanent Landmark</TableCell>
+                                    <TableCell className={classes.tableheading}>Permanent Pincode</TableCell>
+                                    <TableCell className={classes.tableheading}>Permanent City</TableCell>
+                                    <TableCell className={classes.tableheading}>Permanent State</TableCell>
+                                    <TableCell className={classes.tableheading}>Permanent Resident Type</TableCell>
+                                    <TableCell className={classes.tableheading}>Permanent Address Vintage</TableCell>
+                                    <TableCell className={classes.tableheading}>Employment Type</TableCell>
+                                    <TableCell className={classes.tableheading}>Designation</TableCell>
+                                    <TableCell className={classes.tableheading}>Vintage in Current Company</TableCell>
+                                    <TableCell className={classes.tableheading}>Total Work Exp</TableCell>
+                                    <TableCell className={classes.tableheading}>Gross Income</TableCell>
+                                    <TableCell className={classes.tableheading}>Net Income</TableCell>
+                                    <TableCell className={classes.tableheading}>Office Address1</TableCell>
+                                    <TableCell className={classes.tableheading}>Office Address2</TableCell>
+                                    <TableCell className={classes.tableheading}>Office Landmark</TableCell>
+                                    <TableCell className={classes.tableheading}>Office Pincode</TableCell>
+                                    <TableCell className={classes.tableheading}>Office City</TableCell>
+                                    <TableCell className={classes.tableheading}>Office State</TableCell>
+                                    <TableCell className={classes.tableheading}>Official MailID</TableCell>
+                                    <TableCell className={classes.tableheading}>Landline No</TableCell>
+                                    <TableCell className={classes.tableheading}>Salary Mode</TableCell>
+                                    <TableCell className={classes.tableheading}>Salary Bank</TableCell>
+                                    <TableCell className={classes.tableheading}>Total EMI</TableCell>
+                                    <TableCell className={classes.tableheading}>No of Credit Card</TableCell>
+                                    <TableCell className={classes.tableheading}>Credit card Outstanding</TableCell>
+                                    <TableCell className={classes.tableheading}>Credit Card Balence Transfer</TableCell>
+                                    <TableCell className={classes.tableheading}>Relativ's First Name</TableCell>
+                                    <TableCell className={classes.tableheading}>Relativ's Last Name</TableCell>
+                                    <TableCell className={classes.tableheading}>Relativ's MobileNo</TableCell>
+                                    <TableCell className={classes.tableheading}>Relativ's Address1</TableCell>
+                                    <TableCell className={classes.tableheading}>Relativ's Address2</TableCell>
+                                    <TableCell className={classes.tableheading}>Relativ's Pincode</TableCell>
+                                    <TableCell className={classes.tableheading}>Relativ's City</TableCell>
+                                    <TableCell className={classes.tableheading}>Relativ's state</TableCell>
+                                    <TableCell className={classes.tableheading}>Friend's First Name</TableCell>
+                                    <TableCell className={classes.tableheading}>Friend's Last Name</TableCell>
+                                    <TableCell className={classes.tableheading}>Friend's MobileNo</TableCell>
+                                    <TableCell className={classes.tableheading}>Friend's Address1</TableCell>
+                                    <TableCell className={classes.tableheading}>Friend's Address2</TableCell>
+                                    <TableCell className={classes.tableheading}>Friend's Pincode</TableCell>
+                                    <TableCell className={classes.tableheading}>Friend's City</TableCell>
+                                    <TableCell className={classes.tableheading}>Friend's state</TableCell>
+                                    <TableCell className={classes.tableheading}></TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody >
+                                {isLoading ? <div className="loader">
+                                    <CircularProgress size={100} thickness={3} />
+                                </div> : leadJourneyData.length !== 0 ?
+                                    leadJourneyData.map((item, index) => {
+                                        return (
+                                            <TableRow className={classes.oddEvenRow} key={index}>
+                                                <TableCell className={classes.tabledata}>{index + 1}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.name ? item.lead_history.name : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.loan_amount ? item.lead_history.loan_amount : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>NA</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.current_company_name ? item.lead_history.current_company_name : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.loan_type ? item.lead_history.loan_type : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>NA</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.req_roi ? item.lead_history.req_roi : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.gender ? item.lead_history.gender : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.father_name ? item.lead_history.father_name : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.mother_name ? item.lead_history.mother_name : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.dob ? item.lead_history.dob : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.pan_no ? item.lead_history.pan_no : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.email_id ? item.lead_history.email_id : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.marital_status ? item.lead_history.marital_status : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.no_of_dependence ? item.lead_history.no_of_dependence : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.adhaar_no ? item.lead_history.adhaar_no : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.address_one ? item.lead_history.address_one : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.address_two ? item.lead_history.address_two : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.address_three ? item.lead_history.address_three : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.residential_pincode ? item.lead_history.residential_pincode : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.city ? item.lead_history.city : "NA"}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.state ? item.lead_history.state : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>NA</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.current_address_vintage ? item.lead_history.current_address_vintage : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.permanent_address_one ? item.lead_history.permanent_address_one : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.permanent_address_two ? item.lead_history.permanent_address_two : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.permanent_address_three ? item.lead_history.permanent_address_three : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.permanent_pincode ? item.lead_history.permanent_pincode : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.permanent_city ? item.lead_history.permanent_city : "NA"}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.permanent_state ? item.lead_history.permanent_state : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.permanent_resident_Type ? item.lead_history.permanent_resident_Type : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.permanent_address_vintage ? item.lead_history.permanent_address_vintage : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.employment_type ? item.lead_history.employment_type : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.designation ? item.lead_history.designation : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.current_work_exp ? item.lead_history.current_work_exp : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.total_work_exp ? item.lead_history.total_work_exp : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.gross_income ? item.lead_history.gross_income : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.monthly_income ? item.lead_history.monthly_income : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.office_address_one ? item.lead_history.office_address_one : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.office_address_two ? item.lead_history.office_address_two : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.office_address_three ? item.lead_history.office_address_three : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.office_pincode ? item.lead_history.office_pincode : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.office_city ? item.lead_history.office_city : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.office_state ? item.lead_history.office_state : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.official_mail ? item.lead_history.official_mail : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.landline_no ? item.lead_history.landline_no : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.salary_mode ? item.lead_history.salary_mode : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.salary_bank ? item.lead_history.salary_bank : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.current_emi ? item.lead_history.current_emi : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.no_of_creditcard ? item.lead_history.no_of_creditcard : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.credit_card_outstanding ? item.lead_history.credit_card_outstanding : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.credi_card_balance_transfer ? item.lead_history.credi_card_balance_transfer : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref1_first_name ? item.lead_history.ref1_first_name : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref1_last_name ? item.lead_history.ref1_last_name : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref1_mobile_no ? item.lead_history.ref1_mobile_no : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref1_address1 ? item.lead_history.ref1_address1 : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref1_address2 ? item.lead_history.ref1_address2 : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref1_pincode ? item.lead_history.ref1_pincode : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref1_city ? item.lead_history.ref1_city : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref1_state ? item.lead_history.ref1_state : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref2_first_name ? item.lead_history.ref2_first_name : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref2_last_name ? item.lead_history.ref2_last_name : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref2_mobile_no ? item.lead_history.ref2_mobile_no : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref2_address1 ? item.lead_history.ref2_address1 : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref2_address2 ? item.lead_history.ref2_address2 : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref2_pincode ? item.lead_history.ref2_pincode : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref2_city ? item.lead_history.ref2_city : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref2_state ? item.lead_history.ref2_state : 'NA'}</TableCell>
+                                            </TableRow>
+                                        )
+                                    }) : <div className={classes.emptydata}>No Data Found</div>
+                                }
+
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </DialogContent>
+            </Dialog>
         </PageLayerSection>
     )
 }
