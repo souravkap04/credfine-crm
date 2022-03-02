@@ -46,7 +46,6 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable'
 import { Column } from 'jspdf-react';
 import EligibilityCalculator from '../EligibilityCalculator/EligibilityCalculator';
-var submitCount = 0;
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -739,20 +738,6 @@ export default function LeadDetailsNew(props) {
                 .then((response) => {
                     if (response.status === 200) {
                         setIsStatus(true)
-                        if(history.location.pathname === `/dashboards/leads/edit/${leadid}`  && (profileData.campaign_category === 'ELITE_CUSTOMER_MUMBAI' || profileData.campaign_category === 'ELITE_CUSTOMER_NOIDA')){
-                            submitCount = submitCount + 1;
-                            if(submitCount > 14){
-                                console.log("submitCount:" + submitCount);
-                                localStorage.removeItem('user_info');
-                                localStorage.removeItem('status_info');
-                                localStorage.removeItem('notification');
-                                localStorage.removeItem('callHangUp');
-                                localStorage.removeItem('EMI')
-                                localStorage.removeItem('Interest')
-                                localStorage.removeItem('LoanAmount')
-                                localStorage.removeItem('LoanTenure')
-                                }
-                        }
                     }
                     if (location.pathname === `/dashboards/myleads/edit/${leadid}`) {
                         setTimeout(() => {

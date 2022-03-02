@@ -20,15 +20,13 @@ import {
   FormHelperText,
   IconButton,
 } from "@material-ui/core";
-import OtpInput from 'react-otp-input';
 import { getCampaign, getDialer } from "../../global/leadsGlobalData";
-import { haloocomNoidaDialerApi, haloocomMumbaiDialerApi } from '../../global/callApi';
+import {haloocomNoidaDialerApi,haloocomMumbaiDialerApi} from '../../global/callApi';
 import EmailOutlinedIcon from "@material-ui/icons/EmailOutlined";
 import HttpsOutlinedIcon from "@material-ui/icons/HttpsOutlined";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import Alert from "@material-ui/lab/Alert";
-import Snackbar from "@material-ui/core/Snackbar";
 import "./login.css";
 
 const useStyles = makeStyles((theme) => ({
@@ -81,74 +79,13 @@ export default function Login() {
   const campaignData = getCampaign();
   const dialerData = getDialer();
   let history = useHistory();
-  const [isError, setisError] = useState(false);
-  const [isSuccess, setisSuccess] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [isDisplay, setIsDisplay] = useState(false);
   const [showPassword, setshowPassword] = useState(false);
-  const [userName,setUserName] = useState('')
-  const [password,setPassword] = useState('');
-  const [selectedDialer, setSelectedDialer] = useState("");
-  const [campaign,setCampaign] = useState("");
-  const [otpPopup, setOtpPopup] = useState(false);
-  const [isOTP, setisOTP] = useState(false);
-  const [otpValue, setotpValue] = useState('');
-  const [mobileNo, setMobileNo] = useState('');
-  const [mobileVerify, setmobileVerify] = useState(false);
+  const [selectedDialer,setSelectedDialer] = useState("");
   const { register, handleSubmit, control, errors } = useForm();
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     const { email, password, campaign, dialer } = data;
-    setUserName(email);
-    setPassword(password);
-    setSelectedDialer(dialer);
-    setCampaign(campaign);
-    if (campaign === 'WEBSITE_LEAD') {
-      setOtpPopup(true);
-      setMobileNo('9930656757');
-      getOTP('9930656757');
-      return;
-    } 
-    if (campaign === 'HOT_LEAD_SILVER_NOIDA') {
-      setOtpPopup(true);
-      setMobileNo('8586055499');
-      getOTP('8586055499');
-      return;
-    }
-    if (campaign === 'HOT_LEAD_SILVER_MUMBAI') {
-      setOtpPopup(true);
-      setMobileNo('9930656757');
-      getOTP('9930656757');
-      return;
-    }
-    if (campaign === 'HOT_LEAD_PLATINUM_NOIDA') {
-      setOtpPopup(true);
-      setMobileNo('8586055499');
-      getOTP('8586055499');
-      return;
-    }
-    if (campaign === 'HOT_LEAD_PLATINUM_MUMBAI') {
-      setOtpPopup(true);
-      setMobileNo('9930656757');
-      getOTP('9930656757');
-      return;
-    }
-     if (campaign === 'ELITE_CUSTOMER_MUMBAI') {
-      setOtpPopup(true);
-      setMobileNo('9930656757');
-      getOTP('9930656757');
-      return;
-    }
-     if (campaign === 'ELITE_CUSTOMER_NOIDA') {
-      setOtpPopup(true);
-      setMobileNo('8586055499');
-      getOTP('8586055499');
-      return;
-    }
-    else {
-        loginHandler(email, password, campaign, dialer);
-    }
-  };
-  const loginHandler = async (email, password, campaign, dialer) => {
     let item = {
       username: email,
       password,
@@ -179,104 +116,32 @@ export default function Login() {
               console.log(error);
             });
         }
-        if (dialer === "HALOOCOM-Noida") {
-          axios.post(`${haloocomNoidaDialerApi}/action.php?user=${profileData.vertage_id}&type=Login`)
-            .then((response) => {
-              console.log("dialer-noida loin successfull")
-            }).catch((error) => {
-              console.log(error);
-            })
-        } else if (dialer === "HALOOCOM-Mumbai") {
+        if(dialer === "HALOOCOM-Noida"){
+         axios.post(`${haloocomNoidaDialerApi}/action.php?user=${profileData.vertage_id}&type=Login`)
+         .then((response)=>{
+          console.log("dialer-noida loin successfull")
+         }).catch((error)=>{
+          console.log(error);
+         })
+        }else if(dialer === "HALOOCOM-Mumbai"){
           axios.post(`${haloocomMumbaiDialerApi}/action.php?user=${profileData.vertage_id}&type=Login`)
-            .then((response) => {
-              console.log("dialer-mumbai loin successfull")
-            }).catch((error) => {
-              console.log(error);
-            })
+          .then((response)=>{
+           console.log("dialer-mumbai loin successfull")
+          }).catch((error)=>{
+           console.log(error);
+          })
         }
       })
       .catch((error) => {
         setAlertMessage("This is an error alert — check it out!");
         setIsDisplay(true);
       });
-  }
+  };
   const handleClickShowPassword = () => {
     setshowPassword(!showPassword);
   };
-  const getOTP = async (mobileNo) => {
-   await axios.post(`http://35.154.120.200/common/send_otp`, {
-      mobile: mobileNo
-    }).then(response => {
-      if (response.status === 200) {
-        setisOTP(true)
-        setisSuccess(true)
-        setAlertMessage('OTP Sent Successfully')
-      }
-    }).catch((error) => {
-      if (error.response.status === 400) {
-        setisError(true)
-        setAlertMessage(error.response.data)
-      }
-      if (error) {
-        setisError(true)
-        setAlertMessage(error.response.data)
-      }
-    });
-  }
-  const verifyOtp = async () => {
-    let items = { mobile: mobileNo, otp: otpValue }
-    await axios.post(`http://35.154.120.200/common/verify_otp`, items)
-      .then(response => {
-        if (response.status === 200) {
-          setisSuccess(true)
-          setAlertMessage(response.data)
-          loginHandler(userName,password,campaign,selectedDialer);
-          setTimeout(() => {
-            setmobileVerify(true);
-            setotpValue('')
-            setisOTP(false)
-          }, 1500)
-        }
-      }).catch((error) => {
-        if (error.response.status === 404) {
-          setisError(true)
-          setAlertMessage(error.response.data)
-        }
-        if (error) {
-          setisError(true)
-          setAlertMessage(error.response.data)
-        }
-      });
-  }
-  const handleChange = (otpValue) => {
-    setotpValue(otpValue);
-  }
-  const closePopup = () => {
-    setisSuccess(false);
-    setisError(false);
-  }
   return (
     <div className={classes.root}>
-      <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        open={isSuccess}
-        autoHideDuration={1500}
-        onClose={closePopup}
-      >
-        <Alert onClose={closePopup} severity="info">
-          {alertMessage}
-        </Alert>
-      </Snackbar>
-      <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        open={isError}
-        autoHideDuration={1500}
-        onClose={closePopup}
-      >
-        <Alert onClose={closePopup} severity="error">
-          {alertMessage}
-        </Alert>
-      </Snackbar>
       <div className="leftSectionImage">
         <img src={loinImage} alt="login image" />
       </div>
@@ -360,6 +225,8 @@ export default function Login() {
                 fullWidth
                 variant="standard"
                 error={Boolean(errors.dialer)}
+                value={selectedDialer}
+                onChange={(e)=>setSelectedDialer(e.target.value)}
               >
                 <InputLabel>Select Dialer</InputLabel>
                 <Controller
@@ -425,26 +292,6 @@ export default function Login() {
           </Grid>
         </form>
       </Container>
-      {otpPopup ?
-        <div className="otpBoxMainContainer">
-          <div className='otpBox'>
-            <div className="enterOTPlabel">Enter OTP</div>
-            <div className="otpAdjustContainer" method="get" data-group-name="digits" data-autosubmit="false" autoComplete="off">
-              <OtpInput
-                value={otpValue}
-                onChange={handleChange}
-                numInputs={4}
-                hasErrored={otpValue == '' ? true : false}
-              />
-            </div>
-            <div className="otpSubmit" onClick={() => verifyOtp()}>
-              <div className="btnText">CONTINUE</div>
-            </div>
-            <div id="timer"></div>
-            <div className="resentText">Did not get OTP? <span onClick={() => getOTP()}>Resend</span></div>
-          </div>
-        </div> : ''
-      }
     </div>
   );
 }
