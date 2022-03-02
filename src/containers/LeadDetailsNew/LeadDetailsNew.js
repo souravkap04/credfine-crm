@@ -742,7 +742,6 @@ export default function LeadDetailsNew(props) {
                         if(history.location.pathname === `/dashboards/leads/edit/${leadid}`  && (profileData.campaign_category === 'ELITE_CUSTOMER_MUMBAI' || profileData.campaign_category === 'ELITE_CUSTOMER_NOIDA')){
                             submitCount = submitCount + 1;
                             if(submitCount > 14){
-                                console.log("submitCount:" + submitCount);
                                 localStorage.removeItem('user_info');
                                 localStorage.removeItem('status_info');
                                 localStorage.removeItem('notification');
