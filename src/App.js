@@ -28,6 +28,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import PricingPopup from './containers/PricingPopup/PricingPopup';
 import PersonalLoanForm from './containers/PersonalLoanForm/PersonalLoanForm';
 import HDFCForm from './containers/HDFCForm/HDFCForm';
+import Loanbaba from './containers/LOANBABAForm/Loanbaba';
 import CalculatorTable from './containers/CalculatorTable/CalculatorTable';
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -129,6 +130,7 @@ function App() {
           <PrivateRoute exact path="/dashboards/pricing" component={PricingPopup} />
           <PrivateRoute exact path="/dashboards/PersonalLoanForm/:leadid" component={PersonalLoanForm} />
           <PrivateRoute exact path="/dashboards/HDFCForm/:leadid" component={HDFCForm} />
+          <PrivateRoute exact path="/dashboards/LOANBABAForm/:leadid" component={Loanbaba} />
           <PrivateRoute exact path="/dashboards/EMIcalculator" component={CalculatorTable} />
         </Switch>
       </Router>

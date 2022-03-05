@@ -1,0 +1,95 @@
+$desk: 100 / 1440;
+.LoanbabaContainer {
+    display: flex;
+    background-color: #fff;
+    .leftSection {
+        width: 238 * $desk + vw;
+        height: 900 * $desk + vw;
+        background: #177fb2 0% 0% no-repeat padding-box;
+        opacity: 1;
+        .loanbabaimg {
+            width: 238 * $desk + vw;
+            height: 70 * $desk + vw;
+            opacity: 1;
+        }
+        .list {
+            .progressContainer {
+                margin-top: 39 * $desk + vw;
+                .progressBox {
+                    display: flex;
+                    .progressIconBox {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        margin-left: 31 * $desk + vw;
+                        .iconBar {
+                            width: 18 * $desk + vw;
+                            height: 18 * $desk + vw;
+                            background-color: #ffffff;
+                            border-radius: 50%;
+                            transition: 0.3s;
+                        }
+                        .bottomProgressBar {
+                            width: 0 * $desk + vw;
+                            height: 47 * $desk + vw;
+                            border: 1px solid #074d72;
+                            transition: 0.3s;
+                        }
+                    }
+                    .iconText {
+                        color: #ffffff;
+                        margin-left: 8 * $desk + vw;
+                        font-size: 15 * $desk + rem;
+                        font-weight: 500;
+                    }
+                }
+            }
+        }
+    }
+    .rightSection {
+        .headerContainer{
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            height: 70 * $desk + vw;
+            background-color: #FCFCFC;
+            .backButton {
+                margin-left: 47 * $desk + rem;
+                width: 24 * $desk + rem;
+                height: 24 * $desk + rem;
+                cursor: pointer;
+                img {
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+            .needHelpContainer{
+                margin-right: 43 * $desk + vw;
+                .needHelpText{
+                    font-size: 12 * $desk + vw;
+                    color: #535ad1;
+                    line-height: 14 * $desk + vw;
+                    margin-left: 22 * $desk + vw;
+                }
+                .rightPart {
+                    display: flex;
+                    justify-content: center;
+                    .phoneCall {
+                        width: 18 * $desk + vw;
+                        height: 18 * $desk + vw;
+                        margin-right: 4 * $desk + vw;
+                        img {
+                            width: 100%;
+                            height: 100%;
+                        }
+                    }
+                    .numberText {
+                        font-size: 18 * $desk + vw;
+                        font-weight: bold;
+                        color: #535ad1;
+                    }
+                }
+            }
+        }
+    }
+}

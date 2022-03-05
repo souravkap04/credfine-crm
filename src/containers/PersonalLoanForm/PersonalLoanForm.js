@@ -23,7 +23,7 @@ import {
     getSalaryModeType,
     getProfileData
 } from "../../global/leadsGlobalData";
-import {hdfcBankApi} from "../../global/bankingApis";
+import { hdfcBankApi } from "../../global/bankingApis";
 import { ListGroup } from 'react-bootstrap';
 import axios from "axios";
 import baseUrl from "../../global/api";
@@ -57,7 +57,19 @@ export default function PersonalLoanForm() {
             MaxTenure: '72',
             PartPayment: '12',
             Forclosure: '18',
-            url: '/dashboards/HDFCForm'
+            url: '/dashboards/HDFCForm',
+            bankName: 'HDFC Bank'
+        },
+        {
+            img: '',
+            interest: '10.25%',
+            PFee: '1999',
+            MaxTenure: '72',
+            PartPayment: '12',
+            Forclosure: '18',
+            url: '/dashboards/LOANBABAForm',
+            bankName: 'LOANBABA Bank'
+
         },
         // {
         //     img: ICICI,
@@ -284,16 +296,21 @@ export default function PersonalLoanForm() {
         setIsLeadError(false);
         setIsLeadDetails(false);
     }
-    const applyNowBtnHandler = async () => {
-        let item = {};
-        await axios.post(`${hdfcBankApi}/sendHdfcLead/${leadId}/1`, item)
-            .then((response) => {
-                if(response.data.response_status === "Success"){
-                    history.push(`/dashboards/HDFCForm/${leadid}`);
-                }
-            }).catch((error)=>{
-                console.log(error);
-            })
+    const applyNowBtnHandler = async (id) => {
+        if (id === 'HDFC Bank') {
+            let item = {};
+            await axios.post(`${hdfcBankApi}/sendHdfcLead/${leadId}/1`, item)
+                .then((response) => {
+                    if (response.data.response_status === "Success") {
+                        history.push(`/dashboards/HDFCForm/${leadid}`);
+                    }
+                }).catch((error) => {
+                    console.log(error);
+                })
+        }
+        if(id === 'LOANBABA Bank') {
+            history.push(`/dashboards/LOANBABAForm/${leadid}`)
+        }
     }
     return (
         <div className="personalFormContainer">
@@ -1004,7 +1021,7 @@ export default function PersonalLoanForm() {
                             </div>
                         </div>
                         {Offers.map(item => {
-                            return <div className="offerCardContainer">
+                            return (<div className="offerCardContainer">
                                 <div className="bankLogoImage">
                                     <img src={item.img} alt="" />
                                 </div>
@@ -1013,10 +1030,10 @@ export default function PersonalLoanForm() {
                                 <div className="months">{item.MaxTenure} months</div>
                                 <div className="after12">After {item.PartPayment} EMIs</div>
                                 <div className="after18">After {item.Forclosure} EMIs</div>
-                                    <div className="applyBtn">
-                                        <div className="btnText" onClick={applyNowBtnHandler}>APPLY NOW</div>
-                                    </div>
-                            </div>
+                                <div className="applyBtn">
+                                    <div className="btnText" onClick={() => applyNowBtnHandler(item.bankName)}>APPLY NOW</div>
+                                </div>
+                            </div>)
                         })}
                     </div> : ''}
                     {isGrid ? <div className="OfferMainGridContainer">
@@ -1047,9 +1064,9 @@ export default function PersonalLoanForm() {
                                         <div className="after18">After {item.Forclosure} EMIs</div>
                                     </div>
                                 </div>
-                                    <div className="applyBtn">
-                                        <div className="btnText" onClick={applyNowBtnHandler}>APPLY NOW</div>
-                                    </div>
+                                <div className="applyBtn">
+                                    <div className="btnText" onClick={() => applyNowBtnHandler(item.bankName)}>APPLY NOW</div>
+                                </div>
                             </div>
                         })}
                     </div> : ''}

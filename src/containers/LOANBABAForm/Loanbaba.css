@@ -1,0 +1,129 @@
+.LoanbabaContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  background-color: #fff;
+}
+
+.LoanbabaContainer .leftSection {
+  width: 16.52778vw;
+  height: 62.5vw;
+  background: #177fb2 0% 0% no-repeat padding-box;
+  opacity: 1;
+}
+
+.LoanbabaContainer .leftSection .loanbabaimg {
+  width: 16.52778vw;
+  height: 4.86111vw;
+  opacity: 1;
+}
+
+.LoanbabaContainer .leftSection .list .progressContainer {
+  margin-top: 2.70833vw;
+}
+
+.LoanbabaContainer .leftSection .list .progressContainer .progressBox {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.LoanbabaContainer .leftSection .list .progressContainer .progressBox .progressIconBox {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-left: 2.15278vw;
+}
+
+.LoanbabaContainer .leftSection .list .progressContainer .progressBox .progressIconBox .iconBar {
+  width: 1.25vw;
+  height: 1.25vw;
+  background-color: #ffffff;
+  border-radius: 50%;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+
+.LoanbabaContainer .leftSection .list .progressContainer .progressBox .progressIconBox .bottomProgressBar {
+  width: 0vw;
+  height: 3.26389vw;
+  border: 1px solid #074d72;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+
+.LoanbabaContainer .leftSection .list .progressContainer .progressBox .iconText {
+  color: #ffffff;
+  margin-left: 0.55556vw;
+  font-size: 1.04167rem;
+  font-weight: 500;
+}
+
+.LoanbabaContainer .rightSection .headerContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  width: 100%;
+  height: 4.86111vw;
+  background-color: #FCFCFC;
+}
+
+.LoanbabaContainer .rightSection .headerContainer .backButton {
+  margin-left: 3.26389rem;
+  width: 1.66667rem;
+  height: 1.66667rem;
+  cursor: pointer;
+}
+
+.LoanbabaContainer .rightSection .headerContainer .backButton img {
+  width: 100%;
+  height: 100%;
+}
+
+.LoanbabaContainer .rightSection .headerContainer .needHelpContainer {
+  margin-right: 2.98611vw;
+}
+
+.LoanbabaContainer .rightSection .headerContainer .needHelpContainer .needHelpText {
+  font-size: 0.83333vw;
+  color: #535ad1;
+  line-height: 0.97222vw;
+  margin-left: 1.52778vw;
+}
+
+.LoanbabaContainer .rightSection .headerContainer .needHelpContainer .rightPart {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.LoanbabaContainer .rightSection .headerContainer .needHelpContainer .rightPart .phoneCall {
+  width: 1.25vw;
+  height: 1.25vw;
+  margin-right: 0.27778vw;
+}
+
+.LoanbabaContainer .rightSection .headerContainer .needHelpContainer .rightPart .phoneCall img {
+  width: 100%;
+  height: 100%;
+}
+
+.LoanbabaContainer .rightSection .headerContainer .needHelpContainer .rightPart .numberText {
+  font-size: 1.25vw;
+  font-weight: bold;
+  color: #535ad1;
+}
+/*# sourceMappingURL=Loanbaba.css.map */
