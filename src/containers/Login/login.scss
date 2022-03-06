@@ -43,17 +43,14 @@ $desk: 0.069;
             .btnText {
                 color: #fff;
                 font-size: 16 * $desk + vw;
-                font-family: Lato-regular;
             }
         }
         .enterOTPlabel {
-            // position: absolute;
             margin-top: 83 * $desk + vw;
             margin-left: 133 * $desk + vw;
             font-size: 18 * $desk + vw;
             font-weight: 600;
             color: #535ad1;
-            font-family: Lato-regular;
         }
         .otpAdjustContainer {
             margin-top: 16 * $desk + vw;
@@ -68,7 +65,6 @@ $desk: 0.069;
                 margin-right: 6 * $desk + vw;
                 outline: none;
                 text-align: center !important;
-                font-family: Lato-regular;
             }
             input:focus {
                 background-color: #f4f4ff;
@@ -82,7 +78,6 @@ $desk: 0.069;
                 font-weight: 600;
                 margin-top: 5 * $desk + vw;
                 margin-left: 5 * $desk + vw;
-                font-family: Lato-regular;
             }
         }
         #timer {
@@ -90,7 +85,6 @@ $desk: 0.069;
             font-size: 18 * $desk + vw;
             font-weight: 600;
             margin-top: 16 * $desk + vw;
-            font-family: Lato-regular;
         }
         .resentText {
             font-size: 14 * $desk + vw;
@@ -102,7 +96,6 @@ $desk: 0.069;
                 color: #535ad1;
                 border-bottom: 1px solid #535ad1;
                 cursor: pointer;
-                font-family: Lato-regular;
             }
         }
     }

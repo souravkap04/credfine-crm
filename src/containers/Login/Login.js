@@ -91,7 +91,6 @@ export default function Login() {
   const [selectedDialer, setSelectedDialer] = useState("");
   const [campaign,setCampaign] = useState("");
   const [otpPopup, setOtpPopup] = useState(false);
-  const [isOTP, setisOTP] = useState(false);
   const [otpValue, setotpValue] = useState('');
   const [mobileNo, setMobileNo] = useState('');
   const [mobileVerify, setmobileVerify] = useState(false);
@@ -208,7 +207,6 @@ export default function Login() {
       mobile: mobileNo
     }).then(response => {
       if (response.status === 200) {
-        setisOTP(true)
         setisSuccess(true)
         setAlertMessage('OTP Sent Successfully')
       }
@@ -234,13 +232,15 @@ export default function Login() {
           setTimeout(() => {
             setmobileVerify(true);
             setotpValue('')
-            setisOTP(false)
           }, 1500)
         }
       }).catch((error) => {
         if (error.response.status === 404) {
           setisError(true)
           setAlertMessage(error.response.data)
+          setTimeout(() => {
+            setotpValue('')
+          }, 1500)
         }
         if (error) {
           setisError(true)
@@ -441,7 +441,7 @@ export default function Login() {
               <div className="btnText">CONTINUE</div>
             </div>
             <div id="timer"></div>
-            <div className="resentText">Did not get OTP? <span onClick={() => getOTP()}>Resend</span></div>
+            <div className="resentText">Did not get OTP? <span onClick={() => getOTP(mobileNo)}>Resend</span></div>
           </div>
         </div> : ''
       }
