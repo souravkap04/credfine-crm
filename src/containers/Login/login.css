@@ -62,7 +62,6 @@
 .otpBoxMainContainer .otpBox .otpSubmit .btnText {
   color: #fff;
   font-size: 1.104vw;
-  font-family: Lato-regular;
 }
 
 .otpBoxMainContainer .otpBox .enterOTPlabel {
@@ -71,7 +70,6 @@
   font-size: 1.242vw;
   font-weight: 600;
   color: #535ad1;
-  font-family: Lato-regular;
 }
 
 .otpBoxMainContainer .otpBox .otpAdjustContainer {
@@ -93,7 +91,6 @@
   margin-right: 0.414vw;
   outline: none;
   text-align: center !important;
-  font-family: Lato-regular;
 }
 
 .otpBoxMainContainer .otpBox .otpAdjustContainer input:focus {
@@ -110,7 +107,6 @@
   font-weight: 600;
   margin-top: 0.345vw;
   margin-left: 0.345vw;
-  font-family: Lato-regular;
 }
 
 .otpBoxMainContainer .otpBox #timer {
@@ -118,7 +114,6 @@
   font-size: 1.242vw;
   font-weight: 600;
   margin-top: 1.104vw;
-  font-family: Lato-regular;
 }
 
 .otpBoxMainContainer .otpBox .resentText {
@@ -133,6 +128,5 @@
   color: #535ad1;
   border-bottom: 1px solid #535ad1;
   cursor: pointer;
-  font-family: Lato-regular;
 }
 /*# sourceMappingURL=login.css.map */

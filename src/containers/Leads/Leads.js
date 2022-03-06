@@ -176,7 +176,7 @@ export default function Leads() {
       })
       .catch((error) => {
         if (error.response.status === 403) {
-          setResponseStatus('This Leads Owned By Someone Else Kindliy Connect Your Product Team swati@credfine.com');
+          setResponseStatus('This Lead Owned By Someone Else Kindly Connect Your Product Team swati@credfine.com');
           setAlertMessage('Lead Already Exist');
           setIsError(true);
           setisLoading(false);
