@@ -41,21 +41,13 @@ const Loanbaba = () => {
     const fetchLoanbabaData = async (leadId) => {
         await axios.get(`${bankApi}/sendLeadPartner/${leadId}/2/0`)
             .then((response) => {
-                let getDobfromApi = response.data.dateOfBirth;
-                let dateRegex = /^(\d{2})[/](\d{2})[/](\d{4})$/.test(getDobfromApi);
-                if (dateRegex) {
-                    setDob(response.data.dateOfBirth);
-                } else {
-                    let changeDateFormat = Moment(getDobfromApi, 'DDMMYYYY').format("DD/MM/YYYY");
-                    setDob(changeDateFormat);
-                    console.log("dateRegex:" + changeDateFormat);
-                }
                 setFullName(response.data.nameOnPan);
                 setMobileNo(response.data.phone);
                 setPanCardNo(response.data.panNo);
                 setCity(response.data.city);
                 setSalary(response.data.salary);
                 setEmailID(response.data.email);
+                setDob(response.data.dateOfBirth);
             }).catch((error) => {
                 console.log(error);
             })
@@ -112,7 +104,6 @@ const Loanbaba = () => {
                     setUniqueID(response.data.response.lbUniqueId)
                 }
                 if(response.data.response.statusCode === '400') {
-                    console.log('fgfgfg:'+response.data.response.message)
                     setAlertMessage(response.data.response.message)
                     setIsError(true);
                 }

@@ -30,6 +30,7 @@ import axios from "axios";
 import baseUrl from "../../global/api";
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
+import moment from 'moment';
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -189,12 +190,19 @@ export default function PersonalLoanForm() {
                 await axios
                     .get(`${baseUrl}/leads/lead_detail/${leadId}`, { headers })
                     .then((response) => {
+                        let getDobfromApi = response.data.lead_data.data.dob;
+                        let dateRegex = /^\d{4}-\d{2}-\d{2}$/.test(getDobfromApi);
+                        if (dateRegex) {
+                            setDate(response.data.lead_data.data.dob);
+                        } else {
+                            let changeDateFormat = moment(getDobfromApi, 'DDMMYYYY').format("YYYY-MM-DD");
+                            setDate(changeDateFormat);
+                        }
                         setMobileNo(response.data.lead_data.phone_no);
                         setLeadId(response.data.lead_data.lead_crm_id);
                         setLoanAmount(response.data.lead_data.loan_amount);
                         setMonthlyIncome(response.data.lead_data["data"].monthly_income);
                         setCurrentCompany(response.data.lead_data['data'].current_company);
-                        setDate(response.data.lead_data["data"].dob);
                         setPincode(response.data.lead_data["data"].residential_pincode);
                         setcity(response.data.lead_data["data"].city);
                         setstates(response.data.lead_data["data"].state);
