@@ -34,7 +34,6 @@ const Loanbaba = () => {
     const [isSuccess, setIsSuccess] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
     const [uniqueID, setUniqueID] = useState('');
-    console.log("dob:" + dob);
     useEffect(() => {
         fetchLoanbabaData(leadid)
     }, [])
@@ -135,7 +134,7 @@ const Loanbaba = () => {
         })
     }
     const trackStatusHandler = () => {
-        console.log('trackStatusHandler');
+     //   console.log('trackStatusHandler');
     }
     const closeSnackbar = () => {
         setIsError(false);
