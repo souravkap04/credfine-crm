@@ -10,6 +10,7 @@ import phoneCall from '../../images/forms/phoneCall.svg';
 import list from '../../images/forms/list.svg';
 import grid from '../../images/forms/grid.svg';
 import HDFC from '../../images/forms/HDFCAgain.svg';
+import LOANBABA from '../../images/forms/loanbaba.png'
 import ICICI from '../../images/forms/ICICI.svg';
 import SC from '../../images/forms/SC.svg';
 import IDFC from '../../images/forms/IDFC.svg';
@@ -23,7 +24,7 @@ import {
     getSalaryModeType,
     getProfileData
 } from "../../global/leadsGlobalData";
-import { hdfcBankApi } from "../../global/bankingApis";
+import { bankApi } from "../../global/bankingApis";
 import { ListGroup } from 'react-bootstrap';
 import axios from "axios";
 import baseUrl from "../../global/api";
@@ -61,7 +62,7 @@ export default function PersonalLoanForm() {
             bankName: 'HDFC Bank'
         },
         {
-            img: '',
+            img: LOANBABA,
             interest: '10.25%',
             PFee: '1999',
             MaxTenure: '72',
@@ -299,7 +300,7 @@ export default function PersonalLoanForm() {
     const applyNowBtnHandler = async (id) => {
         if (id === 'HDFC Bank') {
             let item = {};
-            await axios.post(`${hdfcBankApi}/sendHdfcLead/${leadId}/1`, item)
+            await axios.post(`${bankApi}/sendHdfcLead/${leadId}/1`, item)
                 .then((response) => {
                     if (response.data.response_status === "Success") {
                         history.push(`/dashboards/HDFCForm/${leadid}`);

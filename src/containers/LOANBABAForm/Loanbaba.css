@@ -51,6 +51,14 @@
   transition: 0.3s;
 }
 
+.LoanbabaContainer .leftSection .list .progressContainer .progressBox .progressIconBox .activeCurrent {
+  background-color: #fff;
+}
+
+.LoanbabaContainer .leftSection .list .progressContainer .progressBox .progressIconBox .activeiconBar {
+  background-color: #1cb980;
+}
+
 .LoanbabaContainer .leftSection .list .progressContainer .progressBox .progressIconBox .bottomProgressBar {
   width: 0vw;
   height: 3.26389vw;
@@ -76,6 +84,8 @@
   width: 100%;
   height: 4.86111vw;
   background-color: #FCFCFC;
+  margin-top: 1.38889vw;
+  margin-bottom: 1.59722vw;
 }
 
 .LoanbabaContainer .rightSection .headerContainer .backButton {
@@ -92,6 +102,8 @@
 
 .LoanbabaContainer .rightSection .headerContainer .needHelpContainer {
   margin-right: 2.98611vw;
+  /* need change */
+  margin-left: 67.56944vw;
 }
 
 .LoanbabaContainer .rightSection .headerContainer .needHelpContainer .needHelpText {
@@ -125,5 +137,125 @@
   font-size: 1.25vw;
   font-weight: bold;
   color: #535ad1;
+}
+
+.LoanbabaContainer .rightSection .texualContainer {
+  margin-left: 8.75VW;
+  width: 55.97222vw;
+  margin-bottom: 1.38889vw;
+}
+
+.LoanbabaContainer .rightSection .texualContainer .headText {
+  color: #177FB2;
+  font-size: 32px;
+}
+
+.LoanbabaContainer .rightSection .texualContainer .headText2 {
+  font-size: 2.22222rem;
+  color: #07498e;
+  margin-bottom: 0.97222rem;
+}
+
+.LoanbabaContainer .rightSection .texualContainer .subText {
+  font-size: 1.11111rem;
+  color: #727272;
+  margin-bottom: 1.59722rem;
+}
+
+.LoanbabaContainer .rightSection .texualContainer .subText2 {
+  font-size: 1.11111rem;
+  color: #727272;
+  line-height: 1.66667rem;
+}
+
+.LoanbabaContainer .rightSection .texualContainer .subText2 strong {
+  color: #07498E;
+}
+
+.LoanbabaContainer .rightSection .texualContainer .losContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-top: 2.29167rem;
+}
+
+.LoanbabaContainer .rightSection .texualContainer .losContainer .losHeader {
+  margin-right: 0.69444rem;
+  color: #000000;
+  font-size: 1.11111rem;
+}
+
+.LoanbabaContainer .rightSection .texualContainer .losContainer .losNumber {
+  width: 7.63889rem;
+  height: 2.22222rem;
+  background-color: #535AD1;
+  color: #FFFFFF;
+  padding: 0.41667rem 0.90278rem 0.48611rem 0.90278rem;
+  text-align: center;
+  border-radius: 0.27778rem;
+}
+
+.LoanbabaContainer .rightSection .texualContainer .losContainer .copyIcon {
+  margin-left: 0.44167rem;
+  cursor: pointer;
+}
+
+.LoanbabaContainer .rightSection .texualContainer .trackStatus {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 13.88889rem;
+  height: 3.47222rem;
+  border-radius: 2.29167rem;
+  background-color: #1c86fc;
+  cursor: pointer;
+}
+
+.LoanbabaContainer .rightSection .texualContainer .trackStatus .btnText {
+  font-size: 1.11111rem;
+  font-weight: 500;
+  color: #fff;
+}
+
+.LoanbabaContainer .rightSection .offerContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-left: 6.11111VW;
+}
+
+.LoanbabaContainer .rightSection .offerContainer .offerBox {
+  margin-left: 2.63889VW;
+}
+
+.LoanbabaContainer .rightSection .offerContainer .offerBox .offerHead {
+  color: #727272;
+  font-size: 1.11111vw;
+}
+
+.LoanbabaContainer .rightSection .offerContainer .offerBox .offerText {
+  color: #07498E;
+  font-size: 1.66667vw;
+  margin-top: 0.34722vw;
+}
+
+.LoanbabaContainer .rightSection .offerBorder {
+  width: 59.09722VW;
+  border: 1PX solid #D1D1D1;
+  margin-top: 1.11111VW;
+  margin-left: 8.75VW;
+}
+
+.LoanbabaContainer .iconTextContainer {
+  display: none;
 }
 /*# sourceMappingURL=Loanbaba.css.map */

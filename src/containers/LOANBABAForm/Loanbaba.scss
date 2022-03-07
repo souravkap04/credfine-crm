@@ -29,6 +29,12 @@ $desk: 100 / 1440;
                             border-radius: 50%;
                             transition: 0.3s;
                         }
+                        .activeCurrent {
+                            background-color: #fff;
+                        }
+                        .activeiconBar {
+                            background-color: #1cb980;
+                        }
                         .bottomProgressBar {
                             width: 0 * $desk + vw;
                             height: 47 * $desk + vw;
@@ -53,6 +59,8 @@ $desk: 100 / 1440;
             width: 100%;
             height: 70 * $desk + vw;
             background-color: #FCFCFC;
+            margin-top: 20 * $desk + vw;
+            margin-bottom: 23 * $desk + vw;
             .backButton {
                 margin-left: 47 * $desk + rem;
                 width: 24 * $desk + rem;
@@ -65,6 +73,8 @@ $desk: 100 / 1440;
             }
             .needHelpContainer{
                 margin-right: 43 * $desk + vw;
+                /* need change */
+                margin-left: 973 * $desk + vw;
                 .needHelpText{
                     font-size: 12 * $desk + vw;
                     color: #535ad1;
@@ -91,5 +101,96 @@ $desk: 100 / 1440;
                 }
             }
         }
+        .texualContainer {
+            margin-left: 126 * $desk + VW;
+            width: 806 * $desk + vw;
+            margin-bottom: 20 * $desk + vw;
+            .headText{
+                color: #177FB2;
+                font-size: 32px;
+            }
+            .headText2 {
+                font-size: 32 * $desk + rem;
+                color: #07498e;
+                margin-bottom: 14 * $desk + rem;
+            }
+            .subText {
+                font-size: 16 * $desk + rem;
+                color: #727272;
+                margin-bottom: 23 * $desk + rem;
+            }
+            .subText2 {
+                font-size: 16 * $desk + rem;
+                color: #727272;
+                line-height: 24 * $desk + rem;
+                strong{
+                    color: #07498E;
+                }
+            }
+            .losContainer {
+                display: flex;
+                align-items: center;
+                margin-top: 33 * $desk + rem;
+                .losHeader{
+                    margin-right: 10 * $desk + rem;
+                    color: #000000;
+                    font-size: 16 * $desk + rem;
+                    
+                }
+                .losNumber{
+                    width: 110 * $desk + rem;
+                    height: 32 * $desk + rem;
+                    background-color: #535AD1;
+                    color: #FFFFFF;
+                    padding: 6 * $desk + rem 13 * $desk + rem 7 * $desk + rem 13 * $desk + rem;
+                    text-align: center;
+                    border-radius: 4 * $desk + rem;
+                }
+                .copyIcon{
+                    margin-left: 6.36 * $desk + rem;
+                    cursor: pointer;
+                }
+            }
+            .trackStatus {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 200 * $desk + rem;
+                height: 50 * $desk + rem;
+                border-radius: 33 * $desk + rem;
+                background-color: #1c86fc;
+                cursor: pointer;
+                .btnText {
+                    font-size: 16 * $desk + rem;
+                    font-weight: 500;
+                    color: #fff;
+                }
+            }
+        }
+        .offerContainer{
+            display: flex;
+            margin-left: 88 * $desk + VW;
+            .offerBox{
+                margin-left: 38 * $desk + VW;
+                .offerHead {
+                    color: #727272;
+                    font-size: 16 * $desk + vw;
+                }
+                .offerText {
+                    color: #07498E;
+                    font-size: 24 * $desk + vw;
+                    margin-top: 5 * $desk + vw;
+                }
+            }
+        }
+        .offerBorder {
+            width: 851 * $desk + VW;
+            border: 1PX solid #D1D1D1;
+            margin-top: 16 * $desk + VW;
+            margin-left: 126 * $desk + VW;
+        }
+    }
+    .iconTextContainer {
+        display: none;
     }
 }
