@@ -16,6 +16,7 @@ function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 const Loanbaba = () => {
+    const history = useHistory();
     const { leadid } = useParams();
     const [isPersonalDetail, setisPersonalDetail] = useState(true);
     const [isPersonalProgress, setisPersonalProgress] = useState(false);
@@ -29,7 +30,7 @@ const Loanbaba = () => {
     const [salary, setSalary] = useState('');
     const [emailID, setEmailID] = useState('');
     const [isError, setIsError] = useState(false);
-    const [isCopy,setIsCopy] = useState(false);
+    const [isCopy, setIsCopy] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
     const [uniqueID, setUniqueID] = useState('');
@@ -53,7 +54,8 @@ const Loanbaba = () => {
                 setMobileNo(response.data.phone);
                 setPanCardNo(response.data.panNo);
                 setCity(response.data.city);
-                setSalary(response.data.salary)
+                setSalary(response.data.salary);
+                setEmailID(response.data.email);
             }).catch((error) => {
                 console.log(error);
             })
@@ -61,9 +63,14 @@ const Loanbaba = () => {
     const loanBabaPresonalDetailsHandler = async (leadID) => {
         let mobRegex = /^[6-9]\d{9}$/.test(mobileNo);
         let panRegex = /[A-Z]{5}[0-9]{4}[A-Z]{1}/.test(panCardNo)
-        let emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(emailID)
+        let emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(emailID);
         if (fullName === '') {
             setAlertMessage('Invalid Full Name')
+            setIsError(true)
+            return;
+        }
+        if(dob === '') {
+            setAlertMessage('Invalid Date of Birth')
             setIsError(true)
             return;
         }
@@ -129,9 +136,9 @@ const Loanbaba = () => {
 
     }
     const copyUniqueIDNumber = (clip) => {
-        navigator.clipboard.writeText(clip).then(function(){
+        navigator.clipboard.writeText(clip).then(function () {
             setIsCopy(true)
-        },function(){
+        }, function () {
             setIsError(true)
             alertMessage('uniqueID Not Copied!')
         })
@@ -185,7 +192,7 @@ const Loanbaba = () => {
             </div>
             <div className='rightSection'>
                 <div className='headerContainer'>
-                    <div className="backButton">
+                    <div className="backButton" onClick={() => history.goBack()}>
                         <img src={back} alt="" />
                     </div>
                     <div className='needHelpContainer'>
@@ -345,7 +352,7 @@ const Loanbaba = () => {
                     </FormContainer>
                 </div>}
                 {isApprovalStatus &&
-                    <div className="texualContainer" style={{ paddingRight: '104px' }}>
+                    <div className="texualContainer">
                         <div className="headText2"><strong>Congratulations!</strong></div>
                         <div className="subText">Your Application has been <strong>successfully submitted.</strong> Our Team will get back to you in 24-48 hours.</div>
                         <div className='subText2'>CredFine.com doesn’t charge any money from customers for it’s Loan or Credit Card offerings. In case you<br />
@@ -358,8 +365,11 @@ const Loanbaba = () => {
                             </div>
                         </div>
                         <hr />
-                        <div className="trackStatus">
+                        <div className='trackStatus'>
+                        <div className="statusBtn">
                             <div className="btnText" onClick={trackStatusHandler}>TRACK STATUS</div>
+                        </div>
+                        <div className='statusText'>or email us with the Reference No:<br/><strong>info@credfine.com</strong></div>
                         </div>
                     </div>
                 }

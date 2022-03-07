@@ -1,19 +1,19 @@
-$desk: 0.063;
+$desk: 100 / 1440;
 $mob: 100 / 375;
 .iconTextContainer {
     display: flex;
     align-items: center;
-    margin: auto;
-    margin-top: 37 * $desk + rem;
-    width: 1024 * $desk + rem;
+    margin-left: 38 * $desk +vw;
+    margin-top: 37 * $desk + vw;
+    width: 1024 * $desk + vw;
     @media only screen and (max-width: 800px) {
         display: none;
     }
     .icon {
-        width: 38 * $desk + rem;
-        height: 38 * $desk + rem;
-        margin-right: 15 * $desk + rem;
-        // margin-left: 47 * $desk + rem;
+        width: 38 * $desk + vw;
+        height: 38 * $desk + vw;
+        margin-right: 15 * $desk + vw;
+        // margin-left: 47 * $desk + vw;
         img {
             width: 100%;
             height: 100%;
@@ -21,27 +21,27 @@ $mob: 100 / 375;
         }
     }
     .text {
-        font-size: 20 * $desk + rem;
+        font-size: 20 * $desk + vw;
         font-weight: bold;
         color: #535ad1;
     }
 }
 .formMainContainer {
     position: relative;
-    margin: auto;
-    margin-top: 32 * $desk + rem;
-    margin-bottom: 50 * $desk + rem;
-    width: 1024 * $desk + rem;
+    margin-left: 38 * $desk + vw;
+    margin-top: 32 * $desk + vw;
+    margin-bottom: 50 * $desk + vw;
+    width: 1024 * $desk + vw;
     @media only screen and (max-width: 800px) {
         width: 100%;
         margin-top: 18 * $mob + vw;
         margin-bottom: 50 * $mob + vw;
     }
     h3 {
-        font-size: 18 * $desk + rem;
+        font-size: 18 * $desk + vw;
         font-weight: 600;
         color: #727272;
-        margin-bottom: 25 * $desk + rem;
+        margin-bottom: 25 * $desk + vw;
         @media only screen and (max-width: 800px) {
             margin-left: 36 * $mob + vw;
             margin-bottom: 16 * $mob + vw;
@@ -50,16 +50,16 @@ $mob: 100 / 375;
     .formContainer {
         display: flex;
         flex-wrap: wrap;
-        width: 800 * $desk + rem;
+        width: 800 * $desk + vw;
         @media only screen and (max-width: 800px) {
             flex-wrap: unset;
             flex-direction: column;
             width: 100%;
         }
         .textField {
-            width: 244 * $desk + rem;
-            margin-right: 20 * $desk + rem !important;
-            margin-bottom: 31 * $desk + rem !important;
+            width: 244 * $desk + vw;
+            margin-right: 20 * $desk + vw !important;
+            margin-bottom: 31 * $desk + vw !important;
             margin-top: 0 !important;
             @media only screen and (max-width: 800px) {
                 width: 312 * $mob + vw;
@@ -69,8 +69,8 @@ $mob: 100 / 375;
             }
             label {
                 color: #07498e;
-                letter-spacing: 0.4 * $desk + rem;
-                font-size: 15.5 * $desk + rem;
+                letter-spacing: 0.4 * $desk + vw;
+                font-size: 15.5 * $desk + vw;
                 span {
                     position:absolute;
                     color: red;
@@ -84,7 +84,7 @@ $mob: 100 / 375;
                 }
             }
             .MuiOutlinedInput-root {
-                height: 56 * $desk + rem;
+                height: 56 * $desk + vw;
                 @media only screen and (max-width: 800px) {
                     height: 56 * $mob + vw;
                 }
@@ -96,7 +96,7 @@ $mob: 100 / 375;
                 opacity: 0.6;
             }
             .MuiInputBase-input {
-                font-size: 16 * $desk + rem;
+                font-size: 16 * $desk + vw;
                 @media only screen and (max-width: 800px) {
                     font-size: 16 * $mob + vw;
                 }
@@ -107,7 +107,7 @@ $mob: 100 / 375;
         }
     }
     .borderBottom {
-        width: 774 * $desk + rem;
+        width: 774 * $desk + vw;
         border-bottom: solid 1px #eaeaea;
         @media only screen and (max-width: 800px) {
             display: none;
@@ -117,13 +117,13 @@ $mob: 100 / 375;
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 200 * $desk + rem;
-        height: 50 * $desk + rem;
-        border-radius: 33 * $desk + rem;
+        width: 200 * $desk + vw;
+        height: 50 * $desk + vw;
+        border-radius: 33 * $desk + vw;
         background-color: #1cb980;
         cursor: pointer;
-        margin-top: 18.5 * $desk + rem;
-        margin-left: 576 * $desk + rem;
+        margin-top: 18.5 * $desk + vw;
+        margin-left: 576 * $desk + vw;
         @media only screen and (max-width: 800px) {
             width: 200 * $mob + vw;
             height: 50 * $mob + vw;
@@ -132,7 +132,7 @@ $mob: 100 / 375;
             margin-top: 0;
         }
         .btnText {
-            font-size: 16 * $desk + rem;
+            font-size: 16 * $desk + vw;
             font-weight: 500;
             color: #fff;
             @media only screen and (max-width: 800px) {
@@ -140,10 +140,10 @@ $mob: 100 / 375;
             }
         }
         .arrowIcon {
-            width: 16 * $desk + rem;
-            height: 16 * $desk + rem;
-            margin-left: 27.5 * $desk + rem;
-            margin-top: -1 * $desk + rem;
+            width: 16 * $desk + vw;
+            height: 16 * $desk + vw;
+            margin-left: 27.5 * $desk + vw;
+            margin-top: -1 * $desk + vw;
             @media only screen and (max-width: 800px) {
                 width: 16 * $mob + vw;
                 height: 16 * $mob + vw;

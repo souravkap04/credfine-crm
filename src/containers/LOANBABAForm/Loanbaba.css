@@ -70,7 +70,7 @@
 .LoanbabaContainer .leftSection .list .progressContainer .progressBox .iconText {
   color: #ffffff;
   margin-left: 0.55556vw;
-  font-size: 1.04167rem;
+  font-size: 1.04167vw;
   font-weight: 500;
 }
 
@@ -78,20 +78,22 @@
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
   width: 100%;
   height: 4.86111vw;
-  background-color: #FCFCFC;
-  margin-top: 1.38889vw;
+  background-color: #fcfcfc;
   margin-bottom: 1.59722vw;
 }
 
 .LoanbabaContainer .rightSection .headerContainer .backButton {
-  margin-left: 3.26389rem;
-  width: 1.66667rem;
-  height: 1.66667rem;
+  margin-left: 3.26389vw;
+  width: 1.66667vw;
+  height: 1.66667vw;
   cursor: pointer;
 }
 
@@ -101,7 +103,6 @@
 }
 
 .LoanbabaContainer .rightSection .headerContainer .needHelpContainer {
-  margin-right: 2.98611vw;
   /* need change */
   margin-left: 67.56944vw;
 }
@@ -140,36 +141,36 @@
 }
 
 .LoanbabaContainer .rightSection .texualContainer {
-  margin-left: 8.75VW;
+  margin-left: 2.63889VW;
   width: 55.97222vw;
   margin-bottom: 1.38889vw;
 }
 
 .LoanbabaContainer .rightSection .texualContainer .headText {
-  color: #177FB2;
+  color: #177fb2;
   font-size: 32px;
 }
 
 .LoanbabaContainer .rightSection .texualContainer .headText2 {
-  font-size: 2.22222rem;
+  font-size: 2.22222vw;
   color: #07498e;
-  margin-bottom: 0.97222rem;
+  margin-bottom: 0.97222vw;
 }
 
 .LoanbabaContainer .rightSection .texualContainer .subText {
-  font-size: 1.11111rem;
+  font-size: 1.11111vw;
   color: #727272;
-  margin-bottom: 1.59722rem;
+  margin-bottom: 1.59722vw;
 }
 
 .LoanbabaContainer .rightSection .texualContainer .subText2 {
-  font-size: 1.11111rem;
+  font-size: 1.11111vw;
   color: #727272;
-  line-height: 1.66667rem;
+  line-height: 1.66667vw;
 }
 
 .LoanbabaContainer .rightSection .texualContainer .subText2 strong {
-  color: #07498E;
+  color: #07498e;
 }
 
 .LoanbabaContainer .rightSection .texualContainer .losContainer {
@@ -179,27 +180,27 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  margin-top: 2.29167rem;
+  margin-top: 2.29167vw;
 }
 
 .LoanbabaContainer .rightSection .texualContainer .losContainer .losHeader {
-  margin-right: 0.69444rem;
+  margin-right: 0.69444vw;
   color: #000000;
-  font-size: 1.11111rem;
+  font-size: 1.11111vw;
 }
 
 .LoanbabaContainer .rightSection .texualContainer .losContainer .losNumber {
-  width: 7.63889rem;
-  height: 2.22222rem;
-  background-color: #535AD1;
-  color: #FFFFFF;
-  padding: 0.41667rem 0.90278rem 0.48611rem 0.90278rem;
+  width: 7.63889vw;
+  height: 2.22222vw;
+  background-color: #535ad1;
+  color: #ffffff;
+  padding: 0.41667vw 0.90278vw 0.48611vw 0.90278vw;
   text-align: center;
-  border-radius: 0.27778rem;
+  border-radius: 0.27778vw;
 }
 
 .LoanbabaContainer .rightSection .texualContainer .losContainer .copyIcon {
-  margin-left: 0.44167rem;
+  margin-left: 0.44167vw;
   cursor: pointer;
 }
 
@@ -207,30 +208,40 @@
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  width: 13.88889rem;
-  height: 3.47222rem;
-  border-radius: 2.29167rem;
+}
+
+.LoanbabaContainer .rightSection .texualContainer .trackStatus .statusBtn {
+  width: 13.88889vw;
+  height: 3.47222vw;
+  border-radius: 2.29167vw;
   background-color: #1c86fc;
+  text-align: center;
+  padding-top: 1.11111vw;
   cursor: pointer;
 }
 
-.LoanbabaContainer .rightSection .texualContainer .trackStatus .btnText {
-  font-size: 1.11111rem;
+.LoanbabaContainer .rightSection .texualContainer .trackStatus .statusBtn .btnText {
+  font-size: 1.11111vw;
   font-weight: 500;
   color: #fff;
+}
+
+.LoanbabaContainer .rightSection .texualContainer .trackStatus .statusText {
+  margin-left: 3.81944vw;
+  color: #727272;
+}
+
+.LoanbabaContainer .rightSection .texualContainer .trackStatus .statusText strong {
+  color: #07498e;
 }
 
 .LoanbabaContainer .rightSection .offerContainer {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  margin-left: 6.11111VW;
 }
 
 .LoanbabaContainer .rightSection .offerContainer .offerBox {
@@ -243,16 +254,16 @@
 }
 
 .LoanbabaContainer .rightSection .offerContainer .offerBox .offerText {
-  color: #07498E;
+  color: #07498e;
   font-size: 1.66667vw;
   margin-top: 0.34722vw;
 }
 
 .LoanbabaContainer .rightSection .offerBorder {
   width: 59.09722VW;
-  border: 1PX solid #D1D1D1;
+  border: 1px solid #d1d1d1;
   margin-top: 1.11111VW;
-  margin-left: 8.75VW;
+  margin-left: 2.63889VW;
 }
 
 .LoanbabaContainer .iconTextContainer {

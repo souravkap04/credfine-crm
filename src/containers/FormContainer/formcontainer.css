@@ -5,9 +5,9 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  margin: auto;
-  margin-top: 2.331rem;
-  width: 64.512rem;
+  margin-left: 2.63889vw;
+  margin-top: 2.56944vw;
+  width: 71.11111vw;
 }
 
 @media only screen and (max-width: 800px) {
@@ -17,9 +17,9 @@
 }
 
 .iconTextContainer .icon {
-  width: 2.394rem;
-  height: 2.394rem;
-  margin-right: 0.945rem;
+  width: 2.63889vw;
+  height: 2.63889vw;
+  margin-right: 1.04167vw;
 }
 
 .iconTextContainer .icon img {
@@ -30,17 +30,17 @@
 }
 
 .iconTextContainer .text {
-  font-size: 1.26rem;
+  font-size: 1.38889vw;
   font-weight: bold;
   color: #535ad1;
 }
 
 .formMainContainer {
   position: relative;
-  margin: auto;
-  margin-top: 2.016rem;
-  margin-bottom: 3.15rem;
-  width: 64.512rem;
+  margin-left: 2.63889vw;
+  margin-top: 2.22222vw;
+  margin-bottom: 3.47222vw;
+  width: 71.11111vw;
 }
 
 @media only screen and (max-width: 800px) {
@@ -52,10 +52,10 @@
 }
 
 .formMainContainer h3 {
-  font-size: 1.134rem;
+  font-size: 1.25vw;
   font-weight: 600;
   color: #727272;
-  margin-bottom: 1.575rem;
+  margin-bottom: 1.73611vw;
 }
 
 @media only screen and (max-width: 800px) {
@@ -71,7 +71,7 @@
   display: flex;
   -ms-flex-wrap: wrap;
       flex-wrap: wrap;
-  width: 50.4rem;
+  width: 55.55556vw;
 }
 
 @media only screen and (max-width: 800px) {
@@ -87,9 +87,9 @@
 }
 
 .formMainContainer .formContainer .textField {
-  width: 15.372rem;
-  margin-right: 1.26rem !important;
-  margin-bottom: 1.953rem !important;
+  width: 16.94444vw;
+  margin-right: 1.38889vw !important;
+  margin-bottom: 2.15278vw !important;
   margin-top: 0 !important;
 }
 
@@ -104,8 +104,8 @@
 
 .formMainContainer .formContainer .textField label {
   color: #07498e;
-  letter-spacing: 0.0252rem;
-  font-size: 0.9765rem;
+  letter-spacing: 0.02778vw;
+  font-size: 1.07639vw;
 }
 
 .formMainContainer .formContainer .textField label span {
@@ -124,7 +124,7 @@
 }
 
 .formMainContainer .formContainer .textField .MuiOutlinedInput-root {
-  height: 3.528rem;
+  height: 3.88889vw;
 }
 
 @media only screen and (max-width: 800px) {
@@ -142,7 +142,7 @@
 }
 
 .formMainContainer .formContainer .textField .MuiInputBase-input {
-  font-size: 1.008rem;
+  font-size: 1.11111vw;
 }
 
 @media only screen and (max-width: 800px) {
@@ -152,7 +152,7 @@
 }
 
 .formMainContainer .borderBottom {
-  width: 48.762rem;
+  width: 53.75vw;
   border-bottom: solid 1px #eaeaea;
 }
 
@@ -172,13 +172,13 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  width: 12.6rem;
-  height: 3.15rem;
-  border-radius: 2.079rem;
+  width: 13.88889vw;
+  height: 3.47222vw;
+  border-radius: 2.29167vw;
   background-color: #1cb980;
   cursor: pointer;
-  margin-top: 1.1655rem;
-  margin-left: 36.288rem;
+  margin-top: 1.28472vw;
+  margin-left: 40vw;
 }
 
 @media only screen and (max-width: 800px) {
@@ -192,7 +192,7 @@
 }
 
 .formMainContainer .saveButton .btnText {
-  font-size: 1.008rem;
+  font-size: 1.11111vw;
   font-weight: 500;
   color: #fff;
 }
@@ -204,10 +204,10 @@
 }
 
 .formMainContainer .saveButton .arrowIcon {
-  width: 1.008rem;
-  height: 1.008rem;
-  margin-left: 1.7325rem;
-  margin-top: -0.063rem;
+  width: 1.11111vw;
+  height: 1.11111vw;
+  margin-left: 1.90972vw;
+  margin-top: -0.06944vw;
 }
 
 @media only screen and (max-width: 800px) {
