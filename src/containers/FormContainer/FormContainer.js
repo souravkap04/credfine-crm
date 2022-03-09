@@ -16,7 +16,7 @@ export default function FormContainer(props) {
                     {props.children}
                 </div>
                 <div className="borderBottom"></div>
-                {props.isSaveNextButton ? <div className="saveButton" onClick={props.onClick}>
+                {props.isSaveNextButton ? <div className="saveButton" style={{backgroundColor: `${props.btnColor}`}} onClick={props.onClick}>
                     <div className="btnText">SAVE &amp; NEXT</div>
                     <div className="arrowIcon">
                         <img src={RightArrow} alt="" />

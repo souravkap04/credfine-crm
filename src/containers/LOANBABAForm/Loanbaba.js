@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './Loanbaba.css';
 import axios from 'axios';
-import Moment from 'moment';
 import { bankApi } from '../../global/bankingApis';
 import { useHistory, useParams } from 'react-router-dom';
+import { getProfileData } from "../../global/leadsGlobalData";
 import logo from '../../images/forms/loanbaba.png';
 import back from '../../images/forms/back.svg';
 import phoneCall from '../../images/forms/phoneCall.svg';
@@ -11,6 +11,7 @@ import { List, TextField } from '@material-ui/core';
 import FormContainer from '../FormContainer/FormContainer';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+import Checkbox from '@material-ui/core/Checkbox';
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -18,6 +19,7 @@ function Alert(props) {
 const Loanbaba = () => {
     const history = useHistory();
     const { leadid } = useParams();
+    const profileData = getProfileData();
     const [isPersonalDetail, setisPersonalDetail] = useState(true);
     const [isPersonalProgress, setisPersonalProgress] = useState(false);
     const [isApprovalStatus, setIsApprovalStatus] = useState(false);
@@ -38,7 +40,8 @@ const Loanbaba = () => {
         fetchLoanbabaData(leadid)
     }, [])
     const fetchLoanbabaData = async (leadId) => {
-        await axios.get(`${bankApi}/sendLeadPartner/${leadId}/2/0`)
+        const headers = { Authorization: `Token ${profileData.token}`};
+        await axios.get(`${bankApi}/sendLeadPartner/${leadId}/2/0`, {headers})
             .then((response) => {
                 setFullName(response.data.nameOnPan);
                 setMobileNo(response.data.phone);
@@ -90,8 +93,9 @@ const Loanbaba = () => {
             setIsError(true)
             return;
         }
+        const headers = { Authorization: `Token ${profileData.token}`};
         let items = {panNo:panCardNo,nameOnPan:fullName,phone:mobileNo,email:emailID,dateOfBirth:dob,city:city,salary:salary}
-        await axios.post(`${bankApi}/sendLeadPartner/${leadID}/2/0`, items)
+        await axios.post(`${bankApi}/sendLeadPartner/${leadID}/2/0`, items ,{headers})
             .then((response) => {
                 if (response.data.response.statusCode === '200') {
                     setAlertMessage(response.data.response.message)
@@ -133,8 +137,14 @@ const Loanbaba = () => {
             alertMessage('uniqueID Not Copied!')
         })
     }
-    const trackStatusHandler = () => {
-     //   console.log('trackStatusHandler');
+    const trackStatusHandler = async (leadID) => {
+        const headers = { Authorization: `Token ${profileData.token}`};  
+        await axios.get(`${bankApi}/leads/PartnerLeadTrack/${leadID}/2}`,{headers})
+            .then((response) => {
+            console.log("loan baba track status:"+response.data)
+            }).catch((error) => {
+                console.log(error);
+            })
     }
     const closeSnackbar = () => {
         setIsError(false);
@@ -222,7 +232,7 @@ const Loanbaba = () => {
                         </div>
                     </div>
                     <div className="offerBorder"></div>
-                    <FormContainer Name="Personal Details" isSaveNextButton={true} onClick={() => loanBabaPresonalDetailsHandler(leadid)}>
+                    <FormContainer Name="Personal Details" btnColor='#1C86FC' isSaveNextButton={true} onClick={() => loanBabaPresonalDetailsHandler(leadid)}>
                         <TextField
                             className="textField"
                             id="outlined-full-width"
@@ -339,6 +349,10 @@ const Loanbaba = () => {
                             value={emailID}
                             onChange={(e) => setEmailID(e.target.value)}
                         />
+                        <div className="checkboxContainer">
+                        <Checkbox className="check" />
+                        <p>By submitting I provide my consent to retrieve my credit information from Credit Bureaus including CIBIL to check eligibility for this application. I understand that this may impact my credit score.</p>
+                    </div>
                     </FormContainer>
                 </div>}
                 {isApprovalStatus &&
@@ -357,7 +371,7 @@ const Loanbaba = () => {
                         <hr />
                         <div className='trackStatus'>
                         <div className="statusBtn">
-                            <div className="btnText" onClick={trackStatusHandler}>TRACK STATUS</div>
+                            <div className="btnText" onClick={() => trackStatusHandler(leadid)}>TRACK STATUS</div>
                         </div>
                         <div className='statusText'>or email us with the Reference No:<br/><strong>info@credfine.com</strong></div>
                         </div>

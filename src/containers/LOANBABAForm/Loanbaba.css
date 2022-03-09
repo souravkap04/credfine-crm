@@ -266,6 +266,27 @@
   margin-left: 2.63889VW;
 }
 
+.LoanbabaContainer .rightSection .checkboxContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+}
+
+.LoanbabaContainer .rightSection .checkboxContainer .check {
+  margin-top: -0.34722rem;
+  margin-left: -0.69444rem;
+}
+
+.LoanbabaContainer .rightSection .checkboxContainer p {
+  width: 49.51389rem;
+  font-size: 0.97222rem;
+  font-weight: 300;
+  color: #000;
+}
+
 .LoanbabaContainer .iconTextContainer {
   display: none;
 }

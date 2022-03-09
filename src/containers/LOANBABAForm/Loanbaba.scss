@@ -196,6 +196,20 @@ $desk: 100 / 1440;
             margin-top: 16 * $desk + VW;
             margin-left: 38 * $desk + VW;
         }
+        .checkboxContainer {
+            display: flex;
+            align-items: flex-start;
+            .check {
+                margin-top: -5 * $desk + rem;
+                margin-left: -10 * $desk + rem;
+            }
+            p {
+                width: 713 * $desk + rem;
+                font-size: 14 * $desk + rem;
+                font-weight: 300;
+                color: #000;
+            }
+        }
     }
     .iconTextContainer {
         display: none;

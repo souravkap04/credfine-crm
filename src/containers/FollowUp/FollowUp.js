@@ -277,7 +277,7 @@ export default function FollowUp(props) {
                             <CircularProgress size={100} thickness={3} />
                         </div> : LeadCount !== 0 ? (Object.keys(leadData).length !== 0 ?
                             <TableRow className={classes.oddEvenRow}>
-                                <TableCell className={classes.tabledata, classes.click}
+                                <TableCell className={clsx(classes.tabledata, classes.click)}
                                     onClick={() => routeChangeHAndler(leadData.lead.lead_crm_id)}
                                 >{leadData.lead.lead_crm_id} </TableCell>
                                 <TableCell className={classes.tabledata}>{leadData.lead.name ? leadData.lead.name : 'NA'}</TableCell>
