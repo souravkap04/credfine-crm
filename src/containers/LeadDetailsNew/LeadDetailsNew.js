@@ -568,7 +568,7 @@ export default function LeadDetailsNew(props) {
     }
     const options = subStatusHandler();
     const statusUpdateHandler = async (id) => {
-        if (status === 'STB') {
+        if (status === 'STB' && subStatus !== 'STB') {
             let data = [...STBError];
             if (appID === "") data[0] = true;
             if (bankNBFC === "") data[1] = true;
@@ -2783,6 +2783,7 @@ export default function LeadDetailsNew(props) {
                                         <option value="INCRED">INCRED</option>
                                         <option value="HERO_Fincorp">HERO Fincorp</option>
                                         <option value="Paysense">Paysense</option>
+                                        <option value="Loanbaba">Loanbaba</option>
                                         <option value="Others">Others</option>
                                     </TextField>
                                 </Grid>
