@@ -68,6 +68,26 @@
   background-color: #eb5757;
 }
 
+.guideContainer .searchField {
+  margin-left: 1.80556vw;
+}
+
+.guideContainer .searchField .MuiOutlinedInput-root {
+  height: 2.77778vw;
+}
+
+.guideContainer .searchField .MuiOutlinedInput-notchedOutline {
+  border: 2px solid #c5cee0;
+}
+
+.guideContainer .searchField .MuiInputAdornment-root {
+  opacity: 0.6;
+}
+
+.guideContainer .searchField .MuiInputBase-input {
+  font-size: 1.11111vw;
+}
+
 .menuItem {
   color: #fff !important;
   font-size: 13px;

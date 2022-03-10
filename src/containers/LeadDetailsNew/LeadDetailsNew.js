@@ -6,6 +6,14 @@ import baseUrl from "../../global/api";
 import { haloocomNoidaDialerApi, haloocomMumbaiDialerApi } from "../../global/callApi";
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import IconButton from "@material-ui/core/IconButton";
+import Toolbar from '@material-ui/core/Toolbar';
 import MuiAccordion from '@material-ui/core/Accordion';
 import MuiAccordionSummary from '@material-ui/core/AccordionSummary';
 import MuiAccordionDetails from '@material-ui/core/AccordionDetails';
@@ -15,9 +23,10 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import PersonIcon from '@material-ui/icons/Person';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import { Button } from '@material-ui/core';
+import { Button, Dialog, DialogContent, DialogTitle } from '@material-ui/core';
 import CallIcon from '@material-ui/icons/Call';
 import SendIcon from '@material-ui/icons/Send';
+import CloseIcon from '@material-ui/icons/Close';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Checkbox from '@material-ui/core/Checkbox';
 import { ListGroup } from 'react-bootstrap';
@@ -34,6 +43,10 @@ import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import moment from 'moment';
 import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable'
+import { Column } from 'jspdf-react';
+import EligibilityCalculator from '../EligibilityCalculator/EligibilityCalculator';
+var submitCount = 0;
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -53,11 +66,52 @@ const useStyles = makeStyles({
         opacity: '1'
     },
     headerText: {
-        // fontFamily: 'Lato',
         fontSize: '17px',
         fontWeight: '400',
         letterSpacing: '0.4px'
-    }
+    },
+    container: {
+        overflow: "auto",
+        marginTop: "10px",
+        maxHeight: '375px'
+    },
+    popupContainer: {
+        overflow: "auto",
+        marginTop: "10px",
+        maxHeight: '685px'
+    },
+    table: {
+        width: "100%",
+    },
+    tableheading: {
+        backgroundColor: "#8f9bb3",
+        color: "#ffffff",
+        fontSize: "14px",
+        whiteSpace: 'nowrap'
+    },
+    tabledata: {
+        padding: "15px",
+        fontSize: "12px",
+        overflowWrap: "break-word",
+    },
+    oddEvenRow: {
+        "&:nth-of-type(odd)": {
+            backgroundColor: "#f7f9fc",
+        },
+        "&:nth-of-type(even)": {
+            backgroundColor: "#fff",
+        },
+    },
+    emptydata: {
+        position: "relative",
+        left: "26rem",
+        fontSize: "12px",
+        whiteSpace: 'nowrap'
+    },
+    click: {
+        cursor: "pointer",
+        color: "blue",
+    },
 });
 const Accordion = withStyles({
     root: {
@@ -116,6 +170,19 @@ export default function LeadDetailsNew(props) {
     const handleChange = (panel) => (event, newExpanded) => {
         setExpanded(newExpanded ? panel : false);
     };
+    const [journeyStatus, setjourneyStatus] = useState('');
+    const handleJourneyStatusChange = (name) => {
+        setjourneyStatus(name ? name : false);
+        if (name === 'leadHistory') {
+            getLeadHistoryData();
+        }
+        if (name === 'leadJourney') {
+            getLeadJourneyData();
+        }
+        if (name === 'dispositionHistory') {
+            getDispositionHistoryData();
+        }
+    };
     const [openCalculate, setopenCalculate] = useState(false);
     const openCalculator = () => {
         setopenCalculate(true);
@@ -156,7 +223,7 @@ export default function LeadDetailsNew(props) {
     const [yearsInCurrentCity, setYearsInCurrentCity] = useState("");
     const [gender, setGender] = useState("");
     const [tenure, setTenure] = useState("");
-    const [requiredRoi,setRequiredRoi] = useState("");
+    const [requiredRoi, setRequiredRoi] = useState("");
     const [Roi, setRoi] = useState('');
     const [fatherName, setFatherName] = useState("");
     const [motherName, setMotherName] = useState("");
@@ -176,9 +243,9 @@ export default function LeadDetailsNew(props) {
     const [permanentResidentType, setPermanentResidentType] = useState("");
     const [permanentAddressVintage, setPermanentAddressVintage] = useState();
     const [grossIncome, setGrossIncome] = useState("");
-    const [officeAddress1,setOfficeAddress1] = useState("");
-    const [officeAddress2,setOfficeAddress2] = useState("");
-    const [officeAddress3,setOfficeAddress3] = useState("");
+    const [officeAddress1, setOfficeAddress1] = useState("");
+    const [officeAddress2, setOfficeAddress2] = useState("");
+    const [officeAddress3, setOfficeAddress3] = useState("");
     const [officePincode, setOfficePincode] = useState("");
     const [officeCity, setOfficeCity] = useState("");
     const [officeStates, setOfficeStates] = useState("");
@@ -187,19 +254,19 @@ export default function LeadDetailsNew(props) {
     const [ref1FirstName, setRef1FirstName] = useState("");
     const [ref1LastName, setRef1LastName] = useState("");
     const [ref1MobileNo, setRef1MobileNo] = useState("");
-    const [ref1Address1,setRef1Address1] = useState('');
-    const [ref1Address2,setRef1Address2] = useState('');
-    const [ref1Pincode,setRef1Pincode] = useState('');
-    const [ref1City,setRef1City] = useState('');
-    const [ref1States,setRef1States] = useState('');
+    const [ref1Address1, setRef1Address1] = useState('');
+    const [ref1Address2, setRef1Address2] = useState('');
+    const [ref1Pincode, setRef1Pincode] = useState('');
+    const [ref1City, setRef1City] = useState('');
+    const [ref1States, setRef1States] = useState('');
     const [ref2FirstName, setRef2FirstName] = useState("");
     const [ref2LastName, setRef2LastName] = useState("");
     const [ref2MobileNo, setRef2MobileNo] = useState("");
-    const [ref2Address1,setRef2Address1] = useState('');
-    const [ref2Address2,setRef2Address2] = useState('');
-    const [ref2Pincode,setRef2Pincode] = useState('');
-    const [ref2City,setRef2City] = useState('');
-    const [ref2States,setRef2States] = useState('');
+    const [ref2Address1, setRef2Address1] = useState('');
+    const [ref2Address2, setRef2Address2] = useState('');
+    const [ref2Pincode, setRef2Pincode] = useState('');
+    const [ref2City, setRef2City] = useState('');
+    const [ref2States, setRef2States] = useState('');
     const [status, setStatus] = useState('');
     const [subStatus, setSubStatus] = useState([]);
     const [loanType, setLoanType] = useState("");
@@ -239,9 +306,21 @@ export default function LeadDetailsNew(props) {
     const [isCopy, setisCopy] = useState(false);
     const [disbursedDate, setdisbursedDate] = useState(new Date());
     const [disbursedError, setdisbursedError] = useState([false, false]);
-    const [colorRed, setcolorRed] = useState([false, false, false, false, false, false,false]);
+    const [colorRed, setcolorRed] = useState([false, false, false, false, false, false, false]);
     const [isAutoDialerEnd, setIsAutoDialerEnd] = useState(false);
     const [checked, setChecked] = React.useState(false);
+    const [checkEligibility, setCheckEligibility] = useState(false);
+    const [leadHistoryData, setLeadHistoryData] = useState([]);
+    const [leadJourneyData, setLeadJourneyData] = useState([]);
+    const [dispositionHistoryData, setDispositionHistoryData] = useState([]);
+    const [isLogPopup, setIsLogPopup] = useState(false);
+
+    const openEligibility = () => {
+        setCheckEligibility(true);
+    }
+    const closeEligibility = () => {
+        setCheckEligibility(false);
+    }
     let statusData = getStatusData();
     let { leadid } = useParams();
     let history = useHistory();
@@ -279,114 +358,114 @@ export default function LeadDetailsNew(props) {
         const fetchLeadDetaile = async (leadId) => {
             setisLoading(true)
             let headers = { 'Authorization': `Token ${profileData.token}` }
-                await axios
-                    .get(`${baseUrl}/leads/lead_detail/${leadId}`, { headers })
-                    .then((response) => {
-                        let getDobfromApi = response.data.lead_data.data.dob;
-                        let dateRegex = /^\d{4}-\d{2}-\d{2}$/.test(getDobfromApi);
-                        if (dateRegex) {
-                            setDate(response.data.lead_data.data.dob);
-                        } else {
-                            let changeDateFormat = moment(getDobfromApi, 'DDMMYYYY').format("YYYY-MM-DD");
-                            setDate(changeDateFormat);
-                        }
-                        setMobileNo(response.data.lead_data.phone_no);
-                        setStatus(response.data.lead_data.status);
-                        setSubStatus(response.data.lead_data.sub_status);
-                        setLeadId(response.data.lead_data.lead_crm_id);
-                        setLoanAmount(response.data.lead_data.loan_amount);
-                        setMonthlyIncome(response.data.lead_data["data"].monthly_income);
-                        setCurrentCompany(response.data.lead_data['data'].current_company);
-                        setPincode(response.data.lead_data["data"].residential_pincode);
-                        setcity(response.data.lead_data["data"].city);
-                        setstates(response.data.lead_data["data"].state);
-                        setname(response.data.lead_data.name);
-                        setCompanyName(response.data.lead_data["data"].current_company_name);
-                        setLoanType(response.data.lead_data.loan_type);
-                        setSource(response.data.lead_data.source);
-                        setPancardNo(response.data.lead_data.data.pan_no);
-                        setEmploymentType(response.data.lead_data["data"].employment_type)
-                        setTotalWorkExp(response.data.eligibility_data.total_work_exp);
-                        setCurrentWorkExp(response.data.eligibility_data.current_work_exp);
-                        setEmail(response.data.eligibility_data.email_id);
-                        setDesignation(response.data.eligibility_data.designation);
-                        setCurrentEMI(response.data.eligibility_data.current_emi);
-                        setCreditCardOutstanding(response.data.eligibility_data.credit_card_outstanding);
-                        setcreditCardbalanceTransfer(response.data.lead_data["data"].credi_card_balance_transfer)
-                        setSalaryCreditMode(response.data.eligibility_data.salary_mode);
-                        setSalaryBankAcc(response.data.eligibility_data.salary_bank);
-                        setCurrentResidentType(response.data.eligibility_data.residence_type);
-                        setYearsInCurrentCity(response.data.eligibility_data.no_of_years_current_city);
-                        setappID(response.data.lead_extra_details.app_id);
-                        setbankNBFC(response.data.lead_extra_details.bank);
-                        setscheme(response.data.lead_extra_details.scheme);
-                        setdisbursedDate(response.data.lead_extra_details.disbursed_date)
-                        setRoi(response.data.lead_extra_details.roi);
-                        setRequiredRoi(response.data.lead_data.data.req_roi)
-                        setGender(response.data.lead_data.data.gender);
-                        setTenure(response.data.lead_data.data.tenure);
-                        setFatherName(response.data.lead_data.data.father_name);
-                        setMotherName(response.data.lead_data.data.mother_name);
-                        setMaritalStatus(response.data.lead_data.data.marital_status);
-                        setNoOfDependent(response.data.lead_data.data.no_of_dependence);
-                        setAdhaarNo(response.data.lead_data.data.adhaar_no);
-                        setAddressOne(response.data.lead_data.data.address_one);
-                        setAddressTwo(response.data.lead_data.data.address_two);
-                        setAddressThree(response.data.lead_data.data.address_three);
-                        setCurrentAddressVintage(response.data.lead_data.data.current_address_vintage);
-                        setPermanentAddressOne(response.data.lead_data.data.permanent_address_one);
-                        setPermanentAddressTwo(response.data.lead_data.data.permanent_address_two);
-                        setPermanentAddressThree(response.data.lead_data.data.permanent_address_three);
-                        setPermanentCity(response.data.lead_data.data.permanent_city);
-                        setPermanentStates(response.data.lead_data.data.permanent_state);
-                        setPermanentPincode(response.data.lead_data.data.permanent_pincode);
-                        setPermanentResidentType(response.data.lead_data.data.permanent_resident_Type);
-                        setPermanentAddressVintage(response.data.lead_data.data.permanent_address_vintage);
-                        setGrossIncome(response.data.lead_data.data.gross_income);
-                        setOfficeAddress1(response.data.lead_data.data.office_address_one);
-                        setOfficeAddress2(response.data.lead_data.data.office_address_two);
-                        setOfficeAddress3(response.data.lead_data.data.office_address_three);
-                        setOfficeCity(response.data.lead_data.data.office_city);
-                        setOfficeStates(response.data.lead_data.data.office_state);
-                        setOfficePincode(response.data.lead_data.data.office_pincode);
-                        setOfficialMailid(response.data.lead_data.data.official_mail);
-                        setLandlineNo(response.data.lead_data.data.landline_no);
-                        setNoOfCreditCard(response.data.lead_data.data.no_of_creditcard);
-                        setRef1FirstName(response.data.lead_data.data.ref1_first_name);
-                        setRef1LastName(response.data.lead_data.data.ref1_last_name);
-                        setRef1MobileNo(response.data.lead_data.data.ref1_mobile_no);
-                        setRef1Address1(response.data.lead_data.data.ref1_address1);
-                        setRef1Address2(response.data.lead_data.data.ref1_address2)
-                        setRef1Pincode(response.data.lead_data.data.ref1_pincode);
-                        setRef1City(response.data.lead_data.data.ref1_city);
-                        setRef1States(response.data.lead_data.data.ref1_state);
-                        setRef2Address1(response.data.lead_data.data.ref2_address1);
-                        setRef2Address2(response.data.lead_data.data.ref2_address2);
-                        setRef2Pincode(response.data.lead_data.data.ref2_pincode);
-                        setRef2City(response.data.lead_data.data.ref2_city);
-                        setRef2States(response.data.lead_data.data.ref2_state);
-                        setRef2FirstName(response.data.lead_data.data.ref2_first_name);
-                        setRef2LastName(response.data.lead_data.data.ref2_last_name);
-                        setRef2MobileNo(response.data.lead_data.data.ref2_mobile_no);
-                        setisLoading(false)
-                        if (response.data.lead_data.lead_crm_id !== '' && response.data.lead_data.loan_type !== '' && response.data.lead_data.loan_amount !== '' && response.data.lead_data.name !== '' && response.data.lead_data["data"].dob !== '' && response.data.eligibility_data.pan_no !== '' && response.data.eligibility_data.email_id !== '' && response.data.lead_data.phone_no !== '') {
-                            setcolorTick(true)
-                        }
-                        if (response.data.lead_data["data"].residential_pincode !== '' && response.data.lead_data["data"].city !== '' && response.data.lead_data["data"].state !== '' && response.data.eligibility_data.residence_type !== '') {
-                            setcolorTick2(true)
-                        }
-                        if (response.data.lead_data["data"].permanent_pincode !== '' && response.data.lead_data["data"].permanent_city !== '' && response.data.lead_data['data'].permanent_state!== '' && response.data.lead_data['data'].permanent_resident_Type) {
-                            setcolorTick3(true)
-                        }
-                        if (response.data.lead_data["data"].employment_type !== '' && response.data.lead_data["data"].current_company_name !== '' && response.data.eligibility_data.designation !== '' && response.data.eligibility_data.current_work_exp !== '' && response.data.eligibility_data.total_work_exp !== '' && response.data.lead_data["data"].monthly_income !== '' && response.data.eligibility_data.salary_mode !== '' && response.data.eligibility_data.salary_bank !== '') {
-                            setcolorTick4(true)
-                        }
-                        if (response.data.eligibility_data.current_emi !== '') {
-                            setcolorTick5(true)
-                        }
-                    }).catch((error)=>{
-                        console.log(error)
-                    });
+            await axios
+                .get(`${baseUrl}/leads/lead_detail/${leadId}`, { headers })
+                .then((response) => {
+                    let getDobfromApi = response.data.lead_data.data.dob;
+                    let dateRegex = /^\d{4}-\d{2}-\d{2}$/.test(getDobfromApi);
+                    if (dateRegex) {
+                        setDate(response.data.lead_data.data.dob);
+                    } else {
+                        let changeDateFormat = moment(getDobfromApi, 'DDMMYYYY').format("YYYY-MM-DD");
+                        setDate(changeDateFormat);
+                    }
+                    setMobileNo(response.data.lead_data.phone_no);
+                    setStatus(response.data.lead_data.status);
+                    setSubStatus(response.data.lead_data.sub_status);
+                    setLeadId(response.data.lead_data.lead_crm_id);
+                    setLoanAmount(response.data.lead_data.loan_amount);
+                    setMonthlyIncome(response.data.lead_data["data"].monthly_income);
+                    setCurrentCompany(response.data.lead_data['data'].current_company);
+                    setPincode(response.data.lead_data["data"].residential_pincode);
+                    setcity(response.data.lead_data["data"].city);
+                    setstates(response.data.lead_data["data"].state);
+                    setname(response.data.lead_data.name);
+                    setCompanyName(response.data.lead_data["data"].current_company_name);
+                    setLoanType(response.data.lead_data.loan_type);
+                    setSource(response.data.lead_data.source);
+                    setPancardNo(response.data.lead_data.data.pan_no);
+                    setEmploymentType(response.data.lead_data["data"].employment_type)
+                    setTotalWorkExp(response.data.eligibility_data.total_work_exp);
+                    setCurrentWorkExp(response.data.eligibility_data.current_work_exp);
+                    setEmail(response.data.eligibility_data.email_id);
+                    setDesignation(response.data.eligibility_data.designation);
+                    setCurrentEMI(response.data.eligibility_data.current_emi);
+                    setCreditCardOutstanding(response.data.eligibility_data.credit_card_outstanding);
+                    setcreditCardbalanceTransfer(response.data.lead_data["data"].credi_card_balance_transfer)
+                    setSalaryCreditMode(response.data.eligibility_data.salary_mode);
+                    setSalaryBankAcc(response.data.eligibility_data.salary_bank);
+                    setCurrentResidentType(response.data.eligibility_data.residence_type);
+                    setYearsInCurrentCity(response.data.eligibility_data.no_of_years_current_city);
+                    setappID(response.data.lead_extra_details.app_id);
+                    setbankNBFC(response.data.lead_extra_details.bank);
+                    setscheme(response.data.lead_extra_details.scheme);
+                    setdisbursedDate(response.data.lead_extra_details.disbursed_date)
+                    setRoi(response.data.lead_extra_details.roi);
+                    setRequiredRoi(response.data.lead_data.data.req_roi)
+                    setGender(response.data.lead_data.data.gender);
+                    setTenure(response.data.lead_data.data.tenure);
+                    setFatherName(response.data.lead_data.data.father_name);
+                    setMotherName(response.data.lead_data.data.mother_name);
+                    setMaritalStatus(response.data.lead_data.data.marital_status);
+                    setNoOfDependent(response.data.lead_data.data.no_of_dependence);
+                    setAdhaarNo(response.data.lead_data.data.adhaar_no);
+                    setAddressOne(response.data.lead_data.data.address_one);
+                    setAddressTwo(response.data.lead_data.data.address_two);
+                    setAddressThree(response.data.lead_data.data.address_three);
+                    setCurrentAddressVintage(response.data.lead_data.data.current_address_vintage);
+                    setPermanentAddressOne(response.data.lead_data.data.permanent_address_one);
+                    setPermanentAddressTwo(response.data.lead_data.data.permanent_address_two);
+                    setPermanentAddressThree(response.data.lead_data.data.permanent_address_three);
+                    setPermanentCity(response.data.lead_data.data.permanent_city);
+                    setPermanentStates(response.data.lead_data.data.permanent_state);
+                    setPermanentPincode(response.data.lead_data.data.permanent_pincode);
+                    setPermanentResidentType(response.data.lead_data.data.permanent_resident_Type);
+                    setPermanentAddressVintage(response.data.lead_data.data.permanent_address_vintage);
+                    setGrossIncome(response.data.lead_data.data.gross_income);
+                    setOfficeAddress1(response.data.lead_data.data.office_address_one);
+                    setOfficeAddress2(response.data.lead_data.data.office_address_two);
+                    setOfficeAddress3(response.data.lead_data.data.office_address_three);
+                    setOfficeCity(response.data.lead_data.data.office_city);
+                    setOfficeStates(response.data.lead_data.data.office_state);
+                    setOfficePincode(response.data.lead_data.data.office_pincode);
+                    setOfficialMailid(response.data.lead_data.data.official_mail);
+                    setLandlineNo(response.data.lead_data.data.landline_no);
+                    setNoOfCreditCard(response.data.lead_data.data.no_of_creditcard);
+                    setRef1FirstName(response.data.lead_data.data.ref1_first_name);
+                    setRef1LastName(response.data.lead_data.data.ref1_last_name);
+                    setRef1MobileNo(response.data.lead_data.data.ref1_mobile_no);
+                    setRef1Address1(response.data.lead_data.data.ref1_address1);
+                    setRef1Address2(response.data.lead_data.data.ref1_address2)
+                    setRef1Pincode(response.data.lead_data.data.ref1_pincode);
+                    setRef1City(response.data.lead_data.data.ref1_city);
+                    setRef1States(response.data.lead_data.data.ref1_state);
+                    setRef2Address1(response.data.lead_data.data.ref2_address1);
+                    setRef2Address2(response.data.lead_data.data.ref2_address2);
+                    setRef2Pincode(response.data.lead_data.data.ref2_pincode);
+                    setRef2City(response.data.lead_data.data.ref2_city);
+                    setRef2States(response.data.lead_data.data.ref2_state);
+                    setRef2FirstName(response.data.lead_data.data.ref2_first_name);
+                    setRef2LastName(response.data.lead_data.data.ref2_last_name);
+                    setRef2MobileNo(response.data.lead_data.data.ref2_mobile_no);
+                    setisLoading(false)
+                    if (response.data.lead_data.lead_crm_id !== '' && response.data.lead_data.loan_type !== '' && response.data.lead_data.loan_amount !== '' && response.data.lead_data.name !== '' && response.data.lead_data["data"].dob !== '' && response.data.eligibility_data.pan_no !== '' && response.data.eligibility_data.email_id !== '' && response.data.lead_data.phone_no !== '') {
+                        setcolorTick(true)
+                    }
+                    if (response.data.lead_data["data"].residential_pincode !== '' && response.data.lead_data["data"].city !== '' && response.data.lead_data["data"].state !== '' && response.data.eligibility_data.residence_type !== '') {
+                        setcolorTick2(true)
+                    }
+                    if (response.data.lead_data["data"].permanent_pincode !== '' && response.data.lead_data["data"].permanent_city !== '' && response.data.lead_data['data'].permanent_state !== '' && response.data.lead_data['data'].permanent_resident_Type) {
+                        setcolorTick3(true)
+                    }
+                    if (response.data.lead_data["data"].employment_type !== '' && response.data.lead_data["data"].current_company_name !== '' && response.data.eligibility_data.designation !== '' && response.data.eligibility_data.current_work_exp !== '' && response.data.eligibility_data.total_work_exp !== '' && response.data.lead_data["data"].monthly_income !== '' && response.data.eligibility_data.salary_mode !== '' && response.data.eligibility_data.salary_bank !== '') {
+                        setcolorTick4(true)
+                    }
+                    if (response.data.eligibility_data.current_emi !== '') {
+                        setcolorTick5(true)
+                    }
+                }).catch((error) => {
+                    console.log(error)
+                });
         };
         fetchLeadDetaile(leadid);
     }, []);
@@ -484,7 +563,7 @@ export default function LeadDetailsNew(props) {
             setExpanded('panel6')
         }
         if (expanded === 'panel6') {
-            if (ref1FirstName !== '' && ref1LastName !== '' && ref1MobileNo !== '' && ref1Address1 !== '' && ref1Address2 !== '' && ref1Pincode !== '' ) {
+            if (ref1FirstName !== '' && ref1LastName !== '' && ref1MobileNo !== '' && ref1Address1 !== '' && ref1Address2 !== '' && ref1Pincode !== '') {
                 colorRed[5] = false;
                 setcolorTick6(true)
             } else {
@@ -493,7 +572,7 @@ export default function LeadDetailsNew(props) {
             setExpanded('panel7')
         }
         if (expanded === 'panel7') {
-            if (ref2FirstName !== '' && ref2LastName !== '' && ref2MobileNo !== '' && ref2Address1 !== '' && ref2Address2 !== '' && ref2Pincode !== '' ) {
+            if (ref2FirstName !== '' && ref2LastName !== '' && ref2MobileNo !== '' && ref2Address1 !== '' && ref2Address2 !== '' && ref2Pincode !== '') {
                 colorRed[6] = false;
                 setcolorTick7(true)
             } else {
@@ -505,19 +584,19 @@ export default function LeadDetailsNew(props) {
             dob: date, monthly_income: monthlyIncome, pan_no: pancardNo, current_company_name: companyName,
             residential_pincode: pincode, city: city, state: states, current_company: currentCompany,
             employment_type: employmentType, credi_card_balance_transfer: creditCardbalanceTransfer,
-            gender: gender,req_roi:requiredRoi, tenure: tenure, father_name: fatherName, mother_name: motherName, marital_status: maritalStatus,
+            gender: gender, req_roi: requiredRoi, tenure: tenure, father_name: fatherName, mother_name: motherName, marital_status: maritalStatus,
             adhaar_no: adhaarNo, no_of_dependence: noOfDependent, address_one: addressOne, address_two: addressTwo,
             address_three: addressThree, current_address_vintage: currentAddressVintage, permanent_address_one: permanentAddressOne,
             permanent_address_two: permanentAddressTwo, permanent_address_three: permanentAddressThree, permanent_pincode: permanentPincode,
             permanent_city: permanentCity, permanent_state: permanentStates, permanent_address_vintage: permanentAddressVintage,
-            gross_income: grossIncome,office_address_one:officeAddress1,office_address_two:officeAddress2,office_address_three:officeAddress3,
-             office_pincode: officePincode, office_city: officeCity, office_state: officeStates,
+            gross_income: grossIncome, office_address_one: officeAddress1, office_address_two: officeAddress2, office_address_three: officeAddress3,
+            office_pincode: officePincode, office_city: officeCity, office_state: officeStates,
             official_mail: officialMailid, landline_no: landlineNo, no_of_creditcard: noOfCreditCard, ref1_first_name: ref1FirstName,
-            ref1_last_name: ref1LastName, ref1_mobile_no: ref1MobileNo, ref1_address1:ref1Address1,ref1_address2:ref1Address2,
-            ref1_pincode:ref1Pincode,ref1_city:ref1City,ref1_state:ref1States,
-            ref2_first_name: ref2FirstName, ref2_last_name: ref2LastName,ref2_mobile_no: ref2MobileNo, permanent_resident_Type: permanentResidentType,
-            ref2_address1:ref2Address1,ref2_address2:ref2Address2,ref2_pincode:ref2Pincode,
-            ref2_city:ref2City,ref2_state:ref2States
+            ref1_last_name: ref1LastName, ref1_mobile_no: ref1MobileNo, ref1_address1: ref1Address1, ref1_address2: ref1Address2,
+            ref1_pincode: ref1Pincode, ref1_city: ref1City, ref1_state: ref1States,
+            ref2_first_name: ref2FirstName, ref2_last_name: ref2LastName, ref2_mobile_no: ref2MobileNo, permanent_resident_Type: permanentResidentType,
+            ref2_address1: ref2Address1, ref2_address2: ref2Address2, ref2_pincode: ref2Pincode,
+            ref2_city: ref2City, ref2_state: ref2States
         };
         let lead_data = {
             lead_crm_id: leadId, loan_amount: loanAmount,
@@ -589,7 +668,7 @@ export default function LeadDetailsNew(props) {
             if (loanAmount === '') colorRedError[0] = true;
             if (tenure === '') colorRedError[0] = true;
             if (requiredRoi === '') colorRedError[0] = true;
-            if (date === '' || pancardNo === '' || email === '' || leadId === '' || mobileNo === '' || loanType === '' || name === ''|| loanAmount === ''||tenure === ''||requiredRoi === '')  {
+            if (date === '' || pancardNo === '' || email === '' || leadId === '' || mobileNo === '' || loanType === '' || name === '' || loanAmount === '' || tenure === '' || requiredRoi === '') {
                 setcolorRed(colorRedError)
                 return;
             }
@@ -634,7 +713,7 @@ export default function LeadDetailsNew(props) {
                 setcolorRed(colorRedError)
                 return;
             }
-            
+
         }
         if (status === 'Valid Follow-Up' || status === 'Cold Follow-Up' || status === 'Hot Follow-Up' || (status === 'Punched' && subStatus === 'Eligible')) {
             let followData = [...followUpDateError];
@@ -660,6 +739,19 @@ export default function LeadDetailsNew(props) {
                 .then((response) => {
                     if (response.status === 200) {
                         setIsStatus(true)
+                        if(history.location.pathname === `/dashboards/leads/edit/${leadid}`  && (profileData.campaign_category === 'ELITE_CUSTOMER_MUMBAI' || profileData.campaign_category === 'ELITE_CUSTOMER_NOIDA')){
+                            submitCount = submitCount + 1;
+                            if(submitCount > 14){
+                                localStorage.removeItem('user_info');
+                                localStorage.removeItem('status_info');
+                                localStorage.removeItem('notification');
+                                localStorage.removeItem('callHangUp');
+                                localStorage.removeItem('EMI')
+                                localStorage.removeItem('Interest')
+                                localStorage.removeItem('LoanAmount')
+                                localStorage.removeItem('LoanTenure')
+                                }
+                        }
                     }
                     if (location.pathname === `/dashboards/myleads/edit/${leadid}`) {
                         setTimeout(() => {
@@ -880,54 +972,54 @@ export default function LeadDetailsNew(props) {
     }
     const downloadPdfHandler = () => {
         const doc = new jsPDF("p", "pt", "a4");
-        doc.autoTable({ 
-            html: '#leadDetails-table' ,
-            theme:"grid",
+        doc.autoTable({
+            html: '#leadDetails-table',
+            theme: "grid",
             styles: {
                 overflow: 'linebreak',
                 columnWidth: 260,
             },
-            didDrawCell:function(data){
+            didDrawCell: function (data) {
                 doc.setFontSize(15);
                 doc.setTextColor(0);
-                doc.text("Customer Personal And Loan Details", data.settings.margin.left, 22);            
-             },
+                doc.text("Customer Personal And Loan Details", data.settings.margin.left, 22);
+            },
         })
-        doc.autoTable({ 
+        doc.autoTable({
             html: '#leadDetails-table1',
-            theme:'grid',
+            theme: 'grid',
             styles: {
                 overflow: 'linebreak',
                 columnWidth: 260,
             },
         })
         doc.autoTable({
-             html: '#leadDetails-table2',
-            theme:'grid',
+            html: '#leadDetails-table2',
+            theme: 'grid',
             styles: {
                 overflow: 'linebreak',
                 columnWidth: 260,
             },
         })
         doc.autoTable({
-             html: '#leadDetails-table3',
-            theme:'grid',
+            html: '#leadDetails-table3',
+            theme: 'grid',
             styles: {
                 overflow: 'linebreak',
                 columnWidth: 260,
             },
         })
         doc.autoTable({
-             html: '#leadDetails-table4',
-            theme:'grid',
+            html: '#leadDetails-table4',
+            theme: 'grid',
             styles: {
                 overflow: 'linebreak',
                 columnWidth: 260,
             },
         })
         doc.autoTable({
-             html: '#leadDetails-table5',
-            theme:'grid',
+            html: '#leadDetails-table5',
+            theme: 'grid',
             styles: {
                 overflow: 'linebreak',
                 columnWidth: 260,
@@ -935,12 +1027,12 @@ export default function LeadDetailsNew(props) {
         })
         doc.autoTable({
             html: '#leadDetails-table6',
-           theme:'grid',
-           styles: {
-               overflow: 'linebreak',
-               columnWidth: 260,
-           },
-       })
+            theme: 'grid',
+            styles: {
+                overflow: 'linebreak',
+                columnWidth: 260,
+            },
+        })
         doc.save(`${name}-${leadId}.pdf`);
     }
     const checkboxHandler = (e) => {
@@ -956,8 +1048,48 @@ export default function LeadDetailsNew(props) {
             setPermanentAddressVintage(currentAddressVintage);
         }
     }
+    const getDispositionHistoryData = async () => {
+        const headers = {
+            'Authorization': `Token ${profileData.token}`,
+        };
+        await axios.get(`${baseUrl}/leads/LeadStatusHistory/${leadid}`, { headers })
+            .then((response) => {
+                setDispositionHistoryData(response.data.lead_history);
+            }).catch((error) => {
+                console.log(error);
+            })
+    }
+    const getLeadJourneyData = async () => {
+        const headers = {
+            'Authorization': `Token ${profileData.token}`,
+        };
+        await axios.get(`${baseUrl}/leads/LeadHistory/${leadid}`, { headers })
+            .then((response) => {
+                setLeadJourneyData(response.data.lead_history);
+            }).catch((error) => {
+                console.log(error);
+            })
+    }
+    const getLeadHistoryData = async () => {
+        const headers = {
+            'Authorization': `Token ${profileData.token}`,
+        };
+        await axios.get(`${baseUrl}/leads/LeadLoanHistory/${leadid}`, { headers })
+            .then((response) => {
+                setLeadHistoryData(response.data.lead_loan_history)
+            }).catch((error) => {
+                console.log(error);
+            })
+    }
+    const changeLogHandler = () => {
+        setIsLogPopup(true);
+    }
+    const closeLogPopup = () => {
+        setIsLogPopup(false);
+    }
     return (
-        <PageLayerSection isDisplaySearchBar={true} pageTitle="Lead Details" className={classes.scrollEnable} offerButton={true} isWhatsapp={true} whatsappNumber={mobileNo} endAutoDialerBtn={true} endAutoDialerClick={() => endAutoDialerBtnHandler()} ActualEmiCalculate={openCalculator} isDownloadPdf={true} downloadPdf={() => downloadPdfHandler()} isShareThroughEmail={true} emailId={email}>
+        <PageLayerSection isDisplaySearchBar={true} pageTitle="Lead Details" className={classes.scrollEnable} offerButton={true} isWhatsapp={true} whatsappNumber={mobileNo} endAutoDialerBtn={true} endAutoDialerClick={() => endAutoDialerBtnHandler()} ActualEmiCalculate={openCalculator} isDownloadPdf={true} downloadPdf={() => downloadPdfHandler()} isShareThroughEmail={true} emailId={email} ActualEligibilityCalculate={openEligibility}>
+            <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility} />
             <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
             {/* Errors SnackBars Start */}
             <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={hangUpSnacks} autoHideDuration={1500} onClose={disableHangUpSnacks}>
@@ -1387,7 +1519,7 @@ export default function LeadDetailsNew(props) {
                                             required: true
                                         }}
                                         inputProps={{
-                                            maxLength:30
+                                            maxLength: 30
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -1569,7 +1701,7 @@ export default function LeadDetailsNew(props) {
                                             required: true
                                         }}
                                         inputProps={{
-                                            maxLength:30
+                                            maxLength: 30
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -1606,7 +1738,7 @@ export default function LeadDetailsNew(props) {
                                             required: true
                                         }}
                                         inputProps={{
-                                            maxLength:30
+                                            maxLength: 30
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -1935,7 +2067,7 @@ export default function LeadDetailsNew(props) {
                                             shrink: true,
                                         }}
                                         inputProps={{
-                                            maxLength:30
+                                            maxLength: 30
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -1970,7 +2102,7 @@ export default function LeadDetailsNew(props) {
                                             shrink: true,
                                         }}
                                         inputProps={{
-                                            maxLength:30
+                                            maxLength: 30
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -2314,12 +2446,12 @@ export default function LeadDetailsNew(props) {
                                             shrink: true,
                                         }}
                                         inputProps={{
-                                            maxLength:30
+                                            maxLength: 30
                                         }}
                                         variant="outlined"
                                         size="small"
                                         value={ref1Address1}
-                                        onChange={(e) =>setRef1Address1(e.target.value)}
+                                        onChange={(e) => setRef1Address1(e.target.value)}
                                     />
                                 </Grid>
                                 <Grid lg={4}>
@@ -2354,7 +2486,7 @@ export default function LeadDetailsNew(props) {
                                         variant="outlined"
                                         size="small"
                                         value={ref1Pincode}
-                                        onChange={(e)=>getRelativesPincodeHandler(e)}
+                                        onChange={(e) => getRelativesPincodeHandler(e)}
                                     />
                                 </Grid>
                                 <Grid lg={4}>
@@ -2390,11 +2522,11 @@ export default function LeadDetailsNew(props) {
                                         disabled
                                     />
                                 </Grid>
-                                    <Grid lg={4} style={{ display: 'flex', alignItems: 'center' }}>
-                                        <Button className="saveAndNextBtn" color='primary' variant='contained' onClick={() => updateLeadDetails(leadid)}>SAVE &amp; NEXT</Button>
-                                    </Grid>
+                                <Grid lg={4} style={{ display: 'flex', alignItems: 'center' }}>
+                                    <Button className="saveAndNextBtn" color='primary' variant='contained' onClick={() => updateLeadDetails(leadid)}>SAVE &amp; NEXT</Button>
+                                </Grid>
                             </Grid>
-                        </AccordionDetails>                
+                        </AccordionDetails>
                     </Accordion>
                     <Accordion square expanded={expanded === 'panel7'} onChange={handleChange('panel7')}>
                         <AccordionSummary expandIcon={<ArrowRightIcon />} expanded={expanded === 'panel7'} onChange={handleChange('panel7')} aria-controls="panel7d-content" id="panel7-header">
@@ -2470,12 +2602,12 @@ export default function LeadDetailsNew(props) {
                                             shrink: true,
                                         }}
                                         inputProps={{
-                                            maxLength:30
+                                            maxLength: 30
                                         }}
                                         variant="outlined"
                                         size="small"
                                         value={ref2Address1}
-                                        onChange={(e) =>setRef2Address1(e.target.value)}
+                                        onChange={(e) => setRef2Address1(e.target.value)}
                                     />
                                 </Grid>
                                 <Grid lg={4}>
@@ -2510,7 +2642,7 @@ export default function LeadDetailsNew(props) {
                                         variant="outlined"
                                         size="small"
                                         value={ref2Pincode}
-                                        onChange={(e)=>getFriendnsPincodeHandler(e)}
+                                        onChange={(e) => getFriendnsPincodeHandler(e)}
                                     />
                                 </Grid>
                                 <Grid lg={4}>
@@ -2546,11 +2678,11 @@ export default function LeadDetailsNew(props) {
                                         disabled
                                     />
                                 </Grid>
-                                    <Grid lg={4} style={{ display: 'flex', alignItems: 'center' }}>
-                                        <Button className="saveAndNextBtn" color='primary' variant='contained' onClick={() => updateLeadDetails(leadid)}>SAVE</Button>
-                                    </Grid>
+                                <Grid lg={4} style={{ display: 'flex', alignItems: 'center' }}>
+                                    <Button className="saveAndNextBtn" color='primary' variant='contained' onClick={() => updateLeadDetails(leadid)}>SAVE</Button>
+                                </Grid>
                             </Grid>
-                        </AccordionDetails>                
+                        </AccordionDetails>
                     </Accordion>
                     <Grid className="completeJourneyContainer">
                         <NavLink to={`/dashboards/PersonalLoanForm/${leadid}`} target="_blank">
@@ -2564,19 +2696,22 @@ export default function LeadDetailsNew(props) {
                         <Button
                             className="journeyBtn"
                             color="primary"
-                            variant="contained">
+                            variant="contained"
+                            onClick={() => handleJourneyStatusChange('leadJourney')}>
                             LEAD JOURNEY
                         </Button>
                         <Button
                             className="journeyBtn"
                             color="primary"
-                            variant="contained">
+                            variant="contained"
+                            onClick={() => handleJourneyStatusChange('leadHistory')}>
                             LEAD HISTORY
                         </Button>
                         <Button
                             className="journeyBtn"
                             color="primary"
-                            variant="contained">
+                            variant="contained"
+                            onClick={() => handleJourneyStatusChange('dispositionHistory')}>
                             DISPOSITION HISTORY
                         </Button>
                         <Button
@@ -2604,6 +2739,144 @@ export default function LeadDetailsNew(props) {
                             SOURCE
                         </Button>
                     </Grid>
+                    {journeyStatus === 'leadJourney' ? <Grid>
+                        <TableContainer className={classes.container}>
+                            <Table className={classes.table} stickyHeader>
+                                <TableHead className={classes.tableheading}>
+                                    <TableRow>
+                                        <TableCell className={classes.tableheading}>SL No</TableCell>
+                                        <TableCell className={classes.tableheading}>Status</TableCell>
+                                        <TableCell className={classes.tableheading}>Sub Status</TableCell>
+                                        <TableCell className={classes.tableheading}>Updated By</TableCell>
+                                        <TableCell className={classes.tableheading}>Updated Date and Time</TableCell>
+                                        <TableCell className={classes.tableheading}>Change Log</TableCell>
+                                        <TableCell className={classes.tableheading}>
+                                            <Toolbar>
+                                                <IconButton edge="end" color="inherit" onClick={() => handleJourneyStatusChange('')} aria-label="close">
+                                                    <CloseIcon />
+                                                </IconButton>
+                                            </Toolbar>
+                                        </TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody >
+                                    {isLoading ? <div className="loader">
+                                        <CircularProgress size={100} thickness={3} />
+                                    </div> : leadJourneyData.length !== 0 ?
+                                        leadJourneyData.map((item, index) => {
+                                            let updatedDate = new Date(item.updated_date);
+                                            let currentUpdatedDate = updatedDate.toLocaleDateString() + " " +
+                                                moment(updatedDate.toLocaleTimeString(), "HH:mm:ss a").format("hh:mm A");
+                                            return (
+                                                <TableRow className={classes.oddEvenRow} key={index}>
+                                                    <TableCell className={classes.tabledata}>{index + 1}</TableCell>
+                                                    <TableCell className={classes.tabledata}>Valid Follow-Up</TableCell>
+                                                    <TableCell className={classes.tabledata}>RNR</TableCell>
+                                                    <TableCell className={classes.tabledata}>{item.updated_by_user ? item.updated_by_user : 'NA'}</TableCell>
+                                                    <TableCell className={classes.tabledata}>{currentUpdatedDate ? currentUpdatedDate : 'NA'}</TableCell>
+                                                    <TableCell className={(classes.tabledata, classes.click)} onClick={changeLogHandler}>Updated Log</TableCell>
+                                                    <TableCell className={classes.tabledata}></TableCell>
+                                                </TableRow>
+                                            )
+                                        }) : <div className={classes.emptydata}>No Data Found</div>
+                                    }
+
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Grid> : ''}
+                    {journeyStatus === 'leadHistory' ? <Grid>
+                        <TableContainer className={classes.container}>
+                            <Table className={classes.table} stickyHeader>
+                                <TableHead className={classes.tableheading}>
+                                    <TableRow >
+                                        <TableCell className={classes.tableheading}>Lead Id</TableCell>
+                                        <TableCell className={classes.tableheading}>Product</TableCell>
+                                        <TableCell className={classes.tableheading}>Final Status</TableCell>
+                                        <TableCell className={classes.tableheading}>Final Sub Status</TableCell>
+                                        <TableCell className={classes.tableheading}>Updated By</TableCell>
+                                        <TableCell className={classes.tableheading}>Updated Date</TableCell>
+                                        <TableCell className={classes.tableheading}>Remarks</TableCell>
+                                        <TableCell className={classes.tableheading}>
+                                            <Toolbar >
+                                                <IconButton edge="end" color="inherit" onClick={() => handleJourneyStatusChange('')} aria-label="close">
+                                                    <CloseIcon />
+                                                </IconButton>
+                                            </Toolbar>
+                                        </TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody >
+                                    {isLoading ? <div className="loader">
+                                        <CircularProgress size={100} thickness={3} />
+                                    </div> : leadHistoryData.length !== 0 ?
+                                        leadHistoryData.map((item, index) => {
+                                            let updatedDate = new Date(item.updated_time);
+                                            let currentUpdatedDate = updatedDate.toLocaleDateString() + " " +
+                                                moment(updatedDate.toLocaleTimeString(), "HH:mm:ss a").format("hh:mm A");
+                                            return (
+                                                <TableRow className={classes.oddEvenRow} key={index}>
+                                                    <TableCell className={classes.tabledata}>{item.lead_id ? item.lead_id : 'NA'}</TableCell>
+                                                    <TableCell className={classes.tabledata}>{item.loan_type ? item.loan_type : 'NA'}</TableCell>
+                                                    <TableCell className={classes.tabledata}>{item.status ? item.status : 'NA'}</TableCell>
+                                                    <TableCell className={classes.tabledata}>{item.sub_status ? item.sub_status : 'NA'}</TableCell>
+                                                    <TableCell className={classes.tabledata}>{item.updated_by ? item.updated_by : 'NA'}</TableCell>
+                                                    <TableCell className={classes.tabledata}>{currentUpdatedDate ? currentUpdatedDate : 'NA'}</TableCell>
+                                                    <TableCell className={classes.tabledata}>{item.remarks ? item.remarks : 'NA'}</TableCell>
+                                                    <TableCell className={classes.tabledata}></TableCell>
+                                                </TableRow>
+                                            )
+                                        }) : <div className={classes.emptydata}>No Data Found</div>}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Grid> : ''}
+                    {journeyStatus === 'dispositionHistory' ? <Grid>
+                        <TableContainer className={classes.container}>
+                            <Table className={classes.table} stickyHeader>
+                                <TableHead className={classes.tableheading} >
+                                    <TableRow>
+                                        <TableCell className={classes.tableheading}>SL No</TableCell>
+                                        <TableCell className={classes.tableheading}>Lead Id</TableCell>
+                                        <TableCell className={classes.tableheading}>Status</TableCell>
+                                        <TableCell className={classes.tableheading}>Sub Status</TableCell>
+                                        <TableCell className={classes.tableheading}>Updated By</TableCell>
+                                        <TableCell className={classes.tableheading}>Updated Date and Time</TableCell>
+                                        <TableCell className={classes.tableheading}>Lead Stage</TableCell>
+                                        <TableCell className={classes.tableheading}>
+                                            <Toolbar>
+                                                <IconButton edge="end" color="inherit" onClick={() => handleJourneyStatusChange('')} aria-label="close">
+                                                    <CloseIcon />
+                                                </IconButton>
+                                            </Toolbar>
+                                        </TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody >
+                                    {isLoading ? <div className="loader">
+                                        <CircularProgress size={100} thickness={3} />
+                                    </div> : dispositionHistoryData.length !== 0 ?
+                                        dispositionHistoryData.map((item, index) => {
+                                            let updatedDate = new Date(item.updated_date);
+                                            let currentUpdatedDate = updatedDate.toLocaleDateString() + " " +
+                                                moment(updatedDate.toLocaleTimeString(), "HH:mm:ss a").format("hh:mm A");
+                                            return (
+                                                <TableRow className={classes.oddEvenRow} key={index}>
+                                                    <TableCell className={classes.tabledata}>{index + 1}</TableCell>
+                                                    <TableCell className={classes.tabledata}>{leadid}</TableCell>
+                                                    <TableCell className={classes.tabledata}>{item.status ? item.status : 'NA'}</TableCell>
+                                                    <TableCell className={classes.tabledata}>{item.sub_status ? item.sub_status : 'NA'}</TableCell>
+                                                    <TableCell className={classes.tabledata}>{item.agent_user_name ? item.agent_user_name : 'NA'}</TableCell>
+                                                    <TableCell className={classes.tabledata}>{currentUpdatedDate ? currentUpdatedDate : 'NA'}</TableCell>
+                                                    <TableCell className={classes.tabledata}>{item.lead_stage ? item.lead_stage : 'NA'}</TableCell>
+                                                    <TableCell className={classes.tabledata}></TableCell>
+                                                </TableRow>
+                                            )
+                                        }) : <div className={classes.emptydata}>No Data Found</div>}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Grid> : ''}
                 </Grid>
                 <Grid className="callConatiner" lg={3}>
                     <Grid className="callAdjustContainer">
@@ -2932,7 +3205,7 @@ export default function LeadDetailsNew(props) {
                 </Snackbar>
             </div>
             <div>
-                <table className='pdfTable' id="leadDetails-table" style={{display:'none'}}>
+                <table className='pdfTable' id="leadDetails-table" style={{ display: 'none' }}>
                     <tr>
                         <td className='tableTitle'>Lead Id</td>
                         <td className='tableDescription'>{leadId}</td>
@@ -2998,7 +3271,7 @@ export default function LeadDetailsNew(props) {
                         <td className='tableDescription'>{adhaarNo}</td>
                     </tr>
                 </table>
-                <table className='pdfTable' id="leadDetails-table1" style={{display:'none'}}>
+                <table className='pdfTable' id="leadDetails-table1" style={{ display: 'none' }}>
                     <tr>
                         <td className='tableTitle'>Current Address 1</td>
                         <td className='tableDescription'>{addressOne}</td>
@@ -3031,8 +3304,8 @@ export default function LeadDetailsNew(props) {
                         <td className='tableTitle'>Current Address Vintage</td>
                         <td className='tableDescription'>{currentAddressVintage}</td>
                     </tr>
-                </table>    
-                <table className='pdfTable' id="leadDetails-table2" style={{display:'none'}}>
+                </table>
+                <table className='pdfTable' id="leadDetails-table2" style={{ display: 'none' }}>
                     <tr>
                         <td className='tableTitle'>Permanent Address 1</td>
                         <td className='tableDescription'>{permanentAddressOne}</td>
@@ -3066,7 +3339,7 @@ export default function LeadDetailsNew(props) {
                         <td className='tableDescription'>{permanentAddressVintage}</td>
                     </tr>
                 </table>
-                <table className='pdfTable' id="leadDetails-table3" style={{display:'none'}}>
+                <table className='pdfTable' id="leadDetails-table3" style={{ display: 'none' }}>
                     <tr>
                         <td className='tableTitle'>Employment Type</td>
                         <td className='tableDescription'>{employmentType}</td>
@@ -3135,8 +3408,8 @@ export default function LeadDetailsNew(props) {
                         <td className='tableTitle'>Salary Credit Bank Name</td>
                         <td className='tableDescription'>{salaryBankAcc}</td>
                     </tr>
-                    </table>
-                <table className='pdfTable' id="leadDetails-table4" style={{display:'none'}}>
+                </table>
+                <table className='pdfTable' id="leadDetails-table4" style={{ display: 'none' }}>
                     <tr>
                         <td className='tableTitle'>Total EMI Exclude Credit Card</td>
                         <td className='tableDescription'>{currentEMI}</td>
@@ -3153,8 +3426,8 @@ export default function LeadDetailsNew(props) {
                         <td className='tableTitle'>Credit Card Balance Transfer</td>
                         <td className='tableDescription'>{creditCardbalanceTransfer}</td>
                     </tr>
-                    </table>
-                <table className='pdfTable' id="leadDetails-table5" style={{display:'none'}}>
+                </table>
+                <table className='pdfTable' id="leadDetails-table5" style={{ display: 'none' }}>
                     <tr>
                         <td className='tableTitle'>Relative's First Name</td>
                         <td className='tableDescription'>{ref1FirstName}</td>
@@ -3187,8 +3460,8 @@ export default function LeadDetailsNew(props) {
                         <td className='tableTitle'>Relative's State</td>
                         <td className='tableDescription'>{ref1States}</td>
                     </tr>
-                    </table>
-                    <table className='pdfTable' id="leadDetails-table6" style={{display:'none'}}>
+                </table>
+                <table className='pdfTable' id="leadDetails-table6" style={{ display: 'none' }}>
                     <tr>
                         <td className='tableTitle'>Friend's First Name</td>
                         <td className='tableDescription'>{ref2FirstName}</td>
@@ -3221,8 +3494,175 @@ export default function LeadDetailsNew(props) {
                         <td className='tableTitle'>Friend's State</td>
                         <td className='tableDescription'>{ref2States}</td>
                     </tr>
-                    </table>
+                </table>
             </div>
+            <Dialog open={isLogPopup} fullScreen >
+                <Toolbar>
+                    <CloseIcon className='dialogCloseBtn' fontSize='large' onClick={closeLogPopup}/>
+                </Toolbar>
+                <DialogContent>
+                    <TableContainer className={classes.popupContainer}>
+                        <Table className={classes.table} stickyHeader>
+                            <TableHead className={classes.tableheading}>
+                                <TableRow>
+                                    <TableCell className={classes.tableheading}>SL No</TableCell>
+                                    <TableCell className={classes.tableheading}>Name</TableCell>
+                                    <TableCell className={classes.tableheading}>Loan Amt</TableCell>
+                                    <TableCell className={classes.tableheading}>Income</TableCell>
+                                    <TableCell className={classes.tableheading}>Company</TableCell>
+                                    <TableCell className={classes.tableheading}>Loan Type</TableCell>
+                                    <TableCell className={classes.tableheading}>Tenure</TableCell>
+                                    <TableCell className={classes.tableheading}>Req ROI</TableCell>
+                                    <TableCell className={classes.tableheading}>Gender</TableCell>
+                                    <TableCell className={classes.tableheading}>Father's Name</TableCell>
+                                    <TableCell className={classes.tableheading}>Mother's Name</TableCell>
+                                    <TableCell className={classes.tableheading}>Date of Birth</TableCell>
+                                    <TableCell className={classes.tableheading}>Pancard</TableCell>
+                                    <TableCell className={classes.tableheading}>EmailID</TableCell>
+                                    <TableCell className={classes.tableheading}>Marital Status</TableCell>
+                                    <TableCell className={classes.tableheading}>Dependence</TableCell>
+                                    <TableCell className={classes.tableheading}>Adhaar No</TableCell>
+                                    <TableCell className={classes.tableheading}>Current Address1</TableCell>
+                                    <TableCell className={classes.tableheading}>Current Address2</TableCell>
+                                    <TableCell className={classes.tableheading}>Current Landmark</TableCell>
+                                    <TableCell className={classes.tableheading}>Current Pincode</TableCell>
+                                    <TableCell className={classes.tableheading}>Current City</TableCell>
+                                    <TableCell className={classes.tableheading}>Current State</TableCell>
+                                    <TableCell className={classes.tableheading}>Resident Type</TableCell>
+                                    <TableCell className={classes.tableheading}>Current Address Vintage</TableCell>
+                                    <TableCell className={classes.tableheading}>Permanent Address1</TableCell>
+                                    <TableCell className={classes.tableheading}>Permanent Address2</TableCell>
+                                    <TableCell className={classes.tableheading}>Permanent Landmark</TableCell>
+                                    <TableCell className={classes.tableheading}>Permanent Pincode</TableCell>
+                                    <TableCell className={classes.tableheading}>Permanent City</TableCell>
+                                    <TableCell className={classes.tableheading}>Permanent State</TableCell>
+                                    <TableCell className={classes.tableheading}>Permanent Resident Type</TableCell>
+                                    <TableCell className={classes.tableheading}>Permanent Address Vintage</TableCell>
+                                    <TableCell className={classes.tableheading}>Employment Type</TableCell>
+                                    <TableCell className={classes.tableheading}>Designation</TableCell>
+                                    <TableCell className={classes.tableheading}>Vintage in Current Company</TableCell>
+                                    <TableCell className={classes.tableheading}>Total Work Exp</TableCell>
+                                    <TableCell className={classes.tableheading}>Gross Income</TableCell>
+                                    <TableCell className={classes.tableheading}>Net Income</TableCell>
+                                    <TableCell className={classes.tableheading}>Office Address1</TableCell>
+                                    <TableCell className={classes.tableheading}>Office Address2</TableCell>
+                                    <TableCell className={classes.tableheading}>Office Landmark</TableCell>
+                                    <TableCell className={classes.tableheading}>Office Pincode</TableCell>
+                                    <TableCell className={classes.tableheading}>Office City</TableCell>
+                                    <TableCell className={classes.tableheading}>Office State</TableCell>
+                                    <TableCell className={classes.tableheading}>Official MailID</TableCell>
+                                    <TableCell className={classes.tableheading}>Landline No</TableCell>
+                                    <TableCell className={classes.tableheading}>Salary Mode</TableCell>
+                                    <TableCell className={classes.tableheading}>Salary Bank</TableCell>
+                                    <TableCell className={classes.tableheading}>Total EMI</TableCell>
+                                    <TableCell className={classes.tableheading}>No of Credit Card</TableCell>
+                                    <TableCell className={classes.tableheading}>Credit card Outstanding</TableCell>
+                                    <TableCell className={classes.tableheading}>Credit Card Balence Transfer</TableCell>
+                                    <TableCell className={classes.tableheading}>Relativ's First Name</TableCell>
+                                    <TableCell className={classes.tableheading}>Relativ's Last Name</TableCell>
+                                    <TableCell className={classes.tableheading}>Relativ's MobileNo</TableCell>
+                                    <TableCell className={classes.tableheading}>Relativ's Address1</TableCell>
+                                    <TableCell className={classes.tableheading}>Relativ's Address2</TableCell>
+                                    <TableCell className={classes.tableheading}>Relativ's Pincode</TableCell>
+                                    <TableCell className={classes.tableheading}>Relativ's City</TableCell>
+                                    <TableCell className={classes.tableheading}>Relativ's state</TableCell>
+                                    <TableCell className={classes.tableheading}>Friend's First Name</TableCell>
+                                    <TableCell className={classes.tableheading}>Friend's Last Name</TableCell>
+                                    <TableCell className={classes.tableheading}>Friend's MobileNo</TableCell>
+                                    <TableCell className={classes.tableheading}>Friend's Address1</TableCell>
+                                    <TableCell className={classes.tableheading}>Friend's Address2</TableCell>
+                                    <TableCell className={classes.tableheading}>Friend's Pincode</TableCell>
+                                    <TableCell className={classes.tableheading}>Friend's City</TableCell>
+                                    <TableCell className={classes.tableheading}>Friend's state</TableCell>
+                                    <TableCell className={classes.tableheading}></TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody >
+                                {isLoading ? <div className="loader">
+                                    <CircularProgress size={100} thickness={3} />
+                                </div> : leadJourneyData.length !== 0 ?
+                                    leadJourneyData.map((item, index) => {
+                                        return (
+                                            <TableRow className={classes.oddEvenRow} key={index}>
+                                                <TableCell className={classes.tabledata}>{index + 1}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.name ? item.lead_history.name : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.loan_amount ? item.lead_history.loan_amount : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>NA</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.current_company_name ? item.lead_history.current_company_name : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.loan_type ? item.lead_history.loan_type : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>NA</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.req_roi ? item.lead_history.req_roi : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.gender ? item.lead_history.gender : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.father_name ? item.lead_history.father_name : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.mother_name ? item.lead_history.mother_name : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.dob ? item.lead_history.dob : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.pan_no ? item.lead_history.pan_no : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.email_id ? item.lead_history.email_id : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.marital_status ? item.lead_history.marital_status : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.no_of_dependence ? item.lead_history.no_of_dependence : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.adhaar_no ? item.lead_history.adhaar_no : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.address_one ? item.lead_history.address_one : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.address_two ? item.lead_history.address_two : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.address_three ? item.lead_history.address_three : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.residential_pincode ? item.lead_history.residential_pincode : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.city ? item.lead_history.city : "NA"}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.state ? item.lead_history.state : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>NA</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.current_address_vintage ? item.lead_history.current_address_vintage : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.permanent_address_one ? item.lead_history.permanent_address_one : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.permanent_address_two ? item.lead_history.permanent_address_two : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.permanent_address_three ? item.lead_history.permanent_address_three : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.permanent_pincode ? item.lead_history.permanent_pincode : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.permanent_city ? item.lead_history.permanent_city : "NA"}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.permanent_state ? item.lead_history.permanent_state : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.permanent_resident_Type ? item.lead_history.permanent_resident_Type : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.permanent_address_vintage ? item.lead_history.permanent_address_vintage : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.employment_type ? item.lead_history.employment_type : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.designation ? item.lead_history.designation : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.current_work_exp ? item.lead_history.current_work_exp : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.total_work_exp ? item.lead_history.total_work_exp : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.gross_income ? item.lead_history.gross_income : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.monthly_income ? item.lead_history.monthly_income : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.office_address_one ? item.lead_history.office_address_one : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.office_address_two ? item.lead_history.office_address_two : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.office_address_three ? item.lead_history.office_address_three : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.office_pincode ? item.lead_history.office_pincode : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.office_city ? item.lead_history.office_city : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.office_state ? item.lead_history.office_state : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.official_mail ? item.lead_history.official_mail : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.landline_no ? item.lead_history.landline_no : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.salary_mode ? item.lead_history.salary_mode : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.salary_bank ? item.lead_history.salary_bank : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.current_emi ? item.lead_history.current_emi : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.no_of_creditcard ? item.lead_history.no_of_creditcard : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.credit_card_outstanding ? item.lead_history.credit_card_outstanding : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.credi_card_balance_transfer ? item.lead_history.credi_card_balance_transfer : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref1_first_name ? item.lead_history.ref1_first_name : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref1_last_name ? item.lead_history.ref1_last_name : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref1_mobile_no ? item.lead_history.ref1_mobile_no : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref1_address1 ? item.lead_history.ref1_address1 : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref1_address2 ? item.lead_history.ref1_address2 : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref1_pincode ? item.lead_history.ref1_pincode : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref1_city ? item.lead_history.ref1_city : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref1_state ? item.lead_history.ref1_state : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref2_first_name ? item.lead_history.ref2_first_name : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref2_last_name ? item.lead_history.ref2_last_name : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref2_mobile_no ? item.lead_history.ref2_mobile_no : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref2_address1 ? item.lead_history.ref2_address1 : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref2_address2 ? item.lead_history.ref2_address2 : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref2_pincode ? item.lead_history.ref2_pincode : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref2_city ? item.lead_history.ref2_city : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.ref2_state ? item.lead_history.ref2_state : 'NA'}</TableCell>
+                                            </TableRow>
+                                        )
+                                    }) : <div className={classes.emptydata}>No Data Found</div>
+                                }
+
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </DialogContent>
+            </Dialog>
         </PageLayerSection>
     )
 }

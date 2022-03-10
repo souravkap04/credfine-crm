@@ -38,6 +38,7 @@ import filter from "../../images/filter.png";
 import { useQueryy } from "../../global/query";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import EmiCalculator from '../Emicalculator/EmiCalculator';
+import EligibilityCalculator from "../EligibilityCalculator/EligibilityCalculator";
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -63,7 +64,7 @@ const useStyles = makeStyles({
     backgroundColor: "#ffffff",
     width: "100%",
     height: "64px",
-    marginTop: "8px",
+    marginTop: "25px",
     marginBottom: "25px",
     display: "flex",
     justifyContent: "flex-end",
@@ -101,9 +102,10 @@ const useStyles = makeStyles({
     overflowWrap: "break-word",
   },
   emptydata: {
-    position: "relative",
-    left: "30rem",
-    fontSize: "12px",
+    position: "absolute",
+    left: "40rem",
+    fontSize: "16px",
+    whiteSpace: 'nowrap',
   },
   leadid: {
     cursor: "pointer",
@@ -191,10 +193,6 @@ export default function MyLeads(props) {
   const [prevPage, setPrevPage] = useState(null);
   const [nextPage, setNextPage] = useState(null);
   const [totalLeads, setTotalLeads] = useState(null);
-  const [isCalling, setIsCalling] = useState(false);
-  const [isCallConnect, setIsCallConnect] = useState(false);
-  const [onGoingCall, setOnGoingCall] = useState(false);
-  const [isCallNotConnected, setIsCallNotConnected] = useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(100);
   const [totalDataPerPage, settotalDataPerPage] = useState(0);
   const [dialerCall, setDialerCall] = useState(false);
@@ -216,6 +214,8 @@ export default function MyLeads(props) {
   const [hangUpSnacks, sethangUpSnacks] = useState(false);
   const [myLeadSearchData, setMyLeadSearchData] = useState([]);
   const [isMyLeadsSearchData, setisMyLeadsSearchData] = useState(false);
+  const [responseStatus, setResponseStatus] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
   let statusData = getStatusData();
   let campaignData = getCampaign();
   const queryy = useQueryy();
@@ -279,7 +279,20 @@ export default function MyLeads(props) {
         setisLoading(false);
       })
       .catch((error) => {
-        console.log(error);
+        if (error.response.status === 403) {
+          setResponseStatus('This Lead Owned By Someone Else Kindly Connect Your Product Team swati@credfine.com');
+          setAlertMessage('Lead Already Exist');
+          setisError(true);
+          setisLoading(false);
+        }
+        if (error.response.status === 400) {
+          setResponseStatus('No Data Found In Our CRM You Can Create a New Lead From Manual Lead Creation');
+          setAlertMessage('No Record Found');
+          setisError(true);
+          setisLoading(false);
+        } else {
+          console.log(error);
+        }
       });
   };
   useEffect(() => {
@@ -423,17 +436,10 @@ export default function MyLeads(props) {
       }, 1500);
     }
   };
-  const disablePopup = () => {
-    setIsCalling(false);
-    setOnGoingCall(false);
-  };
-  const callConnectHandler = () => {
-    setIsCallConnect(false);
-    setIsCallNotConnected(false);
-  };
   const disableDialerPopUp = () => {
     setDialerCall(false);
     setDisableHangupBtn(false);
+    setisError(false);
   };
   const openDrawer = () => {
     setState(true);
@@ -537,15 +543,43 @@ export default function MyLeads(props) {
     setCallHangUpState(true);
   };
   const [openCalculate, setopenCalculate] = useState(false);
+  const [checkEligibility, setCheckEligibility] = useState(false);
   const openCalculator = () => {
     setopenCalculate(true);
   }
   const closeCalculator = () => {
     setopenCalculate(false);
   }
+  const openEligibility = () => {
+    setCheckEligibility(true);
+  }
+  const closeEligibility = () => {
+    setCheckEligibility(false);
+  }
   return (
-    <PageLayerSection isDisplaySearchBar={true} isMyLeadsSearch={true} ActualEmiCalculate={openCalculator}>
+    <PageLayerSection isDisplaySearchBar={true} isMyLeadsSearch={true} ActualEmiCalculate={openCalculator} ActualEligibilityCalculate={openEligibility}>
+      <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility} />
       <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={dialerCall}
+        autoHideDuration={1500}
+        onClose={disableDialerPopUp}
+      >
+        <Alert onClose={disableDialerPopUp} severity="info">
+          Calling...
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={isError}
+        autoHideDuration={1500}
+        onClose={disableDialerPopUp}
+      >
+        <Alert onClose={disableDialerPopUp} severity="error">
+          {alertMessage}
+        </Alert>
+      </Snackbar>
       <Drawer anchor="right" open={state} onClose={closeDrawer}>
         <div className="rightContainerForm">
           <form onSubmit={filterSubmit}>
@@ -944,7 +978,7 @@ export default function MyLeads(props) {
                   );
                 })
               ) : (
-                <span className={classes.emptydata}>No Data Found</span>
+                <span className={classes.emptydata}>{responseStatus}</span>
               )
             ) : myLeads.length !== 0 ? (
               myLeads.map((my_leads, index) => {
@@ -1036,28 +1070,6 @@ export default function MyLeads(props) {
             )}
           </TableBody>
         </Table>
-        <div>
-          <CallerDialogBox
-            onGoingCall={onGoingCall}
-            isCalling={isCalling}
-            isCallConnect={isCallConnect}
-            isCallNotConnected={isCallNotConnected}
-            callConnectHandler={callConnectHandler}
-            disablePopup={disablePopup}
-          />
-        </div>
-        <div>
-          <Snackbar
-            anchorOrigin={{ vertical: "top", horizontal: "right" }}
-            open={dialerCall}
-            autoHideDuration={1500}
-            onClose={disableDialerPopUp}
-          >
-            <Alert onClose={disableDialerPopUp} severity="info">
-              Calling...
-            </Alert>
-          </Snackbar>
-        </div>
       </TableContainer>
       {isLoading ? (
         ""
