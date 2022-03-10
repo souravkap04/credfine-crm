@@ -33,7 +33,7 @@ $desk: 100 / 1440;
                             background-color: #fff;
                         }
                         .activeiconBar {
-                            background-color: #1cb980;
+                            background-color: #004D72;
                         }
                         .bottomProgressBar {
                             width: 0 * $desk + vw;
@@ -173,6 +173,36 @@ $desk: 100 / 1440;
                         color: #07498e;
                     }
                 }
+            }
+            .applicationStatus {
+                display: flex;
+                align-items: center;
+                margin-top: 42 * $desk + vw;
+                .statusLabel{
+                    color:#727272;
+                    margin-right: 10 * $desk + vw;
+                }
+                .statusMessage {
+                    width: 130 * $desk + vw;
+                    height: 34 * $desk + vw;
+                    border-radius: 8 *$desk + vw;
+                    text-align: center;
+                    padding-top: 8 *$desk + vw;
+                }
+                .checkiconContainer {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 130 * $desk + vw;
+                    height: 34 * $desk + vw;
+                    border-radius: 8 *$desk + vw;
+                    img{
+                        width: 14 * $desk + vw;
+                        height: 14 * $desk + vw;
+                        margin-left: 12 * $desk + vw;
+                    }
+                }
+
             }
         }
         .offerContainer {

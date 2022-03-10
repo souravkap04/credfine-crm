@@ -64,11 +64,11 @@ export default function PersonalLoanForm() {
         },
         {
             img: LOANBABA,
-            interest: '10.25%',
-            PFee: '1999',
-            MaxTenure: '72',
-            PartPayment: '12',
-            Forclosure: '18',
+            interest: '0.1% per day',
+            PFee: '5%',
+            MaxTenure: '18',
+            PartPayment: '1',
+            Forclosure: '1',
             url: '/dashboards/LOANBABAForm',
             bankName: 'LOANBABA Bank'
 
@@ -134,8 +134,10 @@ export default function PersonalLoanForm() {
     const [mobileNo, setMobileNo] = useState("");
     const [pincode, setPincode] = useState("");
     const [city, setcity] = useState("");
-    const [states, setstates] = useState("");
-    const [name, setname] = useState("");
+    const [states, setstates] = useState("sourav kapri");
+    const [fullName,setFullName] = useState("")
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
     const [companyName, setCompanyName] = useState("");
     const [searchCompany, setSearchCompany] = useState([]);
     const [pancardNo, setPancardNo] = useState("");
@@ -198,6 +200,9 @@ export default function PersonalLoanForm() {
                             let changeDateFormat = moment(getDobfromApi, 'DDMMYYYY').format("YYYY-MM-DD");
                             setDate(changeDateFormat);
                         }
+                        setFullName(response.data.lead_data.name);
+                        setFirstName(response.data.lead_data.name.split(' ').slice(0,-1).join(' '));
+                        setLastName(response.data.lead_data.name.split(' ').slice(-1).join(' '));
                         setMobileNo(response.data.lead_data.phone_no);
                         setLeadId(response.data.lead_data.lead_crm_id);
                         setLoanAmount(response.data.lead_data.loan_amount);
@@ -206,7 +211,6 @@ export default function PersonalLoanForm() {
                         setPincode(response.data.lead_data["data"].residential_pincode);
                         setcity(response.data.lead_data["data"].city);
                         setstates(response.data.lead_data["data"].state);
-                        setname(response.data.lead_data.name);
                         setCompanyName(response.data.lead_data["data"].current_company_name);
                         setLoanType(response.data.lead_data.loan_type);
                         setSource(response.data.lead_data.source);
@@ -231,6 +235,9 @@ export default function PersonalLoanForm() {
         };
         fetchLeadDetaile(leadid);
     }, []);
+    const getFullname = () => {
+        return firstName + ' ' + lastName
+    }
     const updateLeadDetails = async (id) => {
         let data = {
             dob: date, monthly_income: monthlyIncome, current_company_name: companyName,
@@ -238,7 +245,7 @@ export default function PersonalLoanForm() {
         };
         let lead_data = {
             lead_crm_id: leadId, loan_amount: loanAmount,
-            phone_no: mobileNo, name: name, data,
+            phone_no: mobileNo, name: getFullname(), data,
             status: status,
             loan_type: loanType, source: source,
         };
@@ -486,8 +493,8 @@ export default function PersonalLoanForm() {
                             }}
                             variant="outlined"
                             size="small"
-                            value={name}
-                            onChange={(e) => setname(e.target.value)}
+                            value={firstName}
+                            onChange={(e) => setFirstName(e.target.value)}
                         />
                         <TextField
                             className="textField fullName"
@@ -499,8 +506,8 @@ export default function PersonalLoanForm() {
                             }}
                             variant="outlined"
                             size="small"
-                            value={name}
-                        // onChange={(e) => setname(e.target.value)}
+                            value={lastName}
+                            onChange={(e) => setLastName(e.target.value)}
                         />
                         <TextField
                             type="date"

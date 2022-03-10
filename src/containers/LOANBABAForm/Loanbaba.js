@@ -6,6 +6,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { getProfileData } from "../../global/leadsGlobalData";
 import logo from '../../images/forms/loanbaba.png';
 import back from '../../images/forms/back.svg';
+import checkCircle from '../../images/forms/checkCircle.svg';
 import phoneCall from '../../images/forms/phoneCall.svg';
 import { List, TextField } from '@material-ui/core';
 import FormContainer from '../FormContainer/FormContainer';
@@ -36,12 +37,14 @@ const Loanbaba = () => {
     const [isSuccess, setIsSuccess] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
     const [uniqueID, setUniqueID] = useState('');
+    const [isTrackStatus, setIsTrackStatus] = useState(false);
+    const [loanbabaStatus, setLoanbabaStatus] = useState('');
     useEffect(() => {
         fetchLoanbabaData(leadid)
     }, [])
     const fetchLoanbabaData = async (leadId) => {
-        const headers = { Authorization: `Token ${profileData.token}`};
-        await axios.get(`${bankApi}/sendLeadPartner/${leadId}/2/0`, {headers})
+        const headers = { Authorization: `Token ${profileData.token}` };
+        await axios.get(`${bankApi}/sendLeadPartner/${leadId}/2/0`, { headers })
             .then((response) => {
                 setFullName(response.data.nameOnPan);
                 setMobileNo(response.data.phone);
@@ -63,7 +66,7 @@ const Loanbaba = () => {
             setIsError(true)
             return;
         }
-        if(dob === '') {
+        if (dob === '') {
             setAlertMessage('Invalid Date of Birth')
             setIsError(true)
             return;
@@ -93,41 +96,32 @@ const Loanbaba = () => {
             setIsError(true)
             return;
         }
-        const headers = { Authorization: `Token ${profileData.token}`};
-        let items = {panNo:panCardNo,nameOnPan:fullName,phone:mobileNo,email:emailID,dateOfBirth:dob,city:city,salary:salary}
-        await axios.post(`${bankApi}/sendLeadPartner/${leadID}/2/0`, items ,{headers})
+        const headers = { Authorization: `Token ${profileData.token}` };
+        let items = { panNo: panCardNo, nameOnPan: fullName, phone: mobileNo, email: emailID, dateOfBirth: dob, city: city,salary: salary}
+        await axios.post(`${bankApi}/sendLeadPartner/${leadID}/2/0`, items, { headers })
             .then((response) => {
-                if (response.data.response.statusCode === '200') {
-                    setAlertMessage(response.data.response.message)
+                if (response.data.status) {
+                    setAlertMessage(response.data.message)
                     setIsSuccess(true);
                     setisPersonalDetail(false)
                     setisPersonalProgress(true)
                     setIsApprovalProgress(true)
                     setIsApprovalStatus(true);
-                    setUniqueID(response.data.response.lbUniqueId)
+                    setUniqueID(response.data.partner_id);
                 }
-                if(response.data.response.statusCode === '400') {
-                    setAlertMessage(response.data.response.message)
+                if (response.data.status === false) {
+                    setAlertMessage(response.data.message)
                     setIsError(true);
-                }
-                if(response.data.response.statusCode === '401') {
-                    setIsError(true);
-                    setAlertMessage('Unauthorized Token')
-                }
-                if(response.data.response.statusCode === '500') {
-                    setIsError(true);
-                    setAlertMessage('Internal Server Error')
                 }
             }).catch((error) => {
-                if(error.response.status === 400){
+                if (error.response.status === 400) {
                     setIsError(true);
                     setAlertMessage('Bad Request')
-                }else{
+                } else {
                     setIsError(true);
                     setAlertMessage('Something Wrong')
                 }
             })
-
     }
     const copyUniqueIDNumber = (clip) => {
         navigator.clipboard.writeText(clip).then(function () {
@@ -138,12 +132,23 @@ const Loanbaba = () => {
         })
     }
     const trackStatusHandler = async (leadID) => {
-        const headers = { Authorization: `Token ${profileData.token}`};  
-        await axios.get(`${bankApi}/leads/PartnerLeadTrack/${leadID}/2}`,{headers})
+        const headers = { Authorization: `Token ${profileData.token}` };
+        await axios.get(`${bankApi}/PartnerLeadTrack/${leadID}/2`, { headers })
             .then((response) => {
-            console.log("loan baba track status:"+response.data)
+                if (response.data.status) {
+                    setIsTrackStatus(true);
+                    setLoanbabaStatus(response.data.lead_status);
+                    setAlertMessage(response.data.message)
+                    setIsSuccess(true);
+                }
             }).catch((error) => {
-                console.log(error);
+                if (error.response.status === 400) {
+                    setIsError(true);
+                    setAlertMessage('Bad Request')
+                } else {
+                    setIsError(true);
+                    setAlertMessage('Something Wrong')
+                }
             })
     }
     const closeSnackbar = () => {
@@ -209,7 +214,7 @@ const Loanbaba = () => {
                     <div className='texualContainer'>
                         <div className='headText'> <strong>Congratulations!</strong> your personal loan is a few steps away…</div>
                     </div>
-                    <div className='offerContainer'>
+                    {/* <div className='offerContainer'>
                         <div className='offerBox'>
                             <div className='offerHead'>Loan Amount</div>
                             <div className='offerText'>₹ 15,00,000</div>
@@ -230,7 +235,7 @@ const Loanbaba = () => {
                             <div className='offerHead'>Processing Fee</div>
                             <div className='offerText'>₹ 1,999</div>
                         </div>
-                    </div>
+                    </div> */}
                     <div className="offerBorder"></div>
                     <FormContainer Name="Personal Details" btnColor='#1C86FC' isSaveNextButton={true} onClick={() => loanBabaPresonalDetailsHandler(leadid)}>
                         <TextField
@@ -350,9 +355,9 @@ const Loanbaba = () => {
                             onChange={(e) => setEmailID(e.target.value)}
                         />
                         <div className="checkboxContainer">
-                        <Checkbox className="check" />
-                        <p>By submitting I provide my consent to retrieve my credit information from Credit Bureaus including CIBIL to check eligibility for this application. I understand that this may impact my credit score.</p>
-                    </div>
+                            <Checkbox className="check" />
+                            <p>By submitting I provide my consent to retrieve my credit information from Credit Bureaus including CIBIL to check eligibility for this application. I understand that this may impact my credit score.</p>
+                        </div>
                     </FormContainer>
                 </div>}
                 {isApprovalStatus &&
@@ -370,11 +375,27 @@ const Loanbaba = () => {
                         </div>
                         <hr />
                         <div className='trackStatus'>
-                        <div className="statusBtn">
-                            <div className="btnText" onClick={() => trackStatusHandler(leadid)}>TRACK STATUS</div>
+                            <div className="statusBtn">
+                                <div className="btnText" onClick={() => trackStatusHandler(leadid)}>TRACK STATUS</div>
+                            </div>
+                            <div className='statusText'>or email us with the Reference No:<br /><strong>info@credfine.com</strong></div>
                         </div>
-                        <div className='statusText'>or email us with the Reference No:<br/><strong>info@credfine.com</strong></div>
-                        </div>
+                        {isTrackStatus && <div className='applicationStatus'>
+                            <div className='statusLabel'>Your application status</div>
+                            {loanbabaStatus.toLowerCase() === 'not found' && <div className='statusMessage' style={{ backgroundColor: '#DBEBF7', color: '#3770FC' }}>Not Found</div>}
+                            {loanbabaStatus.toLowerCase() === 'not applied' && <div className='statusMessage' style={{ backgroundColor: '#FADFDF', color: '#E55959' }}>Not Applied</div>}
+                            {loanbabaStatus.toLowerCase() === 'under process' && <div className='statusMessage' style={{ backgroundColor: '#FAF1DF', color: '#FFAA34' }}>Under Process</div>}
+                            {loanbabaStatus.toLowerCase() === 'not eligible' && <div className='statusMessage' style={{ backgroundColor: '#FADFDF', color: '#FADFDF' }}>Not Eligible</div>}
+                            {loanbabaStatus.toLowerCase() === 'closed' && <div className='statusMessage' style={{ backgroundColor: '#F4F4F4', color: '#727272' }}>Closed</div>}
+                            {loanbabaStatus.toLowerCase() === 'sanctioned' && <div className='checkiconContainer' style={{ backgroundColor: '#DFFAE4', color: '#1CB980' }}>
+                                <div>Sanctioned</div>
+                                <img src={checkCircle} alt="" />
+                            </div>}
+                            {loanbabaStatus.toLowerCase() === 'disbursed' && <div className='checkiconContainer' style={{ backgroundColor: '#DFFAE4', color: '#1CB980' }}>
+                                <div>Disbursed</div>
+                                <img src={checkCircle} alt="" />
+                            </div>}
+                        </div>}
                     </div>
                 }
             </div>

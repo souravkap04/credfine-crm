@@ -1,5 +1,6 @@
 $desk: 100 / 1440;
 $mob: 100 / 375;
+$desk2: 0.063;
 .iconTextContainer {
     display: flex;
     align-items: center;
@@ -57,9 +58,9 @@ $mob: 100 / 375;
             width: 100%;
         }
         .textField {
-            width: 244 * $desk + vw;
-            margin-right: 20 * $desk + vw !important;
-            margin-bottom: 31 * $desk + vw !important;
+            width: 244 * $desk2 + rem;
+            margin-right: 20 * $desk2 + rem !important;
+            margin-bottom: 31 * $desk2 + rem !important;
             margin-top: 0 !important;
             @media only screen and (max-width: 800px) {
                 width: 312 * $mob + vw;
@@ -69,8 +70,8 @@ $mob: 100 / 375;
             }
             label {
                 color: #07498e;
-                letter-spacing: 0.4 * $desk + vw;
-                font-size: 15.5 * $desk + vw;
+                letter-spacing: 0.4px;
+                font-size: 15.5px;
                 span {
                     position:absolute;
                     color: red;

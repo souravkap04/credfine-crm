@@ -56,7 +56,7 @@
 }
 
 .LoanbabaContainer .leftSection .list .progressContainer .progressBox .progressIconBox .activeiconBar {
-  background-color: #1cb980;
+  background-color: #004D72;
 }
 
 .LoanbabaContainer .leftSection .list .progressContainer .progressBox .progressIconBox .bottomProgressBar {
@@ -236,6 +236,50 @@
 
 .LoanbabaContainer .rightSection .texualContainer .trackStatus .statusText strong {
   color: #07498e;
+}
+
+.LoanbabaContainer .rightSection .texualContainer .applicationStatus {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-top: 2.91667vw;
+}
+
+.LoanbabaContainer .rightSection .texualContainer .applicationStatus .statusLabel {
+  color: #727272;
+  margin-right: 0.69444vw;
+}
+
+.LoanbabaContainer .rightSection .texualContainer .applicationStatus .statusMessage {
+  width: 9.02778vw;
+  height: 2.36111vw;
+  border-radius: 0.55556vw;
+  text-align: center;
+  padding-top: 0.55556vw;
+}
+
+.LoanbabaContainer .rightSection .texualContainer .applicationStatus .checkiconContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 9.02778vw;
+  height: 2.36111vw;
+  border-radius: 0.55556vw;
+}
+
+.LoanbabaContainer .rightSection .texualContainer .applicationStatus .checkiconContainer img {
+  width: 0.97222vw;
+  height: 0.97222vw;
+  margin-left: 0.83333vw;
 }
 
 .LoanbabaContainer .rightSection .offerContainer {

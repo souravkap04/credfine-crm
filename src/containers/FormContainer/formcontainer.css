@@ -87,9 +87,9 @@
 }
 
 .formMainContainer .formContainer .textField {
-  width: 16.94444vw;
-  margin-right: 1.38889vw !important;
-  margin-bottom: 2.15278vw !important;
+  width: 15.372rem;
+  margin-right: 1.26rem !important;
+  margin-bottom: 1.953rem !important;
   margin-top: 0 !important;
 }
 
@@ -104,8 +104,8 @@
 
 .formMainContainer .formContainer .textField label {
   color: #07498e;
-  letter-spacing: 0.02778vw;
-  font-size: 1.07639vw;
+  letter-spacing: 0.4px;
+  font-size: 15.5px;
 }
 
 .formMainContainer .formContainer .textField label span {
