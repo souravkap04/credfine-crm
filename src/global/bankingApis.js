@@ -1,0 +1,1 @@
+export const bankApi = "http://3.108.39.125:9005/leads";

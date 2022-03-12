@@ -37,7 +37,7 @@ import {
     getProfileData,
     getStatusData
 } from "../../global/leadsGlobalData";
-import { useParams, useHistory, useLocation } from 'react-router-dom';
+import { useParams, useHistory, useLocation, NavLink } from 'react-router-dom';
 import EmiCalculator from '../Emicalculator/EmiCalculator';
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -647,7 +647,7 @@ export default function LeadDetailsNew(props) {
     }
     const options = subStatusHandler();
     const statusUpdateHandler = async (id) => {
-        if (status === 'STB') {
+        if (status === 'STB' && subStatus !== 'STB') {
             let data = [...STBError];
             if (appID === "") data[0] = true;
             if (bankNBFC === "") data[1] = true;
@@ -787,7 +787,7 @@ export default function LeadDetailsNew(props) {
         const searchCompanyUrl = "https://backend.credfine.com/common/search_company";
         let item = { company: companyName };
         const header = { 'Content-Type': 'application/json' }
-        if (companyName.length >= 2) {
+        if (e.target.value.length >= 2) {
             await axios.post(`${searchCompanyUrl}`, item, { header })
                 .then((response) => {
                     setSearchCompany(response.data);
@@ -2685,12 +2685,14 @@ export default function LeadDetailsNew(props) {
                         </AccordionDetails>
                     </Accordion>
                     <Grid className="completeJourneyContainer">
-                        <Button
-                            className="journeyBtn"
-                            color="primary"
-                            variant="contained">
-                            COMPLETE JOURNEY
-                        </Button>
+                        <NavLink to={`/dashboards/PersonalLoanForm/${leadid}`} target="_blank">
+                            <Button
+                                className="journeyBtn"
+                                color="primary"
+                                variant="contained">
+                                COMPLETE JOURNEY
+                            </Button>
+                        </NavLink>
                         <Button
                             className="journeyBtn"
                             color="primary"
@@ -3054,6 +3056,7 @@ export default function LeadDetailsNew(props) {
                                         <option value="INCRED">INCRED</option>
                                         <option value="HERO_Fincorp">HERO Fincorp</option>
                                         <option value="Paysense">Paysense</option>
+                                        <option value="Loanbaba">Loanbaba</option>
                                         <option value="Others">Others</option>
                                     </TextField>
                                 </Grid>
