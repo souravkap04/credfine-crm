@@ -2772,7 +2772,7 @@ export default function LeadDetailsNew(props) {
                                                     <TableCell className={classes.tabledata}>RNR</TableCell>
                                                     <TableCell className={classes.tabledata}>{item.updated_by_user ? item.updated_by_user : 'NA'}</TableCell>
                                                     <TableCell className={classes.tabledata}>{currentUpdatedDate ? currentUpdatedDate : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata, classes.click} onClick={changeLogHandler}>Updated Log</TableCell>
+                                                    <TableCell className={(classes.tabledata, classes.click)} onClick={changeLogHandler}>Updated Log</TableCell>
                                                     <TableCell className={classes.tabledata}></TableCell>
                                                 </TableRow>
                                             )
