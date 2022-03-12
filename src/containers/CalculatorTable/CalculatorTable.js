@@ -19,9 +19,9 @@ import clsx from 'clsx';
 import './calculatortable.css';
 import logo from '../../images/crmLogo.svg';
 import $ from 'jquery';
-import PDF, { Text, AddPage, Line, Image, Html } from 'jspdf-react';
-import jsPDF from 'jspdf'
-import autoTable from 'jspdf-autotable'
+// import PDF, { Text, AddPage, Line, Image, Html } from 'jspdf-react';
+// import jsPDF from 'jspdf'
+// import autoTable from 'jspdf-autotable'
 const useStyles = makeStyles({
     container: {
         marginBottom: '50px'
@@ -149,7 +149,7 @@ function principalPercentage(p, r, t) {
     return percentage.toFixed(1);
 }
 export default function CalculatorTable(props) {
-    const doc = new jsPDF()
+    // const doc = new jsPDF()
     const [repaymentData, setrepaymentData] = useState([]);
     const [whatsapp, setwhatsapp] = useState('');
     const [emailSent, setemailSent] = useState('');

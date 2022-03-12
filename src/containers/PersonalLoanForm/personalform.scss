@@ -1,0 +1,631 @@
+$desk: 0.063;
+$mob: 100 / 375;
+.personalFormContainer {
+    position: relative;
+    @media only screen and (max-width: 800px) {
+        display: flex;
+        flex-direction: column;
+    }
+    .leftSection {
+        position: fixed;
+        width: 238 * $desk + rem;
+        background-color: #8669d9;
+        height: 100%;
+        @media only screen and (max-width: 800px) {
+            position: relative;
+            width: 100%;
+            height: 140 * $mob + vw;
+        }
+        .logoContainer {
+            width: 100%;
+            height: 70 * $desk + rem;
+            background-color: #fafafa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            @media only screen and (max-width: 800px) {
+                display: none;
+            }
+            .logoImage {
+                width: 127.4 * $desk + rem;
+                height: 40 * $desk + rem;
+                img {
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+        }
+        @media only screen and (min-width: 800px) {
+            .mobileBarsContainer {
+                display: none;
+            }
+            .mobileProgressContainer {
+                display: none;
+            }
+        }
+        @media only screen and (max-width: 800px) {
+            .mobileBarsContainer {
+                display: flex;
+                align-items: center;
+                height: 54 * $mob + vw;
+                .hambars {
+                    color: #fff;
+                    font-size: 23 * $mob + vw;
+                    margin-left: 24 * $mob + vw;
+                    margin-right: 17.9 * $mob + vw;
+                }
+                .mobileTitleText {
+                    font-family: Lato-regular;
+                    font-size: 18 * $mob + vw;
+                    font-weight: 600;
+                    color: #fff;
+                }
+            }
+            .mobileProgressContainer {
+                display: flex;
+                justify-content: space-evenly;
+                align-items: center;
+                height: 86 * $mob + vw;
+                .mobileProgressBox {
+                    display: flex;
+                    position: relative;
+                    .mobileProgressIconBox {
+                        display: flex;
+                        align-items: center;
+                        flex-direction: column;
+                        .iconBar {
+                            font-size: 15 * $mob + vw;
+                            color: #bca5fd;
+                            transition: 0.3s;
+                        }
+                        .activeBar {
+                            color: #fff;
+                            font-size: 15 * $mob + vw;
+                        }
+                        .activeiconBar {
+                            font-size: 15 * $mob + vw;
+                            color: #bca5fd;
+                        }
+                    }
+                    .bottomProgress {
+                        width: 37 * $mob + vw;
+                        height: 0;
+                        border-bottom: solid 2px #bca5ff;
+                        transition: 0.3s;
+                        position: absolute;
+                        top: 6 * $mob + vw;
+                        left: 23 * $mob + vw;
+                    }
+                    .activebottomProgress {
+                        border-bottom: solid 2px #bca5ff;
+                    }
+                    .bottomProgressAdjust2 {
+                        position: absolute;
+                        left: 26.5 * $mob + vw;
+                    }
+                    .bottomProgressAdjust3 {
+                        position: absolute;
+                        left: 27 * $mob + vw;
+                    }
+                    .bottomProgressAdjust4 {
+                        position: absolute;
+                        left: 24 * $mob + vw;
+                    }
+                    .bottomProgressAdjust5 {
+                        position: absolute;
+                        left: 30 * $mob + vw;
+                    }
+                    .bottomProgressAdjust6 {
+                        position: absolute;
+                        left: 21.5 * $mob + vw;
+                    }
+                    .iconText {
+                        font-size: 10 * $mob + vw;
+                        font-weight: 600;
+                        margin-top: 4 * $mob + vw;
+                        color: #fff;
+                        font-family: Lato-regular;
+                    }
+                    .activeiconText {
+                        color: #fff;
+                    }
+                }
+            }
+        }
+        .progressContainer {
+            margin-top: 39 * $desk + rem;
+            @media only screen and (max-width: 800px) {
+                display: none;
+            }
+            .progressBox {
+                display: flex;
+                .progressIconBox {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    margin-left: 31 * $desk + rem;
+                    .iconBar {
+                        font-size: 20 * $desk + rem;
+                        color: #bca5fd;
+                        transition: 0.3s;
+                    }
+                    .activeBar {
+                        color: #fff;
+                        font-size: 20 * $desk + rem;
+                    }
+                    .activeiconBar {
+                        font-size: 20 * $desk + rem;
+                        color: #bca5fd;
+                    }
+                    .bottomProgress {
+                        width: 0;
+                        height: 34 * $desk + rem;
+                        border: solid 1px #bca5ff;
+                        transition: 0.3s;
+                    }
+                    .activebottomProgress {
+                        border: solid 1px #bca5ff;
+                    }
+                }
+                .iconText {
+                    font-size: 15 * $desk + rem;
+                    font-weight: 500;
+                    margin-left: 8 * $desk + rem;
+                    // margin-top: 1 * $desk + rem;
+                    color: #fff;
+                }
+                .activeiconText {
+                    color: #daccff;
+                }
+            }
+        }
+    }
+    .rightSection {
+        position: relative;
+        width: auto;
+        height: 100%;
+        margin-left: 238 * $desk + rem;
+        background-color: #fff;
+        // Personal Loan Form CSS
+        .listGroup {
+            position: absolute;
+            z-index: 100;
+            max-width: 250 * $desk + rem;
+            max-height: 170 * $desk + rem;
+            overflow-y: scroll;
+            margin-top: -30 * $desk + rem;
+            .list-group-item {
+                cursor: pointer;
+            }
+        }
+        .listGroup::-webkit-scrollbar {
+            width: 8 * $desk + rem;
+        }
+        .listGroup::-webkit-scrollbar-thumb {
+            background-color: #f7f9fc;
+            border-radius: 8 * $desk + rem;
+        }
+        .adjustBackground {
+            height: 100vh;
+            background-color: #fff;
+        }
+        .headerContainer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            height: 70 * $desk + rem;
+            // margin: auto;
+            background-color: #fcfcfc;
+            @media only screen and (max-width: 800px) {
+                width: 100%;
+                height: 50 * $mob + vw;
+            }
+            .backButton {
+                margin-left: 47 * $desk + rem;
+                width: 24 * $desk + rem;
+                height: 24 * $desk + rem;
+                cursor: pointer;
+                @media only screen and (max-width: 800px) {
+                    margin-left: 15 * $mob + vw;
+                    width: 19 * $mob + vw;
+                    height: 19 * $mob + vw;
+                }
+                img {
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+            .needHelpContainer {
+                margin-right: 43 * $desk + rem;
+                @media only screen and (max-width: 800px) {
+                    display: none;
+                }
+                .needHelpText {
+                    font-size: 12 * $desk + rem;
+                    color: #535ad1;
+                    // font-family: Lato-regular;
+                    line-height: 14 * $desk + rem;
+                    margin-left: 22 * $desk + rem;
+                }
+                .rightPart {
+                    display: flex;
+                    justify-content: center;
+                    // align-items: center;
+                    .phoneCall {
+                        width: 18 * $desk + rem;
+                        height: 18 * $desk + rem;
+                        margin-right: 4 * $desk + rem;
+                        img {
+                            width: 100%;
+                            height: 100%;
+                        }
+                    }
+                    .numberText {
+                        font-size: 18 * $desk + rem;
+                        // font-family: Lato-regular;
+                        font-weight: bold;
+                        color: #535ad1;
+                    }
+                }
+            }
+        }
+        .calculationContainer {
+            position: relative;
+            width: 1024 * $desk + rem;
+            height: 121 * $desk + rem;
+            border-radius: 8 * $desk + rem;
+            background-color: #f7f7f7;
+            margin: auto;
+            margin-top: 26 * $desk + rem;
+            display: flex;
+            .personalLacsContainer {
+                position: relative;
+                margin-left: 28 * $desk + rem;
+                label {
+                    margin-top: 25 * $desk + rem;
+                }
+                .loanCard {
+                    position: relative;
+                    width: 340 * $desk + rem;
+                    .tagText {
+                        position: absolute;
+                        right: 2 * $desk + rem;
+                        top: -20 * $desk + rem;
+                        font-size: 16 * $desk + rem;
+                        font-weight: 600;
+                    }
+                    .loanCardBar {
+                        height: 8 * $desk + rem;
+                        color: #d6d6d6;
+                        .MuiSlider-track {
+                            color: #fd914d;
+                        }
+                        .MuiSlider-thumb {
+                            width: 24 * $desk + rem;
+                            height: 24 * $desk + rem;
+                            background-color: #535ad1;
+                        }
+                    }
+                }
+            }
+            .personalMonthContainer {
+                position: relative;
+                margin-left: 56 * $desk + rem;
+                label {
+                    margin-top: 25 * $desk + rem;
+                }
+                .loanCard {
+                    position: relative;
+                    width: 340 * $desk + rem;
+                    .tagText {
+                        position: absolute;
+                        right: 2 * $desk + rem;
+                        top: -20 * $desk + rem;
+                        font-size: 16 * $desk + rem;
+                        font-weight: 600;
+                    }
+                    .loanCardBar {
+                        height: 8 * $desk + rem;
+                        color: #d6d6d6;
+                        .MuiSlider-track {
+                            color: #fd914d;
+                        }
+                        .MuiSlider-thumb {
+                            width: 24 * $desk + rem;
+                            height: 24 * $desk + rem;
+                            background-color: #535ad1;
+                        }
+                    }
+                }
+            }
+            .indicationContainer {
+                margin-top: 17 * $desk + rem;
+                margin-left: 57 * $desk + rem;
+                .loanLacText {
+                    font-size: 46 * $desk + rem;
+                    font-weight: bold;
+                    color: #535ad1;
+                    line-height: 55 * $desk + rem;
+                }
+                .loanMonthText {
+                    font-size: 24 * $desk + rem;
+                    font-weight: 300;
+                    color: #535ad1;
+                    margin-left: 5 * $desk + rem;
+                }
+            }
+        }
+        .exclusiveHeaderContainer {
+            position: relative;
+            width: 1024 * $desk + rem;
+            margin: auto;
+            margin-top: 21 * $desk + rem;
+            display: flex;
+            justify-content: space-between;
+            h3 {
+                font-size: 22 * $desk + rem;
+                font-weight: 600;
+                color: #535ad1;
+                margin-bottom: 0;
+            }
+            .viewContainer {
+                display: flex;
+                align-items: center;
+                .listImage {
+                    width: 22 * $desk + rem;
+                    height: 22 * $desk + rem;
+                    margin-right: 16 * $desk + rem;
+                    cursor: pointer;
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        vertical-align: unset;
+                        filter: grayscale(1);
+                    }
+                }
+                .gridImage {
+                    width: 22 * $desk + rem;
+                    height: 22 * $desk + rem;
+                    margin-right: 16 * $desk + rem;
+                    cursor: pointer;
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        vertical-align: unset;
+                        filter: grayscale(1);
+                    }
+                }
+                .activeImage {
+                    img {
+                        filter: grayscale(0);
+                    }
+                }
+            }
+        }
+        .offerMainCardContainer {
+            position: relative;
+            width: 1024 * $desk + rem;
+            margin: auto;
+            margin-top: 15 * $desk + rem;
+            height: 115vh;
+            .offerCardContainer {
+                width: 1024 * $desk + rem;
+                height: 100 * $desk + rem;
+                border-radius: 9 * $desk + rem;
+                box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.1);
+                background-color: #fff;
+                display: flex;
+                align-items: center;
+                margin-bottom: 20 * $desk + rem;
+                .bankLogoImage {
+                    width: 150 * $desk + rem;
+                    height: 50 * $desk + rem;
+                    margin-left: 50 * $desk + rem;
+                    margin-right: 50 * $desk + rem;
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: contain;
+                    }
+                }
+                .rate {
+                    width: 120 * $desk + rem;
+                    font-size: 15 * $desk + rem;
+                    color: #535ad1;
+                }
+                .price {
+                    width: 120 * $desk + rem;
+                    font-size: 15 * $desk + rem;
+                    color: #535ad1;
+                }
+                .months {
+                    width: 115 * $desk + rem;
+                    font-size: 15 * $desk + rem;
+                    color: #535ad1;
+                }
+                .after12 {
+                    width: 125 * $desk + rem;
+                    font-size: 15 * $desk + rem;
+                    color: #535ad1;
+                }
+                .after18 {
+                    width: 125 * $desk + rem;
+                    font-size: 15 * $desk + rem;
+                    color: #535ad1;
+                }
+                .applyBtn {
+                    width: 133 * $desk + rem;
+                    height: 40 * $desk + rem;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    border-radius: 20 * $desk + rem;
+                    background-color: #bcbcbc;
+                    cursor: pointer;
+                    .btnText {
+                        font-size: 15 * $desk + rem;
+                        font-weight: 500;
+                        color: #fff;
+                    }
+                }
+            }
+            .offerCardContainer:hover {
+                box-shadow: 0 3px 16px 0 rgba(83, 90, 209, 0.3);
+                cursor: pointer;
+                .applyBtn {
+                    width: 133 * $desk + rem;
+                    height: 40 * $desk + rem;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    border-radius: 20 * $desk + rem;
+                    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+                    background-color: #1cb980;
+                    cursor: pointer;
+                    .btnText {
+                        font-size: 15 * $desk + rem;
+                        font-weight: 500;
+                        color: #fff;
+                    }
+                }
+            }
+        }
+        .OfferMainGridContainer {
+            position: relative;
+            margin: auto;
+            width: 1024 * $desk + rem;
+            margin-top: 15 * $desk + rem;
+            display: flex;
+            flex-wrap: wrap;
+            height: 115vh;
+            // margin-left: 47 * $desk + rem;
+            .offerGridContainer {
+                position: relative;
+                margin-right: 14 * $desk + rem;
+                margin-left: 14 * $desk + rem;
+                margin-bottom: 32 * $desk + rem;
+                width: 312 * $desk + rem;
+                height: 280 * $desk + rem;
+                border-radius: 9 * $desk + rem;
+                box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.1);
+                background-color: #fff;
+                .bankLogoImage {
+                    position: relative;
+                    width: 150 * $desk + rem;
+                    height: 50 * $desk + rem;
+                    margin-left: 27 * $desk + rem;
+                    margin-top: 23 * $desk + rem;
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: contain;
+                    }
+                }
+                .bottomAdjustContainer {
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: space-between;
+                    margin-left: 27 * $desk + rem;
+                    margin-right: 25 * $desk + rem;
+                    .rateContainer {
+                        margin-top: 17 * $desk + rem;
+                        margin-bottom: 17 * $desk + rem;
+                        .label {
+                            font-size: 14 * $desk + rem;
+                            color: #727272;
+                            margin-bottom: 0;
+                        }
+                        .rate {
+                            font-size: 15 * $desk + rem;
+                            color: #535ad1;
+                        }
+                    }
+                    .priceContainer {
+                        margin-left: 25 * $desk + rem;
+                        margin-right: 25 * $desk + rem;
+                        margin-top: 17 * $desk + rem;
+                        margin-bottom: 17 * $desk + rem;
+                        .label {
+                            font-size: 14 * $desk + rem;
+                            color: #727272;
+                        }
+                        .price {
+                            font-size: 15 * $desk + rem;
+                            color: #535ad1;
+                        }
+                    }
+                    .monthsContainer {
+                        margin-top: 17 * $desk + rem;
+                        margin-bottom: 17 * $desk + rem;
+                        .label {
+                            font-size: 14 * $desk + rem;
+                            color: #727272;
+                        }
+                        .months {
+                            font-size: 15 * $desk + rem;
+                            color: #535ad1;
+                        }
+                    }
+                    .after12Container {
+                        .label {
+                            font-size: 14 * $desk + rem;
+                            color: #727272;
+                        }
+                        .after12 {
+                            font-size: 15 * $desk + rem;
+                            color: #535ad1;
+                        }
+                    }
+                    .after18Container {
+                        .label {
+                            font-size: 14 * $desk + rem;
+                            color: #727272;
+                        }
+                        .after18 {
+                            font-size: 15 * $desk + rem;
+                            color: #535ad1;
+                        }
+                    }
+                }
+                .applyBtn {
+                    width: 133 * $desk + rem;
+                    height: 40 * $desk + rem;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    border-radius: 20 * $desk + rem;
+                    background-color: #bcbcbc;
+                    cursor: pointer;
+                    margin: auto;
+                    margin-top: 25 * $desk + rem;
+                    .btnText {
+                        font-size: 15 * $desk + rem;
+                        font-weight: 500;
+                        color: #fff;
+                    }
+                }
+            }
+            .offerGridContainer:hover {
+                box-shadow: 0 3px 16px 0 rgba(83, 90, 209, 0.3);
+                cursor: pointer;
+                .applyBtn {
+                    width: 133 * $desk + rem;
+                    height: 40 * $desk + rem;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    border-radius: 20 * $desk + rem;
+                    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+                    background-color: #1cb980;
+                    cursor: pointer;
+                    .btnText {
+                        font-size: 15 * $desk + rem;
+                        font-weight: 500;
+                        color: #fff;
+                    }
+                }
+            }
+        }
+    }
+}
