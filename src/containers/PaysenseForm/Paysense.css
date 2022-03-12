@@ -1,0 +1,319 @@
+.PaysenseContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  background-color: #ffffff;
+}
+
+.PaysenseContainer .leftSection {
+  width: 16.52778vw;
+  height: 62.5vw;
+  background: #212ac5 0% 0% no-repeat padding-box;
+  opacity: 1;
+}
+
+.PaysenseContainer .leftSection .image {
+  width: 11.80556vw;
+  height: 2.36111vw;
+  margin-left: 2.36111vw;
+  margin-top: 1.45833vw;
+  opacity: 1;
+}
+
+.PaysenseContainer .leftSection .list .progressContainer {
+  margin-top: 3.81944vw;
+}
+
+.PaysenseContainer .leftSection .list .progressContainer .progressBox {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.PaysenseContainer .leftSection .list .progressContainer .progressBox .progressIconBox {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-left: 2.22222vw;
+}
+
+.PaysenseContainer .leftSection .list .progressContainer .progressBox .progressIconBox .iconBar {
+  width: 1.11111vw;
+  height: 1.11111vw;
+  background-color: #ffffff;
+  border-radius: 50%;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+
+.PaysenseContainer .leftSection .list .progressContainer .progressBox .progressIconBox .activeCurrent {
+  background-color: #21d196;
+}
+
+.PaysenseContainer .leftSection .list .progressContainer .progressBox .progressIconBox .activeiconBar {
+  background-color: #21d196;
+}
+
+.PaysenseContainer .leftSection .list .progressContainer .progressBox .progressIconBox .bottomProgressBar {
+  width: 0vw;
+  height: 3.26389vw;
+  border: 1px solid #ffffff;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+
+.PaysenseContainer .leftSection .list .progressContainer .progressBox .iconText {
+  color: #ffffff;
+  margin-left: 0.55556vw;
+  font-size: 0.97222vw;
+  font-weight: 500;
+}
+
+.PaysenseContainer .rightSection .headerContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  width: 100%;
+  height: 4.86111vw;
+  background-color: #fcfcfc;
+  margin-bottom: 1.59722vw;
+}
+
+.PaysenseContainer .rightSection .headerContainer .backButton {
+  margin-left: 3.26389vw;
+  width: 1.66667vw;
+  height: 1.66667vw;
+  cursor: pointer;
+}
+
+.PaysenseContainer .rightSection .headerContainer .backButton img {
+  width: 100%;
+  height: 100%;
+}
+
+.PaysenseContainer .rightSection .headerContainer .needHelpContainer {
+  /* need change */
+  margin-left: 67.56944vw;
+}
+
+.PaysenseContainer .rightSection .headerContainer .needHelpContainer .needHelpText {
+  font-size: 0.83333vw;
+  color: #535ad1;
+  line-height: 0.97222vw;
+  margin-left: 1.52778vw;
+}
+
+.PaysenseContainer .rightSection .headerContainer .needHelpContainer .rightPart {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.PaysenseContainer .rightSection .headerContainer .needHelpContainer .rightPart .phoneCall {
+  width: 1.25vw;
+  height: 1.25vw;
+  margin-right: 0.27778vw;
+}
+
+.PaysenseContainer .rightSection .headerContainer .needHelpContainer .rightPart .phoneCall img {
+  width: 100%;
+  height: 100%;
+}
+
+.PaysenseContainer .rightSection .headerContainer .needHelpContainer .rightPart .numberText {
+  font-size: 1.25vw;
+  font-weight: bold;
+  color: #535ad1;
+}
+
+.PaysenseContainer .rightSection .texualContainer {
+  margin-left: 2.63889VW;
+  width: 55.97222vw;
+  margin-bottom: 1.38889vw;
+}
+
+.PaysenseContainer .rightSection .texualContainer .headText {
+  color: #212ac5;
+  font-size: 32px;
+}
+
+.PaysenseContainer .rightSection .texualContainer .headText2 {
+  font-size: 2.22222vw;
+  color: #000000;
+  margin-bottom: 0.97222vw;
+}
+
+.PaysenseContainer .rightSection .texualContainer .subText {
+  font-size: 1.11111vw;
+  color: #727272;
+  margin-bottom: 1.59722vw;
+}
+
+.PaysenseContainer .rightSection .texualContainer .subText2 {
+  font-size: 1.11111vw;
+  color: #727272;
+  line-height: 1.66667vw;
+  white-space: nowrap;
+}
+
+.PaysenseContainer .rightSection .texualContainer .subText2 strong {
+  color: #07498e;
+}
+
+.PaysenseContainer .rightSection .texualContainer .losContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-top: 2.29167vw;
+}
+
+.PaysenseContainer .rightSection .texualContainer .losContainer .losHeader {
+  margin-right: 0.69444vw;
+  color: #000000;
+  font-size: 1.11111vw;
+}
+
+.PaysenseContainer .rightSection .texualContainer .losContainer .losNumber {
+  width: 7.63889vw;
+  height: 2.22222vw;
+  background-color: #535ad1;
+  color: #ffffff;
+  padding: 0.41667vw 0.90278vw 0.48611vw 0.90278vw;
+  text-align: center;
+  border-radius: 0.27778vw;
+}
+
+.PaysenseContainer .rightSection .texualContainer .losContainer .copyIcon {
+  margin-left: 0.44167vw;
+  cursor: pointer;
+}
+
+.PaysenseContainer .rightSection .texualContainer .trackStatus {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.PaysenseContainer .rightSection .texualContainer .trackStatus .statusBtn {
+  width: 13.88889vw;
+  height: 3.47222vw;
+  border-radius: 2.29167vw;
+  background-color: #1c86fc;
+  text-align: center;
+  padding-top: 1.11111vw;
+  cursor: pointer;
+}
+
+.PaysenseContainer .rightSection .texualContainer .trackStatus .statusBtn .btnText {
+  font-size: 1.11111vw;
+  font-weight: 500;
+  color: #fff;
+}
+
+.PaysenseContainer .rightSection .texualContainer .trackStatus .statusText {
+  margin-left: 3.81944vw;
+  color: #727272;
+}
+
+.PaysenseContainer .rightSection .texualContainer .trackStatus .statusText strong {
+  color: #07498e;
+}
+
+.PaysenseContainer .rightSection .texualContainer .applicationStatus {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-top: 2.91667vw;
+}
+
+.PaysenseContainer .rightSection .texualContainer .applicationStatus .statusLabel {
+  color: #727272;
+  margin-right: 0.69444vw;
+}
+
+.PaysenseContainer .rightSection .texualContainer .applicationStatus .statusMessage {
+  width: 9.02778vw;
+  height: 2.36111vw;
+  border-radius: 0.55556vw;
+  text-align: center;
+  padding-top: 0.55556vw;
+}
+
+.PaysenseContainer .rightSection .texualContainer .applicationStatus .checkiconContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 9.02778vw;
+  height: 2.36111vw;
+  border-radius: 0.55556vw;
+}
+
+.PaysenseContainer .rightSection .texualContainer .applicationStatus .checkiconContainer img {
+  width: 0.97222vw;
+  height: 0.97222vw;
+  margin-left: 0.83333vw;
+}
+
+.PaysenseContainer .rightSection .offerContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.PaysenseContainer .rightSection .offerContainer .offerBox {
+  margin-left: 2.63889VW;
+}
+
+.PaysenseContainer .rightSection .offerContainer .offerBox .offerHead {
+  color: #727272;
+  font-size: 1.11111vw;
+}
+
+.PaysenseContainer .rightSection .offerContainer .offerBox .offerText {
+  color: #07498e;
+  font-size: 1.66667vw;
+  margin-top: 0.34722vw;
+}
+
+.PaysenseContainer .rightSection .offerBorder {
+  width: 59.09722VW;
+  border: 1px solid #d1d1d1;
+  margin-top: 1.11111VW;
+  margin-left: 2.63889VW;
+}
+
+.PaysenseContainer .iconTextContainer {
+  display: none;
+}
+/*# sourceMappingURL=Paysense.css.map */
