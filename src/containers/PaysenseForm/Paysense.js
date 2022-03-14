@@ -93,7 +93,7 @@ const Paysense = () => {
                     <div className='texualContainer'>
                         <div className='headText'> <strong>Congratulations!</strong> your personal loan is a few steps away…</div>
                     </div>
-                    <div className='offerContainer'>
+                    {/* <div className='offerContainer'>
                         <div className='offerBox'>
                             <div className='offerHead'>Loan Amount</div>
                             <div className='offerText'>₹ 15,00,000</div>
@@ -114,7 +114,7 @@ const Paysense = () => {
                             <div className='offerHead'>Processing Fee</div>
                             <div className='offerText'>₹ 1,999</div>
                         </div>
-                    </div>
+                    </div> */}
                     <div className="offerBorder"></div>
                     <FormContainer Name="Basic Details" btnColor='#1C86FC' isSaveNextButton={true} onClick={() => basicDetailsHandler()}>
                         <TextField
@@ -158,7 +158,7 @@ const Paysense = () => {
                     <div className='texualContainer'>
                         <div className='headText'> <strong>Congratulations!</strong> your personal loan is a few steps away…</div>
                     </div>
-                    <div className='offerContainer'>
+                    {/* <div className='offerContainer'>
                         <div className='offerBox'>
                             <div className='offerHead'>Loan Amount</div>
                             <div className='offerText'>₹ 15,00,000</div>
@@ -179,7 +179,7 @@ const Paysense = () => {
                             <div className='offerHead'>Processing Fee</div>
                             <div className='offerText'>₹ 1,999</div>
                         </div>
-                    </div>
+                    </div> */}
                     <div className="offerBorder"></div>
                     <FormContainer Name="Personal & Income Details" btnColor='#1C86FC' isSaveNextButton={true} onClick={() => pesonalDetailsHandle()}>
                         <TextField

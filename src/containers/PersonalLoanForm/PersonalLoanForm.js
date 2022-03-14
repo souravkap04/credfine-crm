@@ -11,7 +11,7 @@ import list from '../../images/forms/list.svg';
 import grid from '../../images/forms/grid.svg';
 import HDFC from '../../images/forms/HDFCAgain.svg';
 import LOANBABA from '../../images/forms/loanbaba.png';
-import PAYSENSE from '../../images/forms/paysense.svg';
+import PAYSENSE from '../../images/forms/paysense-blue.svg';
 import ICICI from '../../images/forms/ICICI.svg';
 import SC from '../../images/forms/SC.svg';
 import IDFC from '../../images/forms/IDFC.svg';
