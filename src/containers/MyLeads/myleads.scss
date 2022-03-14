@@ -95,3 +95,14 @@ $desk: 100 / 1440;
         background-color: rgba(235, 87, 87, 0.8);
     }
 }
+.assignToBox {
+    margin-right: 618 * $desk + vw !important;
+    width: 126 * $desk + vw !important;
+}
+.assignLeads {
+    width: 166 * $desk + vw !important;
+    background-color: #3EC68C !important;
+    border-radius: 5px !important;
+    color: #FFFFFF !important;
+    cursor: pointer;
+}

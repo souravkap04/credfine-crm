@@ -131,4 +131,17 @@
 .buttonAdjust .endBtn:hover {
   background-color: rgba(235, 87, 87, 0.8);
 }
+
+.assignToBox {
+  margin-right: 42.91667vw !important;
+  width: 8.75vw !important;
+}
+
+.assignLeads {
+  width: 11.52778vw !important;
+  background-color: #3EC68C !important;
+  border-radius: 5px !important;
+  color: #FFFFFF !important;
+  cursor: pointer;
+}
 /*# sourceMappingURL=myleads.css.map */

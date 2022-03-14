@@ -7,6 +7,12 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import MenuItem from "@material-ui/core/MenuItem"
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
+import ListItemText from '@material-ui/core/ListItemText';
+import Checkbox from '@material-ui/core/Checkbox';
 import axios from "axios";
 import baseUrl from "../../global/api";
 import {
@@ -45,8 +51,8 @@ function Alert(props) {
 const useStyles = makeStyles({
   container: {
     // margin: '25px',
-    overflow: "auto",
-    // maxHeight: '550px',
+    //overflow: "auto",
+    maxHeight: '525px',
     marginBottom: "10px",
   },
   table: {
@@ -868,10 +874,10 @@ export default function MyLeads(props) {
         </div>
       </div>
       <TableContainer className={classes.container}>
-        <Table className={classes.table} aria-label="simple table">
+        <Table className={classes.table} stickyHeader aria-label="simple table">
           <TableHead className={classes.tableheading}>
             <TableRow>
-              <TableCell className={classes.tableheading}>Sr No</TableCell>
+              <TableCell className={classes.tableheading}><Checkbox color="primary"/></TableCell>
               <TableCell className={classes.tableheading}>Lead ID</TableCell>
               <TableCell className={classes.tableheading}>Name</TableCell>
               <TableCell className={classes.tableheading}>Mobile</TableCell>
@@ -918,7 +924,7 @@ export default function MyLeads(props) {
                   return (
                     <TableRow className={classes.oddEvenRow} key={index}>
                       <TableCell className={classes.tabledata}>
-                        {index + 1}
+                      <Checkbox color="primary"/>
                       </TableCell>
                       <TableCell
                         className={(classes.tabledata, classes.leadid)}
@@ -998,7 +1004,7 @@ export default function MyLeads(props) {
                 return (
                   <TableRow className={classes.oddEvenRow} key={index}>
                     <TableCell className={classes.tabledata}>
-                      {index + 1}
+                      <Checkbox color="primary"/>
                     </TableCell>
                     <TableCell
                       className={(classes.tabledata, classes.leadid)}
@@ -1075,6 +1081,27 @@ export default function MyLeads(props) {
         ""
       ) : (
         <div className={classes.tablePagination}>
+          <FormControl variant="outlined" className="assignToBox">
+          <InputLabel id="demo-customized-select-label">Assign To</InputLabel>
+          <Select
+          labelId="demo-customized-select-label"
+          id="demo-customized-select"
+          >
+            <MenuItem>
+              <Checkbox/>
+              <ListItemText primary="ARO1"/>
+            </MenuItem>
+            <MenuItem>
+              <Checkbox/>
+              <ListItemText primary="ARO2"/>
+            </MenuItem>
+            <MenuItem>
+            <Button
+            className="assignLeads"
+            >Assign Leads</Button>
+            </MenuItem>
+          </Select>
+          </FormControl>
           <div className={classes.rowsPerPageContainer}>
             <div className={classes.rowsText}>Rows Per Page: {rowsPerPage}</div>
           </div>
