@@ -7,11 +7,6 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import MenuItem from "@material-ui/core/MenuItem"
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
-import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import axios from "axios";
 import baseUrl from "../../global/api";
@@ -50,8 +45,6 @@ function Alert(props) {
 }
 const useStyles = makeStyles({
   container: {
-    // margin: '25px',
-    //overflow: "auto",
     maxHeight: '525px',
     marginBottom: "10px",
   },
@@ -59,33 +52,12 @@ const useStyles = makeStyles({
     width: "100%",
   },
   tableheading: {
-    // padding: '0 8px',
-    // fontSize: '12px',
-    // textAlign: 'center',
     backgroundColor: "#8f9bb3",
     color: "#ffffff",
     fontSize: "14px",
   },
-  tablePagination: {
-    backgroundColor: "#ffffff",
-    width: "100%",
-    height: "64px",
-    marginTop: "25px",
-    marginBottom: "25px",
-    display: "flex",
-    justifyContent: "flex-end",
-    alignItems: "center",
-  },
   numberOfTotalCount: {
     marginRight: "25px",
-  },
-  rowsPerPageContainer: {
-    marginRight: "70px",
-    display: "flex",
-    alignItems: "center",
-  },
-  rowsText: {
-    marginRight: "8px",
   },
   buttonsContainer: {
     marginRight: "15px",
@@ -222,6 +194,7 @@ export default function MyLeads(props) {
   const [isMyLeadsSearchData, setisMyLeadsSearchData] = useState(false);
   const [responseStatus, setResponseStatus] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
+  const [leadsAssignTo ,setLeadsAssignTo] = useState('');
   let statusData = getStatusData();
   let campaignData = getCampaign();
   const queryy = useQueryy();
@@ -877,7 +850,7 @@ export default function MyLeads(props) {
         <Table className={classes.table} stickyHeader aria-label="simple table">
           <TableHead className={classes.tableheading}>
             <TableRow>
-              <TableCell className={classes.tableheading}><Checkbox color="primary"/></TableCell>
+              <TableCell className={classes.tableheading}><Checkbox color="primary" /></TableCell>
               <TableCell className={classes.tableheading}>Lead ID</TableCell>
               <TableCell className={classes.tableheading}>Name</TableCell>
               <TableCell className={classes.tableheading}>Mobile</TableCell>
@@ -924,7 +897,7 @@ export default function MyLeads(props) {
                   return (
                     <TableRow className={classes.oddEvenRow} key={index}>
                       <TableCell className={classes.tabledata}>
-                      <Checkbox color="primary"/>
+                        <Checkbox color="primary" />
                       </TableCell>
                       <TableCell
                         className={(classes.tabledata, classes.leadid)}
@@ -1004,7 +977,7 @@ export default function MyLeads(props) {
                 return (
                   <TableRow className={classes.oddEvenRow} key={index}>
                     <TableCell className={classes.tabledata}>
-                      <Checkbox color="primary"/>
+                      <Checkbox color="primary" />
                     </TableCell>
                     <TableCell
                       className={(classes.tabledata, classes.leadid)}
@@ -1080,57 +1053,67 @@ export default function MyLeads(props) {
       {isLoading ? (
         ""
       ) : (
-        <div className={classes.tablePagination}>
-          <FormControl variant="outlined" className="assignToBox">
-          <InputLabel id="demo-customized-select-label">Assign To</InputLabel>
-          <Select
-          labelId="demo-customized-select-label"
-          id="demo-customized-select"
-          >
-            <MenuItem>
-              <Checkbox/>
-              <ListItemText primary="ARO1"/>
-            </MenuItem>
-            <MenuItem>
-              <Checkbox/>
-              <ListItemText primary="ARO2"/>
-            </MenuItem>
-            <MenuItem>
-            <Button
-            className="assignLeads"
+        <div className="paginationContainer">
+          <form className="assignToContainer">
+            <TextField
+              select
+              className="textField"
+              id="outlined-full-width"
+              label="Assign To"
+              style={{ margin: 8 }}
+              margin="normal"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              SelectProps={{
+                native: true,
+              }}
+              variant="outlined"
+              size="small"
+              value={leadsAssignTo}
+              onChange={(e) => setLeadsAssignTo(e.target.value)}
+            >
+              <option value="">Select One</option>
+              <option value="ARO 1">ARO 1</option>
+              <option value="ARO 2">ARO 2</option>
+            </TextField>
+            <Button 
+            className="assignLeadsBtn"
+            variant="contained"
+            color="primary"
+            disabled={!leadsAssignTo}
             >Assign Leads</Button>
-            </MenuItem>
-          </Select>
-          </FormControl>
-          <div className={classes.rowsPerPageContainer}>
-            <div className={classes.rowsText}>Rows Per Page: {rowsPerPage}</div>
-          </div>
-          <div className={classes.numberOfTotalCount}>
-            {totalDataPerPage} of {totalLeads}
-          </div>
-          <div className={classes.buttonsContainer}>
-            {prevPage === null ? (
-              <IconButton disabled onClick={prevPageHandler}>
-                <ChevronLeftOutlinedIcon />
-              </IconButton>
-            ) : (
-              <IconButton onClick={prevPageHandler}>
-                <ChevronLeftOutlinedIcon
-                  className={prevPage !== null ? classes.activeColor : ""}
-                />
-              </IconButton>
-            )}
-            {nextPage === null ? (
-              <IconButton disabled onClick={nextPageHandler}>
-                <ChevronRightOutlinedIcon />
-              </IconButton>
-            ) : (
-              <IconButton onClick={nextPageHandler}>
-                <ChevronRightOutlinedIcon
-                  className={nextPage !== null ? classes.activeColor : ""}
-                />
-              </IconButton>
-            )}
+            <div className="selectedText">14 Leads Selected</div>
+          </form>
+          <div className='paginationRightContainer'>
+            <div className='rowsPerPage'>Rows Per Page: {rowsPerPage}</div>
+            <div className={classes.numberOfTotalCount}>
+              {totalDataPerPage} of {totalLeads}
+            </div>
+            <div className={classes.buttonsContainer}>
+              {prevPage === null ? (
+                <IconButton disabled onClick={prevPageHandler}>
+                  <ChevronLeftOutlinedIcon />
+                </IconButton>
+              ) : (
+                <IconButton onClick={prevPageHandler}>
+                  <ChevronLeftOutlinedIcon
+                    className={prevPage !== null ? classes.activeColor : ""}
+                  />
+                </IconButton>
+              )}
+              {nextPage === null ? (
+                <IconButton disabled onClick={nextPageHandler}>
+                  <ChevronRightOutlinedIcon />
+                </IconButton>
+              ) : (
+                <IconButton onClick={nextPageHandler}>
+                  <ChevronRightOutlinedIcon
+                    className={nextPage !== null ? classes.activeColor : ""}
+                  />
+                </IconButton>
+              )}
+            </div>
           </div>
         </div>
       )}

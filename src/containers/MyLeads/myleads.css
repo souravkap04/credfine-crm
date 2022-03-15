@@ -132,16 +132,53 @@
   background-color: rgba(235, 87, 87, 0.8);
 }
 
-.assignToBox {
-  margin-right: 42.91667vw !important;
-  width: 8.75vw !important;
+.paginationContainer {
+  background-color: #ffffff;
+  width: 100%;
+  height: 6.25vw;
+  margin-top: 1.73611pxvw;
+  padding-left: 1.11111vw;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
-.assignLeads {
-  width: 11.52778vw !important;
-  background-color: #3EC68C !important;
-  border-radius: 5px !important;
-  color: #FFFFFF !important;
-  cursor: pointer;
+.paginationContainer .assignToContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.paginationContainer .assignToContainer .assignLeadsBtn {
+  border-radius: 0.34722vw;
+}
+
+.paginationContainer .assignToContainer .selectedText {
+  margin-left: 1.04167vw;
+  font-size: 0.83333vw;
+  line-height: 0.97222vw;
+  color: #000000;
+}
+
+.paginationContainer .paginationRightContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.paginationContainer .paginationRightContainer .rowsPerPage {
+  margin-right: 2.70833vw;
 }
 /*# sourceMappingURL=myleads.css.map */

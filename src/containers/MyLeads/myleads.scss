@@ -95,14 +95,35 @@ $desk: 100 / 1440;
         background-color: rgba(235, 87, 87, 0.8);
     }
 }
-.assignToBox {
-    margin-right: 618 * $desk + vw !important;
-    width: 126 * $desk + vw !important;
-}
-.assignLeads {
-    width: 166 * $desk + vw !important;
-    background-color: #3EC68C !important;
-    border-radius: 5px !important;
-    color: #FFFFFF !important;
-    cursor: pointer;
+.paginationContainer {
+    background-color: #ffffff;
+    width: 100%;
+    height: 90 * $desk + vw;
+    margin-top: 25px * $desk + vw;
+    padding-left: 16 * $desk + vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .assignToContainer {
+        display: flex;
+        align-items: center;
+        .assignLeadsBtn {
+            // background-color: #3ec68c;
+            // color: #ffffff;
+            border-radius: 5 * $desk + vw;
+        }
+        .selectedText {
+            margin-left: 15 * $desk + vw;
+            font-size: 12 * $desk + vw;
+            line-height: 14 * $desk + vw;
+            color: #000000;
+        }
+    }
+    .paginationRightContainer {
+        display: flex;
+        align-items: center;
+        .rowsPerPage {
+            margin-right: 39 * $desk + vw;
+        }
+    }
 }
