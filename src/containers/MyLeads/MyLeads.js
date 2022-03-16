@@ -195,8 +195,11 @@ export default function MyLeads(props) {
   const [responseStatus, setResponseStatus] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
   const [leadsAssignTo ,setLeadsAssignTo] = useState('');
+  const [headerCheckbox,setHeaderCheckbox] = useState(false);
+  const [childCheckBox,setChildCheckBox] = useState(false);
   let statusData = getStatusData();
   let campaignData = getCampaign();
+  let history = useHistory();
   const queryy = useQueryy();
   const myLeadQuery = queryy.get("query") || "";
   const splitUrl = (data) => {
@@ -205,7 +208,13 @@ export default function MyLeads(props) {
       return pager;
     }
   };
-  let history = useHistory();
+  const handleSelectAllClick = (event) => {
+    setHeaderCheckbox(event.target.checked);
+    setChildCheckBox(event.target.checked)
+  } 
+  const childCheckBoxHandler = (even) => {
+   setChildCheckBox(even.target.checked)
+  }
   const fetchMyLeads = async () => {
     setisLoading(true);
     const headers = { Authorization: `Token ${profileData.token}` };
@@ -850,7 +859,11 @@ export default function MyLeads(props) {
         <Table className={classes.table} stickyHeader aria-label="simple table">
           <TableHead className={classes.tableheading}>
             <TableRow>
-              <TableCell className={classes.tableheading}><Checkbox color="primary" /></TableCell>
+              <TableCell className={classes.tableheading}>
+                <Checkbox color="primary"
+                checked={headerCheckbox}
+                onChange={handleSelectAllClick}/>
+                </TableCell>
               <TableCell className={classes.tableheading}>Lead ID</TableCell>
               <TableCell className={classes.tableheading}>Name</TableCell>
               <TableCell className={classes.tableheading}>Mobile</TableCell>
@@ -897,7 +910,9 @@ export default function MyLeads(props) {
                   return (
                     <TableRow className={classes.oddEvenRow} key={index}>
                       <TableCell className={classes.tabledata}>
-                        <Checkbox color="primary" />
+                        <Checkbox color="primary" 
+                        checked={childCheckBox}
+                        onChange={childCheckBoxHandler}/>
                       </TableCell>
                       <TableCell
                         className={(classes.tabledata, classes.leadid)}
@@ -977,7 +992,9 @@ export default function MyLeads(props) {
                 return (
                   <TableRow className={classes.oddEvenRow} key={index}>
                     <TableCell className={classes.tabledata}>
-                      <Checkbox color="primary" />
+                      <Checkbox color="primary" 
+                      checked={childCheckBox}
+                      onChange={childCheckBoxHandler}/>
                     </TableCell>
                     <TableCell
                       className={(classes.tabledata, classes.leadid)}
