@@ -11,6 +11,10 @@ $desk: 100 / 1440;
             width: 238 * $desk + vw;
             height: 70 * $desk + vw;
             opacity: 1;
+            img {
+                width: 100%;
+                height: 100%;
+            }
         }
         .list {
             .progressContainer {
@@ -30,7 +34,7 @@ $desk: 100 / 1440;
                             transition: 0.3s;
                         }
                         .activeCurrent {
-                            background-color: #fff;
+                            background-color: #004D72;
                         }
                         .activeiconBar {
                             background-color: #004D72;
