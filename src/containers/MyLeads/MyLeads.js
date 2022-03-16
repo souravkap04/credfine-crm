@@ -194,9 +194,9 @@ export default function MyLeads(props) {
   const [isMyLeadsSearchData, setisMyLeadsSearchData] = useState(false);
   const [responseStatus, setResponseStatus] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
-  const [leadsAssignTo ,setLeadsAssignTo] = useState('');
-  const [headerCheckbox,setHeaderCheckbox] = useState(false);
-  const [childCheckBox,setChildCheckBox] = useState(false);
+  const [leadsAssignTo, setLeadsAssignTo] = useState('');
+  const [headerCheckbox, setHeaderCheckbox] = useState(false);
+  const [childCheckBox, setChildCheckBox] = useState(false);
   let statusData = getStatusData();
   let campaignData = getCampaign();
   let history = useHistory();
@@ -210,10 +210,12 @@ export default function MyLeads(props) {
   };
   const handleSelectAllClick = (event) => {
     setHeaderCheckbox(event.target.checked);
-    setChildCheckBox(event.target.checked)
-  } 
-  const childCheckBoxHandler = (even) => {
-   setChildCheckBox(even.target.checked)
+    //setChildCheckBox(event.target.checked)
+  }
+  const childCheckBoxHandler = (e) => {
+    const { name, checked } = e.target;
+  let newSelected = myLeads.map(my_leads => my_leads.lead.name === name ? { ...myLeads, isChecked: checked } : myLeads);
+   setMyLeads(newSelected);
   }
   const fetchMyLeads = async () => {
     setisLoading(true);
@@ -861,9 +863,9 @@ export default function MyLeads(props) {
             <TableRow>
               <TableCell className={classes.tableheading}>
                 <Checkbox color="primary"
-                checked={headerCheckbox}
-                onChange={handleSelectAllClick}/>
-                </TableCell>
+                  checked={headerCheckbox}
+                  onChange={handleSelectAllClick} />
+              </TableCell>
               <TableCell className={classes.tableheading}>Lead ID</TableCell>
               <TableCell className={classes.tableheading}>Name</TableCell>
               <TableCell className={classes.tableheading}>Mobile</TableCell>
@@ -910,9 +912,9 @@ export default function MyLeads(props) {
                   return (
                     <TableRow className={classes.oddEvenRow} key={index}>
                       <TableCell className={classes.tabledata}>
-                        <Checkbox color="primary" 
-                        checked={childCheckBox}
-                        onChange={childCheckBoxHandler}/>
+                        <Checkbox color="primary"
+                          checked={childCheckBox}
+                          onChange={childCheckBoxHandler} />
                       </TableCell>
                       <TableCell
                         className={(classes.tabledata, classes.leadid)}
@@ -992,9 +994,10 @@ export default function MyLeads(props) {
                 return (
                   <TableRow className={classes.oddEvenRow} key={index}>
                     <TableCell className={classes.tabledata}>
-                      <Checkbox color="primary" 
-                      checked={childCheckBox}
-                      onChange={childCheckBoxHandler}/>
+                      <Checkbox color="primary"
+                        name={my_leads.lead.name}
+                        checked={myLeads?.isChecked || false}
+                        onChange={childCheckBoxHandler} />
                     </TableCell>
                     <TableCell
                       className={(classes.tabledata, classes.leadid)}
@@ -1094,11 +1097,11 @@ export default function MyLeads(props) {
               <option value="ARO 1">ARO 1</option>
               <option value="ARO 2">ARO 2</option>
             </TextField>
-            <Button 
-            className="assignLeadsBtn"
-            variant="contained"
-            color="primary"
-            disabled={!leadsAssignTo}
+            <Button
+              className="assignLeadsBtn"
+              variant="contained"
+              color="primary"
+              disabled={!leadsAssignTo}
             >Assign Leads</Button>
             <div className="selectedText">14 Leads Selected</div>
           </form>
