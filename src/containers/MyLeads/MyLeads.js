@@ -195,7 +195,6 @@ export default function MyLeads(props) {
   const [responseStatus, setResponseStatus] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
   const [leadsAssignTo, setLeadsAssignTo] = useState('');
-  const [headerCheckbox, setHeaderCheckbox] = useState(false);
   const [childCheckBox, setChildCheckBox] = useState(false);
   let statusData = getStatusData();
   let campaignData = getCampaign();
@@ -208,14 +207,18 @@ export default function MyLeads(props) {
       return pager;
     }
   };
-  const handleSelectAllClick = (event) => {
-    setHeaderCheckbox(event.target.checked);
-    //setChildCheckBox(event.target.checked)
-  }
   const childCheckBoxHandler = (e) => {
     const { name, checked } = e.target;
-  let newSelected = myLeads.map(my_leads => my_leads.lead.name === name ? { ...myLeads, isChecked: checked } : myLeads);
-   setMyLeads(newSelected);
+    if (name === 'allSelect') {
+      let newSelected = myLeads.map((my_leads) => {
+        return { ...my_leads, isChecked: checked }
+      });
+      setMyLeads(newSelected);
+    } else {
+      let newSelected = myLeads.map(my_leads => my_leads.lead.name === name ? { ...my_leads, isChecked: checked } : my_leads);
+      setMyLeads(newSelected);
+      console.log("name:"+newSelected.id)
+    }
   }
   const fetchMyLeads = async () => {
     setisLoading(true);
@@ -863,8 +866,9 @@ export default function MyLeads(props) {
             <TableRow>
               <TableCell className={classes.tableheading}>
                 <Checkbox color="primary"
-                  checked={headerCheckbox}
-                  onChange={handleSelectAllClick} />
+                  name="allSelect"
+                  checked={!myLeads.some((my_leads) => my_leads?.isChecked !== true)}
+                  onChange={childCheckBoxHandler} />
               </TableCell>
               <TableCell className={classes.tableheading}>Lead ID</TableCell>
               <TableCell className={classes.tableheading}>Name</TableCell>
@@ -914,7 +918,7 @@ export default function MyLeads(props) {
                       <TableCell className={classes.tabledata}>
                         <Checkbox color="primary"
                           checked={childCheckBox}
-                          onChange={childCheckBoxHandler} />
+                          onChange={(e) => childCheckBoxHandler(e, index)} />
                       </TableCell>
                       <TableCell
                         className={(classes.tabledata, classes.leadid)}
@@ -996,8 +1000,8 @@ export default function MyLeads(props) {
                     <TableCell className={classes.tabledata}>
                       <Checkbox color="primary"
                         name={my_leads.lead.name}
-                        checked={myLeads?.isChecked || false}
-                        onChange={childCheckBoxHandler} />
+                        checked={my_leads?.isChecked || false}
+                        onChange={(e) => childCheckBoxHandler(e, index)} />
                     </TableCell>
                     <TableCell
                       className={(classes.tabledata, classes.leadid)}
