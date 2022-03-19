@@ -195,7 +195,8 @@ export default function MyLeads(props) {
   const [responseStatus, setResponseStatus] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
   const [leadsAssignTo, setLeadsAssignTo] = useState('');
-  const [childCheckBox, setChildCheckBox] = useState(false);
+  const [noOfSelectedLeads, setNoOfSelectedLeads] = useState(0);
+  const [childUsers, setChildUsers] = useState([]);
   let statusData = getStatusData();
   let campaignData = getCampaign();
   let history = useHistory();
@@ -214,10 +215,21 @@ export default function MyLeads(props) {
         return { ...my_leads, isChecked: checked }
       });
       setMyLeads(newSelected);
+      setNoOfSelectedLeads(newSelected.length);
+    } else if (isMyLeadsSearchData) {
+      if (name === 'searchAllSelect') {
+        let newSelected = myLeadSearchData.map((searchdata) => {
+          return { ...searchdata, isChecked: checked }
+        });
+        setMyLeadSearchData(newSelected)
+      } else {
+        let newSelected = myLeadSearchData.map(searchdata => searchdata.name === name ? { ...searchdata, isChecked: checked } : searchdata);
+        setMyLeadSearchData(newSelected);
+      }
     } else {
       let newSelected = myLeads.map(my_leads => my_leads.lead.name === name ? { ...my_leads, isChecked: checked } : my_leads);
       setMyLeads(newSelected);
-      console.log("name:"+newSelected.id)
+      setNoOfSelectedLeads(newSelected.length);
     }
   }
   const fetchMyLeads = async () => {
@@ -866,8 +878,8 @@ export default function MyLeads(props) {
             <TableRow>
               <TableCell className={classes.tableheading}>
                 <Checkbox color="primary"
-                  name="allSelect"
-                  checked={!myLeads.some((my_leads) => my_leads?.isChecked !== true)}
+                  name={isMyLeadsSearchData ? "searchAllSelect" : "allSelect"}
+                  checked={isMyLeadsSearchData ? !myLeadSearchData.some((searchdata) => searchdata?.isChecked !== true) : !myLeads.some((my_leads) => my_leads?.isChecked !== true)}
                   onChange={childCheckBoxHandler} />
               </TableCell>
               <TableCell className={classes.tableheading}>Lead ID</TableCell>
@@ -917,7 +929,8 @@ export default function MyLeads(props) {
                     <TableRow className={classes.oddEvenRow} key={index}>
                       <TableCell className={classes.tabledata}>
                         <Checkbox color="primary"
-                          checked={childCheckBox}
+                          name={search.name}
+                          checked={search?.isChecked || false}
                           onChange={(e) => childCheckBoxHandler(e, index)} />
                       </TableCell>
                       <TableCell
@@ -1097,9 +1110,14 @@ export default function MyLeads(props) {
               value={leadsAssignTo}
               onChange={(e) => setLeadsAssignTo(e.target.value)}
             >
-              <option value="">Select One</option>
-              <option value="ARO 1">ARO 1</option>
-              <option value="ARO 2">ARO 2</option>
+              <option value="">Select User</option>
+              {users.map((item) => {
+                return (
+                  <option value={item.myuser.username}>
+                    {item.myuser.username}
+                  </option>
+                );
+              })}
             </TextField>
             <Button
               className="assignLeadsBtn"
@@ -1107,7 +1125,7 @@ export default function MyLeads(props) {
               color="primary"
               disabled={!leadsAssignTo}
             >Assign Leads</Button>
-            <div className="selectedText">14 Leads Selected</div>
+            <div className="selectedText">{noOfSelectedLeads} Leads Selected</div>
           </form>
           <div className='paginationRightContainer'>
             <div className='rowsPerPage'>Rows Per Page: {rowsPerPage}</div>
