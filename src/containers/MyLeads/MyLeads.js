@@ -186,6 +186,7 @@ export default function MyLeads(props) {
   const [dateType, setdateType] = useState("");
   const [users_id, setUserID] = useState("");
   const [isError, setisError] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
   const [isLoading, setisLoading] = useState(false);
   const [dialerMobileNumber, setdialerMobileNumber] = useState("");
   const [callHangUpState, setCallHangUpState] = useState(true);
@@ -195,8 +196,7 @@ export default function MyLeads(props) {
   const [responseStatus, setResponseStatus] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
   const [leadsAssignTo, setLeadsAssignTo] = useState('');
-  const [noOfSelectedLeads, setNoOfSelectedLeads] = useState(0);
-  const [childUsers, setChildUsers] = useState([]);
+  const [selectedLeads, setSelectedLeads] = useState([]);
   let statusData = getStatusData();
   let campaignData = getCampaign();
   let history = useHistory();
@@ -208,29 +208,43 @@ export default function MyLeads(props) {
       return pager;
     }
   };
-  const childCheckBoxHandler = (e) => {
+  const childCheckBoxHandler = (e,data) => {
     const { name, checked } = e.target;
-    if (name === 'allSelect') {
-      let newSelected = myLeads.map((my_leads) => {
-        return { ...my_leads, isChecked: checked }
-      });
-      setMyLeads(newSelected);
-      setNoOfSelectedLeads(newSelected.length);
-    } else if (isMyLeadsSearchData) {
-      if (name === 'searchAllSelect') {
-        let newSelected = myLeadSearchData.map((searchdata) => {
-          return { ...searchdata, isChecked: checked }
-        });
-        setMyLeadSearchData(newSelected)
-      } else {
-        let newSelected = myLeadSearchData.map(searchdata => searchdata.name === name ? { ...searchdata, isChecked: checked } : searchdata);
-        setMyLeadSearchData(newSelected);
+    if(checked){
+      // if cheked and selectall checkbox add all fileds to selectedList
+      if(name === 'allSelect'){
+      setSelectedLeads(myLeads)
+      }else if(name === 'searchAllSelect'){
+        setSelectedLeads(myLeadSearchData)
       }
-    } else {
-      let newSelected = myLeads.map(my_leads => my_leads.lead.name === name ? { ...my_leads, isChecked: checked } : my_leads);
-      setMyLeads(newSelected);
-      setNoOfSelectedLeads(newSelected.length);
+      else{
+        // if cheked and specific checkbox add specific field to selectedList
+        setSelectedLeads([...selectedLeads,data])
+      }
+    }else {
+      // if uncheked and selectall checkbox add remove all fileds from selectedList
+      if(name === 'allSelect'){
+        setSelectedLeads([])
+      }else{
+        // if uncheked and specific checkbox remove specific field from selectedList
+        let tempLead = selectedLeads.filter((item) => item.id !== data.id)
+        setSelectedLeads(tempLead);
+      }
     }
+  }
+  const allocateLeadsHandler = async () => {
+    let items = {assigned_user : leadsAssignTo , leads: isMyLeadsSearchData ? selectedLeads.map(item => item.lead_crm_id): selectedLeads.map(item => item.lead.lead_crm_id)}
+    const headers = { Authorization: `Token ${profileData.token}` };
+    await axios.post(`${baseUrl}/leads/allocateLead/`,items , {headers})
+    .then((response) => {
+      console.log(response.data.message);
+      setIsSuccess(true);
+      setAlertMessage(response.data.message)
+      myLeadQuery ? fetchMyLeadsSearchData(myLeadQuery) : fetchMyLeads();
+      setSelectedLeads([]);
+    }).catch((error)=>{
+      console.log(error)
+    })
   }
   const fetchMyLeads = async () => {
     setisLoading(true);
@@ -445,6 +459,7 @@ export default function MyLeads(props) {
     setDialerCall(false);
     setDisableHangupBtn(false);
     setisError(false);
+    setIsSuccess(false);
   };
   const openDrawer = () => {
     setState(true);
@@ -573,6 +588,16 @@ export default function MyLeads(props) {
       >
         <Alert onClose={disableDialerPopUp} severity="info">
           Calling...
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={isSuccess}
+        autoHideDuration={1500}
+        onClose={disableDialerPopUp}
+      >
+        <Alert onClose={disableDialerPopUp} severity="info">
+          {alertMessage}
         </Alert>
       </Snackbar>
       <Snackbar
@@ -879,8 +904,8 @@ export default function MyLeads(props) {
               <TableCell className={classes.tableheading}>
                 <Checkbox color="primary"
                   name={isMyLeadsSearchData ? "searchAllSelect" : "allSelect"}
-                  checked={isMyLeadsSearchData ? !myLeadSearchData.some((searchdata) => searchdata?.isChecked !== true) : !myLeads.some((my_leads) => my_leads?.isChecked !== true)}
-                  onChange={childCheckBoxHandler} />
+                  checked={isMyLeadsSearchData ? selectedLeads?.length === myLeadSearchData?.length: selectedLeads?.length === myLeads?.length}
+                  onChange={(e) => childCheckBoxHandler(e,myLeads)} />
               </TableCell>
               <TableCell className={classes.tableheading}>Lead ID</TableCell>
               <TableCell className={classes.tableheading}>Name</TableCell>
@@ -930,8 +955,8 @@ export default function MyLeads(props) {
                       <TableCell className={classes.tabledata}>
                         <Checkbox color="primary"
                           name={search.name}
-                          checked={search?.isChecked || false}
-                          onChange={(e) => childCheckBoxHandler(e, index)} />
+                          checked={selectedLeads.some((item) => item?.id === search?.id)}
+                          onChange={(e) => childCheckBoxHandler(e, search)} />
                       </TableCell>
                       <TableCell
                         className={(classes.tabledata, classes.leadid)}
@@ -1013,8 +1038,8 @@ export default function MyLeads(props) {
                     <TableCell className={classes.tabledata}>
                       <Checkbox color="primary"
                         name={my_leads.lead.name}
-                        checked={my_leads?.isChecked || false}
-                        onChange={(e) => childCheckBoxHandler(e, index)} />
+                        checked={selectedLeads.some((item) => item?.id === my_leads?.id)}
+                        onChange={(e) => childCheckBoxHandler(e, my_leads)} />
                     </TableCell>
                     <TableCell
                       className={(classes.tabledata, classes.leadid)}
@@ -1124,8 +1149,9 @@ export default function MyLeads(props) {
               variant="contained"
               color="primary"
               disabled={!leadsAssignTo}
+              onClick={allocateLeadsHandler}
             >Assign Leads</Button>
-            <div className="selectedText">{noOfSelectedLeads} Leads Selected</div>
+            <div className="selectedText">{selectedLeads.length} Leads Selected</div>
           </form>
           <div className='paginationRightContainer'>
             <div className='rowsPerPage'>Rows Per Page: {rowsPerPage}</div>
