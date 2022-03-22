@@ -45,7 +45,7 @@ function Alert(props) {
 }
 const useStyles = makeStyles({
   container: {
-    maxHeight: '525px',
+    maxHeight: '67vh',
     marginBottom: "10px",
   },
   table: {
@@ -208,24 +208,24 @@ export default function MyLeads(props) {
       return pager;
     }
   };
-  const childCheckBoxHandler = (e,data) => {
+  const childCheckBoxHandler = (e, data) => {
     const { name, checked } = e.target;
-    if(checked){
+    if (checked) {
       // if cheked and selectall checkbox add all fileds to selectedList
-      if(name === 'allSelect'){
-      setSelectedLeads(myLeads)
-      }else if(name === 'searchAllSelect'){
+      if (name === 'allSelect') {
+        setSelectedLeads(myLeads)
+      } else if (name === 'searchAllSelect') {
         setSelectedLeads(myLeadSearchData)
       }
-      else{
+      else {
         // if cheked and specific checkbox add specific field to selectedList
-        setSelectedLeads([...selectedLeads,data])
+        setSelectedLeads([...selectedLeads, data])
       }
-    }else {
+    } else {
       // if uncheked and selectall checkbox add remove all fileds from selectedList
-      if(name === 'allSelect'){
+      if (name === 'allSelect') {
         setSelectedLeads([])
-      }else{
+      } else {
         // if uncheked and specific checkbox remove specific field from selectedList
         let tempLead = selectedLeads.filter((item) => item.id !== data.id)
         setSelectedLeads(tempLead);
@@ -233,18 +233,18 @@ export default function MyLeads(props) {
     }
   }
   const allocateLeadsHandler = async () => {
-    let items = {assigned_user : leadsAssignTo , leads: isMyLeadsSearchData ? selectedLeads.map(item => item.lead_crm_id): selectedLeads.map(item => item.lead.lead_crm_id)}
+    let items = { assigned_user: leadsAssignTo, leads: isMyLeadsSearchData ? selectedLeads.map(item => item.lead_crm_id) : selectedLeads.map(item => item.lead.lead_crm_id) }
     const headers = { Authorization: `Token ${profileData.token}` };
-    await axios.post(`${baseUrl}/leads/allocateLead/`,items , {headers})
-    .then((response) => {
-      console.log(response.data.message);
-      setIsSuccess(true);
-      setAlertMessage(response.data.message)
-      myLeadQuery ? fetchMyLeadsSearchData(myLeadQuery) : fetchMyLeads();
-      setSelectedLeads([]);
-    }).catch((error)=>{
-      console.log(error)
-    })
+    await axios.post(`${baseUrl}/leads/allocateLead/`, items, { headers })
+      .then((response) => {
+        console.log(response.data.message);
+        setIsSuccess(true);
+        setAlertMessage(response.data.message)
+        myLeadQuery ? fetchMyLeadsSearchData(myLeadQuery) : fetchMyLeads();
+        setSelectedLeads([]);
+      }).catch((error) => {
+        console.log(error)
+      })
   }
   const fetchMyLeads = async () => {
     setisLoading(true);
@@ -904,8 +904,8 @@ export default function MyLeads(props) {
               <TableCell className={classes.tableheading}>
                 <Checkbox color="primary"
                   name={isMyLeadsSearchData ? "searchAllSelect" : "allSelect"}
-                  checked={isMyLeadsSearchData ? selectedLeads?.length === myLeadSearchData?.length: selectedLeads?.length === myLeads?.length}
-                  onChange={(e) => childCheckBoxHandler(e,myLeads)} />
+                  checked={isMyLeadsSearchData ? selectedLeads?.length === myLeadSearchData?.length : selectedLeads?.length === myLeads?.length}
+                  onChange={(e) => childCheckBoxHandler(e, myLeads)} />
               </TableCell>
               <TableCell className={classes.tableheading}>Lead ID</TableCell>
               <TableCell className={classes.tableheading}>Name</TableCell>
