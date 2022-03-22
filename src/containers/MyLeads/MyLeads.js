@@ -40,6 +40,9 @@ import { useQueryy } from "../../global/query";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import EmiCalculator from '../Emicalculator/EmiCalculator';
 import EligibilityCalculator from "../EligibilityCalculator/EligibilityCalculator";
+import { ListGroup } from 'react-bootstrap';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import CancelRoundedIcon from '@material-ui/icons/CancelRounded';
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -197,6 +200,7 @@ export default function MyLeads(props) {
   const [alertMessage, setAlertMessage] = useState("");
   const [leadsAssignTo, setLeadsAssignTo] = useState('');
   const [selectedLeads, setSelectedLeads] = useState([]);
+  const [showAROList, setShowAROList] = useState(false);
   let statusData = getStatusData();
   let campaignData = getCampaign();
   let history = useHistory();
@@ -233,18 +237,24 @@ export default function MyLeads(props) {
     }
   }
   const allocateLeadsHandler = async () => {
-    let items = { assigned_user: leadsAssignTo, leads: isMyLeadsSearchData ? selectedLeads.map(item => item.lead_crm_id) : selectedLeads.map(item => item.lead.lead_crm_id) }
-    const headers = { Authorization: `Token ${profileData.token}` };
-    await axios.post(`${baseUrl}/leads/allocateLead/`, items, { headers })
-      .then((response) => {
-        console.log(response.data.message);
-        setIsSuccess(true);
-        setAlertMessage(response.data.message)
-        myLeadQuery ? fetchMyLeadsSearchData(myLeadQuery) : fetchMyLeads();
-        setSelectedLeads([]);
-      }).catch((error) => {
-        console.log(error)
-      })
+    setShowAROList(false);
+    if (leadsAssignTo !== '') {
+      let items = { assigned_user: leadsAssignTo, leads: isMyLeadsSearchData ? selectedLeads.map(item => item.lead_crm_id) : selectedLeads.map(item => item.lead.lead_crm_id) }
+      const headers = { Authorization: `Token ${profileData.token}` };
+      await axios.post(`${baseUrl}/leads/allocateLead/`, items, { headers })
+        .then((response) => {
+          console.log(response.data.message);
+          setIsSuccess(true);
+          setAlertMessage(response.data.message)
+          myLeadQuery ? fetchMyLeadsSearchData(myLeadQuery) : fetchMyLeads();
+          setSelectedLeads([]);
+        }).catch((error) => {
+          console.log(error)
+        })
+    }
+  }
+  const toggleAROHandler = () => {
+    setShowAROList(true);
   }
   const fetchMyLeads = async () => {
     setisLoading(true);
@@ -562,6 +572,12 @@ export default function MyLeads(props) {
     sethangUpSnacks(true);
     setCallHangUpState(true);
   };
+  const getAssignedAgent = (agentName) => {
+    setLeadsAssignTo(agentName);
+  }
+  const closeListGroupHandler = () => {
+    setShowAROList(false);
+  }
   const [openCalculate, setopenCalculate] = useState(false);
   const [checkEligibility, setCheckEligibility] = useState(false);
   const openCalculator = () => {
@@ -1117,40 +1133,27 @@ export default function MyLeads(props) {
       ) : (
         <div className="paginationContainer">
           <form className="assignToContainer">
-            <TextField
-              select
-              className="textField"
-              id="outlined-full-width"
-              label="Assign To"
-              style={{ margin: 8 }}
-              margin="normal"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              SelectProps={{
-                native: true,
-              }}
-              variant="outlined"
-              size="small"
-              value={leadsAssignTo}
-              onChange={(e) => setLeadsAssignTo(e.target.value)}
-            >
-              <option value="">Select User</option>
-              {users.map((item) => {
-                return (
-                  <option value={item.myuser.username}>
-                    {item.myuser.username}
-                  </option>
-                );
-              })}
-            </TextField>
-            <Button
-              className="assignLeadsBtn"
-              variant="contained"
-              color="primary"
-              disabled={!leadsAssignTo}
-              onClick={allocateLeadsHandler}
-            >Assign Leads</Button>
+            {showAROList && <ListGroup className="listGroup">
+              <CancelRoundedIcon className="closeListGroup" onClick={closeListGroupHandler}/>
+              <div className="listItemContainer">
+                {users.map((item) => (
+                  <ListGroup.Item className={leadsAssignTo === item.myuser.username && "activeListItem"} onClick={() => getAssignedAgent(item.myuser.username)}
+                  >{item.myuser.username}</ListGroup.Item>
+                ))}
+              </div>
+              <Button
+                className="assignLeadsBtn"
+                variant="contained"
+                color="primary"
+                onClick={allocateLeadsHandler}
+              >
+                Assign
+              </Button>
+            </ListGroup>}
+            <div className="assignToBtnContainer" onClick={toggleAROHandler}>
+              <span className="assignText">Assign To</span>
+              <ArrowDropDownIcon />
+            </div>
             <div className="selectedText">{selectedLeads.length} Leads Selected</div>
           </form>
           <div className='paginationRightContainer'>
