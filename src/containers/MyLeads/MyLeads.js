@@ -7,6 +7,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import Checkbox from '@material-ui/core/Checkbox';
 import axios from "axios";
 import baseUrl from "../../global/api";
 import {
@@ -32,6 +33,7 @@ import "./myleads.css";
 import { Drawer } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
+import InputBase from "@material-ui/core/InputBase";
 import MuiAlert from "@material-ui/lab/Alert";
 import Snackbar from "@material-ui/core/Snackbar";
 import filter from "../../images/filter.png";
@@ -39,47 +41,28 @@ import { useQueryy } from "../../global/query";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import EmiCalculator from '../Emicalculator/EmiCalculator';
 import EligibilityCalculator from "../EligibilityCalculator/EligibilityCalculator";
+import SearchIcon from "@material-ui/icons/Search";
+import { ListGroup } from 'react-bootstrap';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import CancelRoundedIcon from '@material-ui/icons/CancelRounded';
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 const useStyles = makeStyles({
   container: {
-    // margin: '25px',
-    overflow: "auto",
-    // maxHeight: '550px',
+    maxHeight: '67vh',
     marginBottom: "10px",
   },
   table: {
     width: "100%",
   },
   tableheading: {
-    // padding: '0 8px',
-    // fontSize: '12px',
-    // textAlign: 'center',
     backgroundColor: "#8f9bb3",
     color: "#ffffff",
     fontSize: "14px",
   },
-  tablePagination: {
-    backgroundColor: "#ffffff",
-    width: "100%",
-    height: "64px",
-    marginTop: "25px",
-    marginBottom: "25px",
-    display: "flex",
-    justifyContent: "flex-end",
-    alignItems: "center",
-  },
   numberOfTotalCount: {
     marginRight: "25px",
-  },
-  rowsPerPageContainer: {
-    marginRight: "70px",
-    display: "flex",
-    alignItems: "center",
-  },
-  rowsText: {
-    marginRight: "8px",
   },
   buttonsContainer: {
     marginRight: "15px",
@@ -208,6 +191,7 @@ export default function MyLeads(props) {
   const [dateType, setdateType] = useState("");
   const [users_id, setUserID] = useState("");
   const [isError, setisError] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
   const [isLoading, setisLoading] = useState(false);
   const [dialerMobileNumber, setdialerMobileNumber] = useState("");
   const [callHangUpState, setCallHangUpState] = useState(true);
@@ -216,8 +200,13 @@ export default function MyLeads(props) {
   const [isMyLeadsSearchData, setisMyLeadsSearchData] = useState(false);
   const [responseStatus, setResponseStatus] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
+  const [leadsAssignTo, setLeadsAssignTo] = useState('');
+  const [selectedLeads, setSelectedLeads] = useState([]);
+  const [showAROList, setShowAROList] = useState(false);
+  const [searchInput, setSearchInput] = useState('');
   let statusData = getStatusData();
   let campaignData = getCampaign();
+  let history = useHistory();
   const queryy = useQueryy();
   const myLeadQuery = queryy.get("query") || "";
   const splitUrl = (data) => {
@@ -226,7 +215,50 @@ export default function MyLeads(props) {
       return pager;
     }
   };
-  let history = useHistory();
+  const childCheckBoxHandler = (e, data) => {
+    const { name, checked } = e.target;
+    if (checked) {
+      // if cheked and selectall checkbox add all fileds to selectedList
+      if (name === 'allSelect') {
+        setSelectedLeads(myLeads)
+      } else if (name === 'searchAllSelect') {
+        setSelectedLeads(myLeadSearchData)
+      }
+      else {
+        // if cheked and specific checkbox add specific field to selectedList
+        setSelectedLeads([...selectedLeads, data])
+      }
+    } else {
+      // if uncheked and selectall checkbox add remove all fileds from selectedList
+      if (name === 'allSelect') {
+        setSelectedLeads([])
+      } else {
+        // if uncheked and specific checkbox remove specific field from selectedList
+        let tempLead = selectedLeads.filter((item) => item.id !== data.id)
+        setSelectedLeads(tempLead);
+      }
+    }
+  }
+  const allocateLeadsHandler = async () => {
+    setShowAROList(false);
+    if (leadsAssignTo !== '') {
+      let items = { assigned_user: leadsAssignTo, leads: isMyLeadsSearchData ? selectedLeads.map(item => item.lead_crm_id) : selectedLeads.map(item => item.lead.lead_crm_id) }
+      const headers = { Authorization: `Token ${profileData.token}` };
+      await axios.post(`${baseUrl}/leads/allocateLead/`, items, { headers })
+        .then((response) => {
+          console.log(response.data.message);
+          setIsSuccess(true);
+          setAlertMessage(response.data.message)
+          myLeadQuery ? fetchMyLeadsSearchData(myLeadQuery) : fetchMyLeads();
+          setSelectedLeads([]);
+        }).catch((error) => {
+          console.log(error)
+        })
+    }
+  }
+  const toggleAROHandler = () => {
+    setShowAROList(true);
+  }
   const fetchMyLeads = async () => {
     setisLoading(true);
     const headers = { Authorization: `Token ${profileData.token}` };
@@ -440,6 +472,7 @@ export default function MyLeads(props) {
     setDialerCall(false);
     setDisableHangupBtn(false);
     setisError(false);
+    setIsSuccess(false);
   };
   const openDrawer = () => {
     setState(true);
@@ -542,6 +575,13 @@ export default function MyLeads(props) {
     sethangUpSnacks(true);
     setCallHangUpState(true);
   };
+  const getAssignedAgent = (agentName) => {
+    setLeadsAssignTo(agentName);
+  }
+  const closeListGroupHandler = () => {
+    setShowAROList(false);
+    setSearchInput('');
+  }
   const [openCalculate, setopenCalculate] = useState(false);
   const [checkEligibility, setCheckEligibility] = useState(false);
   const openCalculator = () => {
@@ -568,6 +608,16 @@ export default function MyLeads(props) {
       >
         <Alert onClose={disableDialerPopUp} severity="info">
           Calling...
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={isSuccess}
+        autoHideDuration={1500}
+        onClose={disableDialerPopUp}
+      >
+        <Alert onClose={disableDialerPopUp} severity="info">
+          {alertMessage}
         </Alert>
       </Snackbar>
       <Snackbar
@@ -868,10 +918,15 @@ export default function MyLeads(props) {
         </div>
       </div>
       <TableContainer className={classes.container}>
-        <Table className={classes.table} aria-label="simple table">
+        <Table className={classes.table} stickyHeader aria-label="simple table">
           <TableHead className={classes.tableheading}>
             <TableRow>
-              <TableCell className={classes.tableheading}>Sr No</TableCell>
+              <TableCell className={classes.tableheading}>
+                <Checkbox color="primary"
+                  name={isMyLeadsSearchData ? "searchAllSelect" : "allSelect"}
+                  checked={isMyLeadsSearchData ? selectedLeads?.length === myLeadSearchData?.length : selectedLeads?.length === myLeads?.length}
+                  onChange={(e) => childCheckBoxHandler(e, myLeads)} />
+              </TableCell>
               <TableCell className={classes.tableheading}>Lead ID</TableCell>
               <TableCell className={classes.tableheading}>Name</TableCell>
               <TableCell className={classes.tableheading}>Mobile</TableCell>
@@ -918,7 +973,10 @@ export default function MyLeads(props) {
                   return (
                     <TableRow className={classes.oddEvenRow} key={index}>
                       <TableCell className={classes.tabledata}>
-                        {index + 1}
+                        <Checkbox color="primary"
+                          name={search.name}
+                          checked={selectedLeads.some((item) => item?.id === search?.id)}
+                          onChange={(e) => childCheckBoxHandler(e, search)} />
                       </TableCell>
                       <TableCell
                         className={(classes.tabledata, classes.leadid)}
@@ -998,7 +1056,10 @@ export default function MyLeads(props) {
                 return (
                   <TableRow className={classes.oddEvenRow} key={index}>
                     <TableCell className={classes.tabledata}>
-                      {index + 1}
+                      <Checkbox color="primary"
+                        name={my_leads.lead.name}
+                        checked={selectedLeads.some((item) => item?.id === my_leads?.id)}
+                        onChange={(e) => childCheckBoxHandler(e, my_leads)} />
                     </TableCell>
                     <TableCell
                       className={(classes.tabledata, classes.leadid)}
@@ -1074,36 +1135,80 @@ export default function MyLeads(props) {
       {isLoading ? (
         ""
       ) : (
-        <div className={classes.tablePagination}>
-          <div className={classes.rowsPerPageContainer}>
-            <div className={classes.rowsText}>Rows Per Page: {rowsPerPage}</div>
-          </div>
-          <div className={classes.numberOfTotalCount}>
-            {totalDataPerPage} of {totalLeads}
-          </div>
-          <div className={classes.buttonsContainer}>
-            {prevPage === null ? (
-              <IconButton disabled onClick={prevPageHandler}>
-                <ChevronLeftOutlinedIcon />
-              </IconButton>
-            ) : (
-              <IconButton onClick={prevPageHandler}>
-                <ChevronLeftOutlinedIcon
-                  className={prevPage !== null ? classes.activeColor : ""}
-                />
-              </IconButton>
-            )}
-            {nextPage === null ? (
-              <IconButton disabled onClick={nextPageHandler}>
-                <ChevronRightOutlinedIcon />
-              </IconButton>
-            ) : (
-              <IconButton onClick={nextPageHandler}>
-                <ChevronRightOutlinedIcon
-                  className={nextPage !== null ? classes.activeColor : ""}
-                />
-              </IconButton>
-            )}
+        <div className="paginationContainer">
+          <form className="assignToContainer">
+            {showAROList && <ListGroup className="listGroup">
+              <CancelRoundedIcon className="closeListGroup" onClick={closeListGroupHandler} />
+              <div className="searchMainContainer">
+                <div className="searchContainer">
+                  <InputBase
+                    className="inputContainer"
+                    inputProps={{ "aria-label": "search" }}
+                    value={searchInput}
+                    onChange={(e) => setSearchInput((e.target.value).toLowerCase().trim())}
+                  />
+                  <div className="searchIconContainer">
+                    <SearchIcon className="searchIcon" />
+                  </div>
+                </div>
+              </div>
+              <div className="listItemContainer">
+                {
+                  users.filter((data) => {
+                    if (searchInput === "") {
+                      return users;
+                    } else if (data.myuser.username.toLowerCase().includes(searchInput.toLowerCase())) {
+                      return users;
+                    }
+                  }).map((item) => (
+                    <ListGroup.Item className={leadsAssignTo === item.myuser.username && "activeListItem"} onClick={() => getAssignedAgent(item.myuser.username)}
+                    >{item.myuser.username}</ListGroup.Item>
+                  ))}
+              </div>
+              <Button
+                className="assignLeadsBtn"
+                variant="contained"
+                color="primary"
+                onClick={allocateLeadsHandler}
+              >
+                Assign
+              </Button>
+            </ListGroup>}
+            <div className="assignToBtnContainer" onClick={toggleAROHandler}>
+              <span className="assignText">Assign To</span>
+              <ArrowDropDownIcon />
+            </div>
+            <div className="selectedText">{selectedLeads.length} Leads Selected</div>
+          </form>
+          <div className='paginationRightContainer'>
+            <div className='rowsPerPage'>Rows Per Page: {rowsPerPage}</div>
+            <div className={classes.numberOfTotalCount}>
+              {totalDataPerPage} of {totalLeads}
+            </div>
+            <div className={classes.buttonsContainer}>
+              {prevPage === null ? (
+                <IconButton disabled onClick={prevPageHandler}>
+                  <ChevronLeftOutlinedIcon />
+                </IconButton>
+              ) : (
+                <IconButton onClick={prevPageHandler}>
+                  <ChevronLeftOutlinedIcon
+                    className={prevPage !== null ? classes.activeColor : ""}
+                  />
+                </IconButton>
+              )}
+              {nextPage === null ? (
+                <IconButton disabled onClick={nextPageHandler}>
+                  <ChevronRightOutlinedIcon />
+                </IconButton>
+              ) : (
+                <IconButton onClick={nextPageHandler}>
+                  <ChevronRightOutlinedIcon
+                    className={nextPage !== null ? classes.activeColor : ""}
+                  />
+                </IconButton>
+              )}
+            </div>
           </div>
         </div>
       )}
