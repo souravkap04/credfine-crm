@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Paysense.css';
 import axios from 'axios';
-import { bankApi } from '../../global/bankingApis';
+import { paysenseApi } from '../../global/bankingApis';
 import { useHistory, useParams } from 'react-router-dom';
 import { getProfileData } from "../../global/leadsGlobalData";
 import back from '../../images/forms/back.svg';
@@ -13,8 +13,14 @@ import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import Checkbox from '@material-ui/core/Checkbox';
 
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 const Paysense = () => {
     const history = useHistory();
+    const profileData = getProfileData();
+    const { leadid } = useParams();
     const [isBasicDetails, setIsBasicDetails] = useState(true)
     const [isBasicProgress, setisBasicProgress] = useState(false);
     const [isPersonalDetail, setisPersonalDetail] = useState(false);
@@ -31,20 +37,167 @@ const Paysense = () => {
     const [monthlyIncome, setMonthlyIncome] = useState("");
     const [postalcode, setPostalcode] = useState("");
     const [emailID, setEmailID] = useState("");
-    const basicDetailsHandler = () => {
-        setIsBasicDetails(false);
-        setisBasicProgress(true);
-        setisPersonalDetail(true);
-        setisPersonalProgress(true);
+    const [isError, setIsError] = useState(false);
+    const [isCopy, setIsCopy] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+    useEffect(() => {
+        getBasicdetailsData(leadid);
+        getPersonaldetailsData(leadid);
+    }, [])
+    const getBasicdetailsData = async (leadID) => {
+        const headers = { Authorization: `Token ${profileData.token}` };
+        await axios.get(`${paysenseApi}/leads/sendLeadPartner/${leadID}/3/1`, { headers })
+            .then((response) => {
+                setPanCardNo(response.data.panNo);
+                setMobileNo(response.data.phone)
+            }).catch((error) => {
+                console.log(error);
+            })
     }
-    const pesonalDetailsHandle = () => {
-        setIsBasicDetails(false);
-        setisPersonalDetail(false);
-        setIsApprovalStatus(true);
-        setIsApprovalProgress(true);
+    const getPersonaldetailsData = async (leadID) => {
+        const headers = { Authorization: `Token ${profileData.token}` };
+        await axios.get(`${paysenseApi}/leads/sendLeadPartner/${leadID}/3/2`, { headers })
+            .then((response) => {
+                setPanCardNo(response.data.pan);
+                setMobileNo(response.data.phone)
+                setFirstName(response.data.first_name.split(' ').slice(0, -1).join(' '))
+                setLastName(response.data.last_name.split(' ').slice(-1).join(' '))
+                setDob(response.data.date_of_birth)
+                setEmploymentType(response.data.employment_type)
+                setGender(response.data.gender)
+                setEmailID(response.data.email)
+                setMonthlyIncome(response.data.monthly_income)
+                setPostalcode(response.data.postal_code)
+            }).catch((error) => {
+                console.log(error);
+            })
+    }
+    const basicDetailsHandler = async () => {
+        if (panCardNo === '') {
+            setAlertMessage('Invalid Pancard Number')
+            setIsError(true)
+            return;
+        }
+        if (mobileNo === '') {
+            setAlertMessage('Invalid Mobile Number')
+            setIsError(true)
+            return;
+        }
+        const headers = { Authorization: `Token ${profileData.token}` };
+        let items = { panNo: panCardNo, phone: mobileNo }
+        await axios.post(`${paysenseApi}/leads/sendLeadPartner/${leadid}/3/1`, items, { headers })
+            .then((response) => {
+                if (response.status === 200) {
+                    if (response.data.leads[0].status === 'not-registered') {
+                        setIsBasicDetails(false);
+                        setisBasicProgress(true);
+                        setisPersonalDetail(true);
+                        setisPersonalProgress(true);
+                    }
+                }
+            }).catch((error) => {
+                console.log(error);
+            })
+
+    }
+    const pesonalDetailsHandle = async () => {
+        if (panCardNo === '') {
+            setAlertMessage('Invalid Pancard Number')
+            setIsError(true)
+            return;
+        }
+        if (firstName === '') {
+            setAlertMessage('Invalid First Name')
+            setIsError(true)
+            return;
+        }
+        if (lastName === '') {
+            setAlertMessage('Invalid Last Name')
+            setIsError(true)
+            return;
+        }
+        if (dob === '') {
+            setAlertMessage('Invalid Date of Birth')
+            setIsError(true)
+            return;
+        }
+        if (employmentType === '') {
+            setAlertMessage('Invalid Employment Type')
+            setIsError(true)
+            return;
+        }
+        if (gender === '') {
+            setAlertMessage('Invalid Gender')
+            setIsError(true)
+            return;
+        }
+        if (monthlyIncome === '') {
+            setAlertMessage('Invalid Monthly Income')
+            setIsError(true)
+            return;
+        }
+        if (postalcode === '') {
+            setAlertMessage('Invalid Postal Code')
+            setIsError(true)
+            return;
+        }
+        if (mobileNo === '') {
+            setAlertMessage('Invalid Mobile Number')
+            setIsError(true)
+            return;
+        }
+        if (emailID === '') {
+            setAlertMessage('Invalid Email ID')
+            setIsError(true)
+            return;
+        }
+        const headers = { Authorization: `Token ${profileData.token}` };
+        let items = {
+            pan: panCardNo, phone: mobileNo, first_name: firstName, last_name: lastName, gender, date_of_birth: dob,
+            employment_type: employmentType, monthly_income: monthlyIncome, postal_code: postalcode, email: emailID,
+            product_offering: "product_offering", terms_accepted: true, "phone_verified": true
+        }
+        await axios.post(`${paysenseApi}/leads/sendLeadPartner/${leadid}/3/2`, items, { headers })
+            .then((response) => {
+                if (response.data.status_code === 200) {
+                    setIsBasicDetails(false);
+                    setisPersonalDetail(false);
+                    setIsApprovalStatus(true);
+                    setIsApprovalProgress(true);
+                }
+                else if (response.data.status_code === 400) {
+                    setAlertMessage(response.data.message)
+                    setIsError(true)
+                }
+            }).catch((error) => {
+                console.log(error)
+            })
+    }
+    const closeSnackbar = () => {
+        setIsError(false);
+        setIsCopy(false)
+    }
+    const copyUniqueIDNumber = (clip) => {
+        navigator.clipboard.writeText(clip).then(function () {
+            setIsCopy(true)
+        }, function () {
+            setIsError(true)
+            alertMessage('uniqueID Not Copied!')
+        })
     }
     return (
         <div className='PaysenseContainer'>
+            <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isError} autoHideDuration={1500} onClose={closeSnackbar}>
+                <Alert onClose={closeSnackbar} severity="error">
+                    {alertMessage}
+                </Alert>
+            </Snackbar>
+            <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isCopy} autoHideDuration={1500} onClose={closeSnackbar}>
+                <Alert onClose={closeSnackbar} severity="success">
+                    Successfully copied to clipboard
+                </Alert>
+            </Snackbar>
             <div className='leftSection'>
                 <div className='image'>
                     <img src={logo} alt="" />
@@ -364,7 +517,7 @@ const Paysense = () => {
                         <div className='losContainer'>
                             <div className='losHeader'><strong>Loan Tracking Number</strong></div>
                             <div className='losNumber'>1234567890</div>
-                            <div className='copyIcon' >
+                            <div className='copyIcon' onClick={() => copyUniqueIDNumber("1234567890")}>
                                 <i class="far fa-copy"></i>
                             </div>
                         </div>
