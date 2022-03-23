@@ -172,6 +172,70 @@
   margin-left: 0.48611vw;
 }
 
+.paginationContainer .assignToContainer .listGroup .searchMainContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-top: 1.11111vw;
+  margin-left: 0.83333vw;
+  margin-right: 0.83333vw;
+  margin-bottom: 1.11111vw;
+}
+
+.paginationContainer .assignToContainer .listGroup .searchMainContainer .searchContainer {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 16.66667vw;
+  height: 2.91667vw;
+  border-radius: 0.27778vw;
+  border: solid 1px #8F9BB3;
+  background-color: #fff;
+}
+
+.paginationContainer .assignToContainer .listGroup .searchMainContainer .searchContainer .searchIconContainer {
+  margin-right: 0.55556vw;
+  margin-left: 0.55556vw;
+}
+
+.paginationContainer .assignToContainer .listGroup .searchMainContainer .searchContainer .searchIconContainer .searchIcon {
+  font-size: 1.94444vw;
+  color: #8f9bb3;
+}
+
+.paginationContainer .assignToContainer .listGroup .searchMainContainer .searchContainer .inputContainer input {
+  width: 95% !important;
+  font-size: 1.11111vw;
+  color: #8f9bb3;
+  margin-left: 5px;
+}
+
+.paginationContainer .assignToContainer .listGroup .searchMainContainer .searchContainer .inputContainer::-webkit-input-placeholder {
+  color: #8f9bb3;
+}
+
+.paginationContainer .assignToContainer .listGroup .searchMainContainer .searchContainer .inputContainer:-ms-input-placeholder {
+  color: #8f9bb3;
+}
+
+.paginationContainer .assignToContainer .listGroup .searchMainContainer .searchContainer .inputContainer::-ms-input-placeholder {
+  color: #8f9bb3;
+}
+
+.paginationContainer .assignToContainer .listGroup .searchMainContainer .searchContainer .inputContainer::placeholder {
+  color: #8f9bb3;
+}
+
 .paginationContainer .assignToContainer .listGroup .closeListGroup {
   background-color: #fff;
   border-radius: 50%;

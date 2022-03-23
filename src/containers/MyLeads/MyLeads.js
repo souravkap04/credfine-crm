@@ -33,6 +33,7 @@ import "./myleads.css";
 import { Drawer } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
+import InputBase from "@material-ui/core/InputBase";
 import MuiAlert from "@material-ui/lab/Alert";
 import Snackbar from "@material-ui/core/Snackbar";
 import filter from "../../images/filter.png";
@@ -40,6 +41,7 @@ import { useQueryy } from "../../global/query";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import EmiCalculator from '../Emicalculator/EmiCalculator';
 import EligibilityCalculator from "../EligibilityCalculator/EligibilityCalculator";
+import SearchIcon from "@material-ui/icons/Search";
 import { ListGroup } from 'react-bootstrap';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import CancelRoundedIcon from '@material-ui/icons/CancelRounded';
@@ -201,6 +203,7 @@ export default function MyLeads(props) {
   const [leadsAssignTo, setLeadsAssignTo] = useState('');
   const [selectedLeads, setSelectedLeads] = useState([]);
   const [showAROList, setShowAROList] = useState(false);
+  const [searchInput, setSearchInput] = useState('');
   let statusData = getStatusData();
   let campaignData = getCampaign();
   let history = useHistory();
@@ -577,6 +580,7 @@ export default function MyLeads(props) {
   }
   const closeListGroupHandler = () => {
     setShowAROList(false);
+    setSearchInput('');
   }
   const [openCalculate, setopenCalculate] = useState(false);
   const [checkEligibility, setCheckEligibility] = useState(false);
@@ -1134,12 +1138,32 @@ export default function MyLeads(props) {
         <div className="paginationContainer">
           <form className="assignToContainer">
             {showAROList && <ListGroup className="listGroup">
-              <CancelRoundedIcon className="closeListGroup" onClick={closeListGroupHandler}/>
+              <CancelRoundedIcon className="closeListGroup" onClick={closeListGroupHandler} />
+              <div className="searchMainContainer">
+                <div className="searchContainer">
+                  <InputBase
+                    className="inputContainer"
+                    inputProps={{ "aria-label": "search" }}
+                    value={searchInput}
+                    onChange={(e) => setSearchInput((e.target.value).toLowerCase().trim())}
+                  />
+                  <div className="searchIconContainer">
+                    <SearchIcon className="searchIcon" />
+                  </div>
+                </div>
+              </div>
               <div className="listItemContainer">
-                {users.map((item) => (
-                  <ListGroup.Item className={leadsAssignTo === item.myuser.username && "activeListItem"} onClick={() => getAssignedAgent(item.myuser.username)}
-                  >{item.myuser.username}</ListGroup.Item>
-                ))}
+                {
+                  users.filter((data) => {
+                    if (searchInput === "") {
+                      return users;
+                    } else if (data.myuser.username.toLowerCase().includes(searchInput.toLowerCase())) {
+                      return users;
+                    }
+                  }).map((item) => (
+                    <ListGroup.Item className={leadsAssignTo === item.myuser.username && "activeListItem"} onClick={() => getAssignedAgent(item.myuser.username)}
+                    >{item.myuser.username}</ListGroup.Item>
+                  ))}
               </div>
               <Button
                 className="assignLeadsBtn"

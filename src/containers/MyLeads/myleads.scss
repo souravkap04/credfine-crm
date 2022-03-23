@@ -118,6 +118,42 @@ $desk: 100 / 1440;
             box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
             border-radius: 4 * $desk + vw;
             margin-left: 7 * $desk + vw;
+            .searchMainContainer {
+                display: flex;
+                align-items: center;
+                margin-top: 16 * $desk + vw;
+                margin-left: 12 * $desk + vw;
+                margin-right: 12 * $desk + vw;
+                margin-bottom: 16 * $desk + vw;
+                .searchContainer {
+                    position: relative;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 240 * $desk + vw;
+                    height: 42 * $desk + vw;
+                    border-radius: 4 * $desk + vw;
+                    border: solid 1px #8F9BB3;
+                    background-color: #fff;
+                    .searchIconContainer {
+                        margin-right: 8 * $desk + vw;
+                        margin-left: 8 * $desk + vw;
+                        .searchIcon {
+                            font-size: 28 * $desk + vw;
+                            color: #8f9bb3;
+                        }
+                    }
+                    .inputContainer input {
+                        width: 95% !important;
+                        font-size: 16 * $desk + vw;
+                        color: #8f9bb3;
+                        margin-left: 5px;
+                    }
+                    .inputContainer::placeholder {
+                        color: #8f9bb3;
+                    }
+                }
+            }
             .closeListGroup {
                 background-color: #fff;
                 border-radius: 50%;
@@ -125,7 +161,7 @@ $desk: 100 / 1440;
                 position: absolute;
                 z-index: 1;
                 right: -10 * $desk + vw;
-                top: -10 * $desk + vw;;
+                top: -10 * $desk + vw;
             }
             .listItemContainer {
                 overflow-y: scroll;
