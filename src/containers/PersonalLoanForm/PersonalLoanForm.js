@@ -53,16 +53,16 @@ export default function PersonalLoanForm() {
     const [isList, setisList] = useState(true);
     const [isGrid, setisGrid] = useState(false);
     const [Offers] = useState([
-        // {
-        //     img: HDFC,
-        //     interest: '10.25%',
-        //     PFee: '1999',
-        //     MaxTenure: '72',
-        //     PartPayment: '12',
-        //     Forclosure: '18',
-        //     url: '/dashboards/HDFCForm',
-        //     bankName: 'HDFC Bank'
-        // },
+        {
+            img: HDFC,
+            interest: '10.25%',
+            PFee: '1999',
+            MaxTenure: '72',
+            PartPayment: '12',
+            Forclosure: '18',
+            url: '/dashboards/HDFCForm',
+            bankName: 'HDFC Bank'
+        },
         {
             img: LOANBABA,
             interest: '0.1% per day',

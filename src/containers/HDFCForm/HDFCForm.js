@@ -820,7 +820,7 @@ export default function HDFCFrom() {
                     />
                     <div>
                         <TextField
-                            className="textField3"
+                            className="textField"
                             id="outlined-full-width"
                             label="City"
                             margin="normal"
@@ -916,7 +916,7 @@ export default function HDFCFrom() {
                 }}>
                     <div>
                         <TextField
-                            className="textField3"
+                            className="textField"
                             id="outlined-full-width"
                             label="Employer Name"
                             margin="normal"
@@ -981,7 +981,7 @@ export default function HDFCFrom() {
                     />
                     <div>
                         <TextField
-                            className="textField3"
+                            className="textField"
                             id="outlined-full-width"
                             label="Office City"
                             margin="normal"
