@@ -246,22 +246,25 @@
   color: #07498e;
 }
 
-.PaysenseContainer .rightSection .texualContainer .applicationStatus {
+.PaysenseContainer .rightSection .texualContainer .statusContainer {
+  margin-top: 2.91667vw;
+}
+
+.PaysenseContainer .rightSection .texualContainer .statusContainer .applicationStatus {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  margin-top: 2.91667vw;
 }
 
-.PaysenseContainer .rightSection .texualContainer .applicationStatus .statusLabel {
+.PaysenseContainer .rightSection .texualContainer .statusContainer .applicationStatus .statusLabel {
   color: #727272;
   margin-right: 0.69444vw;
 }
 
-.PaysenseContainer .rightSection .texualContainer .applicationStatus .statusMessage {
+.PaysenseContainer .rightSection .texualContainer .statusContainer .applicationStatus .statusMessage {
   width: 9.02778vw;
   height: 2.36111vw;
   border-radius: 0.55556vw;
@@ -269,7 +272,7 @@
   padding-top: 0.55556vw;
 }
 
-.PaysenseContainer .rightSection .texualContainer .applicationStatus .checkiconContainer {
+.PaysenseContainer .rightSection .texualContainer .statusContainer .applicationStatus .checkiconContainer {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -284,10 +287,80 @@
   border-radius: 0.55556vw;
 }
 
-.PaysenseContainer .rightSection .texualContainer .applicationStatus .checkiconContainer img {
+.PaysenseContainer .rightSection .texualContainer .statusContainer .applicationStatus .checkiconContainer img {
   width: 0.97222vw;
   height: 0.97222vw;
   margin-left: 0.83333vw;
+}
+
+.PaysenseContainer .rightSection .texualContainer .statusContainer .kycStatus {
+  margin-top: 1.73611vw;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.PaysenseContainer .rightSection .texualContainer .statusContainer .kycStatus .KYCLabel {
+  color: #727272;
+  margin-right: 6.04167vw;
+}
+
+.PaysenseContainer .rightSection .texualContainer .statusContainer .kycStatus .KYCMessage {
+  width: 9.02778vw;
+  height: 2.36111vw;
+  border-radius: 0.55556vw;
+  text-align: center;
+  padding-top: 0.55556vw;
+}
+
+.PaysenseContainer .rightSection .texualContainer .statusContainer .kycStatus .checkiconContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 9.02778vw;
+  height: 2.36111vw;
+  border-radius: 0.55556vw;
+}
+
+.PaysenseContainer .rightSection .texualContainer .statusContainer .kycStatus .checkiconContainer img {
+  width: 0.97222vw;
+  height: 0.97222vw;
+  margin-left: 0.83333vw;
+}
+
+.PaysenseContainer .rightSection .texualContainer .statusContainer .reqDocContainer {
+  margin-top: 1.73611vw;
+}
+
+.PaysenseContainer .rightSection .texualContainer .statusContainer .reqDocContainer .reqDocText {
+  color: #727272;
+}
+
+.PaysenseContainer .rightSection .texualContainer .statusContainer .reqDocContainer .reqDocText strong {
+  color: #07498e;
+}
+
+.PaysenseContainer .rightSection .texualContainer .statusContainer .reqDocContainer .docListContainer {
+  margin-top: 1.45833vw;
+}
+
+.PaysenseContainer .rightSection .texualContainer .statusContainer .reqDocContainer .docListContainer ol {
+  color: #727272;
+  font-weight: 600;
+  font-size: 0.90278vw;
+}
+
+.PaysenseContainer .rightSection .texualContainer .statusContainer .reqDocContainer .docListContainer ol li {
+  padding-bottom: 0.69444vw;
 }
 
 .PaysenseContainer .rightSection .offerContainer {

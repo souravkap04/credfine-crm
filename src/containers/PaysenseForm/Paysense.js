@@ -43,7 +43,8 @@ const Paysense = () => {
     const [isSuccess, setIsSuccess] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
     const [isTrackStatus, setIsTrackStatus] = useState(false);
-    const [paysenseStatus,setPaysenseStatus] = useState('');
+    const [paysenseStatus, setPaysenseStatus] = useState('');
+    const [KYCStatus, setKYCStatus] = useState('');
     useEffect(() => {
         getBasicdetailsData(leadid);
         getPersonaldetailsData(leadid);
@@ -199,6 +200,8 @@ const Paysense = () => {
     }
     const trackStatusHandler = (leadID) => {
         setIsTrackStatus(true);
+        setPaysenseStatus('approved')
+        setKYCStatus('axml-completed');
     }
     return (
         <div className='PaysenseContainer'>
@@ -542,22 +545,53 @@ const Paysense = () => {
                             </div>
                             <div className='statusText'>or email us with the Reference No:<br /><strong>info@credfine.com</strong></div>
                         </div>
-                        {isTrackStatus && <div className='applicationStatus'>
-                            <div className='statusLabel'>Your application status</div>
-                            {paysenseStatus.toLowerCase() === 'eligible' && <div className='statusMessage' style={{ backgroundColor: '#DBEBF7', color: '#3770FC' }}>Eligible</div>}
-                            {paysenseStatus.toLowerCase() === 'processing' && <div className='statusMessage' style={{ backgroundColor: '#FAF1DF', color: '#FFAA34' }}>Processing</div>}
-                            {paysenseStatus.toLowerCase() === 'under process' && <div className='statusMessage' style={{ backgroundColor: '#FAF1DF', color: '#FFAA34' }}>Under Process</div>}
-                            {paysenseStatus.toLowerCase() === 'not eligible' && <div className='statusMessage' style={{ backgroundColor: '#FADFDF', color: '#FADFDF' }}>Not Eligible</div>}
-                            {paysenseStatus.toLowerCase() === 'closed' && <div className='statusMessage' style={{ backgroundColor: '#F4F4F4', color: '#727272' }}>Closed</div>}
-                            {paysenseStatus.toLowerCase() === 'sanctioned' && <div className='checkiconContainer' style={{ backgroundColor: '#DFFAE4', color: '#1CB980' }}>
-                                <div>Sanctioned</div>
-                                <img src={checkCircle} alt="" />
-                            </div>}
-                            {paysenseStatus.toLowerCase() === 'disbursed' && <div className='checkiconContainer' style={{ backgroundColor: '#DFFAE4', color: '#1CB980' }}>
-                                <div>Disbursed</div>
-                                <img src={checkCircle} alt="" />
-                            </div>}
-                        </div>}
+                        {isTrackStatus &&
+                            <div className='statusContainer'>
+                                <div className='applicationStatus'>
+                                    <div className='statusLabel'>Your application status</div>
+                                    {paysenseStatus.toLowerCase() === 'eligible' && <div className='statusMessage' style={{ backgroundColor: '#DBEBF7', color: '#3770FC' }}>Eligible</div>}
+                                    {paysenseStatus.toLowerCase() === 'processing' && <div className='statusMessage' style={{ backgroundColor: '#FAF1DF', color: '#FFAA34' }}>Processing</div>}
+                                    {paysenseStatus.toLowerCase() === 'need-information' && <div className='statusMessage' style={{ backgroundColor: '#DBEBF7', color: '#3770FC' }}>Need Information</div>}
+                                    {paysenseStatus.toLowerCase() === 'pre-approved' && <div className='checkiconContainer' style={{ backgroundColor: '#DFFAE4', color: '#1CB980' }}>
+                                        <div>Pre-Approved</div>
+                                        <img src={checkCircle} alt="" />
+                                    </div>}
+                                    {paysenseStatus.toLowerCase() === 'declined' && <div className='statusMessage' style={{ backgroundColor: '#FADFDF', color: '#E55959' }}>Decliined</div>}
+                                    {paysenseStatus.toLowerCase() === 'disbursed' && <div className='checkiconContainer' style={{ backgroundColor: '#DFFAE4', color: '#1CB980' }}>
+                                        <div>Disbursed</div>
+                                        <img src={checkCircle} alt="" />
+                                    </div>}
+                                    {paysenseStatus.toLowerCase() === 'not-eligible' && <div className='statusMessage' style={{ backgroundColor: '#FADFDF', color: '#E55959' }}>Not Eligible</div>}
+                                    {paysenseStatus.toLowerCase() === 'lps-pending' && <div className='statusMessage' style={{ backgroundColor: '#DBEBF7', color: '#3770FC' }}>IPS Pending</div>}
+                                    {paysenseStatus.toLowerCase() === 'under-review' && <div className='statusMessage' style={{ backgroundColor: '#FAF1DF', color: '#FFAA34' }}>Under Review</div>}
+                                    {paysenseStatus.toLowerCase() === 'open' && <div className='statusMessage' style={{ backgroundColor: '#DBEBF7', color: '#3770FC' }}>Open</div>}
+                                    {paysenseStatus.toLowerCase() === 'approved' && <div className='checkiconContainer' style={{ backgroundColor: '#DFFAE4', color: '#1CB980' }}>
+                                        <div>Approved</div>
+                                        <img src={checkCircle} alt="" />
+                                    </div>}
+                                </div>
+                                <div className='kycStatus'>
+                                    <div className='KYCLabel'>KYC status</div>
+                                    {KYCStatus.toLowerCase() === 'ckyc-confirmed' && <div className='checkiconContainer' style={{ backgroundColor: '#DFFAE4', color: '#1CB980' }}>
+                                        <div>Confirmed</div>
+                                        <img src={checkCircle} alt="" />
+                                    </div>}
+                                    {KYCStatus.toLowerCase() === 'ckyc-confirmation-pending' && <div className='KYCMessage' style={{ backgroundColor: '#DBEBF7', color: '#3770FC', paddingLeft: '13px', paddingRight: '13px', width: 'unset' }}>Confirmation Pending</div>}
+                                    {KYCStatus.toLowerCase() === 'axml-completed' && <div className='KYCMessage' style={{ backgroundColor: '#FADFDF', color: '#E55959' }}>No KYC</div>}
+                                </div>
+                                <div className='reqDocContainer'>
+                                    <div className='reqDocText'>Please email the following Documents<br /><strong> to info@credfine.com </strong></div>
+                                    <div className='docListContainer'>
+                                        <ol>
+                                            <li>Photograph</li>
+                                            <li>PAN Card</li>
+                                            <li>Permanent Address Proof</li>
+                                            <li>Current Address Proof</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                        }
                     </div>
                 }
             </div>
