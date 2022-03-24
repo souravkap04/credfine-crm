@@ -12,6 +12,7 @@ import FormContainer from '../FormContainer/FormContainer';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import Checkbox from '@material-ui/core/Checkbox';
+import checkCircle from '../../images/forms/checkCircle.svg';
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -41,6 +42,8 @@ const Paysense = () => {
     const [isCopy, setIsCopy] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
+    const [isTrackStatus, setIsTrackStatus] = useState(false);
+    const [paysenseStatus,setPaysenseStatus] = useState('');
     useEffect(() => {
         getBasicdetailsData(leadid);
         getPersonaldetailsData(leadid);
@@ -74,105 +77,113 @@ const Paysense = () => {
             })
     }
     const basicDetailsHandler = async () => {
-        if (panCardNo === '') {
-            setAlertMessage('Invalid Pancard Number')
-            setIsError(true)
-            return;
-        }
-        if (mobileNo === '') {
-            setAlertMessage('Invalid Mobile Number')
-            setIsError(true)
-            return;
-        }
-        const headers = { Authorization: `Token ${profileData.token}` };
-        let items = { panNo: panCardNo, phone: mobileNo }
-        await axios.post(`${paysenseApi}/leads/sendLeadPartner/${leadid}/3/1`, items, { headers })
-            .then((response) => {
-                if (response.status === 200) {
-                    if (response.data.leads[0].status === 'not-registered') {
-                        setIsBasicDetails(false);
-                        setisBasicProgress(true);
-                        setisPersonalDetail(true);
-                        setisPersonalProgress(true);
-                    }
-                }
-            }).catch((error) => {
-                console.log(error);
-            })
+        // if (panCardNo === '') {
+        //     setAlertMessage('Invalid Pancard Number')
+        //     setIsError(true)
+        //     return;
+        // }
+        // if (mobileNo === '') {
+        //     setAlertMessage('Invalid Mobile Number')
+        //     setIsError(true)
+        //     return;
+        // }
+        // const headers = { Authorization: `Token ${profileData.token}` };
+        // let items = { panNo: panCardNo, phone: mobileNo }
+        // await axios.post(`${paysenseApi}/leads/sendLeadPartner/${leadid}/3/1`, items, { headers })
+        //     .then((response) => {
+        //         if (response.status === 200) {
+        //             if (response.data.leads[0].status === 'not-registered') {
+        //                 setIsBasicDetails(false);
+        //                 setisBasicProgress(true);
+        //                 setisPersonalDetail(true);
+        //                 setisPersonalProgress(true);
+        //             }
+        //         }
+        //     }).catch((error) => {
+        //         console.log(error);
+        //     })
+        setIsBasicDetails(false);
+        setisBasicProgress(true);
+        setisPersonalDetail(true);
+        setisPersonalProgress(true);
 
     }
     const pesonalDetailsHandle = async () => {
-        if (panCardNo === '') {
-            setAlertMessage('Invalid Pancard Number')
-            setIsError(true)
-            return;
-        }
-        if (firstName === '') {
-            setAlertMessage('Invalid First Name')
-            setIsError(true)
-            return;
-        }
-        if (lastName === '') {
-            setAlertMessage('Invalid Last Name')
-            setIsError(true)
-            return;
-        }
-        if (dob === '') {
-            setAlertMessage('Invalid Date of Birth')
-            setIsError(true)
-            return;
-        }
-        if (employmentType === '') {
-            setAlertMessage('Invalid Employment Type')
-            setIsError(true)
-            return;
-        }
-        if (gender === '') {
-            setAlertMessage('Invalid Gender')
-            setIsError(true)
-            return;
-        }
-        if (monthlyIncome === '') {
-            setAlertMessage('Invalid Monthly Income')
-            setIsError(true)
-            return;
-        }
-        if (postalcode === '') {
-            setAlertMessage('Invalid Postal Code')
-            setIsError(true)
-            return;
-        }
-        if (mobileNo === '') {
-            setAlertMessage('Invalid Mobile Number')
-            setIsError(true)
-            return;
-        }
-        if (emailID === '') {
-            setAlertMessage('Invalid Email ID')
-            setIsError(true)
-            return;
-        }
-        const headers = { Authorization: `Token ${profileData.token}` };
-        let items = {
-            pan: panCardNo, phone: mobileNo, first_name: firstName, last_name: lastName, gender, date_of_birth: dob,
-            employment_type: employmentType, monthly_income: monthlyIncome, postal_code: postalcode, email: emailID,
-            product_offering: "product_offering", terms_accepted: true, "phone_verified": true
-        }
-        await axios.post(`${paysenseApi}/leads/sendLeadPartner/${leadid}/3/2`, items, { headers })
-            .then((response) => {
-                if (response.data.status_code === 200) {
-                    setIsBasicDetails(false);
-                    setisPersonalDetail(false);
-                    setIsApprovalStatus(true);
-                    setIsApprovalProgress(true);
-                }
-                else if (response.data.status_code === 400) {
-                    setAlertMessage(response.data.message)
-                    setIsError(true)
-                }
-            }).catch((error) => {
-                console.log(error)
-            })
+        setIsBasicDetails(false);
+        setisPersonalDetail(false);
+        setIsApprovalStatus(true);
+        setIsApprovalProgress(true);
+        // if (panCardNo === '') {
+        //     setAlertMessage('Invalid Pancard Number')
+        //     setIsError(true)
+        //     return;
+        // }
+        // if (firstName === '') {
+        //     setAlertMessage('Invalid First Name')
+        //     setIsError(true)
+        //     return;
+        // }
+        // if (lastName === '') {
+        //     setAlertMessage('Invalid Last Name')
+        //     setIsError(true)
+        //     return;
+        // }
+        // if (dob === '') {
+        //     setAlertMessage('Invalid Date of Birth')
+        //     setIsError(true)
+        //     return;
+        // }
+        // if (employmentType === '') {
+        //     setAlertMessage('Invalid Employment Type')
+        //     setIsError(true)
+        //     return;
+        // }
+        // if (gender === '') {
+        //     setAlertMessage('Invalid Gender')
+        //     setIsError(true)
+        //     return;
+        // }
+        // if (monthlyIncome === '') {
+        //     setAlertMessage('Invalid Monthly Income')
+        //     setIsError(true)
+        //     return;
+        // }
+        // if (postalcode === '') {
+        //     setAlertMessage('Invalid Postal Code')
+        //     setIsError(true)
+        //     return;
+        // }
+        // if (mobileNo === '') {
+        //     setAlertMessage('Invalid Mobile Number')
+        //     setIsError(true)
+        //     return;
+        // }
+        // if (emailID === '') {
+        //     setAlertMessage('Invalid Email ID')
+        //     setIsError(true)
+        //     return;
+        // }
+        // const headers = { Authorization: `Token ${profileData.token}` };
+        // let items = {
+        //     pan: panCardNo, phone: mobileNo, first_name: firstName, last_name: lastName, gender, date_of_birth: dob,
+        //     employment_type: employmentType, monthly_income: monthlyIncome, postal_code: postalcode, email: emailID,
+        //     product_offering: "product_offering", terms_accepted: true, "phone_verified": true
+        // }
+        // await axios.post(`${paysenseApi}/leads/sendLeadPartner/${leadid}/3/2`, items, { headers })
+        //     .then((response) => {
+        //         if (response.data.status_code === 200) {
+        //             setIsBasicDetails(false);
+        //             setisPersonalDetail(false);
+        //             setIsApprovalStatus(true);
+        //             setIsApprovalProgress(true);
+        //         }
+        //         else if (response.data.status_code === 400) {
+        //             setAlertMessage(response.data.message)
+        //             setIsError(true)
+        //         }
+        //     }).catch((error) => {
+        //         console.log(error)
+        //     })
     }
     const closeSnackbar = () => {
         setIsError(false);
@@ -185,6 +196,9 @@ const Paysense = () => {
             setIsError(true)
             alertMessage('uniqueID Not Copied!')
         })
+    }
+    const trackStatusHandler = (leadID) => {
+        setIsTrackStatus(true);
     }
     return (
         <div className='PaysenseContainer'>
@@ -524,10 +538,26 @@ const Paysense = () => {
                         <hr />
                         <div className='trackStatus'>
                             <div className="statusBtn">
-                                <div className="btnText">TRACK STATUS</div>
+                                <div className="btnText" onClick={() => trackStatusHandler(leadid)}>TRACK STATUS</div>
                             </div>
                             <div className='statusText'>or email us with the Reference No:<br /><strong>info@credfine.com</strong></div>
                         </div>
+                        {isTrackStatus && <div className='applicationStatus'>
+                            <div className='statusLabel'>Your application status</div>
+                            {paysenseStatus.toLowerCase() === 'eligible' && <div className='statusMessage' style={{ backgroundColor: '#DBEBF7', color: '#3770FC' }}>Eligible</div>}
+                            {paysenseStatus.toLowerCase() === 'processing' && <div className='statusMessage' style={{ backgroundColor: '#FAF1DF', color: '#FFAA34' }}>Processing</div>}
+                            {paysenseStatus.toLowerCase() === 'under process' && <div className='statusMessage' style={{ backgroundColor: '#FAF1DF', color: '#FFAA34' }}>Under Process</div>}
+                            {paysenseStatus.toLowerCase() === 'not eligible' && <div className='statusMessage' style={{ backgroundColor: '#FADFDF', color: '#FADFDF' }}>Not Eligible</div>}
+                            {paysenseStatus.toLowerCase() === 'closed' && <div className='statusMessage' style={{ backgroundColor: '#F4F4F4', color: '#727272' }}>Closed</div>}
+                            {paysenseStatus.toLowerCase() === 'sanctioned' && <div className='checkiconContainer' style={{ backgroundColor: '#DFFAE4', color: '#1CB980' }}>
+                                <div>Sanctioned</div>
+                                <img src={checkCircle} alt="" />
+                            </div>}
+                            {paysenseStatus.toLowerCase() === 'disbursed' && <div className='checkiconContainer' style={{ backgroundColor: '#DFFAE4', color: '#1CB980' }}>
+                                <div>Disbursed</div>
+                                <img src={checkCircle} alt="" />
+                            </div>}
+                        </div>}
                     </div>
                 }
             </div>
