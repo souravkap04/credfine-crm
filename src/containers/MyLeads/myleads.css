@@ -131,4 +131,217 @@
 .buttonAdjust .endBtn:hover {
   background-color: rgba(235, 87, 87, 0.8);
 }
+
+.paginationContainer {
+  background-color: #ffffff;
+  width: 100%;
+  height: 5.20833vw;
+  margin-top: 1.73611pxvw;
+  padding-left: 1.11111vw;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.paginationContainer .assignToContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.paginationContainer .assignToContainer .listGroup {
+  position: absolute;
+  z-index: 100;
+  max-width: 15.97222vw;
+  max-height: 22.77778vw;
+  bottom: 5.90278vw;
+  background-color: #ffffff;
+  border: 0.06944vw solid #8f9bb3;
+  -webkit-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+          box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 0.27778vw;
+  margin-left: 0.48611vw;
+}
+
+.paginationContainer .assignToContainer .listGroup .searchMainContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-top: 1.11111vw;
+  margin-left: 0.83333vw;
+  margin-right: 0.83333vw;
+  margin-bottom: 1.11111vw;
+}
+
+.paginationContainer .assignToContainer .listGroup .searchMainContainer .searchContainer {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 16.66667vw;
+  height: 2.91667vw;
+  border-radius: 0.27778vw;
+  border: solid 1px #8F9BB3;
+  background-color: #fff;
+}
+
+.paginationContainer .assignToContainer .listGroup .searchMainContainer .searchContainer .searchIconContainer {
+  margin-right: 0.55556vw;
+  margin-left: 0.55556vw;
+}
+
+.paginationContainer .assignToContainer .listGroup .searchMainContainer .searchContainer .searchIconContainer .searchIcon {
+  font-size: 1.94444vw;
+  color: #8f9bb3;
+}
+
+.paginationContainer .assignToContainer .listGroup .searchMainContainer .searchContainer .inputContainer input {
+  width: 95% !important;
+  font-size: 1.11111vw;
+  color: #8f9bb3;
+  margin-left: 5px;
+}
+
+.paginationContainer .assignToContainer .listGroup .searchMainContainer .searchContainer .inputContainer::-webkit-input-placeholder {
+  color: #8f9bb3;
+}
+
+.paginationContainer .assignToContainer .listGroup .searchMainContainer .searchContainer .inputContainer:-ms-input-placeholder {
+  color: #8f9bb3;
+}
+
+.paginationContainer .assignToContainer .listGroup .searchMainContainer .searchContainer .inputContainer::-ms-input-placeholder {
+  color: #8f9bb3;
+}
+
+.paginationContainer .assignToContainer .listGroup .searchMainContainer .searchContainer .inputContainer::placeholder {
+  color: #8f9bb3;
+}
+
+.paginationContainer .assignToContainer .listGroup .closeListGroup {
+  background-color: #fff;
+  border-radius: 50%;
+  color: #8f9bb3;
+  position: absolute;
+  z-index: 1;
+  right: -0.69444vw;
+  top: -0.69444vw;
+}
+
+.paginationContainer .assignToContainer .listGroup .listItemContainer {
+  overflow-y: scroll;
+  border-radius: 0.27778vw;
+  width: 15.97222vw;
+}
+
+.paginationContainer .assignToContainer .listGroup .listItemContainer .list-group-item {
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  width: 100%;
+  padding-top: 0.69444vw;
+  padding-bottom: 0.69444vw;
+  padding-left: 0.83333vw;
+}
+
+.paginationContainer .assignToContainer .listGroup .listItemContainer .activeListItem {
+  background-color: #e3edff;
+}
+
+.paginationContainer .assignToContainer .listGroup .listItemContainer .list-group-item:hover {
+  background-color: #e3edff;
+}
+
+.paginationContainer .assignToContainer .listGroup .listItemContainer::-webkit-scrollbar {
+  width: 0.55556vw;
+}
+
+.paginationContainer .assignToContainer .listGroup .listItemContainer::-webkit-scrollbar-thumb {
+  background-color: #8f9bb3;
+  border-radius: 0.55556vw;
+}
+
+.paginationContainer .assignToContainer .listGroup .assignLeadsBtn {
+  width: 12.91667vw;
+  height: 2.5vw;
+  background: #3ec68c;
+  border-radius: 0.34722vw;
+  margin: auto;
+  margin-bottom: 0.76389vw;
+  margin-top: 0.76389vw;
+  color: #ffffff;
+  cursor: pointer !important;
+  text-transform: capitalize;
+}
+
+.paginationContainer .assignToContainer .assignToBtnContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 9.02778vw;
+  height: 2.77778vw;
+  background: #ffffff;
+  border: 1px solid #8f9bb3;
+  -webkit-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+          box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 0.27778vw;
+  padding-left: 0.69444vw;
+  margin-left: 0.48611vw;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.paginationContainer .assignToContainer .assignToBtnContainer .assignText {
+  font-weight: 600;
+  font-size: 0.83333vw;
+  color: #8f9bb3;
+}
+
+.paginationContainer .assignToContainer .assignToBtnContainer .MuiSvgIcon-root {
+  color: #8f9bb3;
+}
+
+.paginationContainer .assignToContainer .selectedText {
+  margin-left: 1.04167vw;
+  font-size: 0.83333vw;
+  line-height: 0.97222vw;
+  color: #000000;
+}
+
+.paginationContainer .paginationRightContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.paginationContainer .paginationRightContainer .rowsPerPage {
+  margin-right: 2.70833vw;
+}
 /*# sourceMappingURL=myleads.css.map */
