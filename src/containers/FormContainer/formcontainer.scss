@@ -4,7 +4,7 @@ $desk2: 0.063;
 .iconTextContainer {
     display: flex;
     align-items: center;
-    margin-left: 38 * $desk +vw;
+    margin-left: 38 * $desk + vw;
     margin-top: 37 * $desk + vw;
     width: 1024 * $desk + vw;
     @media only screen and (max-width: 800px) {
@@ -57,10 +57,19 @@ $desk2: 0.063;
             flex-direction: column;
             width: 100%;
         }
-        .textField {
-            width: 244 * $desk2 + rem;
-            margin-right: 20 * $desk2 + rem !important;
-            margin-bottom: 31 * $desk2 + rem !important;
+        @media (min-width: 1024px) and (max-width: 1440px) {
+            width: 824 * $desk + vw;
+            .textField {
+                width: 244 * $desk2 + vw;
+                // margin-right: 20 * $desk2 + vw !important;
+                // margin-bottom: 31 * $desk2 + vw !important;
+                // margin-top: 0 !important;
+            }
+        }
+        ​ .textField {
+            width: 244 * $desk2 + vw;
+            margin-right: 20 * $desk2 + vw !important;
+            margin-bottom: 31 * $desk2 + vw !important;
             margin-top: 0 !important;
             @media only screen and (max-width: 800px) {
                 width: 312 * $mob + vw;
@@ -73,7 +82,7 @@ $desk2: 0.063;
                 letter-spacing: 0.4px;
                 font-size: 15.5px;
                 span {
-                    position:absolute;
+                    position: absolute;
                     color: red;
                     font-size: 22px;
                     top: -25px;

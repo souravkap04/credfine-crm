@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Loanbaba.css';
 import axios from 'axios';
-import { bankApi } from '../../global/bankingApis';
+import  baseUrl  from '../../global/api';
 import { useHistory, useParams } from 'react-router-dom';
 import { getProfileData } from "../../global/leadsGlobalData";
 import logo from '../../images/forms/loanbaba.png';
@@ -44,7 +44,7 @@ const Loanbaba = () => {
     }, [])
     const fetchLoanbabaData = async (leadId) => {
         const headers = { Authorization: `Token ${profileData.token}` };
-        await axios.get(`${bankApi}/sendLeadPartner/${leadId}/2/0`, { headers })
+        await axios.get(`${baseUrl}/leads/sendLeadPartner/${leadId}/2/0`, { headers })
             .then((response) => {
                 setFullName(response.data.nameOnPan);
                 setMobileNo(response.data.phone);
@@ -98,7 +98,7 @@ const Loanbaba = () => {
         }
         const headers = { Authorization: `Token ${profileData.token}` };
         let items = { panNo: panCardNo, nameOnPan: fullName, phone: mobileNo, email: emailID, dateOfBirth: dob, city: city,salary: salary}
-        await axios.post(`${bankApi}/sendLeadPartner/${leadID}/2/0`, items, { headers })
+        await axios.post(`${baseUrl}/leads/sendLeadPartner/${leadID}/2/0`, items, { headers })
             .then((response) => {
                 if (response.data.status) {
                     setAlertMessage(response.data.message)
@@ -133,7 +133,7 @@ const Loanbaba = () => {
     }
     const trackStatusHandler = async (leadID) => {
         const headers = { Authorization: `Token ${profileData.token}` };
-        await axios.get(`${bankApi}/PartnerLeadTrack/${leadID}/2`, { headers })
+        await axios.get(`${baseUrl}/leads/PartnerLeadTrack/${leadID}/2`, { headers })
             .then((response) => {
                 if (response.data.status) {
                     setIsTrackStatus(true);

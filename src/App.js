@@ -29,6 +29,7 @@ import PricingPopup from './containers/PricingPopup/PricingPopup';
 import PersonalLoanForm from './containers/PersonalLoanForm/PersonalLoanForm';
 import HDFCForm from './containers/HDFCForm/HDFCForm';
 import Loanbaba from './containers/LOANBABAForm/Loanbaba';
+import Paysense from './containers/PaysenseForm/Paysense';
 import CalculatorTable from './containers/CalculatorTable/CalculatorTable';
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -131,6 +132,7 @@ function App() {
           <PrivateRoute exact path="/dashboards/PersonalLoanForm/:leadid" component={PersonalLoanForm} />
           <PrivateRoute exact path="/dashboards/HDFCForm/:leadid" component={HDFCForm} />
           <PrivateRoute exact path="/dashboards/LOANBABAForm/:leadid" component={Loanbaba} />
+          <PrivateRoute exact path="/dashboards/PAYSENSEForm/:leadid" component={Paysense}/>
           <PrivateRoute exact path="/dashboards/EMIcalculator" component={CalculatorTable} />
         </Switch>
       </Router>

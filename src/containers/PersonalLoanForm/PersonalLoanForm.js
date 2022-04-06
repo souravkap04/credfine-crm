@@ -10,7 +10,8 @@ import phoneCall from '../../images/forms/phoneCall.svg';
 import list from '../../images/forms/list.svg';
 import grid from '../../images/forms/grid.svg';
 import HDFC from '../../images/forms/HDFCAgain.svg';
-import LOANBABA from '../../images/forms/loanbaba.png'
+import LOANBABA from '../../images/forms/loanbaba.png';
+import PAYSENSE from '../../images/forms/paysense-blue.svg';
 import ICICI from '../../images/forms/ICICI.svg';
 import SC from '../../images/forms/SC.svg';
 import IDFC from '../../images/forms/IDFC.svg';
@@ -52,16 +53,16 @@ export default function PersonalLoanForm() {
     const [isList, setisList] = useState(true);
     const [isGrid, setisGrid] = useState(false);
     const [Offers] = useState([
-        // {
-        //     img: HDFC,
-        //     interest: '10.25%',
-        //     PFee: '1999',
-        //     MaxTenure: '72',
-        //     PartPayment: '12',
-        //     Forclosure: '18',
-        //     url: '/dashboards/HDFCForm',
-        //     bankName: 'HDFC Bank'
-        // },
+        {
+            img: HDFC,
+            interest: '10.25%',
+            PFee: '1999',
+            MaxTenure: '72',
+            PartPayment: '12',
+            Forclosure: '18',
+            url: '/dashboards/HDFCForm',
+            bankName: 'HDFC Bank'
+        },
         {
             img: LOANBABA,
             interest: '0.1% per day',
@@ -73,6 +74,16 @@ export default function PersonalLoanForm() {
             bankName: 'LOANBABA Bank'
 
         },
+        // {
+        //     img: PAYSENSE,
+        //     interest: '10.25%',
+        //     PFee: '1999',
+        //     MaxTenure: '72',
+        //     PartPayment: '12',
+        //     Forclosure: '18',
+        //     url: '/dashboards/PAYSENSEForm',
+        //     bankName: 'PAYSENSE Bank'
+        // },
         // {
         //     img: ICICI,
         //     interest: '10.25%',
@@ -135,7 +146,7 @@ export default function PersonalLoanForm() {
     const [pincode, setPincode] = useState("");
     const [city, setcity] = useState("");
     const [states, setstates] = useState("sourav kapri");
-    const [fullName,setFullName] = useState("")
+    const [fullName, setFullName] = useState("")
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [companyName, setCompanyName] = useState("");
@@ -201,7 +212,7 @@ export default function PersonalLoanForm() {
                             setDate(changeDateFormat);
                         }
                         setFullName(response.data.lead_data.name);
-                        setFirstName(response.data.lead_data.name.split(' ').slice(0,-1).join(' '));
+                        setFirstName(response.data.lead_data.name.split(' ').slice(0, -1).join(' '));
                         setLastName(response.data.lead_data.name.split(' ').slice(-1).join(' '));
                         setMobileNo(response.data.lead_data.phone_no);
                         setLeadId(response.data.lead_data.lead_crm_id);
@@ -315,7 +326,7 @@ export default function PersonalLoanForm() {
     const applyNowBtnHandler = async (id) => {
         if (id === 'HDFC Bank') {
             let item = {};
-            await axios.post(`${bankApi}/sendHdfcLead/${leadId}/1`, item)
+            await axios.post(`${bankApi}/leads/sendHdfcLead/${leadId}/1`, item)
                 .then((response) => {
                     if (response.data.response_status === "Success") {
                         history.push(`/dashboards/HDFCForm/${leadid}`);
@@ -324,8 +335,11 @@ export default function PersonalLoanForm() {
                     console.log(error);
                 })
         }
-        if(id === 'LOANBABA Bank') {
+        if (id === 'LOANBABA Bank') {
             history.push(`/dashboards/LOANBABAForm/${leadid}`)
+        }
+        if (id === 'PAYSENSE Bank') {
+            history.push(`/dashboards/PAYSENSEForm/${leadid}`)
         }
     }
     return (

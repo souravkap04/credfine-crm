@@ -1,15 +1,17 @@
 $desk: 100 / 1440;
-.LoanbabaContainer {
+.PaysenseContainer {
     display: flex;
-    background-color: #fff;
+    background-color: #ffffff;
     .leftSection {
         width: 238 * $desk + vw;
         height: 900 * $desk + vw;
-        background: #177fb2 0% 0% no-repeat padding-box;
+        background: #212ac5 0% 0% no-repeat padding-box;
         opacity: 1;
-        .loanbabaimg {
-            width: 238 * $desk + vw;
-            height: 70 * $desk + vw;
+        .image {
+            width: 170 * $desk + vw;
+            height: 34 * $desk + vw;
+            margin-left: 34 * $desk + vw;
+            margin-top: 21 * $desk + vw;
             opacity: 1;
             img {
                 width: 100%;
@@ -18,38 +20,38 @@ $desk: 100 / 1440;
         }
         .list {
             .progressContainer {
-                margin-top: 39 * $desk + vw;
+                margin-top: 55 * $desk + vw;
                 .progressBox {
                     display: flex;
                     .progressIconBox {
                         display: flex;
                         flex-direction: column;
                         align-items: center;
-                        margin-left: 31 * $desk + vw;
+                        margin-left: 32 * $desk + vw;
                         .iconBar {
-                            width: 18 * $desk + vw;
-                            height: 18 * $desk + vw;
+                            width: 16 * $desk + vw;
+                            height: 16 * $desk + vw;
                             background-color: #ffffff;
                             border-radius: 50%;
                             transition: 0.3s;
                         }
                         .activeCurrent {
-                            background-color: #004D72;
+                            background-color: #21d196;
                         }
                         .activeiconBar {
-                            background-color: #004D72;
+                            background-color: #21d196;
                         }
                         .bottomProgressBar {
                             width: 0 * $desk + vw;
                             height: 47 * $desk + vw;
-                            border: 1px solid #074d72;
+                            border: 1px solid #ffffff;
                             transition: 0.3s;
                         }
                     }
                     .iconText {
                         color: #ffffff;
                         margin-left: 8 * $desk + vw;
-                        font-size: 15 * $desk + vw;
+                        font-size: 14 * $desk + vw;
                         font-weight: 500;
                     }
                 }
@@ -109,12 +111,12 @@ $desk: 100 / 1440;
             width: 806 * $desk + vw;
             margin-bottom: 20 * $desk + vw;
             .headText {
-                color: #177fb2;
+                color: #212ac5;
                 font-size: 32px;
             }
             .headText2 {
                 font-size: 32 * $desk + vw;
-                color: #07498e;
+                color: #000000;
                 margin-bottom: 14 * $desk + vw;
             }
             .subText {
@@ -126,6 +128,7 @@ $desk: 100 / 1440;
                 font-size: 16 * $desk + vw;
                 color: #727272;
                 line-height: 24 * $desk + vw;
+                white-space: nowrap;
                 strong {
                     color: #07498e;
                 }
@@ -182,16 +185,16 @@ $desk: 100 / 1440;
                 display: flex;
                 align-items: center;
                 margin-top: 42 * $desk + vw;
-                .statusLabel{
-                    color:#727272;
+                .statusLabel {
+                    color: #727272;
                     margin-right: 10 * $desk + vw;
                 }
                 .statusMessage {
                     width: 130 * $desk + vw;
                     height: 34 * $desk + vw;
-                    border-radius: 8 *$desk + vw;
+                    border-radius: 8 * $desk + vw;
                     text-align: center;
-                    padding-top: 8 *$desk + vw;
+                    padding-top: 8 * $desk + vw;
                 }
                 .checkiconContainer {
                     display: flex;
@@ -199,14 +202,13 @@ $desk: 100 / 1440;
                     align-items: center;
                     width: 130 * $desk + vw;
                     height: 34 * $desk + vw;
-                    border-radius: 8 *$desk + vw;
-                    img{
+                    border-radius: 8 * $desk + vw;
+                    img {
                         width: 14 * $desk + vw;
                         height: 14 * $desk + vw;
                         margin-left: 12 * $desk + vw;
                     }
                 }
-
             }
         }
         .offerContainer {
@@ -229,20 +231,6 @@ $desk: 100 / 1440;
             border: 1px solid #d1d1d1;
             margin-top: 16 * $desk + VW;
             margin-left: 38 * $desk + VW;
-        }
-        .checkboxContainer {
-            display: flex;
-            align-items: flex-start;
-            .check {
-                margin-top: -5 * $desk + rem;
-                margin-left: -10 * $desk + rem;
-            }
-            p {
-                width: 713 * $desk + rem;
-                font-size: 14 * $desk + rem;
-                font-weight: 300;
-                color: #000;
-            }
         }
     }
     .iconTextContainer {
