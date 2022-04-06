@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import AWS from 'aws-sdk'
 import { bankApi } from "../../global/bankingApis";
+import {getProfileData} from "../../global/leadsGlobalData";
 import './HDFC.css';
-import Grid from '@material-ui/core/Grid';
 import logo from '../../images/forms/hdfc.svg';
 import back from '../../images/forms/back.svg';
 import TextField from '@material-ui/core/TextField';
@@ -21,6 +21,7 @@ function Alert(props) {
 }
 export default function HDFCFrom() {
     const history = useHistory();
+    const profileData = getProfileData();
     const { leadid } = useParams();
     const [isPersonalDetail, setisPersonalDetail] = useState(true);
     const [isPersonalProgress, setisPersonalProgress] = useState(false);
@@ -78,7 +79,6 @@ export default function HDFCFrom() {
     const [brabchCodeIdd, setbranchCodeIdd] = useState("");
     const [brabchCodeName, setbranchCodeName] = useState("");
     const [rmCodeIdd, setRmCodeIdd] = useState("");
-    const [rmCodeName, setRmCodeName] = useState("");
     const [seCodeIdd, setSeCodeIdd] = useState("");
     const [seCodeName, setSeCodeName] = useState("");
     const [refFirstName, setRefFirstName] = useState("");
@@ -126,7 +126,7 @@ export default function HDFCFrom() {
         let item = { search_key: employerName, type: 'hdfc_company' }
         const headers = { 'Content-Type': 'application/json' };
         if (employerName.length >= 2) {
-            await axios.post(`${bankApi}/getHdfcCompanies/`, item, { headers })
+            await axios.post(`${bankApi}/leads/getHdfcCompanies/`, item, { headers })
                 .then((response) => {
                     setSearchHdfcCompany(response.data)
                     setShowHdfcCompany(true);
@@ -139,7 +139,7 @@ export default function HDFCFrom() {
         setCityName(e.target.value);
         let item = { search_key: cityName, type: 'city_name' }
         if (cityName.length >= 2) {
-            await axios.post(`${bankApi}/getHdfcCompanies/`, item)
+            await axios.post(`${bankApi}/leads/getHdfcCompanies/`, item)
                 .then((response) => {
                     setSearchHdfcCity(response.data);
                     setShowHdfcCity(true);
@@ -152,7 +152,7 @@ export default function HDFCFrom() {
         setOfficeCityName(e.target.value);
         let item = { search_key: officeCityName, type: 'city_name' }
         if (officeCityName.length >= 2) {
-            await axios.post(`${bankApi}/getHdfcCompanies/`, item)
+            await axios.post(`${bankApi}/leads/getHdfcCompanies/`, item)
                 .then((response) => {
                     setSearchHdfcOfficeCity(response.data);
                     setShowHdfcOfficeCity(true);
@@ -177,7 +177,8 @@ export default function HDFCFrom() {
         setOfficeStateIdd(stateId)
     }
     const fetchHdfcData = async (leadId) => {
-        await axios.get(`${bankApi}/sendHdfcLead/${leadId}/2`)
+        const headers = { Authorization: `Token ${profileData.token}` };
+        await axios.get(`${bankApi}/leads/sendHdfcLead/${leadId}/2`,{headers})
             .then((response) => {
                 let getDobfromApi = response.data.applyLoan.Date_Of_Birth__req;
                 let dateRegex = /^\d{4}-\d{2}-\d{2}$/.test(getDobfromApi);
@@ -188,8 +189,8 @@ export default function HDFCFrom() {
                     setDob(changeDateFormat);
                 }
 
-                setFirstName(response.data.applyLoan.First_Name__req);
-                setLastName(response.data.applyLoan.Last_Name__req);
+                setFirstName(response.data.applyLoan.First_Name__req.split(' ').slice(0, -1).join(' '));
+                setLastName(response.data.applyLoan.First_Name__req.split(' ').slice(-1).join(' '));
                 setGender(response.data.applyLoan.Gender__req);
                 setLoanAmount(response.data.applyLoan.Loan_Amount__req);
                 setEmi(response.data.applyLoan.EMI);
@@ -222,7 +223,6 @@ export default function HDFCFrom() {
                 setbranchCodeIdd(response.data.applyLoan.Branch_code__req.id);
                 setbranchCodeName(response.data.applyLoan.Branch_code__req.name);
                 setRmCodeIdd(response.data.applyLoan.RM_code.id);
-                setRmCodeName(response.data.applyLoan.RM_code.name);
                 setSeCodeIdd(response.data.applyLoan.SE_code.id);
                 setSeCodeName(response.data.applyLoan.SE_code.name);
                 setOfficePincode(response.data.applyLoan.Pin_Code_Work__req);
@@ -231,7 +231,8 @@ export default function HDFCFrom() {
             })
     };
     const fetchPersonalReferenceData = async (leadId) => {
-        await axios.get(`${bankApi}/sendHdfcLead/${leadId}/3`)
+        const headers = { Authorization: `Token ${profileData.token}` };
+        await axios.get(`${bankApi}/leads/sendHdfcLead/${leadId}/3`,{headers})
             .then((response) => {
                 setRefFirstName(response.data.ref_1_FirstName__req);
                 setRefLastName(response.data.ref_1_LastName);
@@ -332,12 +333,7 @@ export default function HDFCFrom() {
             setAlertMessage('Invalid Branch Code Name');
             setIsError(true);
             return;
-        } if (rmCodeName === '') {
-            setAlertMessage('Invalid RM Code Name');
-            setIsError(true);
-            return;
-        }
-        if (employmentType === '') {
+        } if (employmentType === '') {
             setAlertMessage('Invalid Employment Type')
             setIsError(true);
             return;
@@ -361,8 +357,8 @@ export default function HDFCFrom() {
             Aadhar: "", Driving_License: "",
         }
         let items = { loan_data: { applyLoan } };
-        const headers = { 'Content-Type': 'application/json' };
-        await axios.post(`${bankApi}/sendHdfcLead/${leadId}/2`, items, { headers })
+        const headers = { 'Content-Type': 'application/json', Authorization: `Token ${profileData.token}`};
+        await axios.post(`${bankApi}/leads/sendHdfcLead/${leadId}/2`, items, { headers })
             .then((response) => {
                 if (response.data.response_status === 'Success') {
                     setIsHdfcData(true);
@@ -397,7 +393,8 @@ export default function HDFCFrom() {
         }
         let loan_data = { ref_1_FirstName: refFirstName, ref_1_LastName: refLastName, ref_1_Mobile: refMobileNo, ref_1_Relationship: "" }
         let items = { loan_data };
-        await axios.post(`${bankApi}/sendHdfcLead/${leadId}/3`, items)
+        const headers = { Authorization: `Token ${profileData.token}` };
+        await axios.post(`${bankApi}/leads/sendHdfcLead/${leadId}/3`, items ,{headers})
             .then((response) => {
                 if (response.data.response_status === 'Success') {
                     setisUploadDocument(true)
@@ -414,7 +411,8 @@ export default function HDFCFrom() {
             })
     }
     const hdfcUploadDocumentGetHandler = async (leadId) => {
-        await axios.get(`${bankApi}/sendHdfcLead/${leadId}/4`)
+        const headers = { Authorization: `Token ${profileData.token}`};
+        await axios.get(`${bankApi}/leads/sendHdfcLead/${leadId}/4`,{headers})
             .then((response) => {
                 if (response.data.documents === "") {
                     history.goBack();
@@ -445,7 +443,8 @@ export default function HDFCFrom() {
                 let getUrl = data.Location;
                 let loan_data = { s3_url: getUrl, fileName: `images.${fileExt}`, ContentType: `image/${fileExt}`, Parent_Doc_Id: parentId, Child_Doc_Id: childId };
                 let items = { loan_data };
-                axios.post(`${bankApi}/sendHdfcLead/${leadid}/4`, items)
+                const headers = { Authorization: `Token ${profileData.token}`};
+                axios.post(`${bankApi}/leads/sendHdfcLead/${leadid}/4`, items , {headers})
                     .then((response) => {
                         console.log(response.data)
                     }).catch((error) => {
@@ -456,7 +455,8 @@ export default function HDFCFrom() {
     }
     const uploadAllDocumentsHandler = async () => {
         let item = {}
-        await axios.post(`${bankApi}/sendHdfcLead/${leadid}/5`, { item })
+        const headers = { Authorization: `Token ${profileData.token}`};
+        await axios.post(`${bankApi}/leads/sendHdfcLead/${leadid}/5`, { item } , {headers})
             .then((response) => {
                 if (response.data.response_status === 'Success') {
                     setisApprovalStatus(true)
@@ -482,7 +482,8 @@ export default function HDFCFrom() {
         })
     }
     const trackStatusHandler = async () => {
-        await axios.get(`${bankApi}/trackHdfcApi/${leadid}`)
+        const headers = { Authorization: `Token ${profileData.token}`};
+        await axios.get(`${bankApi}/leads/trackHdfcApi/${leadid}`,{headers})
             .then((response) => {
                 console.log(response.data.response)
             }).catch((error) => {
@@ -1041,8 +1042,7 @@ export default function HDFCFrom() {
                         }}
                         variant="outlined"
                         size="small"
-                        value={rmCodeName}
-                        onChange={(e) => setRmCodeName(e.target.value)}
+                        value={rmCodeIdd}
                     />
                     <TextField
                         className="textField"

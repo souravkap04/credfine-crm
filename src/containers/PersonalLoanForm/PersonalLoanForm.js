@@ -74,16 +74,16 @@ export default function PersonalLoanForm() {
             bankName: 'LOANBABA Bank'
 
         },
-        {
-            img: PAYSENSE,
-            interest: '10.25%',
-            PFee: '1999',
-            MaxTenure: '72',
-            PartPayment: '12',
-            Forclosure: '18',
-            url: '/dashboards/PAYSENSEForm',
-            bankName: 'PAYSENSE Bank'
-        },
+        // {
+        //     img: PAYSENSE,
+        //     interest: '10.25%',
+        //     PFee: '1999',
+        //     MaxTenure: '72',
+        //     PartPayment: '12',
+        //     Forclosure: '18',
+        //     url: '/dashboards/PAYSENSEForm',
+        //     bankName: 'PAYSENSE Bank'
+        // },
         // {
         //     img: ICICI,
         //     interest: '10.25%',
@@ -326,7 +326,7 @@ export default function PersonalLoanForm() {
     const applyNowBtnHandler = async (id) => {
         if (id === 'HDFC Bank') {
             let item = {};
-            await axios.post(`${bankApi}/sendHdfcLead/${leadId}/1`, item)
+            await axios.post(`${bankApi}/leads/sendHdfcLead/${leadId}/1`, item)
                 .then((response) => {
                     if (response.data.response_status === "Success") {
                         history.push(`/dashboards/HDFCForm/${leadid}`);
