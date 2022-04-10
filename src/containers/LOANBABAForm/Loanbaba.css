@@ -18,6 +18,11 @@
   opacity: 1;
 }
 
+.LoanbabaContainer .leftSection .loanbabaimg img {
+  width: 100%;
+  height: 100%;
+}
+
 .LoanbabaContainer .leftSection .list .progressContainer {
   margin-top: 2.70833vw;
 }
@@ -52,7 +57,7 @@
 }
 
 .LoanbabaContainer .leftSection .list .progressContainer .progressBox .progressIconBox .activeCurrent {
-  background-color: #fff;
+  background-color: #004D72;
 }
 
 .LoanbabaContainer .leftSection .list .progressContainer .progressBox .progressIconBox .activeiconBar {
