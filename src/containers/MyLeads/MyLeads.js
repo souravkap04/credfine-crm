@@ -1108,8 +1108,8 @@ export default function MyLeads(props) {
                         : "NA"}
                     </TableCell>
                     <TableCell className={classes.tabledata}>
-                      {my_leads.last_updated_by
-                        ? my_leads.last_updated_by
+                      {my_leads.lead.last_updated_by
+                        ? my_leads.lead.last_updated_by
                         : "NA"}
                     </TableCell>
                     <TableCell className={classes.tabledata}>
