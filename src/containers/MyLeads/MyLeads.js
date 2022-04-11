@@ -263,9 +263,7 @@ export default function MyLeads(props) {
     setisLoading(true);
     const headers = { Authorization: `Token ${profileData.token}` };
     await axios
-      .get(
-        `${baseUrl}/leads/fetchUpdatedLeadsUserWise/`, { headers }
-      )
+      .get(`${baseUrl}/leads/fetchUpdatedLeadsUserWise/`, { headers })
       .then((response) => {
         setRowsPerPage(response.data.results.length);
         settotalDataPerPage(response.data.results.length);
@@ -929,7 +927,7 @@ export default function MyLeads(props) {
               </TableCell>
               <TableCell className={classes.tableheading}>Lead ID</TableCell>
               <TableCell className={classes.tableheading}>Name</TableCell>
-              <TableCell className={classes.tableheading}>Mobile</TableCell>
+              {/* <TableCell className={classes.tableheading}>Mobile</TableCell> */}
               <TableCell className={classes.tableheading}>Loan Amt</TableCell>
               <TableCell className={classes.tableheading}>Campaign</TableCell>
               <TableCell className={classes.tableheading}>Created Date</TableCell>
@@ -942,6 +940,9 @@ export default function MyLeads(props) {
                 Status
               </TableCell>
               <TableCell className={classes.tableheading}>Sub Status</TableCell>
+              <TableCell className={classes.tableheading}>
+                Last Updated By
+              </TableCell>
               <TableCell className={classes.tableheading}>
                 Lead Agent Name
               </TableCell>
@@ -987,9 +988,9 @@ export default function MyLeads(props) {
                       <TableCell className={classes.tabledata}>
                         {search.name ? search.name : "NA"}
                       </TableCell>
-                      <TableCell className={classes.tabledata}>
+                      {/* <TableCell className={classes.tabledata}>
                         {leadPhoneNo ? leadPhoneNo : "NA"}
-                      </TableCell>
+                      </TableCell> */}
                       <TableCell className={classes.tabledata}>
                         {search.loan_amount ? search.loan_amount : "NA"}
                       </TableCell>
@@ -1013,6 +1014,9 @@ export default function MyLeads(props) {
                       </TableCell>
                       <TableCell className={classes.tabledata}>
                         {search.sub_status ? search.sub_status : "NA"}
+                      </TableCell>
+                      <TableCell className={classes.tabledata}>
+                        {search.last_updated_by ? search.last_updated_by : "NA"}
                       </TableCell>
                       <TableCell className={classes.tabledata}>
                         {search.lead_agent_name ? search.lead_agent_name : "NA"}
@@ -1072,9 +1076,9 @@ export default function MyLeads(props) {
                     <TableCell className={classes.tabledata}>
                       {my_leads.lead.name ? my_leads.lead.name : "NA"}
                     </TableCell>
-                    <TableCell className={classes.tabledata}>
+                    {/* <TableCell className={classes.tabledata}>
                       {leadPhoneNo ? leadPhoneNo : "NA"}
-                    </TableCell>
+                    </TableCell> */}
                     <TableCell className={classes.tabledata}>
                       {my_leads.lead.loan_amount
                         ? my_leads.lead.loan_amount
@@ -1101,6 +1105,11 @@ export default function MyLeads(props) {
                     <TableCell className={classes.tabledata}>
                       {my_leads.lead.sub_status
                         ? my_leads.lead.sub_status
+                        : "NA"}
+                    </TableCell>
+                    <TableCell className={classes.tabledata}>
+                      {my_leads.last_updated_by
+                        ? my_leads.last_updated_by
                         : "NA"}
                     </TableCell>
                     <TableCell className={classes.tabledata}>
