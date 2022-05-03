@@ -3033,7 +3033,7 @@ export default function LeadDetailsNew(props) {
                                         helperText={STBError[1] ? 'Bank is required' : ''}
                                     >
                                         <option key="" value="">Select</option>
-                                        <option value="HDFB_Bank_(Online)">HDFB Bank (Online)</option>
+                                        <option value="HDFC_Bank_(Online)">HDFC Bank (Online)</option>
                                         <option value="HDFC_Bank_(DSA)">HDFC Bank (DSA)</option>
                                         <option value="Kotak_Bank_(Online)">Kotak Bank (Online)</option>
                                         <option value="Kotak_Bank_(DSA)">Kotak Bank (DSA)</option>
