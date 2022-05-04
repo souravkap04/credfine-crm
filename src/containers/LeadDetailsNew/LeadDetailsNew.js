@@ -2866,7 +2866,7 @@ export default function LeadDetailsNew(props) {
                                                     <TableCell className={classes.tabledata}>{leadid}</TableCell>
                                                     <TableCell className={classes.tabledata}>{item.status ? item.status : 'NA'}</TableCell>
                                                     <TableCell className={classes.tabledata}>{item.sub_status ? item.sub_status : 'NA'}</TableCell>
-                                                    <TableCell className={classes.tabledata}>{item.agent_user_name ? item.agent_user_name : 'NA'}</TableCell>
+                                                    <TableCell className={classes.tabledata}>{item.updated_by_user ? item.updated_by_user : 'NA'}</TableCell>
                                                     <TableCell className={classes.tabledata}>{currentUpdatedDate ? currentUpdatedDate : 'NA'}</TableCell>
                                                     <TableCell className={classes.tabledata}>{item.lead_stage ? item.lead_stage : 'NA'}</TableCell>
                                                     <TableCell className={classes.tabledata}></TableCell>
@@ -3033,7 +3033,7 @@ export default function LeadDetailsNew(props) {
                                         helperText={STBError[1] ? 'Bank is required' : ''}
                                     >
                                         <option key="" value="">Select</option>
-                                        <option value="HDFB_Bank_(Online)">HDFB Bank (Online)</option>
+                                        <option value="HDFC_Bank_(Online)">HDFC Bank (Online)</option>
                                         <option value="HDFC_Bank_(DSA)">HDFC Bank (DSA)</option>
                                         <option value="Kotak_Bank_(Online)">Kotak Bank (Online)</option>
                                         <option value="Kotak_Bank_(DSA)">Kotak Bank (DSA)</option>
