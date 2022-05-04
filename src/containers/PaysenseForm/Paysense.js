@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Paysense.css';
 import axios from 'axios';
-import { paysenseApi } from '../../global/bankingApis';
+import baseUrl from "../../global/api";
 import { useHistory, useParams } from 'react-router-dom';
 import { getProfileData } from "../../global/leadsGlobalData";
 import back from '../../images/forms/back.svg';
@@ -48,12 +48,13 @@ const Paysense = () => {
     useEffect(() => {
         getBasicdetailsData(leadid);
         getPersonaldetailsData(leadid);
+        console.log("last name:"+lastName);
     }, [])
     const getBasicdetailsData = async (leadID) => {
         const headers = { Authorization: `Token ${profileData.token}` };
-        await axios.get(`${paysenseApi}/leads/sendLeadPartner/${leadID}/3/1`, { headers })
+        await axios.get(`${baseUrl}/leads/sendLeadPartner/${leadID}/3/1`, { headers })
             .then((response) => {
-                setPanCardNo(response.data.panNo);
+                setPanCardNo(response.data.pan);
                 setMobileNo(response.data.phone)
             }).catch((error) => {
                 console.log(error);
@@ -61,12 +62,12 @@ const Paysense = () => {
     }
     const getPersonaldetailsData = async (leadID) => {
         const headers = { Authorization: `Token ${profileData.token}` };
-        await axios.get(`${paysenseApi}/leads/sendLeadPartner/${leadID}/3/2`, { headers })
+        await axios.get(`${baseUrl}/leads/sendLeadPartner/${leadID}/3/2`, { headers })
             .then((response) => {
                 setPanCardNo(response.data.pan);
                 setMobileNo(response.data.phone)
                 setFirstName(response.data.first_name.split(' ').slice(0, -1).join(' '))
-                setLastName(response.data.last_name.split(' ').slice(-1).join(' '))
+                setLastName(response.data.first_name.split(' ').slice(-1).join(' '))
                 setDob(response.data.date_of_birth)
                 setEmploymentType(response.data.employment_type)
                 setGender(response.data.gender)
@@ -89,19 +90,18 @@ const Paysense = () => {
             return;
         }
         const headers = { Authorization: `Token ${profileData.token}` };
-        let items = { panNo: panCardNo, phone: mobileNo }
-        await axios.post(`${paysenseApi}/leads/sendLeadPartner/${leadid}/3/1`, items, { headers })
+        let items = { pan: panCardNo, phone: mobileNo }
+        await axios.post(`${baseUrl}/leads/sendLeadPartner/${leadid}/3/1`, items, { headers })
             .then((response) => {
                 if (response.status === 200) {
-                    console.log('dudupe check post request')
-                    if (response.data.data[0].status === 'not-registered') {
+                    if (response.data.status) {
                         setIsBasicDetails(false);
                         setisBasicProgress(true);
                         setisPersonalDetail(true);
                         setisPersonalProgress(true);
-                    } else if (response.data.leads[0].status === 'registered') {
+                    } else if (response.data.status === false) {
                         setIsError(true)
-                        setAlertMessage('Duplication Application')
+                        setAlertMessage('Duplicate Application')
 
                     }
                 }
@@ -165,18 +165,17 @@ const Paysense = () => {
         let items = {
             pan: panCardNo, phone: mobileNo, first_name: firstName, last_name: lastName, gender, date_of_birth: dob,
             employment_type: employmentType, monthly_income: monthlyIncome, postal_code: postalcode, email: emailID,
-            terms_accepted: true, "phone_verified": true
         }
-        await axios.post(`${paysenseApi}/leads/sendLeadPartner/${leadid}/3/2`, items, { headers })
+        await axios.post(`${baseUrl}/leads/sendLeadPartner/${leadid}/3/2`, items, { headers })
             .then((response) => {
-                if (response.data.status_code === 200) {
+                if (response.data.status) {
                     setIsBasicDetails(false);
                     setisPersonalDetail(false);
                     setIsApprovalStatus(true);
                     setIsApprovalProgress(true);
                 }
-                else if (response.data.status_code === 400) {
-                    setAlertMessage(response.data.message)
+                else if (response.data.status === false) {
+                    setAlertMessage(response.data.data.details[0].message)
                     setIsError(true)
                 }
             }).catch((error) => {
@@ -299,7 +298,7 @@ const Paysense = () => {
                             variant="outlined"
                             size="small"
                             value={panCardNo}
-                            onChange={(e) => setPanCardNo(e.target.value)}
+                            onChange={(e) => setPanCardNo(e.target.value.toUpperCase())}
                         />
                         <TextField
                             className="textField"
@@ -364,7 +363,7 @@ const Paysense = () => {
                             variant="outlined"
                             size="small"
                             value={panCardNo}
-                            onChange={(e) => setPanCardNo(e.target.value)}
+                            onChange={(e) => setPanCardNo(e.target.value.toUpperCase())}
                         />
                         <TextField
                             className="textField"
@@ -374,9 +373,6 @@ const Paysense = () => {
                             InputLabelProps={{
                                 shrink: true,
                                 required: true
-                            }}
-                            inputProps={{
-                                maxLength: 10
                             }}
                             variant="outlined"
                             size="small"
@@ -391,9 +387,6 @@ const Paysense = () => {
                             InputLabelProps={{
                                 shrink: true,
                                 required: true
-                            }}
-                            inputProps={{
-                                maxLength: 10
                             }}
                             variant="outlined"
                             size="small"
@@ -410,9 +403,6 @@ const Paysense = () => {
                                 shrink: true,
                                 required: true
                             }}
-                            inputProps={{
-                                maxLength: 10
-                            }}
                             variant="outlined"
                             size="small"
                             value={dob}
@@ -421,37 +411,48 @@ const Paysense = () => {
                         <TextField
                             className="textField"
                             id="outlined-full-width"
+                            select
                             label="Employment Type"
                             margin="normal"
                             InputLabelProps={{
                                 shrink: true,
                                 required: true
                             }}
-                            inputProps={{
-                                maxLength: 10
+                            SelectProps={{
+                                native: true,
                             }}
                             variant="outlined"
                             size="small"
                             value={employmentType}
                             onChange={(e) => setEmploymentType(e.target.value)}
-                        />
+                        >
+                            <option key = "" value="">Select</option>
+                            <option value="salaried">Salaried</option>
+                            <option value="self_employed">Self Employed</option>
+                        </TextField>
                         <TextField
                             className="textField"
                             id="outlined-full-width"
+                            select
                             label="Gender"
                             margin="normal"
                             InputLabelProps={{
                                 shrink: true,
                                 required: true
                             }}
-                            inputProps={{
-                                maxLength: 10
+                            SelectProps={{
+                                native: true,
                             }}
                             variant="outlined"
                             size="small"
                             value={gender}
                             onChange={(e) => setGender(e.target.value)}
-                        />
+                        >
+                            <option key="" value="">Select</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="trans">Trans-Gender</option>
+                        </TextField>
                         <TextField
                             className="textField"
                             id="outlined-full-width"
@@ -460,9 +461,6 @@ const Paysense = () => {
                             InputLabelProps={{
                                 shrink: true,
                                 required: true
-                            }}
-                            inputProps={{
-                                maxLength: 10
                             }}
                             variant="outlined"
                             size="small"
@@ -477,9 +475,6 @@ const Paysense = () => {
                             InputLabelProps={{
                                 shrink: true,
                                 required: true
-                            }}
-                            inputProps={{
-                                maxLength: 10
                             }}
                             variant="outlined"
                             size="small"
@@ -511,9 +506,6 @@ const Paysense = () => {
                             InputLabelProps={{
                                 shrink: true,
                                 required: true
-                            }}
-                            inputProps={{
-                                maxLength: 10
                             }}
                             variant="outlined"
                             size="small"

@@ -74,16 +74,16 @@ export default function PersonalLoanForm() {
             bankName: 'LOANBABA Bank'
 
         },
-        // {
-        //     img: PAYSENSE,
-        //     interest: '10.25%',
-        //     PFee: '1999',
-        //     MaxTenure: '72',
-        //     PartPayment: '12',
-        //     Forclosure: '18',
-        //     url: '/dashboards/PAYSENSEForm',
-        //     bankName: 'PAYSENSE Bank'
-        // },
+        {
+            img: PAYSENSE,
+            interest: '10.25%',
+            PFee: '1999',
+            MaxTenure: '72',
+            PartPayment: '12',
+            Forclosure: '18',
+            url: '/dashboards/PAYSENSEForm',
+            bankName: 'PAYSENSE Bank'
+        },
         // {
         //     img: ICICI,
         //     interest: '10.25%',
