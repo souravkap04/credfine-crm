@@ -11,7 +11,6 @@ import { List, TextField } from '@material-ui/core';
 import FormContainer from '../FormContainer/FormContainer';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
-import Checkbox from '@material-ui/core/Checkbox';
 import checkCircle from '../../images/forms/checkCircle.svg';
 
 function Alert(props) {
@@ -45,10 +44,11 @@ const Paysense = () => {
     const [isTrackStatus, setIsTrackStatus] = useState(false);
     const [paysenseStatus, setPaysenseStatus] = useState('');
     const [KYCStatus, setKYCStatus] = useState('');
+    const [partnerID, setPartnerID] = useState('');
     useEffect(() => {
         getBasicdetailsData(leadid);
         getPersonaldetailsData(leadid);
-        console.log("last name:"+lastName);
+        console.log("last name:" + lastName);
     }, [])
     const getBasicdetailsData = async (leadID) => {
         const headers = { Authorization: `Token ${profileData.token}` };
@@ -99,10 +99,12 @@ const Paysense = () => {
                         setisBasicProgress(true);
                         setisPersonalDetail(true);
                         setisPersonalProgress(true);
-                    } else if (response.data.status === false) {
+                    } else if (response.data.status === false && response.data.message === 'registered') {
                         setIsError(true)
                         setAlertMessage('Duplicate Application')
-
+                    } else if (response.data.status === false) {
+                        setIsError(true)
+                        setAlertMessage(response.data.message)
                     }
                 }
             }).catch((error) => {
@@ -173,10 +175,14 @@ const Paysense = () => {
                     setisPersonalDetail(false);
                     setIsApprovalStatus(true);
                     setIsApprovalProgress(true);
+                    setPartnerID(response.data.partner_id);
                 }
-                else if (response.data.status === false) {
-                    setAlertMessage(response.data.data.details[0].message)
+                else if (response.data.status === false && response.data.data?.details[0].message !== undefined) {
+                    setAlertMessage(response.data.data?.details[0].message)
                     setIsError(true)
+                } else if (response.data.status === false && response.data.message === 'Others') {
+                    setIsError(true);
+                    setAlertMessage('Your loan request has been declined , because you do not meet our eligibility criteria')
                 }
             }).catch((error) => {
                 console.log(error)
@@ -426,7 +432,7 @@ const Paysense = () => {
                             value={employmentType}
                             onChange={(e) => setEmploymentType(e.target.value)}
                         >
-                            <option key = "" value="">Select</option>
+                            <option key="" value="">Select</option>
                             <option value="salaried">Salaried</option>
                             <option value="self_employed">Self Employed</option>
                         </TextField>
@@ -522,7 +528,7 @@ const Paysense = () => {
                             receive such communication from anyone claiming to be a CredFine representative, please contact us at <strong>care@credfine.com</strong></div>
                         <div className='losContainer'>
                             <div className='losHeader'><strong>Loan Tracking Number</strong></div>
-                            <div className='losNumber'>1234567890</div>
+                            <div className='losNumber'>{partnerID}</div>
                             <div className='copyIcon' onClick={() => copyUniqueIDNumber("1234567890")}>
                                 <i class="far fa-copy"></i>
                             </div>
