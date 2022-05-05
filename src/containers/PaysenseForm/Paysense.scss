@@ -143,7 +143,7 @@ $desk: 100 / 1440;
                     font-size: 16 * $desk + vw;
                 }
                 .losNumber {
-                    width: 110 * $desk + vw;
+                    width: 327 * $desk + vw;
                     height: 32 * $desk + vw;
                     background-color: #535ad1;
                     color: #ffffff;
@@ -181,32 +181,83 @@ $desk: 100 / 1440;
                     }
                 }
             }
-            .applicationStatus {
-                display: flex;
-                align-items: center;
+            .statusContainer {
                 margin-top: 42 * $desk + vw;
-                .statusLabel {
-                    color: #727272;
-                    margin-right: 10 * $desk + vw;
-                }
-                .statusMessage {
-                    width: 130 * $desk + vw;
-                    height: 34 * $desk + vw;
-                    border-radius: 8 * $desk + vw;
-                    text-align: center;
-                    padding-top: 8 * $desk + vw;
-                }
-                .checkiconContainer {
+                .applicationStatus {
                     display: flex;
-                    justify-content: center;
                     align-items: center;
-                    width: 130 * $desk + vw;
-                    height: 34 * $desk + vw;
-                    border-radius: 8 * $desk + vw;
-                    img {
-                        width: 14 * $desk + vw;
-                        height: 14 * $desk + vw;
-                        margin-left: 12 * $desk + vw;
+                    .statusLabel {
+                        color: #727272;
+                        margin-right: 10 * $desk + vw;
+                    }
+                    .statusMessage {
+                        width: 130 * $desk + vw;
+                        height: 34 * $desk + vw;
+                        border-radius: 8 * $desk + vw;
+                        text-align: center;
+                        padding-top: 8 * $desk + vw;
+                    }
+                    .checkiconContainer {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        width: 130 * $desk + vw;
+                        height: 34 * $desk + vw;
+                        border-radius: 8 * $desk + vw;
+                        img {
+                            width: 14 * $desk + vw;
+                            height: 14 * $desk + vw;
+                            margin-left: 12 * $desk + vw;
+                        }
+                    }
+                }
+                .kycStatus {
+                    margin-top: 25 * $desk + vw;
+                    display: flex;
+                    align-items: center;
+                    .KYCLabel {
+                        color: #727272;
+                        margin-right: 87 * $desk + vw;
+                    }
+                    .KYCMessage {
+                        width: 130 * $desk + vw;
+                        height: 34 * $desk + vw;
+                        border-radius: 8 * $desk + vw;
+                        text-align: center;
+                        padding-top: 8 * $desk + vw;
+                    }
+                    .checkiconContainer {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        width: 130 * $desk + vw;
+                        height: 34 * $desk + vw;
+                        border-radius: 8 * $desk + vw;
+                        img {
+                            width: 14 * $desk + vw;
+                            height: 14 * $desk + vw;
+                            margin-left: 12 * $desk + vw;
+                        }
+                    }
+                }
+                .reqDocContainer {
+                    margin-top: 25 * $desk + vw;
+                    .reqDocText {
+                        color: #727272;
+                        strong {
+                            color: #07498e;
+                        }
+                    }
+                    .docListContainer{
+                        margin-top: 21 * $desk +  vw;
+                        ol{
+                            color: #727272;
+                            font-weight: 600;
+                            font-size: 13 * $desk + vw;
+                            li{
+                                padding-bottom: 10 * $desk + vw;
+                            }
+                        }
                     }
                 }
             }

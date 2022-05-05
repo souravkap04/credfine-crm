@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Paysense.css';
 import axios from 'axios';
-import { paysenseApi } from '../../global/bankingApis';
+import baseUrl from "../../global/api";
 import { useHistory, useParams } from 'react-router-dom';
 import { getProfileData } from "../../global/leadsGlobalData";
 import back from '../../images/forms/back.svg';
@@ -11,7 +11,7 @@ import { List, TextField } from '@material-ui/core';
 import FormContainer from '../FormContainer/FormContainer';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
-import Checkbox from '@material-ui/core/Checkbox';
+import checkCircle from '../../images/forms/checkCircle.svg';
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -41,15 +41,20 @@ const Paysense = () => {
     const [isCopy, setIsCopy] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
+    const [isTrackStatus, setIsTrackStatus] = useState(false);
+    const [paysenseStatus, setPaysenseStatus] = useState('');
+    const [KYCStatus, setKYCStatus] = useState('');
+    const [partnerID, setPartnerID] = useState('');
     useEffect(() => {
         getBasicdetailsData(leadid);
         getPersonaldetailsData(leadid);
+        console.log("last name:" + lastName);
     }, [])
     const getBasicdetailsData = async (leadID) => {
         const headers = { Authorization: `Token ${profileData.token}` };
-        await axios.get(`${paysenseApi}/leads/sendLeadPartner/${leadID}/3/1`, { headers })
+        await axios.get(`${baseUrl}/leads/sendLeadPartner/${leadID}/3/1`, { headers })
             .then((response) => {
-                setPanCardNo(response.data.panNo);
+                setPanCardNo(response.data.pan);
                 setMobileNo(response.data.phone)
             }).catch((error) => {
                 console.log(error);
@@ -57,12 +62,12 @@ const Paysense = () => {
     }
     const getPersonaldetailsData = async (leadID) => {
         const headers = { Authorization: `Token ${profileData.token}` };
-        await axios.get(`${paysenseApi}/leads/sendLeadPartner/${leadID}/3/2`, { headers })
+        await axios.get(`${baseUrl}/leads/sendLeadPartner/${leadID}/3/2`, { headers })
             .then((response) => {
                 setPanCardNo(response.data.pan);
                 setMobileNo(response.data.phone)
                 setFirstName(response.data.first_name.split(' ').slice(0, -1).join(' '))
-                setLastName(response.data.last_name.split(' ').slice(-1).join(' '))
+                setLastName(response.data.first_name.split(' ').slice(-1).join(' '))
                 setDob(response.data.date_of_birth)
                 setEmploymentType(response.data.employment_type)
                 setGender(response.data.gender)
@@ -85,15 +90,21 @@ const Paysense = () => {
             return;
         }
         const headers = { Authorization: `Token ${profileData.token}` };
-        let items = { panNo: panCardNo, phone: mobileNo }
-        await axios.post(`${paysenseApi}/leads/sendLeadPartner/${leadid}/3/1`, items, { headers })
+        let items = { pan: panCardNo, phone: mobileNo }
+        await axios.post(`${baseUrl}/leads/sendLeadPartner/${leadid}/3/1`, items, { headers })
             .then((response) => {
                 if (response.status === 200) {
-                    if (response.data.leads[0].status === 'not-registered') {
+                    if (response.data.status) {
                         setIsBasicDetails(false);
                         setisBasicProgress(true);
                         setisPersonalDetail(true);
                         setisPersonalProgress(true);
+                    } else if (response.data.status === false && response.data.message === 'registered') {
+                        setIsError(true)
+                        setAlertMessage('Duplicate Application')
+                    } else if (response.data.status === false) {
+                        setIsError(true)
+                        setAlertMessage(response.data.message)
                     }
                 }
             }).catch((error) => {
@@ -156,19 +167,22 @@ const Paysense = () => {
         let items = {
             pan: panCardNo, phone: mobileNo, first_name: firstName, last_name: lastName, gender, date_of_birth: dob,
             employment_type: employmentType, monthly_income: monthlyIncome, postal_code: postalcode, email: emailID,
-            product_offering: "product_offering", terms_accepted: true, "phone_verified": true
         }
-        await axios.post(`${paysenseApi}/leads/sendLeadPartner/${leadid}/3/2`, items, { headers })
+        await axios.post(`${baseUrl}/leads/sendLeadPartner/${leadid}/3/2`, items, { headers })
             .then((response) => {
-                if (response.data.status_code === 200) {
+                if (response.data.status) {
                     setIsBasicDetails(false);
                     setisPersonalDetail(false);
                     setIsApprovalStatus(true);
                     setIsApprovalProgress(true);
+                    setPartnerID(response.data.partner_id);
                 }
-                else if (response.data.status_code === 400) {
-                    setAlertMessage(response.data.message)
+                else if (response.data.status === false && response.data.data?.details[0].message !== undefined) {
+                    setAlertMessage(response.data.data?.details[0].message)
                     setIsError(true)
+                } else if (response.data.status === false && response.data.message === 'Others') {
+                    setIsError(true);
+                    setAlertMessage('Your loan request has been declined , because you do not meet our eligibility criteria')
                 }
             }).catch((error) => {
                 console.log(error)
@@ -185,6 +199,11 @@ const Paysense = () => {
             setIsError(true)
             alertMessage('uniqueID Not Copied!')
         })
+    }
+    const trackStatusHandler = (leadID) => {
+        setIsTrackStatus(true);
+        setPaysenseStatus('approved')
+        setKYCStatus('axml-completed');
     }
     return (
         <div className='PaysenseContainer'>
@@ -285,7 +304,7 @@ const Paysense = () => {
                             variant="outlined"
                             size="small"
                             value={panCardNo}
-                            onChange={(e) => setPanCardNo(e.target.value)}
+                            onChange={(e) => setPanCardNo(e.target.value.toUpperCase())}
                         />
                         <TextField
                             className="textField"
@@ -350,7 +369,7 @@ const Paysense = () => {
                             variant="outlined"
                             size="small"
                             value={panCardNo}
-                            onChange={(e) => setPanCardNo(e.target.value)}
+                            onChange={(e) => setPanCardNo(e.target.value.toUpperCase())}
                         />
                         <TextField
                             className="textField"
@@ -360,9 +379,6 @@ const Paysense = () => {
                             InputLabelProps={{
                                 shrink: true,
                                 required: true
-                            }}
-                            inputProps={{
-                                maxLength: 10
                             }}
                             variant="outlined"
                             size="small"
@@ -377,9 +393,6 @@ const Paysense = () => {
                             InputLabelProps={{
                                 shrink: true,
                                 required: true
-                            }}
-                            inputProps={{
-                                maxLength: 10
                             }}
                             variant="outlined"
                             size="small"
@@ -396,9 +409,6 @@ const Paysense = () => {
                                 shrink: true,
                                 required: true
                             }}
-                            inputProps={{
-                                maxLength: 10
-                            }}
                             variant="outlined"
                             size="small"
                             value={dob}
@@ -407,37 +417,48 @@ const Paysense = () => {
                         <TextField
                             className="textField"
                             id="outlined-full-width"
+                            select
                             label="Employment Type"
                             margin="normal"
                             InputLabelProps={{
                                 shrink: true,
                                 required: true
                             }}
-                            inputProps={{
-                                maxLength: 10
+                            SelectProps={{
+                                native: true,
                             }}
                             variant="outlined"
                             size="small"
                             value={employmentType}
                             onChange={(e) => setEmploymentType(e.target.value)}
-                        />
+                        >
+                            <option key="" value="">Select</option>
+                            <option value="salaried">Salaried</option>
+                            <option value="self_employed">Self Employed</option>
+                        </TextField>
                         <TextField
                             className="textField"
                             id="outlined-full-width"
+                            select
                             label="Gender"
                             margin="normal"
                             InputLabelProps={{
                                 shrink: true,
                                 required: true
                             }}
-                            inputProps={{
-                                maxLength: 10
+                            SelectProps={{
+                                native: true,
                             }}
                             variant="outlined"
                             size="small"
                             value={gender}
                             onChange={(e) => setGender(e.target.value)}
-                        />
+                        >
+                            <option key="" value="">Select</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="trans">Trans-Gender</option>
+                        </TextField>
                         <TextField
                             className="textField"
                             id="outlined-full-width"
@@ -446,9 +467,6 @@ const Paysense = () => {
                             InputLabelProps={{
                                 shrink: true,
                                 required: true
-                            }}
-                            inputProps={{
-                                maxLength: 10
                             }}
                             variant="outlined"
                             size="small"
@@ -463,9 +481,6 @@ const Paysense = () => {
                             InputLabelProps={{
                                 shrink: true,
                                 required: true
-                            }}
-                            inputProps={{
-                                maxLength: 10
                             }}
                             variant="outlined"
                             size="small"
@@ -498,9 +513,6 @@ const Paysense = () => {
                                 shrink: true,
                                 required: true
                             }}
-                            inputProps={{
-                                maxLength: 10
-                            }}
                             variant="outlined"
                             size="small"
                             value={emailID}
@@ -516,7 +528,7 @@ const Paysense = () => {
                             receive such communication from anyone claiming to be a CredFine representative, please contact us at <strong>care@credfine.com</strong></div>
                         <div className='losContainer'>
                             <div className='losHeader'><strong>Loan Tracking Number</strong></div>
-                            <div className='losNumber'>1234567890</div>
+                            <div className='losNumber'>{partnerID}</div>
                             <div className='copyIcon' onClick={() => copyUniqueIDNumber("1234567890")}>
                                 <i class="far fa-copy"></i>
                             </div>
@@ -524,10 +536,57 @@ const Paysense = () => {
                         <hr />
                         <div className='trackStatus'>
                             <div className="statusBtn">
-                                <div className="btnText">TRACK STATUS</div>
+                                <div className="btnText" onClick={() => trackStatusHandler(leadid)}>TRACK STATUS</div>
                             </div>
-                            <div className='statusText'>or email us with the Reference No:<br /><strong>info@credfine.com</strong></div>
+                            <div className='statusText'>or email us with the Reference No:<br /><strong>care@credfine.com</strong></div>
                         </div>
+                        {isTrackStatus &&
+                            <div className='statusContainer'>
+                                <div className='applicationStatus'>
+                                    <div className='statusLabel'>Your application status</div>
+                                    {paysenseStatus.toLowerCase() === 'eligible' && <div className='statusMessage' style={{ backgroundColor: '#DBEBF7', color: '#3770FC' }}>Eligible</div>}
+                                    {paysenseStatus.toLowerCase() === 'processing' && <div className='statusMessage' style={{ backgroundColor: '#FAF1DF', color: '#FFAA34' }}>Processing</div>}
+                                    {paysenseStatus.toLowerCase() === 'need-information' && <div className='statusMessage' style={{ backgroundColor: '#DBEBF7', color: '#3770FC' }}>Need Information</div>}
+                                    {paysenseStatus.toLowerCase() === 'pre-approved' && <div className='checkiconContainer' style={{ backgroundColor: '#DFFAE4', color: '#1CB980' }}>
+                                        <div>Pre-Approved</div>
+                                        <img src={checkCircle} alt="" />
+                                    </div>}
+                                    {paysenseStatus.toLowerCase() === 'declined' && <div className='statusMessage' style={{ backgroundColor: '#FADFDF', color: '#E55959' }}>Decliined</div>}
+                                    {paysenseStatus.toLowerCase() === 'disbursed' && <div className='checkiconContainer' style={{ backgroundColor: '#DFFAE4', color: '#1CB980' }}>
+                                        <div>Disbursed</div>
+                                        <img src={checkCircle} alt="" />
+                                    </div>}
+                                    {paysenseStatus.toLowerCase() === 'not-eligible' && <div className='statusMessage' style={{ backgroundColor: '#FADFDF', color: '#E55959' }}>Not Eligible</div>}
+                                    {paysenseStatus.toLowerCase() === 'lps-pending' && <div className='statusMessage' style={{ backgroundColor: '#DBEBF7', color: '#3770FC' }}>IPS Pending</div>}
+                                    {paysenseStatus.toLowerCase() === 'under-review' && <div className='statusMessage' style={{ backgroundColor: '#FAF1DF', color: '#FFAA34' }}>Under Review</div>}
+                                    {paysenseStatus.toLowerCase() === 'open' && <div className='statusMessage' style={{ backgroundColor: '#DBEBF7', color: '#3770FC' }}>Open</div>}
+                                    {paysenseStatus.toLowerCase() === 'approved' && <div className='checkiconContainer' style={{ backgroundColor: '#DFFAE4', color: '#1CB980' }}>
+                                        <div>Approved</div>
+                                        <img src={checkCircle} alt="" />
+                                    </div>}
+                                </div>
+                                <div className='kycStatus'>
+                                    <div className='KYCLabel'>KYC status</div>
+                                    {KYCStatus.toLowerCase() === 'ckyc-confirmed' && <div className='checkiconContainer' style={{ backgroundColor: '#DFFAE4', color: '#1CB980' }}>
+                                        <div>Confirmed</div>
+                                        <img src={checkCircle} alt="" />
+                                    </div>}
+                                    {KYCStatus.toLowerCase() === 'ckyc-confirmation-pending' && <div className='KYCMessage' style={{ backgroundColor: '#DBEBF7', color: '#3770FC', paddingLeft: '13px', paddingRight: '13px', width: 'unset' }}>Confirmation Pending</div>}
+                                    {KYCStatus.toLowerCase() === 'axml-completed' && <div className='KYCMessage' style={{ backgroundColor: '#FADFDF', color: '#E55959' }}>No KYC</div>}
+                                </div>
+                                <div className='reqDocContainer'>
+                                    <div className='reqDocText'>Please email the following Documents<br /><strong> to care@credfine.com </strong></div>
+                                    <div className='docListContainer'>
+                                        <ol>
+                                            <li>Photograph</li>
+                                            <li>PAN Card</li>
+                                            <li>Permanent Address Proof</li>
+                                            <li>Current Address Proof</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                        }
                     </div>
                 }
             </div>
