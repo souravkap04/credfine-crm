@@ -546,7 +546,7 @@ $mob: 100 / 375;
 .listGroup {
     position: absolute;
     z-index: 100;
-    max-width: 300 * $desk + vw;
+    width: 262 * $desk + vw;
     max-height: 250 * $desk + vw;
     overflow-y: scroll;
     .list-group-item {
