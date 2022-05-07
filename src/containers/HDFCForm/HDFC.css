@@ -743,7 +743,7 @@
 .listGroup {
   position: absolute;
   z-index: 100;
-  max-width: 18.9vw;
+  width: 16.506vw;
   max-height: 15.75vw;
   overflow-y: scroll;
 }

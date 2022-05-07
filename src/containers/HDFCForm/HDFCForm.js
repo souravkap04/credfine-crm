@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import AWS from 'aws-sdk'
 import { bankApi } from "../../global/bankingApis";
-import {getProfileData} from "../../global/leadsGlobalData";
+import { getProfileData } from "../../global/leadsGlobalData";
 import './HDFC.css';
 import logo from '../../images/forms/hdfc.svg';
 import back from '../../images/forms/back.svg';
@@ -106,7 +106,7 @@ export default function HDFCFrom() {
     const [searchHdfcCity, setSearchHdfcCity] = useState([]);
     const [showHdfcOfficeCity, setShowHdfcOfficeCity] = useState(false);
     const [searchHdfcOfficeCity, setSearchHdfcOfficeCity] = useState([]);
-    const [losNo,setLosNo] = useState('');
+    const [losNo, setLosNo] = useState('');
     useEffect(() => {
         fetchHdfcData(leadid);
         fetchPersonalReferenceData(leadid);
@@ -137,7 +137,7 @@ export default function HDFCFrom() {
     }
     const getHdfcCity = async (e) => {
         setCityName(e.target.value);
-        let item = { search_key: cityName, type: 'city_name' }
+        let item = { search_key: cityName, type: 'hdfc_city_name' }
         if (cityName.length >= 2) {
             await axios.post(`${bankApi}/leads/getHdfcCompanies/`, item)
                 .then((response) => {
@@ -150,7 +150,7 @@ export default function HDFCFrom() {
     }
     const getHdfcOfficeCity = async (e) => {
         setOfficeCityName(e.target.value);
-        let item = { search_key: officeCityName, type: 'city_name' }
+        let item = { search_key: officeCityName, type: 'hdfc_city_name' }
         if (officeCityName.length >= 2) {
             await axios.post(`${bankApi}/leads/getHdfcCompanies/`, item)
                 .then((response) => {
@@ -166,19 +166,26 @@ export default function HDFCFrom() {
         setEmployerIdd(companyID);
         setEmployerName(companyName);
     }
-    const selectHdfcCity = (cityId, stateId) => {
+    const selectHdfcCity = (cityId,cityName, stateId, stateName,rmCode,branchCode,branchName) => {
         setCityIdd(cityId);
+        setCityName(cityName)
         setShowHdfcCity(false);
-        setStateIdd(stateId)
+        setStateIdd(stateId);
+        setStateName(stateName)
+        setRmCodeIdd(rmCode);
+        setbranchCodeIdd(branchCode);
+        setbranchCodeName(branchName)
     }
-    const selectHdfcOfficeCity = (cityId, stateId) => {
+    const selectHdfcOfficeCity = (cityId,cityName, stateId, stateName) => {
         setOfficeCityIdd(cityId)
+        setOfficeCityName(cityName)
         setShowHdfcOfficeCity(false);
-        setOfficeStateIdd(stateId)
+        setOfficeStateIdd(stateId);
+        setOfficeStateName(stateName);
     }
     const fetchHdfcData = async (leadId) => {
         const headers = { Authorization: `Token ${profileData.token}` };
-        await axios.get(`${bankApi}/leads/sendHdfcLead/${leadId}/2`,{headers})
+        await axios.get(`${bankApi}/leads/sendHdfcLead/${leadId}/2`, { headers })
             .then((response) => {
                 let getDobfromApi = response.data.applyLoan.Date_Of_Birth__req;
                 let dateRegex = /^\d{4}-\d{2}-\d{2}$/.test(getDobfromApi);
@@ -232,7 +239,7 @@ export default function HDFCFrom() {
     };
     const fetchPersonalReferenceData = async (leadId) => {
         const headers = { Authorization: `Token ${profileData.token}` };
-        await axios.get(`${bankApi}/leads/sendHdfcLead/${leadId}/3`,{headers})
+        await axios.get(`${bankApi}/leads/sendHdfcLead/${leadId}/3`, { headers })
             .then((response) => {
                 setRefFirstName(response.data.ref_1_FirstName__req);
                 setRefLastName(response.data.ref_1_LastName);
@@ -304,7 +311,7 @@ export default function HDFCFrom() {
             setAlertMessage('Invalid EmailId')
             setIsError(true);
             return;
-        }  if (employerName === '') {
+        } if (employerName === '') {
             setAlertMessage('Invalid Employer Name')
             setIsError(true);
         }
@@ -339,25 +346,25 @@ export default function HDFCFrom() {
             return;
         }
         let chechEmployerType = '';
-        if (typeof employerIdd === 'number'){
+        if (typeof employerIdd === 'number') {
             chechEmployerType = true
-        }else{
+        } else {
             chechEmployerType = false;
         }
         let applyLoan = {
-            Employer_Name : chechEmployerType ? employerIdd : '',  Employer_Name_other: chechEmployerType ? '' : employerName,
+            Employer_Name: chechEmployerType ? employerIdd : '', Employer_Name_other: chechEmployerType ? '' : employerName,
             First_Name: firstName, Last_Name: lastName, Gender: gender, Date_Of_Birth: dob, Educational_Qualification: highestQualification,
             Loan_Amount: loanAmount, PAN_AC_No: panCardNo, EMI: emi, Landmark_Resi: "", Landmark_Work: "", Passport_no: "", Voter_iD: "",
-            City_Resi: cityIdd,State_Resi: stateIdd, Pin_Code_Resi: pincode, Address1_Resi: addressLineOne, Address2_Resi: addressLineTwo, 
-            Address3_Resi: addressLineThree,Mobile1_Resi: mobileNo,STD_Code_Resi: "", Email_Resi: residentialEmailId, 
-            Year_at_Current_Address: yearsInCurrentResidence,Year_at_City: yearsInCurrentCity,Address1_Work: officeAddressOne,
-            Address2_Work: officeAddressTwo, Phone1_Work: phoneNoWork,Pin_Code_Work: officePincode, City_Work: officeCityIdd,
-             State_Work: officeStateIdd, Monthly_take_home_Salary: monthlyTakeHomeSalary,  residence_type_dap: residanceTypeDap,
+            City_Resi: cityIdd, State_Resi: stateIdd, Pin_Code_Resi: pincode, Address1_Resi: addressLineOne, Address2_Resi: addressLineTwo,
+            Address3_Resi: addressLineThree, Mobile1_Resi: mobileNo, STD_Code_Resi: "", Email_Resi: residentialEmailId,
+            Year_at_Current_Address: yearsInCurrentResidence, Year_at_City: yearsInCurrentCity, Address1_Work: officeAddressOne,
+            Address2_Work: officeAddressTwo, Phone1_Work: phoneNoWork, Pin_Code_Work: officePincode, City_Work: officeCityIdd,
+            State_Work: officeStateIdd, Monthly_take_home_Salary: monthlyTakeHomeSalary, residence_type_dap: residanceTypeDap,
             employment_type: employmentType, No_of_Dependent: totalDependent, Branch_code: brabchCodeIdd, RM_code: rmCodeIdd, SE_code: seCodeIdd,
             Aadhar: "", Driving_License: "",
         }
         let items = { loan_data: { applyLoan } };
-        const headers = { 'Content-Type': 'application/json', Authorization: `Token ${profileData.token}`};
+        const headers = { 'Content-Type': 'application/json', Authorization: `Token ${profileData.token}` };
         await axios.post(`${bankApi}/leads/sendHdfcLead/${leadId}/2`, items, { headers })
             .then((response) => {
                 if (response.data.response_status === 'Success') {
@@ -394,7 +401,7 @@ export default function HDFCFrom() {
         let loan_data = { ref_1_FirstName: refFirstName, ref_1_LastName: refLastName, ref_1_Mobile: refMobileNo, ref_1_Relationship: "" }
         let items = { loan_data };
         const headers = { Authorization: `Token ${profileData.token}` };
-        await axios.post(`${bankApi}/leads/sendHdfcLead/${leadId}/3`, items ,{headers})
+        await axios.post(`${bankApi}/leads/sendHdfcLead/${leadId}/3`, items, { headers })
             .then((response) => {
                 if (response.data.response_status === 'Success') {
                     setisUploadDocument(true)
@@ -411,8 +418,8 @@ export default function HDFCFrom() {
             })
     }
     const hdfcUploadDocumentGetHandler = async (leadId) => {
-        const headers = { Authorization: `Token ${profileData.token}`};
-        await axios.get(`${bankApi}/leads/sendHdfcLead/${leadId}/4`,{headers})
+        const headers = { Authorization: `Token ${profileData.token}` };
+        await axios.get(`${bankApi}/leads/sendHdfcLead/${leadId}/4`, { headers })
             .then((response) => {
                 if (response.data.documents === "") {
                     history.goBack();
@@ -443,8 +450,8 @@ export default function HDFCFrom() {
                 let getUrl = data.Location;
                 let loan_data = { s3_url: getUrl, fileName: `images.${fileExt}`, ContentType: `image/${fileExt}`, Parent_Doc_Id: parentId, Child_Doc_Id: childId };
                 let items = { loan_data };
-                const headers = { Authorization: `Token ${profileData.token}`};
-                axios.post(`${bankApi}/leads/sendHdfcLead/${leadid}/4`, items , {headers})
+                const headers = { Authorization: `Token ${profileData.token}` };
+                axios.post(`${bankApi}/leads/sendHdfcLead/${leadid}/4`, items, { headers })
                     .then((response) => {
                         console.log(response.data)
                     }).catch((error) => {
@@ -455,8 +462,8 @@ export default function HDFCFrom() {
     }
     const uploadAllDocumentsHandler = async () => {
         let item = {}
-        const headers = { Authorization: `Token ${profileData.token}`};
-        await axios.post(`${bankApi}/leads/sendHdfcLead/${leadid}/5`, { item } , {headers})
+        const headers = { Authorization: `Token ${profileData.token}` };
+        await axios.post(`${bankApi}/leads/sendHdfcLead/${leadid}/5`, { item }, { headers })
             .then((response) => {
                 if (response.data.response_status === 'Success') {
                     setisApprovalStatus(true)
@@ -473,17 +480,17 @@ export default function HDFCFrom() {
                 console.log(error);
             })
     }
-    const copyLosNumber = (clip) =>{
-        navigator.clipboard.writeText(clip).then(function(){
+    const copyLosNumber = (clip) => {
+        navigator.clipboard.writeText(clip).then(function () {
             setisCopy(true)
-        },function(){
+        }, function () {
             setAlertMessage('Los No not copied!');
             setIsError(true)
         })
     }
     const trackStatusHandler = async () => {
-        const headers = { Authorization: `Token ${profileData.token}`};
-        await axios.get(`${bankApi}/leads/trackHdfcApi/${leadid}`,{headers})
+        const headers = { Authorization: `Token ${profileData.token}` };
+        await axios.get(`${bankApi}/leads/trackHdfcApi/${leadid}`, { headers })
             .then((response) => {
                 console.log(response.data.response)
             }).catch((error) => {
@@ -507,10 +514,10 @@ export default function HDFCFrom() {
             </Alert>
         </Snackbar>
         <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isCopy} autoHideDuration={1500} onClose={disableHangUpSnacks}>
-                <Alert onClose={disableHangUpSnacks} severity="success">
-                    Successfully copied to clipboard
-                </Alert>
-            </Snackbar>
+            <Alert onClose={disableHangUpSnacks} severity="success">
+                Successfully copied to clipboard
+            </Alert>
+        </Snackbar>
         <div className="leftSection">
             <div className="logoContainer">
                 <div className="logoImage">
@@ -665,7 +672,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
-                            required:true
+                            required: true
                         }}
                         SelectProps={{
                             native: true
@@ -688,7 +695,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
-                            required:true
+                            required: true
                         }}
                         SelectProps={{
                             native: true
@@ -712,7 +719,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
-                            required:true
+                            required: true
                         }}
                         SelectProps={{
                             native: true
@@ -740,7 +747,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
-                            required:false
+                            required: false
                         }}
                         variant="outlined"
                         size="small"
@@ -754,7 +761,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
-                            required:false
+                            required: false
                         }}
                         variant="outlined"
                         size="small"
@@ -768,7 +775,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
-                            required:true
+                            required: true
                         }}
                         variant="outlined"
                         size="small"
@@ -784,7 +791,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
-                            required:true
+                            required: true
                         }}
                         variant="outlined"
                         size="small"
@@ -798,7 +805,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
-                            required:true
+                            required: true
                         }}
                         variant="outlined"
                         size="small"
@@ -812,7 +819,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
-                            required:true
+                            required: true
                         }}
                         variant="outlined"
                         size="small"
@@ -827,7 +834,7 @@ export default function HDFCFrom() {
                             margin="normal"
                             InputLabelProps={{
                                 shrink: true,
-                                required:true
+                                required: true
                             }}
                             variant="outlined"
                             size="small"
@@ -837,7 +844,7 @@ export default function HDFCFrom() {
                         <ListGroup className="listGroup">
                             {showHdfcCity ? searchHdfcCity.map((city) => (
                                 <ListGroup.Item key={city.value.city_id}
-                                    onClick={() => selectHdfcCity(city.value.city_id, city.value.state_id)}
+                                    onClick={() => selectHdfcCity(city.value.city_id,city.value.city_name, city.value.state_id, city.value.state_name,city.value.rm_code,city.value.branch_code,city.value.branch_name)}
                                 >{city.city_name}</ListGroup.Item>
                             )) : ''}
                         </ListGroup>
@@ -849,7 +856,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
-                            required:true
+                            required: true
                         }}
                         variant="outlined"
                         size="small"
@@ -863,7 +870,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
-                            required:true
+                            required: true
                         }}
                         variant="outlined"
                         size="small"
@@ -877,7 +884,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
-                            required:true
+                            required: true
                         }}
                         variant="outlined"
                         size="small"
@@ -890,7 +897,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
-                            required:true
+                            required: true
                         }}
                         variant="outlined"
                         size="small"
@@ -904,7 +911,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
-                            required:false
+                            required: false
                         }}
                         variant="outlined"
                         size="small"
@@ -923,7 +930,7 @@ export default function HDFCFrom() {
                             margin="normal"
                             InputLabelProps={{
                                 shrink: true,
-                                required:true
+                                required: true
                             }}
                             variant="outlined"
                             size="small"
@@ -945,7 +952,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
-                            required:true
+                            required: true
                         }}
                         variant="outlined"
                         size="small"
@@ -959,26 +966,12 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
-                            required:true
+                            required: true
                         }}
                         variant="outlined"
                         size="small"
                         value={officeAddressTwo}
                         onChange={(e) => setofficeAddressTwo(e.target.value)}
-                    />
-                    <TextField
-                        className="textField"
-                        id="outlined-full-width"
-                        label="Office State"
-                        margin="normal"
-                        InputLabelProps={{
-                            shrink: true,
-                            required:true
-                        }}
-                        variant="outlined"
-                        size="small"
-                        value={officeStateName}
-                        onChange={(e) => setOfficeStateName(e.target.value)}
                     />
                     <div>
                         <TextField
@@ -988,7 +981,7 @@ export default function HDFCFrom() {
                             margin="normal"
                             InputLabelProps={{
                                 shrink: true,
-                                required:true
+                                required: true
                             }}
                             variant="outlined"
                             size="small"
@@ -998,7 +991,7 @@ export default function HDFCFrom() {
                         <ListGroup className="listGroup">
                             {showHdfcOfficeCity ? searchHdfcOfficeCity.map((city) => (
                                 <ListGroup.Item key={city.value.city_id}
-                                    onClick={() => selectHdfcOfficeCity(city.value.city_id, city.value.state_id)}
+                                    onClick={() => selectHdfcOfficeCity(city.value.city_id,city.value.city_name, city.value.state_id, city.value.state_name)}
                                 >{city.city_name}</ListGroup.Item>
                             )) : ''}
                         </ListGroup>
@@ -1006,11 +999,25 @@ export default function HDFCFrom() {
                     <TextField
                         className="textField"
                         id="outlined-full-width"
+                        label="Office State"
+                        margin="normal"
+                        InputLabelProps={{
+                            shrink: true,
+                            required: true
+                        }}
+                        variant="outlined"
+                        size="small"
+                        value={officeStateName}
+                        onChange={(e) => setOfficeStateName(e.target.value)}
+                    />
+                    <TextField
+                        className="textField"
+                        id="outlined-full-width"
                         label="Office Pincode"
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
-                            required:true
+                            required: true
                         }}
                         variant="outlined"
                         size="small"
@@ -1024,7 +1031,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
-                            required:true
+                            required: true
                         }}
                         variant="outlined"
                         size="small"
@@ -1038,7 +1045,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
-                            required:true
+                            required: true
                         }}
                         variant="outlined"
                         size="small"
@@ -1051,7 +1058,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
-                            required:false
+                            required: false
                         }}
                         variant="outlined"
                         size="small"
@@ -1066,7 +1073,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
-                            required:true
+                            required: true
                         }}
                         SelectProps={{
                             native: true
@@ -1140,7 +1147,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
-                            required:true
+                            required: true
                         }}
                         variant="outlined"
                         size="small"
@@ -1154,7 +1161,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
-                            required:true
+                            required: true
                         }}
                         variant="outlined"
                         size="small"
@@ -1168,7 +1175,7 @@ export default function HDFCFrom() {
                         margin="normal"
                         InputLabelProps={{
                             shrink: true,
-                            required:true
+                            required: true
                         }}
                         variant="outlined"
                         size="small"
@@ -1434,19 +1441,19 @@ export default function HDFCFrom() {
                         </div>
                     </div>
                 </div>
-                <div className="texualContainer" style={{paddingRight:'104px'}}>
+                <div className="texualContainer" style={{ paddingRight: '104px' }}>
                     <div className="headText2"><strong>Congratulations!</strong></div>
                     <div className="subText">Your Application has been <strong>successfully submitted.</strong> Our Team will get back to you in 24-48 hours.</div>
-                    <div className='subText2'>CredFine.com doesn’t charge any money from customers for it’s Loan or Credit Card offerings. In case you<br/>
-                             receive such communication from anyone claiming to be a CredFine representative, please contact us at <strong>care@credfine.com</strong></div>
+                    <div className='subText2'>CredFine.com doesn’t charge any money from customers for it’s Loan or Credit Card offerings. In case you<br />
+                        receive such communication from anyone claiming to be a CredFine representative, please contact us at <strong>care@credfine.com</strong></div>
                     <div className='losContainer'>
                         <div className='losHeader'><strong>Loan Tracking Number</strong></div>
                         <div className='losNumber'>{losNo}</div>
-                        <div className='copyIcon' onClick={()=>copyLosNumber(losNo)}>
+                        <div className='copyIcon' onClick={() => copyLosNumber(losNo)}>
                             <i class="far fa-copy"></i>
                         </div>
                     </div>
-                    <hr/>
+                    <hr />
                     <div className="trackStatus">
                         <div className="btnText" onClick={trackStatusHandler}>TRACK STATUS</div>
                     </div>
