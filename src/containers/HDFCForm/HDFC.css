@@ -548,71 +548,6 @@
   font-size: 1.386rem;
 }
 
-.HDFCFormContainer .rightSection .formMainContainer .textField3 {
-  width: 15.372rem;
-  margin-right: 1.26rem !important;
-  margin-bottom: 0.63rem !important;
-  margin-top: 0 !important;
-}
-
-@media only screen and (max-width: 800px) {
-  .HDFCFormContainer .rightSection .formMainContainer .textField3 {
-    width: 83.2vw;
-    margin-right: 8.26667vw !important;
-    margin-left: 8.53333vw !important;
-    margin-bottom: 5.06667vw !important;
-  }
-}
-
-.HDFCFormContainer .rightSection .formMainContainer .textField3 label {
-  color: #07498e;
-  letter-spacing: 0.0252rem;
-  font-size: 0.9765rem;
-}
-
-.HDFCFormContainer .rightSection .formMainContainer .textField3 label span {
-  position: absolute;
-  color: red;
-  font-size: 22px;
-  top: -25px;
-  margin-left: 2px;
-}
-
-@media only screen and (max-width: 800px) {
-  .HDFCFormContainer .rightSection .formMainContainer .textField3 label {
-    letter-spacing: 0.10667vw;
-    font-size: 4.13333vw;
-  }
-}
-
-.HDFCFormContainer .rightSection .formMainContainer .textField3 .MuiOutlinedInput-root {
-  height: 3.528rem;
-}
-
-@media only screen and (max-width: 800px) {
-  .HDFCFormContainer .rightSection .formMainContainer .textField3 .MuiOutlinedInput-root {
-    height: 14.93333vw;
-  }
-}
-
-.HDFCFormContainer .rightSection .formMainContainer .textField3 .MuiOutlinedInput-notchedOutline {
-  border: 1px solid #bababa;
-}
-
-.HDFCFormContainer .rightSection .formMainContainer .textField3 .MuiInputAdornment-root {
-  opacity: 0.6;
-}
-
-.HDFCFormContainer .rightSection .formMainContainer .textField3 .MuiInputBase-input {
-  font-size: 1.008rem;
-}
-
-@media only screen and (max-width: 800px) {
-  .HDFCFormContainer .rightSection .formMainContainer .textField3 .MuiInputBase-input {
-    font-size: 4.26667vw;
-  }
-}
-
 .HDFCFormContainer .rightSection .formMainContainer .checkboxContainer {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -743,7 +678,7 @@
 .listGroup {
   position: absolute;
   z-index: 100;
-  width: 16.506vw;
+  width: 15.75vw;
   max-height: 15.75vw;
   overflow-y: scroll;
 }

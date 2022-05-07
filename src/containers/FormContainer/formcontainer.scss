@@ -66,7 +66,7 @@ $desk2: 0.063;
                 // margin-top: 0 !important;
             }
         }
-        ​ .textField {
+        .textField {
             width: 244 * $desk2 + vw;
             margin-right: 20 * $desk2 + vw !important;
             margin-bottom: 31 * $desk2 + vw !important;
@@ -83,9 +83,9 @@ $desk2: 0.063;
                 font-size: 15.5px;
                 span {
                     position: absolute;
-                    color: red;
+                    color: #07498e;
                     font-size: 22px;
-                    top: -25px;
+                    top: -20px;
                     margin-left: 2px;
                 }
                 @media only screen and (max-width: 800px) {

@@ -166,7 +166,7 @@ export default function HDFCFrom() {
         setEmployerIdd(companyID);
         setEmployerName(companyName);
     }
-    const selectHdfcCity = (cityId,cityName, stateId, stateName,rmCode,branchCode,branchName) => {
+    const selectHdfcCity = (cityId, cityName, stateId, stateName, rmCode, branchCode, branchName) => {
         setCityIdd(cityId);
         setCityName(cityName)
         setShowHdfcCity(false);
@@ -176,7 +176,7 @@ export default function HDFCFrom() {
         setbranchCodeIdd(branchCode);
         setbranchCodeName(branchName)
     }
-    const selectHdfcOfficeCity = (cityId,cityName, stateId, stateName) => {
+    const selectHdfcOfficeCity = (cityId, cityName, stateId, stateName) => {
         setOfficeCityIdd(cityId)
         setOfficeCityName(cityName)
         setShowHdfcOfficeCity(false);
@@ -611,7 +611,7 @@ export default function HDFCFrom() {
                 </div>
                 <div className="texualContainer">
                     <div className="headText"><strong>Congratulations!</strong> your personal loan is a few steps away…</div>
-                    <div className="offerContainer">
+                    {/* <div className="offerContainer">
                         <div className="offerBox">
                             <div className="offerHead">Loan Amount</div>
                             <div className="offerText">₹ 15,00,000</div>
@@ -632,12 +632,12 @@ export default function HDFCFrom() {
                             <div className="offerHead">Processing Fee</div>
                             <div className="offerText">₹ 1,999</div>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
                 <div className="offerBorder"></div>
                 <FormContainer Name="Personal Details">
                     <TextField
-                        className="textField fullName"
+                        className="textField"
                         id="outlined-full-width"
                         label="First Name"
                         margin="normal"
@@ -651,7 +651,7 @@ export default function HDFCFrom() {
                         onChange={(e) => setFirstName(e.target.value)}
                     />
                     <TextField
-                        className="textField fullName"
+                        className="textField"
                         id="outlined-full-width"
                         label="Last Name"
                         margin="normal"
@@ -844,7 +844,7 @@ export default function HDFCFrom() {
                         <ListGroup className="listGroup">
                             {showHdfcCity ? searchHdfcCity.map((city) => (
                                 <ListGroup.Item key={city.value.city_id}
-                                    onClick={() => selectHdfcCity(city.value.city_id,city.value.city_name, city.value.state_id, city.value.state_name,city.value.rm_code,city.value.branch_code,city.value.branch_name)}
+                                    onClick={() => selectHdfcCity(city.value.city_id, city.value.city_name, city.value.state_id, city.value.state_name, city.value.rm_code, city.value.branch_code, city.value.branch_name)}
                                 >{city.city_name}</ListGroup.Item>
                             )) : ''}
                         </ListGroup>
@@ -991,7 +991,7 @@ export default function HDFCFrom() {
                         <ListGroup className="listGroup">
                             {showHdfcOfficeCity ? searchHdfcOfficeCity.map((city) => (
                                 <ListGroup.Item key={city.value.city_id}
-                                    onClick={() => selectHdfcOfficeCity(city.value.city_id,city.value.city_name, city.value.state_id, city.value.state_name)}
+                                    onClick={() => selectHdfcOfficeCity(city.value.city_id, city.value.city_name, city.value.state_id, city.value.state_name)}
                                 >{city.city_name}</ListGroup.Item>
                             )) : ''}
                         </ListGroup>
@@ -1112,7 +1112,7 @@ export default function HDFCFrom() {
                 </div>
                 <div className="texualContainer">
                     <div className="headText"><strong>Congratulations!</strong> your personal loan is a few steps away…</div>
-                    <div className="offerContainer">
+                    {/* <div className="offerContainer">
                         <div className="offerBox">
                             <div className="offerHead">Loan Amount</div>
                             <div className="offerText">₹ 15,00,000</div>
@@ -1133,7 +1133,7 @@ export default function HDFCFrom() {
                             <div className="offerHead">Processing Fee</div>
                             <div className="offerText">₹ 1,999</div>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
                 <div className="offerBorder"></div>
                 <FormContainer Name="Personal Reference" isSaveNextButton={true} onClick={() => {
@@ -1205,7 +1205,7 @@ export default function HDFCFrom() {
                 </div>
                 <div className="texualContainer">
                     <div className="headText"><strong>Congratulations!</strong> your personal loan is a few steps away…</div>
-                    <div className="offerContainer">
+                    {/* <div className="offerContainer">
                         <div className="offerBox">
                             <div className="offerHead">Loan Amount</div>
                             <div className="offerText">₹ 15,00,000</div>
@@ -1226,7 +1226,7 @@ export default function HDFCFrom() {
                             <div className="offerHead">Processing Fee</div>
                             <div className="offerText">₹ 1,999</div>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
                 <div className="offerBorder"></div>
                 <div className="uploadContainer">
