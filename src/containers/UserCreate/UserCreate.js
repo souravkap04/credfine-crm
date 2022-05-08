@@ -11,7 +11,9 @@ import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
 import { getProfileData } from '../../global/leadsGlobalData';
+import EmiCalculator from '../Emicalculator/EmiCalculator';
 import './usercreate.css';
+import EligibilityCalculator from "../EligibilityCalculator/EligibilityCalculator";
 const useStyles = makeStyles((theme) => ({
   CreateUser: {
     display: 'flex',
@@ -65,6 +67,21 @@ function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 export default function UserCreate() {
+  const [openCalculate, setopenCalculate] = useState(false);
+  const [checkEligibility,setCheckEligibility] = useState(false);
+  
+  const openEligibility = () =>{
+    setCheckEligibility(true);
+  }
+  const closeEligibility = () =>{
+    setCheckEligibility(false);
+  }
+  const openCalculator = () => {
+    setopenCalculate(true);
+  }
+  const closeCalculator = () => {
+    setopenCalculate(false);
+  }
   const classes = useStyles();
   const profileData = getProfileData();
   const [users, setUsers] = useState([]);
@@ -75,7 +92,7 @@ export default function UserCreate() {
   const [pullLocation, setpullLocation] = useState([]);
   const { register, handleSubmit, control, errors } = useForm();
   const onSubmit = async (data) => {
-    const { userName, firstName, lastName, email, role, productType, phoneNo, gender, parent ,dialerId ,dialerPassword} = data;
+    const { userName, firstName, lastName, email, role, productType, phoneNo, gender, parent, dialerId, dialerPassword } = data;
     let item = {
       username: userName, first_name: firstName, last_name: lastName, email, role,
       product_type: productType, phone_no: phoneNo, gender: gender, parent_user: parent, locations: location
@@ -107,7 +124,7 @@ export default function UserCreate() {
     const headers = {
       'Authorization': `Token ${profileData.token}`,
     }
-    await axios.get(`${baseUrl}/common/getLocations`, { headers })
+    await axios.get(`${baseUrl}/common/getLocations/`, { headers })
       .then((response) => {
         setpullLocation(response.data)
       }).catch((error) => {
@@ -128,7 +145,9 @@ export default function UserCreate() {
       })
   }
   return (
-    <PageLayerSection>
+    <PageLayerSection ActualEmiCalculate={openCalculator} ActualEligibilityCalculate={openEligibility}>
+      <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility}/>
+      <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
       <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isDisplay} autoHideDuration={1500} onClose={disableSnacksBar}>
         <Alert onClose={disableSnacksBar} severity="success">
           {alertMessage}
@@ -191,8 +210,8 @@ export default function UserCreate() {
                       }
                     })}
                     error={Boolean(errors.firstName)}
-                    helperText={errors.firstName?.type === "required" ? errors.firstName?.message : errors.firstName?.message} 
-                    />
+                    helperText={errors.firstName?.type === "required" ? errors.firstName?.message : errors.firstName?.message}
+                  />
                 </Grid>
               </Grid>
               <Grid container style={{ justifyContent: 'space-evenly' }}>
@@ -215,8 +234,8 @@ export default function UserCreate() {
                       }
                     })}
                     error={Boolean(errors.lastName)}
-                    helperText={errors.lastName?.type === "required" ? errors.lastName?.message : errors.lastName?.message} 
-                    />
+                    helperText={errors.lastName?.type === "required" ? errors.lastName?.message : errors.lastName?.message}
+                  />
                 </Grid>
                 <Grid >
                   <TextField

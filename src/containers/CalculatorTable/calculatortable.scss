@@ -1,0 +1,311 @@
+$desk: 100 / 1440;
+.EMIHeaderContainer {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 21 * $desk + vw;
+    h3 {
+        font-size: 22 * $desk + vw;
+        color: #4046b2;
+        font-weight: 600;
+        margin-bottom: 0;
+    }
+}
+.yearTableBtnActive {
+    width: 118 * $desk + vw;
+    height: 56 * $desk + vw;
+    font-family: "Lato";
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    font-size: 18 * $desk + vw;
+}
+.yearTableBtn {
+    width: 114 * $desk + vw;
+    height: 56 * $desk + vw;
+    font-family: "Lato";
+    color: #4046b2 !important;
+    background-color: #fff !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    font-size: 15 * $desk + vw;
+}
+.progressTableContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 121 * $desk + vw;
+    .progressBarLine {
+        height: 10 * $desk + vw;
+        width: 121 * $desk + vw;
+        border-radius: 30 * $desk + vw;
+        display: flex;
+        justify-content: center;
+        .leftPart {
+            background-color: #5dc699;
+            border-top-left-radius: 30 * $desk + vw;
+            border-bottom-left-radius: 30 * $desk + vw;
+        }
+        .rightPart {
+            background-color: #f18a8a;
+            border-top-right-radius: 30 * $desk + vw;
+            border-bottom-right-radius: 30 * $desk + vw;
+        }
+    }
+    .bottomSection {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 5 * $desk + vw;
+        .textProgress {
+            font-family: "Lato";
+            font-weight: bold;
+            font-size: 12 * $desk + vw;
+            line-height: 20 * $desk + vw;
+            letter-spacing: 0.15 * $desk + vw;
+            color: #8f9bb3;
+        }
+    }
+}
+.summaryConatiner {
+    position: relative;
+    height: 439 * $desk + vw;
+    border-radius: 6 * $desk + vw;
+    box-shadow: 0 3px 4.7px 0 rgba(0, 0, 0, 0.27);
+    background-color: #fff;
+    margin-left: 10 * $desk + vw;
+    padding-top: 21 * $desk + vw;
+    padding-left: 28 * $desk + vw;
+    padding-right: 28 * $desk + vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .summaryText {
+        font-family: "Lato";
+        font-weight: bold;
+        font-size: 18 * $desk + vw;
+        letter-spacing: 0.15 * $desk + vw;
+        color: #4046b2;
+        margin-bottom: 0;
+    }
+    .progressContainer {
+        display: flex;
+        margin-top: 15 * $desk + vw;
+        .leftBarPart {
+            display: flex;
+            flex-direction: column;
+            .textProgress {
+                font-family: "Lato";
+                font-weight: bold;
+                font-size: 12 * $desk + vw;
+                line-height: 20 * $desk + vw;
+                letter-spacing: 0.15 * $desk + vw;
+                color: #8f9bb3;
+            }
+        }
+        .progressBarLine {
+            height: 10 * $desk + vw;
+            width: 121 * $desk + vw;
+            border-radius: 30 * $desk + vw;
+            display: flex;
+            justify-content: center;
+            margin-left: 8 * $desk + vw;
+            margin-right: 8 * $desk + vw;
+            margin-top: 4 * $desk + vw;
+            .leftPart {
+                background-color: #5dc699;
+                border-top-left-radius: 30 * $desk + vw;
+                border-bottom-left-radius: 30 * $desk + vw;
+            }
+            .rightPart {
+                background-color: #f18a8a;
+                border-top-right-radius: 30 * $desk + vw;
+                border-bottom-right-radius: 30 * $desk + vw;
+            }
+        }
+        .rightBarPart {
+            display: flex;
+            flex-direction: column;
+            .textProgress {
+                font-family: "Lato";
+                font-weight: bold;
+                font-size: 12 * $desk + vw;
+                line-height: 20 * $desk + vw;
+                letter-spacing: 0.15 * $desk + vw;
+                color: #8f9bb3;
+            }
+        }
+    }
+    .totalPriceContainer {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 80 * $desk + vw;
+        width: 230 * $desk + vw;
+        border-radius: 5 * $desk + vw;
+        background: rgba(93, 198, 153, 0.1);
+        margin-top: 12 * $desk + vw;
+        .textPrice {
+            font-family: "Lato";
+            font-weight: 800;
+            font-size: 32 * $desk + vw;
+            line-height: 20 * $desk + vw;
+            margin-bottom: 13 * $desk + vw;
+            letter-spacing: 0.15 * $desk + vw;
+            color: #3ec68c;
+            margin-top: 7 * $desk + vw;
+        }
+        .subTextPrice {
+            font-family: "Lato";
+            font-weight: 600;
+            font-size: 14 * $desk + vw;
+            line-height: 20 * $desk + vw;
+            letter-spacing: 0.15 * $desk + vw;
+        }
+    }
+    .listOfTextAmountContainer {
+        width: 230 * $desk + vw;
+        display: flex;
+        justify-content: space-between;
+        margin-top: 12 * $desk + vw;
+        .textPrice {
+            font-family: "Lato";
+            font-weight: 600;
+            font-size: 14 * $desk + vw;
+            line-height: 20 * $desk + vw;
+            letter-spacing: 0.15 * $desk + vw;
+        }
+        .subTextPrice {
+            font-family: "Lato";
+            font-weight: 600;
+            font-size: 14 * $desk + vw;
+            line-height: 20 * $desk + vw;
+            letter-spacing: 0.15 * $desk + vw;
+        }
+    }
+    .showEMITableBtn {
+        width: 230 * $desk + vw;
+        height: 48 * $desk + vw;
+        background-color: #3ec68c;
+        margin-top: 16 * $desk + vw;
+        font-family: "Lato";
+        border-radius: 5 * $desk + vw;
+        box-shadow: none;
+        font-size: 14 * $desk + vw;
+    }
+    .showEMITableBtn:hover {
+        background-color: #3ec68c !important;
+        box-shadow: none !important;
+    }
+}
+.shareConatiner {
+    position: relative;
+    height: 230 * $desk + vw;
+    border-radius: 6 * $desk + vw;
+    box-shadow: 0 3px 4.7px 0 rgba(0, 0, 0, 0.27);
+    background-color: #fff;
+    margin-left: 10 * $desk + vw;
+    margin-top: 13 * $desk + vw;
+    padding-top: 20 * $desk + vw;
+    padding-left: 28 * $desk + vw;
+    padding-right: 28 * $desk + vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .shareText {
+        font-family: "Lato";
+        font-weight: bold;
+        font-size: 18 * $desk + vw;
+        letter-spacing: 0.15 * $desk + vw;
+        color: #4046b2;
+        margin-bottom: 0;
+        width: 230 * $desk + vw;
+    }
+    .socialMediaContainer {
+        display: flex;
+        width: 230 * $desk + vw;
+        margin-top: 20 * $desk + vw;
+        .socialIcon {
+            width: 28 * $desk + vw;
+            height: 28 * $desk + vw;
+            margin-right: 20 * $desk + vw;
+            filter: grayscale(1);
+            cursor: pointer;
+            img {
+                width: 100%;
+                height: 100%;
+            }
+        }
+        .socialIconActive {
+            width: 28 * $desk + vw;
+            height: 28 * $desk + vw;
+            margin-right: 20 * $desk + vw;
+            filter: grayscale(0);
+            cursor: pointer;
+            img {
+                width: 100%;
+                height: 100%;
+            }
+        }
+    }
+    .whatsappFieldContainer {
+        .calculatorTableTextField {
+            width: 236 * $desk + vw !important;
+            margin-top: 21 * $desk + vw !important;
+            margin-bottom: 0 !important;
+            label {
+                color: #535ad1;
+                letter-spacing: 0.4px;
+                font-size: 15.5px;
+                font-family: "Lato";
+            }
+            .MuiOutlinedInput-root {
+                height: 46 * $desk + vw;
+            }
+            .MuiOutlinedInput-notchedOutline {
+                border: 2px solid #c5cee0;
+            }
+            .MuiInputAdornment-root {
+                opacity: 0.6;
+            }
+            .MuiInputBase-input {
+                font-size: 16 * $desk + vw;
+                font-family: "Lato";
+            }
+        }
+        .sendBtn {
+            margin-top: 14 * $desk + vw;
+            width: 100 * $desk + vw;
+            height: 40 * $desk + vw;
+            color: #fff !important;
+            background-color: #535ad1 !important;
+            border-radius: 5 * $desk + vw;
+            box-shadow: none !important;
+            font-size: 14 * $desk + vw;
+            font-family: "Lato";
+            float: right;
+        }
+    }
+    .downloadContainer {
+        .downloadText {
+            font-weight: 500;
+            font-size: 15 * $desk + vw;
+            letter-spacing: 0.15 * $desk + vw;
+            font-family: "Lato";
+            margin-top: 20 * $desk + vw;
+            margin-bottom: 0 !important;
+        }
+        .downloadBtn {
+            margin-top: 19 * $desk + vw;
+            width: 100 * $desk + vw;
+            height: 40 * $desk + vw;
+            color: #fff !important;
+            background-color: #535ad1 !important;
+            border-radius: 5 * $desk + vw;
+            box-shadow: none !important;
+            font-size: 14 * $desk + vw;
+            font-family: "Lato";
+            float: right;
+        }
+    }
+}

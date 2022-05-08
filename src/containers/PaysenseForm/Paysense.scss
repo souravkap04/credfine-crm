@@ -1,0 +1,290 @@
+$desk: 100 / 1440;
+.PaysenseContainer {
+    display: flex;
+    background-color: #ffffff;
+    .leftSection {
+        width: 238 * $desk + vw;
+        height: 900 * $desk + vw;
+        background: #212ac5 0% 0% no-repeat padding-box;
+        opacity: 1;
+        .image {
+            width: 170 * $desk + vw;
+            height: 34 * $desk + vw;
+            margin-left: 34 * $desk + vw;
+            margin-top: 21 * $desk + vw;
+            opacity: 1;
+            img {
+                width: 100%;
+                height: 100%;
+            }
+        }
+        .list {
+            .progressContainer {
+                margin-top: 55 * $desk + vw;
+                .progressBox {
+                    display: flex;
+                    .progressIconBox {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        margin-left: 32 * $desk + vw;
+                        .iconBar {
+                            width: 16 * $desk + vw;
+                            height: 16 * $desk + vw;
+                            background-color: #ffffff;
+                            border-radius: 50%;
+                            transition: 0.3s;
+                        }
+                        .activeCurrent {
+                            background-color: #21d196;
+                        }
+                        .activeiconBar {
+                            background-color: #21d196;
+                        }
+                        .bottomProgressBar {
+                            width: 0 * $desk + vw;
+                            height: 47 * $desk + vw;
+                            border: 1px solid #ffffff;
+                            transition: 0.3s;
+                        }
+                    }
+                    .iconText {
+                        color: #ffffff;
+                        margin-left: 8 * $desk + vw;
+                        font-size: 14 * $desk + vw;
+                        font-weight: 500;
+                    }
+                }
+            }
+        }
+    }
+    .rightSection {
+        .headerContainer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            height: 70 * $desk + vw;
+            background-color: #fcfcfc;
+            margin-bottom: 23 * $desk + vw;
+            .backButton {
+                margin-left: 47 * $desk + vw;
+                width: 24 * $desk + vw;
+                height: 24 * $desk + vw;
+                cursor: pointer;
+                img {
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+            .needHelpContainer {
+                /* need change */
+                margin-left: 973 * $desk + vw;
+                .needHelpText {
+                    font-size: 12 * $desk + vw;
+                    color: #535ad1;
+                    line-height: 14 * $desk + vw;
+                    margin-left: 22 * $desk + vw;
+                }
+                .rightPart {
+                    display: flex;
+                    justify-content: center;
+                    .phoneCall {
+                        width: 18 * $desk + vw;
+                        height: 18 * $desk + vw;
+                        margin-right: 4 * $desk + vw;
+                        img {
+                            width: 100%;
+                            height: 100%;
+                        }
+                    }
+                    .numberText {
+                        font-size: 18 * $desk + vw;
+                        font-weight: bold;
+                        color: #535ad1;
+                    }
+                }
+            }
+        }
+        .texualContainer {
+            margin-left: 38 * $desk + VW;
+            width: 806 * $desk + vw;
+            margin-bottom: 20 * $desk + vw;
+            .headText {
+                color: #212ac5;
+                font-size: 32px;
+            }
+            .headText2 {
+                font-size: 32 * $desk + vw;
+                color: #000000;
+                margin-bottom: 14 * $desk + vw;
+            }
+            .subText {
+                font-size: 16 * $desk + vw;
+                color: #727272;
+                margin-bottom: 23 * $desk + vw;
+            }
+            .subText2 {
+                font-size: 16 * $desk + vw;
+                color: #727272;
+                line-height: 24 * $desk + vw;
+                white-space: nowrap;
+                strong {
+                    color: #07498e;
+                }
+            }
+            .losContainer {
+                display: flex;
+                align-items: center;
+                margin-top: 33 * $desk + vw;
+                .losHeader {
+                    margin-right: 10 * $desk + vw;
+                    color: #000000;
+                    font-size: 16 * $desk + vw;
+                }
+                .losNumber {
+                    width: 327 * $desk + vw;
+                    height: 32 * $desk + vw;
+                    background-color: #535ad1;
+                    color: #ffffff;
+                    padding: 6 * $desk + vw 13 * $desk + vw 7 * $desk + vw 13 * $desk + vw;
+                    text-align: center;
+                    border-radius: 4 * $desk + vw;
+                }
+                .copyIcon {
+                    margin-left: 6.36 * $desk + vw;
+                    cursor: pointer;
+                }
+            }
+            .trackStatus {
+                display: flex;
+                align-items: center;
+                .statusBtn {
+                    width: 200 * $desk + vw;
+                    height: 50 * $desk + vw;
+                    border-radius: 33 * $desk + vw;
+                    background-color: #1c86fc;
+                    text-align: center;
+                    padding-top: 16 * $desk + vw;
+                    cursor: pointer;
+                    .btnText {
+                        font-size: 16 * $desk + vw;
+                        font-weight: 500;
+                        color: #fff;
+                    }
+                }
+                .statusText {
+                    margin-left: 55 * $desk + vw;
+                    color: #727272;
+                    strong {
+                        color: #07498e;
+                    }
+                }
+            }
+            .statusContainer {
+                margin-top: 42 * $desk + vw;
+                .applicationStatus {
+                    display: flex;
+                    align-items: center;
+                    .statusLabel {
+                        color: #727272;
+                        margin-right: 10 * $desk + vw;
+                    }
+                    .statusMessage {
+                        width: 130 * $desk + vw;
+                        height: 34 * $desk + vw;
+                        border-radius: 8 * $desk + vw;
+                        text-align: center;
+                        padding-top: 8 * $desk + vw;
+                    }
+                    .checkiconContainer {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        width: 130 * $desk + vw;
+                        height: 34 * $desk + vw;
+                        border-radius: 8 * $desk + vw;
+                        img {
+                            width: 14 * $desk + vw;
+                            height: 14 * $desk + vw;
+                            margin-left: 12 * $desk + vw;
+                        }
+                    }
+                }
+                .kycStatus {
+                    margin-top: 25 * $desk + vw;
+                    display: flex;
+                    align-items: center;
+                    .KYCLabel {
+                        color: #727272;
+                        margin-right: 87 * $desk + vw;
+                    }
+                    .KYCMessage {
+                        width: 130 * $desk + vw;
+                        height: 34 * $desk + vw;
+                        border-radius: 8 * $desk + vw;
+                        text-align: center;
+                        padding-top: 8 * $desk + vw;
+                    }
+                    .checkiconContainer {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        width: 130 * $desk + vw;
+                        height: 34 * $desk + vw;
+                        border-radius: 8 * $desk + vw;
+                        img {
+                            width: 14 * $desk + vw;
+                            height: 14 * $desk + vw;
+                            margin-left: 12 * $desk + vw;
+                        }
+                    }
+                }
+                .reqDocContainer {
+                    margin-top: 25 * $desk + vw;
+                    .reqDocText {
+                        color: #727272;
+                        strong {
+                            color: #07498e;
+                        }
+                    }
+                    .docListContainer{
+                        margin-top: 21 * $desk +  vw;
+                        ol{
+                            color: #727272;
+                            font-weight: 600;
+                            font-size: 13 * $desk + vw;
+                            li{
+                                padding-bottom: 10 * $desk + vw;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .offerContainer {
+            display: flex;
+            .offerBox {
+                margin-left: 38 * $desk + VW;
+                .offerHead {
+                    color: #727272;
+                    font-size: 16 * $desk + vw;
+                }
+                .offerText {
+                    color: #07498e;
+                    font-size: 24 * $desk + vw;
+                    margin-top: 5 * $desk + vw;
+                }
+            }
+        }
+        .offerBorder {
+            width: 851 * $desk + VW;
+            border: 1px solid #d1d1d1;
+            margin-top: 16 * $desk + VW;
+            margin-left: 38 * $desk + VW;
+        }
+    }
+    .iconTextContainer {
+        display: none;
+    }
+}

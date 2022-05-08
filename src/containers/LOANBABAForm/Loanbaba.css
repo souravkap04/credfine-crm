@@ -1,0 +1,342 @@
+.LoanbabaContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  background-color: #fff;
+}
+
+.LoanbabaContainer .leftSection {
+  width: 16.52778vw;
+  height: 62.5vw;
+  background: #177fb2 0% 0% no-repeat padding-box;
+  opacity: 1;
+}
+
+.LoanbabaContainer .leftSection .loanbabaimg {
+  width: 16.52778vw;
+  height: 4.86111vw;
+  opacity: 1;
+}
+
+.LoanbabaContainer .leftSection .loanbabaimg img {
+  width: 100%;
+  height: 100%;
+}
+
+.LoanbabaContainer .leftSection .list .progressContainer {
+  margin-top: 2.70833vw;
+}
+
+.LoanbabaContainer .leftSection .list .progressContainer .progressBox {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.LoanbabaContainer .leftSection .list .progressContainer .progressBox .progressIconBox {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-left: 2.15278vw;
+}
+
+.LoanbabaContainer .leftSection .list .progressContainer .progressBox .progressIconBox .iconBar {
+  width: 1.25vw;
+  height: 1.25vw;
+  background-color: #ffffff;
+  border-radius: 50%;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+
+.LoanbabaContainer .leftSection .list .progressContainer .progressBox .progressIconBox .activeCurrent {
+  background-color: #004D72;
+}
+
+.LoanbabaContainer .leftSection .list .progressContainer .progressBox .progressIconBox .activeiconBar {
+  background-color: #004D72;
+}
+
+.LoanbabaContainer .leftSection .list .progressContainer .progressBox .progressIconBox .bottomProgressBar {
+  width: 0vw;
+  height: 3.26389vw;
+  border: 1px solid #074d72;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+
+.LoanbabaContainer .leftSection .list .progressContainer .progressBox .iconText {
+  color: #ffffff;
+  margin-left: 0.55556vw;
+  font-size: 1.04167vw;
+  font-weight: 500;
+}
+
+.LoanbabaContainer .rightSection .headerContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  width: 100%;
+  height: 4.86111vw;
+  background-color: #fcfcfc;
+  margin-bottom: 1.59722vw;
+}
+
+.LoanbabaContainer .rightSection .headerContainer .backButton {
+  margin-left: 3.26389vw;
+  width: 1.66667vw;
+  height: 1.66667vw;
+  cursor: pointer;
+}
+
+.LoanbabaContainer .rightSection .headerContainer .backButton img {
+  width: 100%;
+  height: 100%;
+}
+
+.LoanbabaContainer .rightSection .headerContainer .needHelpContainer {
+  /* need change */
+  margin-left: 67.56944vw;
+}
+
+.LoanbabaContainer .rightSection .headerContainer .needHelpContainer .needHelpText {
+  font-size: 0.83333vw;
+  color: #535ad1;
+  line-height: 0.97222vw;
+  margin-left: 1.52778vw;
+}
+
+.LoanbabaContainer .rightSection .headerContainer .needHelpContainer .rightPart {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.LoanbabaContainer .rightSection .headerContainer .needHelpContainer .rightPart .phoneCall {
+  width: 1.25vw;
+  height: 1.25vw;
+  margin-right: 0.27778vw;
+}
+
+.LoanbabaContainer .rightSection .headerContainer .needHelpContainer .rightPart .phoneCall img {
+  width: 100%;
+  height: 100%;
+}
+
+.LoanbabaContainer .rightSection .headerContainer .needHelpContainer .rightPart .numberText {
+  font-size: 1.25vw;
+  font-weight: bold;
+  color: #535ad1;
+}
+
+.LoanbabaContainer .rightSection .texualContainer {
+  margin-left: 2.63889VW;
+  width: 55.97222vw;
+  margin-bottom: 1.38889vw;
+}
+
+.LoanbabaContainer .rightSection .texualContainer .headText {
+  color: #177fb2;
+  font-size: 32px;
+}
+
+.LoanbabaContainer .rightSection .texualContainer .headText2 {
+  font-size: 2.22222vw;
+  color: #07498e;
+  margin-bottom: 0.97222vw;
+}
+
+.LoanbabaContainer .rightSection .texualContainer .subText {
+  font-size: 1.11111vw;
+  color: #727272;
+  margin-bottom: 1.59722vw;
+}
+
+.LoanbabaContainer .rightSection .texualContainer .subText2 {
+  font-size: 1.11111vw;
+  color: #727272;
+  line-height: 1.66667vw;
+}
+
+.LoanbabaContainer .rightSection .texualContainer .subText2 strong {
+  color: #07498e;
+}
+
+.LoanbabaContainer .rightSection .texualContainer .losContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-top: 2.29167vw;
+}
+
+.LoanbabaContainer .rightSection .texualContainer .losContainer .losHeader {
+  margin-right: 0.69444vw;
+  color: #000000;
+  font-size: 1.11111vw;
+}
+
+.LoanbabaContainer .rightSection .texualContainer .losContainer .losNumber {
+  width: 7.63889vw;
+  height: 2.22222vw;
+  background-color: #535ad1;
+  color: #ffffff;
+  padding: 0.41667vw 0.90278vw 0.48611vw 0.90278vw;
+  text-align: center;
+  border-radius: 0.27778vw;
+}
+
+.LoanbabaContainer .rightSection .texualContainer .losContainer .copyIcon {
+  margin-left: 0.44167vw;
+  cursor: pointer;
+}
+
+.LoanbabaContainer .rightSection .texualContainer .trackStatus {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.LoanbabaContainer .rightSection .texualContainer .trackStatus .statusBtn {
+  width: 13.88889vw;
+  height: 3.47222vw;
+  border-radius: 2.29167vw;
+  background-color: #1c86fc;
+  text-align: center;
+  padding-top: 1.11111vw;
+  cursor: pointer;
+}
+
+.LoanbabaContainer .rightSection .texualContainer .trackStatus .statusBtn .btnText {
+  font-size: 1.11111vw;
+  font-weight: 500;
+  color: #fff;
+}
+
+.LoanbabaContainer .rightSection .texualContainer .trackStatus .statusText {
+  margin-left: 3.81944vw;
+  color: #727272;
+}
+
+.LoanbabaContainer .rightSection .texualContainer .trackStatus .statusText strong {
+  color: #07498e;
+}
+
+.LoanbabaContainer .rightSection .texualContainer .applicationStatus {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-top: 2.91667vw;
+}
+
+.LoanbabaContainer .rightSection .texualContainer .applicationStatus .statusLabel {
+  color: #727272;
+  margin-right: 0.69444vw;
+}
+
+.LoanbabaContainer .rightSection .texualContainer .applicationStatus .statusMessage {
+  width: 9.02778vw;
+  height: 2.36111vw;
+  border-radius: 0.55556vw;
+  text-align: center;
+  padding-top: 0.55556vw;
+}
+
+.LoanbabaContainer .rightSection .texualContainer .applicationStatus .checkiconContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 9.02778vw;
+  height: 2.36111vw;
+  border-radius: 0.55556vw;
+}
+
+.LoanbabaContainer .rightSection .texualContainer .applicationStatus .checkiconContainer img {
+  width: 0.97222vw;
+  height: 0.97222vw;
+  margin-left: 0.83333vw;
+}
+
+.LoanbabaContainer .rightSection .offerContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.LoanbabaContainer .rightSection .offerContainer .offerBox {
+  margin-left: 2.63889VW;
+}
+
+.LoanbabaContainer .rightSection .offerContainer .offerBox .offerHead {
+  color: #727272;
+  font-size: 1.11111vw;
+}
+
+.LoanbabaContainer .rightSection .offerContainer .offerBox .offerText {
+  color: #07498e;
+  font-size: 1.66667vw;
+  margin-top: 0.34722vw;
+}
+
+.LoanbabaContainer .rightSection .offerBorder {
+  width: 59.09722VW;
+  border: 1px solid #d1d1d1;
+  margin-top: 1.11111VW;
+  margin-left: 2.63889VW;
+}
+
+.LoanbabaContainer .rightSection .checkboxContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+}
+
+.LoanbabaContainer .rightSection .checkboxContainer .check {
+  margin-top: -0.34722rem;
+  margin-left: -0.69444rem;
+}
+
+.LoanbabaContainer .rightSection .checkboxContainer p {
+  width: 49.51389rem;
+  font-size: 0.97222rem;
+  font-weight: 300;
+  color: #000;
+}
+
+.LoanbabaContainer .iconTextContainer {
+  display: none;
+}
+/*# sourceMappingURL=Loanbaba.css.map */

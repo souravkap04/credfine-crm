@@ -37,8 +37,10 @@ import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import SendIcon from '@material-ui/icons/Send';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import {haloocomNoidaDialerApi,haloocomMumbaiDialerApi} from "../../global/callApi";
+import { haloocomNoidaDialerApi, haloocomMumbaiDialerApi } from "../../global/callApi";
+import EmiCalculator from '../Emicalculator/EmiCalculator';
 import './resetpassword.css';
+import EligibilityCalculator from "../EligibilityCalculator/EligibilityCalculator";
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -142,6 +144,21 @@ const useStyles = makeStyles({
   }
 });
 export default function Users() {
+  const [openCalculate, setopenCalculate] = useState(false);
+  const [checkEligibility,setCheckEligibility] = useState(false);
+  
+  const openEligibility = () =>{
+    setCheckEligibility(true);
+  }
+  const closeEligibility = () =>{
+    setCheckEligibility(false);
+  }
+  const openCalculator = () => {
+    setopenCalculate(true);
+  }
+  const closeCalculator = () => {
+    setopenCalculate(false);
+  }
   const classes = useStyles();
   const profileData = getProfileData();
   const [isResetPassword, setIsResetPassword] = useState(false);
@@ -167,12 +184,12 @@ export default function Users() {
   const [rowData, setRowData] = useState({});
   const [alertMessage, setAlertMessage] = useState('');
   const [isDisplay, setIsDisplay] = useState(false);
-  const [dialerAlertMessage,setDialerAlertMessage] = useState('');
-  const [isDisplayDialerMessage,setIsDisplayDialerMessage] = useState(false);
+  const [dialerAlertMessage, setDialerAlertMessage] = useState('');
+  const [isDisplayDialerMessage, setIsDisplayDialerMessage] = useState(false);
   const [deleteCount, setDeleteCount] = useState(0);
   const [selectedUserName, setSelectedUserName] = useState('');
   const [updatedUserName, setUpdatedUserName] = useState('');
-  const [selectedVertageId,setSelectedVertageId] = useState('');
+  const [selectedVertageId, setSelectedVertageId] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [vertageId, setVertageId] = useState("");
   const [vertagePass, setVertagePass] = useState("");
@@ -258,7 +275,7 @@ export default function Users() {
     const headers = {
       'Authorization': `Token ${profileData.token}`,
     }
-    await axios.get(`${baseUrl}/common/getLocations`, { headers })
+    await axios.get(`${baseUrl}/common/getLocations/`, { headers })
       .then((response) => {
         setpullLocation(response.data)
       }).catch((error) => {
@@ -280,7 +297,7 @@ export default function Users() {
       console.log(error);
     }
   }
-  const deletedUserPopUpHandler = (username,vertageid) => {
+  const deletedUserPopUpHandler = (username, vertageid) => {
     setIsDeleteUser(true);
     setUserName(username);
     setSelectedVertageId(vertageid)
@@ -302,25 +319,25 @@ export default function Users() {
           setAlertMessage(response.data.message);
           setIsDeleteUser(false);
           setDeleteCount(deleteCount + 1);
-          if(profileData.dialer === "HALOOCOM-Noida"){
-             axios.post(`${haloocomNoidaDialerApi}/userCreation.php?user=${selectedVertageId}&operation=Delete`)
-           .then((response)=>{
-            setAlertMessage("dialer user is successfully deleted");
-            setIsDisplay(true);
-           }).catch((error)=>{
-            setAlertMessage("something wrong in dialer users delete");
-            setIsDisplay(true);
-           })
-          }else if(profileData.dialer === "HALOOCOM-Mumbai"){
+          if (profileData.dialer === "HALOOCOM-Noida") {
+            axios.post(`${haloocomNoidaDialerApi}/userCreation.php?user=${selectedVertageId}&operation=Delete`)
+              .then((response) => {
+                setAlertMessage("dialer user is successfully deleted");
+                setIsDisplay(true);
+              }).catch((error) => {
+                setAlertMessage("something wrong in dialer users delete");
+                setIsDisplay(true);
+              })
+          } else if (profileData.dialer === "HALOOCOM-Mumbai") {
             axios.post(`${haloocomMumbaiDialerApi}/userCreation.php?user=${selectedVertageId}&operation=Delete`)
-          .then((response)=>{
-           setAlertMessage("dialer user is successfully deleted");
-           setIsDisplay(true);
-          }).catch((error)=>{
-           setAlertMessage("something wrong in dialer users delete");
-           setIsDisplay(true);
-          })
-         }
+              .then((response) => {
+                setAlertMessage("dialer user is successfully deleted");
+                setIsDisplay(true);
+              }).catch((error) => {
+                setAlertMessage("something wrong in dialer users delete");
+                setIsDisplay(true);
+              })
+          }
         }
       }).catch((error) => {
         console.log(error);
@@ -388,29 +405,31 @@ export default function Users() {
     setIsDisplay(false);
     setIsDisplayDialerMessage(false);
   }
-  const submitHaloocomUserName = ()=>{
-    if(profileData.dialer === "HALOOCOM-Noida"){
+  const submitHaloocomUserName = () => {
+    if (profileData.dialer === "HALOOCOM-Noida") {
       axios.post(`${haloocomNoidaDialerApi}/userCreation.php?user=${vertageId}&operation=Add`)
-    .then((response)=>{
-     setDialerAlertMessage(response.data.Description);
-     setIsDisplayDialerMessage(true);
-    }).catch((error)=>{
-     setDialerAlertMessage("something wrong in dialer user creation");
-     setIsDisplayDialerMessage(true);
-    })
-   }if(profileData.dialer === "HALOOCOM-Mumbai"){
-     axios.post(`${haloocomMumbaiDialerApi}/userCreation.php?user=${vertageId}&operation=Add`)
-   .then((response)=>{
-     setDialerAlertMessage(response.data.Description);
-     setIsDisplayDialerMessage(true);
-   }).catch((error)=>{
-     setDialerAlertMessage("something wrong in dialer user creation");
-     setIsDisplayDialerMessage(true);
-   })
-  }
+        .then((response) => {
+          setDialerAlertMessage(response.data.Description);
+          setIsDisplayDialerMessage(true);
+        }).catch((error) => {
+          setDialerAlertMessage("something wrong in dialer user creation");
+          setIsDisplayDialerMessage(true);
+        })
+    } if (profileData.dialer === "HALOOCOM-Mumbai") {
+      axios.post(`${haloocomMumbaiDialerApi}/userCreation.php?user=${vertageId}&operation=Add`)
+        .then((response) => {
+          setDialerAlertMessage(response.data.Description);
+          setIsDisplayDialerMessage(true);
+        }).catch((error) => {
+          setDialerAlertMessage("something wrong in dialer user creation");
+          setIsDisplayDialerMessage(true);
+        })
+    }
   }
   return (
-    <PageLayerSection>
+    <PageLayerSection ActualEmiCalculate={openCalculator} ActualEligibilityCalculate={openEligibility}>
+      <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility}/>
+      <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
       <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isDisplay} autoHideDuration={1500} onClose={closeSnankBar}>
         <Alert>
           {alertMessage}
@@ -515,7 +534,7 @@ export default function Users() {
                           </Tooltip>
                           <Tooltip title="Delete User">
                             {/* <IconButton onClick={() => deleteUser(user.myuser.username, index)}> */}
-                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username,user.myuser.vertage_id)}>
+                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username, user.myuser.vertage_id)}>
                               <DeleteIcon />
                             </IconButton>
                           </Tooltip>
@@ -556,7 +575,7 @@ export default function Users() {
                           </Tooltip>
                           <Tooltip title="Delete User">
                             {/* <IconButton onClick={() => deleteUser(user.myuser.username, index)}> */}
-                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username,user.myuser.vertage_id)}>
+                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username, user.myuser.vertage_id)}>
                               <DeleteIcon />
                             </IconButton>
                           </Tooltip>
@@ -597,7 +616,7 @@ export default function Users() {
                           </Tooltip>
                           <Tooltip title="Delete User">
                             {/* <IconButton onClick={() => deleteUser(user.myuser.username, index)}> */}
-                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username,user.myuser.vertage_id)}>
+                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username, user.myuser.vertage_id)}>
                               <DeleteIcon />
                             </IconButton>
                           </Tooltip>
@@ -638,7 +657,7 @@ export default function Users() {
                           </Tooltip>
                           <Tooltip title="Delete User">
                             {/* <IconButton onClick={() => deleteUser(user.myuser.username, index)}> */}
-                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username,user.myuser.vertage_id)}>
+                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username, user.myuser.vertage_id)}>
                               <DeleteIcon />
                             </IconButton>
                           </Tooltip>
@@ -679,7 +698,7 @@ export default function Users() {
                           </Tooltip>
                           <Tooltip title="Delete User">
                             {/* <IconButton onClick={() => deleteUser(user.myuser.username, index)}> */}
-                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username,user.myuser.vertage_id)}>
+                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username, user.myuser.vertage_id)}>
                               <DeleteIcon />
                             </IconButton>
                           </Tooltip>
@@ -720,7 +739,7 @@ export default function Users() {
                           </Tooltip>
                           <Tooltip title="Delete User">
                             {/* <IconButton onClick={() => deleteUser(user.myuser.username, index)}> */}
-                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username,user.myuser.vertage_id)}>
+                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username, user.myuser.vertage_id)}>
                               <DeleteIcon />
                             </IconButton>
                           </Tooltip>
@@ -1126,7 +1145,7 @@ export default function Users() {
                                 endAdornment: (
                                   <InputAdornment position="end">
                                     <IconButton onClick={submitHaloocomUserName}>
-                                       <SendIcon style={{ color: '#14cc9e' }}/>
+                                      <SendIcon style={{ color: '#14cc9e' }} />
                                     </IconButton>
                                   </InputAdornment>
                                 ),

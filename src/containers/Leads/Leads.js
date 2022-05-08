@@ -31,6 +31,8 @@ import clsx from "clsx";
 import MuiAlert from "@material-ui/lab/Alert";
 import Snackbar from "@material-ui/core/Snackbar";
 import { findAllByTestId } from "@testing-library/react";
+import EmiCalculator from '../Emicalculator/EmiCalculator';
+import EligibilityCalculator from "../EligibilityCalculator/EligibilityCalculator";
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -59,9 +61,10 @@ const useStyles = makeStyles({
     fontSize: "12px",
   },
   emptydata: {
-    position: "relative",
-    left: "30rem",
-    fontSize: "12px",
+    position: "absolute",
+    left: "40rem",
+    fontSize: "16px",
+    whiteSpace: 'nowrap'
   },
   click: {
     cursor: "pointer",
@@ -120,10 +123,6 @@ export default function Leads() {
   const profileData = getProfileData();
   const [leadData, setLeadData] = useState({});
   const [searchData, setSearchData] = useState([]);
-  const [isCalling, setIsCalling] = useState(false);
-  const [isCallConnect, setIsCallConnect] = useState(false);
-  const [onGoingCall, setOnGoingCall] = useState(false);
-  const [isCallNotConnected, setIsCallNotConnected] = useState(false);
   const [isSearchData, setisSearchData] = useState(false);
   const [dialerCall, setDialerCall] = useState(false);
   const [disableHangupBtn, setDisableHangupBtn] = useState(true);
@@ -138,13 +137,28 @@ export default function Leads() {
   const [validated, setValidated] = useState(false);
   const [isDisplay, setIsDisplay] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [isAutoDialerStart,setIsAutoDialerStart] = useState(false);
+  const [isAutoDialerStart, setIsAutoDialerStart] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [isLoading, setisLoading] = useState(false);
   const [fullName, setfullName] = useState("");
   const [mobileNo, setmobileNo] = useState("");
   const [monthlyIncome, setmonthlyIncome] = useState("");
   const [formError, setformError] = useState([false, false, false]);
+  const [openCalculate, setopenCalculate] = useState(false);
+  const [checkEligibility, setCheckEligibility] = useState(false);
+  const [responseStatus, setResponseStatus] = useState("");
+  const openEligibility = () => {
+    setCheckEligibility(true);
+  }
+  const closeEligibility = () => {
+    setCheckEligibility(false);
+  }
+  const openCalculator = () => {
+    setopenCalculate(true);
+  }
+  const closeCalculator = () => {
+    setopenCalculate(false);
+  }
   useEffect(() => {
     leadQuery ? fetchSearchData(leadQuery) : fetchLeadsData();
   }, [leadQuery]);
@@ -155,11 +169,26 @@ export default function Leads() {
     await axios
       .get(`${baseUrl}/leads/search/${key}`, { headers })
       .then((response) => {
-        setSearchData(response.data);
-        setisLoading(false);
+        if (response.status === 200) {
+          setSearchData(response.data);
+          setisLoading(false);
+        }
       })
       .catch((error) => {
-        console.log(error);
+        if (error.response.status === 403) {
+          setResponseStatus('This Lead Owned By Someone Else Kindly Connect Your Product Team swati@credfine.com');
+          setAlertMessage('Lead Already Exist');
+          setIsError(true);
+          setisLoading(false);
+        }
+        if (error.response.status === 400) {
+          setResponseStatus('No Data Found In Our CRM You Can Create a New Lead From Manual Lead Creation');
+          setAlertMessage('No Record Found');
+          setIsError(true);
+          setisLoading(false);
+        } else {
+          console.log(error);
+        }
       });
   };
   const fetchLeadsData = async () => {
@@ -176,7 +205,7 @@ export default function Leads() {
       .then((response) => {
         setLeadData(response.data);
         setisLoading(false);
-          })
+      })
       .catch((error) => {
         console.log(error);
       });
@@ -184,8 +213,9 @@ export default function Leads() {
   const routeChangeHAndler = (leadId) => {
     history.push(`/dashboards/leads/edit/${leadId}`);
   };
+
   const clickToCall = async (encryptData, leadID) => {
-     const customerNo = decodeURIComponent(window.atob(encryptData));
+    const customerNo = decodeURIComponent(window.atob(encryptData));
     if (profileData.dialer === "HALOOCOM-Noida") {
       await axios
         .post(
@@ -223,14 +253,6 @@ export default function Leads() {
         history.push(`/dashboards/leads/edit/${leadID}`);
       }, 1500);
     }
-  };
-  const disablePopup = () => {
-    setIsCalling(false);
-    setOnGoingCall(false);
-  };
-  const callConnectHandler = () => {
-    setIsCallConnect(false);
-    setIsCallNotConnected(false);
   };
   const maskPhoneNo = (phoneNo) => {
     let data = decodeURIComponent(window.atob(phoneNo));
@@ -331,9 +353,9 @@ export default function Leads() {
     clickToCall(leadData.phone_no_encrypt, leadData.lead_crm_id);
   };
   useEffect(() => {
-      if (localStorage.getItem("auto_dialer") && Object.keys(leadData).length !== 0 ) {
-        clickToCall(leadData.phone_no_encrypt,leadData.lead_crm_id)
-      }
+    if (localStorage.getItem("auto_dialer") && Object.keys(leadData).length !== 0) {
+      clickToCall(leadData.phone_no_encrypt, leadData.lead_crm_id)
+    }
   }, [leadData]);
   return (
     <PageLayerSection isDisplaySearchBar={true}
@@ -341,7 +363,11 @@ export default function Leads() {
       onClick={() => openDrawer()}
       startAutoDialerButton={true}
       startAutoDialerClick={() => autoDialerHandler()}
+      ActualEmiCalculate={openCalculator}
+      ActualEligibilityCalculate={openEligibility}
     >
+      <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility} />
+      <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
       <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
         open={isAutoDialerStart}
@@ -350,6 +376,16 @@ export default function Leads() {
       >
         <Alert onClose={closeSnankBar} severity="info">
           Auto dialer mode is on
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={dialerCall}
+        autoHideDuration={3000}
+        onClose={disableDialerPopUp}
+      >
+        <Alert onClose={disableDialerPopUp} severity="info">
+          Calling...
         </Alert>
       </Snackbar>
       <Snackbar
@@ -539,10 +575,10 @@ export default function Leads() {
                     <TableRow className={classes.oddEvenRow} key={index}>
                       <TableCell
                         className={(classes.tabledata, classes.click)}
-                        onClick={() => routeChangeHAndler(search.lead_crm_id)} 
+                        onClick={() => routeChangeHAndler(search.lead_crm_id)}
                       >
                         {search.lead_crm_id}
-                      </TableCell> 
+                      </TableCell>
                       <TableCell className={classes.tabledata}>
                         {search.name ? search.name : "NA"}
                       </TableCell>
@@ -594,12 +630,12 @@ export default function Leads() {
                             <CallIcon className={classes.callIcon} />
                           </IconButton>
                         </Tooltip>
-                      </TableCell> 
+                      </TableCell>
                     </TableRow>
                   );
                 })
               ) : (
-                <span className={classes.emptydata}> No Data Found </span>
+                <span className={classes.emptydata}>{responseStatus}</span>
               )
             ) : Object.keys(leadData).length !== 0 ? (
               <TableRow className={classes.oddEvenRow}>
@@ -664,28 +700,6 @@ export default function Leads() {
             ) : (
               <span className={classes.emptydata}> No Data Found </span>
             )}
-            <div>
-              <CallerDialogBox
-                onGoingCall={onGoingCall}
-                isCalling={isCalling}
-                isCallConnect={isCallConnect}
-                isCallNotConnected={isCallNotConnected}
-                callConnectHandler={callConnectHandler}
-                disablePopup={disablePopup}
-              />
-            </div>
-            <div>
-              <Snackbar
-                anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                open={dialerCall}
-                autoHideDuration={3000}
-                onClose={disableDialerPopUp}
-              >
-                <Alert onClose={disableDialerPopUp} severity="info">
-                  Calling...
-                </Alert>
-              </Snackbar>
-            </div>
           </TableBody>
         </Table>
       </TableContainer>

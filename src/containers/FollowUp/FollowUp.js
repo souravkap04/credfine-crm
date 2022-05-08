@@ -13,7 +13,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import CallIcon from '@material-ui/icons/Call';
 import axios from 'axios';
 import baseUrl from '../../global/api';
-import {haloocomNoidaDialerApi, haloocomMumbaiDialerApi } from '../../global/callApi'
+import { haloocomNoidaDialerApi, haloocomMumbaiDialerApi } from '../../global/callApi'
 import { getProfileData } from '../../global/leadsGlobalData';
 import CallerDialogBox from '../Leads/CallerDialog/CallerDialogBox';
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
@@ -24,6 +24,8 @@ import Snackbar from '@material-ui/core/Snackbar';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Button } from '@material-ui/core';
 import Badge from '@material-ui/core/Badge';
+import EmiCalculator from '../Emicalculator/EmiCalculator';
+import EligibilityCalculator from '../EligibilityCalculator/EligibilityCalculator';
 // import NoDataFound from '../NoDataFound/NoDataFound';
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -118,7 +120,9 @@ export default function FollowUp(props) {
     const [disableHangupBtn, setDisableHangupBtn] = useState(true);
     const [isLoading, setisLoading] = useState(false);
     const [currentDateTime, setcurrentDateTime] = useState('');
-    const [isAutoDialerStart,setIsAutoDialerStart] = useState(false);
+    const [isAutoDialerStart, setIsAutoDialerStart] = useState(false);
+    const [openCalculate, setopenCalculate] = useState(false);
+    const [checkEligibility, setCheckEligibility] = useState(false);
     const fetchLeadsData = async () => {
         setisLoading(true);
         const headers = {
@@ -152,7 +156,7 @@ export default function FollowUp(props) {
         history.push(`/dashboards/followup/edit/${leadId}`);
     };
     const clickToCall = async (customerNo, leadID) => {
-          if (profileData.dialer === 'HALOOCOM-Noida') {
+        if (profileData.dialer === 'HALOOCOM-Noida') {
             await axios.post(`${haloocomNoidaDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`)
                 .then((response) => {
                     setDialerCall(true);
@@ -204,12 +208,12 @@ export default function FollowUp(props) {
             return data;
         }
     }
-    const createdDateHandler = (date)=>{
+    const createdDateHandler = (date) => {
         let createdDate = new Date(date);
-        let currentCreatedDate = createdDate.toLocaleDateString() + " " + 
-        moment(createdDate.toLocaleTimeString(), "HH:mm:ss a").format(
-        "hh:mm A"
-        );
+        let currentCreatedDate = createdDate.toLocaleDateString() + " " +
+            moment(createdDate.toLocaleTimeString(), "HH:mm:ss a").format(
+                "hh:mm A"
+            );
         return currentCreatedDate;
     }
     const disableDialerPopUp = () => {
@@ -221,22 +225,37 @@ export default function FollowUp(props) {
         localStorage.setItem("auto_dialer", true);
         setIsAutoDialerStart(true);
         clickToCall(leadData.lead.phone_no, leadData.lead.lead_crm_id);
-      };
+    };
     useEffect(() => {
-        if (localStorage.getItem("auto_dialer") && Object.keys(leadData).length !== 0 ) {
-        clickToCall(leadData.lead.phone_no,leadData.lead.lead_crm_id)
+        if (localStorage.getItem("auto_dialer") && Object.keys(leadData).length !== 0) {
+            clickToCall(leadData.lead.phone_no, leadData.lead.lead_crm_id)
         }
     }, [leadData]);
+    
+    const openEligibility = () => {
+        setCheckEligibility(true);
+    }
+    const closeEligibility = () => {
+        setCheckEligibility(false);
+    }
+    const openCalculator = () => {
+        setopenCalculate(true);
+    }
+    const closeCalculator = () => {
+        setopenCalculate(false);
+    }
     return (
-        <PageLayerSection isDisplaySearchBar={false}>
+        <PageLayerSection isDisplaySearchBar={false} ActualEmiCalculate={openCalculator} ActualEligibilityCalculate={openEligibility}>
+            <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility} />
+            <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
             {/* <NoDataFound text="Coming Soon" /> */}
             <div className="followUpBtnContainer">
-                    <Button 
+                <Button
                     className="followUpAutoDialerStartBtn"
                     color="primary"
                     variant="contained"
                     onClick={() => autoDialerHandler()}
-                    >
+                >
                     Start</Button>
                 {LeadCount !== 0 ? <Badge className="followbtn" max={5000} badgeContent={LeadCount} color="secondary">
                     <Button variant="contained">Follow Up</Button>
@@ -268,7 +287,7 @@ export default function FollowUp(props) {
                             <CircularProgress size={100} thickness={3} />
                         </div> : LeadCount !== 0 ? (Object.keys(leadData).length !== 0 ?
                             <TableRow className={classes.oddEvenRow}>
-                                <TableCell className={classes.tabledata, classes.click}
+                                <TableCell className={clsx(classes.tabledata, classes.click)}
                                     onClick={() => routeChangeHAndler(leadData.lead.lead_crm_id)}
                                 >{leadData.lead.lead_crm_id} </TableCell>
                                 <TableCell className={classes.tabledata}>{leadData.lead.name ? leadData.lead.name : 'NA'}</TableCell>
