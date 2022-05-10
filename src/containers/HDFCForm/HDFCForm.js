@@ -77,7 +77,7 @@ export default function HDFCFrom() {
     const [officeCityName, setOfficeCityName] = useState("");
     const [officePincode, setOfficePincode] = useState("");
     const [brabchCodeIdd, setbranchCodeIdd] = useState("");
-    const [brabchCodeName, setbranchCodeName] = useState("");
+    const [branchCodeName, setbranchCodeName] = useState("");
     const [rmCodeIdd, setRmCodeIdd] = useState("");
     const [seCodeIdd, setSeCodeIdd] = useState("");
     const [seCodeName, setSeCodeName] = useState("");
@@ -336,7 +336,7 @@ export default function HDFCFrom() {
             setAlertMessage('Invalid Office Pincode')
             setIsError(true);
             return;
-        } if (brabchCodeName === '') {
+        } if (branchCodeName === '') {
             setAlertMessage('Invalid Branch Code Name');
             setIsError(true);
             return;
@@ -1025,6 +1025,7 @@ export default function HDFCFrom() {
                         onChange={(e) => setOfficePincode(e.target.value)}
                     />
                     <TextField
+                        disabled
                         className="textField"
                         id="outlined-full-width"
                         label="Branch Code"
@@ -1035,10 +1036,10 @@ export default function HDFCFrom() {
                         }}
                         variant="outlined"
                         size="small"
-                        value={brabchCodeName}
-                        onChange={(e) => setbranchCodeName(e.target.value)}
+                        value={branchCodeName}
                     />
                     <TextField
+                        disabled
                         className="textField"
                         id="outlined-full-width"
                         label="RM Code"
@@ -1052,6 +1053,7 @@ export default function HDFCFrom() {
                         value={rmCodeIdd}
                     />
                     <TextField
+                        disabled
                         className="textField"
                         id="outlined-full-width"
                         label="SE Code"
@@ -1063,7 +1065,6 @@ export default function HDFCFrom() {
                         variant="outlined"
                         size="small"
                         value={seCodeName}
-                        onChange={(e) => setSeCodeName(e.target.value)}
                     />
                     <TextField
                         select
@@ -1262,10 +1263,13 @@ export default function HDFCFrom() {
                                                     }
                                                 })
                                             }} />
-                                            <label className='fileButton' for="addressProof-btn">
+                                            {addressProof === '' ? <label className='fileButton disableUploadBtn'>
                                                 <div className='fileText'>Upload</div>
                                                 <div className='plus'>+</div>
-                                            </label>
+                                            </label> : <label className='fileButton' for="addressProof-btn" >
+                                                <div className='fileText'>Upload</div>
+                                                <div className='plus'>+</div>
+                                            </label>}
                                             <div className='fileChosen' id="actualProof-file-chosen">No file chosen</div>
                                             <div className='uploadStatusButton'>
                                                 <div
@@ -1296,10 +1300,15 @@ export default function HDFCFrom() {
                                                     }
                                                 })
                                             }} />
-                                            <label className='fileButton' for="incomeProof-btn">
-                                                <div className='fileText'>Upload</div>
-                                                <div className='plus'>+</div>
-                                            </label>
+                                            {incomeProof === '' ?
+                                                <label className='fileButton disableUploadBtn'>
+                                                    <div className='fileText'>Upload</div>
+                                                    <div className='plus'>+</div>
+                                                </label> :
+                                                <label className='fileButton' for="incomeProof-btn">
+                                                    <div className='fileText'>Upload</div>
+                                                    <div className='plus'>+</div>
+                                                </label>}
                                             <div className='fileChosen' id="incomeProof-file-chosen">No file chosen</div>
                                             <div className='uploadStatusButton'>
                                                 <div className='uploadStatusText'>Uploaded</div>
@@ -1328,10 +1337,14 @@ export default function HDFCFrom() {
                                                     }
                                                 })
                                             }} />
-                                            <label className='fileButton' for="bankStatement-btn">
+                                            {bankStatement === '' ? <label className='fileButton disableUploadBtn'>
                                                 <div className='fileText'>Upload</div>
                                                 <div className='plus'>+</div>
-                                            </label>
+                                            </label> :
+                                                <label className='fileButton' for="bankStatement-btn">
+                                                    <div className='fileText'>Upload</div>
+                                                    <div className='plus'>+</div>
+                                                </label>}
                                             <div className='fileChosen' id="bankStatement-file-chosen">No file chosen</div>
                                             <div className='uploadStatusButton'>
                                                 <div className='uploadStatusText'>Uploaded</div>
@@ -1360,10 +1373,14 @@ export default function HDFCFrom() {
                                                     }
                                                 })
                                             }} />
-                                            <label className='fileButton' for="identityProof-btn">
+                                            {identityProof === '' ? <label className='fileButton disableUploadBtn'>
                                                 <div className='fileText'>Upload</div>
                                                 <div className='plus'>+</div>
-                                            </label>
+                                            </label> :
+                                                <label className='fileButton' for="identityProof-btn">
+                                                    <div className='fileText'>Upload</div>
+                                                    <div className='plus'>+</div>
+                                                </label>}
                                             <div className='fileChosen' id="identityProof-file-chosen">No file chosen</div>
                                             <div className='uploadStatusButton'>
                                                 <div className='uploadStatusText'>Uploaded</div>
@@ -1392,10 +1409,14 @@ export default function HDFCFrom() {
                                                     }
                                                 })
                                             }} />
-                                            <label className='fileButton' for="loanTransferDoc-btn">
+                                            {loanTransferDoc === '' ? <label className='fileButton disableUploadBtn'>
                                                 <div className='fileText'>Upload</div>
                                                 <div className='plus'>+</div>
-                                            </label>
+                                            </label> :
+                                                <label className='fileButton' for="loanTransferDoc-btn">
+                                                    <div className='fileText'>Upload</div>
+                                                    <div className='plus'>+</div>
+                                                </label>}
                                             <div className='fileChosen' id="loanTransferDoc-file-chosen">No file chosen</div>
                                             <div className='uploadStatusButton'>
                                                 <div className='uploadStatusText'>Uploaded</div>

@@ -365,6 +365,10 @@ $mob: 100 / 375;
                             margin-left: 8 * $desk + rem;
                         }
                     }
+                    .disableUploadBtn{
+                        background-color:#727272 ;
+                        cursor: none;
+                    }
                     .fileChosen {
                         font-size: 13 * $desk + rem;
                         color: #07498e;
