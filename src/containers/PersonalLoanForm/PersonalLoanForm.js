@@ -326,7 +326,8 @@ export default function PersonalLoanForm() {
     const applyNowBtnHandler = async (id) => {
         if (id === 'HDFC Bank') {
             let item = {};
-            await axios.post(`${bankApi}/leads/sendHdfcLead/${leadId}/1`, item)
+            let headers = { 'Authorization': `Token ${profileData.token}` }
+            await axios.post(`${bankApi}/leads/sendHdfcLead/${leadid}/1`, item , {headers})
                 .then((response) => {
                     if (response.data.response_status === "Success") {
                         history.push(`/dashboards/HDFCForm/${leadid}`);

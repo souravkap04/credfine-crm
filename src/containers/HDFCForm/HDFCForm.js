@@ -185,7 +185,7 @@ export default function HDFCFrom() {
     }
     const fetchHdfcData = async (leadId) => {
         const headers = { Authorization: `Token ${profileData.token}` };
-        await axios.get(`${bankApi}/leads/sendHdfcLead/${leadId}/2`, { headers })
+        await axios.get(`${bankApi}/leads/sendHdfcLead/${leadId}/2`,{headers})
             .then((response) => {
                 let getDobfromApi = response.data.applyLoan.Date_Of_Birth__req;
                 let dateRegex = /^\d{4}-\d{2}-\d{2}$/.test(getDobfromApi);
@@ -212,10 +212,10 @@ export default function HDFCFrom() {
                 setAddressLineOne(response.data.applyLoan.Address1_Resi__req);
                 setAddressLineTwo(response.data.applyLoan.Address2_Resi__req);
                 setAddressLineThree(response.data.applyLoan.Address3_Resi__req);
-                setCityIdd(response.data.applyLoan.City_Resi__req.id);
-                setCityName(response.data.applyLoan.City_Resi__req.name);
-                setStateIdd(response.data.applyLoan.State_Resi__req.id);
-                setStateName(response.data.applyLoan.State_Resi__req.name);
+                setCityIdd(response.data.applyLoan.City_Resi__req?.id);
+                setCityName(response.data.applyLoan.City_Resi__req?.name);
+                setStateIdd(response.data.applyLoan.State_Resi__req?.id);
+                setStateName(response.data.applyLoan.State_Resi__req?.name);
                 setPincode(response.data.applyLoan.Pin_Code_Resi__req);
                 setMobileNo(response.data.applyLoan.Mobile1_Resi__req);
                 setPhoneNoWork(response.data.applyLoan.Phone1_Work);
@@ -223,14 +223,14 @@ export default function HDFCFrom() {
                 setEmployerName(response.data.applyLoan.Employer_Name__req);
                 setofficeAddressOne(response.data.applyLoan.Address1_Work__req);
                 setofficeAddressTwo(response.data.applyLoan.Address2_Work__req);
-                setOfficeStateIdd(response.data.applyLoan.State_Work__req.id);
-                setOfficeStateName(response.data.applyLoan.State_Work__req.name);
-                setOfficeCityIdd(response.data.applyLoan.City_Work__req.id);
-                setOfficeCityName(response.data.applyLoan.City_Work__req.name);
-                setbranchCodeIdd(response.data.applyLoan.Branch_code__req.id);
-                setbranchCodeName(response.data.applyLoan.Branch_code__req.name);
-                setRmCodeIdd(response.data.applyLoan.RM_code.id);
-                setSeCodeIdd(response.data.applyLoan.SE_code.id);
+                setOfficeStateIdd(response.data.applyLoan.State_Work__req?.id);
+                setOfficeStateName(response.data.applyLoan.State_Work__req?.name);
+                setOfficeCityIdd(response.data.applyLoan.City_Work__req?.id);
+                setOfficeCityName(response.data.applyLoan.City_Work__req?.name);
+                setbranchCodeIdd(response.data.applyLoan.Branch_code__req?.id);
+                setbranchCodeName(response.data.applyLoan.Branch_code__req?.name);
+                setRmCodeIdd(response.data.applyLoan.RM_code?.id);
+                setSeCodeIdd(response.data.applyLoan.SE_code?.id);
                 setSeCodeName(response.data.applyLoan.SE_code.name);
                 setOfficePincode(response.data.applyLoan.Pin_Code_Work__req);
             }).catch((error) => {
