@@ -501,6 +501,11 @@
   margin-left: 0.504rem;
 }
 
+.HDFCFormContainer .rightSection .uploadContainer .uploadDocumentContainer .uploadDocumentRow .disableUploadBtn {
+  background-color: #727272;
+  cursor: none;
+}
+
 .HDFCFormContainer .rightSection .uploadContainer .uploadDocumentContainer .uploadDocumentRow .fileChosen {
   font-size: 0.819rem;
   color: #07498e;
