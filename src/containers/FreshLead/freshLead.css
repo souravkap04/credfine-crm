@@ -1,4 +1,13 @@
 .mainContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
   margin-bottom: 1.11111vw;
 }
 
@@ -7,5 +16,139 @@
   color: #4046b2;
   font-weight: 600;
   margin-bottom: 0;
+}
+
+.mainContainer .filterBtnContainer {
+  width: 7.63889vw;
+  height: 2.5vw;
+  border-radius: 0.27778vw;
+  background-color: #fd914d;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  cursor: pointer;
+}
+
+.mainContainer .filterBtnContainer .filterImage {
+  width: 1.66667vw;
+  height: 2.36111vw;
+  margin-right: 0.55556vw;
+}
+
+.mainContainer .filterBtnContainer .filterImage img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+
+.mainContainer .filterBtnContainer .filterText {
+  color: #fff;
+}
+
+.rightSideContainer {
+  width: 23vw;
+  background-color: #fff;
+  padding-top: 2.08333vw;
+}
+
+.rightSideContainer form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.rightSideContainer h4 {
+  margin-left: 2.77778vw;
+  font-size: 1.52778vw;
+  font-weight: bold;
+  letter-spacing: 0.01042vw;
+  color: #535ad1;
+  margin-bottom: 0.83333vw;
+  font-family: "Lato";
+}
+
+.rightSideContainer .textField {
+  width: 15.97222vw;
+  margin-top: 0.97222vw !important;
+  margin-bottom: 0.97222vw !important;
+  margin-right: 1.38889vw !important;
+  font-family: "Lato";
+}
+
+.rightSideContainer .textField label {
+  color: #535ad1;
+  letter-spacing: 0.4px;
+  font-size: 15.5px;
+  font-family: "Lato";
+}
+
+.rightSideContainer .textField .MuiOutlinedInput-root {
+  height: 3.33333vw;
+}
+
+.rightSideContainer .textField .MuiOutlinedInput-notchedOutline {
+  border: 2px solid #c5cee0;
+}
+
+.rightSideContainer .textField .MuiInputAdornment-root {
+  opacity: 0.6;
+}
+
+.rightSideContainer .textField .MuiInputBase-input {
+  font-size: 1.11111vw;
+  font-family: "Lato";
+}
+
+.rightSideContainer .textField .MuiInputBase-root:hover .MuiOutlinedInput-notchedOutline {
+  border: 2px solid #c5cee0;
+}
+
+.rightSideContainer .submitBtn {
+  width: 9.72222vw;
+  height: 3.33333vw;
+  background-color: #535ad1;
+  margin-top: 0.69444vw;
+}
+
+.deleteIcon {
+  background-color: #8f9bb3 !important;
+}
+
+.bulkDeletedContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.bulkDeletedContainer .bulkDeleteBtn {
+  width: 12.08333vw;
+  height: 2.08333vw;
+  background-color: #ffffff;
+  border: 1px solid #8f9bb3;
+  font-size: 0.83333vw;
+}
+
+.bulkDeletedContainer .selectedText {
+  margin-left: 1.04167vw;
+  font-size: 0.83333vw;
+  line-height: 0.97222vw;
+  color: #000000;
 }
 /*# sourceMappingURL=freshLead.css.map */
