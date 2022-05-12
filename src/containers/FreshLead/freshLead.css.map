@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AACA,AAAA,cAAc,CAAC;EACX,aAAa,EAAE,SAAe;CAOjC;;AARD,AAEI,cAFU,CAEV,EAAE,CAAC;EACC,SAAS,EAAE,SAAe;EAC1B,KAAK,EAAE,OAAO;EACd,WAAW,EAAE,GAAG;EAChB,aAAa,EAAE,CAAC;CACnB",
+    "sources": [
+        "freshLead.scss"
+    ],
+    "names": [],
+    "file": "freshLead.css"
+}

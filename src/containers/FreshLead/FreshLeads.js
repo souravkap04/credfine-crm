@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
+import "./freshLead.css";
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -226,12 +227,12 @@ export default function FreshLead() {
     return phoneNo;
   }
   const [openCalculate, setopenCalculate] = useState(false);
-  const [checkEligibility,setCheckEligibility] = useState(false);
-  
-  const openEligibility = () =>{
+  const [checkEligibility, setCheckEligibility] = useState(false);
+
+  const openEligibility = () => {
     setCheckEligibility(true);
   }
-  const closeEligibility = () =>{
+  const closeEligibility = () => {
     setCheckEligibility(false);
   }
   const openCalculator = () => {
@@ -241,9 +242,12 @@ export default function FreshLead() {
     setopenCalculate(false);
   }
   return (
-    <PageLayerSection ActualEmiCalculate={openCalculator} ActualEligibilityCalculate={openEligibility}>
-      <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility}/>
+    <PageLayerSection isDisplaySearchBar ActualEmiCalculate={openCalculator} ActualEligibilityCalculate={openEligibility}>
+      <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility} />
       <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
+      <div className='mainContainer'>
+        <h3>FreshLead(34)</h3>
+      </div>
       <TableContainer className={classes.container}>
         <Table className={classes.table} aria-label="simple table">
           <TableHead className={classes.tableheading}>
