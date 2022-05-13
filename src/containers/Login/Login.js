@@ -143,6 +143,18 @@ export default function Login() {
       getOTP('8586055499');
       return;
     }
+    if (campaign === 'IDFC_CC') {
+      setOtpPopup(true);
+      setMobileNo('9930656757');
+      getOTP('9930656757');
+      return;
+    } 
+    if (campaign === 'YES_BANK_CC') {
+      setOtpPopup(true);
+      setMobileNo('9930656757');
+      getOTP('9930656757');
+      return;
+    } 
     else {
         loginHandler(email, password, campaign, dialer);
     }
