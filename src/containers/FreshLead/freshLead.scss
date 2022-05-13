@@ -95,6 +95,7 @@ $desk: 100/1440;
 .bulkDeletedContainer {
     display: flex;
     align-items: center;
+    margin-right: 450 * $desk + vw;
     .bulkDeleteBtn {
         width: 174 * $desk + vw;
         height: 30 * $desk + vw;
@@ -107,5 +108,11 @@ $desk: 100/1440;
         font-size: 12 * $desk + vw;
         line-height: 14 * $desk + vw;
         color: #000000;
+    }
+    .MuiIconButton-root {
+        color: #8f9bb3 !important;
+    }
+    .MuiButton-root {
+        color: #8f9bb3 !important;
     }
 }

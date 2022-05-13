@@ -135,6 +135,7 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  margin-right: 31.25vw;
 }
 
 .bulkDeletedContainer .bulkDeleteBtn {
@@ -150,5 +151,13 @@
   font-size: 0.83333vw;
   line-height: 0.97222vw;
   color: #000000;
+}
+
+.bulkDeletedContainer .MuiIconButton-root {
+  color: #8f9bb3 !important;
+}
+
+.bulkDeletedContainer .MuiButton-root {
+  color: #8f9bb3 !important;
 }
 /*# sourceMappingURL=freshLead.css.map */

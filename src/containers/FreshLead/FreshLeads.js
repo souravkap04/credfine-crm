@@ -128,17 +128,6 @@ const useStyles = makeStyles({
     whiteSpace: 'nowrap',
     wordBreak: 'break-word'
   },
-  deleteBtn: {
-    backgroundColor: "#8F9BB3",
-    padding: "9px",
-    "&:hover": {
-      backgroundColor: "rgba(0,0,0,0.4)",
-    },
-    deleteIcon: {
-      color: "#8F9BB3 !im",
-      fontSize: "17px",
-    },
-  },
 });
 export default function FreshLead() {
   const classes = useStyles();
@@ -392,7 +381,7 @@ export default function FreshLead() {
                       <Tooltip title="Delete Lead">
                         <IconButton
                           onClick={() => deleteFreshLead(lead.lead_crm_id)}>
-                          <DeleteIcon className={classes.deleteIcon} />
+                          <DeleteIcon/>
                         </IconButton>
                       </Tooltip>
                     </TableCell>
