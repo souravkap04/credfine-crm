@@ -208,13 +208,13 @@ export default function FollowUp(props) {
             return data;
         }
     }
-    const createdDateHandler = (date) => {
-        let createdDate = new Date(date);
-        let currentCreatedDate = createdDate.toLocaleDateString() + " " +
-            moment(createdDate.toLocaleTimeString(), "HH:mm:ss a").format(
+    const dateFormatHandler = (date) => {
+        let changeDateFormat = new Date(date);
+        let dateFormat = changeDateFormat.toLocaleDateString() + " " +
+            moment(changeDateFormat.toLocaleTimeString(), "HH:mm:ss a").format(
                 "hh:mm A"
             );
-        return currentCreatedDate;
+        return dateFormat;
     }
     const disableDialerPopUp = () => {
         setDialerCall(false)
@@ -275,6 +275,7 @@ export default function FollowUp(props) {
                             <TableCell className={classes.tableheading} >Company</TableCell>
                             <TableCell className={classes.tableheading} >Campaign</TableCell>
                             <TableCell className={classes.tableheading}>Created Date</TableCell>
+                            <TableCell className={classes.tableheading}>Updated Date</TableCell>
                             <TableCell className={classes.tableheading}>Follow-Up Date</TableCell>
                             <TableCell className={clsx(classes.tableheading, classes.statusHeading)} >Status</TableCell>
                             <TableCell className={classes.tableheading} >Sub Status</TableCell>
@@ -295,7 +296,8 @@ export default function FollowUp(props) {
                                 <TableCell className={classes.tabledata}>{leadData.lead.loan_amount ? leadData.lead.loan_amount : 'NA'}</TableCell>
                                 <TableCell className={classes.tabledata}>{leadData.lead.data['current_company_name'] ? leadData.lead.data['current_company_name'] : 'NA'}</TableCell>
                                 <TableCell className={classes.tabledata}>{leadData.lead.campaign_category ? leadData.lead.campaign_category : 'NA'}</TableCell>
-                                <TableCell className={classes.tabledata}>{createdDateHandler(leadData.lead.created_date) ? createdDateHandler(leadData.lead.created_date) : 'NA'}</TableCell>
+                                <TableCell className={classes.tabledata}>{dateFormatHandler(leadData.lead.created_date) ? dateFormatHandler(leadData.lead.created_date) : 'NA'}</TableCell>
+                                <TableCell className={classes.tabledata}>{dateFormatHandler(leadData.lead.updated_date) ? dateFormatHandler(leadData.lead.updated_date) : 'NA'}</TableCell>
                                 <TableCell className={classes.tabledata}>{currentDateTime ? currentDateTime : 'NA'}</TableCell>
                                 <TableCell className={classes.tabledata}>
                                     <div className={classes.loanTypeButton}>

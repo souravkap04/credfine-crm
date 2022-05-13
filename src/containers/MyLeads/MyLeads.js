@@ -927,8 +927,6 @@ export default function MyLeads(props) {
               </TableCell>
               <TableCell className={classes.tableheading}>Lead ID</TableCell>
               <TableCell className={classes.tableheading}>Name</TableCell>
-              {/* <TableCell className={classes.tableheading}>Mobile</TableCell> */}
-              <TableCell className={classes.tableheading}>Loan Amt</TableCell>
               <TableCell className={classes.tableheading}>Campaign</TableCell>
               <TableCell className={classes.tableheading}>Created Date</TableCell>
               <TableCell className={classes.tableheading}>
@@ -987,12 +985,6 @@ export default function MyLeads(props) {
                       </TableCell>
                       <TableCell className={classes.tabledata}>
                         {search.name ? search.name : "NA"}
-                      </TableCell>
-                      {/* <TableCell className={classes.tabledata}>
-                        {leadPhoneNo ? leadPhoneNo : "NA"}
-                      </TableCell> */}
-                      <TableCell className={classes.tabledata}>
-                        {search.loan_amount ? search.loan_amount : "NA"}
                       </TableCell>
                       <TableCell className={classes.tabledata}>
                         {search.campaign_category
@@ -1075,14 +1067,6 @@ export default function MyLeads(props) {
                     </TableCell>
                     <TableCell className={classes.tabledata}>
                       {my_leads.lead.name ? my_leads.lead.name : "NA"}
-                    </TableCell>
-                    {/* <TableCell className={classes.tabledata}>
-                      {leadPhoneNo ? leadPhoneNo : "NA"}
-                    </TableCell> */}
-                    <TableCell className={classes.tabledata}>
-                      {my_leads.lead.loan_amount
-                        ? my_leads.lead.loan_amount
-                        : "NA"}
                     </TableCell>
                     <TableCell className={classes.tabledata}>
                       {my_leads.lead.campaign_category
