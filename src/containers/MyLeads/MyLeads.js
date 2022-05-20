@@ -153,7 +153,6 @@ const useStyles = makeStyles({
     fontSize: "0.8vw",
     textAlign: "center",
     color: "#fff",
-    // width: '75px',
     whiteSpace: "nowrap",
     wordBreak: "break-word",
   },
