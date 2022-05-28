@@ -203,6 +203,10 @@ export default function MyLeads(props) {
   const [selectedLeads, setSelectedLeads] = useState([]);
   const [showAROList, setShowAROList] = useState(false);
   const [searchInput, setSearchInput] = useState('');
+  const [isGreen, setIsGreen] = useState(false);
+  const [isBlue, setIsBlue] = useState(true);
+  const [isYellow, setIsYellow] = useState(false);
+  const [isRed, setIsRed] = useState(false);
   let statusData = getStatusData();
   let campaignData = getCampaign();
   let history = useHistory();
@@ -593,6 +597,30 @@ export default function MyLeads(props) {
   const closeEligibility = () => {
     setCheckEligibility(false);
   }
+  const blueDataHandler = () => {
+    setIsBlue(true)
+    setIsGreen(false);
+    setIsYellow(false);
+    setIsRed(false);
+  }
+  const greenDataHandler = () => {
+    setIsGreen(true);
+    setIsBlue(false)
+    setIsYellow(false);
+    setIsRed(false);
+  }
+  const yellowDataHandler = () => {
+    setIsGreen(false);
+    setIsBlue(false)
+    setIsYellow(true);
+    setIsRed(false);
+  }
+  const redDataHandler = () => {
+    setIsGreen(false);
+    setIsBlue(false)
+    setIsYellow(false);
+    setIsRed(true);
+  }
   return (
     <PageLayerSection isDisplaySearchBar={true} isMyLeadsSearch={true} ActualEmiCalculate={openCalculator} ActualEligibilityCalculate={openEligibility}>
       <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility} />
@@ -898,6 +926,27 @@ export default function MyLeads(props) {
         <h3>My Leads ({totalLeads})</h3>
         <div style={{ display: "flex", alignItems: "center" }}>
           <Button
+            variant="contained"
+            color="primary"
+            style={{ marginRight: "15px", }}
+            onClick={blueDataHandler}
+          >Blue</Button>
+          <Button
+            variant="contained"
+            style={{ marginRight: "15px", background: '#72CC87', color: '#fff' }}
+            onClick={greenDataHandler}
+          >Green</Button>
+          <Button
+            variant="contained"
+            style={{ marginRight: "15px", background: '#FDB528', color: '#fff' }}
+            onClick={yellowDataHandler}
+          >Yellow</Button>
+          <Button
+            variant="contained"
+            style={{ marginRight: "15px", background: '#E33E3E', color: '#fff' }}
+            onClick={redDataHandler}
+          >Red</Button>
+          <Button
             className="addBtn"
             color="primary"
             variant="contained"
@@ -954,7 +1003,7 @@ export default function MyLeads(props) {
             ) : isMyLeadsSearchData ? (
               myLeadSearchData.length !== 0 ? (
                 myLeadSearchData.map((search, index) => {
-                  let leadPhoneNo = maskPhoneNo(search.phone_no_encrypt);
+                  // let leadPhoneNo = maskPhoneNo(search.phone_no_encrypt);
                   let createdDate = new Date(search.created_date);
                   let currentCreatedDate = createdDate.toLocaleDateString() + " " +
                     moment(createdDate.toLocaleTimeString(), "HH:mm:ss a").format(
@@ -1034,8 +1083,18 @@ export default function MyLeads(props) {
                 <span className={classes.emptydata}>{responseStatus}</span>
               )
             ) : myLeads.length !== 0 ? (
-              myLeads.map((my_leads, index) => {
-                let leadPhoneNo = maskPhoneNo(my_leads.lead.phone_no_encrypt);
+              myLeads.filter((data) => {
+                if (isBlue) {
+                  return data.lead.status === 'STB'
+                } else if (isGreen) {
+                  return (data.lead.status === 'Hot Follow-Up' || data.lead.status === 'Cold Follow-Up')
+                } else if (isYellow) {
+                  return data.lead.status === 'Valid Follow-Up'
+                } else if (isRed) {
+                  return (data.lead.status === 'Contacted NI/NE' || data.lead.status === 'Not Contactable' || data.lead.status === 'Customer Not Interested')
+                }
+              }).map((my_leads, index) => {
+                // let leadPhoneNo = maskPhoneNo(my_leads.lead.phone_no_encrypt);
                 let createdDate = new Date(my_leads.created_date);
                 let currentCreatedDate = createdDate.toLocaleDateString() + " " +
                   moment(createdDate.toLocaleTimeString(), "HH:mm:ss a").format(
