@@ -1,5 +1,5 @@
 import React from 'react'
- import { Card,Table,Row,Col} from 'react-bootstrap'
+ import { Card,Row,Col} from 'react-bootstrap'
 import style from './Profile.module.css'
 import {getProfileData} from '../../../global/leadsGlobalData'
 export default function Profile() {

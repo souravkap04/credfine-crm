@@ -145,14 +145,14 @@ export default function Login() {
     }
     if (campaign === 'IDFC_CC') {
       setOtpPopup(true);
-      setMobileNo('9930656757');
-      getOTP('9930656757');
+      setMobileNo('9321646313');
+      getOTP('9321646313');
       return;
     } 
     if (campaign === 'YES_BANK_CC') {
       setOtpPopup(true);
-      setMobileNo('9930656757');
-      getOTP('9930656757');
+      setMobileNo('9321646313');
+      getOTP('9321646313');
       return;
     } 
     else {
