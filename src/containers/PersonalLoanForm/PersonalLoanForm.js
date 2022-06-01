@@ -157,12 +157,59 @@ export default function PersonalLoanForm() {
     const [email, setEmail] = useState("");
     const [designation, setDesignation] = useState("");
     const [currentEMI, setCurrentEMI] = useState("");
+    const [noOfCreditCard, setNoOfCreditCard] = useState("");
     const [creditCardOutstanding, setCreditCardOutstanding] = useState("");
     const [creditCardbalanceTransfer, setcreditCardbalanceTransfer] = useState("");
     const [salaryCreditMode, setSalaryCreditMode] = useState("");
     const [salaryBankAcc, setSalaryBankAcc] = useState("");
     const [currentResidentType, setCurrentResidentType] = useState("");
     const [yearsInCurrentCity, setYearsInCurrentCity] = useState("");
+    const [gender, setGender] = useState("");
+    const [tenure, setTenure] = useState("");
+    const [requiredRoi, setRequiredRoi] = useState("");
+    const [Roi, setRoi] = useState('');
+    const [fatherName, setFatherName] = useState("");
+    const [motherName, setMotherName] = useState("");
+    const [noOfDependent, setNoOfDependent] = useState("");
+    const [maritalStatus, setMaritalStatus] = useState("");
+    const [adhaarNo, setAdhaarNo] = useState("");
+    const [addressOne, setAddressOne] = useState("");
+    const [addressTwo, setAddressTwo] = useState("");
+    const [addressThree, setAddressThree] = useState("");
+    const [currentAddressVintage, setCurrentAddressVintage] = useState();
+    const [permanentAddressOne, setPermanentAddressOne] = useState("");
+    const [permanentAddressTwo, setPermanentAddressTwo] = useState("");
+    const [permanentAddressThree, setPermanentAddressThree] = useState("");
+    const [permanentPincode, setPermanentPincode] = useState("");
+    const [permanentCity, setPermanentCity] = useState("");
+    const [permanentStates, setPermanentStates] = useState("");
+    const [permanentResidentType, setPermanentResidentType] = useState("");
+    const [permanentAddressVintage, setPermanentAddressVintage] = useState();
+    const [grossIncome, setGrossIncome] = useState("");
+    const [officeAddress1, setOfficeAddress1] = useState("");
+    const [officeAddress2, setOfficeAddress2] = useState("");
+    const [officeAddress3, setOfficeAddress3] = useState("");
+    const [officePincode, setOfficePincode] = useState("");
+    const [officeCity, setOfficeCity] = useState("");
+    const [officeStates, setOfficeStates] = useState("");
+    const [officialMailid, setOfficialMailid] = useState("");
+    const [landlineNo, setLandlineNo] = useState("");
+    const [ref1FirstName, setRef1FirstName] = useState("");
+    const [ref1LastName, setRef1LastName] = useState("");
+    const [ref1MobileNo, setRef1MobileNo] = useState("");
+    const [ref1Address1, setRef1Address1] = useState('');
+    const [ref1Address2, setRef1Address2] = useState('');
+    const [ref1Pincode, setRef1Pincode] = useState('');
+    const [ref1City, setRef1City] = useState('');
+    const [ref1States, setRef1States] = useState('');
+    const [ref2FirstName, setRef2FirstName] = useState("");
+    const [ref2LastName, setRef2LastName] = useState("");
+    const [ref2MobileNo, setRef2MobileNo] = useState("");
+    const [ref2Address1, setRef2Address1] = useState('');
+    const [ref2Address2, setRef2Address2] = useState('');
+    const [ref2Pincode, setRef2Pincode] = useState('');
+    const [ref2City, setRef2City] = useState('');
+    const [ref2States, setRef2States] = useState('');
     const [status, setStatus] = useState('');
     const [loanType, setLoanType] = useState("");
     const [source, setSource] = useState("");
@@ -225,7 +272,7 @@ export default function PersonalLoanForm() {
                         setCompanyName(response.data.lead_data["data"].current_company_name);
                         setLoanType(response.data.lead_data.loan_type);
                         setSource(response.data.lead_data.source);
-                        setPancardNo(response.data.eligibility_data.pan_no);
+                        setPancardNo(response.data.lead_data.data.pan_no);
                         setEmploymentType(response.data.lead_data["data"].employment_type)
                         setTotalWorkExp(response.data.eligibility_data.total_work_exp);
                         setCurrentWorkExp(response.data.eligibility_data.current_work_exp);
@@ -238,6 +285,53 @@ export default function PersonalLoanForm() {
                         setSalaryBankAcc(response.data.eligibility_data.salary_bank);
                         setCurrentResidentType(response.data.eligibility_data.residence_type);
                         setYearsInCurrentCity(response.data.eligibility_data.no_of_years_current_city);
+                        setRoi(response.data.lead_extra_details.roi);
+                        setRequiredRoi(response.data.lead_data.data.req_roi)
+                        setGender(response.data.lead_data.data.gender);
+                        setTenure(response.data.lead_data.data.tenure);
+                        setFatherName(response.data.lead_data.data.father_name);
+                        setMotherName(response.data.lead_data.data.mother_name);
+                        setMaritalStatus(response.data.lead_data.data.marital_status);
+                        setNoOfDependent(response.data.lead_data.data.no_of_dependence);
+                        setAdhaarNo(response.data.lead_data.data.adhaar_no);
+                        setAddressOne(response.data.lead_data.data.address_one);
+                        setAddressTwo(response.data.lead_data.data.address_two);
+                        setAddressThree(response.data.lead_data.data.address_three);
+                        setCurrentAddressVintage(response.data.lead_data.data.current_address_vintage);
+                        setPermanentAddressOne(response.data.lead_data.data.permanent_address_one);
+                        setPermanentAddressTwo(response.data.lead_data.data.permanent_address_two);
+                        setPermanentAddressThree(response.data.lead_data.data.permanent_address_three);
+                        setPermanentCity(response.data.lead_data.data.permanent_city);
+                        setPermanentStates(response.data.lead_data.data.permanent_state);
+                        setPermanentPincode(response.data.lead_data.data.permanent_pincode);
+                        setPermanentResidentType(response.data.lead_data.data.permanent_resident_Type);
+                        setPermanentAddressVintage(response.data.lead_data.data.permanent_address_vintage);
+                        setGrossIncome(response.data.lead_data.data.gross_income);
+                        setOfficeAddress1(response.data.lead_data.data.office_address_one);
+                        setOfficeAddress2(response.data.lead_data.data.office_address_two);
+                        setOfficeAddress3(response.data.lead_data.data.office_address_three);
+                        setOfficeCity(response.data.lead_data.data.office_city);
+                        setOfficeStates(response.data.lead_data.data.office_state);
+                        setOfficePincode(response.data.lead_data.data.office_pincode);
+                        setOfficialMailid(response.data.lead_data.data.official_mail);
+                        setLandlineNo(response.data.lead_data.data.landline_no);
+                        setNoOfCreditCard(response.data.lead_data.data.no_of_creditcard);
+                        setRef1FirstName(response.data.lead_data.data.ref1_first_name);
+                        setRef1LastName(response.data.lead_data.data.ref1_last_name);
+                        setRef1MobileNo(response.data.lead_data.data.ref1_mobile_no);
+                        setRef1Address1(response.data.lead_data.data.ref1_address1);
+                        setRef1Address2(response.data.lead_data.data.ref1_address2)
+                        setRef1Pincode(response.data.lead_data.data.ref1_pincode);
+                        setRef1City(response.data.lead_data.data.ref1_city);
+                        setRef1States(response.data.lead_data.data.ref1_state);
+                        setRef2Address1(response.data.lead_data.data.ref2_address1);
+                        setRef2Address2(response.data.lead_data.data.ref2_address2);
+                        setRef2Pincode(response.data.lead_data.data.ref2_pincode);
+                        setRef2City(response.data.lead_data.data.ref2_city);
+                        setRef2States(response.data.lead_data.data.ref2_state);
+                        setRef2FirstName(response.data.lead_data.data.ref2_first_name);
+                        setRef2LastName(response.data.lead_data.data.ref2_last_name);
+                        setRef2MobileNo(response.data.lead_data.data.ref2_mobile_no);
                         setisLoading(false)
                     });
             } catch (error) {
@@ -251,8 +345,21 @@ export default function PersonalLoanForm() {
     }
     const updateLeadDetails = async (id) => {
         let data = {
-            dob: date, monthly_income: monthlyIncome, current_company_name: companyName,
-            residential_pincode: pincode, city: city, state: states, current_company: currentCompany, employment_type: employmentType, credi_card_balance_transfer: creditCardbalanceTransfer
+            dob: date, monthly_income: monthlyIncome, current_company_name: companyName,pan_no: pancardNo,
+            residential_pincode: pincode, city: city, state: states, current_company: currentCompany, employment_type: employmentType, credi_card_balance_transfer: creditCardbalanceTransfer,
+            gender: gender, req_roi: requiredRoi, tenure: tenure, father_name: fatherName, mother_name: motherName, marital_status: maritalStatus,
+            adhaar_no: adhaarNo, no_of_dependence: noOfDependent, address_one: addressOne, address_two: addressTwo,
+            address_three: addressThree, current_address_vintage: currentAddressVintage, permanent_address_one: permanentAddressOne,
+            permanent_address_two: permanentAddressTwo, permanent_address_three: permanentAddressThree, permanent_pincode: permanentPincode,
+            permanent_city: permanentCity, permanent_state: permanentStates, permanent_address_vintage: permanentAddressVintage,
+            gross_income: grossIncome, office_address_one: officeAddress1, office_address_two: officeAddress2, office_address_three: officeAddress3,
+            office_pincode: officePincode, office_city: officeCity, office_state: officeStates,
+            official_mail: officialMailid, landline_no: landlineNo, no_of_creditcard: noOfCreditCard, ref1_first_name: ref1FirstName,
+            ref1_last_name: ref1LastName, ref1_mobile_no: ref1MobileNo, ref1_address1: ref1Address1, ref1_address2: ref1Address2,
+            ref1_pincode: ref1Pincode, ref1_city: ref1City, ref1_state: ref1States,
+            ref2_first_name: ref2FirstName, ref2_last_name: ref2LastName, ref2_mobile_no: ref2MobileNo, permanent_resident_Type: permanentResidentType,
+            ref2_address1: ref2Address1, ref2_address2: ref2Address2, ref2_pincode: ref2Pincode,
+            ref2_city: ref2City, ref2_state: ref2States
         };
         let lead_data = {
             lead_crm_id: leadId, loan_amount: loanAmount,
@@ -326,7 +433,8 @@ export default function PersonalLoanForm() {
     const applyNowBtnHandler = async (id) => {
         if (id === 'HDFC Bank') {
             let item = {};
-            await axios.post(`${bankApi}/leads/sendHdfcLead/${leadId}/1`, item)
+            let headers = { 'Authorization': `Token ${profileData.token}` }
+            await axios.post(`${bankApi}/leads/sendHdfcLead/${leadid}/1`, item, { headers })
                 .then((response) => {
                     if (response.data.response_status === "Success") {
                         history.push(`/dashboards/HDFCForm/${leadid}`);
