@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import axios from "axios";
 import baseUrl from "../../global/api";
+import {website_prod} from "../../global/bankingApis";
 import crmLogo from "../../images/crmLogo.svg";
 import loinImage from "../../images/loginImage.png";
 import {
@@ -151,8 +152,8 @@ export default function Login() {
     } 
     if (campaign === 'YES_BANK_CC') {
       setOtpPopup(true);
-      setMobileNo('9321646313');
-      getOTP('9321646313');
+      setMobileNo('8420878985');
+      getOTP('8420878985');
       return;
     } 
     else {
@@ -215,7 +216,7 @@ export default function Login() {
     setshowPassword(!showPassword);
   };
   const getOTP = async (mobileNo) => {
-   await axios.post(`http://35.154.120.200/common/send_otp`, {
+   await axios.post(`${website_prod}/common/send_otp`, {
       mobile: mobileNo
     }).then(response => {
       if (response.status === 200) {
@@ -235,7 +236,7 @@ export default function Login() {
   }
   const verifyOtp = async () => {
     let items = { mobile: mobileNo, otp: otpValue }
-    await axios.post(`http://35.154.120.200/common/verify_otp`, items)
+    await axios.post(`${website_prod}/common/verify_otp`, items)
       .then(response => {
         if (response.status === 200) {
           setisSuccess(true)
