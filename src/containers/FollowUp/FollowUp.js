@@ -14,7 +14,7 @@ import CallIcon from '@material-ui/icons/Call';
 import axios from 'axios';
 import baseUrl from '../../global/api';
 import { haloocomNoidaDialerApi, haloocomMumbaiDialerApi } from '../../global/callApi'
-import { getProfileData } from '../../global/leadsGlobalData';
+import { getCampaign, getProfileData, getStatusData, } from '../../global/leadsGlobalData';
 import CallerDialogBox from '../Leads/CallerDialog/CallerDialogBox';
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
 import clsx from 'clsx';
@@ -22,10 +22,21 @@ import './followup.css';
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { Button } from '@material-ui/core';
+import { Button, TextField } from '@material-ui/core';
 import Badge from '@material-ui/core/Badge';
 import EmiCalculator from '../Emicalculator/EmiCalculator';
 import EligibilityCalculator from '../EligibilityCalculator/EligibilityCalculator';
+import filter from "../../images/filter.png";
+import { Drawer } from '@mui/material';
+import Grid from "@material-ui/core/Grid";
+import Checkbox from '@material-ui/core/Checkbox';
+import ChevronLeftOutlinedIcon from '@material-ui/icons/ChevronLeftOutlined';
+import ChevronRightOutlinedIcon from '@material-ui/icons/ChevronRightOutlined';
+import { ListGroup } from 'react-bootstrap';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import CancelRoundedIcon from '@material-ui/icons/CancelRounded';
+import InputBase from "@material-ui/core/InputBase";
+import SearchIcon from "@material-ui/icons/Search";
 // import NoDataFound from '../NoDataFound/NoDataFound';
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -103,13 +114,17 @@ const useStyles = makeStyles({
         // width: '75px',
         whiteSpace: 'nowrap',
         wordBreak: 'break-word'
-    }
+    },
+    numberOfTotalCount: {
+        marginRight: '25px'
+    },
 });
 export default function FollowUp(props) {
     const classes = useStyles();
-    const CancelToken = axios.CancelToken;
     let history = useHistory();
     const profileData = getProfileData();
+    const campaignData = getCampaign();
+    const statusData = getStatusData();
     const [leadData, setLeadData] = useState({});
     const [LeadCount, setLeadCount] = useState(0);
     const [isCalling, setIsCalling] = useState(false);
@@ -118,11 +133,25 @@ export default function FollowUp(props) {
     const [isCallNotConnected, setIsCallNotConnected] = useState(false)
     const [dialerCall, setDialerCall] = useState(false);
     const [disableHangupBtn, setDisableHangupBtn] = useState(true);
+    const [prevPage, setPrevPage] = useState(null);
+    const [nextPage, setNextPage] = useState(null);
+    const [rowsPerPage, setRowsPerPage] = React.useState(100);
+    const [totalDataPerPage, settotalDataPerPage] = useState(0);
     const [isLoading, setisLoading] = useState(false);
     const [currentDateTime, setcurrentDateTime] = useState('');
     const [isAutoDialerStart, setIsAutoDialerStart] = useState(false);
     const [openCalculate, setopenCalculate] = useState(false);
     const [checkEligibility, setCheckEligibility] = useState(false);
+    const [isDrawer, setIsDrawer] = useState(false);
+    const [status, setStatus] = useState("");
+    const [subStatus, setSubStatus] = useState([]);
+    const [users, setUsers] = useState([]);
+    const [usersId, setUserID] = useState("");
+    const [showAROList, setShowAROList] = useState(false);
+    const [searchInput, setSearchInput] = useState('');
+    const [totalLeads, setTotalLeads] = useState(null);
+    const [leadsAssignTo, setLeadsAssignTo] = useState('');
+    const [selectedLeads, setSelectedLeads] = useState([]);
     const fetchLeadsData = async () => {
         setisLoading(true);
         const headers = {
@@ -151,9 +180,23 @@ export default function FollowUp(props) {
     };
     useEffect(() => {
         fetchLeadsData();
+        listOfUsers();
     }, [])
     const routeChangeHAndler = (leadId) => {
         history.push(`/dashboards/followup/edit/${leadId}`);
+    };
+    const listOfUsers = async () => {
+        const headers = {
+            Authorization: `Token ${profileData.token}`,
+        };
+        await axios
+            .get(`${baseUrl}/user/childUsers/`, { headers })
+            .then((response) => {
+                setUsers(response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     };
     const clickToCall = async (customerNo, leadID) => {
         if (profileData.dialer === 'HALOOCOM-Noida') {
@@ -194,6 +237,26 @@ export default function FollowUp(props) {
         setIsCallConnect(false);
         setIsCallNotConnected(false)
     }
+    const removeDuplicateStatus = (data) => {
+        let unique = [];
+        data.forEach((element) => {
+            if (!unique.includes(element.status)) {
+                unique.push(element.status);
+            }
+        });
+        return unique;
+    };
+    const uniqueStatus = removeDuplicateStatus(statusData);
+    const subStatusHandler = () => {
+        let subStatusoptions = [];
+        statusData.forEach((item, index) => {
+            if (item.status === status) {
+                subStatusoptions.push(item.sub_status);
+            }
+        });
+        return subStatusoptions;
+    };
+    const options = subStatusHandler();
     const maskPhoneNo = (phoneNo) => {
         let data = phoneNo;
         let unMaskdata = data.slice(-4);
@@ -231,7 +294,7 @@ export default function FollowUp(props) {
             clickToCall(leadData.lead.phone_no, leadData.lead.lead_crm_id)
         }
     }, [leadData]);
-    
+
     const openEligibility = () => {
         setCheckEligibility(true);
     }
@@ -244,30 +307,214 @@ export default function FollowUp(props) {
     const closeCalculator = () => {
         setopenCalculate(false);
     }
+    const openDrawer = () => {
+        setIsDrawer(true)
+    }
+    const closeDrawer = () => {
+        setIsDrawer(false)
+    }
+    const closeListGroupHandler = () => {
+        setShowAROList(false);
+        setSearchInput('');
+    }
+    const getAssignedAgent = (agentName) => {
+        setLeadsAssignTo(agentName);
+    }
+    const toggleAROHandler = () => {
+        setShowAROList(true);
+    }
+
     return (
         <PageLayerSection isDisplaySearchBar={false} ActualEmiCalculate={openCalculator} ActualEligibilityCalculate={openEligibility}>
             <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility} />
             <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
-            {/* <NoDataFound text="Coming Soon" /> */}
-            <div className="followUpBtnContainer">
-                <Button
-                    className="followUpAutoDialerStartBtn"
-                    color="primary"
-                    variant="contained"
-                    onClick={() => autoDialerHandler()}
-                >
-                    Start</Button>
-                {LeadCount !== 0 ? <Badge className="followbtn" max={5000} badgeContent={LeadCount} color="secondary">
-                    <Button variant="contained">Follow Up</Button>
-                </Badge> : ''}
-                {/* <Badge className="followbtn" badgeContent={4} color="secondary">
+            <div className='mainContainer'>
+                <h3>FollowUp Leads({LeadCount})</h3>
+                <div className='btnContainer'>
+                    <Button
+                        className="followUpAutoDialerStartBtn"
+                        color="primary"
+                        variant="contained"
+                        onClick={() => autoDialerHandler()}
+                    >
+                        Start</Button>
+                    <div className="filterBtnContainer" onClick={openDrawer}>
+                        <div className="filterImage">
+                            <img src={filter} alt="" />
+                        </div>
+                        <div className="filterText">FILTER</div>
+                    </div>
+                    {/* {LeadCount !== 0 ? <Badge className="followbtn" max={5000} badgeContent={LeadCount} color="secondary">
+                        <Button variant="contained">Follow Up</Button>
+                    </Badge> : ''} */}
+                    {/* <Badge className="followbtn" badgeContent={4} color="secondary">
                     <Button variant="contained">Laps</Button>
                 </Badge> */}
+                </div>
             </div>
+            <Drawer anchor='right' open={isDrawer} onClose={closeDrawer}>
+                <div className='rightSideContainer'>
+                    <form>
+                        <Grid container justifyContent="flex-start">
+                            <h4>Search Here</h4>
+                        </Grid>
+                        <Grid>
+                            <TextField
+                                className='textField'
+                                type="date"
+                                id="outlined-full-width"
+                                label="From"
+                                style={{ margin: 8 }}
+                                margin="normal"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                variant="outlined"
+                                size="small" />
+                        </Grid>
+                        <Grid>
+                            <TextField
+                                className='textField'
+                                type="date"
+                                id="outlined-full-width"
+                                label="To"
+                                style={{ margin: 8 }}
+                                margin="normal"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                variant="outlined"
+                                size="small" />
+                        </Grid>
+                        <Grid container style={{ justifyContent: "center" }}>
+                            <Grid>
+                                <TextField
+                                    select
+                                    className="textField2"
+                                    id="outlined-full-width"
+                                    label="Status"
+                                    style={{ margin: 8 }}
+                                    margin="normal"
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    SelectProps={{
+                                        native: true,
+                                    }}
+                                    variant="outlined"
+                                    size="small"
+                                    value={status}
+                                    onChange={(e) => setStatus(e.target.value)}
+                                >
+                                    <option value="">Select</option>
+                                    {uniqueStatus.map((item, index) => (
+                                        <option key={index} value={item}>
+                                            {item}
+                                        </option>
+                                    ))}
+                                </TextField>
+                            </Grid>
+                            <Grid>
+                                <TextField
+                                    className="textField2"
+                                    select
+                                    id="outlined-full-width"
+                                    label="Sub Status"
+                                    style={{ margin: 8 }}
+                                    margin="normal"
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    SelectProps={{
+                                        native: true,
+                                    }}
+                                    variant="outlined"
+                                    size="small"
+                                    value={subStatus}
+                                    onChange={(e) => {
+                                        setSubStatus(e.target.value);
+                                    }}
+                                >
+                                    <option value="">Select</option>
+                                    {options.map((item, index) => (
+                                        <option key={index} value={item}>
+                                            {item}
+                                        </option>
+                                    ))}
+                                </TextField>
+                            </Grid>
+                        </Grid>
+                        <Grid>
+                            <TextField
+                                className="textField"
+                                select
+                                id="outlined-full-width"
+                                label="Select Campaign"
+                                style={{ margin: 8 }}
+                                margin="normal"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                SelectProps={{
+                                    native: true,
+                                }}
+                                variant="outlined"
+                                size="small"
+                            >
+                                <option value="">Select</option>
+                                {campaignData.map((item, index) => (
+                                    <option key={index} value={item}>
+                                        {item}
+                                    </option>
+                                ))}
+                            </TextField>
+                        </Grid>
+                        <Grid>
+                            <TextField
+                                select
+                                className="textField"
+                                id="outlined-full-width"
+                                label="Users"
+                                style={{ margin: 8 }}
+                                margin="normal"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                SelectProps={{
+                                    native: true,
+                                }}
+                                variant="outlined"
+                                size="small"
+                                value={usersId}
+                                onChange={(e) => setUserID(e.target.value)}
+                            >
+                                <option value="">Select User</option>
+                                {users.map((item) => {
+                                    return (
+                                        <option value={item.myuser.username}>
+                                            {item.myuser.username}
+                                        </option>
+                                    );
+                                })}
+                            </TextField>
+                        </Grid>
+                        <Grid>
+                            <Button
+                                className='submitBtn'
+                                type='submit'
+                                color='primary'
+                                variant='contained'>
+                                Submit
+                            </Button>
+                        </Grid>
+                    </form>
+                </div>
+            </Drawer>
             <TableContainer className={classes.container}>
                 <Table className={classes.table} aria-label="simple table">
                     <TableHead className={classes.tableheading}>
                         <TableRow>
+                            <TableCell className={classes.tableheading}><Checkbox /></TableCell>
                             <TableCell className={classes.tableheading}>Lead ID</TableCell>
                             <TableCell className={classes.tableheading} >Name</TableCell>
                             <TableCell className={classes.tableheading} >Mobile</TableCell>
@@ -288,6 +535,7 @@ export default function FollowUp(props) {
                             <CircularProgress size={100} thickness={3} />
                         </div> : LeadCount !== 0 ? (Object.keys(leadData).length !== 0 ?
                             <TableRow className={classes.oddEvenRow}>
+                                <TableCell className={classes.tabledata}><Checkbox /></TableCell>
                                 <TableCell className={clsx(classes.tabledata, classes.click)}
                                     onClick={() => routeChangeHAndler(leadData.lead.lead_crm_id)}
                                 >{leadData.lead.lead_crm_id} </TableCell>
@@ -341,6 +589,83 @@ export default function FollowUp(props) {
                     </TableBody>
                 </Table>
             </TableContainer>
+            {isLoading ? '' :
+                <div className="paginationContainer">
+                    <form className="assignToContainer">
+                        {showAROList && <ListGroup className="listGroup">
+                            <CancelRoundedIcon className="closeListGroup" onClick={closeListGroupHandler} />
+                            <div className="searchMainContainer">
+                                <div className="searchContainer">
+                                    <InputBase
+                                        className="inputContainer"
+                                        inputProps={{ "aria-label": "search" }}
+                                        value={searchInput}
+                                        onChange={(e) => setSearchInput((e.target.value).toLowerCase().trim())}
+                                    />
+                                    <div className="searchIconContainer">
+                                        <SearchIcon className="searchIcon" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="listItemContainer">
+                                {
+                                    users.filter((data) => {
+                                        if (searchInput === "") {
+                                            return users;
+                                        } else if (data.myuser.username.toLowerCase().includes(searchInput.toLowerCase())) {
+                                            return users;
+                                        }
+                                    }).map((item) => (
+                                        <ListGroup.Item className={leadsAssignTo === item.myuser.username && "activeListItem"} onClick={() => getAssignedAgent(item.myuser.username)}
+                                        >{item.myuser.username}</ListGroup.Item>
+                                    ))}
+                            </div>
+                            <Button
+                                className="assignLeadsBtn"
+                                variant="contained"
+                                color="primary"
+                            >
+                                Assign
+                            </Button>
+                        </ListGroup>}
+                        <div className="assignToBtnContainer" onClick={toggleAROHandler}>
+                            <span className="assignText">Assign To</span>
+                            <ArrowDropDownIcon />
+                        </div>
+                        <div className="selectedText">{selectedLeads.length} Leads Selected</div>
+                    </form>
+                    <div className='paginationRightContainer'>
+                        <div className='rowsPerPage'>Rows Per Page: {rowsPerPage}</div>
+                        <div className={classes.numberOfTotalCount}>
+                            {totalDataPerPage} of {totalLeads}
+                        </div>
+                        <div className={classes.buttonsContainer}>
+                            {prevPage === null ? (
+                                <IconButton disabled>
+                                    <ChevronLeftOutlinedIcon />
+                                </IconButton>
+                            ) : (
+                                <IconButton>
+                                    <ChevronLeftOutlinedIcon
+                                        className={prevPage !== null ? classes.activeColor : ""}
+                                    />
+                                </IconButton>
+                            )}
+                            {nextPage === null ? (
+                                <IconButton disabled>
+                                    <ChevronRightOutlinedIcon />
+                                </IconButton>
+                            ) : (
+                                <IconButton>
+                                    <ChevronRightOutlinedIcon
+                                        className={nextPage !== null ? classes.activeColor : ""}
+                                    />
+                                </IconButton>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            }
         </PageLayerSection>
     )
 }

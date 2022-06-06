@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
+import "./freshLead.css";
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -14,14 +15,19 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import axios from 'axios';
 import baseUrl from '../../global/api';
-import { getProfileData } from '../../global/leadsGlobalData'
+import { getCampaign, getProfileData } from '../../global/leadsGlobalData'
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
 import EmiCalculator from '../Emicalculator/EmiCalculator';
 import clsx from 'clsx';
+import filter from "../../images/filter.png";
+import Checkbox from '@material-ui/core/Checkbox';
 import EligibilityCalculator from '../EligibilityCalculator/EligibilityCalculator';
+import { Drawer } from '@mui/material';
+import Grid from "@material-ui/core/Grid";
+import { Button, TextField } from '@material-ui/core';
 const useStyles = makeStyles({
   container: {
-    overflow: 'auto',
+    maxHeight: '67vh',
     marginBottom: '10px'
   },
   table: {
@@ -40,7 +46,6 @@ const useStyles = makeStyles({
     width: '100%',
     height: '64px',
     marginTop: '8px',
-    marginBottom: '25px',
     display: 'flex',
     justifyContent: 'flex-end',
     alignItems: 'center',
@@ -122,11 +127,12 @@ const useStyles = makeStyles({
     // width: '75px',
     whiteSpace: 'nowrap',
     wordBreak: 'break-word'
-  }
+  },
 });
 export default function FreshLead() {
   const classes = useStyles();
   const profileData = getProfileData();
+  const campaignData = getCampaign();
   const [freshLeads, setFreshLeads] = useState([]);
   const [prevPage, setPrevPage] = useState(null);
   const [nextPage, setNextPage] = useState(null);
@@ -135,6 +141,7 @@ export default function FreshLead() {
   const [rowsPerPage, setRowsPerPage] = React.useState(100);
   const [totalDataPerPage, settotalDataPerPage] = useState(0);
   const [isLoading, setisLoading] = useState(false);
+  const [isDrawer, setIsDrawer] = useState(false);
   const splitUrl = (data) => {
     if (data !== null) {
       const [url, pager] = data.split('?');
@@ -226,12 +233,12 @@ export default function FreshLead() {
     return phoneNo;
   }
   const [openCalculate, setopenCalculate] = useState(false);
-  const [checkEligibility,setCheckEligibility] = useState(false);
-  
-  const openEligibility = () =>{
+  const [checkEligibility, setCheckEligibility] = useState(false);
+
+  const openEligibility = () => {
     setCheckEligibility(true);
   }
-  const closeEligibility = () =>{
+  const closeEligibility = () => {
     setCheckEligibility(false);
   }
   const openCalculator = () => {
@@ -240,15 +247,101 @@ export default function FreshLead() {
   const closeCalculator = () => {
     setopenCalculate(false);
   }
+  const openDrawer = () => {
+    setIsDrawer(true)
+  }
+  const closeDrawer = () => {
+    setIsDrawer(false)
+  }
   return (
-    <PageLayerSection ActualEmiCalculate={openCalculator} ActualEligibilityCalculate={openEligibility}>
-      <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility}/>
+    <PageLayerSection isDisplaySearchBar ActualEmiCalculate={openCalculator} ActualEligibilityCalculate={openEligibility}>
+      <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility} />
       <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
+      <div className='mainContainer'>
+        <h3>Fresh Leads(34)</h3>
+        <div className="filterBtnContainer" onClick={openDrawer}>
+          <div className="filterImage">
+            <img src={filter} alt="" />
+          </div>
+          <div className="filterText">FILTER</div>
+        </div>
+      </div>
+      <Drawer anchor='right' open={isDrawer} onClose={closeDrawer}>
+        <div className='rightSideContainer'>
+          <form>
+            <Grid container justifyContent="flex-start">
+              <h4>Search Here</h4>
+            </Grid>
+            <Grid>
+              <TextField
+                className='textField'
+                type="date"
+                id="outlined-full-width"
+                label="From"
+                style={{ margin: 8 }}
+                margin="normal"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                variant="outlined"
+                size="small" />
+            </Grid>
+            <Grid>
+              <TextField
+                className='textField'
+                type="date"
+                id="outlined-full-width"
+                label="To"
+                style={{ margin: 8 }}
+                margin="normal"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                variant="outlined"
+                size="small" />
+            </Grid>
+            <Grid>
+              <TextField
+                className="textField"
+                select
+                id="outlined-full-width"
+                label="Select Campaign"
+                style={{ margin: 8 }}
+                margin="normal"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                SelectProps={{
+                  native: true,
+                }}
+                variant="outlined"
+                size="small"
+              >
+                <option value="">Select</option>
+                {campaignData.map((item, index) => (
+                  <option key={index} value={item}>
+                    {item}
+                  </option>
+                ))}
+              </TextField>
+            </Grid>
+            <Grid>
+              <Button
+                className='submitBtn'
+                type='submit'
+                color='primary'
+                variant='contained'>
+                Submit
+              </Button>
+            </Grid>
+          </form>
+        </div>
+      </Drawer>
       <TableContainer className={classes.container}>
-        <Table className={classes.table} aria-label="simple table">
+        <Table className={classes.table} aria-label="simple table" stickyHeader>
           <TableHead className={classes.tableheading}>
             <TableRow>
-              <TableCell className={classes.tableheading}>Sr No</TableCell>
+              <TableCell className={classes.tableheading}><Checkbox /></TableCell>
               <TableCell className={classes.tableheading}>Lead ID</TableCell>
               <TableCell className={classes.tableheading}>Name</TableCell>
               <TableCell className={classes.tableheading}>Mobile</TableCell>
@@ -269,7 +362,7 @@ export default function FreshLead() {
               freshLeads.map((lead, index) => {
                 return (
                   <TableRow className={classes.oddEvenRow} key={index}>
-                    <TableCell className={classes.tabledata}>{index + 1}</TableCell>
+                    <TableCell className={classes.tabledata}><Checkbox /></TableCell>
                     <TableCell className={classes.tabledata}>{lead.lead_crm_id}</TableCell>
                     <TableCell className={classes.tabledata}>{lead.name ? lead.name : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>{lead.phone_no_encrypt ? decryptedData(lead.phone_no_encrypt) : 'NA'}</TableCell>
@@ -286,8 +379,9 @@ export default function FreshLead() {
                     <TableCell className={classes.tabledata}>{lead.campaign_category ? lead.campaign_category : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>
                       <Tooltip title="Delete Lead">
-                        <IconButton onClick={() => deleteFreshLead(lead.lead_crm_id)}>
-                          <DeleteIcon />
+                        <IconButton
+                          onClick={() => deleteFreshLead(lead.lead_crm_id)}>
+                          <DeleteIcon/>
                         </IconButton>
                       </Tooltip>
                     </TableCell>
@@ -299,6 +393,14 @@ export default function FreshLead() {
         </Table>
       </TableContainer>
       {isLoading ? '' : <div className={classes.tablePagination}>
+        <div className='bulkDeletedContainer'>
+          <Button
+            className='bulkDeleteBtn'
+            startIcon={<DeleteIcon />}
+          >
+            Deleted Selected</Button>
+          <div className="selectedText">14 Leads Selected</div>
+        </div>
         <div className={classes.rowsPerPageContainer}>
           <div className={classes.rowsText}>Rows Per Page: {rowsPerPage}</div>
         </div>
