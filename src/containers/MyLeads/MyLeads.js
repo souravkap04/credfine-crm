@@ -926,27 +926,6 @@ export default function MyLeads(props) {
         <h3>My Leads ({totalLeads})</h3>
         <div style={{ display: "flex", alignItems: "center" }}>
           <Button
-            variant="contained"
-            color="primary"
-            style={{ marginRight: "15px", }}
-            onClick={blueDataHandler}
-          >Blue</Button>
-          <Button
-            variant="contained"
-            style={{ marginRight: "15px", background: '#72CC87', color: '#fff' }}
-            onClick={greenDataHandler}
-          >Green</Button>
-          <Button
-            variant="contained"
-            style={{ marginRight: "15px", background: '#FDB528', color: '#fff' }}
-            onClick={yellowDataHandler}
-          >Yellow</Button>
-          <Button
-            variant="contained"
-            style={{ marginRight: "15px", background: '#E33E3E', color: '#fff' }}
-            onClick={redDataHandler}
-          >Red</Button>
-          <Button
             className="addBtn"
             color="primary"
             variant="contained"
@@ -1083,17 +1062,7 @@ export default function MyLeads(props) {
                 <span className={classes.emptydata}>{responseStatus}</span>
               )
             ) : myLeads.length !== 0 ? (
-              myLeads.filter((data) => {
-                if (isBlue) {
-                  return data.lead.status === 'STB'
-                } else if (isGreen) {
-                  return (data.lead.status === 'Hot Follow-Up' || data.lead.status === 'Cold Follow-Up')
-                } else if (isYellow) {
-                  return data.lead.status === 'Valid Follow-Up'
-                } else if (isRed) {
-                  return (data.lead.status === 'Contacted NI/NE' || data.lead.status === 'Not Contactable' || data.lead.status === 'Customer Not Interested')
-                }
-              }).map((my_leads, index) => {
+              myLeads.map((my_leads, index) => {
                 // let leadPhoneNo = maskPhoneNo(my_leads.lead.phone_no_encrypt);
                 let createdDate = new Date(my_leads.created_date);
                 let currentCreatedDate = createdDate.toLocaleDateString() + " " +

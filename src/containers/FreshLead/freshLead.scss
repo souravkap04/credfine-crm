@@ -92,27 +92,44 @@ $desk: 100/1440;
 .deleteIcon {
     background-color: #8f9bb3 !important;
 }
-.bulkDeletedContainer {
+.paginationContainer {
+    background-color: #ffffff;
+    width: 100%;
+    height: 75 * $desk + vw;
+    margin-top: 25px * $desk + vw;
+    padding-left: 16 * $desk + vw;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    margin-right: 450 * $desk + vw;
-    .bulkDeleteBtn {
-        width: 174 * $desk + vw;
-        height: 30 * $desk + vw;
-        background-color: #ffffff;
-        border: 1px solid #8f9bb3;
-        font-size: 12 * $desk + vw;
+    .bulkDeletedContainer {
+        display: flex;
+        align-items: center;
+        margin-right: 450 * $desk + vw;
+        .bulkDeleteBtn {
+            width: 174 * $desk + vw;
+            height: 30 * $desk + vw;
+            background-color: #ffffff;
+            border: 1px solid #8f9bb3;
+            font-size: 12 * $desk + vw;
+        }
+        .selectedText {
+            margin-left: 15 * $desk + vw;
+            font-size: 12 * $desk + vw;
+            line-height: 14 * $desk + vw;
+            color: #000000;
+        }
+        .MuiIconButton-root {
+            color: #8f9bb3 !important;
+        }
+        .MuiButton-root {
+            color: #8f9bb3 !important;
+        }
     }
-    .selectedText {
-        margin-left: 15 * $desk + vw;
-        font-size: 12 * $desk + vw;
-        line-height: 14 * $desk + vw;
-        color: #000000;
-    }
-    .MuiIconButton-root {
-        color: #8f9bb3 !important;
-    }
-    .MuiButton-root {
-        color: #8f9bb3 !important;
+    .paginationRightContainer {
+        display: flex;
+        align-items: center;
+        .rowsPerPage {
+            margin-right: 39 * $desk + vw;
+        }
     }
 }

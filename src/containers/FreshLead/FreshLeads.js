@@ -41,25 +41,8 @@ const useStyles = makeStyles({
   tabledata: {
     fontSize: '12px',
   },
-  tablePagination: {
-    backgroundColor: '#ffffff',
-    width: '100%',
-    height: '64px',
-    marginTop: '8px',
-    display: 'flex',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  },
   numberOfTotalCount: {
     marginRight: '25px'
-  },
-  rowsPerPageContainer: {
-    marginRight: '70px',
-    display: 'flex',
-    alignItems: 'center'
-  },
-  rowsText: {
-    marginRight: '8px'
   },
   buttonsContainer: {
     marginRight: '15px'
@@ -381,7 +364,7 @@ export default function FreshLead() {
                       <Tooltip title="Delete Lead">
                         <IconButton
                           onClick={() => deleteFreshLead(lead.lead_crm_id)}>
-                          <DeleteIcon/>
+                          <DeleteIcon />
                         </IconButton>
                       </Tooltip>
                     </TableCell>
@@ -392,7 +375,7 @@ export default function FreshLead() {
           </TableBody>
         </Table>
       </TableContainer>
-      {isLoading ? '' : <div className={classes.tablePagination}>
+      {isLoading ? '' : <div className="paginationContainer">
         <div className='bulkDeletedContainer'>
           <Button
             className='bulkDeleteBtn'
@@ -401,29 +384,29 @@ export default function FreshLead() {
             Deleted Selected</Button>
           <div className="selectedText">14 Leads Selected</div>
         </div>
-        <div className={classes.rowsPerPageContainer}>
-          <div className={classes.rowsText}>Rows Per Page: {rowsPerPage}</div>
-        </div>
-        <div className={classes.numberOfTotalCount}>{totalDataPerPage} of {totalUploadLeads}</div>
-        <div className={classes.buttonsContainer}>
-          {prevPage === null ? <IconButton disabled
-            onClick={prevPageHandler}
-          >
-            <ChevronLeftOutlinedIcon />
-          </IconButton> : <IconButton
-            onClick={prevPageHandler}
-          >
-            <ChevronLeftOutlinedIcon className={prevPage !== null ? classes.activeColor : ''} />
-          </IconButton>}
-          {nextPage === null ? <IconButton disabled
-            onClick={nextPageHandler}
-          >
-            <ChevronRightOutlinedIcon />
-          </IconButton> : <IconButton
-            onClick={nextPageHandler}
-          >
-            <ChevronRightOutlinedIcon className={nextPage !== null ? classes.activeColor : ''} />
-          </IconButton>}
+        <div className="paginationRightContainer">
+          <div className="rowsPerPage">Rows Per Page: {rowsPerPage}</div>
+          <div className={classes.numberOfTotalCount}>{totalDataPerPage} of {totalUploadLeads}</div>
+          <div className={classes.buttonsContainer}>
+            {prevPage === null ? <IconButton disabled
+              onClick={prevPageHandler}
+            >
+              <ChevronLeftOutlinedIcon />
+            </IconButton> : <IconButton
+              onClick={prevPageHandler}
+            >
+              <ChevronLeftOutlinedIcon className={prevPage !== null ? classes.activeColor : ''} />
+            </IconButton>}
+            {nextPage === null ? <IconButton disabled
+              onClick={nextPageHandler}
+            >
+              <ChevronRightOutlinedIcon />
+            </IconButton> : <IconButton
+              onClick={nextPageHandler}
+            >
+              <ChevronRightOutlinedIcon className={nextPage !== null ? classes.activeColor : ''} />
+            </IconButton>}
+          </div>
         </div>
       </div>}
     </PageLayerSection>
