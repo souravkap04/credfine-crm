@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import axios from "axios";
 import baseUrl from "../../global/api";
-import {website_prod} from "../../global/bankingApis";
+import { website_prod } from "../../global/bankingApis";
 import crmLogo from "../../images/crmLogo.svg";
 import loinImage from "../../images/loginImage.png";
 import {
@@ -87,78 +87,16 @@ export default function Login() {
   const [alertMessage, setAlertMessage] = useState("");
   const [isDisplay, setIsDisplay] = useState(false);
   const [showPassword, setshowPassword] = useState(false);
-  const [userName,setUserName] = useState('')
-  const [password,setPassword] = useState('');
-  const [selectedDialer, setSelectedDialer] = useState("");
-  const [campaign,setCampaign] = useState("");
   const [otpPopup, setOtpPopup] = useState(false);
   const [otpValue, setotpValue] = useState('');
   const [mobileNo, setMobileNo] = useState('');
   const [mobileVerify, setmobileVerify] = useState(false);
+  let profileData = {};
   const { register, handleSubmit, control, errors } = useForm();
+  console.log("checking:" + profileData);
   const onSubmit = (data) => {
     const { email, password, campaign, dialer } = data;
-    setUserName(email);
-    setPassword(password);
-    setSelectedDialer(dialer);
-    setCampaign(campaign);
-    if (campaign === 'WEBSITE_LEAD') {
-      setOtpPopup(true);
-      setMobileNo('9930656757');
-      getOTP('9930656757');
-      return;
-    } 
-    if (campaign === 'HOT_LEAD_SILVER_NOIDA') {
-      setOtpPopup(true);
-      setMobileNo('8586055499');
-      getOTP('8586055499');
-      return;
-    }
-    if (campaign === 'HOT_LEAD_SILVER_MUMBAI') {
-      setOtpPopup(true);
-      setMobileNo('9930656757');
-      getOTP('9930656757');
-      return;
-    }
-    if (campaign === 'HOT_LEAD_PLATINUM_NOIDA') {
-      setOtpPopup(true);
-      setMobileNo('8586055499');
-      getOTP('8586055499');
-      return;
-    }
-    if (campaign === 'HOT_LEAD_PLATINUM_MUMBAI') {
-      setOtpPopup(true);
-      setMobileNo('9930656757');
-      getOTP('9930656757');
-      return;
-    }
-     if (campaign === 'ELITE_CUSTOMER_MUMBAI') {
-      setOtpPopup(true);
-      setMobileNo('9930656757');
-      getOTP('9930656757');
-      return;
-    }
-     if (campaign === 'ELITE_CUSTOMER_NOIDA') {
-      setOtpPopup(true);
-      setMobileNo('8586055499');
-      getOTP('8586055499');
-      return;
-    }
-    if (campaign === 'IDFC_CC') {
-      setOtpPopup(true);
-      setMobileNo('9321646313');
-      getOTP('9321646313');
-      return;
-    } 
-    if (campaign === 'YES_BANK_CC') {
-      setOtpPopup(true);
-      setMobileNo('8420878985');
-      getOTP('8420878985');
-      return;
-    } 
-    else {
-        loginHandler(email, password, campaign, dialer);
-    }
+    loginHandler(email, password, campaign, dialer);
   };
   const loginHandler = async (email, password, campaign, dialer) => {
     let item = {
@@ -170,44 +108,104 @@ export default function Login() {
     await axios
       .post(`${baseUrl}/user/login/`, item)
       .then((response) => {
-        localStorage.setItem("user_info", JSON.stringify(response.data));
-        const profileData = JSON.parse(localStorage.getItem("user_info"));
-        if (profileData.is_admin_verified) {
-          if (profileData.user_roles[0].user_type === 3) {
-            history.push("/dashboards/leads");
-          } else {
-            history.push("/dashboard");
+        if (response.status === 200) {
+          localStorage.setItem("user_info", JSON.stringify(response.data));
+          profileData = JSON.parse(localStorage.getItem("user_info"))
+          console.log("checking1:" + profileData?.is_admin_verified);
+          if (campaign === 'WEBSITE_LEAD') {
+            setOtpPopup(true);
+            setMobileNo(profileData.parent_phone_no);
+            getOTP(profileData.parent_phone_no);
+            return;
           }
-          let headers = { Authorization: `Token ${profileData.token}` };
-          axios
-            .get(`${baseUrl}/leads/fetchAllLeads/`, { headers })
-            .then((response) => {
-              localStorage.setItem(
-                "status_info",
-                JSON.stringify(response.data)
-              );
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-        }
-        if (dialer === "HALOOCOM-Noida") {
-          axios.post(`${haloocomNoidaDialerApi}/action.php?user=${profileData.vertage_id}&type=Login`)
-            .then((response) => {
-              console.log("dialer-noida loin successfull")
-            }).catch((error) => {
-              console.log(error);
-            })
-        } else if (dialer === "HALOOCOM-Mumbai") {
-          axios.post(`${haloocomMumbaiDialerApi}/action.php?user=${profileData.vertage_id}&type=Login`)
-            .then((response) => {
-              console.log("dialer-mumbai loin successfull")
-            }).catch((error) => {
-              console.log(error);
-            })
+          else if (campaign === 'HOT_LEAD_SILVER_NOIDA') {
+            setOtpPopup(true);
+            setMobileNo(profileData.parent_phone_no);
+            getOTP(profileData.parent_phone_no);
+            return;
+          }
+          else if (campaign === 'HOT_LEAD_SILVER_MUMBAI') {
+            setOtpPopup(true);
+            setMobileNo(profileData.parent_phone_no);
+            getOTP(profileData.parent_phone_no);
+            return;
+          }
+          else if (campaign === 'HOT_LEAD_PLATINUM_NOIDA') {
+            setOtpPopup(true);
+            setMobileNo(profileData.parent_phone_no);
+            getOTP(profileData.parent_phone_no);
+            return;
+          }
+          else if (campaign === 'HOT_LEAD_PLATINUM_MUMBAI') {
+            setOtpPopup(true);
+            setMobileNo(profileData.parent_phone_no);
+            getOTP(profileData.parent_phone_no);
+            return;
+          }
+          else if (campaign === 'ELITE_CUSTOMER_MUMBAI') {
+            setOtpPopup(true);
+            setMobileNo(profileData.parent_phone_no);
+            getOTP(profileData.parent_phone_no);
+            return;
+          }
+          else if (campaign === 'ELITE_CUSTOMER_NOIDA') {
+            setOtpPopup(true);
+            setMobileNo(profileData.parent_phone_no);
+            getOTP(profileData.parent_phone_no);
+            return;
+          }
+          else if (campaign === 'IDFC_CC') {
+            setOtpPopup(true);
+            setMobileNo(profileData.parent_phone_no);
+            getOTP(profileData.parent_phone_no);
+            return;
+          }
+          else if (campaign === 'YES_BANK_CC') {
+            setOtpPopup(true);
+            setMobileNo(profileData.parent_phone_no);
+            getOTP(profileData.parent_phone_no);
+            return;
+          } else {
+            console.log("other campaign:" + profileData?.is_admin_verified)
+            if (profileData.is_admin_verified) {
+              if (profileData.user_roles[0].user_type === 3) {
+                history.push("/dashboards/leads");
+              } else {
+                history.push("/dashboard");
+              }
+              let headers = { Authorization: `Token ${profileData.token}` };
+              axios
+                .get(`${baseUrl}/leads/fetchAllLeads/`, { headers })
+                .then((response) => {
+                  localStorage.setItem(
+                    "status_info",
+                    JSON.stringify(response.data)
+                  );
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
+            }
+          }
+          if (dialer === "HALOOCOM-Noida") {
+            axios.post(`${haloocomNoidaDialerApi}/action.php?user=${profileData.vertage_id}&type=Login`)
+              .then((response) => {
+                console.log("dialer-noida loin successfull")
+              }).catch((error) => {
+                console.log(error);
+              })
+          } else if (dialer === "HALOOCOM-Mumbai") {
+            axios.post(`${haloocomMumbaiDialerApi}/action.php?user=${profileData.vertage_id}&type=Login`)
+              .then((response) => {
+                console.log("dialer-mumbai loin successfull")
+              }).catch((error) => {
+                console.log(error);
+              })
+          }
         }
       })
       .catch((error) => {
+        console.log(error);
         setAlertMessage("This is an error alert — check it out!");
         setIsDisplay(true);
       });
@@ -216,7 +214,7 @@ export default function Login() {
     setshowPassword(!showPassword);
   };
   const getOTP = async (mobileNo) => {
-   await axios.post(`${website_prod}/common/send_otp`, {
+    await axios.post(`${website_prod}/common/send_otp`, {
       mobile: mobileNo
     }).then(response => {
       if (response.status === 200) {
@@ -241,7 +239,27 @@ export default function Login() {
         if (response.status === 200) {
           setisSuccess(true)
           setAlertMessage(response.data)
-          loginHandler(userName,password,campaign,selectedDialer);
+          console.log("checking3:"+profileData?.is_admin_verified)
+          if (profileData.is_admin_verified) {
+            console.log("checking4:"+profileData?.is_admin_verified)
+            if (profileData.user_roles[0].user_type === 3) {
+              history.push("/dashboards/leads");
+            } else {
+              history.push("/dashboard");
+            }
+            let headers = { Authorization: `Token ${profileData.token}` };
+            axios
+              .get(`${baseUrl}/leads/fetchAllLeads/`, { headers })
+              .then((response) => {
+                localStorage.setItem(
+                  "status_info",
+                  JSON.stringify(response.data)
+                );
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          }
           setTimeout(() => {
             setmobileVerify(true);
             setotpValue('')

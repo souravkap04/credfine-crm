@@ -48,7 +48,6 @@ const Paysense = () => {
     useEffect(() => {
         getBasicdetailsData(leadid);
         getPersonaldetailsData(leadid);
-        console.log("last name:" + lastName);
     }, [])
     const getBasicdetailsData = async (leadID) => {
         const headers = { Authorization: `Token ${profileData.token}` };
@@ -207,7 +206,7 @@ const Paysense = () => {
     }
     return (
         <div className='PaysenseContainer'>
-            <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isError} autoHideDuration={1500} onClose={closeSnackbar}>
+            <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isError} autoHideDuration={10000} onClose={closeSnackbar}>
                 <Alert onClose={closeSnackbar} severity="error">
                     {alertMessage}
                 </Alert>
@@ -526,21 +525,21 @@ const Paysense = () => {
                         <div className="subText">Your Application has been <strong>successfully submitted.</strong> Our Team will get back to you in 24-48 hours.</div>
                         <div className='subText2'>CredFine.com doesn’t charge any money from customers for it’s Loan or Credit Card offerings. In case you<br />
                             receive such communication from anyone claiming to be a CredFine representative, please contact us at <strong>care@credfine.com</strong></div>
-                        <div className='losContainer'>
+                        {/* <div className='losContainer'>
                             <div className='losHeader'><strong>Loan Tracking Number</strong></div>
                             <div className='losNumber'>{partnerID}</div>
                             <div className='copyIcon' onClick={() => copyUniqueIDNumber("1234567890")}>
                                 <i class="far fa-copy"></i>
                             </div>
-                        </div>
+                        </div> */}
                         <hr />
-                        <div className='trackStatus'>
+                        {/* <div className='trackStatus'>
                             <div className="statusBtn">
                                 <div className="btnText" onClick={() => trackStatusHandler(leadid)}>TRACK STATUS</div>
                             </div>
                             <div className='statusText'>or email us with the Reference No:<br /><strong>care@credfine.com</strong></div>
-                        </div>
-                        {isTrackStatus &&
+                        </div> */}
+                        {/* {isTrackStatus &&
                             <div className='statusContainer'>
                                 <div className='applicationStatus'>
                                     <div className='statusLabel'>Your application status</div>
@@ -586,7 +585,7 @@ const Paysense = () => {
                                     </div>
                                 </div>
                             </div>
-                        }
+                        } */}
                     </div>
                 }
             </div>
