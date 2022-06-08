@@ -90,10 +90,7 @@ export default function Login() {
   const [otpPopup, setOtpPopup] = useState(false);
   const [otpValue, setotpValue] = useState('');
   const [mobileNo, setMobileNo] = useState('');
-  const [mobileVerify, setmobileVerify] = useState(false);
-  let profileData = {};
   const { register, handleSubmit, control, errors } = useForm();
-  console.log("checking:" + profileData);
   const onSubmit = (data) => {
     const { email, password, campaign, dialer } = data;
     loginHandler(email, password, campaign, dialer);
@@ -110,8 +107,7 @@ export default function Login() {
       .then((response) => {
         if (response.status === 200) {
           localStorage.setItem("user_info", JSON.stringify(response.data));
-          profileData = JSON.parse(localStorage.getItem("user_info"))
-          console.log("checking1:" + profileData?.is_admin_verified);
+          const profileData = JSON.parse(localStorage.getItem("user_info"))
           if (campaign === 'WEBSITE_LEAD') {
             setOtpPopup(true);
             setMobileNo(profileData.parent_phone_no);
@@ -233,23 +229,19 @@ export default function Login() {
     });
   }
   const verifyOtp = async () => {
+    const profileData = JSON.parse(localStorage.getItem("user_info"))
     let items = { mobile: mobileNo, otp: otpValue }
     await axios.post(`${website_prod}/common/verify_otp`, items)
       .then(response => {
         if (response.status === 200) {
-          setisSuccess(true)
-          setAlertMessage(response.data)
-          console.log("checking3:"+profileData?.is_admin_verified)
           if (profileData.is_admin_verified) {
-            console.log("checking4:"+profileData?.is_admin_verified)
             if (profileData.user_roles[0].user_type === 3) {
               history.push("/dashboards/leads");
             } else {
               history.push("/dashboard");
             }
             let headers = { Authorization: `Token ${profileData.token}` };
-            axios
-              .get(`${baseUrl}/leads/fetchAllLeads/`, { headers })
+            axios.get(`${baseUrl}/leads/fetchAllLeads/`, { headers })
               .then((response) => {
                 localStorage.setItem(
                   "status_info",
@@ -260,8 +252,9 @@ export default function Login() {
                 console.log(error);
               });
           }
+          setisSuccess(true)
+          setAlertMessage(response.data)
           setTimeout(() => {
-            setmobileVerify(true);
             setotpValue('')
           }, 1500)
         }
