@@ -152,8 +152,8 @@ export default function Login() {
     } 
     if (campaign === 'YES_BANK_CC') {
       setOtpPopup(true);
-      setMobileNo('8420878985');
-      getOTP('8420878985');
+      setMobileNo('9321646313');
+      getOTP('9321646313');
       return;
     } 
     else {
