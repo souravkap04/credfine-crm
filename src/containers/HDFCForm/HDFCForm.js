@@ -185,7 +185,7 @@ export default function HDFCFrom() {
     }
     const fetchHdfcData = async (leadId) => {
         const headers = { Authorization: `Token ${profileData.token}` };
-        await axios.get(`${bankApi}/leads/sendHdfcLead/${leadId}/2`,{headers})
+        await axios.get(`${bankApi}/leads/sendHdfcLead/${leadId}/2`, { headers })
             .then((response) => {
                 let getDobfromApi = response.data.applyLoan.Date_Of_Birth__req;
                 let dateRegex = /^\d{4}-\d{2}-\d{2}$/.test(getDobfromApi);
@@ -253,6 +253,11 @@ export default function HDFCFrom() {
         let mobRegex = /^[0-9]{10}$/g.test(mobileNo);
         let pinCodeRegex = /^[0-9]{6}$/g.test(pincode);
         let officePinRegex = /^[0-9]{6}$/g.test(officePincode);
+        let address1Regex = /^[a-zA-Z0-9]{1,40}$/.test(addressLineOne);
+        let address2Regex = /^[a-zA-Z0-9]{1,40}$/.test(addressLineTwo);
+        let address3Regex = /^[a-zA-Z0-9]{1,40}$/.test(addressLineThree);
+        let officeAddress1Regex = /^[a-zA-Z0-9]{1,40}$/.test(officeAddressOne);
+        let officeAddress2Regex = /^[a-zA-Z0-9]{1,40}$/.test(officeAddressTwo);
         if (panCardNo === '' || !panRegex) {
             setAlertMessage("Invalid Pan Number");
             setIsError(true);
@@ -279,16 +284,16 @@ export default function HDFCFrom() {
             return;
 
         }
-        if (addressLineOne === '') {
-            setAlertMessage('Invalid Address Line 1')
+        if (addressLineOne === '' || !address1Regex) {
+            setAlertMessage("Address Line 1 should't Empty or should't Exceeds 40 letters")
             setIsError(true);
             return;
-        } if (addressLineTwo === '') {
-            setAlertMessage('Invalid Address Line 2')
+        } if (addressLineTwo === '' || !address2Regex) {
+            setAlertMessage("Address Line 2 should't Empty or should't Exceeds 40 letters")
             setIsError(true);
             return;
-        } if (addressLineThree === '') {
-            setAlertMessage('Invalid Address Line 3')
+        } if (addressLineThree === '' || !address3Regex) {
+            setAlertMessage("Address Line 3 should't Empty or should't Exceeds 40 letters")
             setIsError(true);
             return;
         } if (cityName === '') {
@@ -315,13 +320,13 @@ export default function HDFCFrom() {
             setAlertMessage('Invalid Employer Name')
             setIsError(true);
         }
-        if (officeAddressOne === '') {
-            setAlertMessage('Invalid Office Address 1')
+        if (officeAddressOne === '' || !officeAddress1Regex) {
+            setAlertMessage("Office Address 1 should't Empty or should't Exceeds 40 letters")
             setIsError(true);
             return;
         }
-        if (officeAddressTwo === '') {
-            setAlertMessage('Invalid Office Address2')
+        if (officeAddressTwo === '' || !officeAddress2Regex) {
+            setAlertMessage("Office Address 2 should't Empty or should't Exceeds 40 letters")
             setIsError(true);
             return;
         } if (officeCityName === '') {
@@ -508,7 +513,7 @@ export default function HDFCFrom() {
                 Personal Reference Data Successfully Updated
             </Alert>
         </Snackbar>
-        <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isError} autoHideDuration={1500} onClose={disableHangUpSnacks}>
+        <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isError} autoHideDuration={10000} onClose={disableHangUpSnacks}>
             <Alert onClose={disableHangUpSnacks} severity="error">
                 {alertMessage}
             </Alert>
