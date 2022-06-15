@@ -106,23 +106,17 @@ $desk: 100/1440;
         align-items: center;
         margin-right: 450 * $desk + vw;
         .bulkDeleteBtn {
-            width: 174 * $desk + vw;
+            width: 156 * $desk + vw;
             height: 30 * $desk + vw;
-            background-color: #ffffff;
+            background-color: #fff;
+            color: #8f9bb3;
             border: 1px solid #8f9bb3;
             font-size: 12 * $desk + vw;
         }
-        .selectedText {
-            margin-left: 15 * $desk + vw;
-            font-size: 12 * $desk + vw;
-            line-height: 14 * $desk + vw;
-            color: #000000;
-        }
-        .MuiIconButton-root {
-            color: #8f9bb3 !important;
-        }
-        .MuiButton-root {
-            color: #8f9bb3 !important;
+        .bulkDeleteBtn:hover {
+            background-color: #fff;
+            color: #535ad1;
+            border: 1px solid #535ad1;
         }
     }
     .paginationRightContainer {
@@ -131,5 +125,15 @@ $desk: 100/1440;
         .rowsPerPage {
             margin-right: 39 * $desk + vw;
         }
+    }
+}
+.confirmDialogContainer {
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: 20px;
+    .deleteButton {
+        width: 125 * $desk + vw;
+        background-color: #535ad1;
+        cursor: pointer;
     }
 }

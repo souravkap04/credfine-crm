@@ -203,10 +203,6 @@ export default function MyLeads(props) {
   const [selectedLeads, setSelectedLeads] = useState([]);
   const [showAROList, setShowAROList] = useState(false);
   const [searchInput, setSearchInput] = useState('');
-  const [isGreen, setIsGreen] = useState(false);
-  const [isBlue, setIsBlue] = useState(true);
-  const [isYellow, setIsYellow] = useState(false);
-  const [isRed, setIsRed] = useState(false);
   let statusData = getStatusData();
   let campaignData = getCampaign();
   let history = useHistory();
@@ -597,30 +593,7 @@ export default function MyLeads(props) {
   const closeEligibility = () => {
     setCheckEligibility(false);
   }
-  const blueDataHandler = () => {
-    setIsBlue(true)
-    setIsGreen(false);
-    setIsYellow(false);
-    setIsRed(false);
-  }
-  const greenDataHandler = () => {
-    setIsGreen(true);
-    setIsBlue(false)
-    setIsYellow(false);
-    setIsRed(false);
-  }
-  const yellowDataHandler = () => {
-    setIsGreen(false);
-    setIsBlue(false)
-    setIsYellow(true);
-    setIsRed(false);
-  }
-  const redDataHandler = () => {
-    setIsGreen(false);
-    setIsBlue(false)
-    setIsYellow(false);
-    setIsRed(true);
-  }
+
   return (
     <PageLayerSection isDisplaySearchBar={true} isMyLeadsSearch={true} ActualEmiCalculate={openCalculator} ActualEligibilityCalculate={openEligibility}>
       <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility} />

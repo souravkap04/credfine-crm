@@ -1,12 +1,21 @@
 import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import "./freshLead.css";
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
+import {
+  Table,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TableBody,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  Typography,
+  TextField,
+  Grid,
+  Button
+} from "@material-ui/core";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ChevronLeftOutlinedIcon from '@material-ui/icons/ChevronLeftOutlined';
 import ChevronRightOutlinedIcon from '@material-ui/icons/ChevronRightOutlined';
@@ -23,8 +32,11 @@ import filter from "../../images/filter.png";
 import Checkbox from '@material-ui/core/Checkbox';
 import EligibilityCalculator from '../EligibilityCalculator/EligibilityCalculator';
 import { Drawer } from '@mui/material';
-import Grid from "@material-ui/core/Grid";
-import { Button, TextField } from '@material-ui/core';
+import MuiAlert from "@material-ui/lab/Alert";
+import Snackbar from "@material-ui/core/Snackbar";
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 const useStyles = makeStyles({
   container: {
     maxHeight: '67vh',
@@ -119,12 +131,20 @@ export default function FreshLead() {
   const [freshLeads, setFreshLeads] = useState([]);
   const [prevPage, setPrevPage] = useState(null);
   const [nextPage, setNextPage] = useState(null);
-  const [totalUploadLeads, setTotalUploadLeads] = useState(null);
+  const [totalUploadLeads, setTotalUploadLeads] = useState(0);
   const [deleteCount, setDeleteCount] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(100);
+  const [rowsPerPage, setRowsPerPage] = useState(100);
   const [totalDataPerPage, settotalDataPerPage] = useState(0);
   const [isLoading, setisLoading] = useState(false);
   const [isDrawer, setIsDrawer] = useState(false);
+  const [uploadedFrom, setUploadedFrom] = useState("");
+  const [uploadedTo, setUploadedTo] = useState('');
+  const [loanType, setLoanType] = useState('');
+  const [campaign, setCampaign] = useState('');
+  const [isBulkDelete, setIsBulkDelete] = useState(false)
+  const [alertMessage, setAlertMessage] = useState("");
+  const [isError, setIsError] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
   const splitUrl = (data) => {
     if (data !== null) {
       const [url, pager] = data.split('?');
@@ -201,7 +221,7 @@ export default function FreshLead() {
     const data = { lead_crm_id: leadId };
     const headers = {
       'Authorization': `Token ${profileData.token}`,
-      'userRoleHash': `${profileData.user_roles[0].user_role_hash}`
+      'userRoleHash': `${profileData.user_roles[0].user_role_hash}`,
     };
     await axios.delete(`${baseUrl}/leads/freshLeads/`, { headers, data })
       .then((response) => {
@@ -236,12 +256,106 @@ export default function FreshLead() {
   const closeDrawer = () => {
     setIsDrawer(false)
   }
+  const filteredDataHandler = async (event) => {
+    event.preventDefault();
+    if (uploadedFrom === '') {
+      setAlertMessage('Invalid Uploaded From');
+      setIsError(true)
+      return;
+    } else if (uploadedTo === '') {
+      setAlertMessage('Invalid Uploaded To');
+      setIsError(true)
+      return;
+    } else if (loanType === '') {
+      setAlertMessage('Invalid Loan Type');
+      setIsError(true)
+      return;
+    } else if (campaign === '') {
+      setAlertMessage('Invalid Campaign');
+      setIsError(true)
+      return;
+    }
+    closeDrawer();
+    setisLoading(true)
+    const headers = {
+      'Authorization': `Token ${profileData.token}`,
+      'userRoleHash': `${profileData.user_roles[0].user_role_hash}`,
+    };
+    await axios.get(`${baseUrl}/leads/freshLeads/?campaign=${campaign}&loan_type=${loanType}&uploaded_from=${uploadedFrom}&uploaded_to=${uploadedTo}`, { headers })
+      .then((response) => {
+        setRowsPerPage(response.data.results.length)
+        settotalDataPerPage(response.data.results.length)
+        setFreshLeads(response.data.results);
+        setPrevPage(response.data.previous);
+        setNextPage(response.data.next);
+        setTotalUploadLeads(response.data.count);
+        setisLoading(false)
+      }).catch((error) => {
+        console.log(error)
+      })
+  }
+  const bulkDeleteHandler = () => {
+    setIsBulkDelete(true)
+  }
+  const confirmBulkDelete = async () => {
+    const data = { uploaded_from: uploadedFrom, uploaded_to: uploadedTo, loan_type: loanType, campaign: campaign };
+    const headers = {
+      'Authorization': `Token ${profileData.token}`,
+      'userRoleHash': `${profileData.user_roles[0].user_role_hash}`,
+    }
+    await axios.delete(`${baseUrl}/leads/bulkDeleteLead/`, { headers, data })
+      .then((response) => {
+        if (response.status === 200) {
+          setAlertMessage(response.data.msg)
+          setIsSuccess(true)
+          setIsBulkDelete(false)
+        }
+      }).catch((error) => {
+        if (error.response.status === 400) {
+          setAlertMessage(error.response.data.msg)
+          setIsError(true)
+        } else if (error.response.status === 401) {
+          setAlertMessage(error.response.data.error)
+          setIsError(true)
+        }
+        else {
+          console.log(error)
+        }
+      })
+  }
+  const closeSnackbar = () => {
+    setIsError(false)
+    setIsSuccess(false)
+  }
+  const closePopupHandler = () => {
+    setIsBulkDelete(false)
+  }
   return (
     <PageLayerSection isDisplaySearchBar ActualEmiCalculate={openCalculator} ActualEligibilityCalculate={openEligibility}>
       <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility} />
       <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={isError}
+        autoHideDuration={10000}
+        onClose={closeSnackbar}
+      >
+        <Alert onClose={closeSnackbar} severity="error">
+          {alertMessage}
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={isSuccess}
+        autoHideDuration={5000}
+        onClose={closeSnackbar}
+      >
+        <Alert onClose={closeSnackbar} severity="info">
+          {alertMessage}
+        </Alert>
+      </Snackbar>
       <div className='mainContainer'>
-        <h3>Fresh Leads(34)</h3>
+        <h3>Fresh Leads({totalUploadLeads})</h3>
         <div className="filterBtnContainer" onClick={openDrawer}>
           <div className="filterImage">
             <img src={filter} alt="" />
@@ -251,7 +365,7 @@ export default function FreshLead() {
       </div>
       <Drawer anchor='right' open={isDrawer} onClose={closeDrawer}>
         <div className='rightSideContainer'>
-          <form>
+          <form onSubmit={filteredDataHandler}>
             <Grid container justifyContent="flex-start">
               <h4>Search Here</h4>
             </Grid>
@@ -260,28 +374,59 @@ export default function FreshLead() {
                 className='textField'
                 type="date"
                 id="outlined-full-width"
-                label="From"
+                label="Uploaded From"
                 style={{ margin: 8 }}
                 margin="normal"
                 InputLabelProps={{
                   shrink: true,
                 }}
                 variant="outlined"
-                size="small" />
+                size="small"
+                value={uploadedFrom}
+                onChange={(e) => setUploadedFrom(e.target.value)} />
             </Grid>
             <Grid>
               <TextField
                 className='textField'
                 type="date"
                 id="outlined-full-width"
-                label="To"
+                label="Uploaded To"
                 style={{ margin: 8 }}
                 margin="normal"
                 InputLabelProps={{
                   shrink: true,
                 }}
                 variant="outlined"
-                size="small" />
+                size="small"
+                value={uploadedTo}
+                onChange={(e) => setUploadedTo(e.target.value)} />
+            </Grid>
+            <Grid>
+              <TextField
+                className="textField"
+                select
+                id="outlined-full-width"
+                label="Loan Type"
+                style={{ margin: 8 }}
+                margin="normal"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                SelectProps={{
+                  native: true,
+                }}
+                variant="outlined"
+                size="small"
+                value={loanType}
+                onChange={(e) => setLoanType(e.target.value)}
+              >
+                <option value="">Select</option>
+                <option value="PL">Personal Loan</option>
+                <option value="BL">Business Loan</option>
+                <option value="CC">Credit Card</option>
+                <option value="HL">Home Loan</option>
+                <option value="LAP">Loan Against Property</option>
+              </TextField>
             </Grid>
             <Grid>
               <TextField
@@ -299,6 +444,8 @@ export default function FreshLead() {
                 }}
                 variant="outlined"
                 size="small"
+                value={campaign}
+                onChange={(e) => setCampaign(e.target.value)}
               >
                 <option value="">Select</option>
                 {campaignData.map((item, index) => (
@@ -324,7 +471,7 @@ export default function FreshLead() {
         <Table className={classes.table} aria-label="simple table" stickyHeader>
           <TableHead className={classes.tableheading}>
             <TableRow>
-              <TableCell className={classes.tableheading}><Checkbox /></TableCell>
+              <TableCell className={classes.tableheading}>SL NO</TableCell>
               <TableCell className={classes.tableheading}>Lead ID</TableCell>
               <TableCell className={classes.tableheading}>Name</TableCell>
               <TableCell className={classes.tableheading}>Mobile</TableCell>
@@ -345,7 +492,7 @@ export default function FreshLead() {
               freshLeads.map((lead, index) => {
                 return (
                   <TableRow className={classes.oddEvenRow} key={index}>
-                    <TableCell className={classes.tabledata}><Checkbox /></TableCell>
+                    <TableCell className={classes.tabledata}>{index + 1}</TableCell>
                     <TableCell className={classes.tabledata}>{lead.lead_crm_id}</TableCell>
                     <TableCell className={classes.tabledata}>{lead.name ? lead.name : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>{lead.phone_no_encrypt ? decryptedData(lead.phone_no_encrypt) : 'NA'}</TableCell>
@@ -372,6 +519,21 @@ export default function FreshLead() {
                 )
               })
               : <span className={classes.emptydata}>No Data Found</span>}
+            <>
+              <Dialog open={isBulkDelete}>
+                <DialogTitle>Are You Want to Delete Fresh Leads?</DialogTitle>
+                <DialogContent className='confirmDialogContainer'>
+                  <Button className='deleteButton'
+                    color='primary'
+                    variant="contained"
+                    onClick={confirmBulkDelete}>Yes</Button>
+                  <Button className='deleteButton'
+                    color='primary'
+                    variant="contained"
+                    onClick={closePopupHandler}>No</Button>
+                </DialogContent>
+              </Dialog>
+            </>
           </TableBody>
         </Table>
       </TableContainer>
@@ -379,10 +541,11 @@ export default function FreshLead() {
         <div className='bulkDeletedContainer'>
           <Button
             className='bulkDeleteBtn'
+            disabled={!uploadedFrom && !uploadedTo && !loanType && !campaign}
             startIcon={<DeleteIcon />}
+            onClick={bulkDeleteHandler}
           >
-            Deleted Selected</Button>
-          <div className="selectedText">14 Leads Selected</div>
+            Bulk Delete</Button>
         </div>
         <div className="paginationRightContainer">
           <div className="rowsPerPage">Rows Per Page: {rowsPerPage}</div>

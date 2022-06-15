@@ -156,26 +156,18 @@
 }
 
 .paginationContainer .bulkDeletedContainer .bulkDeleteBtn {
-  width: 12.08333vw;
+  width: 10.83333vw;
   height: 2.08333vw;
-  background-color: #ffffff;
+  background-color: #fff;
+  color: #8f9bb3;
   border: 1px solid #8f9bb3;
   font-size: 0.83333vw;
 }
 
-.paginationContainer .bulkDeletedContainer .selectedText {
-  margin-left: 1.04167vw;
-  font-size: 0.83333vw;
-  line-height: 0.97222vw;
-  color: #000000;
-}
-
-.paginationContainer .bulkDeletedContainer .MuiIconButton-root {
-  color: #8f9bb3 !important;
-}
-
-.paginationContainer .bulkDeletedContainer .MuiButton-root {
-  color: #8f9bb3 !important;
+.paginationContainer .bulkDeletedContainer .bulkDeleteBtn:hover {
+  background-color: #fff;
+  color: #535ad1;
+  border: 1px solid #535ad1;
 }
 
 .paginationContainer .paginationRightContainer {
@@ -189,5 +181,21 @@
 
 .paginationContainer .paginationRightContainer .rowsPerPage {
   margin-right: 2.70833vw;
+}
+
+.confirmDialogContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+  margin-bottom: 20px;
+}
+
+.confirmDialogContainer .deleteButton {
+  width: 8.68056vw;
+  background-color: #535ad1;
+  cursor: pointer;
 }
 /*# sourceMappingURL=freshLead.css.map */
