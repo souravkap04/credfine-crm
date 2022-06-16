@@ -144,6 +144,7 @@ export default function FreshLead() {
   const [alertMessage, setAlertMessage] = useState("");
   const [isError, setIsError] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [totalDeleteLeads, setTotalDeleteLeads] = useState(0);
   const splitUrl = (data) => {
     if (data !== null) {
       const [url, pager] = data.split('?');
@@ -151,29 +152,32 @@ export default function FreshLead() {
     }
   }
   useEffect(() => {
-    const fetchFreshLeads = async () => {
-      setisLoading(true)
-      const headers = {
-        'Authorization': `Token ${profileData.token}`,
-        'userRoleHash': `${profileData.user_roles[0].user_role_hash}`
-      };
-      await axios.get(`${baseUrl}/leads/freshLeads/`, { headers })
-        .then((response) => {
-          setRowsPerPage(response.data.results.length)
-          settotalDataPerPage(response.data.results.length)
-          setFreshLeads(response.data.results);
-          setPrevPage(response.data.previous);
-          setNextPage(response.data.next);
-          setTotalUploadLeads(response.data.count);
-          setisLoading(false)
-        }).catch((error) => {
-          if (error.response.status === 401) {
-            setisLoading(false)
-          }
-        })
-    };
     fetchFreshLeads();
   }, [deleteCount])
+  const fetchFreshLeads = async () => {
+    setisLoading(true)
+    const headers = {
+      'Authorization': `Token ${profileData.token}`,
+      'userRoleHash': `${profileData.user_roles[0].user_role_hash}`
+    };
+    await axios.get(`${baseUrl}/leads/freshLeads/`, { headers })
+      .then((response) => {
+        setRowsPerPage(response.data.results.length)
+        settotalDataPerPage(response.data.results.length)
+        setFreshLeads(response.data.results);
+        setPrevPage(response.data.previous);
+        setNextPage(response.data.next);
+        setTotalUploadLeads(response.data.count);
+        setisLoading(false)
+      }).catch((error) => {
+        if (error.response.status === 401) {
+          setAlertMessage(error.response.data.error)
+          setIsError(true)
+        } else {
+          console.log(error)
+        }
+      })
+  };
   const nextPageHandler = async () => {
     setisLoading(true)
     const headers = {
@@ -191,7 +195,12 @@ export default function FreshLead() {
         setTotalUploadLeads(response.data.count);
         setisLoading(false)
       }).catch((error) => {
-        setisLoading(false)
+        if (error.response.status === 401) {
+          setAlertMessage(error.response.data.error)
+          setIsError(true)
+        } else {
+          console.log(error)
+        }
       })
   }
   const prevPageHandler = async () => {
@@ -211,7 +220,12 @@ export default function FreshLead() {
         setTotalUploadLeads(response.data.count);
         setisLoading(false)
       }).catch((error) => {
-        setisLoading(false)
+        if (error.response.status === 401) {
+          setAlertMessage(error.response.data.error)
+          setIsError(true)
+        } else {
+          console.log(error)
+        }
       })
   }
 
@@ -305,9 +319,15 @@ export default function FreshLead() {
     await axios.delete(`${baseUrl}/leads/bulkDeleteLead/`, { headers, data })
       .then((response) => {
         if (response.status === 200) {
+          setTotalDeleteLeads(response.data.total)
           setAlertMessage(response.data.msg)
           setIsSuccess(true)
           setIsBulkDelete(false)
+          fetchFreshLeads();
+          setUploadedFrom('')
+          setUploadedTo('')
+          setLoanType('')
+          setCampaign('')
         }
       }).catch((error) => {
         if (error.response.status === 400) {
@@ -328,6 +348,11 @@ export default function FreshLead() {
   }
   const closePopupHandler = () => {
     setIsBulkDelete(false)
+    fetchFreshLeads();
+    setUploadedFrom('')
+    setUploadedTo('')
+    setLoanType('')
+    setCampaign('')
   }
   return (
     <PageLayerSection ActualEmiCalculate={openCalculator} ActualEligibilityCalculate={openEligibility}>
@@ -350,7 +375,7 @@ export default function FreshLead() {
         onClose={closeSnackbar}
       >
         <Alert onClose={closeSnackbar} severity="info">
-          {alertMessage}
+          {totalDeleteLeads + " " + alertMessage}
         </Alert>
       </Snackbar>
       <div className='mainContainer'>
