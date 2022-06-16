@@ -1,231 +1,27 @@
 $desk: 100 / 1440;
+.followUpBtnContainer {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 16 * $desk + vw;
+    .followUpAutoDialerStartBtn {
+        background-color:#14cc9e;
+        cursor: pointer;
+        box-shadow: none;
+    }
+    .followbtn {
+        margin-right: 15 * $desk + vw;
+        margin-left: 15 * $desk + vw;
+        
+    }
+    .followbtn button {
+        background-color: #535ad1;
+        box-shadow: none;
+        span {
+            color: #fff;
+        }
+    }
+}
 .followUpBtnContainer .followUpAutoDialerStartBtn:hover {
     background-color: #14cc9e;
     box-shadow: none;
-}
-.mainContainer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16 * $desk + vw;
-    h3 {
-        font-size: 22 * $desk + vw;
-        color: #4046b2;
-        font-weight: 600;
-        margin-bottom: 0;
-    }
-    .btnContainer {
-        display: flex;
-        align-items: center;
-        .followUpAutoDialerStartBtn {
-            background-color: #14cc9e;
-            cursor: pointer;
-            box-shadow: none;
-            margin-right: 15 * $desk + vw;
-        }
-        .followbtn {
-            margin-right: 15 * $desk + vw;
-        }
-        .followbtn button {
-            background-color: #535ad1;
-            box-shadow: none;
-            span {
-                color: #fff;
-            }
-        }
-        .filterBtnContainer {
-            width: 110 * $desk + vw;
-            height: 36 * $desk + vw;
-            border-radius: 4 * $desk + vw;
-            background-color: #fd914d;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            .filterImage {
-                width: 24 * $desk + vw;
-                height: 34 * $desk + vw;
-                margin-right: 8 * $desk + vw;
-                img {
-                    width: 100%;
-                    height: 100%;
-                    object-fit: contain;
-                }
-            }
-            .filterText {
-                color: #fff;
-            }
-        }
-    }
-}
-.rightSideContainer {
-    .textField2 {
-        width: 121 * $desk + vw;
-        margin-top: 20 * $desk + vw !important;
-        label {
-            color: #535ad1;
-            letter-spacing: 0.4px;
-            font-size: 15.5px;
-        }
-        .MuiOutlinedInput-root {
-            height: 48 * $desk + vw;
-        }
-        .MuiOutlinedInput-notchedOutline {
-            border: 2px solid #c5cee0;
-        }
-        .MuiInputAdornment-root {
-            opacity: 0.6;
-        }
-        .MuiInputBase-input {
-            font-size: 16 * $desk + vw;
-        }
-    }
-}
-.paginationContainer {
-    background-color: #ffffff;
-    width: 100%;
-    height: 75 * $desk + vw;
-    margin-top: 25px * $desk + vw;
-    padding-left: 16 * $desk + vw;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    .assignToContainer {
-        display: flex;
-        align-items: center;
-        .listGroup {
-            position: absolute;
-            z-index: 100;
-            max-width: 230 * $desk + vw;
-            max-height: 328 * $desk + vw;
-            bottom: 85 * $desk + vw;
-            background-color: #ffffff;
-            border: 1 * $desk + vw solid #8f9bb3;
-            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-            border-radius: 4 * $desk + vw;
-            margin-left: 7 * $desk + vw;
-            overflow-y: unset;
-            .searchMainContainer {
-                display: flex;
-                align-items: center;
-                margin-top: 16 * $desk + vw;
-                margin-left: 12 * $desk + vw;
-                margin-right: 12 * $desk + vw;
-                margin-bottom: 16 * $desk + vw;
-                .searchContainer {
-                    position: relative;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    width: 240 * $desk + vw;
-                    height: 42 * $desk + vw;
-                    border-radius: 4 * $desk + vw;
-                    border: solid 1px #8f9bb3;
-                    background-color: #fff;
-                    .searchIconContainer {
-                        margin-right: 8 * $desk + vw;
-                        margin-left: 8 * $desk + vw;
-                        .searchIcon {
-                            font-size: 28 * $desk + vw;
-                            color: #8f9bb3;
-                        }
-                    }
-                    .inputContainer input {
-                        width: 95% !important;
-                        font-size: 16 * $desk + vw;
-                        color: #8f9bb3;
-                        margin-left: 5px;
-                    }
-                    .inputContainer::placeholder {
-                        color: #8f9bb3;
-                    }
-                }
-            }
-            .closeListGroup {
-                background-color: #fff;
-                border-radius: 50%;
-                color: #8f9bb3;
-                position: absolute;
-                z-index: 1;
-                right: -10 * $desk + vw;
-                top: -10 * $desk + vw;
-            }
-            .listItemContainer {
-                overflow-y: scroll;
-                border-radius: 4 * $desk + vw;
-                width: 230 * $desk + vw;
-                .list-group-item {
-                    cursor: pointer;
-                    border: none;
-                    padding: 0;
-                    width: 100%;
-                    padding-top: 10 * $desk + vw;
-                    padding-bottom: 10 * $desk + vw;
-                    padding-left: 12 * $desk + vw;
-                }
-                .activeListItem {
-                    background-color: #e3edff;
-                }
-                .list-group-item:hover {
-                    background-color: #e3edff;
-                }
-            }
-            .listItemContainer::-webkit-scrollbar {
-                width: 8 * $desk + vw;
-            }
-            .listItemContainer::-webkit-scrollbar-thumb {
-                background-color: #8f9bb3;
-                border-radius: 8 * $desk + vw;
-            }
-            .assignLeadsBtn {
-                width: 186 * $desk + vw;
-                height: 36 * $desk + vw;
-                background: #3ec68c;
-                border-radius: 5 * $desk + vw;
-                margin: auto;
-                margin-bottom: 11 * $desk + vw;
-                margin-top: 11 * $desk + vw;
-                color: #ffffff;
-                cursor: pointer !important;
-                text-transform: capitalize;
-            }
-        }
-        .assignToBtnContainer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 130 * $desk + vw;
-            height: 40 * $desk + vw;
-            background: #ffffff;
-            border: 1px solid #8f9bb3;
-            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-            border-radius: 4 * $desk + vw;
-            padding-left: 10 * $desk + vw;
-            margin-left: 7 * $desk + vw;
-            cursor: pointer;
-            z-index: 1;
-            .assignText {
-                font-weight: 600;
-                font-size: 12 * $desk + vw;
-                color: #8f9bb3;
-            }
-            .MuiSvgIcon-root {
-                color: #8f9bb3;
-            }
-        }
-
-        .selectedText {
-            margin-left: 15 * $desk + vw;
-            font-size: 12 * $desk + vw;
-            line-height: 14 * $desk + vw;
-            color: #000000;
-        }
-    }
-    .paginationRightContainer {
-        display: flex;
-        align-items: center;
-        .rowsPerPage {
-            margin-right: 39 * $desk + vw;
-        }
-    }
 }

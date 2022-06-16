@@ -24,7 +24,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import axios from 'axios';
 import baseUrl from '../../global/api';
-import { getCampaign, getProfileData } from '../../global/leadsGlobalData'
+import { getProfileData } from '../../global/leadsGlobalData'
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
 import EmiCalculator from '../Emicalculator/EmiCalculator';
 import clsx from 'clsx';
@@ -127,7 +127,6 @@ const useStyles = makeStyles({
 export default function FreshLead() {
   const classes = useStyles();
   const profileData = getProfileData();
-  const campaignData = getCampaign();
   const [freshLeads, setFreshLeads] = useState([]);
   const [prevPage, setPrevPage] = useState(null);
   const [nextPage, setNextPage] = useState(null);
@@ -331,7 +330,7 @@ export default function FreshLead() {
     setIsBulkDelete(false)
   }
   return (
-    <PageLayerSection isDisplaySearchBar ActualEmiCalculate={openCalculator} ActualEligibilityCalculate={openEligibility}>
+    <PageLayerSection ActualEmiCalculate={openCalculator} ActualEligibilityCalculate={openEligibility}>
       <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility} />
       <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
       <Snackbar
@@ -388,7 +387,7 @@ export default function FreshLead() {
             <Grid>
               <TextField
                 className='textField'
-                type="date"
+                type="datetime-local"
                 id="outlined-full-width"
                 label="Uploaded To"
                 style={{ margin: 8 }}
@@ -430,30 +429,18 @@ export default function FreshLead() {
             </Grid>
             <Grid>
               <TextField
-                className="textField"
-                select
+                className='textField'
                 id="outlined-full-width"
-                label="Select Campaign"
+                label="Campaign"
                 style={{ margin: 8 }}
                 margin="normal"
                 InputLabelProps={{
                   shrink: true,
                 }}
-                SelectProps={{
-                  native: true,
-                }}
                 variant="outlined"
                 size="small"
                 value={campaign}
-                onChange={(e) => setCampaign(e.target.value)}
-              >
-                <option value="">Select</option>
-                {campaignData.map((item, index) => (
-                  <option key={index} value={item}>
-                    {item}
-                  </option>
-                ))}
-              </TextField>
+                onChange={(e) => setCampaign(e.target.value.toUpperCase())} />
             </Grid>
             <Grid>
               <Button
