@@ -107,7 +107,12 @@ const Paysense = () => {
                     }
                 }
             }).catch((error) => {
-                console.log(error);
+                if (error.response.status === 400) {
+                    setAlertMessage(error.response.data.error)
+                    setIsError(true)
+                } else {
+                    console.log(error);
+                }
             })
 
     }
@@ -184,7 +189,12 @@ const Paysense = () => {
                     setAlertMessage('Your loan request has been declined , because you do not meet our eligibility criteria')
                 }
             }).catch((error) => {
-                console.log(error)
+                if (error.response.status === 400) {
+                    setAlertMessage(error.response.data.error)
+                    setIsError(true)
+                } else {
+                    console.log(error);
+                }
             })
     }
     const closeSnackbar = () => {

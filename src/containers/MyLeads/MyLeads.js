@@ -153,7 +153,6 @@ const useStyles = makeStyles({
     fontSize: "0.8vw",
     textAlign: "center",
     color: "#fff",
-    // width: '75px',
     whiteSpace: "nowrap",
     wordBreak: "break-word",
   },
@@ -594,6 +593,7 @@ export default function MyLeads(props) {
   const closeEligibility = () => {
     setCheckEligibility(false);
   }
+
   return (
     <PageLayerSection isDisplaySearchBar={true} isMyLeadsSearch={true} ActualEmiCalculate={openCalculator} ActualEligibilityCalculate={openEligibility}>
       <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility} />
@@ -955,7 +955,7 @@ export default function MyLeads(props) {
             ) : isMyLeadsSearchData ? (
               myLeadSearchData.length !== 0 ? (
                 myLeadSearchData.map((search, index) => {
-                  let leadPhoneNo = maskPhoneNo(search.phone_no_encrypt);
+                  // let leadPhoneNo = maskPhoneNo(search.phone_no_encrypt);
                   let createdDate = new Date(search.created_date);
                   let currentCreatedDate = createdDate.toLocaleDateString() + " " +
                     moment(createdDate.toLocaleTimeString(), "HH:mm:ss a").format(
@@ -1036,7 +1036,7 @@ export default function MyLeads(props) {
               )
             ) : myLeads.length !== 0 ? (
               myLeads.map((my_leads, index) => {
-                let leadPhoneNo = maskPhoneNo(my_leads.lead.phone_no_encrypt);
+                // let leadPhoneNo = maskPhoneNo(my_leads.lead.phone_no_encrypt);
                 let createdDate = new Date(my_leads.created_date);
                 let currentCreatedDate = createdDate.toLocaleDateString() + " " +
                   moment(createdDate.toLocaleTimeString(), "HH:mm:ss a").format(

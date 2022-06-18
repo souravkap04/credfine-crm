@@ -1,11 +1,21 @@
 import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
+import "./freshLead.css";
+import {
+  Table,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TableBody,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  Typography,
+  TextField,
+  Grid,
+  Button
+} from "@material-ui/core";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ChevronLeftOutlinedIcon from '@material-ui/icons/ChevronLeftOutlined';
 import ChevronRightOutlinedIcon from '@material-ui/icons/ChevronRightOutlined';
@@ -18,10 +28,18 @@ import { getProfileData } from '../../global/leadsGlobalData'
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
 import EmiCalculator from '../Emicalculator/EmiCalculator';
 import clsx from 'clsx';
+import filter from "../../images/filter.png";
+import Checkbox from '@material-ui/core/Checkbox';
 import EligibilityCalculator from '../EligibilityCalculator/EligibilityCalculator';
+import { Drawer } from '@mui/material';
+import MuiAlert from "@material-ui/lab/Alert";
+import Snackbar from "@material-ui/core/Snackbar";
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 const useStyles = makeStyles({
   container: {
-    overflow: 'auto',
+    maxHeight: '67vh',
     marginBottom: '10px'
   },
   table: {
@@ -35,26 +53,8 @@ const useStyles = makeStyles({
   tabledata: {
     fontSize: '12px',
   },
-  tablePagination: {
-    backgroundColor: '#ffffff',
-    width: '100%',
-    height: '64px',
-    marginTop: '8px',
-    marginBottom: '25px',
-    display: 'flex',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  },
   numberOfTotalCount: {
     marginRight: '25px'
-  },
-  rowsPerPageContainer: {
-    marginRight: '70px',
-    display: 'flex',
-    alignItems: 'center'
-  },
-  rowsText: {
-    marginRight: '8px'
   },
   buttonsContainer: {
     marginRight: '15px'
@@ -122,7 +122,7 @@ const useStyles = makeStyles({
     // width: '75px',
     whiteSpace: 'nowrap',
     wordBreak: 'break-word'
-  }
+  },
 });
 export default function FreshLead() {
   const classes = useStyles();
@@ -130,11 +130,21 @@ export default function FreshLead() {
   const [freshLeads, setFreshLeads] = useState([]);
   const [prevPage, setPrevPage] = useState(null);
   const [nextPage, setNextPage] = useState(null);
-  const [totalUploadLeads, setTotalUploadLeads] = useState(null);
+  const [totalUploadLeads, setTotalUploadLeads] = useState(0);
   const [deleteCount, setDeleteCount] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(100);
+  const [rowsPerPage, setRowsPerPage] = useState(100);
   const [totalDataPerPage, settotalDataPerPage] = useState(0);
   const [isLoading, setisLoading] = useState(false);
+  const [isDrawer, setIsDrawer] = useState(false);
+  const [uploadedFrom, setUploadedFrom] = useState("");
+  const [uploadedTo, setUploadedTo] = useState('');
+  const [loanType, setLoanType] = useState('');
+  const [campaign, setCampaign] = useState('');
+  const [isBulkDelete, setIsBulkDelete] = useState(false)
+  const [alertMessage, setAlertMessage] = useState("");
+  const [isError, setIsError] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [totalDeleteLeads, setTotalDeleteLeads] = useState(0);
   const splitUrl = (data) => {
     if (data !== null) {
       const [url, pager] = data.split('?');
@@ -142,29 +152,32 @@ export default function FreshLead() {
     }
   }
   useEffect(() => {
-    const fetchFreshLeads = async () => {
-      setisLoading(true)
-      const headers = {
-        'Authorization': `Token ${profileData.token}`,
-        'userRoleHash': `${profileData.user_roles[0].user_role_hash}`
-      };
-      await axios.get(`${baseUrl}/leads/freshLeads/`, { headers })
-        .then((response) => {
-          setRowsPerPage(response.data.results.length)
-          settotalDataPerPage(response.data.results.length)
-          setFreshLeads(response.data.results);
-          setPrevPage(response.data.previous);
-          setNextPage(response.data.next);
-          setTotalUploadLeads(response.data.count);
-          setisLoading(false)
-        }).catch((error) => {
-          if (error.response.status === 401) {
-            setisLoading(false)
-          }
-        })
-    };
     fetchFreshLeads();
   }, [deleteCount])
+  const fetchFreshLeads = async () => {
+    setisLoading(true)
+    const headers = {
+      'Authorization': `Token ${profileData.token}`,
+      'userRoleHash': `${profileData.user_roles[0].user_role_hash}`
+    };
+    await axios.get(`${baseUrl}/leads/freshLeads/`, { headers })
+      .then((response) => {
+        setRowsPerPage(response.data.results.length)
+        settotalDataPerPage(response.data.results.length)
+        setFreshLeads(response.data.results);
+        setPrevPage(response.data.previous);
+        setNextPage(response.data.next);
+        setTotalUploadLeads(response.data.count);
+        setisLoading(false)
+      }).catch((error) => {
+        if (error.response.status === 401) {
+          setAlertMessage(error.response.data.error)
+          setIsError(true)
+        } else {
+          console.log(error)
+        }
+      })
+  };
   const nextPageHandler = async () => {
     setisLoading(true)
     const headers = {
@@ -182,7 +195,12 @@ export default function FreshLead() {
         setTotalUploadLeads(response.data.count);
         setisLoading(false)
       }).catch((error) => {
-        setisLoading(false)
+        if (error.response.status === 401) {
+          setAlertMessage(error.response.data.error)
+          setIsError(true)
+        } else {
+          console.log(error)
+        }
       })
   }
   const prevPageHandler = async () => {
@@ -202,7 +220,12 @@ export default function FreshLead() {
         setTotalUploadLeads(response.data.count);
         setisLoading(false)
       }).catch((error) => {
-        setisLoading(false)
+        if (error.response.status === 401) {
+          setAlertMessage(error.response.data.error)
+          setIsError(true)
+        } else {
+          console.log(error)
+        }
       })
   }
 
@@ -211,7 +234,7 @@ export default function FreshLead() {
     const data = { lead_crm_id: leadId };
     const headers = {
       'Authorization': `Token ${profileData.token}`,
-      'userRoleHash': `${profileData.user_roles[0].user_role_hash}`
+      'userRoleHash': `${profileData.user_roles[0].user_role_hash}`,
     };
     await axios.delete(`${baseUrl}/leads/freshLeads/`, { headers, data })
       .then((response) => {
@@ -226,12 +249,12 @@ export default function FreshLead() {
     return phoneNo;
   }
   const [openCalculate, setopenCalculate] = useState(false);
-  const [checkEligibility,setCheckEligibility] = useState(false);
-  
-  const openEligibility = () =>{
+  const [checkEligibility, setCheckEligibility] = useState(false);
+
+  const openEligibility = () => {
     setCheckEligibility(true);
   }
-  const closeEligibility = () =>{
+  const closeEligibility = () => {
     setCheckEligibility(false);
   }
   const openCalculator = () => {
@@ -240,15 +263,227 @@ export default function FreshLead() {
   const closeCalculator = () => {
     setopenCalculate(false);
   }
+  const openDrawer = () => {
+    setIsDrawer(true)
+  }
+  const closeDrawer = () => {
+    setIsDrawer(false)
+  }
+  const filteredDataHandler = async (event) => {
+    event.preventDefault();
+    if (uploadedFrom === '') {
+      setAlertMessage('Invalid Uploaded From');
+      setIsError(true)
+      return;
+    } else if (uploadedTo === '') {
+      setAlertMessage('Invalid Uploaded To');
+      setIsError(true)
+      return;
+    } else if (loanType === '') {
+      setAlertMessage('Invalid Loan Type');
+      setIsError(true)
+      return;
+    } else if (campaign === '') {
+      setAlertMessage('Invalid Campaign');
+      setIsError(true)
+      return;
+    }
+    closeDrawer();
+    setisLoading(true)
+    const headers = {
+      'Authorization': `Token ${profileData.token}`,
+      'userRoleHash': `${profileData.user_roles[0].user_role_hash}`,
+    };
+    await axios.get(`${baseUrl}/leads/freshLeads/?campaign=${campaign}&loan_type=${loanType}&uploaded_from=${uploadedFrom}&uploaded_to=${uploadedTo}`, { headers })
+      .then((response) => {
+        setRowsPerPage(response.data.results.length)
+        settotalDataPerPage(response.data.results.length)
+        setFreshLeads(response.data.results);
+        setPrevPage(response.data.previous);
+        setNextPage(response.data.next);
+        setTotalUploadLeads(response.data.count);
+        setisLoading(false)
+      }).catch((error) => {
+        console.log(error)
+      })
+  }
+  const bulkDeleteHandler = () => {
+    setIsBulkDelete(true)
+  }
+  const confirmBulkDelete = async () => {
+    setIsBulkDelete(false)
+    const data = { uploaded_from: uploadedFrom, uploaded_to: uploadedTo, loan_type: loanType, campaign: campaign };
+    const headers = {
+      'Authorization': `Token ${profileData.token}`,
+      'userRoleHash': `${profileData.user_roles[0].user_role_hash}`,
+    }
+    await axios.delete(`${baseUrl}/leads/bulkDeleteLead/`, { headers, data })
+      .then((response) => {
+        if (response.status === 200) {
+          setTotalDeleteLeads(response.data.total)
+          setAlertMessage(response.data.msg)
+          setIsSuccess(true)
+          fetchFreshLeads();
+          setUploadedFrom('')
+          setUploadedTo('')
+          setLoanType('')
+          setCampaign('')
+        }
+      }).catch((error) => {
+        if (error.response.status === 400) {
+          setAlertMessage(error.response.data.msg)
+          setIsError(true)
+        } else if (error.response.status === 401) {
+          setAlertMessage(error.response.data.error)
+          setIsError(true)
+        }
+        else {
+          console.log(error)
+        }
+      })
+  }
+  const closeSnackbar = () => {
+    setIsError(false)
+    setIsSuccess(false)
+  }
+  const closePopupHandler = () => {
+    setIsBulkDelete(false)
+    fetchFreshLeads();
+    setUploadedFrom('')
+    setUploadedTo('')
+    setLoanType('')
+    setCampaign('')
+  }
   return (
     <PageLayerSection ActualEmiCalculate={openCalculator} ActualEligibilityCalculate={openEligibility}>
-      <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility}/>
+      <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility} />
       <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={isError}
+        autoHideDuration={10000}
+        onClose={closeSnackbar}
+      >
+        <Alert onClose={closeSnackbar} severity="error">
+          {alertMessage}
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={isSuccess}
+        autoHideDuration={5000}
+        onClose={closeSnackbar}
+      >
+        <Alert onClose={closeSnackbar} severity="info">
+          {totalDeleteLeads + " " + alertMessage}
+        </Alert>
+      </Snackbar>
+      <div className='mainContainer'>
+        <h3>Fresh Leads({totalUploadLeads})</h3>
+        <div className="filterBtnContainer" onClick={openDrawer}>
+          <div className="filterImage">
+            <img src={filter} alt="" />
+          </div>
+          <div className="filterText">FILTER</div>
+        </div>
+      </div>
+      <Drawer anchor='right' open={isDrawer} onClose={closeDrawer}>
+        <div className='rightSideContainer'>
+          <form onSubmit={filteredDataHandler}>
+            <Grid container justifyContent="flex-start">
+              <h4>Search Here</h4>
+            </Grid>
+            <Grid>
+              <TextField
+                className='textField'
+                type="date"
+                id="outlined-full-width"
+                label="Uploaded From"
+                style={{ margin: 8 }}
+                margin="normal"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                variant="outlined"
+                size="small"
+                value={uploadedFrom}
+                onChange={(e) => setUploadedFrom(e.target.value)} />
+            </Grid>
+            <Grid>
+              <TextField
+                className='textField'
+                type="datetime-local"
+                id="outlined-full-width"
+                label="Uploaded To"
+                style={{ margin: 8 }}
+                margin="normal"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                variant="outlined"
+                size="small"
+                value={uploadedTo}
+                onChange={(e) => setUploadedTo(e.target.value)} />
+            </Grid>
+            <Grid>
+              <TextField
+                className="textField"
+                select
+                id="outlined-full-width"
+                label="Loan Type"
+                style={{ margin: 8 }}
+                margin="normal"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                SelectProps={{
+                  native: true,
+                }}
+                variant="outlined"
+                size="small"
+                value={loanType}
+                onChange={(e) => setLoanType(e.target.value)}
+              >
+                <option value="">Select</option>
+                <option value="PL">Personal Loan</option>
+                <option value="BL">Business Loan</option>
+                <option value="CC">Credit Card</option>
+                <option value="HL">Home Loan</option>
+                <option value="LAP">Loan Against Property</option>
+              </TextField>
+            </Grid>
+            <Grid>
+              <TextField
+                className='textField'
+                id="outlined-full-width"
+                label="Campaign"
+                style={{ margin: 8 }}
+                margin="normal"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                variant="outlined"
+                size="small"
+                value={campaign}
+                onChange={(e) => setCampaign(e.target.value.toUpperCase())} />
+            </Grid>
+            <Grid>
+              <Button
+                className='submitBtn'
+                type='submit'
+                color='primary'
+                variant='contained'>
+                Submit
+              </Button>
+            </Grid>
+          </form>
+        </div>
+      </Drawer>
       <TableContainer className={classes.container}>
-        <Table className={classes.table} aria-label="simple table">
+        <Table className={classes.table} aria-label="simple table" stickyHeader>
           <TableHead className={classes.tableheading}>
             <TableRow>
-              <TableCell className={classes.tableheading}>Sr No</TableCell>
+              <TableCell className={classes.tableheading}>SL NO</TableCell>
               <TableCell className={classes.tableheading}>Lead ID</TableCell>
               <TableCell className={classes.tableheading}>Name</TableCell>
               <TableCell className={classes.tableheading}>Mobile</TableCell>
@@ -286,7 +521,8 @@ export default function FreshLead() {
                     <TableCell className={classes.tabledata}>{lead.campaign_category ? lead.campaign_category : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>
                       <Tooltip title="Delete Lead">
-                        <IconButton onClick={() => deleteFreshLead(lead.lead_crm_id)}>
+                        <IconButton
+                          onClick={() => deleteFreshLead(lead.lead_crm_id)}>
                           <DeleteIcon />
                         </IconButton>
                       </Tooltip>
@@ -295,33 +531,57 @@ export default function FreshLead() {
                 )
               })
               : <span className={classes.emptydata}>No Data Found</span>}
+            <>
+              <Dialog open={isBulkDelete}>
+                <DialogTitle>Are You Want to Delete Fresh Leads?</DialogTitle>
+                <DialogContent className='confirmDialogContainer'>
+                  <Button className='deleteButton'
+                    color='primary'
+                    variant="contained"
+                    onClick={confirmBulkDelete}>Yes</Button>
+                  <Button className='deleteButton'
+                    color='primary'
+                    variant="contained"
+                    onClick={closePopupHandler}>No</Button>
+                </DialogContent>
+              </Dialog>
+            </>
           </TableBody>
         </Table>
       </TableContainer>
-      {isLoading ? '' : <div className={classes.tablePagination}>
-        <div className={classes.rowsPerPageContainer}>
-          <div className={classes.rowsText}>Rows Per Page: {rowsPerPage}</div>
+      {isLoading ? '' : <div className="paginationContainer">
+        <div className='bulkDeletedContainer'>
+          <Button
+            className='bulkDeleteBtn'
+            disabled={!uploadedFrom && !uploadedTo && !loanType && !campaign}
+            startIcon={<DeleteIcon />}
+            onClick={bulkDeleteHandler}
+          >
+            Bulk Delete</Button>
         </div>
-        <div className={classes.numberOfTotalCount}>{totalDataPerPage} of {totalUploadLeads}</div>
-        <div className={classes.buttonsContainer}>
-          {prevPage === null ? <IconButton disabled
-            onClick={prevPageHandler}
-          >
-            <ChevronLeftOutlinedIcon />
-          </IconButton> : <IconButton
-            onClick={prevPageHandler}
-          >
-            <ChevronLeftOutlinedIcon className={prevPage !== null ? classes.activeColor : ''} />
-          </IconButton>}
-          {nextPage === null ? <IconButton disabled
-            onClick={nextPageHandler}
-          >
-            <ChevronRightOutlinedIcon />
-          </IconButton> : <IconButton
-            onClick={nextPageHandler}
-          >
-            <ChevronRightOutlinedIcon className={nextPage !== null ? classes.activeColor : ''} />
-          </IconButton>}
+        <div className="paginationRightContainer">
+          <div className="rowsPerPage">Rows Per Page: {rowsPerPage}</div>
+          <div className={classes.numberOfTotalCount}>{totalDataPerPage} of {totalUploadLeads}</div>
+          <div className={classes.buttonsContainer}>
+            {prevPage === null ? <IconButton disabled
+              onClick={prevPageHandler}
+            >
+              <ChevronLeftOutlinedIcon />
+            </IconButton> : <IconButton
+              onClick={prevPageHandler}
+            >
+              <ChevronLeftOutlinedIcon className={prevPage !== null ? classes.activeColor : ''} />
+            </IconButton>}
+            {nextPage === null ? <IconButton disabled
+              onClick={nextPageHandler}
+            >
+              <ChevronRightOutlinedIcon />
+            </IconButton> : <IconButton
+              onClick={nextPageHandler}
+            >
+              <ChevronRightOutlinedIcon className={nextPage !== null ? classes.activeColor : ''} />
+            </IconButton>}
+          </div>
         </div>
       </div>}
     </PageLayerSection>
