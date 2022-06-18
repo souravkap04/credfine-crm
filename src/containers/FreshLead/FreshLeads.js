@@ -311,6 +311,7 @@ export default function FreshLead() {
     setIsBulkDelete(true)
   }
   const confirmBulkDelete = async () => {
+    setIsBulkDelete(false)
     const data = { uploaded_from: uploadedFrom, uploaded_to: uploadedTo, loan_type: loanType, campaign: campaign };
     const headers = {
       'Authorization': `Token ${profileData.token}`,
@@ -322,7 +323,6 @@ export default function FreshLead() {
           setTotalDeleteLeads(response.data.total)
           setAlertMessage(response.data.msg)
           setIsSuccess(true)
-          setIsBulkDelete(false)
           fetchFreshLeads();
           setUploadedFrom('')
           setUploadedTo('')
