@@ -324,10 +324,6 @@ export default function FreshLead() {
           setAlertMessage(response.data.msg)
           setIsSuccess(true)
           fetchFreshLeads();
-          setUploadedFrom('')
-          setUploadedTo('')
-          setLoanType('')
-          setCampaign('')
         }
       }).catch((error) => {
         if (error.response.status === 400) {
@@ -349,10 +345,6 @@ export default function FreshLead() {
   const closePopupHandler = () => {
     setIsBulkDelete(false)
     fetchFreshLeads();
-    setUploadedFrom('')
-    setUploadedTo('')
-    setLoanType('')
-    setCampaign('')
   }
   return (
     <PageLayerSection ActualEmiCalculate={openCalculator} ActualEligibilityCalculate={openEligibility}>
