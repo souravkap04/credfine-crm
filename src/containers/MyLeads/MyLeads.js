@@ -175,7 +175,7 @@ export default function MyLeads(props) {
   const [prevPage, setPrevPage] = useState(null);
   const [nextPage, setNextPage] = useState(null);
   const [totalLeads, setTotalLeads] = useState(null);
-  const [rowsPerPage, setRowsPerPage] = React.useState(100);
+  const [rowsPerPage, setRowsPerPage] = useState(100);
   const [totalDataPerPage, settotalDataPerPage] = useState(0);
   const [dialerCall, setDialerCall] = useState(false);
   const [disableHangupBtn, setDisableHangupBtn] = useState(true);

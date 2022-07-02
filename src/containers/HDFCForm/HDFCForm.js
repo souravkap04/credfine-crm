@@ -253,11 +253,11 @@ export default function HDFCFrom() {
         let mobRegex = /^[0-9]{10}$/g.test(mobileNo);
         let pinCodeRegex = /^[0-9]{6}$/g.test(pincode);
         let officePinRegex = /^[0-9]{6}$/g.test(officePincode);
-        let address1Regex = /^[a-zA-Z0-9]{1,40}$/.test(addressLineOne);
-        let address2Regex = /^[a-zA-Z0-9]{1,40}$/.test(addressLineTwo);
-        let address3Regex = /^[a-zA-Z0-9]{1,40}$/.test(addressLineThree);
-        let officeAddress1Regex = /^[a-zA-Z0-9]{1,40}$/.test(officeAddressOne);
-        let officeAddress2Regex = /^[a-zA-Z0-9]{1,40}$/.test(officeAddressTwo);
+        let address1Regex = /^[a-zA-Z0-9\s,/.]{1,40}$/.test(addressLineOne);
+        let address2Regex = /^[a-zA-Z0-9\s,/.]{1,40}$/.test(addressLineTwo);
+        let address3Regex = /^[a-zA-Z0-9\s,/.]{1,40}$/.test(addressLineThree);
+        let officeAddress1Regex = /^[a-zA-Z0-9\s,/.]{1,40}$/.test(officeAddressOne);
+        let officeAddress2Regex = /^[a-zA-Z0-9\s,/.]{1,40}$/.test(officeAddressTwo);
         if (panCardNo === '' || !panRegex) {
             setAlertMessage("Invalid Pan Number");
             setIsError(true);
