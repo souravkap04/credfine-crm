@@ -286,7 +286,7 @@ export default function PersonalLoanForm() {
                         setCurrentResidentType(response.data.eligibility_data.residence_type);
                         setYearsInCurrentCity(response.data.eligibility_data.no_of_years_current_city);
                         setRoi(response.data.lead_extra_details.roi);
-                        setRequiredRoi(response.data.lead_data.data.req_roi)
+                        setRequiredRoi(response.data.lead_data.data.roi)
                         setGender(response.data.lead_data.data.gender);
                         setTenure(response.data.lead_data.data.tenure);
                         setFatherName(response.data.lead_data.data.father_name);
@@ -345,9 +345,9 @@ export default function PersonalLoanForm() {
     }
     const updateLeadDetails = async (id) => {
         let data = {
-            dob: date, monthly_income: monthlyIncome, current_company_name: companyName,pan_no: pancardNo,
+            dob: date, monthly_income: monthlyIncome, current_company_name: companyName, pan_no: pancardNo,
             residential_pincode: pincode, city: city, state: states, current_company: currentCompany, employment_type: employmentType, credi_card_balance_transfer: creditCardbalanceTransfer,
-            gender: gender, req_roi: requiredRoi, tenure: tenure, father_name: fatherName, mother_name: motherName, marital_status: maritalStatus,
+            gender: gender, roi: requiredRoi, tenure: tenure, father_name: fatherName, mother_name: motherName, marital_status: maritalStatus,
             adhaar_no: adhaarNo, no_of_dependence: noOfDependent, address_one: addressOne, address_two: addressTwo,
             address_three: addressThree, current_address_vintage: currentAddressVintage, permanent_address_one: permanentAddressOne,
             permanent_address_two: permanentAddressTwo, permanent_address_three: permanentAddressThree, permanent_pincode: permanentPincode,
