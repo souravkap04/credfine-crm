@@ -158,7 +158,7 @@ const Loanbaba = () => {
     }
     return (
         <div className='LoanbabaContainer'>
-            <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isError} autoHideDuration={1500} onClose={closeSnackbar}>
+            <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isError} autoHideDuration={10000} onClose={closeSnackbar}>
                 <Alert onClose={closeSnackbar} severity="error">
                     {alertMessage}
                 </Alert>

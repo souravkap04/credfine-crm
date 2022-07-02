@@ -153,7 +153,6 @@ const useStyles = makeStyles({
     fontSize: "0.8vw",
     textAlign: "center",
     color: "#fff",
-    // width: '75px',
     whiteSpace: "nowrap",
     wordBreak: "break-word",
   },
@@ -176,7 +175,7 @@ export default function MyLeads(props) {
   const [prevPage, setPrevPage] = useState(null);
   const [nextPage, setNextPage] = useState(null);
   const [totalLeads, setTotalLeads] = useState(null);
-  const [rowsPerPage, setRowsPerPage] = React.useState(100);
+  const [rowsPerPage, setRowsPerPage] = useState(100);
   const [totalDataPerPage, settotalDataPerPage] = useState(0);
   const [dialerCall, setDialerCall] = useState(false);
   const [disableHangupBtn, setDisableHangupBtn] = useState(true);
@@ -594,6 +593,7 @@ export default function MyLeads(props) {
   const closeEligibility = () => {
     setCheckEligibility(false);
   }
+
   return (
     <PageLayerSection isDisplaySearchBar={true} isMyLeadsSearch={true} ActualEmiCalculate={openCalculator} ActualEligibilityCalculate={openEligibility}>
       <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility} />
@@ -955,7 +955,7 @@ export default function MyLeads(props) {
             ) : isMyLeadsSearchData ? (
               myLeadSearchData.length !== 0 ? (
                 myLeadSearchData.map((search, index) => {
-                  let leadPhoneNo = maskPhoneNo(search.phone_no_encrypt);
+                  // let leadPhoneNo = maskPhoneNo(search.phone_no_encrypt);
                   let createdDate = new Date(search.created_date);
                   let currentCreatedDate = createdDate.toLocaleDateString() + " " +
                     moment(createdDate.toLocaleTimeString(), "HH:mm:ss a").format(
@@ -1036,7 +1036,7 @@ export default function MyLeads(props) {
               )
             ) : myLeads.length !== 0 ? (
               myLeads.map((my_leads, index) => {
-                let leadPhoneNo = maskPhoneNo(my_leads.lead.phone_no_encrypt);
+                // let leadPhoneNo = maskPhoneNo(my_leads.lead.phone_no_encrypt);
                 let createdDate = new Date(my_leads.created_date);
                 let currentCreatedDate = createdDate.toLocaleDateString() + " " +
                   moment(createdDate.toLocaleTimeString(), "HH:mm:ss a").format(
