@@ -1122,7 +1122,7 @@ export default function LeadDetailsNew(props) {
                     Status Successfully Updated
                 </Alert>
             </Snackbar>
-            <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isLeadError} autoHideDuration={1500} onClose={disableHangUpSnacks}>
+            <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isLeadError} autoHideDuration={10000} onClose={disableHangUpSnacks}>
                 <Alert onClose={disableHangUpSnacks} severity="error">
                     {alertMessage}
                 </Alert>
