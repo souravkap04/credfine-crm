@@ -22,8 +22,8 @@ import FormControl from '@material-ui/core/FormControl';
 import ListItemText from '@material-ui/core/ListItemText';
 import Select from '@material-ui/core/Select';
 import Checkbox from '@material-ui/core/Checkbox';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { Form, Row, Col, InputGroup } from 'react-bootstrap';
-import * as ReactBootstrap from "react-bootstrap";
 import axios from 'axios';
 import baseUrl from '../../global/api';
 import { getProfileData } from '../../global/leadsGlobalData'
@@ -53,17 +53,8 @@ const useStyles = makeStyles({
     color: '#fff',
     boxShadow: 'none'
   },
-  scroller: {
-    overflow: 'auto',
-    // maxHeight: '500px',
-    marginBottom: '25px'
-  },
   table: {
     width: "100%",
-  },
-  loader: {
-    position: "relative",
-    left: "35em",
   },
   cnfrmPasswordBtn: {
     borderRadius: '15px',
@@ -145,12 +136,12 @@ const useStyles = makeStyles({
 });
 export default function Users() {
   const [openCalculate, setopenCalculate] = useState(false);
-  const [checkEligibility,setCheckEligibility] = useState(false);
-  
-  const openEligibility = () =>{
+  const [checkEligibility, setCheckEligibility] = useState(false);
+
+  const openEligibility = () => {
     setCheckEligibility(true);
   }
-  const closeEligibility = () =>{
+  const closeEligibility = () => {
     setCheckEligibility(false);
   }
   const openCalculator = () => {
@@ -428,7 +419,7 @@ export default function Users() {
   }
   return (
     <PageLayerSection ActualEmiCalculate={openCalculator} ActualEligibilityCalculate={openEligibility}>
-      <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility}/>
+      <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility} />
       <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
       <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isDisplay} autoHideDuration={1500} onClose={closeSnankBar}>
         <Alert>
@@ -465,8 +456,8 @@ export default function Users() {
                 variant="contained" onClick={listOfDeletedUsers}>Deleted User</Button>
             </div>
           </div>
-          <TableContainer className={classes.scroller}>
-            <Table className={classes.table + ' tableMainContainer'}>
+          <TableContainer className="scroller">
+            <Table className={classes.table} stickyHeader>
               <TableHead className={classes.tableheading}>
                 <TableRow>
                   <TableCell className={classes.tableheading}>Sr No</TableCell>
@@ -479,8 +470,8 @@ export default function Users() {
                   <TableCell className={classes.tableheading}>Phone No</TableCell>
                   <TableCell className={classes.tableheading}>Gender</TableCell>
                   {/* <TableCell className={classes.tableheading}>DIALER API Key</TableCell> */}
-                  <TableCell className={classes.tableheading}>Vertage Id</TableCell>
-                  <TableCell className={classes.tableheading}>Vertage Pass</TableCell>
+                  <TableCell className={classes.tableheading}>Dialer Id</TableCell>
+                  {/* <TableCell className={classes.tableheading}>Vertage Pass</TableCell> */}
                   <TableCell className={classes.tableheading}>Parent</TableCell>
                   <TableCell className={classes.tableheading}>Location</TableCell>
                   <TableCell className={classes.tableheading}></TableCell>
@@ -514,7 +505,7 @@ export default function Users() {
                         <TableCell className={classes.tableData}>{user.gender}</TableCell>
                         {/* <TableCell className={classes.tableData}>{user.myuser.dialer_pass}</TableCell> */}
                         <TableCell className={classes.tableData}>{user.myuser.vertage_id}</TableCell>
-                        <TableCell className={classes.tableData}>{user.myuser.vertage_pass}</TableCell>
+                        {/* <TableCell className={classes.tableData}>{user.myuser.vertage_pass}</TableCell> */}
                         <TableCell className={classes.tableData}>{user.myuser.parent_id}</TableCell>
                         <TableCell className={classes.tableData}>{user.myuser.location.join(',')}</TableCell>
                         <TableCell className={classes.tableIconData}>
@@ -555,7 +546,7 @@ export default function Users() {
                         <TableCell className={classes.tableData}>{user.gender}</TableCell>
                         {/* <TableCell className={classes.tableData}>{user.myuser.dialer_pass}</TableCell> */}
                         <TableCell className={classes.tableData}>{user.myuser.vertage_id}</TableCell>
-                        <TableCell className={classes.tableData}>{user.myuser.vertage_pass}</TableCell>
+                        {/* <TableCell className={classes.tableData}>{user.myuser.vertage_pass}</TableCell> */}
                         <TableCell className={classes.tableData}>{user.myuser.parent_id}</TableCell>
                         <TableCell className={classes.tableData}>{user.myuser.location.join(',')}</TableCell>
                         <TableCell className={classes.tableIconData}>
@@ -596,7 +587,7 @@ export default function Users() {
                         <TableCell className={classes.tableData}>{user.gender}</TableCell>
                         {/* <TableCell className={classes.tableData}>{user.myuser.dialer_pass}</TableCell> */}
                         <TableCell className={classes.tableData}>{user.myuser.vertage_id}</TableCell>
-                        <TableCell className={classes.tableData}>{user.myuser.vertage_pass}</TableCell>
+                        {/* <TableCell className={classes.tableData}>{user.myuser.vertage_pass}</TableCell> */}
                         <TableCell className={classes.tableData}>{user.myuser.parent_id}</TableCell>
                         <TableCell className={classes.tableData}>{user.myuser.location.join(',')}</TableCell>
                         <TableCell className={classes.tableIconData}>
@@ -637,7 +628,7 @@ export default function Users() {
                         <TableCell className={classes.tableData}>{user.gender}</TableCell>
                         {/* <TableCell className={classes.tableData}>{user.myuser.dialer_pass}</TableCell> */}
                         <TableCell className={classes.tableData}>{user.myuser.vertage_id}</TableCell>
-                        <TableCell className={classes.tableData}>{user.myuser.vertage_pass}</TableCell>
+                        {/* <TableCell className={classes.tableData}>{user.myuser.vertage_pass}</TableCell> */}
                         <TableCell className={classes.tableData}>{user.myuser.parent_id}</TableCell>
                         <TableCell className={classes.tableData}>{user.myuser.location.join(',')}</TableCell>
                         <TableCell className={classes.tableIconData}>
@@ -678,7 +669,7 @@ export default function Users() {
                         <TableCell className={classes.tableData}>{user.gender}</TableCell>
                         {/* <TableCell className={classes.tableData}>{user.myuser.dialer_pass}</TableCell> */}
                         <TableCell className={classes.tableData}>{user.myuser.vertage_id}</TableCell>
-                        <TableCell className={classes.tableData}>{user.myuser.vertage_pass}</TableCell>
+                        {/* <TableCell className={classes.tableData}>{user.myuser.vertage_pass}</TableCell> */}
                         <TableCell className={classes.tableData}>{user.myuser.parent_id}</TableCell>
                         <TableCell className={classes.tableData}>{user.myuser.location.join(',')}</TableCell>
                         <TableCell className={classes.tableIconData}>
@@ -719,7 +710,7 @@ export default function Users() {
                         <TableCell className={classes.tableData}>{user.gender}</TableCell>
                         {/* <TableCell className={classes.tableData}>{user.myuser.dialer_pass}</TableCell> */}
                         <TableCell className={classes.tableData}>{user.myuser.vertage_id}</TableCell>
-                        <TableCell className={classes.tableData}>{user.myuser.vertage_pass}</TableCell>
+                        {/* <TableCell className={classes.tableData}>{user.myuser.vertage_pass}</TableCell> */}
                         <TableCell className={classes.tableData}>{user.myuser.parent_id}</TableCell>
                         <TableCell className={classes.tableData}>{user.myuser.location.join(',')}</TableCell>
                         <TableCell className={classes.tableIconData}>
@@ -747,8 +738,8 @@ export default function Users() {
                       </TableRow>
                     }
                   }) :
-                    <div className={classes.loader}>
-                      <ReactBootstrap.Spinner animation="border" />
+                    <div className="loader">
+                      <CircularProgress size={100} thickness={3} />
                     </div>
                   : loadingDeletedUser ? deletedUsers.filter((deletedUser) => {
                     if (searchTerm === "") {
@@ -776,7 +767,7 @@ export default function Users() {
                         <TableCell className={classes.deleteUsersData}>{deletedUser.gender}</TableCell>
                         {/* <TableCell className={classes.deleteUsersData}>{user.myuser.dialer_pass}</TableCell> */}
                         <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_id}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_pass}</TableCell>
+                        {/* <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_pass}</TableCell> */}
                         <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.parent_id}</TableCell>
                         <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.location}</TableCell>
                         <TableCell className={classes.deleteUsersData}></TableCell>
@@ -796,7 +787,7 @@ export default function Users() {
                         <TableCell className={classes.deleteUsersData}>{deletedUser.gender}</TableCell>
                         {/* <TableCell className={classes.deleteUsersData}>{user.myuser.dialer_pass}</TableCell> */}
                         <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_id}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_pass}</TableCell>
+                        {/* <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_pass}</TableCell> */}
                         <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.parent_id}</TableCell>
                         <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.location}</TableCell>
                         <TableCell className={classes.deleteUsersData}></TableCell>
@@ -816,7 +807,7 @@ export default function Users() {
                         <TableCell className={classes.deleteUsersData}>{deletedUser.gender}</TableCell>
                         {/* <TableCell className={classes.deleteUsersData}>{user.myuser.dialer_pass}</TableCell> */}
                         <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_id}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_pass}</TableCell>
+                        {/* <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_pass}</TableCell> */}
                         <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.parent_id}</TableCell>
                         <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.location}</TableCell>
                         <TableCell className={classes.deleteUsersData}></TableCell>
@@ -836,7 +827,7 @@ export default function Users() {
                         <TableCell className={classes.deleteUsersData}>{deletedUser.gender}</TableCell>
                         {/* <TableCell className={classes.deleteUsersData}>{user.myuser.dialer_pass}</TableCell> */}
                         <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_id}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_pass}</TableCell>
+                        {/* <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_pass}</TableCell> */}
                         <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.parent_id}</TableCell>
                         <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.location}</TableCell>
                         <TableCell className={classes.deleteUsersData}></TableCell>
@@ -856,7 +847,7 @@ export default function Users() {
                         <TableCell className={classes.deleteUsersData}>{deletedUser.gender}</TableCell>
                         {/* <TableCell className={classes.deleteUsersData}>{user.myuser.dialer_pass}</TableCell> */}
                         <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_id}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_pass}</TableCell>
+                        {/* <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_pass}</TableCell> */}
                         <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.parent_id}</TableCell>
                         <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.location}</TableCell>
                         <TableCell className={classes.deleteUsersData}></TableCell>
@@ -876,15 +867,15 @@ export default function Users() {
                         <TableCell className={classes.deleteUsersData}>{deletedUser.gender}</TableCell>
                         {/* <TableCell className={classes.deleteUsersData}>{user.myuser.dialer_pass}</TableCell> */}
                         <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_id}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_pass}</TableCell>
+                        {/* <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_pass}</TableCell> */}
                         <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.parent_id}</TableCell>
                         <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.location}</TableCell>
                         <TableCell className={classes.deleteUsersData}></TableCell>
                       </TableRow>
                     }
                   }) :
-                    <div className={classes.loader}>
-                      <ReactBootstrap.Spinner animation="border" />
+                    <div className="loader">
+                      <CircularProgress size={100} thickness={3} />
                     </div>
                 }
                 <>

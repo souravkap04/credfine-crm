@@ -162,7 +162,6 @@ export default function Login() {
             getOTP(profileData.parent_phone_no);
             return;
           } else {
-            console.log("other campaign:" + profileData?.is_admin_verified)
             if (profileData.is_admin_verified) {
               if (profileData.user_roles[0].user_type === 3) {
                 history.push("/dashboards/leads");
@@ -181,22 +180,22 @@ export default function Login() {
                 .catch((error) => {
                   console.log(error);
                 });
+              if (dialer === "HALOOCOM-Noida") {
+                axios.post(`${haloocomNoidaDialerApi}/action.php?user=${profileData.vertage_id}&type=Login`)
+                  .then((response) => {
+                    console.log("dialer-noida loin successfull")
+                  }).catch((error) => {
+                    console.log(error);
+                  })
+              } else if (dialer === "HALOOCOM-Mumbai") {
+                axios.post(`${haloocomMumbaiDialerApi}/action.php?user=${profileData.vertage_id}&type=Login`)
+                  .then((response) => {
+                    console.log("dialer-mumbai loin successfull")
+                  }).catch((error) => {
+                    console.log(error);
+                  })
+              }
             }
-          }
-          if (dialer === "HALOOCOM-Noida") {
-            axios.post(`${haloocomNoidaDialerApi}/action.php?user=${profileData.vertage_id}&type=Login`)
-              .then((response) => {
-                console.log("dialer-noida loin successfull")
-              }).catch((error) => {
-                console.log(error);
-              })
-          } else if (dialer === "HALOOCOM-Mumbai") {
-            axios.post(`${haloocomMumbaiDialerApi}/action.php?user=${profileData.vertage_id}&type=Login`)
-              .then((response) => {
-                console.log("dialer-mumbai loin successfull")
-              }).catch((error) => {
-                console.log(error);
-              })
           }
         }
       })

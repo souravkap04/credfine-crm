@@ -29,7 +29,6 @@ import PageLayerSection from '../PageLayerSection/PageLayerSection';
 import EmiCalculator from '../Emicalculator/EmiCalculator';
 import clsx from 'clsx';
 import filter from "../../images/filter.png";
-import Checkbox from '@material-ui/core/Checkbox';
 import EligibilityCalculator from '../EligibilityCalculator/EligibilityCalculator';
 import { Drawer } from '@mui/material';
 import MuiAlert from "@material-ui/lab/Alert";
