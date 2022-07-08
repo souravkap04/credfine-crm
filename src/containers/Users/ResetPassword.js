@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import './resetpassword.css';
 import {
   Table,
   TableCell,
@@ -39,7 +40,6 @@ import SendIcon from '@material-ui/icons/Send';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import { haloocomNoidaDialerApi, haloocomMumbaiDialerApi } from "../../global/callApi";
 import EmiCalculator from '../Emicalculator/EmiCalculator';
-import './resetpassword.css';
 import EligibilityCalculator from "../EligibilityCalculator/EligibilityCalculator";
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -110,20 +110,8 @@ const useStyles = makeStyles({
       backgroundColor: '#fff',
     },
   },
-  buttonContainer: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    paddingLeft: '20px',
-    paddingRight: '20px',
-    paddingTop: '10px',
-    paddingBottom: '10px'
-  },
   activeUserBtn: {
     margin: '0 10px'
-  },
-  userType: {
-    marginRight: '60vh'
   },
   deleteUsersData: {
     fontSize: '12px',
@@ -431,800 +419,794 @@ export default function Users() {
           {dialerAlertMessage}
         </Alert>
       </Snackbar>
-      <div className={classes.container}>
-        <Paper>
-          <div className={classes.buttonContainer}>
-            <div className={classes.userType}>
-              {isActiveUser ? <Typography>Active User</Typography> : <Typography>Deleted User</Typography>}
-            </div>
-            <div>
-              <InputGroup>
-                <TextField
-                  className="searchTermBox"
-                  variant="outlined"
-                  placeholder="Search....."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm((e.target.value).toLowerCase().trim())} />
-              </InputGroup>
-            </div>
-            <div className={classes.activeUserBtn}>
-              <Button disabled={isActiveUser} className={classes.userButton} color="primary"
-                variant="contained" onClick={listOfActiveUsers}>Active User</Button>
-            </div>
-            <div>
-              <Button disabled={!isActiveUser} className={classes.userButton} color="primary"
-                variant="contained" onClick={listOfDeletedUsers}>Deleted User</Button>
-            </div>
+      <div className="freshleadsContainer">
+        <div className="labelContainer">
+          {isActiveUser ? <h4>Active User</h4> : <h4>Deleted User</h4>}
+        </div>
+        <div className="btnContainer">
+          <TextField
+            className="searchTermBox"
+            variant="outlined"
+            placeholder="Search....."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm((e.target.value).toLowerCase().trim())} />
+          <div className={classes.activeUserBtn}>
+            <Button disabled={isActiveUser} className={classes.userButton} color="primary"
+              variant="contained" onClick={listOfActiveUsers}>Active User</Button>
           </div>
-          <TableContainer className="scroller">
-            <Table className={classes.table} stickyHeader>
-              <TableHead className={classes.tableheading}>
-                <TableRow>
-                  <TableCell className={classes.tableheading}>Sr No</TableCell>
-                  <TableCell className={classes.tableheading}>User Name</TableCell>
-                  <TableCell className={classes.tableheading}>First Name</TableCell>
-                  <TableCell className={classes.tableheading}>Last Name</TableCell>
-                  <TableCell className={classes.tableheading}>Email</TableCell>
-                  <TableCell className={classes.tableheading}>Role</TableCell>
-                  <TableCell className={classes.tableheading}>Product Type</TableCell>
-                  <TableCell className={classes.tableheading}>Phone No</TableCell>
-                  <TableCell className={classes.tableheading}>Gender</TableCell>
-                  {/* <TableCell className={classes.tableheading}>DIALER API Key</TableCell> */}
-                  <TableCell className={classes.tableheading}>Dialer Id</TableCell>
-                  {/* <TableCell className={classes.tableheading}>Vertage Pass</TableCell> */}
-                  <TableCell className={classes.tableheading}>Parent</TableCell>
-                  <TableCell className={classes.tableheading}>Location</TableCell>
-                  <TableCell className={classes.tableheading}></TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {isActiveUser ?
-                  loading ? users.filter((user) => {
-                    if (searchTerm === "") {
-                      return user;
-                    } else if (user.phone_no.toLowerCase().includes(searchTerm.toLowerCase())) {
-                      return user;
-                    } else if (user.myuser.first_name.toLowerCase().includes(searchTerm.toLowerCase())) {
-                      return user;
-                    } else if (user.myuser.username.toLowerCase().includes(searchTerm.toLowerCase())) {
-                      return user;
-                    }
-                  }).map((user, index) => {
-                    let roleName;
-                    if (user.role === "1") {
-                      roleName = 'Admin'
-                      return <TableRow className={classes.oddEvenRow} key={index} >
-                        <TableCell className={classes.tableData}>{index + 1}</TableCell>
-                        <TableCell className={classes.tableData}>{user.myuser.username}</TableCell>
-                        <TableCell className={classes.tableData}>{user.myuser.first_name}</TableCell>
-                        <TableCell className={classes.tableData}>{user.myuser.last_name}</TableCell>
-                        <TableCell className={classes.tableData}>{user.myuser.email}</TableCell>
-                        <TableCell className={classes.tableData}>{roleName}</TableCell>
-                        <TableCell className={classes.tableData}>{user.product_type}</TableCell>
-                        <TableCell className={classes.tableData}>{user.phone_no}</TableCell>
-                        <TableCell className={classes.tableData}>{user.gender}</TableCell>
-                        {/* <TableCell className={classes.tableData}>{user.myuser.dialer_pass}</TableCell> */}
-                        <TableCell className={classes.tableData}>{user.myuser.vertage_id}</TableCell>
-                        {/* <TableCell className={classes.tableData}>{user.myuser.vertage_pass}</TableCell> */}
-                        <TableCell className={classes.tableData}>{user.myuser.parent_id}</TableCell>
-                        <TableCell className={classes.tableData}>{user.myuser.location.join(',')}</TableCell>
-                        <TableCell className={classes.tableIconData}>
-                          <Tooltip title="Reset Password">
-                            <IconButton onClick={() => resetPasswordHandler(user.myuser.username, index)}>
-                              <LockIcon />
-                            </IconButton>
-                          </Tooltip>
-                          <Tooltip title="Edit">
-                            <IconButton
-                              onClick={() => editUser(user.myuser.username, user.myuser.username, user.myuser.first_name,
-                                user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
-                                user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
-                                user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
-                              <EditIcon />
-                            </IconButton>
-                          </Tooltip>
-                          <Tooltip title="Delete User">
-                            {/* <IconButton onClick={() => deleteUser(user.myuser.username, index)}> */}
-                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username, user.myuser.vertage_id)}>
-                              <DeleteIcon />
-                            </IconButton>
-                          </Tooltip>
-                        </TableCell>
-                      </TableRow>
-                    }
-                    if (user.role === "2") {
-                      roleName = 'Manager'
-                      return <TableRow className={classes.oddEvenRow} key={index} >
-                        <TableCell className={classes.tableData}>{index + 1}</TableCell>
-                        <TableCell className={classes.tableData}>{user.myuser.username}</TableCell>
-                        <TableCell className={classes.tableData}>{user.myuser.first_name}</TableCell>
-                        <TableCell className={classes.tableData}>{user.myuser.last_name}</TableCell>
-                        <TableCell className={classes.tableData}>{user.myuser.email}</TableCell>
-                        <TableCell className={classes.tableData}>{roleName}</TableCell>
-                        <TableCell className={classes.tableData}>{user.product_type}</TableCell>
-                        <TableCell className={classes.tableData}>{user.phone_no}</TableCell>
-                        <TableCell className={classes.tableData}>{user.gender}</TableCell>
-                        {/* <TableCell className={classes.tableData}>{user.myuser.dialer_pass}</TableCell> */}
-                        <TableCell className={classes.tableData}>{user.myuser.vertage_id}</TableCell>
-                        {/* <TableCell className={classes.tableData}>{user.myuser.vertage_pass}</TableCell> */}
-                        <TableCell className={classes.tableData}>{user.myuser.parent_id}</TableCell>
-                        <TableCell className={classes.tableData}>{user.myuser.location.join(',')}</TableCell>
-                        <TableCell className={classes.tableIconData}>
-                          <Tooltip title="Reset Password">
-                            <IconButton onClick={() => resetPasswordHandler(user.myuser.username, index)}>
-                              <LockIcon />
-                            </IconButton>
-                          </Tooltip>
-                          <Tooltip title="Edit">
-                            <IconButton
-                              onClick={() => editUser(user.myuser.username, user.myuser.username, user.myuser.first_name,
-                                user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
-                                user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
-                                user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
-                              <EditIcon />
-                            </IconButton>
-                          </Tooltip>
-                          <Tooltip title="Delete User">
-                            {/* <IconButton onClick={() => deleteUser(user.myuser.username, index)}> */}
-                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username, user.myuser.vertage_id)}>
-                              <DeleteIcon />
-                            </IconButton>
-                          </Tooltip>
-                        </TableCell>
-                      </TableRow>
-                    }
-                    if (user.role === "3") {
-                      roleName = 'Agent'
-                      return <TableRow className={classes.oddEvenRow} key={index} >
-                        <TableCell className={classes.tableData}>{index + 1}</TableCell>
-                        <TableCell className={classes.tableData}>{user.myuser.username}</TableCell>
-                        <TableCell className={classes.tableData}>{user.myuser.first_name}</TableCell>
-                        <TableCell className={classes.tableData}>{user.myuser.last_name}</TableCell>
-                        <TableCell className={classes.tableData}>{user.myuser.email}</TableCell>
-                        <TableCell className={classes.tableData}>{roleName}</TableCell>
-                        <TableCell className={classes.tableData}>{user.product_type}</TableCell>
-                        <TableCell className={classes.tableData}>{user.phone_no}</TableCell>
-                        <TableCell className={classes.tableData}>{user.gender}</TableCell>
-                        {/* <TableCell className={classes.tableData}>{user.myuser.dialer_pass}</TableCell> */}
-                        <TableCell className={classes.tableData}>{user.myuser.vertage_id}</TableCell>
-                        {/* <TableCell className={classes.tableData}>{user.myuser.vertage_pass}</TableCell> */}
-                        <TableCell className={classes.tableData}>{user.myuser.parent_id}</TableCell>
-                        <TableCell className={classes.tableData}>{user.myuser.location.join(',')}</TableCell>
-                        <TableCell className={classes.tableIconData}>
-                          <Tooltip title="Reset Password">
-                            <IconButton onClick={() => resetPasswordHandler(user.myuser.username, index)}>
-                              <LockIcon />
-                            </IconButton>
-                          </Tooltip>
-                          <Tooltip title="Edit">
-                            <IconButton
-                              onClick={() => editUser(user.myuser.username, user.myuser.username, user.myuser.first_name,
-                                user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
-                                user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
-                                user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
-                              <EditIcon />
-                            </IconButton>
-                          </Tooltip>
-                          <Tooltip title="Delete User">
-                            {/* <IconButton onClick={() => deleteUser(user.myuser.username, index)}> */}
-                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username, user.myuser.vertage_id)}>
-                              <DeleteIcon />
-                            </IconButton>
-                          </Tooltip>
-                        </TableCell>
-                      </TableRow>
-                    }
-                    if (user.role === "4") {
-                      roleName = 'Super Admin'
-                      return <TableRow className={classes.oddEvenRow} key={index} >
-                        <TableCell className={classes.tableData}>{index + 1}</TableCell>
-                        <TableCell className={classes.tableData}>{user.myuser.username}</TableCell>
-                        <TableCell className={classes.tableData}>{user.myuser.first_name}</TableCell>
-                        <TableCell className={classes.tableData}>{user.myuser.last_name}</TableCell>
-                        <TableCell className={classes.tableData}>{user.myuser.email}</TableCell>
-                        <TableCell className={classes.tableData}>{roleName}</TableCell>
-                        <TableCell className={classes.tableData}>{user.product_type}</TableCell>
-                        <TableCell className={classes.tableData}>{user.phone_no}</TableCell>
-                        <TableCell className={classes.tableData}>{user.gender}</TableCell>
-                        {/* <TableCell className={classes.tableData}>{user.myuser.dialer_pass}</TableCell> */}
-                        <TableCell className={classes.tableData}>{user.myuser.vertage_id}</TableCell>
-                        {/* <TableCell className={classes.tableData}>{user.myuser.vertage_pass}</TableCell> */}
-                        <TableCell className={classes.tableData}>{user.myuser.parent_id}</TableCell>
-                        <TableCell className={classes.tableData}>{user.myuser.location.join(',')}</TableCell>
-                        <TableCell className={classes.tableIconData}>
-                          <Tooltip title="Reset Password">
-                            <IconButton onClick={() => resetPasswordHandler(user.myuser.username, index)}>
-                              <LockIcon />
-                            </IconButton>
-                          </Tooltip>
-                          <Tooltip title="Edit">
-                            <IconButton
-                              onClick={() => editUser(user.myuser.username, user.myuser.username, user.myuser.first_name,
-                                user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
-                                user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
-                                user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
-                              <EditIcon />
-                            </IconButton>
-                          </Tooltip>
-                          <Tooltip title="Delete User">
-                            {/* <IconButton onClick={() => deleteUser(user.myuser.username, index)}> */}
-                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username, user.myuser.vertage_id)}>
-                              <DeleteIcon />
-                            </IconButton>
-                          </Tooltip>
-                        </TableCell>
-                      </TableRow>
-                    }
-                    if (user.role === "5") {
-                      roleName = 'Team Leader'
-                      return <TableRow className={classes.oddEvenRow} key={index} >
-                        <TableCell className={classes.tableData}>{index + 1}</TableCell>
-                        <TableCell className={classes.tableData}>{user.myuser.username}</TableCell>
-                        <TableCell className={classes.tableData}>{user.myuser.first_name}</TableCell>
-                        <TableCell className={classes.tableData}>{user.myuser.last_name}</TableCell>
-                        <TableCell className={classes.tableData}>{user.myuser.email}</TableCell>
-                        <TableCell className={classes.tableData}>{roleName}</TableCell>
-                        <TableCell className={classes.tableData}>{user.product_type}</TableCell>
-                        <TableCell className={classes.tableData}>{user.phone_no}</TableCell>
-                        <TableCell className={classes.tableData}>{user.gender}</TableCell>
-                        {/* <TableCell className={classes.tableData}>{user.myuser.dialer_pass}</TableCell> */}
-                        <TableCell className={classes.tableData}>{user.myuser.vertage_id}</TableCell>
-                        {/* <TableCell className={classes.tableData}>{user.myuser.vertage_pass}</TableCell> */}
-                        <TableCell className={classes.tableData}>{user.myuser.parent_id}</TableCell>
-                        <TableCell className={classes.tableData}>{user.myuser.location.join(',')}</TableCell>
-                        <TableCell className={classes.tableIconData}>
-                          <Tooltip title="Reset Password">
-                            <IconButton onClick={() => resetPasswordHandler(user.myuser.username, index)}>
-                              <LockIcon />
-                            </IconButton>
-                          </Tooltip>
-                          <Tooltip title="Edit">
-                            <IconButton
-                              onClick={() => editUser(user.myuser.username, user.myuser.username, user.myuser.first_name,
-                                user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
-                                user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
-                                user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
-                              <EditIcon />
-                            </IconButton>
-                          </Tooltip>
-                          <Tooltip title="Delete User">
-                            {/* <IconButton onClick={() => deleteUser(user.myuser.username, index)}> */}
-                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username, user.myuser.vertage_id)}>
-                              <DeleteIcon />
-                            </IconButton>
-                          </Tooltip>
-                        </TableCell>
-                      </TableRow>
-                    }
-                    if (user.role === "6") {
-                      roleName = 'Backend'
-                      return <TableRow className={classes.oddEvenRow} key={index} >
-                        <TableCell className={classes.tableData}>{index + 1}</TableCell>
-                        <TableCell className={classes.tableData}>{user.myuser.username}</TableCell>
-                        <TableCell className={classes.tableData}>{user.myuser.first_name}</TableCell>
-                        <TableCell className={classes.tableData}>{user.myuser.last_name}</TableCell>
-                        <TableCell className={classes.tableData}>{user.myuser.email}</TableCell>
-                        <TableCell className={classes.tableData}>{roleName}</TableCell>
-                        <TableCell className={classes.tableData}>{user.product_type}</TableCell>
-                        <TableCell className={classes.tableData}>{user.phone_no}</TableCell>
-                        <TableCell className={classes.tableData}>{user.gender}</TableCell>
-                        {/* <TableCell className={classes.tableData}>{user.myuser.dialer_pass}</TableCell> */}
-                        <TableCell className={classes.tableData}>{user.myuser.vertage_id}</TableCell>
-                        {/* <TableCell className={classes.tableData}>{user.myuser.vertage_pass}</TableCell> */}
-                        <TableCell className={classes.tableData}>{user.myuser.parent_id}</TableCell>
-                        <TableCell className={classes.tableData}>{user.myuser.location.join(',')}</TableCell>
-                        <TableCell className={classes.tableIconData}>
-                          <Tooltip title="Reset Password">
-                            <IconButton onClick={() => resetPasswordHandler(user.myuser.username, index)}>
-                              <LockIcon />
-                            </IconButton>
-                          </Tooltip>
-                          <Tooltip title="Edit">
-                            <IconButton
-                              onClick={() => editUser(user.myuser.username, user.myuser.username, user.myuser.first_name,
-                                user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
-                                user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
-                                user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
-                              <EditIcon />
-                            </IconButton>
-                          </Tooltip>
-                          <Tooltip title="Delete User">
-                            {/* <IconButton onClick={() => deleteUser(user.myuser.username, index)}> */}
-                            <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username, user.myuser.vertage_id)}>
-                              <DeleteIcon />
-                            </IconButton>
-                          </Tooltip>
-                        </TableCell>
-                      </TableRow>
-                    }
-                  }) :
-                    <div className="loader">
-                      <CircularProgress size={100} thickness={3} />
-                    </div>
-                  : loadingDeletedUser ? deletedUsers.filter((deletedUser) => {
-                    if (searchTerm === "") {
-                      return deletedUser;
-                    } else if (deletedUser.phone_no.toLowerCase().includes(searchTerm.toLowerCase())) {
-                      return deletedUser;
-                    } else if (deletedUser.myuser.first_name.toLowerCase().includes(searchTerm.toLowerCase())) {
-                      return deletedUser;
-                    } else if (deletedUser.myuser.username.toLowerCase().includes(searchTerm.toLowerCase())) {
-                      return deletedUser;
-                    }
-                  }).map((deletedUser, index) => {
-                    let roleName;
-                    if (deletedUser.role === "1") {
-                      roleName = 'Admin'
-                      return <TableRow className={classes.oddEvenRow} key={index} >
-                        <TableCell className={classes.deleteUsersData}>{index + 1}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.username}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.first_name}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.last_name}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.email}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{roleName}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.product_type}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.phone_no}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.gender}</TableCell>
-                        {/* <TableCell className={classes.deleteUsersData}>{user.myuser.dialer_pass}</TableCell> */}
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_id}</TableCell>
-                        {/* <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_pass}</TableCell> */}
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.parent_id}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.location}</TableCell>
-                        <TableCell className={classes.deleteUsersData}></TableCell>
-                      </TableRow>
-                    }
-                    if (deletedUser.role === "2") {
-                      roleName = 'Manager'
-                      return <TableRow className={classes.oddEvenRow} key={index} >
-                        <TableCell className={classes.deleteUsersData}>{index + 1}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.username}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.first_name}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.last_name}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.email}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{roleName}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.product_type}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.phone_no}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.gender}</TableCell>
-                        {/* <TableCell className={classes.deleteUsersData}>{user.myuser.dialer_pass}</TableCell> */}
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_id}</TableCell>
-                        {/* <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_pass}</TableCell> */}
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.parent_id}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.location}</TableCell>
-                        <TableCell className={classes.deleteUsersData}></TableCell>
-                      </TableRow>
-                    }
-                    if (deletedUser.role === "3") {
-                      roleName = 'Agent'
-                      return <TableRow className={classes.oddEvenRow} key={index} >
-                        <TableCell className={classes.deleteUsersData}>{index + 1}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.username}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.first_name}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.last_name}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.email}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{roleName}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.product_type}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.phone_no}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.gender}</TableCell>
-                        {/* <TableCell className={classes.deleteUsersData}>{user.myuser.dialer_pass}</TableCell> */}
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_id}</TableCell>
-                        {/* <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_pass}</TableCell> */}
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.parent_id}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.location}</TableCell>
-                        <TableCell className={classes.deleteUsersData}></TableCell>
-                      </TableRow>
-                    }
-                    if (deletedUser.role === "4") {
-                      roleName = 'Super Admin'
-                      return <TableRow className={classes.oddEvenRow} key={index} >
-                        <TableCell className={classes.deleteUsersData}>{index + 1}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.username}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.first_name}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.last_name}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.email}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{roleName}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.product_type}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.phone_no}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.gender}</TableCell>
-                        {/* <TableCell className={classes.deleteUsersData}>{user.myuser.dialer_pass}</TableCell> */}
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_id}</TableCell>
-                        {/* <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_pass}</TableCell> */}
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.parent_id}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.location}</TableCell>
-                        <TableCell className={classes.deleteUsersData}></TableCell>
-                      </TableRow>
-                    }
-                    if (deletedUser.role === "5") {
-                      roleName = 'Team Leader'
-                      return <TableRow className={classes.oddEvenRow} key={index} >
-                        <TableCell className={classes.deleteUsersData}>{index + 1}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.username}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.first_name}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.last_name}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.email}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{roleName}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.product_type}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.phone_no}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.gender}</TableCell>
-                        {/* <TableCell className={classes.deleteUsersData}>{user.myuser.dialer_pass}</TableCell> */}
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_id}</TableCell>
-                        {/* <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_pass}</TableCell> */}
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.parent_id}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.location}</TableCell>
-                        <TableCell className={classes.deleteUsersData}></TableCell>
-                      </TableRow>
-                    }
-                    if (deletedUser.role === "6") {
-                      roleName = 'Backend'
-                      return <TableRow className={classes.oddEvenRow} key={index} >
-                        <TableCell className={classes.deleteUsersData}>{index + 1}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.username}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.first_name}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.last_name}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.email}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{roleName}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.product_type}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.phone_no}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.gender}</TableCell>
-                        {/* <TableCell className={classes.deleteUsersData}>{user.myuser.dialer_pass}</TableCell> */}
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_id}</TableCell>
-                        {/* <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_pass}</TableCell> */}
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.parent_id}</TableCell>
-                        <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.location}</TableCell>
-                        <TableCell className={classes.deleteUsersData}></TableCell>
-                      </TableRow>
-                    }
-                  }) :
-                    <div className="loader">
-                      <CircularProgress size={100} thickness={3} />
-                    </div>
-                }
-                <>
-                  <Dialog open={isDeleteUser}>
-                    <DialogTitle>Are You Want to Delete User?</DialogTitle>
-                    <DialogContent style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', padding: '0', marginBottom: '20px' }}>
-                      <Button className="deleteButton" color="primary"
-                        variant="contained" onClick={deleteUser}>Yes</Button>
-                      <Button className="deleteButton" color="primary"
-                        variant="contained" onClick={closeDeleteUserPopUp}>No</Button>
-                    </DialogContent>
-                  </Dialog>
-                </>
-                <>
-                  <Dialog open={isResetPassword} onClose={closeResetPassword}>
-                    <DialogTitle id="form-dialog-title">Reset Password</DialogTitle>
-                    <DialogContent>
-                      <Form onSubmit={confirmPasswordHandler}>
-                        <Grid>
-                          <TextField
-                            type="password"
-                            className="textField"
-                            id="outlined-full-width"
-                            label="Password"
-                            style={{ margin: 8 }}
-                            margin="normal"
-                            InputLabelProps={{
-                              shrink: true,
-                            }}
-                            variant="outlined"
-                            size="small"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            error={!!errors.password}
-                            helperText={errors.password}
-                            onFocus={() => setErrors("")}
-                          />
-                        </Grid>
-                        <Grid>
-                          <TextField
-                            type="password"
-                            className="textField"
-                            id="outlined-full-width"
-                            label="Confirm Password"
-                            style={{ margin: 8 }}
-                            margin="normal"
-                            InputLabelProps={{
-                              shrink: true,
-                            }}
-                            variant="outlined"
-                            size="small"
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                            error={!!errors.cnfrmPassword}
-                            helperText={errors.cnfrmPassword}
-                            onFocus={() => setErrors("")}
-                          />
-                        </Grid>
-                        <Button type="submit" className={classes.cnfrmPasswordBtn}>
-                          Submit</Button>
-                      </Form>
-                    </DialogContent>
-                  </Dialog>
-                </>
-                <>
-                  <Dialog open={isEditUser} onClose={closeEditUser}>
-                    <DialogTitle>Edit User</DialogTitle>
-                    <DialogContent className={classes.formContainer}>
-                      <Form onSubmit={updateUserData} className={classes.formSubContainer}>
-                        <Grid container style={{ justifyContent: 'center' }}>
-                          <Grid>
-                            <TextField
-                              className="textField"
-                              id="outlined-full-width"
-                              label="Username"
-                              style={{ margin: 8 }}
-                              margin="normal"
-                              InputLabelProps={{
-                                shrink: true,
-                              }}
-                              variant="outlined"
-                              size="small"
-                              value={updatedUserName}
-                              onChange={(e) => setUpdatedUserName(e.target.value)}
-                            />
-                          </Grid>
-                          <Grid>
-                            <TextField
-                              className="textField"
-                              id="outlined-full-width"
-                              label="First Name"
-                              style={{ margin: 8 }}
-                              margin="normal"
-                              InputLabelProps={{
-                                shrink: true,
-                              }}
-                              variant="outlined"
-                              size="small"
-                              value={firstName}
-                              onChange={(e) => setFirstName((e.target.value).trim())}
-                            />
-                          </Grid>
-                        </Grid>
-                        <Grid container style={{ justifyContent: 'center' }}>
-                          <Grid>
-                            <TextField
-                              className="textField"
-                              id="outlined-full-width"
-                              label="Last Name"
-                              style={{ margin: 8 }}
-                              margin="normal"
-                              InputLabelProps={{
-                                shrink: true,
-                              }}
-                              variant="outlined"
-                              size="small"
-                              value={lastName}
-                              onChange={(e) => setLastName((e.target.value).trim())}
-                            />
-                          </Grid>
-                          <Grid>
-                            <TextField
-                              className="textField"
-                              id="outlined-full-width"
-                              label="Email Id"
-                              style={{ margin: 8 }}
-                              margin="normal"
-                              InputLabelProps={{
-                                shrink: true,
-                              }}
-                              variant="outlined"
-                              size="small"
-                              value={email}
-                              onChange={(e) => setEmail((e.target.value).toLowerCase().trim())}
-                            />
-                          </Grid>
-                        </Grid>
-                        <Grid container style={{ justifyContent: 'center' }}>
-                          <Grid>
-                            <TextField
-                              select
-                              className="textField"
-                              id="outlined-full-width"
-                              label="Role"
-                              style={{ margin: 8 }}
-                              margin="normal"
-                              InputLabelProps={{
-                                shrink: true,
-                              }}
-                              SelectProps={{
-                                native: true,
-                              }}
-                              variant="outlined"
-                              size="small"
-                              value={role}
-                              onChange={(e) => {
-                                setRole(e.target.value)
-                                listOfUsers(e.target.value)
-                              }}
-                            >
-                              <option>Select One</option>
-                              <option value="4">Super Admin</option>
-                              <option value="1">Admin</option>
-                              <option value="2">Manager</option>
-                              <option value="5">Team Leader</option>
-                              <option value="3">Agent</option>
-                              <option value="6">Backend</option>
-                            </TextField>
-                          </Grid>
-                          <Grid>
-                            <TextField
-                              select
-                              className="textField"
-                              id="outlined-full-width"
-                              label="Product Type"
-                              style={{ margin: 8 }}
-                              margin="normal"
-                              InputLabelProps={{
-                                shrink: true,
-                              }}
-                              SelectProps={{
-                                native: true,
-                              }}
-                              variant="outlined"
-                              size="small"
-                              value={productType}
-                              onChange={(e) => setProductType(e.target.value)}
-                            >
-                              <option>Select One</option>
-                              <option value="PL">Personal Loan</option>
-                              <option value="BL">Business Loan</option>
-                              <option value="CC">Credit Card</option>
-                              <option value="HL">Home Loan</option>
-                              <option value="LAP">Loan Against Property</option>
-                            </TextField>
-                          </Grid>
-                        </Grid>
-                        <Grid container style={{ justifyContent: 'center' }}>
-                          <Grid>
-                            <TextField
-                              className="textField"
-                              id="outlined-full-width"
-                              label="Phone No"
-                              style={{ margin: 8 }}
-                              margin="normal"
-                              InputLabelProps={{
-                                shrink: true,
-                              }}
-                              variant="outlined"
-                              size="small"
-                              value={phoneNo}
-                              onChange={(e) => {
-                                const re = /^[0-9\b]+$/;
-                                if (e.target.value === '' || re.test(e.target.value)) {
-                                  setPhoneNo((e.target.value).trim())
-                                }
-                              }}
-                            />
-                          </Grid>
-                          <Grid>
-                            <TextField
-                              select
-                              className="textField"
-                              id="outlined-full-width"
-                              label="Gender"
-                              style={{ margin: 8 }}
-                              margin="normal"
-                              InputLabelProps={{
-                                shrink: true,
-                              }}
-                              SelectProps={{
-                                native: true,
-                              }}
-                              variant="outlined"
-                              size="small"
-                              value={gender}
-                              onChange={(e) => setGender(e.target.value)}
-                            >
-                              <option value="">Select One</option>
-                              <option value="M">Male</option>
-                              <option value="F">Female</option>
-                              <option value="T">LGBT</option>
-                            </TextField>
-                          </Grid>
-                        </Grid>
-                        <Grid container style={{ justifyContent: 'center' }}>
-                          <Grid>
-                            <TextField
-                              className="textField"
-                              id="outlined-full-width"
-                              label="Haloocoom Username"
-                              style={{ margin: 8 }}
-                              margin="normal"
-                              InputLabelProps={{
-                                shrink: true,
-                              }}
-                              InputProps={{
-                                endAdornment: (
-                                  <InputAdornment position="end">
-                                    <IconButton onClick={submitHaloocomUserName}>
-                                      <SendIcon style={{ color: '#14cc9e' }} />
-                                    </IconButton>
-                                  </InputAdornment>
-                                ),
-                              }}
-                              variant="outlined"
-                              size="small"
-                              value={vertageId}
-                              onChange={(e) => setVertageId((e.target.value).trim())}
-                            />
-                          </Grid>
-                          <Grid>
-                            <TextField
-                              className="textField"
-                              id="outlined-full-width"
-                              label="Vertage Password"
-                              style={{ margin: 8 }}
-                              margin="normal"
-                              InputLabelProps={{
-                                shrink: true,
-                              }}
-                              variant="outlined"
-                              size="small"
-                              value={vertagePass}
-                              onChange={(e) => setVertagePass((e.target.value).trim())}
-                            />
-                          </Grid>
-                        </Grid>
-                        <Grid container style={{ justifyContent: 'center' }}>
-                          <Grid>
-                            <TextField
-                              select
-                              className="textField"
-                              id="outlined-full-width"
-                              label="Parent"
-                              style={{ margin: 8 }}
-                              margin="normal"
-                              InputLabelProps={{
-                                shrink: true,
-                              }}
-                              variant="outlined"
-                              size="small"
-                              value={parent}
-                              onChange={(e) => setparent(e.target.value)}
-                            >
-                              <option value="">Select One</option>
-                              {updateUsers.map(item => {
-                                return <option style={{ cursor: 'pointer' }} value={item.myuser.username}>{item.myuser.username}</option>
-                              })}
-                            </TextField>
-                          </Grid>
-                          <Grid>
-                            <FormControl
-                              className="textField"
-                              style={{ margin: 8 }}
-                              margin="normal"
-                              variant="outlined"
-                              size="small">
-                              <InputLabel id="demo-mutiple-checkbox-label">Location</InputLabel>
-                              <Select
-                                labelId="demo-mutiple-checkbox-label"
-                                id="demo-mutiple-checkbox"
-                                multiple
-                                value={location}
-                                onChange={(e) => setlocation(e.target.value)}
-                                label="Location"
-                                renderValue={(selected) => selected.join(', ')}
-                              >
-                                {pullLocation.map((name) => (
-                                  <MenuItem value={name.id}>
-                                    <Checkbox style={{ color: "#535ad1" }} checked={location.indexOf(name.id) > -1} />
-                                    <ListItemText primary={name.city} />
-                                  </MenuItem>
-                                ))}
-                              </Select>
-                            </FormControl>
-                          </Grid>
-                        </Grid>
-                        <Button type="submit" className={classes.editUserBtn}>
-                          Update</Button>
-                      </Form>
-                    </DialogContent>
-                  </Dialog>
-                </>
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Paper>
+          <div>
+            <Button disabled={!isActiveUser} className={classes.userButton} color="primary"
+              variant="contained" onClick={listOfDeletedUsers}>Deleted User</Button>
+          </div>
+        </div>
       </div>
+      <TableContainer className="scroller">
+        <Table className={classes.table} stickyHeader>
+          <TableHead className={classes.tableheading}>
+            <TableRow>
+              <TableCell className={classes.tableheading}>Sr No</TableCell>
+              <TableCell className={classes.tableheading}>User Name</TableCell>
+              <TableCell className={classes.tableheading}>First Name</TableCell>
+              <TableCell className={classes.tableheading}>Last Name</TableCell>
+              <TableCell className={classes.tableheading}>Email</TableCell>
+              <TableCell className={classes.tableheading}>Role</TableCell>
+              <TableCell className={classes.tableheading}>Product Type</TableCell>
+              <TableCell className={classes.tableheading}>Phone No</TableCell>
+              <TableCell className={classes.tableheading}>Gender</TableCell>
+              {/* <TableCell className={classes.tableheading}>DIALER API Key</TableCell> */}
+              <TableCell className={classes.tableheading}>Dialer Id</TableCell>
+              {/* <TableCell className={classes.tableheading}>Vertage Pass</TableCell> */}
+              <TableCell className={classes.tableheading}>Parent</TableCell>
+              <TableCell className={classes.tableheading}>Location</TableCell>
+              <TableCell className={classes.tableheading}></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {isActiveUser ?
+              loading ? users.filter((user) => {
+                if (searchTerm === "") {
+                  return user;
+                } else if (user.phone_no.toLowerCase().includes(searchTerm.toLowerCase())) {
+                  return user;
+                } else if (user.myuser.first_name.toLowerCase().includes(searchTerm.toLowerCase())) {
+                  return user;
+                } else if (user.myuser.username.toLowerCase().includes(searchTerm.toLowerCase())) {
+                  return user;
+                }
+              }).map((user, index) => {
+                let roleName;
+                if (user.role === "1") {
+                  roleName = 'Admin'
+                  return <TableRow className={classes.oddEvenRow} key={index} >
+                    <TableCell className={classes.tableData}>{index + 1}</TableCell>
+                    <TableCell className={classes.tableData}>{user.myuser.username}</TableCell>
+                    <TableCell className={classes.tableData}>{user.myuser.first_name}</TableCell>
+                    <TableCell className={classes.tableData}>{user.myuser.last_name}</TableCell>
+                    <TableCell className={classes.tableData}>{user.myuser.email}</TableCell>
+                    <TableCell className={classes.tableData}>{roleName}</TableCell>
+                    <TableCell className={classes.tableData}>{user.product_type}</TableCell>
+                    <TableCell className={classes.tableData}>{user.phone_no}</TableCell>
+                    <TableCell className={classes.tableData}>{user.gender}</TableCell>
+                    {/* <TableCell className={classes.tableData}>{user.myuser.dialer_pass}</TableCell> */}
+                    <TableCell className={classes.tableData}>{user.myuser.vertage_id}</TableCell>
+                    {/* <TableCell className={classes.tableData}>{user.myuser.vertage_pass}</TableCell> */}
+                    <TableCell className={classes.tableData}>{user.myuser.parent_id}</TableCell>
+                    <TableCell className={classes.tableData}>{user.myuser.location.join(',')}</TableCell>
+                    <TableCell className={classes.tableIconData}>
+                      <Tooltip title="Reset Password">
+                        <IconButton onClick={() => resetPasswordHandler(user.myuser.username, index)}>
+                          <LockIcon />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Edit">
+                        <IconButton
+                          onClick={() => editUser(user.myuser.username, user.myuser.username, user.myuser.first_name,
+                            user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
+                            user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
+                            user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
+                          <EditIcon />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Delete User">
+                        {/* <IconButton onClick={() => deleteUser(user.myuser.username, index)}> */}
+                        <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username, user.myuser.vertage_id)}>
+                          <DeleteIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </TableCell>
+                  </TableRow>
+                }
+                if (user.role === "2") {
+                  roleName = 'Manager'
+                  return <TableRow className={classes.oddEvenRow} key={index} >
+                    <TableCell className={classes.tableData}>{index + 1}</TableCell>
+                    <TableCell className={classes.tableData}>{user.myuser.username}</TableCell>
+                    <TableCell className={classes.tableData}>{user.myuser.first_name}</TableCell>
+                    <TableCell className={classes.tableData}>{user.myuser.last_name}</TableCell>
+                    <TableCell className={classes.tableData}>{user.myuser.email}</TableCell>
+                    <TableCell className={classes.tableData}>{roleName}</TableCell>
+                    <TableCell className={classes.tableData}>{user.product_type}</TableCell>
+                    <TableCell className={classes.tableData}>{user.phone_no}</TableCell>
+                    <TableCell className={classes.tableData}>{user.gender}</TableCell>
+                    {/* <TableCell className={classes.tableData}>{user.myuser.dialer_pass}</TableCell> */}
+                    <TableCell className={classes.tableData}>{user.myuser.vertage_id}</TableCell>
+                    {/* <TableCell className={classes.tableData}>{user.myuser.vertage_pass}</TableCell> */}
+                    <TableCell className={classes.tableData}>{user.myuser.parent_id}</TableCell>
+                    <TableCell className={classes.tableData}>{user.myuser.location.join(',')}</TableCell>
+                    <TableCell className={classes.tableIconData}>
+                      <Tooltip title="Reset Password">
+                        <IconButton onClick={() => resetPasswordHandler(user.myuser.username, index)}>
+                          <LockIcon />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Edit">
+                        <IconButton
+                          onClick={() => editUser(user.myuser.username, user.myuser.username, user.myuser.first_name,
+                            user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
+                            user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
+                            user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
+                          <EditIcon />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Delete User">
+                        {/* <IconButton onClick={() => deleteUser(user.myuser.username, index)}> */}
+                        <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username, user.myuser.vertage_id)}>
+                          <DeleteIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </TableCell>
+                  </TableRow>
+                }
+                if (user.role === "3") {
+                  roleName = 'Agent'
+                  return <TableRow className={classes.oddEvenRow} key={index} >
+                    <TableCell className={classes.tableData}>{index + 1}</TableCell>
+                    <TableCell className={classes.tableData}>{user.myuser.username}</TableCell>
+                    <TableCell className={classes.tableData}>{user.myuser.first_name}</TableCell>
+                    <TableCell className={classes.tableData}>{user.myuser.last_name}</TableCell>
+                    <TableCell className={classes.tableData}>{user.myuser.email}</TableCell>
+                    <TableCell className={classes.tableData}>{roleName}</TableCell>
+                    <TableCell className={classes.tableData}>{user.product_type}</TableCell>
+                    <TableCell className={classes.tableData}>{user.phone_no}</TableCell>
+                    <TableCell className={classes.tableData}>{user.gender}</TableCell>
+                    {/* <TableCell className={classes.tableData}>{user.myuser.dialer_pass}</TableCell> */}
+                    <TableCell className={classes.tableData}>{user.myuser.vertage_id}</TableCell>
+                    {/* <TableCell className={classes.tableData}>{user.myuser.vertage_pass}</TableCell> */}
+                    <TableCell className={classes.tableData}>{user.myuser.parent_id}</TableCell>
+                    <TableCell className={classes.tableData}>{user.myuser.location.join(',')}</TableCell>
+                    <TableCell className={classes.tableIconData}>
+                      <Tooltip title="Reset Password">
+                        <IconButton onClick={() => resetPasswordHandler(user.myuser.username, index)}>
+                          <LockIcon />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Edit">
+                        <IconButton
+                          onClick={() => editUser(user.myuser.username, user.myuser.username, user.myuser.first_name,
+                            user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
+                            user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
+                            user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
+                          <EditIcon />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Delete User">
+                        {/* <IconButton onClick={() => deleteUser(user.myuser.username, index)}> */}
+                        <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username, user.myuser.vertage_id)}>
+                          <DeleteIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </TableCell>
+                  </TableRow>
+                }
+                if (user.role === "4") {
+                  roleName = 'Super Admin'
+                  return <TableRow className={classes.oddEvenRow} key={index} >
+                    <TableCell className={classes.tableData}>{index + 1}</TableCell>
+                    <TableCell className={classes.tableData}>{user.myuser.username}</TableCell>
+                    <TableCell className={classes.tableData}>{user.myuser.first_name}</TableCell>
+                    <TableCell className={classes.tableData}>{user.myuser.last_name}</TableCell>
+                    <TableCell className={classes.tableData}>{user.myuser.email}</TableCell>
+                    <TableCell className={classes.tableData}>{roleName}</TableCell>
+                    <TableCell className={classes.tableData}>{user.product_type}</TableCell>
+                    <TableCell className={classes.tableData}>{user.phone_no}</TableCell>
+                    <TableCell className={classes.tableData}>{user.gender}</TableCell>
+                    {/* <TableCell className={classes.tableData}>{user.myuser.dialer_pass}</TableCell> */}
+                    <TableCell className={classes.tableData}>{user.myuser.vertage_id}</TableCell>
+                    {/* <TableCell className={classes.tableData}>{user.myuser.vertage_pass}</TableCell> */}
+                    <TableCell className={classes.tableData}>{user.myuser.parent_id}</TableCell>
+                    <TableCell className={classes.tableData}>{user.myuser.location.join(',')}</TableCell>
+                    <TableCell className={classes.tableIconData}>
+                      <Tooltip title="Reset Password">
+                        <IconButton onClick={() => resetPasswordHandler(user.myuser.username, index)}>
+                          <LockIcon />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Edit">
+                        <IconButton
+                          onClick={() => editUser(user.myuser.username, user.myuser.username, user.myuser.first_name,
+                            user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
+                            user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
+                            user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
+                          <EditIcon />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Delete User">
+                        {/* <IconButton onClick={() => deleteUser(user.myuser.username, index)}> */}
+                        <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username, user.myuser.vertage_id)}>
+                          <DeleteIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </TableCell>
+                  </TableRow>
+                }
+                if (user.role === "5") {
+                  roleName = 'Team Leader'
+                  return <TableRow className={classes.oddEvenRow} key={index} >
+                    <TableCell className={classes.tableData}>{index + 1}</TableCell>
+                    <TableCell className={classes.tableData}>{user.myuser.username}</TableCell>
+                    <TableCell className={classes.tableData}>{user.myuser.first_name}</TableCell>
+                    <TableCell className={classes.tableData}>{user.myuser.last_name}</TableCell>
+                    <TableCell className={classes.tableData}>{user.myuser.email}</TableCell>
+                    <TableCell className={classes.tableData}>{roleName}</TableCell>
+                    <TableCell className={classes.tableData}>{user.product_type}</TableCell>
+                    <TableCell className={classes.tableData}>{user.phone_no}</TableCell>
+                    <TableCell className={classes.tableData}>{user.gender}</TableCell>
+                    {/* <TableCell className={classes.tableData}>{user.myuser.dialer_pass}</TableCell> */}
+                    <TableCell className={classes.tableData}>{user.myuser.vertage_id}</TableCell>
+                    {/* <TableCell className={classes.tableData}>{user.myuser.vertage_pass}</TableCell> */}
+                    <TableCell className={classes.tableData}>{user.myuser.parent_id}</TableCell>
+                    <TableCell className={classes.tableData}>{user.myuser.location.join(',')}</TableCell>
+                    <TableCell className={classes.tableIconData}>
+                      <Tooltip title="Reset Password">
+                        <IconButton onClick={() => resetPasswordHandler(user.myuser.username, index)}>
+                          <LockIcon />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Edit">
+                        <IconButton
+                          onClick={() => editUser(user.myuser.username, user.myuser.username, user.myuser.first_name,
+                            user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
+                            user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
+                            user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
+                          <EditIcon />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Delete User">
+                        {/* <IconButton onClick={() => deleteUser(user.myuser.username, index)}> */}
+                        <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username, user.myuser.vertage_id)}>
+                          <DeleteIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </TableCell>
+                  </TableRow>
+                }
+                if (user.role === "6") {
+                  roleName = 'Backend'
+                  return <TableRow className={classes.oddEvenRow} key={index} >
+                    <TableCell className={classes.tableData}>{index + 1}</TableCell>
+                    <TableCell className={classes.tableData}>{user.myuser.username}</TableCell>
+                    <TableCell className={classes.tableData}>{user.myuser.first_name}</TableCell>
+                    <TableCell className={classes.tableData}>{user.myuser.last_name}</TableCell>
+                    <TableCell className={classes.tableData}>{user.myuser.email}</TableCell>
+                    <TableCell className={classes.tableData}>{roleName}</TableCell>
+                    <TableCell className={classes.tableData}>{user.product_type}</TableCell>
+                    <TableCell className={classes.tableData}>{user.phone_no}</TableCell>
+                    <TableCell className={classes.tableData}>{user.gender}</TableCell>
+                    {/* <TableCell className={classes.tableData}>{user.myuser.dialer_pass}</TableCell> */}
+                    <TableCell className={classes.tableData}>{user.myuser.vertage_id}</TableCell>
+                    {/* <TableCell className={classes.tableData}>{user.myuser.vertage_pass}</TableCell> */}
+                    <TableCell className={classes.tableData}>{user.myuser.parent_id}</TableCell>
+                    <TableCell className={classes.tableData}>{user.myuser.location.join(',')}</TableCell>
+                    <TableCell className={classes.tableIconData}>
+                      <Tooltip title="Reset Password">
+                        <IconButton onClick={() => resetPasswordHandler(user.myuser.username, index)}>
+                          <LockIcon />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Edit">
+                        <IconButton
+                          onClick={() => editUser(user.myuser.username, user.myuser.username, user.myuser.first_name,
+                            user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
+                            user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
+                            user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
+                          <EditIcon />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Delete User">
+                        {/* <IconButton onClick={() => deleteUser(user.myuser.username, index)}> */}
+                        <IconButton onClick={() => deletedUserPopUpHandler(user.myuser.username, user.myuser.vertage_id)}>
+                          <DeleteIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </TableCell>
+                  </TableRow>
+                }
+              }) :
+                <div className="loader">
+                  <CircularProgress size={100} thickness={3} />
+                </div>
+              : loadingDeletedUser ? deletedUsers.filter((deletedUser) => {
+                if (searchTerm === "") {
+                  return deletedUser;
+                } else if (deletedUser.phone_no.toLowerCase().includes(searchTerm.toLowerCase())) {
+                  return deletedUser;
+                } else if (deletedUser.myuser.first_name.toLowerCase().includes(searchTerm.toLowerCase())) {
+                  return deletedUser;
+                } else if (deletedUser.myuser.username.toLowerCase().includes(searchTerm.toLowerCase())) {
+                  return deletedUser;
+                }
+              }).map((deletedUser, index) => {
+                let roleName;
+                if (deletedUser.role === "1") {
+                  roleName = 'Admin'
+                  return <TableRow className={classes.oddEvenRow} key={index} >
+                    <TableCell className={classes.deleteUsersData}>{index + 1}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.username}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.first_name}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.last_name}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.email}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{roleName}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.product_type}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.phone_no}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.gender}</TableCell>
+                    {/* <TableCell className={classes.deleteUsersData}>{user.myuser.dialer_pass}</TableCell> */}
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_id}</TableCell>
+                    {/* <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_pass}</TableCell> */}
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.parent_id}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.location}</TableCell>
+                    <TableCell className={classes.deleteUsersData}></TableCell>
+                  </TableRow>
+                }
+                if (deletedUser.role === "2") {
+                  roleName = 'Manager'
+                  return <TableRow className={classes.oddEvenRow} key={index} >
+                    <TableCell className={classes.deleteUsersData}>{index + 1}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.username}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.first_name}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.last_name}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.email}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{roleName}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.product_type}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.phone_no}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.gender}</TableCell>
+                    {/* <TableCell className={classes.deleteUsersData}>{user.myuser.dialer_pass}</TableCell> */}
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_id}</TableCell>
+                    {/* <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_pass}</TableCell> */}
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.parent_id}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.location}</TableCell>
+                    <TableCell className={classes.deleteUsersData}></TableCell>
+                  </TableRow>
+                }
+                if (deletedUser.role === "3") {
+                  roleName = 'Agent'
+                  return <TableRow className={classes.oddEvenRow} key={index} >
+                    <TableCell className={classes.deleteUsersData}>{index + 1}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.username}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.first_name}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.last_name}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.email}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{roleName}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.product_type}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.phone_no}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.gender}</TableCell>
+                    {/* <TableCell className={classes.deleteUsersData}>{user.myuser.dialer_pass}</TableCell> */}
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_id}</TableCell>
+                    {/* <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_pass}</TableCell> */}
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.parent_id}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.location}</TableCell>
+                    <TableCell className={classes.deleteUsersData}></TableCell>
+                  </TableRow>
+                }
+                if (deletedUser.role === "4") {
+                  roleName = 'Super Admin'
+                  return <TableRow className={classes.oddEvenRow} key={index} >
+                    <TableCell className={classes.deleteUsersData}>{index + 1}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.username}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.first_name}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.last_name}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.email}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{roleName}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.product_type}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.phone_no}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.gender}</TableCell>
+                    {/* <TableCell className={classes.deleteUsersData}>{user.myuser.dialer_pass}</TableCell> */}
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_id}</TableCell>
+                    {/* <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_pass}</TableCell> */}
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.parent_id}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.location}</TableCell>
+                    <TableCell className={classes.deleteUsersData}></TableCell>
+                  </TableRow>
+                }
+                if (deletedUser.role === "5") {
+                  roleName = 'Team Leader'
+                  return <TableRow className={classes.oddEvenRow} key={index} >
+                    <TableCell className={classes.deleteUsersData}>{index + 1}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.username}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.first_name}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.last_name}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.email}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{roleName}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.product_type}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.phone_no}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.gender}</TableCell>
+                    {/* <TableCell className={classes.deleteUsersData}>{user.myuser.dialer_pass}</TableCell> */}
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_id}</TableCell>
+                    {/* <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_pass}</TableCell> */}
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.parent_id}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.location}</TableCell>
+                    <TableCell className={classes.deleteUsersData}></TableCell>
+                  </TableRow>
+                }
+                if (deletedUser.role === "6") {
+                  roleName = 'Backend'
+                  return <TableRow className={classes.oddEvenRow} key={index} >
+                    <TableCell className={classes.deleteUsersData}>{index + 1}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.username}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.first_name}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.last_name}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.email}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{roleName}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.product_type}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.phone_no}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.gender}</TableCell>
+                    {/* <TableCell className={classes.deleteUsersData}>{user.myuser.dialer_pass}</TableCell> */}
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_id}</TableCell>
+                    {/* <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_pass}</TableCell> */}
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.parent_id}</TableCell>
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.location}</TableCell>
+                    <TableCell className={classes.deleteUsersData}></TableCell>
+                  </TableRow>
+                }
+              }) :
+                <div className="loader">
+                  {/* <CircularProgress size={100} thickness={3} /> */}
+                </div>
+            }
+            <>
+              <Dialog open={isDeleteUser}>
+                <DialogTitle>Are You Want to Delete User?</DialogTitle>
+                <DialogContent style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', padding: '0', marginBottom: '20px' }}>
+                  <Button className="deleteButton" color="primary"
+                    variant="contained" onClick={deleteUser}>Yes</Button>
+                  <Button className="deleteButton" color="primary"
+                    variant="contained" onClick={closeDeleteUserPopUp}>No</Button>
+                </DialogContent>
+              </Dialog>
+            </>
+            <>
+              <Dialog open={isResetPassword} onClose={closeResetPassword}>
+                <DialogTitle id="form-dialog-title">Reset Password</DialogTitle>
+                <DialogContent>
+                  <Form onSubmit={confirmPasswordHandler}>
+                    <Grid>
+                      <TextField
+                        type="password"
+                        className="textField"
+                        id="outlined-full-width"
+                        label="Password"
+                        style={{ margin: 8 }}
+                        margin="normal"
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                        variant="outlined"
+                        size="small"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        error={!!errors.password}
+                        helperText={errors.password}
+                        onFocus={() => setErrors("")}
+                      />
+                    </Grid>
+                    <Grid>
+                      <TextField
+                        type="password"
+                        className="textField"
+                        id="outlined-full-width"
+                        label="Confirm Password"
+                        style={{ margin: 8 }}
+                        margin="normal"
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                        variant="outlined"
+                        size="small"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        error={!!errors.cnfrmPassword}
+                        helperText={errors.cnfrmPassword}
+                        onFocus={() => setErrors("")}
+                      />
+                    </Grid>
+                    <Button type="submit" className={classes.cnfrmPasswordBtn}>
+                      Submit</Button>
+                  </Form>
+                </DialogContent>
+              </Dialog>
+            </>
+            <>
+              <Dialog open={isEditUser} onClose={closeEditUser}>
+                <DialogTitle>Edit User</DialogTitle>
+                <DialogContent className={classes.formContainer}>
+                  <Form onSubmit={updateUserData} className={classes.formSubContainer}>
+                    <Grid container style={{ justifyContent: 'center' }}>
+                      <Grid>
+                        <TextField
+                          className="textField"
+                          id="outlined-full-width"
+                          label="Username"
+                          style={{ margin: 8 }}
+                          margin="normal"
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                          variant="outlined"
+                          size="small"
+                          value={updatedUserName}
+                          onChange={(e) => setUpdatedUserName(e.target.value)}
+                        />
+                      </Grid>
+                      <Grid>
+                        <TextField
+                          className="textField"
+                          id="outlined-full-width"
+                          label="First Name"
+                          style={{ margin: 8 }}
+                          margin="normal"
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                          variant="outlined"
+                          size="small"
+                          value={firstName}
+                          onChange={(e) => setFirstName((e.target.value).trim())}
+                        />
+                      </Grid>
+                    </Grid>
+                    <Grid container style={{ justifyContent: 'center' }}>
+                      <Grid>
+                        <TextField
+                          className="textField"
+                          id="outlined-full-width"
+                          label="Last Name"
+                          style={{ margin: 8 }}
+                          margin="normal"
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                          variant="outlined"
+                          size="small"
+                          value={lastName}
+                          onChange={(e) => setLastName((e.target.value).trim())}
+                        />
+                      </Grid>
+                      <Grid>
+                        <TextField
+                          className="textField"
+                          id="outlined-full-width"
+                          label="Email Id"
+                          style={{ margin: 8 }}
+                          margin="normal"
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                          variant="outlined"
+                          size="small"
+                          value={email}
+                          onChange={(e) => setEmail((e.target.value).toLowerCase().trim())}
+                        />
+                      </Grid>
+                    </Grid>
+                    <Grid container style={{ justifyContent: 'center' }}>
+                      <Grid>
+                        <TextField
+                          select
+                          className="textField"
+                          id="outlined-full-width"
+                          label="Role"
+                          style={{ margin: 8 }}
+                          margin="normal"
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                          SelectProps={{
+                            native: true,
+                          }}
+                          variant="outlined"
+                          size="small"
+                          value={role}
+                          onChange={(e) => {
+                            setRole(e.target.value)
+                            listOfUsers(e.target.value)
+                          }}
+                        >
+                          <option>Select One</option>
+                          <option value="4">Super Admin</option>
+                          <option value="1">Admin</option>
+                          <option value="2">Manager</option>
+                          <option value="5">Team Leader</option>
+                          <option value="3">Agent</option>
+                          <option value="6">Backend</option>
+                        </TextField>
+                      </Grid>
+                      <Grid>
+                        <TextField
+                          select
+                          className="textField"
+                          id="outlined-full-width"
+                          label="Product Type"
+                          style={{ margin: 8 }}
+                          margin="normal"
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                          SelectProps={{
+                            native: true,
+                          }}
+                          variant="outlined"
+                          size="small"
+                          value={productType}
+                          onChange={(e) => setProductType(e.target.value)}
+                        >
+                          <option>Select One</option>
+                          <option value="PL">Personal Loan</option>
+                          <option value="BL">Business Loan</option>
+                          <option value="CC">Credit Card</option>
+                          <option value="HL">Home Loan</option>
+                          <option value="LAP">Loan Against Property</option>
+                        </TextField>
+                      </Grid>
+                    </Grid>
+                    <Grid container style={{ justifyContent: 'center' }}>
+                      <Grid>
+                        <TextField
+                          className="textField"
+                          id="outlined-full-width"
+                          label="Phone No"
+                          style={{ margin: 8 }}
+                          margin="normal"
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                          variant="outlined"
+                          size="small"
+                          value={phoneNo}
+                          onChange={(e) => {
+                            const re = /^[0-9\b]+$/;
+                            if (e.target.value === '' || re.test(e.target.value)) {
+                              setPhoneNo((e.target.value).trim())
+                            }
+                          }}
+                        />
+                      </Grid>
+                      <Grid>
+                        <TextField
+                          select
+                          className="textField"
+                          id="outlined-full-width"
+                          label="Gender"
+                          style={{ margin: 8 }}
+                          margin="normal"
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                          SelectProps={{
+                            native: true,
+                          }}
+                          variant="outlined"
+                          size="small"
+                          value={gender}
+                          onChange={(e) => setGender(e.target.value)}
+                        >
+                          <option value="">Select One</option>
+                          <option value="M">Male</option>
+                          <option value="F">Female</option>
+                          <option value="T">LGBT</option>
+                        </TextField>
+                      </Grid>
+                    </Grid>
+                    <Grid container style={{ justifyContent: 'center' }}>
+                      <Grid>
+                        <TextField
+                          className="textField"
+                          id="outlined-full-width"
+                          label="Haloocoom Username"
+                          style={{ margin: 8 }}
+                          margin="normal"
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                          InputProps={{
+                            endAdornment: (
+                              <InputAdornment position="end">
+                                <IconButton onClick={submitHaloocomUserName}>
+                                  <SendIcon style={{ color: '#14cc9e' }} />
+                                </IconButton>
+                              </InputAdornment>
+                            ),
+                          }}
+                          variant="outlined"
+                          size="small"
+                          value={vertageId}
+                          onChange={(e) => setVertageId((e.target.value).trim())}
+                        />
+                      </Grid>
+                      <Grid>
+                        <TextField
+                          className="textField"
+                          id="outlined-full-width"
+                          label="Vertage Password"
+                          style={{ margin: 8 }}
+                          margin="normal"
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                          variant="outlined"
+                          size="small"
+                          value={vertagePass}
+                          onChange={(e) => setVertagePass((e.target.value).trim())}
+                        />
+                      </Grid>
+                    </Grid>
+                    <Grid container style={{ justifyContent: 'center' }}>
+                      <Grid>
+                        <TextField
+                          select
+                          className="textField"
+                          id="outlined-full-width"
+                          label="Parent"
+                          style={{ margin: 8 }}
+                          margin="normal"
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                          variant="outlined"
+                          size="small"
+                          value={parent}
+                          onChange={(e) => setparent(e.target.value)}
+                        >
+                          <option value="">Select One</option>
+                          {updateUsers.map(item => {
+                            return <option style={{ cursor: 'pointer' }} value={item.myuser.username}>{item.myuser.username}</option>
+                          })}
+                        </TextField>
+                      </Grid>
+                      <Grid>
+                        <FormControl
+                          className="textField"
+                          style={{ margin: 8 }}
+                          margin="normal"
+                          variant="outlined"
+                          size="small">
+                          <InputLabel id="demo-mutiple-checkbox-label">Location</InputLabel>
+                          <Select
+                            labelId="demo-mutiple-checkbox-label"
+                            id="demo-mutiple-checkbox"
+                            multiple
+                            value={location}
+                            onChange={(e) => setlocation(e.target.value)}
+                            label="Location"
+                            renderValue={(selected) => selected.join(', ')}
+                          >
+                            {pullLocation.map((name) => (
+                              <MenuItem value={name.id}>
+                                <Checkbox style={{ color: "#535ad1" }} checked={location.indexOf(name.id) > -1} />
+                                <ListItemText primary={name.city} />
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+                      </Grid>
+                    </Grid>
+                    <Button type="submit" className={classes.editUserBtn}>
+                      Update</Button>
+                  </Form>
+                </DialogContent>
+              </Dialog>
+            </>
+          </TableBody>
+        </Table>
+      </TableContainer>
     </PageLayerSection>
   );
 }
