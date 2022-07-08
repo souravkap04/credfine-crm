@@ -108,7 +108,7 @@ export default function Login() {
         if (response.status === 200) {
           localStorage.setItem("user_info", JSON.stringify(response.data));
           const profileData = JSON.parse(localStorage.getItem("user_info"))
-          if (campaign === 'WEBSITE_LEAD') {
+          if (campaign === 'WEBSITE') {
             setOtpPopup(true);
             setMobileNo(profileData.parent_phone_no);
             getOTP(profileData.parent_phone_no);
