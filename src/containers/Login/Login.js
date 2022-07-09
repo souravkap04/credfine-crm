@@ -250,6 +250,21 @@ export default function Login() {
               .catch((error) => {
                 console.log(error);
               });
+            if (profileData.dialer === "HALOOCOM-Noida") {
+              axios.post(`${haloocomNoidaDialerApi}/action.php?user=${profileData.vertage_id}&type=Login`)
+                .then((response) => {
+                  console.log("dialer-noida loin successfull")
+                }).catch((error) => {
+                  console.log(error);
+                })
+            } else if (profileData.dialer === "HALOOCOM-Mumbai") {
+              axios.post(`${haloocomMumbaiDialerApi}/action.php?user=${profileData.vertage_id}&type=Login`)
+                .then((response) => {
+                  console.log("dialer-mumbai loin successfull")
+                }).catch((error) => {
+                  console.log(error);
+                })
+            }
           }
           setisSuccess(true)
           setAlertMessage(response.data)
