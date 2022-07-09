@@ -732,7 +732,11 @@ export default function LeadDetailsNew(props) {
                 return;
             }
         }
-        let items = { status: status, sub_status: subStatus, app_id: appID, bank: bankNBFC, scheme: scheme, callback_time: followUpDate.replace('T', ' '), disbursed_date: disbursedDate, roi: Roi }
+        let items = {
+            status: status, sub_status: subStatus, app_id: appID, bank: bankNBFC, scheme: scheme,
+            callback_time: status === 'Contacted NI/NE' || status === 'Customer Not Interested' || status === 'Not Contactable' || status === 'STB'
+                ? "" : followUpDate.replace('T', ' '), disbursed_date: disbursedDate, roi: Roi
+        }
         let headers = { 'Authorization': `Token ${profileData.token}` }
         if (status !== '' && subStatus.length > 0) {
             await axios.put(`${baseUrl}/leads/lead_status/${id}`, items, { headers })
