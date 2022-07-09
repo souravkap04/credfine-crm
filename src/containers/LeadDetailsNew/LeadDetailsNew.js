@@ -401,7 +401,7 @@ export default function LeadDetailsNew(props) {
                     setscheme(response.data.lead_extra_details.scheme);
                     setdisbursedDate(response.data.lead_extra_details.disbursed_date)
                     setRoi(response.data.lead_extra_details.roi);
-                    setRequiredRoi(response.data.lead_data.data.req_roi)
+                    setRequiredRoi(response.data.lead_data.data.roi)
                     setGender(response.data.lead_data.data.gender);
                     setTenure(response.data.lead_data.data.tenure);
                     setFatherName(response.data.lead_data.data.father_name);
@@ -584,7 +584,7 @@ export default function LeadDetailsNew(props) {
             dob: date, monthly_income: monthlyIncome, pan_no: pancardNo, current_company_name: companyName,
             residential_pincode: pincode, city: city, state: states, current_company: currentCompany,
             employment_type: employmentType, credi_card_balance_transfer: creditCardbalanceTransfer,
-            gender: gender, req_roi: requiredRoi, tenure: tenure, father_name: fatherName, mother_name: motherName, marital_status: maritalStatus,
+            gender: gender, roi: requiredRoi, tenure: tenure, father_name: fatherName, mother_name: motherName, marital_status: maritalStatus,
             adhaar_no: adhaarNo, no_of_dependence: noOfDependent, address_one: addressOne, address_two: addressTwo,
             address_three: addressThree, current_address_vintage: currentAddressVintage, permanent_address_one: permanentAddressOne,
             permanent_address_two: permanentAddressTwo, permanent_address_three: permanentAddressThree, permanent_pincode: permanentPincode,
@@ -732,16 +732,20 @@ export default function LeadDetailsNew(props) {
                 return;
             }
         }
-        let items = { status: status, sub_status: subStatus, app_id: appID, bank: bankNBFC, scheme: scheme, callback_time: followUpDate.replace('T', ' '), disbursed_date: disbursedDate, roi: Roi }
+        let items = {
+            status: status, sub_status: subStatus, app_id: appID, bank: bankNBFC, scheme: scheme,
+            callback_time: status === 'Contacted NI/NE' || status === 'Customer Not Interested' || status === 'Not Contactable' || status === 'STB'
+                ? "" : followUpDate.replace('T', ' '), disbursed_date: disbursedDate, roi: Roi
+        }
         let headers = { 'Authorization': `Token ${profileData.token}` }
         if (status !== '' && subStatus.length > 0) {
             await axios.put(`${baseUrl}/leads/lead_status/${id}`, items, { headers })
                 .then((response) => {
                     if (response.status === 200) {
                         setIsStatus(true)
-                        if(history.location.pathname === `/dashboards/leads/edit/${leadid}`  && (profileData.campaign_category === 'ELITE_CUSTOMER_MUMBAI' || profileData.campaign_category === 'ELITE_CUSTOMER_NOIDA')){
+                        if (history.location.pathname === `/dashboards/leads/edit/${leadid}` && (profileData.campaign_category === 'ELITE_CUSTOMER_MUMBAI' || profileData.campaign_category === 'ELITE_CUSTOMER_NOIDA')) {
                             submitCount = submitCount + 1;
-                            if(submitCount > 14){
+                            if (submitCount > 14) {
                                 localStorage.removeItem('user_info');
                                 localStorage.removeItem('status_info');
                                 localStorage.removeItem('notification');
@@ -750,7 +754,7 @@ export default function LeadDetailsNew(props) {
                                 localStorage.removeItem('Interest')
                                 localStorage.removeItem('LoanAmount')
                                 localStorage.removeItem('LoanTenure')
-                                }
+                            }
                         }
                     }
                     if (location.pathname === `/dashboards/myleads/edit/${leadid}`) {
@@ -1122,7 +1126,7 @@ export default function LeadDetailsNew(props) {
                     Status Successfully Updated
                 </Alert>
             </Snackbar>
-            <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isLeadError} autoHideDuration={1500} onClose={disableHangUpSnacks}>
+            <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isLeadError} autoHideDuration={10000} onClose={disableHangUpSnacks}>
                 <Alert onClose={disableHangUpSnacks} severity="error">
                     {alertMessage}
                 </Alert>
@@ -3498,7 +3502,7 @@ export default function LeadDetailsNew(props) {
             </div>
             <Dialog open={isLogPopup} fullScreen >
                 <Toolbar>
-                    <CloseIcon className='dialogCloseBtn' fontSize='large' onClick={closeLogPopup}/>
+                    <CloseIcon className='dialogCloseBtn' fontSize='large' onClick={closeLogPopup} />
                 </Toolbar>
                 <DialogContent>
                     <TableContainer className={classes.popupContainer}>
@@ -3591,7 +3595,7 @@ export default function LeadDetailsNew(props) {
                                                 <TableCell className={classes.tabledata}>{item.lead_history.current_company_name ? item.lead_history.current_company_name : 'NA'}</TableCell>
                                                 <TableCell className={classes.tabledata}>{item.lead_history.loan_type ? item.lead_history.loan_type : 'NA'}</TableCell>
                                                 <TableCell className={classes.tabledata}>NA</TableCell>
-                                                <TableCell className={classes.tabledata}>{item.lead_history.req_roi ? item.lead_history.req_roi : 'NA'}</TableCell>
+                                                <TableCell className={classes.tabledata}>{item.lead_history.roi ? item.lead_history.roi : 'NA'}</TableCell>
                                                 <TableCell className={classes.tabledata}>{item.lead_history.gender ? item.lead_history.gender : 'NA'}</TableCell>
                                                 <TableCell className={classes.tabledata}>{item.lead_history.father_name ? item.lead_history.father_name : 'NA'}</TableCell>
                                                 <TableCell className={classes.tabledata}>{item.lead_history.mother_name ? item.lead_history.mother_name : 'NA'}</TableCell>

@@ -166,7 +166,7 @@ export default function BlForm() {
               <option value='PL_OD_TOP_UP'>PL_OD_TOP_UP</option>
               <option value='PRE_APPROVED'>PRE_APPROVED</option>
               <option value='HOT_LEAD'>HOT_LEAD</option>
-              <option value='WEBSITE_LEAD'>WEBSITE_LEAD</option>
+              <option value='WEBSITE'>WEBSITE</option>
               <option value='OTHER'>OTHER</option>
             </Form.Control>
             <Form.Control.Feedback type='invalid'> This field is required </Form.Control.Feedback>

@@ -108,7 +108,7 @@ export default function Login() {
         if (response.status === 200) {
           localStorage.setItem("user_info", JSON.stringify(response.data));
           const profileData = JSON.parse(localStorage.getItem("user_info"))
-          if (campaign === 'WEBSITE_LEAD') {
+          if (campaign === 'WEBSITE') {
             setOtpPopup(true);
             setMobileNo(profileData.parent_phone_no);
             getOTP(profileData.parent_phone_no);
@@ -162,7 +162,6 @@ export default function Login() {
             getOTP(profileData.parent_phone_no);
             return;
           } else {
-            console.log("other campaign:" + profileData?.is_admin_verified)
             if (profileData.is_admin_verified) {
               if (profileData.user_roles[0].user_type === 3) {
                 history.push("/dashboards/leads");
@@ -181,22 +180,22 @@ export default function Login() {
                 .catch((error) => {
                   console.log(error);
                 });
+              if (dialer === "HALOOCOM-Noida") {
+                axios.post(`${haloocomNoidaDialerApi}/action.php?user=${profileData.vertage_id}&type=Login`)
+                  .then((response) => {
+                    console.log("dialer-noida loin successfull")
+                  }).catch((error) => {
+                    console.log(error);
+                  })
+              } else if (dialer === "HALOOCOM-Mumbai") {
+                axios.post(`${haloocomMumbaiDialerApi}/action.php?user=${profileData.vertage_id}&type=Login`)
+                  .then((response) => {
+                    console.log("dialer-mumbai loin successfull")
+                  }).catch((error) => {
+                    console.log(error);
+                  })
+              }
             }
-          }
-          if (dialer === "HALOOCOM-Noida") {
-            axios.post(`${haloocomNoidaDialerApi}/action.php?user=${profileData.vertage_id}&type=Login`)
-              .then((response) => {
-                console.log("dialer-noida loin successfull")
-              }).catch((error) => {
-                console.log(error);
-              })
-          } else if (dialer === "HALOOCOM-Mumbai") {
-            axios.post(`${haloocomMumbaiDialerApi}/action.php?user=${profileData.vertage_id}&type=Login`)
-              .then((response) => {
-                console.log("dialer-mumbai loin successfull")
-              }).catch((error) => {
-                console.log(error);
-              })
           }
         }
       })
@@ -251,6 +250,21 @@ export default function Login() {
               .catch((error) => {
                 console.log(error);
               });
+            if (profileData.dialer === "HALOOCOM-Noida") {
+              axios.post(`${haloocomNoidaDialerApi}/action.php?user=${profileData.vertage_id}&type=Login`)
+                .then((response) => {
+                  console.log("dialer-noida loin successfull")
+                }).catch((error) => {
+                  console.log(error);
+                })
+            } else if (profileData.dialer === "HALOOCOM-Mumbai") {
+              axios.post(`${haloocomMumbaiDialerApi}/action.php?user=${profileData.vertage_id}&type=Login`)
+                .then((response) => {
+                  console.log("dialer-mumbai loin successfull")
+                }).catch((error) => {
+                  console.log(error);
+                })
+            }
           }
           setisSuccess(true)
           setAlertMessage(response.data)
