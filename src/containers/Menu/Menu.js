@@ -138,7 +138,7 @@ export default function Menu(props) {
             setaddUserPage(true)
             setverfiyUserPage(true)
             setallUsersPage(true)
-            setbulkUploadPage(true)
+            setbulkUploadPage(false)
             setfreshLeadPage(true)
             setreportPage(true)
         }
