@@ -72,12 +72,12 @@ const useStyles = makeStyles({
 });
 export default function Report() {
   const [openCalculate, setopenCalculate] = useState(false);
-  const [checkEligibility,setCheckEligibility] = useState(false);
-  
-  const openEligibility = () =>{
+  const [checkEligibility, setCheckEligibility] = useState(false);
+
+  const openEligibility = () => {
     setCheckEligibility(true);
   }
-  const closeEligibility = () =>{
+  const closeEligibility = () => {
     setCheckEligibility(false);
   }
   const openCalculator = () => {
@@ -87,8 +87,8 @@ export default function Report() {
     setopenCalculate(false);
   }
   const classes = useStyles();
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
   const [status, setStatus] = useState("");
   const [productType, setProductType] = useState("");
   const [alertMessage, setAlertMessage] = useState('');
@@ -102,7 +102,7 @@ export default function Report() {
     let newErrors = {};
     let selectedStartDate = moment(sDate, 'YYYY-MM-DD');
     let selectedEndDate = moment(eDate, 'YYYY-MM-DD');
-    let dateDiff = selectedEndDate.diff(selectedStartDate, 'days')
+    //let dateDiff = selectedEndDate.diff(selectedStartDate, 'days')
 
     if (!startDate || startDate === '') {
       newErrors.startDate = 'This is requires field'
@@ -110,9 +110,9 @@ export default function Report() {
     if (!endDate || endDate === '') {
       newErrors.endDate = 'This is required field'
     }
-    if (dateDiff > 30) {
-      newErrors.endDate = 'Start Date and End Date should be with in 30 days'
-    }
+    // if (dateDiff > 30) {
+    //   newErrors.endDate = 'Start Date and End Date should be with in 30 days'
+    // }
     return newErrors;
   }
   const removeDuplicateStatus = (data) => {
@@ -169,7 +169,7 @@ export default function Report() {
   }, []);
   return (
     <PageLayerSection ActualEmiCalculate={openCalculator} ActualEligibilityCalculate={openEligibility}>
-      <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility}/>
+      <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility} />
       <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
       <div>
         <Form onSubmit={reportSubmit}>
@@ -208,7 +208,7 @@ export default function Report() {
                   type="date"
                   className="textFieldReport"
                   id="outlined-full-width"
-                  label="Start Date"
+                  label="End Date"
                   margin="normal"
                   InputLabelProps={{
                     shrink: true,
@@ -282,7 +282,7 @@ export default function Report() {
         </Form>
       </div>
       <TableContainer className={classes.container}>
-        <Table className={classes.table} >
+        <Table className={classes.table} stickyHeader>
           <TableHead className={classes.tableheading}>
             <TableRow>
               <TableCell className={classes.tableheading}>Sr No</TableCell>
