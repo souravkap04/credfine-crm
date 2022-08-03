@@ -470,6 +470,11 @@ export default function LeadDetailsNew(props) {
         fetchLeadDetaile(leadid);
     }, []);
     const remarksHandler = async (event, id) => {
+        if (status === 'OPEN' && subStatus === null) {
+            setAlertMessage('Please Enter Status & Substatus')
+            setIsLeadError(true);
+            return;
+        }
         event.preventDefault();
         let item = { remark: input };
         let headers = {
@@ -890,7 +895,7 @@ export default function LeadDetailsNew(props) {
             setisCopy(true);
         }, function () {
             setAlertMessage('Lead ID not copied!');
-            isLeadError(true)
+            setIsLeadError(true)
         });
     }
     const disableHangUpSnacks = () => {

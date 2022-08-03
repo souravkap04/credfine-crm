@@ -163,11 +163,13 @@ $desk: 100 / 1440;
                 z-index: 1;
                 right: -10 * $desk + vw;
                 top: -10 * $desk + vw;
+                cursor: pointer;
             }
             .listItemContainer {
                 overflow-y: scroll;
                 border-radius: 4 * $desk + vw;
                 width: 230 * $desk + vw;
+                height: 250 * $desk + vh;
                 .list-group-item {
                     cursor: pointer;
                     border: none;
