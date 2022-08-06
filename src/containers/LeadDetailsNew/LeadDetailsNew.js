@@ -652,6 +652,11 @@ export default function LeadDetailsNew(props) {
     }
     const options = subStatusHandler();
     const statusUpdateHandler = async (id) => {
+        if (status === 'OPEN') {
+            setAlertMessage('Please Enter Status & Substatus')
+            setIsLeadError(true);
+            return;
+        }
         if (status === 'STB' && subStatus !== 'STB') {
             let data = [...STBError];
             if (appID === "") data[0] = true;
@@ -1097,7 +1102,7 @@ export default function LeadDetailsNew(props) {
         setIsLogPopup(false);
     }
     return (
-        <PageLayerSection isDisplaySearchBar={true} pageTitle="Lead Details" className={classes.scrollEnable} offerButton={true} isWhatsapp={true} whatsappNumber={mobileNo} endAutoDialerBtn={true} endAutoDialerClick={() => endAutoDialerBtnHandler()} ActualEmiCalculate={openCalculator} isDownloadPdf={true} downloadPdf={() => downloadPdfHandler()} isShareThroughEmail={true} emailId={email} ActualEligibilityCalculate={openEligibility}>
+        <PageLayerSection isDisplaySearchBar={false} pageTitle="Lead Details" className={classes.scrollEnable} offerButton={true} isWhatsapp={true} whatsappNumber={mobileNo} endAutoDialerBtn={true} endAutoDialerClick={() => endAutoDialerBtnHandler()} ActualEmiCalculate={openCalculator} isDownloadPdf={true} downloadPdf={() => downloadPdfHandler()} isShareThroughEmail={true} emailId={email} ActualEligibilityCalculate={openEligibility}>
             <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility} />
             <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
             {/* Errors SnackBars Start */}
