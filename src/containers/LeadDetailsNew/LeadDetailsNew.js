@@ -470,7 +470,7 @@ export default function LeadDetailsNew(props) {
         fetchLeadDetaile(leadid);
     }, []);
     const remarksHandler = async (event, id) => {
-        if (status === 'OPEN' && subStatus === null) {
+        if (status === 'OPEN') {
             setAlertMessage('Please Enter Status & Substatus')
             setIsLeadError(true);
             return;
