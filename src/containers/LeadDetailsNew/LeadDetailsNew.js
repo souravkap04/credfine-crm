@@ -197,6 +197,10 @@ export default function LeadDetailsNew(props) {
     const [loanAmount, setLoanAmount] = useState("");
     const [leadId, setLeadId] = useState("");
     const [STBError, setSTBError] = useState([false, false, false]);
+    const [loanDetailsError, setLoanDetailsError] = useState([false, false, false, false, false, false, false, false])
+    const [residentialError, setResidentialError] = useState([false, false])
+    const [incomeDetailsError, setIncomeDetailsError] = useState([false, false, false, false, false, false])
+    const [obligationError, setObligationError] = useState([false, false, false]);
     const [employmentType, setEmploymentType] = useState("");
     const [monthlyIncome, setMonthlyIncome] = useState("");
     const [currentCompany, setCurrentCompany] = useState("");
@@ -211,7 +215,7 @@ export default function LeadDetailsNew(props) {
     const [pancardNo, setPancardNo] = useState("");
     const [totalWorkExp, setTotalWorkExp] = useState("");
     const [currentWorkExp, setCurrentWorkExp] = useState("");
-    const [email, setEmail] = useState("");
+    const [email, setEmail] = useState('');
     const [designation, setDesignation] = useState("");
     const [currentEMI, setCurrentEMI] = useState("");
     const [noOfCreditCard, setNoOfCreditCard] = useState("");
@@ -297,9 +301,9 @@ export default function LeadDetailsNew(props) {
     const [colorTick5, setcolorTick5] = useState(false);
     const [colorTick6, setcolorTick6] = useState(false);
     const [colorTick7, setcolorTick7] = useState(false);
-    const [appID, setappID] = useState('');
-    const [bankNBFC, setbankNBFC] = useState('');
-    const [scheme, setscheme] = useState('');
+    const [appID, setappID] = useState(null);
+    const [bankNBFC, setbankNBFC] = useState(null);
+    const [scheme, setscheme] = useState(null);
     const [followUpDate, setfollowUpDate] = useState('');
     const [followUpDateError, setfollowUpDateError] = useState([false]);
     const [isLoading, setisLoading] = useState(false);
@@ -448,23 +452,28 @@ export default function LeadDetailsNew(props) {
                     setRef2LastName(response.data.lead_data.data.ref2_last_name);
                     setRef2MobileNo(response.data.lead_data.data.ref2_mobile_no);
                     setisLoading(false)
-                    if (response.data.lead_data.lead_crm_id !== '' && response.data.lead_data.loan_type !== '' && response.data.lead_data.loan_amount !== '' && response.data.lead_data.name !== '' && response.data.lead_data["data"].dob !== '' && response.data.eligibility_data.pan_no !== '' && response.data.eligibility_data.email_id !== '' && response.data.lead_data.phone_no !== '') {
+                    if (response.data.lead_data.loan_amount !== '' && response.data.lead_data.name !== '' && response.data.lead_data["data"].dob !== '' && response.data.eligibility_data.pan_no !== '' && response.data.eligibility_data.email_id !== '' && response.data.lead_data.data.roi || '' !== '' && response.data.lead_data.data.tenure || '' !== '' && response.data.lead_data.data.gender || '' !== '') {
                         setcolorTick(true)
                     }
-                    if (response.data.lead_data["data"].residential_pincode !== '' && response.data.lead_data["data"].city !== '' && response.data.lead_data["data"].state !== '' && response.data.eligibility_data.residence_type !== '') {
+                    if (response.data.lead_data["data"].residential_pincode || '' !== '') {
                         setcolorTick2(true)
                     }
-                    if (response.data.lead_data["data"].permanent_pincode !== '' && response.data.lead_data["data"].permanent_city !== '' && response.data.lead_data['data'].permanent_state !== '' && response.data.lead_data['data'].permanent_resident_Type) {
+                    if (response.data.lead_data["data"].permanent_pincode || '' !== '') {
                         setcolorTick3(true)
                     }
-                    if (response.data.lead_data["data"].employment_type !== '' && response.data.lead_data["data"].current_company_name !== '' && response.data.eligibility_data.designation !== '' && response.data.eligibility_data.current_work_exp !== '' && response.data.eligibility_data.total_work_exp !== '' && response.data.lead_data["data"].monthly_income !== '' && response.data.eligibility_data.salary_mode !== '' && response.data.eligibility_data.salary_bank !== '') {
+                    if (response.data.lead_data["data"].current_company_name !== '' && response.data.lead_data.data.gross_income || '' !== '' && response.data.lead_data.data.office_pincode || '' !== '' && response.data.lead_data["data"].monthly_income !== '' && response.data.eligibility_data.salary_mode !== '' && response.data.eligibility_data.salary_bank !== '') {
                         setcolorTick4(true)
                     }
-                    if (response.data.eligibility_data.current_emi !== '') {
+                    if (response.data.eligibility_data.current_emi !== '' && response.data.lead_data.data.no_of_creditcard || '' !== '' && response.data.eligibility_data.credit_card_outstanding !== '') {
                         setcolorTick5(true)
                     }
                 }).catch((error) => {
-                    console.log(error)
+                    if (error.response.status === 400) {
+                        setAlertMessage(error.response.data.error)
+                        setIsLeadError(true);
+                    } else {
+                        console.log(error)
+                    }
                 });
         };
         fetchLeadDetaile(leadid);
@@ -517,7 +526,7 @@ export default function LeadDetailsNew(props) {
     const updateLeadDetails = async (id) => {
         let regex = /[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(pancardNo);
         if (expanded === 'panel1') {
-            if (leadId !== '' && loanType !== '' && loanAmount !== '' && name !== '' && date !== '' && pancardNo !== '' && email !== '' && mobileNo !== '' && tenure !== '' && requiredRoi !== '') {
+            if (loanAmount !== '' && name !== '' && date !== '' && pancardNo !== '' && email !== '' && tenure !== '' && requiredRoi !== '') {
                 colorRed[0] = false;
                 setcolorTick(true)
             } else {
@@ -531,7 +540,7 @@ export default function LeadDetailsNew(props) {
             setExpanded('panel2')
         }
         if (expanded === 'panel2') {
-            if (pincode !== '' && city !== '' && states !== '' && currentResidentType !== '' && addressOne !== '' && addressTwo !== '' && addressThree !== '' && currentAddressVintage !== '') {
+            if (pincode !== '') {
                 colorRed[1] = false;
                 setcolorTick2(true)
             } else {
@@ -540,7 +549,7 @@ export default function LeadDetailsNew(props) {
             setExpanded('panel3')
         }
         if (expanded === 'panel3') {
-            if (permanentPincode !== '' && permanentCity !== '' && permanentStates !== '' && permanentResidentType !== '' && permanentAddressOne !== '' && permanentAddressTwo !== '' && permanentAddressTwo !== '' && permanentAddressThree !== '' && permanentAddressVintage !== '') {
+            if (permanentPincode !== '') {
                 colorRed[2] = false;
                 setcolorTick3(true)
             } else {
@@ -549,17 +558,16 @@ export default function LeadDetailsNew(props) {
             setExpanded('panel4')
         }
         if (expanded === 'panel4') {
-            if (employmentType !== '' && companyName !== '' && designation !== '' && currentWorkExp !== '' && totalWorkExp !== '' && monthlyIncome !== '' && salaryCreditMode !== '' && salaryBankAcc !== '') {
+            if (companyName !== '' && grossIncome !== '' && monthlyIncome !== '' && officePincode !== '' && salaryCreditMode !== '' && salaryBankAcc !== '') {
                 colorRed[3] = false;
                 setcolorTick4(true)
             } else {
                 setcolorTick4(false)
             }
             setExpanded('panel5')
-
         }
         if (expanded === 'panel5') {
-            if (currentEMI !== '') {
+            if (currentEMI !== '' && noOfCreditCard !== '' && creditCardOutstanding !== '') {
                 colorRed[4] = false;
                 setcolorTick5(true)
             } else {
@@ -568,21 +576,11 @@ export default function LeadDetailsNew(props) {
             setExpanded('panel6')
         }
         if (expanded === 'panel6') {
-            if (ref1FirstName !== '' && ref1LastName !== '' && ref1MobileNo !== '' && ref1Address1 !== '' && ref1Address2 !== '' && ref1Pincode !== '') {
-                colorRed[5] = false;
-                setcolorTick6(true)
-            } else {
-                setcolorTick6(false)
-            }
+            setcolorTick6(false)
             setExpanded('panel7')
         }
         if (expanded === 'panel7') {
-            if (ref2FirstName !== '' && ref2LastName !== '' && ref2MobileNo !== '' && ref2Address1 !== '' && ref2Address2 !== '' && ref2Pincode !== '') {
-                colorRed[6] = false;
-                setcolorTick7(true)
-            } else {
-                setcolorTick7(false)
-            }
+            setcolorTick7(false)
             setExpanded('panel1')
         }
         let data = {
@@ -657,73 +655,141 @@ export default function LeadDetailsNew(props) {
             setIsLeadError(true);
             return;
         }
-        if (status === 'STB' && subStatus !== 'STB') {
+        if (status === 'STB' && subStatus !== '') {
             let data = [...STBError];
-            if (appID === "") data[0] = true;
-            if (bankNBFC === "") data[1] = true;
-            if (scheme === "") data[2] = true;
-
-            if (appID == '' || bankNBFC == '' || scheme == '') {
+            if (appID === null || appID === '') {
+                data[0] = true;
+                setSTBError(data)
+            }
+            if (bankNBFC === null || bankNBFC === '') {
+                data[1] = true;
+                setSTBError(data)
+            }
+            if (scheme === null || scheme === '') {
+                data[2] = true;
                 setSTBError(data);
-                return;
-            }
-            let colorRedError = [...colorRed];
-            if (leadId === '') colorRedError[0] = true;
-            if (mobileNo === '') colorRedError[0] = true;
-            if (loanType === '') colorRedError[0] = true;
-            if (name === '') colorRedError[0] = true;
-            if (date === '') colorRedError[0] = true;
-            if (pancardNo === '') colorRedError[0] = true;
-            if (email === '') colorRedError[0] = true;
-            if (loanAmount === '') colorRedError[0] = true;
-            if (tenure === '') colorRedError[0] = true;
-            if (requiredRoi === '') colorRedError[0] = true;
-            if (date === '' || pancardNo === '' || email === '' || leadId === '' || mobileNo === '' || loanType === '' || name === '' || loanAmount === '' || tenure === '' || requiredRoi === '') {
-                setcolorRed(colorRedError)
-                return;
-            }
-            if (pincode === '') colorRedError[1] = true;
-            if (city === '') colorRedError[1] = true;
-            if (states === '') colorRedError[1] = true;
-            if (currentResidentType === '') colorRedError[1] = true;
-            if (addressOne === '') colorRedError[1] = true;
-            if (addressTwo === '') colorRedError[1] = true;
-            if (addressThree === '') colorRedError[1] = true;
-            if (currentAddressVintage === '') colorRedError[1] = true
-            if (pincode === '' || city === '' || states === '' || currentResidentType === '' || addressOne === '' || addressTwo === '' || addressThree === '' || currentAddressVintage === '') {
-                setcolorRed(colorRedError)
-                return;
-            }
-            if (permanentPincode === '') colorRedError[2] = true;
-            if (permanentCity === '') colorRedError[2] = true;
-            if (permanentStates === '') colorRedError[2] = true;
-            if (permanentResidentType === '') colorRedError[2] = true;
-            if (permanentAddressOne === '') colorRedError[2] = true;
-            if (permanentAddressTwo === '') colorRedError[2] = true;
-            if (permanentAddressThree === '') colorRedError[2] = true;
-            if (permanentAddressVintage === '') colorRedError[2] = true
-            if (permanentPincode === '' || permanentCity === '' || permanentStates === '' || permanentResidentType === '' || permanentAddressOne === '' || permanentAddressTwo === '' || permanentAddressThree === '' || permanentAddressVintage === '') {
-                setcolorRed(colorRedError)
-                return;
-            }
-            if (employmentType === '') colorRedError[3] = true;
-            if (companyName === '') colorRedError[3] = true;
-            if (designation === '') colorRedError[3] = true;
-            if (currentWorkExp === '') colorRedError[3] = true;
-            if (totalWorkExp === '') colorRedError[3] = true;
-            if (monthlyIncome === '') colorRedError[3] = true;
-            if (salaryCreditMode === '') colorRedError[3] = true;
-            if (salaryBankAcc === '') colorRedError[3] = true;
-            if (employmentType === '' || companyName === '' || designation === '' || currentWorkExp === '' || totalWorkExp === '' || monthlyIncome === '' || salaryCreditMode === '' || salaryBankAcc === '') {
-                setcolorRed(colorRedError)
-                return;
-            }
-            if (currentEMI === '') colorRedError[4] = true;
-            if (currentEMI === '') {
-                setcolorRed(colorRedError)
-                return;
             }
 
+            let colorRedError = [...colorRed];
+            let loanErrorData = [...loanDetailsError]
+            let residentialsData = [...residentialError]
+            let incomeData = [...incomeDetailsError]
+            let obligationData = [...obligationError]
+            if (name === '') {
+                colorRedError[0] = true;
+                loanErrorData[0] = true;
+                setcolorRed(colorRedError)
+                setLoanDetailsError(loanErrorData)
+            }
+            if (date === '' || date === 'Invalid date') {
+                colorRedError[0] = true;
+                loanErrorData[1] = true
+                setcolorRed(colorRedError)
+                setLoanDetailsError(loanErrorData)
+            }
+            if (pancardNo === '' || pancardNo === undefined) {
+                colorRedError[0] = true;
+                loanErrorData[2] = true
+                setcolorRed(colorRedError)
+                setLoanDetailsError(loanErrorData)
+            }
+            if (email === '') {
+                colorRedError[0] = true;
+                loanErrorData[3] = true
+                setcolorRed(colorRedError)
+                setLoanDetailsError(loanErrorData)
+            }
+            if (loanAmount === '') {
+                colorRedError[0] = true;
+                loanErrorData[4] = true
+                setcolorRed(colorRedError)
+                setLoanDetailsError(loanErrorData)
+            }
+            if (tenure === '' || tenure === undefined) {
+                colorRedError[0] = true;
+                loanErrorData[5] = true
+                setcolorRed(colorRedError)
+                setLoanDetailsError(loanErrorData)
+            }
+            if (requiredRoi === '' || requiredRoi === undefined) {
+                colorRedError[0] = true;
+                loanErrorData[6] = true
+                setcolorRed(colorRedError)
+                setLoanDetailsError(loanErrorData)
+            }
+            if (gender === '' || gender === undefined) {
+                colorRedError[0] = true;
+                loanErrorData[7] = true
+                setcolorRed(colorRedError)
+                setLoanDetailsError(loanErrorData)
+            }
+            if (pincode === '' || pincode === undefined) {
+                colorRedError[1] = true;
+                residentialsData[0] = true
+                setcolorRed(colorRedError)
+                setResidentialError(residentialsData)
+            }
+            if (permanentPincode === '' || permanentPincode === undefined) {
+                colorRedError[2] = true;
+                residentialsData[1] = true
+                setcolorRed(colorRedError)
+                setResidentialError(residentialsData)
+            }
+            if (companyName === '' || companyName === undefined) {
+                colorRedError[3] = true;
+                setcolorRed(colorRedError)
+                incomeData[0] = true
+                setIncomeDetailsError(incomeData)
+            }
+            if (grossIncome === '' || grossIncome === undefined) {
+                colorRedError[3] = true;
+                setcolorRed(colorRedError)
+                incomeData[1] = true
+                setIncomeDetailsError(incomeData)
+            }
+            if (monthlyIncome === '' || monthlyIncome === undefined) {
+                colorRedError[3] = true;
+                setcolorRed(colorRedError)
+                incomeData[2] = true
+                setIncomeDetailsError(incomeData)
+            }
+            if (officePincode === '' || officePincode === undefined) {
+                colorRedError[3] = true;
+                setcolorRed(colorRedError)
+                incomeData[3] = true
+                setIncomeDetailsError(incomeData)
+            }
+            if (salaryCreditMode === '' || salaryCreditMode === undefined) {
+                colorRedError[3] = true;
+                setcolorRed(colorRedError)
+                incomeData[4] = true
+                setIncomeDetailsError(incomeData)
+            }
+            if (salaryBankAcc === '' || salaryBankAcc === undefined) {
+                colorRedError[3] = true;
+                setcolorRed(colorRedError)
+                incomeData[5] = true
+                setIncomeDetailsError(incomeData)
+            }
+            if (currentEMI === '' || currentEMI === undefined) {
+                colorRedError[4] = true;
+                setcolorRed(colorRedError)
+                obligationData[0] = true
+                setObligationError(obligationData)
+            }
+            if (noOfCreditCard === '' || noOfCreditCard === undefined) {
+                colorRedError[4] = true;
+                setcolorRed(colorRedError)
+                obligationData[1] = true
+                setObligationError(obligationData)
+            }
+            if (creditCardOutstanding === '' || creditCardOutstanding === undefined) {
+                colorRedError[4] = true;
+                setcolorRed(colorRedError)
+                obligationData[2] = true
+                setObligationError(obligationData)
+            }
+            return;
         }
         if (status === 'Valid Follow-Up' || status === 'Cold Follow-Up' || status === 'Hot Follow-Up' || (status === 'Punched' && subStatus === 'Eligible')) {
             let followData = [...followUpDateError];
@@ -1162,7 +1228,6 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
-                                            required: true
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -1180,7 +1245,6 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
-                                            required: true
                                         }}
                                         SelectProps={{
                                             native: true,
@@ -1217,6 +1281,13 @@ export default function LeadDetailsNew(props) {
                                                 setLoanAmount(e.target.value)
                                             }
                                         }}
+                                        onFocus={() => {
+                                            let data = [...loanDetailsError];
+                                            data[4] = false;
+                                            setLoanDetailsError(data);
+                                        }}
+                                        error={loanDetailsError[4]}
+                                        helperText={loanDetailsError[4] ? 'Loan Amount is required' : ''}
                                     />
                                 </Grid>
                                 <Grid lg={4}>
@@ -1224,7 +1295,7 @@ export default function LeadDetailsNew(props) {
                                         select
                                         className="textField"
                                         id="outlined-full-width"
-                                        label=" Req Tenure in years"
+                                        label="Req Tenure in years"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
@@ -1238,6 +1309,13 @@ export default function LeadDetailsNew(props) {
                                         size="small"
                                         value={tenure}
                                         onChange={(e) => setTenure(e.target.value)}
+                                        onFocus={() => {
+                                            let data = [...loanDetailsError];
+                                            data[5] = false;
+                                            setLoanDetailsError(data);
+                                        }}
+                                        error={loanDetailsError[5]}
+                                        helperText={loanDetailsError[5] ? 'Req Tenure in years is required' : ''}
                                     >
                                         <option key="" value="">Select One</option>
                                         <option value="1 year">1 year</option>
@@ -1272,6 +1350,13 @@ export default function LeadDetailsNew(props) {
                                                 setRequiredRoi(e.target.value)
                                             }
                                         }}
+                                        onFocus={() => {
+                                            let data = [...loanDetailsError];
+                                            data[6] = false;
+                                            setLoanDetailsError(data);
+                                        }}
+                                        error={loanDetailsError[6]}
+                                        helperText={loanDetailsError[6] ? 'Required Roi % is required' : ''}
                                     />
                                 </Grid>
                                 <Grid lg={4}>
@@ -1292,6 +1377,13 @@ export default function LeadDetailsNew(props) {
                                         size="small"
                                         value={name}
                                         onChange={(e) => setname(e.target.value)}
+                                        onFocus={() => {
+                                            let data = [...loanDetailsError];
+                                            data[0] = false;
+                                            setLoanDetailsError(data);
+                                        }}
+                                        error={loanDetailsError[0]}
+                                        helperText={loanDetailsError[0] ? 'Loan Amount is required' : ''}
                                     />
                                 </Grid>
                                 <Grid lg={4}>
@@ -1304,6 +1396,7 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required: true
                                         }}
                                         SelectProps={{
                                             native: true,
@@ -1312,6 +1405,13 @@ export default function LeadDetailsNew(props) {
                                         size="small"
                                         value={gender}
                                         onChange={(e) => setGender(e.target.value)}
+                                        onFocus={() => {
+                                            let data = [...loanDetailsError];
+                                            data[7] = false;
+                                            setLoanDetailsError(data);
+                                        }}
+                                        error={loanDetailsError[7]}
+                                        helperText={loanDetailsError[7] ? 'Gender is required' : ''}
                                     >
                                         <option key="" value="">Select One</option>
                                         <option value="Male">Male</option>
@@ -1368,6 +1468,13 @@ export default function LeadDetailsNew(props) {
                                         size="small"
                                         value={date}
                                         onChange={(e) => setDate(e.target.value)}
+                                        onFocus={() => {
+                                            let data = [...loanDetailsError];
+                                            data[1] = false;
+                                            setLoanDetailsError(data);
+                                        }}
+                                        error={loanDetailsError[1]}
+                                        helperText={loanDetailsError[1] ? 'DOB is required' : ''}
                                     />
                                 </Grid>
                                 <Grid lg={4}>
@@ -1389,6 +1496,13 @@ export default function LeadDetailsNew(props) {
                                         size="small"
                                         value={pancardNo}
                                         onChange={(e) => setPancardNo(e.target.value.toUpperCase())}
+                                        onFocus={() => {
+                                            let data = [...loanDetailsError];
+                                            data[2] = false;
+                                            setLoanDetailsError(data);
+                                        }}
+                                        error={loanDetailsError[2]}
+                                        helperText={loanDetailsError[2] ? 'Pancard No is required' : ''}
                                     />
                                 </Grid>
                                 <Grid lg={4}>
@@ -1406,6 +1520,13 @@ export default function LeadDetailsNew(props) {
                                         size="small"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
+                                        onFocus={() => {
+                                            let data = [...loanDetailsError];
+                                            data[3] = false;
+                                            setLoanDetailsError(data);
+                                        }}
+                                        error={loanDetailsError[3]}
+                                        helperText={loanDetailsError[3] ? 'Email ID is required' : ''}
                                     />
                                 </Grid>
                                 <Grid lg={4}>
@@ -1417,7 +1538,6 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
-                                            required: true
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -1530,7 +1650,6 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
-                                            required: true
                                         }}
                                         inputProps={{
                                             maxLength: 30
@@ -1550,7 +1669,6 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
-                                            required: true
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -1567,7 +1685,6 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
-                                            required: true
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -1593,6 +1710,13 @@ export default function LeadDetailsNew(props) {
                                         size="small"
                                         value={pincode}
                                         onChange={(e) => getPincodeHandler(e)}
+                                        onFocus={() => {
+                                            let residentialData = [...residentialError];
+                                            residentialData[0] = false;
+                                            setResidentialError(residentialData);
+                                        }}
+                                        error={residentialError[0]}
+                                        helperText={residentialError[0] ? 'Pincode is required' : ''}
                                     />
                                 </Grid>
                                 <Grid lg={4}>
@@ -1604,7 +1728,6 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
-                                            required: true
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -1620,8 +1743,7 @@ export default function LeadDetailsNew(props) {
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
-                                            shrink: true,
-                                            required: true
+                                            shrink: true
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -1639,8 +1761,7 @@ export default function LeadDetailsNew(props) {
                                             style={{ margin: 8 }}
                                             margin="normal"
                                             InputLabelProps={{
-                                                shrink: true,
-                                                required: true
+                                                shrink: true
                                             }}
                                             SelectProps={{
                                                 native: true,
@@ -1667,8 +1788,7 @@ export default function LeadDetailsNew(props) {
                                             style={{ margin: 8 }}
                                             margin="normal"
                                             InputLabelProps={{
-                                                shrink: true,
-                                                required: true
+                                                shrink: true
                                             }}
                                             SelectProps={{
                                                 native: true,
@@ -1711,8 +1831,7 @@ export default function LeadDetailsNew(props) {
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
-                                            shrink: true,
-                                            required: true
+                                            shrink: true
                                         }}
                                         inputProps={{
                                             maxLength: 30
@@ -1731,8 +1850,7 @@ export default function LeadDetailsNew(props) {
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
-                                            shrink: true,
-                                            required: true
+                                            shrink: true
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -1748,8 +1866,7 @@ export default function LeadDetailsNew(props) {
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
-                                            shrink: true,
-                                            required: true
+                                            shrink: true
                                         }}
                                         inputProps={{
                                             maxLength: 30
@@ -1778,6 +1895,13 @@ export default function LeadDetailsNew(props) {
                                         size="small"
                                         value={permanentPincode}
                                         onChange={(e) => getPermanentPincodeHandler(e)}
+                                        onFocus={() => {
+                                            let residentialData = [...residentialError];
+                                            residentialData[1] = false;
+                                            setResidentialError(residentialData);
+                                        }}
+                                        error={residentialError[1]}
+                                        helperText={residentialError[1] ? 'Permanent Pincode is required' : ''}
                                     />
                                 </Grid>
                                 <Grid lg={4}>
@@ -1788,8 +1912,7 @@ export default function LeadDetailsNew(props) {
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
-                                            shrink: true,
-                                            required: true
+                                            shrink: true
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -1805,8 +1928,7 @@ export default function LeadDetailsNew(props) {
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
-                                            shrink: true,
-                                            required: true
+                                            shrink: true
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -1824,8 +1946,7 @@ export default function LeadDetailsNew(props) {
                                             style={{ margin: 8 }}
                                             margin="normal"
                                             InputLabelProps={{
-                                                shrink: true,
-                                                required: true
+                                                shrink: true
                                             }}
                                             SelectProps={{
                                                 native: true,
@@ -1852,8 +1973,7 @@ export default function LeadDetailsNew(props) {
                                             style={{ margin: 8 }}
                                             margin="normal"
                                             InputLabelProps={{
-                                                shrink: true,
-                                                required: true
+                                                shrink: true
                                             }}
                                             SelectProps={{
                                                 native: true
@@ -1904,8 +2024,7 @@ export default function LeadDetailsNew(props) {
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
-                                            shrink: true,
-                                            required: true
+                                            shrink: true
                                         }}
                                         SelectProps={{
                                             native: true,
@@ -1936,6 +2055,13 @@ export default function LeadDetailsNew(props) {
                                         size="small"
                                         value={companyName}
                                         onChange={(e) => searchCompanyHandler(e)}
+                                        onFocus={() => {
+                                            let incomeData = [...incomeDetailsError];
+                                            incomeData[0] = false;
+                                            setIncomeDetailsError(incomeData);
+                                        }}
+                                        error={incomeDetailsError[0]}
+                                        helperText={incomeDetailsError[0] ? 'Company Name is required' : ''}
                                     />
                                     <ListGroup className="listGroup">
                                         {showCompany ? searchCompany.map((company) => (
@@ -1953,8 +2079,7 @@ export default function LeadDetailsNew(props) {
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
-                                            shrink: true,
-                                            required: true
+                                            shrink: true
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -1971,8 +2096,7 @@ export default function LeadDetailsNew(props) {
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
-                                            shrink: true,
-                                            required: true
+                                            shrink: true
                                         }}
                                         SelectProps={{
                                             native: true
@@ -2002,8 +2126,7 @@ export default function LeadDetailsNew(props) {
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
-                                            shrink: true,
-                                            required: true
+                                            shrink: true
                                         }}
                                         SelectProps={{
                                             native: true
@@ -2033,6 +2156,7 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required: true
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -2043,6 +2167,13 @@ export default function LeadDetailsNew(props) {
                                                 setGrossIncome(e.target.value)
                                             }
                                         }}
+                                        onFocus={() => {
+                                            let incomeData = [...incomeDetailsError];
+                                            incomeData[1] = false;
+                                            setIncomeDetailsError(incomeData);
+                                        }}
+                                        error={incomeDetailsError[1]}
+                                        helperText={incomeDetailsError[1] ? 'Gross Income is required' : ''}
                                     />
                                 </Grid>
                                 <Grid lg={4}>
@@ -2068,6 +2199,13 @@ export default function LeadDetailsNew(props) {
                                                 setMonthlyIncome(e.target.value)
                                             }
                                         }}
+                                        onFocus={() => {
+                                            let incomeData = [...incomeDetailsError];
+                                            incomeData[2] = false;
+                                            setIncomeDetailsError(incomeData);
+                                        }}
+                                        error={incomeDetailsError[2]}
+                                        helperText={incomeDetailsError[2] ? 'Net Income is required' : ''}
                                     />
                                 </Grid>
                                 <Grid lg={4}>
@@ -2133,11 +2271,19 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required: true
                                         }}
                                         variant="outlined"
                                         size="small"
                                         value={officePincode}
                                         onChange={(e) => getOfficePincodeHandler(e)}
+                                        onFocus={() => {
+                                            let incomeData = [...incomeDetailsError];
+                                            incomeData[3] = false;
+                                            setIncomeDetailsError(incomeData);
+                                        }}
+                                        error={incomeDetailsError[3]}
+                                        helperText={incomeDetailsError[3] ? 'Office Pincode is required' : ''}
                                     />
                                 </Grid>
                                 <Grid lg={4}>
@@ -2224,6 +2370,13 @@ export default function LeadDetailsNew(props) {
                                         size="small"
                                         value={salaryCreditMode}
                                         onChange={(e) => setSalaryCreditMode(e.target.value)}
+                                        onFocus={() => {
+                                            let incomeData = [...incomeDetailsError];
+                                            incomeData[4] = false;
+                                            setIncomeDetailsError(incomeData);
+                                        }}
+                                        error={incomeDetailsError[4]}
+                                        helperText={incomeDetailsError[4] ? 'Mode of Salary is required' : ''}
                                     >
                                         <option value="">Select</option>
                                         {salaryMode.map((mode) => (
@@ -2250,6 +2403,13 @@ export default function LeadDetailsNew(props) {
                                         size="small"
                                         value={salaryBankAcc}
                                         onChange={(e) => setSalaryBankAcc(e.target.value)}
+                                        onFocus={() => {
+                                            let incomeData = [...incomeDetailsError];
+                                            incomeData[5] = false;
+                                            setIncomeDetailsError(incomeData);
+                                        }}
+                                        error={incomeDetailsError[5]}
+                                        helperText={incomeDetailsError[5] ? 'Bank Name is required' : ''}
                                     >
                                         <option value="">Select One</option>
                                         {banks.map((bank) => (
@@ -2292,8 +2452,14 @@ export default function LeadDetailsNew(props) {
                                             if (e.target.value === '' || re.test(e.target.value)) {
                                                 setCurrentEMI(e.target.value)
                                             }
-                                        }
-                                        }
+                                        }}
+                                        onFocus={() => {
+                                            let obligationData = [...obligationError];
+                                            obligationData[0] = false;
+                                            setObligationError(obligationData);
+                                        }}
+                                        error={obligationError[0]}
+                                        helperText={obligationError[0] ? 'Total EMI is required' : ''}
                                     />
                                 </Grid>
                                 <Grid lg={4}>
@@ -2306,6 +2472,7 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required: true
                                         }}
                                         SelectProps={{
                                             native: true
@@ -2314,6 +2481,14 @@ export default function LeadDetailsNew(props) {
                                         size="small"
                                         value={noOfCreditCard}
                                         onChange={(e) => setNoOfCreditCard(e.target.value)}
+                                        onFocus={() => {
+                                            let obligationData = [...obligationError];
+                                            obligationData[1] = false;
+                                            setObligationError(obligationData);
+                                        }}
+                                        error={obligationError[1]}
+                                        helperText={obligationError[1] ? 'No of CC is required' : ''}
+
                                     >
                                         <option key="" value=" ">Select One</option>
                                         <option value="0">0</option>
@@ -2339,6 +2514,7 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required: true
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -2352,6 +2528,14 @@ export default function LeadDetailsNew(props) {
                                                 setCreditCardOutstanding(e.target.value)
                                             }
                                         }}
+                                        onFocus={() => {
+                                            let obligationData = [...obligationError];
+                                            obligationData[2] = false;
+                                            setObligationError(obligationData);
+                                        }}
+                                        error={obligationError[2]}
+                                        helperText={obligationError[2] ? 'CC Outstanding is required' : ''}
+
                                     />
                                 </Grid>
                                 <Grid container style={{ flexDirection: 'row', justifyContent: "space-between", alignItems: "center" }}>
@@ -2992,7 +3176,7 @@ export default function LeadDetailsNew(props) {
                             />
                         </Grid>}
                         {status === "STB" ? <React.Fragment>
-                            <Grid>
+                            {subStatus === 'STB' || subStatus === 'Pre-Login-Reject' ? '' : <Grid>
                                 <TextField
                                     className="textField"
                                     id="outlined-full-width"
@@ -3016,7 +3200,7 @@ export default function LeadDetailsNew(props) {
                                     error={STBError[0]}
                                     helperText={STBError[0] ? 'App Id is required' : ''}
                                 />
-                            </Grid>
+                            </Grid>}
                             <Grid container style={{ justifyContent: 'center' }}>
                                 <Grid>
                                     <TextField
