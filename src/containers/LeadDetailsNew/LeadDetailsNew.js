@@ -524,18 +524,12 @@ export default function LeadDetailsNew(props) {
         fetchRemarks(leadid);
     }, [loadingRemarks]);
     const updateLeadDetails = async (id) => {
-        let regex = /[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(pancardNo);
         if (expanded === 'panel1') {
             if (loanAmount !== '' && name !== '' && date !== '' && pancardNo !== '' && email !== '' && tenure !== '' && requiredRoi !== '') {
                 colorRed[0] = false;
                 setcolorTick(true)
             } else {
                 setcolorTick(false)
-            }
-            if (pancardNo !== '' && !regex) {
-                setAlertMessage('Inavlid PAN Number')
-                setIsLeadError(true);
-                return;
             }
             setExpanded('panel2')
         }
@@ -675,6 +669,7 @@ export default function LeadDetailsNew(props) {
             let residentialsData = [...residentialError]
             let incomeData = [...incomeDetailsError]
             let obligationData = [...obligationError]
+            let regex = /[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(pancardNo);
             if (name === '') {
                 colorRedError[0] = true;
                 loanErrorData[0] = true;
@@ -687,7 +682,7 @@ export default function LeadDetailsNew(props) {
                 setcolorRed(colorRedError)
                 setLoanDetailsError(loanErrorData)
             }
-            if (pancardNo === '' || pancardNo === undefined) {
+            if (pancardNo === '' || pancardNo === undefined || !regex) {
                 colorRedError[0] = true;
                 loanErrorData[2] = true
                 setcolorRed(colorRedError)
@@ -3176,7 +3171,7 @@ export default function LeadDetailsNew(props) {
                             />
                         </Grid>}
                         {status === "STB" ? <React.Fragment>
-                            {subStatus === 'STB' || subStatus === 'Pre-Login-Reject' ? '' : <Grid>
+                            {subStatus === 'Login' || subStatus === 'Approved' || subStatus === 'Disbursed' || subStatus === 'Rejected' || subStatus === 'ABND' || subStatus === 'Underwriting' ? <Grid>
                                 <TextField
                                     className="textField"
                                     id="outlined-full-width"
@@ -3200,7 +3195,7 @@ export default function LeadDetailsNew(props) {
                                     error={STBError[0]}
                                     helperText={STBError[0] ? 'App Id is required' : ''}
                                 />
-                            </Grid>}
+                            </Grid> : ''}
                             <Grid container style={{ justifyContent: 'center' }}>
                                 <Grid>
                                     <TextField
