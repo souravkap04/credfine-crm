@@ -201,6 +201,7 @@ export default function LeadDetailsNew(props) {
     const [residentialError, setResidentialError] = useState([false, false])
     const [incomeDetailsError, setIncomeDetailsError] = useState([false, false, false, false, false, false])
     const [obligationError, setObligationError] = useState([false, false, false]);
+    const [statusError, setStatusError] = useState([false, false])
     const [employmentType, setEmploymentType] = useState("");
     const [monthlyIncome, setMonthlyIncome] = useState("");
     const [currentCompany, setCurrentCompany] = useState("");
@@ -644,9 +645,14 @@ export default function LeadDetailsNew(props) {
     }
     const options = subStatusHandler();
     const statusUpdateHandler = async (id) => {
-        if (status === 'OPEN') {
-            setAlertMessage('Please Enter Status & Substatus')
-            setIsLeadError(true);
+        let statusErrorData = [...statusError]
+        if (status === 'OPEN' || status === '') {
+            if (subStatus === '' || subStatus === null) {
+                statusErrorData[1] = true
+                setStatusError(statusErrorData)
+            }
+            statusErrorData[0] = true
+            setStatusError(statusErrorData)
             return;
         }
         if (status === 'STB' && subStatus !== '') {
@@ -663,7 +669,17 @@ export default function LeadDetailsNew(props) {
                 data[2] = true;
                 setSTBError(data);
             }
-
+            if (subStatus === 'Disbursed') {
+                let disData = [...disbursedError];
+                if (disbursedDate === null || disbursedDate === '') {
+                    disData[0] = true;
+                    setdisbursedError(disData);
+                }
+                if (Roi === 0 || Roi === '') {
+                    disData[1] = true;
+                    setdisbursedError(disData);
+                }
+            }
             let colorRedError = [...colorRed];
             let loanErrorData = [...loanDetailsError]
             let residentialsData = [...residentialError]
@@ -786,20 +802,38 @@ export default function LeadDetailsNew(props) {
             }
             return;
         }
+        if (status === 'Valid Follow-Up' || status === 'Cold Follow-Up' || status === 'Hot Follow-Up' || status === 'Punched' || status === 'Contacted NI/NE' || status === 'Customer Not Interested' || status === 'Not Contactable') {
+            let colorRedError = [...colorRed]
+            let loanErrorData = [...loanDetailsError]
+            let residentialsData = [...residentialError]
+            let incomeData = [...incomeDetailsError]
+            let obligationData = [...obligationError]
+            colorRedError.forEach((item, i) => {
+                colorRedError[i] = false
+            })
+            loanErrorData.forEach((item, i) => {
+                loanErrorData[i] = false
+            })
+            residentialsData.forEach((item, i) => {
+                residentialsData[i] = false
+            })
+            incomeData.forEach((item, i) => {
+                incomeData[i] = false
+            })
+            obligationData.forEach((item, i) => {
+                obligationData[i] = false
+            })
+            setcolorRed(colorRedError)
+            setLoanDetailsError(loanErrorData)
+            setResidentialError(residentialsData)
+            setIncomeDetailsError(incomeData)
+            setObligationError(obligationData)
+        }
         if (status === 'Valid Follow-Up' || status === 'Cold Follow-Up' || status === 'Hot Follow-Up' || (status === 'Punched' && subStatus === 'Eligible')) {
             let followData = [...followUpDateError];
             if (followUpDate === "") {
                 followData[0] = true;
                 setfollowUpDateError(followData);
-                return;
-            }
-        }
-        if (subStatus === 'Disbursed') {
-            let disData = [...disbursedError];
-            if (disbursedDate === null) disData[0] = true;
-            if (Roi === 0) disData[1] = true;
-            if (disbursedDate === null || Roi === 0) {
-                setdisbursedError(disData);
                 return;
             }
         }
@@ -2530,7 +2564,6 @@ export default function LeadDetailsNew(props) {
                                         }}
                                         error={obligationError[2]}
                                         helperText={obligationError[2] ? 'CC Outstanding is required' : ''}
-
                                     />
                                 </Grid>
                                 <Grid container style={{ flexDirection: 'row', justifyContent: "space-between", alignItems: "center" }}>
@@ -3109,10 +3142,15 @@ export default function LeadDetailsNew(props) {
                                 size="small"
                                 value={status}
                                 onChange={(e) => setStatus(e.target.value)}
+                                onFocus={() => {
+                                    let statusErrorData = [...statusError]
+                                    statusErrorData[0] = false
+                                    setStatusError(statusErrorData)
+                                }}
+                                error={statusError[0]}
+                                helperText={statusError[0] ? 'Status is required' : ''}
                             >
-                                <option key="" value="">
-                                    Select
-                                </option>
+                                <option key="" value="">Select</option>
                                 {uniqueStatus.map((item, index) => (
                                     <option key={index} value={item}>{item}</option>
                                 ))}
@@ -3136,10 +3174,15 @@ export default function LeadDetailsNew(props) {
                                 size="small"
                                 value={subStatus}
                                 onChange={(e) => { setSubStatus(e.target.value) }}
+                                onFocus={() => {
+                                    let statusErrorData = [...statusError]
+                                    statusErrorData[1] = false
+                                    setStatusError(statusErrorData)
+                                }}
+                                error={statusError[1]}
+                                helperText={statusError[1] ? 'Sub Status is required' : ''}
                             >
-                                <option key="" value="">
-                                    Select
-                                </option>
+                                <option key="" value="">Select</option>
                                 {options.map((item, index) => (
                                     <option key={index} value={item}>{item}</option>
                                 ))}
