@@ -657,9 +657,12 @@ export default function LeadDetailsNew(props) {
         }
         if (status === 'STB' && subStatus !== '') {
             let data = [...STBError];
-            if (appID === null || appID === '') {
-                data[0] = true;
-                setSTBError(data)
+            if (subStatus === 'Login' || subStatus === 'Approved' || subStatus === 'Disbursed' || subStatus === 'Rejected' || subStatus === 'ABND' || subStatus === 'Underwriting') {
+                if (appID === null || appID === '') {
+                    data[0] = true;
+                    setSTBError(data)
+                    return;
+                }
             }
             if (bankNBFC === null || bankNBFC === '') {
                 data[1] = true;
@@ -678,6 +681,9 @@ export default function LeadDetailsNew(props) {
                 if (Roi === 0 || Roi === '') {
                     disData[1] = true;
                     setdisbursedError(disData);
+                }
+                if ((disbursedDate === null || disbursedDate === '') || (Roi === 0 || Roi === '')) {
+                    return;
                 }
             }
             let colorRedError = [...colorRed];
@@ -800,7 +806,16 @@ export default function LeadDetailsNew(props) {
                 obligationData[2] = true
                 setObligationError(obligationData)
             }
-            return;
+            if ((bankNBFC === null || bankNBFC === '') || (scheme === null || scheme === '') || name === '' || (date === '' || date === 'Invalid date')
+                || (pancardNo === '' || pancardNo === undefined || !regex) || email === '' || loanAmount === '' || (tenure === '' || tenure === undefined)
+                || (requiredRoi === '' || requiredRoi === undefined) || (gender === '' || gender === undefined) || (pincode === '' || pincode === undefined)
+                || (permanentPincode === '' || permanentPincode === undefined) || (companyName === '' || companyName === undefined)
+                || (grossIncome === '' || grossIncome === undefined) || (monthlyIncome === '' || monthlyIncome === undefined)
+                || (officePincode === '' || officePincode === undefined) || (salaryCreditMode === '' || salaryCreditMode === undefined) || (salaryBankAcc === '' || salaryBankAcc === undefined)
+                || (currentEMI === '' || currentEMI === undefined) || (noOfCreditCard === '' || noOfCreditCard === undefined)
+                || (creditCardOutstanding === '' || creditCardOutstanding === undefined)) {
+                return;
+            }
         }
         if (status === 'Valid Follow-Up' || status === 'Cold Follow-Up' || status === 'Hot Follow-Up' || status === 'Punched' || status === 'Contacted NI/NE' || status === 'Customer Not Interested' || status === 'Not Contactable') {
             let colorRedError = [...colorRed]
@@ -837,6 +852,7 @@ export default function LeadDetailsNew(props) {
                 return;
             }
         }
+        console.log('happy');
         let items = {
             status: status, sub_status: subStatus, app_id: appID, bank: bankNBFC, scheme: scheme,
             callback_time: status === 'Contacted NI/NE' || status === 'Customer Not Interested' || status === 'Not Contactable' || status === 'STB'
