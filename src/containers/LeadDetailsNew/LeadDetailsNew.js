@@ -199,7 +199,7 @@ export default function LeadDetailsNew(props) {
     const [STBError, setSTBError] = useState([false, false, false]);
     const [loanDetailsError, setLoanDetailsError] = useState([false, false, false, false, false, false, false, false])
     const [residentialError, setResidentialError] = useState([false, false])
-    const [incomeDetailsError, setIncomeDetailsError] = useState([false, false, false, false, false, false])
+    const [incomeDetailsError, setIncomeDetailsError] = useState([false, false, false, false, false, false, false])
     const [obligationError, setObligationError] = useState([false, false, false]);
     const [statusError, setStatusError] = useState([false, false])
     const [employmentType, setEmploymentType] = useState("");
@@ -479,6 +479,17 @@ export default function LeadDetailsNew(props) {
         };
         fetchLeadDetaile(leadid);
     }, []);
+    const startWithCaps = (name) => {
+        if (name === '' || name === undefined) {
+            return;
+        } else {
+            const data = name.split(' ');
+            for (let i = 0; i < data.length; i++) {
+                data[i] = data[i].charAt(0).toUpperCase() + data[i].slice(1)
+            }
+            return data.join(' ')
+        }
+    }
     const remarksHandler = async (event, id) => {
         if (status === 'OPEN') {
             setAlertMessage('Please Enter Status & Substatus')
@@ -692,6 +703,8 @@ export default function LeadDetailsNew(props) {
             let incomeData = [...incomeDetailsError]
             let obligationData = [...obligationError]
             let regex = /[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(pancardNo);
+            let emailRegex = /^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+\.([a-z]{2,4})$/.test(email)
+            let offiEmailRegex = /^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+\.([a-z]{2,4})$/.test(officialMailid)
             if (name === '') {
                 colorRedError[0] = true;
                 loanErrorData[0] = true;
@@ -710,7 +723,7 @@ export default function LeadDetailsNew(props) {
                 setcolorRed(colorRedError)
                 setLoanDetailsError(loanErrorData)
             }
-            if (email === '') {
+            if (email === '' || !emailRegex) {
                 colorRedError[0] = true;
                 loanErrorData[3] = true
                 setcolorRed(colorRedError)
@@ -776,6 +789,15 @@ export default function LeadDetailsNew(props) {
                 incomeData[3] = true
                 setIncomeDetailsError(incomeData)
             }
+            if (typeof officialMailid !== "undefined") {
+                    if (!offiEmailRegex) {
+                        colorRedError[3] = true;
+                        incomeData[6] = true
+                        setcolorRed(colorRedError)
+                        setIncomeDetailsError(incomeData)
+                        return
+                    }
+                }
             if (salaryCreditMode === '' || salaryCreditMode === undefined) {
                 colorRedError[3] = true;
                 setcolorRed(colorRedError)
@@ -807,7 +829,7 @@ export default function LeadDetailsNew(props) {
                 setObligationError(obligationData)
             }
             if ((bankNBFC === null || bankNBFC === '') || (scheme === null || scheme === '') || name === '' || (date === '' || date === 'Invalid date')
-                || (pancardNo === '' || pancardNo === undefined || !regex) || email === '' || loanAmount === '' || (tenure === '' || tenure === undefined)
+                || (pancardNo === '' || pancardNo === undefined || !regex) || (email === '' || !emailRegex) || loanAmount === '' || (tenure === '' || tenure === undefined)
                 || (requiredRoi === '' || requiredRoi === undefined) || (gender === '' || gender === undefined) || (pincode === '' || pincode === undefined)
                 || (permanentPincode === '' || permanentPincode === undefined) || (companyName === '' || companyName === undefined)
                 || (grossIncome === '' || grossIncome === undefined) || (monthlyIncome === '' || monthlyIncome === undefined)
@@ -1317,6 +1339,9 @@ export default function LeadDetailsNew(props) {
                                             shrink: true,
                                             required: true
                                         }}
+                                        inputProps={{
+                                            maxLength: 8
+                                        }}
                                         variant="outlined"
                                         size="small"
                                         value={loanAmount}
@@ -1420,7 +1445,7 @@ export default function LeadDetailsNew(props) {
                                         }}
                                         variant="outlined"
                                         size="small"
-                                        value={name}
+                                        value={startWithCaps(name)}
                                         onChange={(e) => setname(e.target.value)}
                                         onFocus={() => {
                                             let data = [...loanDetailsError];
@@ -1476,7 +1501,7 @@ export default function LeadDetailsNew(props) {
                                         }}
                                         variant="outlined"
                                         size="small"
-                                        value={fatherName}
+                                        value={startWithCaps(fatherName)}
                                         onChange={(e) => setFatherName(e.target.value)}
                                     />
                                 </Grid>
@@ -1492,7 +1517,7 @@ export default function LeadDetailsNew(props) {
                                         }}
                                         variant="outlined"
                                         size="small"
-                                        value={motherName}
+                                        value={startWithCaps(motherName)}
                                         onChange={(e) => setMotherName(e.target.value)}
                                     />
                                 </Grid>
@@ -1564,7 +1589,7 @@ export default function LeadDetailsNew(props) {
                                         variant="outlined"
                                         size="small"
                                         value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
+                                        onChange={(e) => setEmail(e.target.value.toLowerCase())}
                                         onFocus={() => {
                                             let data = [...loanDetailsError];
                                             data[3] = false;
@@ -1701,7 +1726,7 @@ export default function LeadDetailsNew(props) {
                                         }}
                                         variant="outlined"
                                         size="small"
-                                        value={addressOne}
+                                        value={startWithCaps(addressOne)}
                                         onChange={(e) => setAddressOne(e.target.value)}
                                     />
                                 </Grid>
@@ -1715,9 +1740,12 @@ export default function LeadDetailsNew(props) {
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
+                                        inputProps={{
+                                            maxLength: 30
+                                        }}
                                         variant="outlined"
                                         size="small"
-                                        value={addressTwo}
+                                        value={startWithCaps(addressTwo)}
                                         onChange={(e) => setAddressTwo(e.target.value)}
                                     />
                                 </Grid>
@@ -1731,9 +1759,12 @@ export default function LeadDetailsNew(props) {
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
+                                        inputProps={{
+                                            maxLength: 30
+                                        }}
                                         variant="outlined"
                                         size="small"
-                                        value={addressThree}
+                                        value={startWithCaps(addressThree)}
                                         onChange={(e) => setAddressThree(e.target.value)}
                                     />
                                 </Grid>
@@ -1883,7 +1914,7 @@ export default function LeadDetailsNew(props) {
                                         }}
                                         variant="outlined"
                                         size="small"
-                                        value={permanentAddressOne}
+                                        value={startWithCaps(permanentAddressOne)}
                                         onChange={(e) => setPermanentAddressOne(e.target.value)}
                                     />
                                 </Grid>
@@ -1899,7 +1930,7 @@ export default function LeadDetailsNew(props) {
                                         }}
                                         variant="outlined"
                                         size="small"
-                                        value={permanentAddressTwo}
+                                        value={startWithCaps(permanentAddressTwo)}
                                         onChange={(e) => setPermanentAddressTwo(e.target.value)}
                                     />
                                 </Grid>
@@ -1918,7 +1949,7 @@ export default function LeadDetailsNew(props) {
                                         }}
                                         variant="outlined"
                                         size="small"
-                                        value={permanentAddressThree}
+                                        value={startWithCaps(permanentAddressThree)}
                                         onChange={(e) => setPermanentAddressThree(e.target.value)}
                                     />
                                 </Grid>
@@ -2129,7 +2160,7 @@ export default function LeadDetailsNew(props) {
                                         variant="outlined"
                                         size="small"
                                         value={designation}
-                                        onChange={(e) => setDesignation(e.target.value)}
+                                        onChange={(e) => setDesignation(e.target.value.toUpperCase())}
                                     />
                                 </Grid>
                                 <Grid lg={4}>
@@ -2203,6 +2234,9 @@ export default function LeadDetailsNew(props) {
                                             shrink: true,
                                             required: true
                                         }}
+                                        inputProps={{
+                                            maxLength: 8
+                                        }}
                                         variant="outlined"
                                         size="small"
                                         value={grossIncome}
@@ -2233,7 +2267,7 @@ export default function LeadDetailsNew(props) {
                                             required: true
                                         }}
                                         inputProps={{
-                                            maxLength: 7
+                                            maxLength: 8
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -2268,7 +2302,7 @@ export default function LeadDetailsNew(props) {
                                         }}
                                         variant="outlined"
                                         size="small"
-                                        value={officeAddress1}
+                                        value={startWithCaps(officeAddress1)}
                                         onChange={(e) => setOfficeAddress1(e.target.value)}
                                     />
                                 </Grid>
@@ -2284,7 +2318,7 @@ export default function LeadDetailsNew(props) {
                                         }}
                                         variant="outlined"
                                         size="small"
-                                        value={officeAddress2}
+                                        value={startWithCaps(officeAddress2)}
                                         onChange={(e) => setOfficeAddress2(e.target.value)}
                                     />
                                 </Grid>
@@ -2303,7 +2337,7 @@ export default function LeadDetailsNew(props) {
                                         }}
                                         variant="outlined"
                                         size="small"
-                                        value={officeAddress3}
+                                        value={startWithCaps(officeAddress3)}
                                         onChange={(e) => setOfficeAddress3(e.target.value)}
                                     />
                                 </Grid>
@@ -2377,7 +2411,14 @@ export default function LeadDetailsNew(props) {
                                         variant="outlined"
                                         size="small"
                                         value={officialMailid}
-                                        onChange={(e) => setOfficialMailid(e.target.value)}
+                                        onChange={(e) => setOfficialMailid(e.target.value.toLowerCase())}
+                                        onFocus={() => {
+                                            let incomeData = [...incomeDetailsError];
+                                            incomeData[6] = false;
+                                            setIncomeDetailsError(incomeData);
+                                        }}
+                                        error={incomeDetailsError[6]}
+                                        helperText={incomeDetailsError[6] ? 'Official MailID is required' : ''}
                                     />
                                 </Grid>
                                 <Grid lg={4}>
@@ -2389,6 +2430,9 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                        }}
+                                        inputProps={{
+                                            maxLength: 10
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -2490,7 +2534,7 @@ export default function LeadDetailsNew(props) {
                                         size="small"
                                         value={currentEMI}
                                         inputProps={{
-                                            maxLength: "6"
+                                            maxLength: 8
                                         }}
                                         onChange={(e) => {
                                             const re = /^[0-9\b]+$/;
@@ -2564,7 +2608,7 @@ export default function LeadDetailsNew(props) {
                                         variant="outlined"
                                         size="small"
                                         inputProps={{
-                                            maxLength: "7"
+                                            maxLength: 8
                                         }}
                                         value={creditCardOutstanding}
                                         onChange={(e) => {
@@ -3239,6 +3283,9 @@ export default function LeadDetailsNew(props) {
                                     margin="normal"
                                     InputLabelProps={{
                                         shrink: true,
+                                    }}
+                                    inputProps={{
+                                        maxLength: 20
                                     }}
                                     variant="outlined"
                                     size="small"
