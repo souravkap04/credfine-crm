@@ -169,7 +169,7 @@ $desk: 100 / 1440;
                 overflow-y: scroll;
                 border-radius: 4 * $desk + vw;
                 width: 230 * $desk + vw;
-                height: 250 * $desk + vh;
+                height: 150 * $desk + vw;
                 .list-group-item {
                     cursor: pointer;
                     border: none;
