@@ -852,17 +852,22 @@ export default function LeadDetailsNew(props) {
                 obligationData[1] = true
                 setObligationError(obligationData)
             }
-            if (creditCardOutstanding === '' || creditCardOutstanding === undefined) {
-                colorRedError[4] = true;
-                setcolorRed(colorRedError)
-                obligationData[2] = true
-                setObligationError(obligationData)
-            }
-            if (creditCardbalanceTransfer === '' || creditCardbalanceTransfer === undefined) {
-                colorRedError[4] = true;
-                setcolorRed(colorRedError)
-                obligationData[3] = true
-                setObligationError(obligationData)
+            if (noOfCreditCard > 0) {
+                if (creditCardOutstanding === '' || creditCardOutstanding === undefined) {
+                    colorRedError[4] = true;
+                    setcolorRed(colorRedError)
+                    obligationData[2] = true
+                    setObligationError(obligationData)
+                }
+                if (creditCardbalanceTransfer === '' || creditCardbalanceTransfer === undefined) {
+                    colorRedError[4] = true;
+                    setcolorRed(colorRedError)
+                    obligationData[3] = true
+                    setObligationError(obligationData)
+                }
+                if ((creditCardOutstanding === '' || creditCardOutstanding === undefined) || (creditCardbalanceTransfer === '' || creditCardbalanceTransfer === undefined)) {
+                    return;
+                }
             }
             if ((bankNBFC === null || bankNBFC === '') || (scheme === null || scheme === '') || name === '' || (date === '' || date === 'Invalid date')
                 || (pancardNo === '' || pancardNo === undefined || !regex) || (email === '' || !emailRegex) || loanAmount === '' || (tenure === '' || tenure === undefined)
@@ -870,10 +875,9 @@ export default function LeadDetailsNew(props) {
                 || (permanentPincode === '' || permanentPincode === undefined) || (companyName === '' || companyName === undefined)
                 || (grossIncome === '' || grossIncome === undefined) || (monthlyIncome === '' || monthlyIncome === undefined)
                 || (officePincode === '' || officePincode === undefined) || (salaryCreditMode === '' || salaryCreditMode === undefined) || (salaryBankAcc === '' || salaryBankAcc === undefined)
-                || (currentEMI === '' || currentEMI === undefined) || (noOfCreditCard === '' || noOfCreditCard === undefined)
-                || (creditCardOutstanding === '' || creditCardOutstanding === undefined) || loanType === '' || currentResidentType === ''
+                || (currentEMI === '' || currentEMI === undefined) || (noOfCreditCard === '' || noOfCreditCard === undefined) || loanType === '' || currentResidentType === ''
                 || (permanentResidentType === '' || permanentResidentType === undefined) || (employmentType === '' || employmentType === undefined)
-                || (creditCardbalanceTransfer === '' || creditCardbalanceTransfer === undefined)) {
+            ) {
                 return;
             }
         }
@@ -2671,7 +2675,7 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
-                                            required: true
+                                            required: noOfCreditCard > 0 ? true : false
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -2705,7 +2709,7 @@ export default function LeadDetailsNew(props) {
                                             margin="normal"
                                             InputLabelProps={{
                                                 shrink: true,
-                                                required: true
+                                                required: noOfCreditCard > 0 ? true : false
                                             }}
                                             SelectProps={{
                                                 native: true
