@@ -25,7 +25,6 @@ import {
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import CallIcon from "@material-ui/icons/Call";
-import CallerDialogBox from "../Leads/CallerDialog/CallerDialogBox";
 import PageLayerSection from "../PageLayerSection/PageLayerSection";
 import { useHistory } from "react-router-dom";
 import clsx from "clsx";
