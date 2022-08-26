@@ -65,8 +65,8 @@ const Paysense = () => {
             .then((response) => {
                 setPanCardNo(response.data.pan);
                 setMobileNo(response.data.phone)
-                setFirstName(response.data.first_name.split(' ').slice(0, -1).join(' '))
-                setLastName(response.data.first_name.split(' ').slice(-1).join(' '))
+                setFirstName(response.data.first_name)
+                setLastName(response.data.last_name)
                 setDob(response.data.date_of_birth)
                 setEmploymentType(response.data.employment_type)
                 setGender(response.data.gender)

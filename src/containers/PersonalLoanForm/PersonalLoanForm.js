@@ -146,7 +146,6 @@ export default function PersonalLoanForm() {
     const [pincode, setPincode] = useState("");
     const [city, setcity] = useState("");
     const [states, setstates] = useState("sourav kapri");
-    const [fullName, setFullName] = useState("")
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [companyName, setCompanyName] = useState("");
@@ -214,15 +213,9 @@ export default function PersonalLoanForm() {
     const [loanType, setLoanType] = useState("");
     const [source, setSource] = useState("");
     const [alertMessage, setAlertMessage] = useState('');
-    const [isStatus, setIsStatus] = useState(false);
     const [isLeadDetails, setIsLeadDetails] = useState(false);
     const [isLeadError, setIsLeadError] = useState(false);
     const [showCompany, setShowCompany] = useState(false);
-    const [hangUpSnacks, sethangUpSnacks] = useState(false);
-    const [callHangUpState, setCallHangUpState] = useState(true);
-    const [callInProgress, setcallInProgress] = useState(false);
-    const [submitFalse, setsubmitFalse] = useState(true);
-    const [isDisplay, setIsDisplay] = useState(false);
     const [isLoading, setisLoading] = useState(false);
     const [appID, setappID] = useState('');
     const [bankNBFC, setbankNBFC] = useState('');
@@ -258,9 +251,8 @@ export default function PersonalLoanForm() {
                             let changeDateFormat = moment(getDobfromApi, 'DDMMYYYY').format("YYYY-MM-DD");
                             setDate(changeDateFormat);
                         }
-                        setFullName(response.data.lead_data.name);
-                        setFirstName(response.data.lead_data.name.split(' ').slice(0, -1).join(' '));
-                        setLastName(response.data.lead_data.name.split(' ').slice(-1).join(' '));
+                        setFirstName(response.data.lead_data.first_name);
+                        setLastName(response.data.lead_data.last_name);
                         setMobileNo(response.data.lead_data.phone_no);
                         setLeadId(response.data.lead_data.lead_crm_id);
                         setLoanAmount(response.data.lead_data.loan_amount);
@@ -340,9 +332,6 @@ export default function PersonalLoanForm() {
         };
         fetchLeadDetaile(leadid);
     }, []);
-    const getFullname = () => {
-        return firstName + ' ' + lastName
-    }
     const updateLeadDetails = async (id) => {
         let data = {
             dob: date, monthly_income: monthlyIncome, current_company_name: companyName, pan_no: pancardNo,
@@ -363,8 +352,8 @@ export default function PersonalLoanForm() {
         };
         let lead_data = {
             lead_crm_id: leadId, loan_amount: loanAmount,
-            phone_no: mobileNo, name: getFullname(), data,
-            status: status,
+            phone_no: mobileNo, first_name: firstName, data,
+            last_name: lastName, status: status,
             loan_type: loanType, source: source,
         };
         let eligibility_data = {
@@ -426,7 +415,6 @@ export default function PersonalLoanForm() {
         setShowCompany(false);
     }
     const disableHangUpSnacks = () => {
-        sethangUpSnacks(false);
         setIsLeadError(false);
         setIsLeadDetails(false);
     }
