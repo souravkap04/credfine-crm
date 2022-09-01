@@ -891,7 +891,7 @@ export default function LeadDetailsNew(props) {
                 || colorTick3 === false || colorTick4 === false || colorTick5 === false
             ) {
                 setIsLeadError(true)
-                setAlertMessage('Please Save All Lead Details Data')
+                setAlertMessage('Please Save & Next All Lead Details')
                 return;
             }
         }
