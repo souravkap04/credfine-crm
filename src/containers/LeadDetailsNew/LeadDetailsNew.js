@@ -887,8 +887,11 @@ export default function LeadDetailsNew(props) {
                 || (grossIncome === '' || grossIncome === undefined) || (monthlyIncome === '' || monthlyIncome === undefined)
                 || (officePincode === '' || officePincode === undefined) || (salaryCreditMode === '' || salaryCreditMode === undefined) || (salaryBankAcc === '' || salaryBankAcc === undefined)
                 || (currentEMI === '' || currentEMI === undefined) || (noOfCreditCard === '' || noOfCreditCard === undefined) || loanType === '' || currentResidentType === ''
-                || (permanentResidentType === '' || permanentResidentType === undefined) || (employmentType === '' || employmentType === undefined)
+                || (permanentResidentType === '' || permanentResidentType === undefined) || (employmentType === '' || employmentType === undefined) || colorTick === false || colorTick2 === false
+                || colorTick3 === false || colorTick4 === false || colorTick5 === false
             ) {
+                setIsLeadError(true)
+                setAlertMessage('Please Save All Lead Details Data')
                 return;
             }
         }
