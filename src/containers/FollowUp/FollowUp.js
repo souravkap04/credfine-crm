@@ -107,7 +107,6 @@ const useStyles = makeStyles({
 });
 export default function FollowUp(props) {
     const classes = useStyles();
-    const CancelToken = axios.CancelToken;
     let history = useHistory();
     const profileData = getProfileData();
     const [leadData, setLeadData] = useState({});
@@ -231,7 +230,7 @@ export default function FollowUp(props) {
             clickToCall(leadData.lead.phone_no, leadData.lead.lead_crm_id)
         }
     }, [leadData]);
-    
+
     const openEligibility = () => {
         setCheckEligibility(true);
     }
@@ -269,7 +268,8 @@ export default function FollowUp(props) {
                     <TableHead className={classes.tableheading}>
                         <TableRow>
                             <TableCell className={classes.tableheading}>Lead ID</TableCell>
-                            <TableCell className={classes.tableheading} >Name</TableCell>
+                            <TableCell className={classes.tableheading} >First Name</TableCell>
+                            <TableCell className={classes.tableheading} >Last Name</TableCell>
                             <TableCell className={classes.tableheading} >Mobile</TableCell>
                             <TableCell className={classes.tableheading} >Loan Amt</TableCell>
                             <TableCell className={classes.tableheading} >Company</TableCell>
@@ -291,7 +291,8 @@ export default function FollowUp(props) {
                                 <TableCell className={clsx(classes.tabledata, classes.click)}
                                     onClick={() => routeChangeHAndler(leadData.lead.lead_crm_id)}
                                 >{leadData.lead.lead_crm_id} </TableCell>
-                                <TableCell className={classes.tabledata}>{leadData.lead.name ? leadData.lead.name : 'NA'}</TableCell>
+                                <TableCell className={classes.tabledata}>{leadData.lead.first_name ? leadData.lead.first_name : 'NA'}</TableCell>
+                                <TableCell className={classes.tabledata}>{leadData.lead.last_name ? leadData.lead.last_name : 'NA'}</TableCell>
                                 <TableCell className={classes.tabledata}>{maskPhoneNo(leadData.lead.phone_no) ? maskPhoneNo(leadData.lead.phone_no) : 'NA'}</TableCell>
                                 <TableCell className={classes.tabledata}>{leadData.lead.loan_amount ? leadData.lead.loan_amount : 'NA'}</TableCell>
                                 <TableCell className={classes.tabledata}>{leadData.lead.data['current_company_name'] ? leadData.lead.data['current_company_name'] : 'NA'}</TableCell>

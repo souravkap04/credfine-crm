@@ -26,14 +26,14 @@ export default function PageLayerSection(props) {
     userName = userName.replace(/^\s+|\s+$/g, "");
     userName = userName.replace(/\s+/g, " ");
     const [istimeOut, setIsTimeOut] = useState(false);
-    if (profileData.user_roles[0].user_type === 4 || profileData.user_roles[0].user_type === 1 || profileData.user_roles[0].user_type === 6 ) {
-       var  timeout = 1000 * 30 * 15 ;
-    }else if(profileData.user_roles[0].user_type === 2){
-        var  timeout = 1000 * 30 * 10;
-    }else if(profileData.user_roles[0].user_type === 3){
-        var  timeout = 1000 * 30 * 1;
-    }else if(profileData.user_roles[0].user_type === 5){
-        var  timeout = 1000 * 30 * 5;
+    if (profileData.user_roles[0].user_type === 4 || profileData.user_roles[0].user_type === 1 || profileData.user_roles[0].user_type === 6) {
+        var timeout = 1000 * 30 * 15;
+    } else if (profileData.user_roles[0].user_type === 2) {
+        var timeout = 1000 * 30 * 10;
+    } else if (profileData.user_roles[0].user_type === 3) {
+        var timeout = 1000 * 30 * 1;
+    } else if (profileData.user_roles[0].user_type === 5) {
+        var timeout = 1000 * 30 * 5;
     }
     const onAction = (e) => {
         setIsTimeOut(false)
@@ -43,7 +43,7 @@ export default function PageLayerSection(props) {
     }
     const onIdle = (e) => {
         if (istimeOut) {
-           // history.push("/");
+            // history.push("/");
         } else {
             reset();
             setIsTimeOut(true);
@@ -164,11 +164,11 @@ export default function PageLayerSection(props) {
                             Add New Lead
                         </Button> : null}
                         {props.isShareThroughEmail ? (profileData.user_roles[0].user_type === 6 || profileData.user_roles[0].user_type === 4) ?
-                        <a href={`mailto:${props.emailId}?subject=Personal and loan application details&body=Hello Sir/Ma’am%0D%0A%0D%0APlease find attached PDF of your Personal  and loan application details%2c%20kindly%0D%0A check all information captured is correct or not. 
-                        %0D%0A%0D%0AIf all details are correct then kindly reply ok to process.%0D%0A%0D%0AIf any correction is needed please reply with correct details.%0D%0A%0D%0ARegards%0D%0ATeam CredFine%0D%0A%0D%0A%0D%0A <b>For any support or escalation you can write us at care@credfine.com </b>`} target="_blank"><EmailIcon className='emailBtn'/></a> 
-                        :<a href={`mailto:${props.emailId}`} target="_blank"><EmailIcon className='emailBtn'/></a> 
-                        : ''}
-                        {props.isDownloadPdf && (profileData.user_roles[0].user_type === 6 || profileData.user_roles[0].user_type === 4) ? <GetAppIcon className="pdfBtn" onClick={props.downloadPdf}/> : ''}
+                            <a href={`mailto:${props.emailId}?subject=Personal and loan application details&body=Hello Sir/Ma’am%0D%0A%0D%0APlease find attached PDF of your Personal  and loan application details%2c%20kindly%0D%0A check all information captured is correct or not. 
+                        %0D%0A%0D%0AIf all details are correct then kindly reply ok to process.%0D%0A%0D%0AIf any correction is needed please reply with correct details.%0D%0A%0D%0ARegards%0D%0ATeam CredFine%0D%0A%0D%0A%0D%0A <b>For any support or escalation you can write us at care@credfine.com </b>`} target="_blank"><EmailIcon className='emailBtn' /></a>
+                            : <a href={`mailto:${props.emailId}`} target="_blank"><EmailIcon className='emailBtn' /></a>
+                            : ''}
+                        {props.isDownloadPdf && (profileData.user_roles[0].user_type === 6 || profileData.user_roles[0].user_type === 4) ? <GetAppIcon className="pdfBtn" onClick={props.downloadPdf} /> : ''}
                         {props.isWhatsapp ? <a href={`https://api.whatsapp.com/send?phone=+91${props.whatsappNumber}&text=Hi...`} target="_blank"><WhatsAppIcon className="whatsapp" /></a> : ''}
                         {props.offerButton ? <NavLink to="/dashboards/pricing" target="_blank"><Button
                             className="addBtn"

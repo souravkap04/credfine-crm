@@ -25,7 +25,6 @@ import {
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import CallIcon from "@material-ui/icons/Call";
-import CallerDialogBox from "../Leads/CallerDialog/CallerDialogBox";
 import PageLayerSection from "../PageLayerSection/PageLayerSection";
 import { useHistory } from "react-router-dom";
 import clsx from "clsx";
@@ -926,7 +925,8 @@ export default function MyLeads(props) {
                   onChange={(e) => childCheckBoxHandler(e, myLeads)} />
               </TableCell>
               <TableCell className={classes.tableheading}>Lead ID</TableCell>
-              <TableCell className={classes.tableheading}>Name</TableCell>
+              <TableCell className={classes.tableheading}>First Name</TableCell>
+              <TableCell className={classes.tableheading}>Last Name</TableCell>
               <TableCell className={classes.tableheading}>Campaign</TableCell>
               <TableCell className={classes.tableheading}>Created Date</TableCell>
               <TableCell className={classes.tableheading}>
@@ -973,7 +973,7 @@ export default function MyLeads(props) {
                     <TableRow className={classes.oddEvenRow} key={index}>
                       <TableCell className={classes.tabledata}>
                         <Checkbox color="primary"
-                          name={search.name}
+                          name={search.first_name}
                           checked={selectedLeads.some((item) => item?.id === search?.id)}
                           onChange={(e) => childCheckBoxHandler(e, search)} />
                       </TableCell>
@@ -984,7 +984,10 @@ export default function MyLeads(props) {
                         {search.lead_crm_id}
                       </TableCell>
                       <TableCell className={classes.tabledata}>
-                        {search.name ? search.name : "NA"}
+                        {search.first_name ? search.first_name : "NA"}
+                      </TableCell>
+                      <TableCell className={classes.tabledata}>
+                        {search.last_name ? search.last_name : "NA"}
                       </TableCell>
                       <TableCell className={classes.tabledata}>
                         {search.campaign_category
@@ -1053,7 +1056,7 @@ export default function MyLeads(props) {
                   <TableRow className={classes.oddEvenRow} key={index}>
                     <TableCell className={classes.tabledata}>
                       <Checkbox color="primary"
-                        name={my_leads.lead.name}
+                        name={my_leads.lead.first_name}
                         checked={selectedLeads.some((item) => item?.id === my_leads?.id)}
                         onChange={(e) => childCheckBoxHandler(e, my_leads)} />
                     </TableCell>
@@ -1066,7 +1069,10 @@ export default function MyLeads(props) {
                       {my_leads.lead.lead_crm_id}
                     </TableCell>
                     <TableCell className={classes.tabledata}>
-                      {my_leads.lead.name ? my_leads.lead.name : "NA"}
+                      {my_leads.lead.first_name ? my_leads.lead.first_name : "NA"}
+                    </TableCell>
+                    <TableCell className={classes.tabledata}>
+                      {my_leads.lead.last_name ? my_leads.lead.last_name : "NA"}
                     </TableCell>
                     <TableCell className={classes.tabledata}>
                       {my_leads.lead.campaign_category

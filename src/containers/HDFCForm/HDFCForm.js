@@ -196,8 +196,8 @@ export default function HDFCFrom() {
                     setDob(changeDateFormat);
                 }
 
-                setFirstName(response.data.applyLoan.First_Name__req.split(' ').slice(0, -1).join(' '));
-                setLastName(response.data.applyLoan.First_Name__req.split(' ').slice(-1).join(' '));
+                setFirstName(response.data.applyLoan.First_Name__req);
+                setLastName(response.data.applyLoan.Last_Name__req);
                 setGender(response.data.applyLoan.Gender__req);
                 setLoanAmount(response.data.applyLoan.Loan_Amount__req);
                 setEmi(response.data.applyLoan.EMI);

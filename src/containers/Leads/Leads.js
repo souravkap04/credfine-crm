@@ -18,19 +18,16 @@ import {
 } from "../../global/callApi";
 import { getProfileData } from "../../global/leadsGlobalData";
 import { useQueryy } from "../../global/query";
-import CallerDialogBox from "./CallerDialog/CallerDialogBox";
 import PageLayerSection from "../PageLayerSection/PageLayerSection";
 import { Drawer } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { Button } from "@material-ui/core";
-import { useForm } from "react-hook-form";
 import "./leadDetailsAdjust.css";
 import clsx from "clsx";
 import MuiAlert from "@material-ui/lab/Alert";
 import Snackbar from "@material-ui/core/Snackbar";
-import { findAllByTestId } from "@testing-library/react";
 import EmiCalculator from '../Emicalculator/EmiCalculator';
 import EligibilityCalculator from "../EligibilityCalculator/EligibilityCalculator";
 function Alert(props) {
@@ -44,8 +41,6 @@ const useStyles = makeStyles({
     width: "100%",
   },
   tableheading: {
-    // padding: '0 8px',
-    // textAlign: 'center',
     backgroundColor: "#8f9bb3",
     color: "#ffffff",
     fontSize: "14px",
@@ -57,7 +52,6 @@ const useStyles = makeStyles({
     color: "#ffffff",
   },
   tabledata: {
-    // padding: '0 8px',
     fontSize: "12px",
   },
   emptydata: {
@@ -116,7 +110,6 @@ const useStyles = makeStyles({
 });
 export default function Leads() {
   const classes = useStyles();
-  // const CancelToken = axios.CancelToken;
   const queryy = useQueryy();
   const leadQuery = queryy.get("query") || "";
   let history = useHistory();
@@ -134,13 +127,13 @@ export default function Leads() {
   const [companyName, setCompanyName] = useState("");
   const [currentCompany, setCurrentCompany] = useState("");
   const [campaign, setCampaign] = useState("");
-  const [validated, setValidated] = useState(false);
   const [isDisplay, setIsDisplay] = useState(false);
   const [isError, setIsError] = useState(false);
   const [isAutoDialerStart, setIsAutoDialerStart] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [isLoading, setisLoading] = useState(false);
-  const [fullName, setfullName] = useState("");
+  const [firstName, setFirstName] = useState("")
+  const [lastName, setLastName] = useState("");
   const [mobileNo, setmobileNo] = useState("");
   const [monthlyIncome, setmonthlyIncome] = useState("");
   const [formError, setformError] = useState([false, false, false]);
@@ -279,10 +272,11 @@ export default function Leads() {
   };
   const personalLoanSubmitHandler = async () => {
     let formErrorData = [...formError];
-    if (fullName === "") formErrorData[0] = true;
+    if (firstName === "") formErrorData[0] = true;
+    if (lastName === "") formErrorData[2] = true;
     if (mobileNo === "" || mobileNo.length !== 10) formErrorData[1] = true;
 
-    if (fullName == "" || mobileNo == "" || mobileNo.length !== 10) {
+    if (firstName == "" || lastName === "" || (mobileNo == "" || mobileNo.length !== 10)) {
       setformError(formErrorData);
       return;
     }
@@ -293,9 +287,9 @@ export default function Leads() {
       phone_no: mobileNo,
       residential_pincode: pincode,
       current_company_name: companyName,
-      name: fullName,
-      loan_type:
-        profileData.user_roles[0].allowed_products[0] === "PL" ? "PL" : "BL",
+      first_name: firstName,
+      last_name: lastName,
+      loan_type: profileData.user_roles[0].allowed_products[0] === "PL" ? "PL" : "BL",
       current_company: currentCompany,
       employment_type: employmentType,
       campaign_category: campaign,
@@ -336,7 +330,8 @@ export default function Leads() {
   };
   const closeDrawer = () => {
     setState(false);
-    setfullName("");
+    setFirstName("");
+    setLastName("");
     setmobileNo("");
     setmonthlyIncome("");
     setCampaign("");
@@ -419,7 +414,7 @@ export default function Leads() {
                 className="textField"
                 type="text"
                 id="outlined-full-width"
-                label="Full Name As Per Pancard"
+                label="First Name"
                 style={{ margin: 8 }}
                 margin="normal"
                 InputLabelProps={{
@@ -428,8 +423,8 @@ export default function Leads() {
                 }}
                 variant="outlined"
                 size="small"
-                value={fullName}
-                onChange={(e) => setfullName(e.target.value)}
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
                 onFocus={() => {
                   let formErrorData = [...formError];
                   formErrorData[0] = false;
@@ -437,7 +432,34 @@ export default function Leads() {
                 }}
                 error={formError[0]}
                 helperText={
-                  formError[0] ? "Please enter a valid full name" : ""
+                  formError[0] ? "Please Enter a Valid First Name" : ""
+                }
+              />
+            </Grid>
+            <Grid>
+              <TextField
+                className="textField"
+                type="text"
+                id="outlined-full-width"
+                label="Last Name"
+                style={{ margin: 8 }}
+                margin="normal"
+                InputLabelProps={{
+                  shrink: true,
+                  required: true,
+                }}
+                variant="outlined"
+                size="small"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                onFocus={() => {
+                  let formErrorData = [...formError];
+                  formErrorData[2] = false;
+                  setformError(formErrorData);
+                }}
+                error={formError[2]}
+                helperText={
+                  formError[2] ? "Please Enter a Valid Last Name" : ""
                 }
               />
             </Grid>
@@ -485,7 +507,7 @@ export default function Leads() {
                   required: false,
                 }}
                 inputProps={{
-                  maxLength: 7,
+                  maxLength: 8,
                 }}
                 variant="outlined"
                 size="small"
@@ -546,7 +568,8 @@ export default function Leads() {
           <TableHead className={classes.tableheading}>
             <TableRow>
               <TableCell className={classes.tableheading}>Lead ID</TableCell>
-              <TableCell className={classes.tableheading}>Name</TableCell>
+              <TableCell className={classes.tableheading}>First Name</TableCell>
+              <TableCell className={classes.tableheading}>Last Name</TableCell>
               <TableCell className={classes.tableheading}>Mobile</TableCell>
               <TableCell className={classes.tableheading}>Loan Amt</TableCell>
               <TableCell className={classes.tableheading}>Income</TableCell>
@@ -580,7 +603,10 @@ export default function Leads() {
                         {search.lead_crm_id}
                       </TableCell>
                       <TableCell className={classes.tabledata}>
-                        {search.name ? search.name : "NA"}
+                        {search.first_name ? search.first_name : "NA"}
+                      </TableCell>
+                      <TableCell className={classes.tabledata}>
+                        {search.last_name ? search.last_name : "NA"}
                       </TableCell>
                       <TableCell className={classes.tabledata}>
                         {leadPhoneNo ? leadPhoneNo : "NA"}
@@ -646,7 +672,10 @@ export default function Leads() {
                   {leadData.lead_crm_id}{" "}
                 </TableCell>
                 <TableCell className={classes.tabledata}>
-                  {leadData.name ? leadData.name : "NA"}
+                  {leadData.first_name ? leadData.first_name : "NA"}
+                </TableCell>
+                <TableCell className={classes.tabledata}>
+                  {leadData.last_name ? leadData.last_name : "NA"}
                 </TableCell>
                 <TableCell className={classes.tabledata}>
                   {maskPhoneNo(leadData.phone_no_encrypt)

@@ -197,10 +197,10 @@ export default function LeadDetailsNew(props) {
     const [loanAmount, setLoanAmount] = useState("");
     const [leadId, setLeadId] = useState("");
     const [STBError, setSTBError] = useState([false, false, false]);
-    const [loanDetailsError, setLoanDetailsError] = useState([false, false, false, false, false, false, false, false])
-    const [residentialError, setResidentialError] = useState([false, false])
-    const [incomeDetailsError, setIncomeDetailsError] = useState([false, false, false, false, false, false, false])
-    const [obligationError, setObligationError] = useState([false, false, false]);
+    const [loanDetailsError, setLoanDetailsError] = useState([false, false, false, false, false, false, false, false, false, false])
+    const [residentialError, setResidentialError] = useState([false, false, false, false])
+    const [incomeDetailsError, setIncomeDetailsError] = useState([false, false, false, false, false, false, false, false])
+    const [obligationError, setObligationError] = useState([false, false, false, false]);
     const [statusError, setStatusError] = useState([false, false])
     const [employmentType, setEmploymentType] = useState("");
     const [monthlyIncome, setMonthlyIncome] = useState("");
@@ -210,7 +210,9 @@ export default function LeadDetailsNew(props) {
     const [pincode, setPincode] = useState("");
     const [city, setcity] = useState("");
     const [states, setstates] = useState("");
-    const [name, setname] = useState("");
+    //const [name, setname] = useState("");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState(null)
     const [companyName, setCompanyName] = useState("");
     const [searchCompany, setSearchCompany] = useState([]);
     const [pancardNo, setPancardNo] = useState("");
@@ -313,7 +315,7 @@ export default function LeadDetailsNew(props) {
     const [disbursedError, setdisbursedError] = useState([false, false]);
     const [colorRed, setcolorRed] = useState([false, false, false, false, false, false, false]);
     const [isAutoDialerEnd, setIsAutoDialerEnd] = useState(false);
-    const [checked, setChecked] = React.useState(false);
+    const [checked, setChecked] = useState(false);
     const [checkEligibility, setCheckEligibility] = useState(false);
     const [leadHistoryData, setLeadHistoryData] = useState([]);
     const [leadJourneyData, setLeadJourneyData] = useState([]);
@@ -384,7 +386,9 @@ export default function LeadDetailsNew(props) {
                     setPincode(response.data.lead_data["data"].residential_pincode);
                     setcity(response.data.lead_data["data"].city);
                     setstates(response.data.lead_data["data"].state);
-                    setname(response.data.lead_data.name);
+                    //setname(response.data.lead_data.name);
+                    setFirstName(response.data.lead_data.first_name);
+                    setLastName(response.data.lead_data.last_name);
                     setCompanyName(response.data.lead_data["data"].current_company_name);
                     setLoanType(response.data.lead_data.loan_type);
                     setSource(response.data.lead_data.source);
@@ -453,19 +457,26 @@ export default function LeadDetailsNew(props) {
                     setRef2LastName(response.data.lead_data.data.ref2_last_name);
                     setRef2MobileNo(response.data.lead_data.data.ref2_mobile_no);
                     setisLoading(false)
-                    if (response.data.lead_data.loan_amount !== '' && response.data.lead_data.name !== '' && response.data.lead_data["data"].dob !== '' && response.data.eligibility_data.pan_no !== '' && response.data.eligibility_data.email_id !== '' && response.data.lead_data.data.roi || '' !== '' && response.data.lead_data.data.tenure || '' !== '' && response.data.lead_data.data.gender || '' !== '') {
+                    if (response.data.lead_data.loan_amount !== '' && response.data.lead_data.first_name !== '' && (response.data.lead_data.last_name !== null ||
+                        response.data.lead_data.last_name !== '') && response.data.lead_data["data"].dob !== '' && response.data.eligibility_data.pan_no !== ''
+                        && response.data.eligibility_data.email_id !== '' && (response.data.lead_data.data.roi || '' !== '') && (response.data.lead_data.data.tenure || '' !== '') &&
+                        (response.data.lead_data.data.gender || '' !== '') && response.data.lead_data.loan_type !== '') {
                         setcolorTick(true)
                     }
-                    if (response.data.lead_data["data"].residential_pincode || '' !== '') {
+                    if ((response.data.lead_data["data"].residential_pincode || '' !== '') && response.data.eligibility_data.residence_type !== '') {
                         setcolorTick2(true)
                     }
-                    if (response.data.lead_data["data"].permanent_pincode || '' !== '') {
+                    if ((response.data.lead_data["data"].permanent_pincode || '' !== '') && (response.data.lead_data.data.permanent_resident_Type || '' !== '')) {
                         setcolorTick3(true)
                     }
-                    if (response.data.lead_data["data"].current_company_name !== '' && response.data.lead_data.data.gross_income || '' !== '' && response.data.lead_data.data.office_pincode || '' !== '' && response.data.lead_data["data"].monthly_income !== '' && response.data.eligibility_data.salary_mode !== '' && response.data.eligibility_data.salary_bank !== '') {
+                    if (response.data.lead_data["data"].employment_type !== '' && response.data.lead_data["data"].current_company_name !== '' &&
+                        (response.data.lead_data.data.gross_income || '' !== '') && (response.data.lead_data.data.office_pincode || '' !== '') &&
+                        response.data.lead_data["data"].monthly_income !== '' && response.data.eligibility_data.salary_mode !== '' &&
+                        response.data.eligibility_data.salary_bank !== '') {
                         setcolorTick4(true)
                     }
-                    if (response.data.eligibility_data.current_emi !== '' && response.data.lead_data.data.no_of_creditcard || '' !== '' && response.data.eligibility_data.credit_card_outstanding !== '') {
+                    if (response.data.eligibility_data.current_emi !== '' && (response.data.lead_data.data.no_of_creditcard || '' !== '')
+                        && response.data.eligibility_data.credit_card_outstanding !== '' && (response.data.lead_data["data"].credi_card_balance_transfer || '' !== '')) {
                         setcolorTick5(true)
                     }
                 }).catch((error) => {
@@ -480,7 +491,7 @@ export default function LeadDetailsNew(props) {
         fetchLeadDetaile(leadid);
     }, []);
     const startWithCaps = (name) => {
-        if (name === '' || name === undefined) {
+        if (name === '' || name === undefined || name === null) {
             return;
         } else {
             const data = name.split(' ');
@@ -537,7 +548,7 @@ export default function LeadDetailsNew(props) {
     }, [loadingRemarks]);
     const updateLeadDetails = async (id) => {
         if (expanded === 'panel1') {
-            if (loanAmount !== '' && name !== '' && date !== '' && pancardNo !== '' && email !== '' && tenure !== '' && requiredRoi !== '') {
+            if (loanType !== '' && loanAmount !== '' && firstName !== '' && lastName !== '' && date !== '' && pancardNo !== '' && email !== '' && tenure !== '' && requiredRoi !== '') {
                 colorRed[0] = false;
                 setcolorTick(true)
             } else {
@@ -546,7 +557,7 @@ export default function LeadDetailsNew(props) {
             setExpanded('panel2')
         }
         if (expanded === 'panel2') {
-            if (pincode !== '') {
+            if (pincode !== '' && currentResidentType !== '') {
                 colorRed[1] = false;
                 setcolorTick2(true)
             } else {
@@ -555,7 +566,7 @@ export default function LeadDetailsNew(props) {
             setExpanded('panel3')
         }
         if (expanded === 'panel3') {
-            if (permanentPincode !== '') {
+            if (permanentPincode !== '' && (permanentResidentType || '' !== '')) {
                 colorRed[2] = false;
                 setcolorTick3(true)
             } else {
@@ -564,7 +575,7 @@ export default function LeadDetailsNew(props) {
             setExpanded('panel4')
         }
         if (expanded === 'panel4') {
-            if (companyName !== '' && grossIncome !== '' && monthlyIncome !== '' && officePincode !== '' && salaryCreditMode !== '' && salaryBankAcc !== '') {
+            if (employmentType !== '' && companyName !== '' && grossIncome !== '' && monthlyIncome !== '' && officePincode !== '' && salaryCreditMode !== '' && salaryBankAcc !== '') {
                 colorRed[3] = false;
                 setcolorTick4(true)
             } else {
@@ -573,7 +584,7 @@ export default function LeadDetailsNew(props) {
             setExpanded('panel5')
         }
         if (expanded === 'panel5') {
-            if (currentEMI !== '' && noOfCreditCard !== '' && creditCardOutstanding !== '') {
+            if (currentEMI !== '' && noOfCreditCard !== '' && creditCardOutstanding !== '' && creditCardbalanceTransfer !== '') {
                 colorRed[4] = false;
                 setcolorTick5(true)
             } else {
@@ -609,7 +620,7 @@ export default function LeadDetailsNew(props) {
         };
         let lead_data = {
             lead_crm_id: leadId, loan_amount: loanAmount,
-            phone_no: mobileNo, name: name, data,
+            phone_no: mobileNo, first_name: firstName, last_name: lastName, data,
             status: status,
             loan_type: loanType, source: source,
         };
@@ -705,7 +716,7 @@ export default function LeadDetailsNew(props) {
             let regex = /[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(pancardNo);
             let emailRegex = /^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+\.([a-z]{2,4})$/.test(email)
             let offiEmailRegex = /^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+\.([a-z]{2,4})$/.test(officialMailid)
-            if (name === '') {
+            if (firstName === '') {
                 colorRedError[0] = true;
                 loanErrorData[0] = true;
                 setcolorRed(colorRedError)
@@ -753,15 +764,39 @@ export default function LeadDetailsNew(props) {
                 setcolorRed(colorRedError)
                 setLoanDetailsError(loanErrorData)
             }
+            if (loanType === '') {
+                colorRedError[0] = true;
+                loanErrorData[8] = true
+                setcolorRed(colorRedError)
+                setLoanDetailsError(loanErrorData)
+            }
+            if (lastName === '') {
+                colorRedError[0] = true;
+                loanErrorData[9] = true;
+                setcolorRed(colorRedError)
+                setLoanDetailsError(loanErrorData)
+            }
             if (pincode === '' || pincode === undefined) {
                 colorRedError[1] = true;
                 residentialsData[0] = true
                 setcolorRed(colorRedError)
                 setResidentialError(residentialsData)
             }
+            if (currentResidentType === '') {
+                colorRedError[1] = true;
+                residentialsData[2] = true
+                setcolorRed(colorRedError)
+                setResidentialError(residentialsData)
+            }
             if (permanentPincode === '' || permanentPincode === undefined) {
                 colorRedError[2] = true;
                 residentialsData[1] = true
+                setcolorRed(colorRedError)
+                setResidentialError(residentialsData)
+            }
+            if (permanentResidentType === '' || permanentResidentType === undefined) {
+                colorRedError[2] = true;
+                residentialsData[3] = true
                 setcolorRed(colorRedError)
                 setResidentialError(residentialsData)
             }
@@ -790,14 +825,14 @@ export default function LeadDetailsNew(props) {
                 setIncomeDetailsError(incomeData)
             }
             if (typeof officialMailid !== "undefined") {
-                    if (!offiEmailRegex) {
-                        colorRedError[3] = true;
-                        incomeData[6] = true
-                        setcolorRed(colorRedError)
-                        setIncomeDetailsError(incomeData)
-                        return
-                    }
+                if (!offiEmailRegex) {
+                    colorRedError[3] = true;
+                    incomeData[6] = true
+                    setcolorRed(colorRedError)
+                    setIncomeDetailsError(incomeData)
+                    return
                 }
+            }
             if (salaryCreditMode === '' || salaryCreditMode === undefined) {
                 colorRedError[3] = true;
                 setcolorRed(colorRedError)
@@ -808,6 +843,12 @@ export default function LeadDetailsNew(props) {
                 colorRedError[3] = true;
                 setcolorRed(colorRedError)
                 incomeData[5] = true
+                setIncomeDetailsError(incomeData)
+            }
+            if (employmentType === '' || employmentType === undefined) {
+                colorRedError[3] = true;
+                setcolorRed(colorRedError)
+                incomeData[6] = true
                 setIncomeDetailsError(incomeData)
             }
             if (currentEMI === '' || currentEMI === undefined) {
@@ -822,20 +863,35 @@ export default function LeadDetailsNew(props) {
                 obligationData[1] = true
                 setObligationError(obligationData)
             }
-            if (creditCardOutstanding === '' || creditCardOutstanding === undefined) {
-                colorRedError[4] = true;
-                setcolorRed(colorRedError)
-                obligationData[2] = true
-                setObligationError(obligationData)
+            if (noOfCreditCard > 0) {
+                if (creditCardOutstanding === '' || creditCardOutstanding === undefined) {
+                    colorRedError[4] = true;
+                    setcolorRed(colorRedError)
+                    obligationData[2] = true
+                    setObligationError(obligationData)
+                }
+                if (creditCardbalanceTransfer === '' || creditCardbalanceTransfer === undefined) {
+                    colorRedError[4] = true;
+                    setcolorRed(colorRedError)
+                    obligationData[3] = true
+                    setObligationError(obligationData)
+                }
+                if ((creditCardOutstanding === '' || creditCardOutstanding === undefined) || (creditCardbalanceTransfer === '' || creditCardbalanceTransfer === undefined)) {
+                    return;
+                }
             }
-            if ((bankNBFC === null || bankNBFC === '') || (scheme === null || scheme === '') || name === '' || (date === '' || date === 'Invalid date')
+            if ((bankNBFC === null || bankNBFC === '') || (scheme === null || scheme === '') || firstName === '' || lastName === '' || (date === '' || date === 'Invalid date')
                 || (pancardNo === '' || pancardNo === undefined || !regex) || (email === '' || !emailRegex) || loanAmount === '' || (tenure === '' || tenure === undefined)
                 || (requiredRoi === '' || requiredRoi === undefined) || (gender === '' || gender === undefined) || (pincode === '' || pincode === undefined)
                 || (permanentPincode === '' || permanentPincode === undefined) || (companyName === '' || companyName === undefined)
                 || (grossIncome === '' || grossIncome === undefined) || (monthlyIncome === '' || monthlyIncome === undefined)
                 || (officePincode === '' || officePincode === undefined) || (salaryCreditMode === '' || salaryCreditMode === undefined) || (salaryBankAcc === '' || salaryBankAcc === undefined)
-                || (currentEMI === '' || currentEMI === undefined) || (noOfCreditCard === '' || noOfCreditCard === undefined)
-                || (creditCardOutstanding === '' || creditCardOutstanding === undefined)) {
+                || (currentEMI === '' || currentEMI === undefined) || (noOfCreditCard === '' || noOfCreditCard === undefined) || loanType === '' || currentResidentType === ''
+                || (permanentResidentType === '' || permanentResidentType === undefined) || (employmentType === '' || employmentType === undefined) || colorTick === false || colorTick2 === false
+                || colorTick3 === false || colorTick4 === false || colorTick5 === false
+            ) {
+                setIsLeadError(true)
+                setAlertMessage('Please Save & Next All Lead Details')
                 return;
             }
         }
@@ -874,7 +930,6 @@ export default function LeadDetailsNew(props) {
                 return;
             }
         }
-        console.log('happy');
         let items = {
             status: status, sub_status: subStatus, app_id: appID, bank: bankNBFC, scheme: scheme,
             callback_time: status === 'Contacted NI/NE' || status === 'Customer Not Interested' || status === 'Not Contactable' || status === 'STB'
@@ -1180,7 +1235,7 @@ export default function LeadDetailsNew(props) {
                 columnWidth: 260,
             },
         })
-        doc.save(`${name}-${leadId}.pdf`);
+        doc.save(`${firstName + lastName}-${leadId}.pdf`);
     }
     const checkboxHandler = (e) => {
         setChecked(e.target.checked);
@@ -1312,6 +1367,7 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
+                                            required: true
                                         }}
                                         SelectProps={{
                                             native: true,
@@ -1320,6 +1376,13 @@ export default function LeadDetailsNew(props) {
                                         size="small"
                                         value={loanType}
                                         onChange={(e) => setLoanType(e.target.value)}
+                                        onFocus={() => {
+                                            let data = [...loanDetailsError];
+                                            data[8] = false;
+                                            setLoanDetailsError(data);
+                                        }}
+                                        error={loanDetailsError[8]}
+                                        helperText={loanDetailsError[8] ? 'Product Type is required' : ''}
                                     >
                                         <option key="" value="">
                                             Select
@@ -1433,7 +1496,7 @@ export default function LeadDetailsNew(props) {
                                     <TextField
                                         className="textField fullName"
                                         id="outlined-full-width"
-                                        label="Full Name as Per Pancard"
+                                        label="First Name"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
@@ -1445,15 +1508,42 @@ export default function LeadDetailsNew(props) {
                                         }}
                                         variant="outlined"
                                         size="small"
-                                        value={startWithCaps(name)}
-                                        onChange={(e) => setname(e.target.value)}
+                                        value={startWithCaps(firstName)}
+                                        onChange={(e) => setFirstName(e.target.value)}
                                         onFocus={() => {
                                             let data = [...loanDetailsError];
                                             data[0] = false;
                                             setLoanDetailsError(data);
                                         }}
                                         error={loanDetailsError[0]}
-                                        helperText={loanDetailsError[0] ? 'Loan Amount is required' : ''}
+                                        helperText={loanDetailsError[0] ? 'First Name is required' : ''}
+                                    />
+                                </Grid>
+                                <Grid lg={4}>
+                                    <TextField
+                                        className="textField fullName"
+                                        id="outlined-full-width"
+                                        label="Last Name"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                            required: true
+                                        }}
+                                        InputProps={{
+                                            startAdornment: <InputAdornment position="start"><PersonIcon /></InputAdornment>,
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        value={startWithCaps(lastName)}
+                                        onChange={(e) => setLastName(e.target.value)}
+                                        onFocus={() => {
+                                            let data = [...loanDetailsError];
+                                            data[9] = false;
+                                            setLoanDetailsError(data);
+                                        }}
+                                        error={loanDetailsError[9]}
+                                        helperText={loanDetailsError[9] ? 'Last Name is required' : ''}
                                     />
                                 </Grid>
                                 <Grid lg={4}>
@@ -1641,38 +1731,38 @@ export default function LeadDetailsNew(props) {
                                         <option value="Widow">Widow</option>
                                     </TextField>
                                 </Grid>
-                                <Grid lg={4}>
-                                    <TextField
-                                        className="textField"
-                                        select
-                                        id="outlined-full-width"
-                                        label="No of Dependence"
-                                        style={{ margin: 8 }}
-                                        margin="normal"
-                                        InputLabelProps={{
-                                            shrink: true,
-                                        }}
-                                        SelectProps={{
-                                            native: true,
-                                        }}
-                                        variant="outlined"
-                                        size="small"
-                                        value={noOfDependent}
-                                        onChange={(e) => setNoOfDependent(e.target.value)}
-                                    >
-                                        <option key="" value=""> Select One</option>
-                                        <option value="0">0</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>
-                                        <option value="6">6</option>
-                                        <option value="7">7</option>
-                                        <option value="7+">7+</option>
-                                    </TextField>
-                                </Grid>
                                 <Grid container style={{ direction: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <Grid lg={4}>
+                                        <TextField
+                                            className="textField"
+                                            select
+                                            id="outlined-full-width"
+                                            label="No of Dependence"
+                                            style={{ margin: 8 }}
+                                            margin="normal"
+                                            InputLabelProps={{
+                                                shrink: true,
+                                            }}
+                                            SelectProps={{
+                                                native: true,
+                                            }}
+                                            variant="outlined"
+                                            size="small"
+                                            value={noOfDependent}
+                                            onChange={(e) => setNoOfDependent(e.target.value)}
+                                        >
+                                            <option key="" value=""> Select One</option>
+                                            <option value="0">0</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
+                                            <option value="7+">7+</option>
+                                        </TextField>
+                                    </Grid>
                                     <Grid lg={4}>
                                         <TextField
                                             className="textField"
@@ -1837,7 +1927,8 @@ export default function LeadDetailsNew(props) {
                                             style={{ margin: 8 }}
                                             margin="normal"
                                             InputLabelProps={{
-                                                shrink: true
+                                                shrink: true,
+                                                required: true
                                             }}
                                             SelectProps={{
                                                 native: true,
@@ -1846,6 +1937,13 @@ export default function LeadDetailsNew(props) {
                                             size="small"
                                             value={currentResidentType}
                                             onChange={(e) => setCurrentResidentType(e.target.value)}
+                                            onFocus={() => {
+                                                let residentialData = [...residentialError];
+                                                residentialData[2] = false;
+                                                setResidentialError(residentialData);
+                                            }}
+                                            error={residentialError[2]}
+                                            helperText={residentialError[2] ? 'Resident Type is required' : ''}
                                         >
                                             <option key="" value="">
                                                 Select
@@ -2022,7 +2120,8 @@ export default function LeadDetailsNew(props) {
                                             style={{ margin: 8 }}
                                             margin="normal"
                                             InputLabelProps={{
-                                                shrink: true
+                                                shrink: true,
+                                                required: true
                                             }}
                                             SelectProps={{
                                                 native: true,
@@ -2031,6 +2130,13 @@ export default function LeadDetailsNew(props) {
                                             size="small"
                                             value={permanentResidentType}
                                             onChange={(e) => setPermanentResidentType(e.target.value)}
+                                            onFocus={() => {
+                                                let residentialData = [...residentialError];
+                                                residentialData[3] = false;
+                                                setResidentialError(residentialData);
+                                            }}
+                                            error={residentialError[3]}
+                                            helperText={residentialError[3] ? 'Resident Type is required' : ''}
                                         >
                                             <option key="" value="">
                                                 Select One
@@ -2100,7 +2206,8 @@ export default function LeadDetailsNew(props) {
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         InputLabelProps={{
-                                            shrink: true
+                                            shrink: true,
+                                            required: true
                                         }}
                                         SelectProps={{
                                             native: true,
@@ -2109,11 +2216,18 @@ export default function LeadDetailsNew(props) {
                                         size="small"
                                         value={employmentType}
                                         onChange={(e) => setEmploymentType(e.target.value)}
+                                        onFocus={() => {
+                                            let incomeData = [...incomeDetailsError];
+                                            incomeData[6] = false;
+                                            setIncomeDetailsError(incomeData);
+                                        }}
+                                        error={incomeDetailsError[6]}
+                                        helperText={incomeDetailsError[6] ? 'Employment Type is required' : ''}
                                     >
                                         <option key="" value="">Select</option>
-                                        <option value="salaried">Salaried</option>
-                                        <option value="self_employed">Self Employed</option>
-                                        <option value="self_employed_professional">Self Employed Professional</option>
+                                        <option value="Salaried">Salaried</option>
+                                        <option value="Self_Employed">Self Employed</option>
+                                        <option value="Self_Employed_Professional">Self Employed Professional</option>
                                     </TextField>
                                 </Grid>
                                 <Grid lg={4}>
@@ -2577,9 +2691,8 @@ export default function LeadDetailsNew(props) {
                                         }}
                                         error={obligationError[1]}
                                         helperText={obligationError[1] ? 'No of CC is required' : ''}
-
                                     >
-                                        <option key="" value=" ">Select One</option>
+                                        <option key="" value="">Select One</option>
                                         <option value="0">0</option>
                                         <option value="1">1</option>
                                         <option value="2">2</option>
@@ -2603,7 +2716,7 @@ export default function LeadDetailsNew(props) {
                                         margin="normal"
                                         InputLabelProps={{
                                             shrink: true,
-                                            required: true
+                                            required: noOfCreditCard > 0 ? true : false
                                         }}
                                         variant="outlined"
                                         size="small"
@@ -2637,6 +2750,7 @@ export default function LeadDetailsNew(props) {
                                             margin="normal"
                                             InputLabelProps={{
                                                 shrink: true,
+                                                required: noOfCreditCard > 0 ? true : false
                                             }}
                                             SelectProps={{
                                                 native: true
@@ -2645,6 +2759,13 @@ export default function LeadDetailsNew(props) {
                                             size="small"
                                             value={creditCardbalanceTransfer}
                                             onChange={(e) => setcreditCardbalanceTransfer(e.target.value)}
+                                            onFocus={() => {
+                                                let obligationData = [...obligationError];
+                                                obligationData[3] = false;
+                                                setObligationError(obligationData);
+                                            }}
+                                            error={obligationError[3]}
+                                            helperText={obligationError[3] ? 'CC Balence Transfer is required' : ''}
                                         >
                                             <option value="">Select</option>
                                             <option value="Yes">Yes</option>
@@ -3415,7 +3536,7 @@ export default function LeadDetailsNew(props) {
                                         shrink: true,
                                     }}
                                     inputProps={{
-                                        max:moment().format('YYYY-MM-DD')
+                                        max: moment().format('YYYY-MM-DD')
                                     }}
                                     variant="outlined"
                                     size="small"
@@ -3529,8 +3650,12 @@ export default function LeadDetailsNew(props) {
                         <td className='tableDescription'>{requiredRoi}</td>
                     </tr>
                     <tr>
-                        <td className='tableTitle'>Full Name As Pancard</td>
-                        <td className='tableDescription'>{name}</td>
+                        <td className='tableTitle'>First Name</td>
+                        <td className='tableDescription'>{firstName}</td>
+                    </tr>
+                    <tr>
+                        <td className='tableTitle'>Last Name</td>
+                        <td className='tableDescription'>{lastName}</td>
                     </tr>
                     <tr>
                         <td className='tableTitle'>Gender</td>

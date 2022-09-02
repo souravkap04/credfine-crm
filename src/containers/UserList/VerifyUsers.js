@@ -1,20 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import { Table, TableCell, TableContainer, TableHead, TableRow, Paper, TableBody, Button } from '@material-ui/core';
-import * as ReactBootstrap from 'react-bootstrap';
 import axios from 'axios';
 import baseUrl from '../../global/api';
+import CircularProgress from "@material-ui/core/CircularProgress";
 import { getProfileData } from '../../global/leadsGlobalData'
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
 import EmiCalculator from '../Emicalculator/EmiCalculator';
 import EligibilityCalculator from '../EligibilityCalculator/EligibilityCalculator';
 const useStyles = makeStyles({
     container: {
-        overflow: 'auto',
-        marginBottom: '25px',
-        boxShadow: 'none'
+        maxHeight: '85vh',
+        marginBottom: '10px',
     },
-
     table: {
         width: '100%',
     },
@@ -25,10 +23,6 @@ const useStyles = makeStyles({
     },
     tabledata: {
         fontSize: '12px',
-    },
-    loader: {
-        position: "relative",
-        left: "35em"
     },
     oddEvenRow: {
         '&:nth-of-type(odd)': {
@@ -75,14 +69,14 @@ export default function VerifyUsers() {
             })
     }
     const [openCalculate, setopenCalculate] = useState(false);
-    const [checkEligibility,setCheckEligibility] = useState(false);
-  
-  const openEligibility = () =>{
-    setCheckEligibility(true);
-  }
-  const closeEligibility = () =>{
-    setCheckEligibility(false);
-  }
+    const [checkEligibility, setCheckEligibility] = useState(false);
+
+    const openEligibility = () => {
+        setCheckEligibility(true);
+    }
+    const closeEligibility = () => {
+        setCheckEligibility(false);
+    }
     const openCalculator = () => {
         setopenCalculate(true);
     }
@@ -91,10 +85,10 @@ export default function VerifyUsers() {
     }
     return (
         <PageLayerSection ActualEmiCalculate={openCalculator} ActualEligibilityCalculate={openEligibility}>
-            <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility}/>
+            <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility} />
             <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
             <TableContainer component={Paper} className={classes.container}>
-                <Table className={classes.table} aria-label="user table">
+                <Table className={classes.table} aria-label="user table" stickyHeader>
                     <TableHead className={classes.tableheading}>
                         <TableRow>
                             <TableCell className={classes.tableheading}>Sr No</TableCell>
@@ -124,8 +118,8 @@ export default function VerifyUsers() {
                                     </Button>
                                 </TableCell>
                             </TableRow>
-                        )) : <div className={classes.loader}>
-                            <ReactBootstrap.Spinner animation="border" />
+                        )) : <div className="loader">
+                            <CircularProgress size={100} thickness={3} />
                         </div>
                         }
                     </TableBody>
