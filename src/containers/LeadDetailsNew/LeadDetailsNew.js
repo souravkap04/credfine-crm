@@ -848,7 +848,7 @@ export default function LeadDetailsNew(props) {
             if (employmentType === '' || employmentType === undefined) {
                 colorRedError[3] = true;
                 setcolorRed(colorRedError)
-                incomeData[6] = true
+                incomeData[7] = true
                 setIncomeDetailsError(incomeData)
             }
             if (currentEMI === '' || currentEMI === undefined) {
@@ -2218,11 +2218,11 @@ export default function LeadDetailsNew(props) {
                                         onChange={(e) => setEmploymentType(e.target.value)}
                                         onFocus={() => {
                                             let incomeData = [...incomeDetailsError];
-                                            incomeData[6] = false;
+                                            incomeData[7] = false;
                                             setIncomeDetailsError(incomeData);
                                         }}
-                                        error={incomeDetailsError[6]}
-                                        helperText={incomeDetailsError[6] ? 'Employment Type is required' : ''}
+                                        error={incomeDetailsError[7]}
+                                        helperText={incomeDetailsError[7] ? 'Employment Type is required' : ''}
                                     >
                                         <option key="" value="">Select</option>
                                         <option value="Salaried">Salaried</option>
