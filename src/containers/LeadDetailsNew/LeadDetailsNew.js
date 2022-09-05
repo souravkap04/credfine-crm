@@ -825,7 +825,7 @@ export default function LeadDetailsNew(props) {
                 setIncomeDetailsError(incomeData)
             }
             if (typeof officialMailid !== "undefined") {
-                if (!offiEmailRegex) {
+                if (!offiEmailRegex && officialMailid !== "") {
                     colorRedError[3] = true;
                     incomeData[6] = true
                     setcolorRed(colorRedError)
