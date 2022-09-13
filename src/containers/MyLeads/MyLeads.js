@@ -21,6 +21,7 @@ import Button from "@material-ui/core/Button";
 import {
   haloocomNoidaDialerApi,
   haloocomMumbaiDialerApi,
+  cloudDialerApi
 } from "../../global/callApi";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -177,7 +178,6 @@ export default function MyLeads(props) {
   const [rowsPerPage, setRowsPerPage] = useState(100);
   const [totalDataPerPage, settotalDataPerPage] = useState(0);
   const [dialerCall, setDialerCall] = useState(false);
-  const [disableHangupBtn, setDisableHangupBtn] = useState(true);
   const [state, setState] = useState(false);
   const [manualState, setmanualState] = useState(false);
   const [status, setStatus] = useState("");
@@ -193,7 +193,6 @@ export default function MyLeads(props) {
   const [isLoading, setisLoading] = useState(false);
   const [dialerMobileNumber, setdialerMobileNumber] = useState("");
   const [callHangUpState, setCallHangUpState] = useState(true);
-  const [hangUpSnacks, sethangUpSnacks] = useState(false);
   const [myLeadSearchData, setMyLeadSearchData] = useState([]);
   const [isMyLeadsSearchData, setisMyLeadsSearchData] = useState(false);
   const [responseStatus, setResponseStatus] = useState("");
@@ -427,37 +426,50 @@ export default function MyLeads(props) {
   const clickToCall = async (encryptData, leadID) => {
     const customerNo = decodeURIComponent(window.atob(encryptData));
     if (profileData.dialer === "HALOOCOM-Noida") {
-      await axios
-        .post(
-          `${haloocomNoidaDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`
-        )
+      await axios.post(`${haloocomNoidaDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`)
         .then((response) => {
           setDialerCall(true);
-          setDisableHangupBtn(false);
           if (response.status === 200) {
             localStorage.setItem("callHangUp", true);
           }
         })
         .catch((error) => {
-          console.log("error");
+          console.log(error);
         });
       setTimeout(() => {
         history.push(`/dashboards/myleads/edit/${leadID}`);
       }, 1500);
     } else if (profileData.dialer === "HALOOCOM-Mumbai") {
-      await axios
-        .post(
-          `${haloocomMumbaiDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`
-        )
+      await axios.post(`${haloocomMumbaiDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`)
         .then((response) => {
           setDialerCall(true);
-          setDisableHangupBtn(false);
           if (response.status === 200) {
             localStorage.setItem("callHangUp", true);
           }
         })
         .catch((error) => {
-          console.log("error");
+          console.log(error);
+        });
+      setTimeout(() => {
+        history.push(`/dashboards/myleads/edit/${leadID}`);
+      }, 1500);
+    } else if (profileData.dialer === "CLOUD-DIALER") {
+      await axios.post(`${cloudDialerApi}/callingApis/clicktoDial?agenTptId=8420878985&customerNumber=8420878985&tokenId=ea46f37d402454d2f47e9d8171fd5d5d`)
+        .then((response) => {
+          setDialerCall(true);
+          if (response.status === 200) {
+            if (response.data.LOG === 'ERROR') {
+              setAlertMessage(response.data.OUTPUT);
+              setisError(true);
+            } else if (response.data.LOG === 'SUCCESS') {
+              setDialerCall(true);
+              localStorage.setItem('callRefId', response.data.JSON_INFO)
+              localStorage.setItem('callHangUp', true)
+            }
+          }
+        })
+        .catch((error) => {
+          console.log(error);
         });
       setTimeout(() => {
         history.push(`/dashboards/myleads/edit/${leadID}`);
@@ -466,7 +478,6 @@ export default function MyLeads(props) {
   };
   const disableDialerPopUp = () => {
     setDialerCall(false);
-    setDisableHangupBtn(false);
     setisError(false);
     setIsSuccess(false);
   };
@@ -497,43 +508,48 @@ export default function MyLeads(props) {
   };
   const clickToManualCall = async () => {
     if (profileData.dialer === "HALOOCOM-Noida") {
-      await axios
-        .post(
-          `${haloocomNoidaDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${dialerMobileNumber}`
-        )
+      await axios.post(`${haloocomNoidaDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${dialerMobileNumber}`)
         .then((response) => {
           setDialerCall(true);
-          setDisableHangupBtn(false);
           if (response.status === 200) {
             localStorage.setItem("callHangUp", true);
           }
-        })
-        .catch((error) => {
-          console.log("error");
+        }).catch((error) => {
+          console.log(error);
         });
     } else if (profileData.dialer === "HALOOCOM-Mumbai") {
-      await axios
-        .post(
-          `${haloocomMumbaiDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${dialerMobileNumber}`
-        )
+      await axios.post(`${haloocomMumbaiDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${dialerMobileNumber}`)
         .then((response) => {
           setDialerCall(true);
-          setDisableHangupBtn(false);
           if (response.status === 200) {
             localStorage.setItem("callHangUp", true);
           }
+        }).catch((error) => {
+          console.log(error);
+        });
+    } else if (profileData.dialer === "CLOUD-DIALER") {
+      await axios.post(`${cloudDialerApi}/callingApis/clicktoDial?agenTptId=8420878985&customerNumber=8420878985&tokenId=ea46f37d402454d2f47e9d8171fd5d5d`)
+        .then((response) => {
+          setDialerCall(true);
+          if (response.status === 200) {
+            if (response.data.LOG === 'ERROR') {
+              setAlertMessage(response.data.OUTPUT);
+              setisError(true);
+            } else if (response.data.LOG === 'SUCCESS') {
+              setDialerCall(true);
+              localStorage.setItem('callRefId', response.data.JSON_INFO)
+              localStorage.setItem('callHangUp', true)
+            }
+          }
         })
         .catch((error) => {
-          console.log("error");
+          console.log(error);
         });
     }
   };
   const hangupCallHandler = async () => {
     if (profileData.dialer === "HALOOCOM-Noida") {
-      await axios
-        .post(
-          `${haloocomNoidaDialerApi}/action.php?user=${profileData.vertage_id}&type=Hangup&disposition`
-        )
+      await axios.post(`${haloocomNoidaDialerApi}/action.php?user=${profileData.vertage_id}&type=Hangup&disposition`)
         .then((response) => {
           // setDisableDisposeBtn(false);
           setCallHangUpState(false);
@@ -548,10 +564,7 @@ export default function MyLeads(props) {
           console.log(error);
         });
     } else if (profileData.dialer === "HALOOCOM-Mumbai") {
-      await axios
-        .post(
-          `${haloocomMumbaiDialerApi}/action.php?user=${profileData.vertage_id}&type=Hangup&disposition`
-        )
+      await axios.post(`${haloocomMumbaiDialerApi}/action.php?user=${profileData.vertage_id}&type=Hangup&disposition`)
         .then((response) => {
           // setDisableDisposeBtn(false);
           setCallHangUpState(false);
@@ -565,10 +578,21 @@ export default function MyLeads(props) {
         .catch((error) => {
           console.log(error);
         });
+    } else if (profileData.dialer === "CLOUD-DIALER") {
+      await axios.post(`${cloudDialerApi}/chatServer/externalCallDisposeByCrmId?crmId=8420878985&referenceUuid=${localStorage.getItem('callRefId')}&disposeName=Test Call&callbackFlag=0`)
+        .then((response) => {
+          setCallHangUpState(false);
+          if (response.data.LOG === 'SUCCESS') {
+            localStorage.removeItem('callHangUp')
+            localStorage.removeItem('callRefId')
+            return disposeCallHandler()
+          }
+        }).catch((error) => {
+          console.log(error)
+        })
     }
   };
   const disposeCallHandler = () => {
-    sethangUpSnacks(true);
     setCallHangUpState(true);
   };
   const getAssignedAgent = (agentName) => {

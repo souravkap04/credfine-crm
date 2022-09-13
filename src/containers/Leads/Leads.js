@@ -15,6 +15,7 @@ import baseUrl from "../../global/api";
 import {
   haloocomNoidaDialerApi,
   haloocomMumbaiDialerApi,
+  cloudDialerApi
 } from "../../global/callApi";
 import { getProfileData } from "../../global/leadsGlobalData";
 import { useQueryy } from "../../global/query";
@@ -118,7 +119,6 @@ export default function Leads() {
   const [searchData, setSearchData] = useState([]);
   const [isSearchData, setisSearchData] = useState(false);
   const [dialerCall, setDialerCall] = useState(false);
-  const [disableHangupBtn, setDisableHangupBtn] = useState(true);
   const [state, setState] = useState(false);
   const [loanAmount, setLoanAmount] = useState("");
   const [employmentType, setEmploymentType] = useState("");
@@ -210,37 +210,50 @@ export default function Leads() {
   const clickToCall = async (encryptData, leadID) => {
     const customerNo = decodeURIComponent(window.atob(encryptData));
     if (profileData.dialer === "HALOOCOM-Noida") {
-      await axios
-        .post(
-          `${haloocomNoidaDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`
-        )
+      await axios.post(`${haloocomNoidaDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`)
         .then((response) => {
           setDialerCall(true);
-          setDisableHangupBtn(false);
           if (response.status === 200) {
             localStorage.setItem("callHangUp", true);
           }
         })
         .catch((error) => {
-          console.log("error");
+          console.log(error);
         });
       setTimeout(() => {
         history.push(`/dashboards/leads/edit/${leadID}`);
       }, 1500);
     } else if (profileData.dialer === "HALOOCOM-Mumbai") {
-      await axios
-        .post(
-          `${haloocomMumbaiDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`
-        )
+      await axios.post(`${haloocomMumbaiDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`)
         .then((response) => {
           setDialerCall(true);
-          setDisableHangupBtn(false);
           if (response.status === 200) {
             localStorage.setItem("callHangUp", true);
           }
         })
         .catch((error) => {
-          console.log("error");
+          console.log(error);
+        });
+      setTimeout(() => {
+        history.push(`/dashboards/leads/edit/${leadID}`);
+      }, 1500);
+    } else if (profileData.dialer === "CLOUD-DIALER") {
+      await axios.post(`${cloudDialerApi}/callingApis/clicktoDial?agenTptId=8420878985&customerNumber=8420878985&tokenId=ea46f37d402454d2f47e9d8171fd5d5d`)
+        .then((response) => {
+          setDialerCall(true);
+          if (response.status === 200) {
+            if (response.data.LOG === 'ERROR') {
+              setAlertMessage(response.data.OUTPUT);
+              setIsError(true);
+            } else if (response.data.LOG === 'SUCCESS') {
+              setDialerCall(true);
+              localStorage.setItem('callRefId', response.data.JSON_INFO)
+              localStorage.setItem('callHangUp', true)
+            }
+          }
+        })
+        .catch((error) => {
+          console.log(error);
         });
       setTimeout(() => {
         history.push(`/dashboards/leads/edit/${leadID}`);
@@ -268,7 +281,6 @@ export default function Leads() {
   };
   const disableDialerPopUp = () => {
     setDialerCall(false);
-    setDisableHangupBtn(false);
   };
   const personalLoanSubmitHandler = async () => {
     let formErrorData = [...formError];

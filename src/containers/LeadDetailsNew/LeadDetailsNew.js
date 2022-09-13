@@ -3,7 +3,7 @@ import PageLayerSection from '../PageLayerSection/PageLayerSection';
 import './leadDetailsNew.css';
 import axios from "axios";
 import baseUrl from "../../global/api";
-import { haloocomNoidaDialerApi, haloocomMumbaiDialerApi } from "../../global/callApi";
+import { haloocomNoidaDialerApi, haloocomMumbaiDialerApi, cloudDialerApi } from "../../global/callApi";
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Table from "@material-ui/core/Table";
@@ -285,17 +285,10 @@ export default function LeadDetailsNew(props) {
     const [showCompany, setShowCompany] = useState(false);
     const [hangUpSnacks, sethangUpSnacks] = useState(false);
     const [callHangUpState, setCallHangUpState] = useState(true);
-    const [callInProgress, setcallInProgress] = useState(false);
     const [submitFalse, setsubmitFalse] = useState(true);
     const [input, setInput] = useState("");
     const [loadingRemarks, setLoadingRemarks] = useState(0);
     const [remarks, setRemarks] = useState([]);
-    const [isDisplay, setIsDisplay] = useState(false);
-    const [isCalling, setIsCalling] = useState(false);
-    const [isCallConnect, setIsCallConnect] = useState(false);
-    const [onGoingCall, setOnGoingCall] = useState(false);
-    const [isCallNotConnected, setIsCallNotConnected] = useState(false)
-    const [disableHangupBtn, setDisableHangupBtn] = useState(true);
     const [dialerCall, setDialerCall] = useState(false);
     const [colorTick, setcolorTick] = useState(false);
     const [colorTick2, setcolorTick2] = useState(false);
@@ -529,7 +522,6 @@ export default function LeadDetailsNew(props) {
     useEffect(() => {
         const fetchRemarks = async (id) => {
             setisLoading(true)
-            setIsDisplay(false);
             let headers = {
                 'Authorization': `Token ${profileData.token}`,
             };
@@ -1098,28 +1090,42 @@ export default function LeadDetailsNew(props) {
         setisCopy(false);
         setIsAutoDialerEnd(false);
     }
-    const clickToCall = async (customerNo, leadID) => {
+    const clickToCall = async (customerNo) => {
         if (profileData.dialer === 'HALOOCOM-Noida') {
             await axios.post(`${haloocomNoidaDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`)
                 .then((response) => {
                     setDialerCall(true);
-                    setDisableHangupBtn(false);
                     if (response.status === 200) {
                         localStorage.setItem('callHangUp', true)
                     }
                 }).catch((error) => {
-                    console.log('error');
+                    console.log(error);
                 })
         } else if (profileData.dialer === 'HALOOCOM-Mumbai') {
             await axios.post(`${haloocomMumbaiDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`)
                 .then((response) => {
                     setDialerCall(true);
-                    setDisableHangupBtn(false);
                     if (response.status === 200) {
                         localStorage.setItem('callHangUp', true)
                     }
                 }).catch((error) => {
-                    console.log('error');
+                    console.log(error);
+                })
+        } else if (profileData.dialer === 'CLOUD-DIALER') {
+            await axios.post(`${cloudDialerApi}/callingApis/clicktoDial?agenTptId=8420878985&customerNumber=8420878985&tokenId=ea46f37d402454d2f47e9d8171fd5d5d`)
+                .then((response) => {
+                    if (response.status === 200) {
+                        if (response.data.LOG === 'ERROR') {
+                            setAlertMessage(response.data.OUTPUT);
+                            setIsLeadError(true)
+                        } else if (response.data.LOG === 'SUCCESS') {
+                            setDialerCall(true);
+                            localStorage.setItem('callRefId', response.data.JSON_INFO)
+                            localStorage.setItem('callHangUp', true)
+                        }
+                    }
+                }).catch((error) => {
+                    console.log(error);
                 })
         }
     }
@@ -1150,6 +1156,18 @@ export default function LeadDetailsNew(props) {
                 }).catch((error) => {
                     console.log(error);
                 })
+        } else if (profileData.dialer === "CLOUD-DIALER") {
+            await axios.post(`${cloudDialerApi}/chatServer/externalCallDisposeByCrmId?crmId=8420878985&referenceUuid=${localStorage.getItem('callRefID')}&disposeName=Test Call&callbackFlag=0`)
+                .then((response) => {
+                    setCallHangUpState(false);
+                    if (response.data.LOG === 'SUCCESS') {
+                        localStorage.removeItem('callHangUp')
+                        localStorage.removeItem('callRefId')
+                        return disposeCallHandler()
+                    }
+                }).catch((error) => {
+                    console.log(error)
+                })
         }
     }
     const disposeCallHandler = () => {
@@ -1166,7 +1184,6 @@ export default function LeadDetailsNew(props) {
     }
     const disableDialerPopUp = () => {
         setDialerCall(false)
-        setDisableHangupBtn(false)
     }
     const endAutoDialerBtnHandler = () => {
         setIsAutoDialerEnd(true);
@@ -1304,11 +1321,6 @@ export default function LeadDetailsNew(props) {
                     Auto dialer mode is off
                 </Alert>
             </Snackbar>
-            {profileData.dialer === 'HALOOCOM' ? <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={localStorage.getItem("callHangUp") && localStorage.getItem("callHangUp") !== null ? true : callInProgress} autoHideDuration={1500} onClose={disableHangUpSnacks}>
-                <Alert onClose={disableHangUpSnacks} severity="info">
-                    Call in progress....
-                </Alert>
-            </Snackbar> : ""}
             <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isCopy} autoHideDuration={1500} onClose={disableHangUpSnacks}>
                 <Alert onClose={disableHangUpSnacks} severity="success">
                     Successfully copied to clipboard
@@ -3292,7 +3304,7 @@ export default function LeadDetailsNew(props) {
                             color="primary"
                             variant="contained"
                             startIcon={<CallIcon className="callIcon" />}
-                            onClick={() => clickToCall(mobileNo, leadid)}>
+                            onClick={() => clickToCall(mobileNo)}>
                             Call
                         </Button>
                             <Button

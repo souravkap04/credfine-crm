@@ -100,7 +100,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Menu(props) {
     const classes = useStyles();
     const theme = useTheme();
-    const [openen, setOpen] = React.useState(true);
+    const [openen, setOpen] = useState(true);
     const [uploadOpen, setuploadOpen] = useState(true);
     const [calculatorOpen, setcalculatorOpen] = useState(true);
     const [drawerOpen, setdrawerOpen] = React.useState(true);
@@ -114,10 +114,11 @@ export default function Menu(props) {
     const [bulkUploadPage, setbulkUploadPage] = useState(false);
     const [freshLeadPage, setfreshLeadPage] = useState(false);
     const [reportPage, setreportPage] = useState(false);
+    const [dialerPage, setDialerPage] = useState(false);
     const [isHiddenTab, setIsHiddenTab] = useState(false);
     const [isUserTab, setIsUserTab] = useState(false);
     const [isCalculatorTab, setIsCalculatorTab] = useState(false);
-    const [isEligibleCalculator,setIsEligibleCalculator] = useState(false);
+    const [isEligibleCalculator, setIsEligibleCalculator] = useState(false);
     let location = useLocation();
     const handleClick = () => {
         setOpen(!openen);
@@ -141,6 +142,7 @@ export default function Menu(props) {
             setbulkUploadPage(false)
             setfreshLeadPage(true)
             setreportPage(true)
+            setDialerPage(true)
         }
         if (profileData.user_roles[0].user_type === 2) {
             setdashboardPage(true)
@@ -153,6 +155,7 @@ export default function Menu(props) {
             setbulkUploadPage(true)
             setfreshLeadPage(true)
             setreportPage(true)
+            setDialerPage(true)
         }
         if (profileData.user_roles[0].user_type === 3) {
             setIsUserTab(true)
@@ -167,6 +170,7 @@ export default function Menu(props) {
             setbulkUploadPage(false)
             setfreshLeadPage(false)
             setreportPage(false)
+            setDialerPage(true)
         }
         if (profileData.user_roles[0].user_type === 4) {
             setdashboardPage(true)
@@ -179,6 +183,7 @@ export default function Menu(props) {
             setbulkUploadPage(true)
             setfreshLeadPage(true)
             setreportPage(true)
+            setDialerPage(true)
         }
         if (profileData.user_roles[0].user_type === 5) {
             setIsUserTab(false)
@@ -193,6 +198,7 @@ export default function Menu(props) {
             setbulkUploadPage(false)
             setfreshLeadPage(false)
             setreportPage(false)
+            setDialerPage(true)
         }
         if (profileData.user_roles[0].user_type === 6) {
             setIsUserTab(true)
@@ -207,6 +213,7 @@ export default function Menu(props) {
             setbulkUploadPage(false)
             setfreshLeadPage(false)
             setreportPage(true)
+            setDialerPage(true)
         }
     }, []);
     const handleDrawerOpen = () => {
@@ -343,11 +350,11 @@ export default function Menu(props) {
                 </ListItem>
                     <Collapse in={calculatorOpen} timeout="auto" unmountOnExit>
                         <List component="div" disablePadding>
-                        {location.pathname === '/dashboards/eligibilitycalculator' ? <NavLink to="/dashboards/eligibilitycalculator" activeClassName='active'><ListItem button className={classes.nested + " selected"}>
-                        <ListItemText primary="Eligibility Calculator" />
-                            </ListItem></NavLink>:<ListItem button className={classes.nested + " selected"} onClick={props.eligibilityCalculate}>
+                            {location.pathname === '/dashboards/eligibilitycalculator' ? <NavLink to="/dashboards/eligibilitycalculator" activeClassName='active'><ListItem button className={classes.nested + " selected"}>
                                 <ListItemText primary="Eligibility Calculator" />
-                        </ListItem>}
+                            </ListItem></NavLink> : <ListItem button className={classes.nested + " selected"} onClick={props.eligibilityCalculate}>
+                                <ListItemText primary="Eligibility Calculator" />
+                            </ListItem>}
                             {location.pathname === '/dashboards/EMIcalculator' ? <NavLink to="/dashboards/EMIcalculator" activeClassName="active"><ListItem button className={classes.nested + " selected"}>
                                 <ListItemText primary="EMI Calculator" />
                             </ListItem></NavLink> : <ListItem button className={classes.nested + " selected"} onClick={props.EmiCalculate}>
@@ -359,6 +366,14 @@ export default function Menu(props) {
                         </List>
                     </Collapse>
                 </React.Fragment>}
+                {dialerPage ? <NavLink to="/dashboards/dialerLogin" activeClassName="active">
+                    <ListItem className="selected" button>
+                        <ListItemIcon>
+                            <FileCopyOutlinedIcon className={classes.color} />
+                        </ListItemIcon>
+                        <ListItemText className={classes.color} primary="Dialer" />
+                    </ListItem>
+                </NavLink> : ''}
             </List>
         </Drawer >
     );
