@@ -541,13 +541,7 @@ export default function Leads() {
                 onChange={(e) => setCampaign(e.target.value)}
               >
                 <option value="">Select</option>
-                <option value="FRESH_PL_OD">FRESH_PL_OD</option>
-                <option value="BT_PL_OD">BT_PL_OD</option>
-                <option value="PL_OD_TOP_UP">PL_OD_TOP_UP</option>
-                <option value="PRE_APPROVED">PRE_APPROVED</option>
-                <option value="HOT_LEAD">HOT_LEAD</option>
-                <option value="WEBSITE">WEBSITE</option>
-                <option value="OTHER">OTHER</option>
+                <option value="OWN_LEAD">OWN LEAD</option>
               </TextField>
             </Grid>
             <Grid>
