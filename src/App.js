@@ -32,7 +32,6 @@ import HDFCForm from './containers/HDFCForm/HDFCForm';
 import Loanbaba from './containers/LOANBABAForm/Loanbaba';
 import Paysense from './containers/PaysenseForm/Paysense';
 import CalculatorTable from './containers/CalculatorTable/CalculatorTable';
-import Dialer from './containers/Dialer/Dialer';
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -136,7 +135,6 @@ function App() {
           <PrivateRoute exact path="/dashboards/LOANBABAForm/:leadid" component={Loanbaba} />
           <PrivateRoute exact path="/dashboards/PAYSENSEForm/:leadid" component={Paysense}/>
           <PrivateRoute exact path="/dashboards/EMIcalculator" component={CalculatorTable} />
-          <PrivateRoute exact path="/dashboards/dialerLogin" component={Dialer} />
         </Switch>
       </Router>
     </div>

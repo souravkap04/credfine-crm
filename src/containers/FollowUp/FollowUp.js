@@ -13,7 +13,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import CallIcon from '@material-ui/icons/Call';
 import axios from 'axios';
 import baseUrl from '../../global/api';
-import { haloocomNoidaDialerApi, haloocomMumbaiDialerApi, cloudDialerApi } from '../../global/callApi'
+import { haloocomNoidaDialerApi, haloocomMumbaiDialerApi, cloudDialerApi, dialerToken } from '../../global/callApi'
 import { getProfileData } from '../../global/leadsGlobalData';
 import CallerDialogBox from '../Leads/CallerDialog/CallerDialogBox';
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
@@ -183,7 +183,7 @@ export default function FollowUp(props) {
                 history.push(`/dashboards/followup/edit/${leadID}`)
             }, 1500)
         } else if (profileData.dialer === "CLOUD-DIALER") {
-            await axios.post(`${cloudDialerApi}/callingApis/clicktoDial?agenTptId=8420878985&customerNumber=8420878985&tokenId=ea46f37d402454d2f47e9d8171fd5d5d`)
+            await axios.post(`${cloudDialerApi}/callingApis/clicktoDial?agenTptId=9930656757&customerNumber=8420878985&tokenId=${dialerToken}`)
                 .then((response) => {
                     setDialerCall(true);
                     if (response.status === 200) {

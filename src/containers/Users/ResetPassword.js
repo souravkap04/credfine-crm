@@ -1110,7 +1110,7 @@ export default function Users() {
                         <TextField
                           className="textField"
                           id="outlined-full-width"
-                          label="Haloocoom Username"
+                          label="Dialer ID"
                           style={{ margin: 8 }}
                           margin="normal"
                           InputLabelProps={{
@@ -1135,7 +1135,7 @@ export default function Users() {
                         <TextField
                           className="textField"
                           id="outlined-full-width"
-                          label="Vertage Password"
+                          label="Dialer Username"
                           style={{ margin: 8 }}
                           margin="normal"
                           InputLabelProps={{

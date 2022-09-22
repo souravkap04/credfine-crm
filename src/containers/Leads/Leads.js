@@ -15,7 +15,8 @@ import baseUrl from "../../global/api";
 import {
   haloocomNoidaDialerApi,
   haloocomMumbaiDialerApi,
-  cloudDialerApi
+  cloudDialerApi,
+  dialerToken
 } from "../../global/callApi";
 import { getProfileData } from "../../global/leadsGlobalData";
 import { useQueryy } from "../../global/query";
@@ -238,7 +239,7 @@ export default function Leads() {
         history.push(`/dashboards/leads/edit/${leadID}`);
       }, 1500);
     } else if (profileData.dialer === "CLOUD-DIALER") {
-      await axios.post(`${cloudDialerApi}/callingApis/clicktoDial?agenTptId=8420878985&customerNumber=8420878985&tokenId=ea46f37d402454d2f47e9d8171fd5d5d`)
+      await axios.post(`${cloudDialerApi}/callingApis/clicktoDial?agenTptId=9930656757&customerNumber=8420878985&tokenId=${dialerToken}`)
         .then((response) => {
           setDialerCall(true);
           if (response.status === 200) {
@@ -364,12 +365,17 @@ export default function Leads() {
       clickToCall(leadData.phone_no_encrypt, leadData.lead_crm_id)
     }
   }, [leadData]);
+  const dialerSSOLogin = () => {
+    window.open(`https://credfine.slashrtc.in/index.php/ssoLogin?crmUniqueId=CeuCxaZUVpk+Stxmt5qIWA==&usernameId=${profileData.vertage_pass}&requestOrigin=http://crm.credfine.com/`)
+  }
   return (
     <PageLayerSection isDisplaySearchBar={true}
       addLeadButton={state ? false : true}
       onClick={() => openDrawer()}
       startAutoDialerButton={true}
+      loginDialerBtn={true}
       startAutoDialerClick={() => autoDialerHandler()}
+      logDialerHandler={() => dialerSSOLogin()}
       ActualEmiCalculate={openCalculator}
       ActualEligibilityCalculate={openEligibility}
     >

@@ -3,7 +3,7 @@ import PageLayerSection from '../PageLayerSection/PageLayerSection';
 import './leadDetailsNew.css';
 import axios from "axios";
 import baseUrl from "../../global/api";
-import { haloocomNoidaDialerApi, haloocomMumbaiDialerApi, cloudDialerApi } from "../../global/callApi";
+import { haloocomNoidaDialerApi, haloocomMumbaiDialerApi, cloudDialerApi, dialerToken } from "../../global/callApi";
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Table from "@material-ui/core/Table";
@@ -1112,7 +1112,7 @@ export default function LeadDetailsNew(props) {
                     console.log(error);
                 })
         } else if (profileData.dialer === 'CLOUD-DIALER') {
-            await axios.post(`${cloudDialerApi}/callingApis/clicktoDial?agenTptId=8420878985&customerNumber=8420878985&tokenId=ea46f37d402454d2f47e9d8171fd5d5d`)
+            await axios.post(`${cloudDialerApi}/callingApis/clicktoDial?agenTptId=9930656757&customerNumber=8420878985&tokenId=${dialerToken}`)
                 .then((response) => {
                     if (response.status === 200) {
                         if (response.data.LOG === 'ERROR') {
@@ -1157,7 +1157,7 @@ export default function LeadDetailsNew(props) {
                     console.log(error);
                 })
         } else if (profileData.dialer === "CLOUD-DIALER") {
-            await axios.post(`${cloudDialerApi}/chatServer/externalCallDisposeByCrmId?crmId=8420878985&referenceUuid=${localStorage.getItem('callRefID')}&disposeName=Test Call&callbackFlag=0`)
+            await axios.post(`${cloudDialerApi}/chatServer/externalCallDisposeByCrmId?crmId=8420878985&referenceUuid=${localStorage.getItem('callRefId')}&disposeName=Test Call&callbackFlag=0`)
                 .then((response) => {
                     setCallHangUpState(false);
                     if (response.data.LOG === 'SUCCESS') {

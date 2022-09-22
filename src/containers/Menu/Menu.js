@@ -114,7 +114,6 @@ export default function Menu(props) {
     const [bulkUploadPage, setbulkUploadPage] = useState(false);
     const [freshLeadPage, setfreshLeadPage] = useState(false);
     const [reportPage, setreportPage] = useState(false);
-    const [dialerPage, setDialerPage] = useState(false);
     const [isHiddenTab, setIsHiddenTab] = useState(false);
     const [isUserTab, setIsUserTab] = useState(false);
     const [isCalculatorTab, setIsCalculatorTab] = useState(false);
@@ -142,7 +141,6 @@ export default function Menu(props) {
             setbulkUploadPage(false)
             setfreshLeadPage(true)
             setreportPage(true)
-            setDialerPage(true)
         }
         if (profileData.user_roles[0].user_type === 2) {
             setdashboardPage(true)
@@ -155,7 +153,6 @@ export default function Menu(props) {
             setbulkUploadPage(true)
             setfreshLeadPage(true)
             setreportPage(true)
-            setDialerPage(true)
         }
         if (profileData.user_roles[0].user_type === 3) {
             setIsUserTab(true)
@@ -170,7 +167,6 @@ export default function Menu(props) {
             setbulkUploadPage(false)
             setfreshLeadPage(false)
             setreportPage(false)
-            setDialerPage(true)
         }
         if (profileData.user_roles[0].user_type === 4) {
             setdashboardPage(true)
@@ -183,7 +179,6 @@ export default function Menu(props) {
             setbulkUploadPage(true)
             setfreshLeadPage(true)
             setreportPage(true)
-            setDialerPage(true)
         }
         if (profileData.user_roles[0].user_type === 5) {
             setIsUserTab(false)
@@ -198,7 +193,6 @@ export default function Menu(props) {
             setbulkUploadPage(false)
             setfreshLeadPage(false)
             setreportPage(false)
-            setDialerPage(true)
         }
         if (profileData.user_roles[0].user_type === 6) {
             setIsUserTab(true)
@@ -213,7 +207,6 @@ export default function Menu(props) {
             setbulkUploadPage(false)
             setfreshLeadPage(false)
             setreportPage(true)
-            setDialerPage(true)
         }
     }, []);
     const handleDrawerOpen = () => {
@@ -366,14 +359,6 @@ export default function Menu(props) {
                         </List>
                     </Collapse>
                 </React.Fragment>}
-                {dialerPage ? <NavLink to="/dashboards/dialerLogin" activeClassName="active">
-                    <ListItem className="selected" button>
-                        <ListItemIcon>
-                            <FileCopyOutlinedIcon className={classes.color} />
-                        </ListItemIcon>
-                        <ListItemText className={classes.color} primary="Dialer" />
-                    </ListItem>
-                </NavLink> : ''}
             </List>
         </Drawer >
     );

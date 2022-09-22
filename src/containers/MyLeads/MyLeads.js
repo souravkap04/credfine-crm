@@ -21,7 +21,8 @@ import Button from "@material-ui/core/Button";
 import {
   haloocomNoidaDialerApi,
   haloocomMumbaiDialerApi,
-  cloudDialerApi
+  cloudDialerApi,
+  dialerToken
 } from "../../global/callApi";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -454,7 +455,7 @@ export default function MyLeads(props) {
         history.push(`/dashboards/myleads/edit/${leadID}`);
       }, 1500);
     } else if (profileData.dialer === "CLOUD-DIALER") {
-      await axios.post(`${cloudDialerApi}/callingApis/clicktoDial?agenTptId=8420878985&customerNumber=8420878985&tokenId=ea46f37d402454d2f47e9d8171fd5d5d`)
+      await axios.post(`${cloudDialerApi}/callingApis/clicktoDial?agenTptId=9930656757&customerNumber=8420878985&tokenId=${dialerToken}`)
         .then((response) => {
           setDialerCall(true);
           if (response.status === 200) {
@@ -616,9 +617,18 @@ export default function MyLeads(props) {
   const closeEligibility = () => {
     setCheckEligibility(false);
   }
+  const dialerSSOLogin = () => {
+    window.open(`https://credfine.slashrtc.in/index.php/ssoLogin?crmUniqueId=CeuCxaZUVpk+Stxmt5qIWA==&usernameId=${profileData.vertage_pass}&requestOrigin=http://crm.credfine.com/`)
+  }
 
   return (
-    <PageLayerSection isDisplaySearchBar={true} isMyLeadsSearch={true} ActualEmiCalculate={openCalculator} ActualEligibilityCalculate={openEligibility}>
+    <PageLayerSection
+      isDisplaySearchBar={true}
+      isMyLeadsSearch={true}
+      loginDialerBtn={true}
+      logDialerHandler={() => dialerSSOLogin()}
+      ActualEmiCalculate={openCalculator}
+      ActualEligibilityCalculate={openEligibility}>
       <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility} />
       <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
       <Snackbar

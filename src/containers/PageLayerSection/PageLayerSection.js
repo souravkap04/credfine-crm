@@ -148,6 +148,14 @@ export default function PageLayerSection(props) {
                         </div>
                     </div>
                     <div className="rightAppBarSection">
+                        {props.loginDialerBtn ?
+                                <Button
+                                    className="autoDialerStartBtn"
+                                    color="primary"
+                                    variant="contained"
+                                    onClick={props.logDialerHandler}
+                                > Dialer Login
+                                </Button>: ''}
                         {props.startAutoDialerButton ? <Button
                             className="autoDialerStartBtn"
                             color="primary"
@@ -214,6 +222,6 @@ export default function PageLayerSection(props) {
                 </div>
                 {props.children}
             </div>
-        </div>
+        </div >
     )
 }
