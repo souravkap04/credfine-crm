@@ -455,7 +455,7 @@ export default function MyLeads(props) {
         history.push(`/dashboards/myleads/edit/${leadID}`);
       }, 1500);
     } else if (profileData.dialer === "CLOUD-DIALER") {
-      await axios.post(`${cloudDialerApi}/callingApis/clicktoDial?agenTptId=9930656757&customerNumber=8420878985&tokenId=${dialerToken}`)
+      await axios.post(`${cloudDialerApi}/slashRtc/callingApis/clicktoDial?agenTptId=${profileData.vertage_id}&customerNumber=9930656757&tokenId=${dialerToken}`)
         .then((response) => {
           setDialerCall(true);
           if (response.status === 200) {
@@ -529,7 +529,7 @@ export default function MyLeads(props) {
           console.log(error);
         });
     } else if (profileData.dialer === "CLOUD-DIALER") {
-      await axios.post(`${cloudDialerApi}/callingApis/clicktoDial?agenTptId=8420878985&customerNumber=8420878985&tokenId=ea46f37d402454d2f47e9d8171fd5d5d`)
+      await axios.post(`${cloudDialerApi}/slashRtc/callingApis/clicktoDial?agenTptId=${profileData.vertage_id}&customerNumber=8420878985&tokenId=${dialerToken}`)
         .then((response) => {
           setDialerCall(true);
           if (response.status === 200) {
@@ -580,7 +580,7 @@ export default function MyLeads(props) {
           console.log(error);
         });
     } else if (profileData.dialer === "CLOUD-DIALER") {
-      await axios.post(`${cloudDialerApi}/chatServer/externalCallDisposeByCrmId?crmId=8420878985&referenceUuid=${localStorage.getItem('callRefId')}&disposeName=Test Call&callbackFlag=0`)
+      await axios.post(`${cloudDialerApi}/slashRtc/chatServer/externalCallDisposeByCrmId?crmId=${profileData.vertage_id}&referenceUuid=${localStorage.getItem('callRefId')}&disposeName=Test Call&callbackFlag=0`)
         .then((response) => {
           setCallHangUpState(false);
           if (response.data.LOG === 'SUCCESS') {
@@ -618,7 +618,7 @@ export default function MyLeads(props) {
     setCheckEligibility(false);
   }
   const dialerSSOLogin = () => {
-    window.open(`https://credfine.slashrtc.in/index.php/ssoLogin?crmUniqueId=CeuCxaZUVpk+Stxmt5qIWA==&usernameId=${profileData.vertage_pass}&requestOrigin=http://crm.credfine.com/`)
+    window.open(`${cloudDialerApi}/index.php/ssoLogin?crmUniqueId=${profileData.slashrtc_id}&usernameId=${profileData.vertage_pass}&requestOrigin=http://crm.credfine.com/`)
   }
 
   return (

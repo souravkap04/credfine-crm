@@ -239,7 +239,7 @@ export default function Leads() {
         history.push(`/dashboards/leads/edit/${leadID}`);
       }, 1500);
     } else if (profileData.dialer === "CLOUD-DIALER") {
-      await axios.post(`${cloudDialerApi}/callingApis/clicktoDial?agenTptId=9930656757&customerNumber=8420878985&tokenId=${dialerToken}`)
+      await axios.post(`${cloudDialerApi}/slashRtc/callingApis/clicktoDial?agenTptId=${profileData.vertage_id}&customerNumber=9930656757&tokenId=${dialerToken}`)
         .then((response) => {
           setDialerCall(true);
           if (response.status === 200) {
@@ -366,7 +366,7 @@ export default function Leads() {
     }
   }, [leadData]);
   const dialerSSOLogin = () => {
-    window.open(`https://credfine.slashrtc.in/index.php/ssoLogin?crmUniqueId=CeuCxaZUVpk+Stxmt5qIWA==&usernameId=${profileData.vertage_pass}&requestOrigin=http://crm.credfine.com/`)
+    window.open(`${cloudDialerApi}/index.php/ssoLogin?crmUniqueId=${profileData.slashrtc_id}==&usernameId=${profileData.vertage_pass}&requestOrigin=http://crm.credfine.com/`)
   }
   return (
     <PageLayerSection isDisplaySearchBar={true}
