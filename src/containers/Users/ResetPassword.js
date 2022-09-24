@@ -172,6 +172,8 @@ export default function Users() {
   const [searchTerm, setSearchTerm] = useState('');
   const [vertageId, setVertageId] = useState("");
   const [vertagePass, setVertagePass] = useState("");
+  const [slashrtcId, setSlashrtcId] = useState('');
+  const [slashrtcUsername, setSlashrtcUsername] = useState('')
   const [parent, setparent] = useState("");
   const [location, setlocation] = useState([]);
   const [pullLocation, setpullLocation] = useState([]);
@@ -322,7 +324,7 @@ export default function Users() {
         console.log(error);
       })
   }
-  const editUser = (userName, updatedUserName, firstName, lastName, email, role, gender, phoneNo, productType, dialerPass, vertageId, vertagePass, parent_user, location) => {
+  const editUser = (userName, updatedUserName, firstName, lastName, email, role, gender, phoneNo, productType, dialerPass, vertageId, vertagePass, parent_user, location, slashrtcId, slashrtcUsername) => {
     listOfUsers(role);
     setIsEditUser(true);
     setSelectedUserName(userName);
@@ -339,6 +341,8 @@ export default function Users() {
     setVertagePass(vertagePass);
     setparent(parent_user);
     setlocation(location);
+    setSlashrtcId(slashrtcId);
+    setSlashrtcUsername(slashrtcUsername);
   }
   const closeEditUser = () => {
     setIsEditUser(false);
@@ -347,7 +351,8 @@ export default function Users() {
     e.preventDefault();
     let item = {
       username: updatedUserName, first_name: firstName, last_name: lastName, email, role, gender, phone_no: phoneNo,
-      product_type: productType, dialer_pass: dialerApiKey, vertage_id: vertageId, vertage_pass: vertagePass, parent_user: parent, locations: location
+      product_type: productType, dialer_pass: dialerApiKey, vertage_id: vertageId, vertage_pass: vertagePass,
+      parent_user: parent, locations: location, slashrtc_id: slashrtcId, slashrtc_userName: slashrtcUsername
     };
     const headers = {
       'userRoleHash': profileData.user_roles[0].user_role_hash,
@@ -454,7 +459,8 @@ export default function Users() {
               <TableCell className={classes.tableheading}>Phone No</TableCell>
               <TableCell className={classes.tableheading}>Gender</TableCell>
               {/* <TableCell className={classes.tableheading}>DIALER API Key</TableCell> */}
-              <TableCell className={classes.tableheading}>Dialer Id</TableCell>
+              {/* <TableCell className={classes.tableheading}>Dialer Id</TableCell> */}
+              <TableCell className={classes.tableheading}>Slashrtc Id</TableCell>
               {/* <TableCell className={classes.tableheading}>Vertage Pass</TableCell> */}
               <TableCell className={classes.tableheading}>Parent</TableCell>
               <TableCell className={classes.tableheading}>Location</TableCell>
@@ -488,7 +494,8 @@ export default function Users() {
                     <TableCell className={classes.tableData}>{user.phone_no}</TableCell>
                     <TableCell className={classes.tableData}>{user.gender}</TableCell>
                     {/* <TableCell className={classes.tableData}>{user.myuser.dialer_pass}</TableCell> */}
-                    <TableCell className={classes.tableData}>{user.myuser.vertage_id}</TableCell>
+                    {/* <TableCell className={classes.tableData}>{user.myuser.vertage_id}</TableCell> */}
+                    <TableCell className={classes.tableData}>{user.myuser.slashrtc_id}</TableCell>
                     {/* <TableCell className={classes.tableData}>{user.myuser.vertage_pass}</TableCell> */}
                     <TableCell className={classes.tableData}>{user.myuser.parent_id}</TableCell>
                     <TableCell className={classes.tableData}>{user.myuser.location.join(',')}</TableCell>
@@ -503,7 +510,8 @@ export default function Users() {
                           onClick={() => editUser(user.myuser.username, user.myuser.username, user.myuser.first_name,
                             user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
                             user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
-                            user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
+                            user.myuser.vertage_pass, user.myuser.username, user.myuser.location,
+                            user.myuser.slashrtc_id, user.myuser.slashrtc_userName)}>
                           <EditIcon />
                         </IconButton>
                       </Tooltip>
@@ -529,7 +537,8 @@ export default function Users() {
                     <TableCell className={classes.tableData}>{user.phone_no}</TableCell>
                     <TableCell className={classes.tableData}>{user.gender}</TableCell>
                     {/* <TableCell className={classes.tableData}>{user.myuser.dialer_pass}</TableCell> */}
-                    <TableCell className={classes.tableData}>{user.myuser.vertage_id}</TableCell>
+                    {/* <TableCell className={classes.tableData}>{user.myuser.vertage_id}</TableCell> */}
+                    <TableCell className={classes.tableData}>{user.myuser.slashrtc_id}</TableCell>
                     {/* <TableCell className={classes.tableData}>{user.myuser.vertage_pass}</TableCell> */}
                     <TableCell className={classes.tableData}>{user.myuser.parent_id}</TableCell>
                     <TableCell className={classes.tableData}>{user.myuser.location.join(',')}</TableCell>
@@ -544,7 +553,8 @@ export default function Users() {
                           onClick={() => editUser(user.myuser.username, user.myuser.username, user.myuser.first_name,
                             user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
                             user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
-                            user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
+                            user.myuser.vertage_pass, user.myuser.username, user.myuser.location,
+                            user.myuser.slashrtc_id, user.myuser.slashrtc_userName)}>
                           <EditIcon />
                         </IconButton>
                       </Tooltip>
@@ -570,7 +580,8 @@ export default function Users() {
                     <TableCell className={classes.tableData}>{user.phone_no}</TableCell>
                     <TableCell className={classes.tableData}>{user.gender}</TableCell>
                     {/* <TableCell className={classes.tableData}>{user.myuser.dialer_pass}</TableCell> */}
-                    <TableCell className={classes.tableData}>{user.myuser.vertage_id}</TableCell>
+                    {/* <TableCell className={classes.tableData}>{user.myuser.vertage_id}</TableCell> */}
+                    <TableCell className={classes.tableData}>{user.myuser.slashrtc_id}</TableCell>
                     {/* <TableCell className={classes.tableData}>{user.myuser.vertage_pass}</TableCell> */}
                     <TableCell className={classes.tableData}>{user.myuser.parent_id}</TableCell>
                     <TableCell className={classes.tableData}>{user.myuser.location.join(',')}</TableCell>
@@ -585,7 +596,8 @@ export default function Users() {
                           onClick={() => editUser(user.myuser.username, user.myuser.username, user.myuser.first_name,
                             user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
                             user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
-                            user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
+                            user.myuser.vertage_pass, user.myuser.username, user.myuser.location,
+                            user.myuser.slashrtc_id, user.myuser.slashrtc_userName)}>
                           <EditIcon />
                         </IconButton>
                       </Tooltip>
@@ -611,7 +623,8 @@ export default function Users() {
                     <TableCell className={classes.tableData}>{user.phone_no}</TableCell>
                     <TableCell className={classes.tableData}>{user.gender}</TableCell>
                     {/* <TableCell className={classes.tableData}>{user.myuser.dialer_pass}</TableCell> */}
-                    <TableCell className={classes.tableData}>{user.myuser.vertage_id}</TableCell>
+                    {/* <TableCell className={classes.tableData}>{user.myuser.vertage_id}</TableCell> */}
+                    <TableCell className={classes.tableData}>{user.myuser.slashrtc_id}</TableCell>
                     {/* <TableCell className={classes.tableData}>{user.myuser.vertage_pass}</TableCell> */}
                     <TableCell className={classes.tableData}>{user.myuser.parent_id}</TableCell>
                     <TableCell className={classes.tableData}>{user.myuser.location.join(',')}</TableCell>
@@ -626,7 +639,8 @@ export default function Users() {
                           onClick={() => editUser(user.myuser.username, user.myuser.username, user.myuser.first_name,
                             user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
                             user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
-                            user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
+                            user.myuser.vertage_pass, user.myuser.username, user.myuser.location,
+                            user.myuser.slashrtc_id, user.myuser.slashrtc_userName)}>
                           <EditIcon />
                         </IconButton>
                       </Tooltip>
@@ -652,7 +666,8 @@ export default function Users() {
                     <TableCell className={classes.tableData}>{user.phone_no}</TableCell>
                     <TableCell className={classes.tableData}>{user.gender}</TableCell>
                     {/* <TableCell className={classes.tableData}>{user.myuser.dialer_pass}</TableCell> */}
-                    <TableCell className={classes.tableData}>{user.myuser.vertage_id}</TableCell>
+                    {/* <TableCell className={classes.tableData}>{user.myuser.vertage_id}</TableCell> */}
+                    <TableCell className={classes.tableData}>{user.myuser.slashrtc_id}</TableCell>
                     {/* <TableCell className={classes.tableData}>{user.myuser.vertage_pass}</TableCell> */}
                     <TableCell className={classes.tableData}>{user.myuser.parent_id}</TableCell>
                     <TableCell className={classes.tableData}>{user.myuser.location.join(',')}</TableCell>
@@ -667,7 +682,8 @@ export default function Users() {
                           onClick={() => editUser(user.myuser.username, user.myuser.username, user.myuser.first_name,
                             user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
                             user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
-                            user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
+                            user.myuser.vertage_pass, user.myuser.username, user.myuser.location,
+                            user.myuser.slashrtc_id, user.myuser.slashrtc_userName)}>
                           <EditIcon />
                         </IconButton>
                       </Tooltip>
@@ -693,7 +709,8 @@ export default function Users() {
                     <TableCell className={classes.tableData}>{user.phone_no}</TableCell>
                     <TableCell className={classes.tableData}>{user.gender}</TableCell>
                     {/* <TableCell className={classes.tableData}>{user.myuser.dialer_pass}</TableCell> */}
-                    <TableCell className={classes.tableData}>{user.myuser.vertage_id}</TableCell>
+                    {/* <TableCell className={classes.tableData}>{user.myuser.vertage_id}</TableCell> */}
+                    <TableCell className={classes.tableData}>{user.myuser.slashrtc_id}</TableCell>
                     {/* <TableCell className={classes.tableData}>{user.myuser.vertage_pass}</TableCell> */}
                     <TableCell className={classes.tableData}>{user.myuser.parent_id}</TableCell>
                     <TableCell className={classes.tableData}>{user.myuser.location.join(',')}</TableCell>
@@ -708,7 +725,8 @@ export default function Users() {
                           onClick={() => editUser(user.myuser.username, user.myuser.username, user.myuser.first_name,
                             user.myuser.last_name, user.myuser.email, user.role, user.gender, user.phone_no,
                             user.product_type, user.myuser.dialer_pass, user.myuser.vertage_id,
-                            user.myuser.vertage_pass, user.myuser.username, user.myuser.location)}>
+                            user.myuser.vertage_pass, user.myuser.username, user.myuser.location,
+                            user.myuser.slashrtc_id, user.myuser.slashrtc_userName)}>
                           <EditIcon />
                         </IconButton>
                       </Tooltip>
@@ -750,7 +768,8 @@ export default function Users() {
                     <TableCell className={classes.deleteUsersData}>{deletedUser.phone_no}</TableCell>
                     <TableCell className={classes.deleteUsersData}>{deletedUser.gender}</TableCell>
                     {/* <TableCell className={classes.deleteUsersData}>{user.myuser.dialer_pass}</TableCell> */}
-                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_id}</TableCell>
+                    {/* <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_id}</TableCell> */}
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.slashrtc_id}</TableCell>
                     {/* <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_pass}</TableCell> */}
                     <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.parent_id}</TableCell>
                     <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.location}</TableCell>
@@ -770,7 +789,8 @@ export default function Users() {
                     <TableCell className={classes.deleteUsersData}>{deletedUser.phone_no}</TableCell>
                     <TableCell className={classes.deleteUsersData}>{deletedUser.gender}</TableCell>
                     {/* <TableCell className={classes.deleteUsersData}>{user.myuser.dialer_pass}</TableCell> */}
-                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_id}</TableCell>
+                    {/* <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_id}</TableCell> */}
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.slashrtc_id}</TableCell>
                     {/* <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_pass}</TableCell> */}
                     <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.parent_id}</TableCell>
                     <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.location}</TableCell>
@@ -790,7 +810,8 @@ export default function Users() {
                     <TableCell className={classes.deleteUsersData}>{deletedUser.phone_no}</TableCell>
                     <TableCell className={classes.deleteUsersData}>{deletedUser.gender}</TableCell>
                     {/* <TableCell className={classes.deleteUsersData}>{user.myuser.dialer_pass}</TableCell> */}
-                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_id}</TableCell>
+                    {/* <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_id}</TableCell> */}
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.slashrtc_id}</TableCell>
                     {/* <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_pass}</TableCell> */}
                     <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.parent_id}</TableCell>
                     <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.location}</TableCell>
@@ -810,7 +831,8 @@ export default function Users() {
                     <TableCell className={classes.deleteUsersData}>{deletedUser.phone_no}</TableCell>
                     <TableCell className={classes.deleteUsersData}>{deletedUser.gender}</TableCell>
                     {/* <TableCell className={classes.deleteUsersData}>{user.myuser.dialer_pass}</TableCell> */}
-                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_id}</TableCell>
+                    {/* <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_id}</TableCell> */}
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.slashrtc_id}</TableCell>
                     {/* <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_pass}</TableCell> */}
                     <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.parent_id}</TableCell>
                     <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.location}</TableCell>
@@ -830,7 +852,8 @@ export default function Users() {
                     <TableCell className={classes.deleteUsersData}>{deletedUser.phone_no}</TableCell>
                     <TableCell className={classes.deleteUsersData}>{deletedUser.gender}</TableCell>
                     {/* <TableCell className={classes.deleteUsersData}>{user.myuser.dialer_pass}</TableCell> */}
-                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_id}</TableCell>
+                    {/* <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_id}</TableCell> */}
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.slashrtc_id}</TableCell>
                     {/* <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_pass}</TableCell> */}
                     <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.parent_id}</TableCell>
                     <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.location}</TableCell>
@@ -850,7 +873,8 @@ export default function Users() {
                     <TableCell className={classes.deleteUsersData}>{deletedUser.phone_no}</TableCell>
                     <TableCell className={classes.deleteUsersData}>{deletedUser.gender}</TableCell>
                     {/* <TableCell className={classes.deleteUsersData}>{user.myuser.dialer_pass}</TableCell> */}
-                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_id}</TableCell>
+                    {/* <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_id}</TableCell> */}
+                    <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.slashrtc_id}</TableCell>
                     {/* <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.vertage_pass}</TableCell> */}
                     <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.parent_id}</TableCell>
                     <TableCell className={classes.deleteUsersData}>{deletedUser.myuser.location}</TableCell>
@@ -1145,6 +1169,40 @@ export default function Users() {
                           size="small"
                           value={vertagePass}
                           onChange={(e) => setVertagePass((e.target.value).trim())}
+                        />
+                      </Grid>
+                    </Grid>
+                    <Grid container style={{ justifyContent: 'center' }}>
+                      <Grid>
+                        <TextField
+                          className="textField"
+                          id="outlined-full-width"
+                          label="slashRTC Id"
+                          style={{ margin: 8 }}
+                          margin="normal"
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                          variant="outlined"
+                          size="small"
+                          value={slashrtcId}
+                          onChange={(e) => setSlashrtcId((e.target.value).trim())}
+                        />
+                      </Grid>
+                      <Grid>
+                        <TextField
+                          className="textField"
+                          id="outlined-full-width"
+                          label="slashRTC UserName"
+                          style={{ margin: 8 }}
+                          margin="normal"
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                          variant="outlined"
+                          size="small"
+                          value={slashrtcUsername}
+                          onChange={(e) => setSlashrtcUsername((e.target.value).trim())}
                         />
                       </Grid>
                     </Grid>

@@ -455,7 +455,7 @@ export default function MyLeads(props) {
         history.push(`/dashboards/myleads/edit/${leadID}`);
       }, 1500);
     } else if (profileData.dialer === "CLOUD-DIALER") {
-      await axios.post(`${cloudDialerApi}/slashRtc/callingApis/clicktoDial?agenTptId=${profileData.vertage_id}&customerNumber=${customerNo}&tokenId=${dialerToken}`)
+      await axios.post(`${cloudDialerApi}/slashRtc/callingApis/clicktoDial?agenTptId=${profileData.slashrtc_id}&customerNumber=${customerNo}&tokenId=${dialerToken}`)
         .then((response) => {
           setDialerCall(true);
           if (response.status === 200) {
@@ -529,7 +529,7 @@ export default function MyLeads(props) {
           console.log(error);
         });
     } else if (profileData.dialer === "CLOUD-DIALER") {
-      await axios.post(`${cloudDialerApi}/slashRtc/callingApis/clicktoDial?agenTptId=${profileData.vertage_id}&customerNumber=${dialerMobileNumber}&tokenId=${dialerToken}`)
+      await axios.post(`${cloudDialerApi}/slashRtc/callingApis/clicktoDial?agenTptId=${profileData.slashrtc_id}&customerNumber=${dialerMobileNumber}&tokenId=${dialerToken}`)
         .then((response) => {
           setDialerCall(true);
           if (response.status === 200) {
@@ -580,7 +580,7 @@ export default function MyLeads(props) {
           console.log(error);
         });
     } else if (profileData.dialer === "CLOUD-DIALER") {
-      await axios.post(`${cloudDialerApi}/slashRtc/chatServer/externalCallDisposeByCrmId?crmId=${profileData.vertage_id}&referenceUuid=${localStorage.getItem('callRefId')}&disposeName=Test Call&callbackFlag=0`)
+      await axios.post(`${cloudDialerApi}/slashRtc/chatServer/externalCallDisposeByCrmId?crmId=${profileData.slashrtc_id}&referenceUuid=${localStorage.getItem('callRefId')}&disposeName=Test Call&callbackFlag=0`)
         .then((response) => {
           setCallHangUpState(false);
           if (response.data.LOG === 'SUCCESS') {
@@ -618,14 +618,14 @@ export default function MyLeads(props) {
     setCheckEligibility(false);
   }
   const dialerSSOLogin = () => {
-    window.open(`${cloudDialerApi}/index.php/ssoLogin?crmUniqueId=${profileData.slashrtc_id}&usernameId=${profileData.vertage_pass}&requestOrigin=http://crm.credfine.com/`)
+    window.open(`${cloudDialerApi}/index.php/ssoLogin?crmUniqueId=${profileData.slashrtc_key}&usernameId=${profileData.slashrtc_userName}&requestOrigin=http://crm.credfine.com/`)
   }
 
   return (
     <PageLayerSection
       isDisplaySearchBar={true}
       isMyLeadsSearch={true}
-      loginDialerBtn={true}
+      loginDialerBtn={profileData.dialer === "CLOUD-DIALER" ? true : false}
       logDialerHandler={() => dialerSSOLogin()}
       ActualEmiCalculate={openCalculator}
       ActualEligibilityCalculate={openEligibility}>

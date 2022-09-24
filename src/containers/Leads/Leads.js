@@ -239,7 +239,7 @@ export default function Leads() {
         history.push(`/dashboards/leads/edit/${leadID}`);
       }, 1500);
     } else if (profileData.dialer === "CLOUD-DIALER") {
-      await axios.post(`${cloudDialerApi}/slashRtc/callingApis/clicktoDial?agenTptId=${profileData.vertage_id}&customerNumber=${customerNo}&tokenId=${dialerToken}`)
+      await axios.post(`${cloudDialerApi}/slashRtc/callingApis/clicktoDial?agenTptId=${profileData.slashrtc_id}&customerNumber=${customerNo}&tokenId=${dialerToken}`)
         .then((response) => {
           setDialerCall(true);
           if (response.status === 200) {
@@ -366,13 +366,13 @@ export default function Leads() {
     }
   }, [leadData]);
   const dialerSSOLogin = () => {
-    window.open(`${cloudDialerApi}/index.php/ssoLogin?crmUniqueId=${profileData.slashrtc_id}&usernameId=${profileData.vertage_pass}&requestOrigin=http://crm.credfine.com/`)
+    window.open(`${cloudDialerApi}/index.php/ssoLogin?crmUniqueId=${profileData.slashrtc_key}&usernameId=${profileData.slashrtc_userName}&requestOrigin=http://crm.credfine.com/`)
   }
   return (
     <PageLayerSection isDisplaySearchBar={true}
       addLeadButton={state ? false : true}
       onClick={() => openDrawer()}
-      startAutoDialerButton={true}
+      startAutoDialerButton={profileData.dialer === "CLOUD-DIALER" ? true : false}
       loginDialerBtn={true}
       startAutoDialerClick={() => autoDialerHandler()}
       logDialerHandler={() => dialerSSOLogin()}

@@ -1112,7 +1112,7 @@ export default function LeadDetailsNew(props) {
                     console.log(error);
                 })
         } else if (profileData.dialer === 'CLOUD-DIALER') {
-            await axios.post(`${cloudDialerApi}/slashRtc/callingApis/clicktoDial?agenTptId=${profileData.vertage_id}&customerNumber=${customerNo}&tokenId=${dialerToken}`)
+            await axios.post(`${cloudDialerApi}/slashRtc/callingApis/clicktoDial?agenTptId=${profileData.slashrtc_id}&customerNumber=${customerNo}&tokenId=${dialerToken}`)
                 .then((response) => {
                     if (response.status === 200) {
                         if (response.data.LOG === 'ERROR') {
@@ -1157,7 +1157,7 @@ export default function LeadDetailsNew(props) {
                     console.log(error);
                 })
         } else if (profileData.dialer === "CLOUD-DIALER") {
-            await axios.post(`${cloudDialerApi}/slashRtc/chatServer/externalCallDisposeByCrmId?crmId=${profileData.vertage_id}&referenceUuid=${localStorage.getItem('callRefId')}&disposeName=Test Call&callbackFlag=0`)
+            await axios.post(`${cloudDialerApi}/slashRtc/chatServer/externalCallDisposeByCrmId?crmId=${profileData.slashrtc_id}&referenceUuid=${localStorage.getItem('callRefId')}&disposeName=Test Call&callbackFlag=0`)
                 .then((response) => {
                     setCallHangUpState(false);
                     if (response.data.LOG === 'SUCCESS') {

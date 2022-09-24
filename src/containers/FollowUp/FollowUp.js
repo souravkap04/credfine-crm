@@ -183,7 +183,7 @@ export default function FollowUp(props) {
                 history.push(`/dashboards/followup/edit/${leadID}`)
             }, 1500)
         } else if (profileData.dialer === "CLOUD-DIALER") {
-            await axios.post(`${cloudDialerApi}/slashRtc/callingApis/clicktoDial?agenTptId=${profileData.vertage_id}&customerNumber=${customerNo}&tokenId=${dialerToken}`)
+            await axios.post(`${cloudDialerApi}/slashRtc/callingApis/clicktoDial?agenTptId=${profileData.slashrtc_id}&customerNumber=${customerNo}&tokenId=${dialerToken}`)
                 .then((response) => {
                     setDialerCall(true);
                     if (response.status === 200) {
