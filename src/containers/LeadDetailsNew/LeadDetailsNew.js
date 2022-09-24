@@ -1112,7 +1112,7 @@ export default function LeadDetailsNew(props) {
                     console.log(error);
                 })
         } else if (profileData.dialer === 'CLOUD-DIALER') {
-            await axios.post(`${cloudDialerApi}/slashRtc/callingApis/clicktoDial?agenTptId=${profileData.vertage_id}&customerNumber=9930656757&tokenId=${dialerToken}`)
+            await axios.post(`${cloudDialerApi}/slashRtc/callingApis/clicktoDial?agenTptId=${profileData.vertage_id}&customerNumber=${customerNo}&tokenId=${dialerToken}`)
                 .then((response) => {
                     if (response.status === 200) {
                         if (response.data.LOG === 'ERROR') {
