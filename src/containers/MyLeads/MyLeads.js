@@ -625,8 +625,6 @@ export default function MyLeads(props) {
     <PageLayerSection
       isDisplaySearchBar={true}
       isMyLeadsSearch={true}
-      loginDialerBtn={profileData.dialer === "CLOUD-DIALER" ? true : false}
-      logDialerHandler={() => dialerSSOLogin()}
       ActualEmiCalculate={openCalculator}
       ActualEligibilityCalculate={openEligibility}>
       <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility} />
@@ -906,6 +904,10 @@ export default function MyLeads(props) {
                 variant="contained"
                 startIcon={<CallIcon className="callIcon" />}
                 onClick={() => clickToManualCall()}
+                disabled={localStorage.getItem("callHangUp") &&
+                  localStorage.getItem("callHangUp") !== null
+                  ? callHangUpState
+                  : false}
               >
                 Call
               </Button>
@@ -932,7 +934,14 @@ export default function MyLeads(props) {
         <h3>My Leads ({totalLeads})</h3>
         <div style={{ display: "flex", alignItems: "center" }}>
           <Button
-            className="addBtn"
+            variant="contained"
+            style={{ marginRight: "15px", backgroundColor: '#14cc9e', color: '#ffff' }}
+            onClick={() => dialerSSOLogin()}
+            hidden={profileData.dialer === 'CLOUD-DIALER' ? false : true}
+          >
+            Dialer Login
+          </Button>
+          <Button
             color="primary"
             variant="contained"
             style={{ marginRight: "15px" }}

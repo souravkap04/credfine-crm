@@ -3304,7 +3304,12 @@ export default function LeadDetailsNew(props) {
                             color="primary"
                             variant="contained"
                             startIcon={<CallIcon className="callIcon" />}
-                            onClick={() => clickToCall(mobileNo)}>
+                            onClick={() => clickToCall(mobileNo)}
+                            disabled={localStorage.getItem("callHangUp") &&
+                                localStorage.getItem("callHangUp") !== null
+                                ? callHangUpState
+                                : false}
+                        >
                             Call
                         </Button>
                             <Button
