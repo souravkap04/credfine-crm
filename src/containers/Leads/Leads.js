@@ -372,8 +372,8 @@ export default function Leads() {
     <PageLayerSection isDisplaySearchBar={true}
       addLeadButton={state ? false : true}
       onClick={() => openDrawer()}
-      startAutoDialerButton={profileData.dialer === "CLOUD-DIALER" ? true : false}
-      loginDialerBtn={true}
+      startAutoDialerButton={true}
+      loginDialerBtn={profileData.dialer === "CLOUD-DIALER" ? true : false}
       startAutoDialerClick={() => autoDialerHandler()}
       logDialerHandler={() => dialerSSOLogin()}
       ActualEmiCalculate={openCalculator}
