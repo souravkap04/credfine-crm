@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './App.css';
 import Login from './containers/Login/Login'
 import {
   BrowserRouter as Router,
@@ -6,6 +7,8 @@ import {
   Route,
   Redirect
 } from "react-router-dom";
+import { useDrag } from '@use-gesture/react';
+import { animated, useSpring } from '@react-spring/web';
 // import MainMenu from './containers/UserList/MainMenu';
 import Profile from './containers/UserList/Profile/Profile';
 import Leads from './containers/Leads/Leads';
@@ -40,6 +43,11 @@ function App() {
   const [showStatusOnline, setshowStatusOnline] = useState(false)
   const [showStatusMessage, setshowStatusMessage] = useState('')
   const getProfile = getProfileData()
+  const posP = useSpring({ x: 0, y: 0 });
+  const bindP = useDrag((params) => {
+    posP.x.set(params.offset[0]);
+    posP.y.set(params.offset[1]);
+  });
   const notification = async () => {
     const headers = {
       'Authorization': `Token ${getProfile.token}`,
@@ -108,6 +116,31 @@ function App() {
           {showStatusMessage}
         </Alert>
       </Snackbar>
+      <animated.div {...bindP()} style={{
+        x: posP.x,
+        y: posP.y,
+        touchAction: 'none',
+        userSelect: 'none',
+        backgroundColor: '#14cc9e',
+        paddingTop: '50px',
+        width: '300px',
+        height: '350px',
+        position: 'absolute',
+        left: 0,
+        bottom: 0,
+        zIndex: 10000,
+        cursor: "move",
+      }} >
+        <div className='iframeContainer'>
+          <iframe
+            src="https://credfine.slashrtc.in/index.php/ssoLogin?crmUniqueId=gv/OYoWng8rSuq+e1i6W6Q==&usernameId=SouravKapri1&requestOrigin=http://crm.credfine.com/"
+            frameBorder='0'
+            allow="camera;microphone"
+            width='100%'
+            height='350'
+          ></iframe>
+        </div>
+      </animated.div>
       <Router>
         <Switch>
           <Route exact path="/">
@@ -133,11 +166,11 @@ function App() {
           <PrivateRoute exact path="/dashboards/PersonalLoanForm/:leadid" component={PersonalLoanForm} />
           <PrivateRoute exact path="/dashboards/HDFCForm/:leadid" component={HDFCForm} />
           <PrivateRoute exact path="/dashboards/LOANBABAForm/:leadid" component={Loanbaba} />
-          <PrivateRoute exact path="/dashboards/PAYSENSEForm/:leadid" component={Paysense}/>
+          <PrivateRoute exact path="/dashboards/PAYSENSEForm/:leadid" component={Paysense} />
           <PrivateRoute exact path="/dashboards/EMIcalculator" component={CalculatorTable} />
         </Switch>
       </Router>
-    </div>
+    </div >
   );
 }
 

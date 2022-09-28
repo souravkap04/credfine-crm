@@ -4,7 +4,7 @@ import './pageLayerSection.css';
 import MenuMain from '../Menu/Menu';
 import Avatar from '@material-ui/core/Avatar';
 import SearchIcon from "@material-ui/icons/Search";
-import { InputBase, MenuItem, Menu, IconButton } from '@material-ui/core';
+import { InputBase, MenuItem, Menu } from '@material-ui/core';
 import { useIdleTimer } from 'react-idle-timer';
 import ArrowDropDownOutlinedIcon from '@material-ui/icons/ArrowDropDownOutlined';
 import { NavLink, useHistory, useLocation } from 'react-router-dom';
@@ -149,13 +149,13 @@ export default function PageLayerSection(props) {
                     </div>
                     <div className="rightAppBarSection">
                         {props.loginDialerBtn ?
-                                <Button
-                                    className="autoDialerStartBtn"
-                                    color="primary"
-                                    variant="contained"
-                                    onClick={props.logDialerHandler}
-                                > Dialer Login
-                                </Button>: ''}
+                            <Button
+                                className="autoDialerStartBtn"
+                                color="primary"
+                                variant="contained"
+                                onClick={props.logDialerHandler}
+                            > Dialer Login
+                            </Button> : ''}
                         {props.startAutoDialerButton ? <Button
                             className="autoDialerStartBtn"
                             color="primary"
