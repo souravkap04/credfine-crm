@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import './App.css';
 import Login from './containers/Login/Login'
 import {
   BrowserRouter as Router,
@@ -135,7 +134,7 @@ function App() {
           <iframe
             src="https://credfine.slashrtc.in/index.php/ssoLogin?crmUniqueId=gv/OYoWng8rSuq+e1i6W6Q==&usernameId=SouravKapri1&requestOrigin=http://crm.credfine.com/"
             frameBorder='0'
-            allow="camera;microphone"
+            allow="microphone https://credfine.slashrtc.in"
             width='100%'
             height='350'
           ></iframe>
