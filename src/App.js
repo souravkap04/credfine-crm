@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import Login from './containers/Login/Login'
 import {
   Switch,
@@ -40,10 +40,10 @@ function Alert(props) {
 function App() {
   const [slashrtcKey, setSlashrtcKey] = useState('')
   const [slashrtcUser, setSlashrtcUser] = useState('')
+  const [dialer, setDialer] = useState('')
   const [showStatus, setshowStatus] = useState(false)
   const [showStatusOnline, setshowStatusOnline] = useState(false)
   const [showStatusMessage, setshowStatusMessage] = useState('')
-  const ref = useRef();
   const location = useLocation();
   const profileData = getProfileData()
   const posP = useSpring({ x: 0, y: 0 });
@@ -92,28 +92,10 @@ function App() {
       setshowStatus(true);
     });
   }, []);
-  function getLocalStream() {
-    navigator.mediaDevices.getUserMedia({ video: false, audio: true }).then((stream) => {
-      window.localStream = stream;
-      window.localAudio.srcObject = stream;
-      window.localAudio.autoplay = true;
-    }).catch((err) => {
-      console.error(`you got an error: ${err}`)
-    });
-  }
-
-  // useEffect(() => {
-  //   console.log("dialer");
-  //   if (location.pathname === '/') {
-  //     ref.current.style.visibility = 'hidden'
-  //   } else {
-  //     ref.current.style.visibility = 'visible'
-  //   }
-  //   // getLocalStream();
-  // }, [location.pathname])
   useEffect(() => {
     setSlashrtcKey(profileData?.slashrtc_key)
     setSlashrtcUser(profileData?.slashrtc_userName)
+    setDialer(profileData?.dialer)
   }, [location.pathname])
   const disableConnection = () => {
     setshowStatus(false)
@@ -142,7 +124,7 @@ function App() {
           {showStatusMessage}
         </Alert>
       </Snackbar>
-      {location.pathname === '/' ? '' : <animated.div {...bindP()}
+      {location.pathname === '/' ? '' : dialer === 'CLOUD-DIALER' ? <animated.div {...bindP()}
         style={{
           x: posP.x,
           y: posP.y,
@@ -165,7 +147,7 @@ function App() {
           width='100%'
           height='350'
         ></iframe>
-      </animated.div>}
+      </animated.div> : ''}
       <Switch>
         <Route exact path="/">
           <Login />
