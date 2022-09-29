@@ -88,6 +88,12 @@ function App() {
       setshowStatus(true);
     });
   }, []);
+  useEffect(() => {
+    window.onload = function () {
+      var constraints = { audio: true }
+      navigator.mediaDevices.getUserMedia(constraints)
+    }
+  }, [])
   const disableConnection = () => {
     setshowStatus(false)
     setshowStatusOnline(false)

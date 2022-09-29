@@ -888,8 +888,10 @@ export default function MyLeads(props) {
                   if (event.which == "13") {
                     event.preventDefault();
                   }
-                  if (event.key === "Enter") {
-                    clickToManualCall();
+                  if (dialerMobileNumber.length === 10) {
+                    if (event.key === "Enter") {
+                      clickToManualCall();
+                    }
                   }
                 }}
                 inputProps={{
@@ -904,8 +906,8 @@ export default function MyLeads(props) {
                 variant="contained"
                 startIcon={<CallIcon className="callIcon" />}
                 onClick={() => clickToManualCall()}
-                disabled={localStorage.getItem("callHangUp") &&
-                  localStorage.getItem("callHangUp") !== null
+                disabled={(dialerMobileNumber.length < 10 || localStorage.getItem("callHangUp") &&
+                  localStorage.getItem("callHangUp") !== null)
                   ? callHangUpState
                   : false}
               >
