@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Login from './containers/Login/Login'
 import {
-  BrowserRouter as Router,
   Switch,
   Route,
-  Redirect
+  Redirect,
+  useLocation
 } from "react-router-dom";
 import { useDrag } from '@use-gesture/react';
 import { animated, useSpring } from '@react-spring/web';
@@ -41,7 +41,9 @@ function App() {
   const [showStatus, setshowStatus] = useState(false)
   const [showStatusOnline, setshowStatusOnline] = useState(false)
   const [showStatusMessage, setshowStatusMessage] = useState('')
-  const getProfile = getProfileData()
+  const ref = useRef();
+  const location = useLocation();
+  const profileData = getProfileData()
   const posP = useSpring({ x: 0, y: 0 });
   const bindP = useDrag((params) => {
     posP.x.set(params.offset[0]);
@@ -49,7 +51,7 @@ function App() {
   });
   const notification = async () => {
     const headers = {
-      'Authorization': `Token ${getProfile.token}`,
+      'Authorization': `Token ${profileData.token}`,
     };
     await axios.get(`${baseUrl}/leads/CheckFollowupLead/`, { headers })
       .then((response) => {
@@ -99,12 +101,13 @@ function App() {
   }
 
   useEffect(() => {
+    if (location.pathname === '/') {
+      ref.current.style.display = 'none'
+    } else {
+      ref.current.style.display = 'inline'
+    }
     getLocalStream();
-    // window.onload = function () {
-    //   var constraints = { audio: true }
-    //   navigator.mediaDevices.getUserMedia(constraints)
-    // }
-  }, [])
+  }, [location.pathname])
   const disableConnection = () => {
     setshowStatus(false)
     setshowStatusOnline(false)
@@ -132,60 +135,58 @@ function App() {
           {showStatusMessage}
         </Alert>
       </Snackbar>
-      <animated.div {...bindP()} style={{
-        x: posP.x,
-        y: posP.y,
-        touchAction: 'none',
-        userSelect: 'none',
-        backgroundColor: '#14cc9e',
-        paddingTop: '50px',
-        width: '300px',
-        height: '350px',
-        position: 'absolute',
-        left: 0,
-        bottom: 0,
-        zIndex: 10000,
-        cursor: "move",
-      }} >
-        <div className='iframeContainer'>
-          <iframe
-            src="https://credfine.slashrtc.in/index.php/ssoLogin?crmUniqueId=gv/OYoWng8rSuq+e1i6W6Q==&usernameId=SouravKapri1&requestOrigin=http://crm.credfine.com/"
-            frameBorder='0'
-            allow="microphone https://credfine.slashrtc.in"
-            width='100%'
-            height='350'
-          ></iframe>
-        </div>
+      <animated.div {...bindP()}
+        ref={ref}
+        style={{
+          x: posP.x,
+          y: posP.y,
+          touchAction: 'none',
+          userSelect: 'none',
+          backgroundColor: '#14cc9e',
+          paddingTop: '50px',
+          width: '300px',
+          height: '350px',
+          position: 'absolute',
+          left: 0,
+          bottom: 0,
+          zIndex: 10000,
+          cursor: "move",
+        }} >
+        <iframe
+          src={`https://credfine.slashrtc.in/index.php/ssoLogin?crmUniqueId={profileData.slashrtc_key}&usernameId={profileData.slashrtc_userName}&requestOrigin=http://crm.credfine.com/`}
+          frameBorder='0'
+          allow="microphone"
+          width='100%'
+          height='350'
+        ></iframe>
       </animated.div>
-      <Router>
-        <Switch>
-          <Route exact path="/">
-            <Login />
-          </Route>
-          <PrivateRoute exact path="/profile" component={Profile} />
-          {/* <PrivateRoute exact path="/test/edit/:leadid" component={LeadDetailsNew} /> */}
-          <PrivateRoute exact path="/dashboard" component={Dashboard} />
-          <PrivateRoute exact path="/dashboards/leads" component={Leads} />
-          <PrivateRoute exact path="/dashboards/leads/edit/:leadid" component={LeadDetailsNew} />
-          <PrivateRoute exact path="/dashboards/freshlead" component={FreshLeads} />
-          <PrivateRoute exact path="/dashboards/followup" component={FollowUp} />
-          <PrivateRoute exact path="/dashboards/followup/edit/:leadid" component={LeadDetailsNew} />
-          <PrivateRoute exact path="/dashboards/myleads" component={MyLeads} />
-          <PrivateRoute exact path="/dashboards/myleads/edit/:leadid" component={LeadDetailsNew} />
-          <PrivateRoute exact path="/dashboards/users" component={Users} />
-          <PrivateRoute exact path="/dashboards/verifyusers" component={VerifyUsers} />
-          <PrivateRoute exact path="/dashboards/addleads" component={AddLeads} />
-          <PrivateRoute exact path="/dashboards/reports" component={Reports} />
-          <PrivateRoute exact path="/dashboards/bulkuploads" component={BulkUploads} />
-          <PrivateRoute exact path="/dashboards/addusers" component={AddUsers} />
-          <PrivateRoute exact path="/dashboards/pricing" component={PricingPopup} />
-          <PrivateRoute exact path="/dashboards/PersonalLoanForm/:leadid" component={PersonalLoanForm} />
-          <PrivateRoute exact path="/dashboards/HDFCForm/:leadid" component={HDFCForm} />
-          <PrivateRoute exact path="/dashboards/LOANBABAForm/:leadid" component={Loanbaba} />
-          <PrivateRoute exact path="/dashboards/PAYSENSEForm/:leadid" component={Paysense} />
-          <PrivateRoute exact path="/dashboards/EMIcalculator" component={CalculatorTable} />
-        </Switch>
-      </Router>
+      <Switch>
+        <Route exact path="/">
+          <Login />
+        </Route>
+        <PrivateRoute exact path="/profile" component={Profile} />
+        {/* <PrivateRoute exact path="/test/edit/:leadid" component={LeadDetailsNew} /> */}
+        <PrivateRoute exact path="/dashboard" component={Dashboard} />
+        <PrivateRoute exact path="/dashboards/leads" component={Leads} />
+        <PrivateRoute exact path="/dashboards/leads/edit/:leadid" component={LeadDetailsNew} />
+        <PrivateRoute exact path="/dashboards/freshlead" component={FreshLeads} />
+        <PrivateRoute exact path="/dashboards/followup" component={FollowUp} />
+        <PrivateRoute exact path="/dashboards/followup/edit/:leadid" component={LeadDetailsNew} />
+        <PrivateRoute exact path="/dashboards/myleads" component={MyLeads} />
+        <PrivateRoute exact path="/dashboards/myleads/edit/:leadid" component={LeadDetailsNew} />
+        <PrivateRoute exact path="/dashboards/users" component={Users} />
+        <PrivateRoute exact path="/dashboards/verifyusers" component={VerifyUsers} />
+        <PrivateRoute exact path="/dashboards/addleads" component={AddLeads} />
+        <PrivateRoute exact path="/dashboards/reports" component={Reports} />
+        <PrivateRoute exact path="/dashboards/bulkuploads" component={BulkUploads} />
+        <PrivateRoute exact path="/dashboards/addusers" component={AddUsers} />
+        <PrivateRoute exact path="/dashboards/pricing" component={PricingPopup} />
+        <PrivateRoute exact path="/dashboards/PersonalLoanForm/:leadid" component={PersonalLoanForm} />
+        <PrivateRoute exact path="/dashboards/HDFCForm/:leadid" component={HDFCForm} />
+        <PrivateRoute exact path="/dashboards/LOANBABAForm/:leadid" component={Loanbaba} />
+        <PrivateRoute exact path="/dashboards/PAYSENSEForm/:leadid" component={Paysense} />
+        <PrivateRoute exact path="/dashboards/EMIcalculator" component={CalculatorTable} />
+      </Switch>
     </div >
   );
 }
