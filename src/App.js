@@ -38,8 +38,8 @@ function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 function App() {
-  const [slashrtcKey,setSlashrtcKey] =useState('')
-  const [slashrtcUser,setSlashrtcUser] =useState('')
+  const [slashrtcKey, setSlashrtcKey] = useState('')
+  const [slashrtcUser, setSlashrtcUser] = useState('')
   const [showStatus, setshowStatus] = useState(false)
   const [showStatusOnline, setshowStatusOnline] = useState(false)
   const [showStatusMessage, setshowStatusMessage] = useState('')
@@ -150,7 +150,7 @@ function App() {
           userSelect: 'none',
           backgroundColor: '#14cc9e',
           paddingTop: '50px',
-          width: '300px',
+          width: '230px',
           height: '350px',
           position: 'absolute',
           left: 0,
