@@ -88,11 +88,22 @@ function App() {
       setshowStatus(true);
     });
   }, []);
+  function getLocalStream() {
+    navigator.mediaDevices.getUserMedia({ video: false, audio: true }).then((stream) => {
+      window.localStream = stream;
+      window.localAudio.srcObject = stream;
+      window.localAudio.autoplay = true;
+    }).catch((err) => {
+      console.error(`you got an error: ${err}`)
+    });
+  }
+
   useEffect(() => {
-    window.onload = function () {
-      var constraints = { audio: true }
-      navigator.mediaDevices.getUserMedia(constraints)
-    }
+    getLocalStream();
+    // window.onload = function () {
+    //   var constraints = { audio: true }
+    //   navigator.mediaDevices.getUserMedia(constraints)
+    // }
   }, [])
   const disableConnection = () => {
     setshowStatus(false)
