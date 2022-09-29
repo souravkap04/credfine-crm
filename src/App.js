@@ -38,6 +38,8 @@ function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 function App() {
+  const [slashrtcKey,setSlashrtcKey] =useState('')
+  const [slashrtcUser,setSlashrtcUser] =useState('')
   const [showStatus, setshowStatus] = useState(false)
   const [showStatusOnline, setshowStatusOnline] = useState(false)
   const [showStatusMessage, setshowStatusMessage] = useState('')
@@ -100,13 +102,18 @@ function App() {
     });
   }
 
+  // useEffect(() => {
+  //   console.log("dialer");
+  //   if (location.pathname === '/') {
+  //     ref.current.style.visibility = 'hidden'
+  //   } else {
+  //     ref.current.style.visibility = 'visible'
+  //   }
+  //   // getLocalStream();
+  // }, [location.pathname])
   useEffect(() => {
-    if (location.pathname === '/') {
-      ref.current.style.display = 'none'
-    } else {
-      ref.current.style.display = 'inline'
-    }
-    getLocalStream();
+    setSlashrtcKey(profileData?.slashrtc_key)
+    setSlashrtcUser(profileData?.slashrtc_userName)
   }, [location.pathname])
   const disableConnection = () => {
     setshowStatus(false)
@@ -135,8 +142,7 @@ function App() {
           {showStatusMessage}
         </Alert>
       </Snackbar>
-      <animated.div {...bindP()}
-        ref={ref}
+      {location.pathname === '/' ? '' : <animated.div {...bindP()}
         style={{
           x: posP.x,
           y: posP.y,
@@ -153,13 +159,13 @@ function App() {
           cursor: "move",
         }} >
         <iframe
-          src={`https://credfine.slashrtc.in/index.php/ssoLogin?crmUniqueId={profileData.slashrtc_key}&usernameId={profileData.slashrtc_userName}&requestOrigin=http://crm.credfine.com/`}
+          src={`https://credfine.slashrtc.in/index.php/ssoLogin?crmUniqueId=${slashrtcKey}&usernameId=${slashrtcUser}&requestOrigin=http://crm.credfine.com/`}
           frameBorder='0'
           allow="microphone"
           width='100%'
           height='350'
         ></iframe>
-      </animated.div>
+      </animated.div>}
       <Switch>
         <Route exact path="/">
           <Login />
