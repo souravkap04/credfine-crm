@@ -617,10 +617,6 @@ export default function MyLeads(props) {
   const closeEligibility = () => {
     setCheckEligibility(false);
   }
-  const dialerSSOLogin = () => {
-    window.open(`${cloudDialerApi}/index.php/ssoLogin?crmUniqueId=${profileData.slashrtc_key}&usernameId=${profileData.slashrtc_userName}&requestOrigin=http://crm.credfine.com/`)
-  }
-
   return (
     <PageLayerSection
       isDisplaySearchBar={true}
@@ -935,14 +931,6 @@ export default function MyLeads(props) {
       <div className="filterMainContainer">
         <h3>My Leads ({totalLeads})</h3>
         <div style={{ display: "flex", alignItems: "center" }}>
-          <Button
-            variant="contained"
-            style={{ marginRight: "15px", backgroundColor: '#14cc9e', color: '#ffff' }}
-            onClick={() => dialerSSOLogin()}
-            hidden={profileData.dialer === 'CLOUD-DIALER' ? false : true}
-          >
-            Dialer Login
-          </Button>
           <Button
             color="primary"
             variant="contained"

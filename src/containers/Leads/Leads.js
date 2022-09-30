@@ -365,17 +365,12 @@ export default function Leads() {
       clickToCall(leadData.phone_no_encrypt, leadData.lead_crm_id)
     }
   }, [leadData]);
-  const dialerSSOLogin = () => {
-    window.open(`${cloudDialerApi}/index.php/ssoLogin?crmUniqueId=${profileData.slashrtc_key}&usernameId=${profileData.slashrtc_userName}&requestOrigin=http://crm.credfine.com/`)
-  }
   return (
     <PageLayerSection isDisplaySearchBar={true}
       addLeadButton={state ? false : true}
       onClick={() => openDrawer()}
       startAutoDialerButton={true}
-      loginDialerBtn={profileData.dialer === "CLOUD-DIALER" ? true : false}
       startAutoDialerClick={() => autoDialerHandler()}
-      logDialerHandler={() => dialerSSOLogin()}
       ActualEmiCalculate={openCalculator}
       ActualEligibilityCalculate={openEligibility}
     >
