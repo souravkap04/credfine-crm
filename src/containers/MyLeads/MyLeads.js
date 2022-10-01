@@ -495,9 +495,6 @@ export default function MyLeads(props) {
       setisError(true);
       return;
     }
-    history.push(
-      `/dashboards/myleads/?datetype=${dateType}&status=${status}&start_date=${startdate}&end_date=${enddate}&sub_status=${subStatus}&campaign_category=${campaign}&user_id=${users_id}`
-    );
     fetchFilteredMyLeads();
     closeDrawer();
   };
