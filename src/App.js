@@ -8,7 +8,6 @@ import {
 } from "react-router-dom";
 import { useDrag } from '@use-gesture/react';
 import { animated, useSpring } from '@react-spring/web';
-// import MainMenu from './containers/UserList/MainMenu';
 import Profile from './containers/UserList/Profile/Profile';
 import Leads from './containers/Leads/Leads';
 // import LeadDetails from './containers/Leads/LeadDetails';
