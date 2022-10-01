@@ -42,12 +42,12 @@ export default function UploadLeads() {
     }
   }
   const [openCalculate, setopenCalculate] = useState(false);
-  const [checkEligibility,setCheckEligibility] = useState(false);
-  
-  const openEligibility = () =>{
+  const [checkEligibility, setCheckEligibility] = useState(false);
+
+  const openEligibility = () => {
     setCheckEligibility(true);
   }
-  const closeEligibility = () =>{
+  const closeEligibility = () => {
     setCheckEligibility(false);
   }
   const openCalculator = () => {
@@ -58,11 +58,11 @@ export default function UploadLeads() {
   }
   return (
     <PageLayerSection ActualEmiCalculate={openCalculator} ActualEligibilityCalculate={openEligibility}>
-      <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility}/>
+      <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility} />
       <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
       <div >
-        <Form noValidate validated={validated} onSubmit={leadsSubmitHandler}>
-          <Card className={style.Card}>
+        <Card className={style.Card}>
+          <Form noValidate validated={validated} onSubmit={leadsSubmitHandler}>
             {isDisplay && <Alert className={style.alertBox}>{alertMessage}</Alert>}
             <Form.Group>
               <Form.Label>Loan Type</Form.Label>
@@ -87,11 +87,11 @@ export default function UploadLeads() {
               <Button
                 variant="success" size="sm" type="submit">Submit</Button>
             </Form.Group>
-            <Form.Group>
-              <SampleData loanType={loanType} />
-            </Form.Group>
-          </Card>
-        </Form>
+          </Form>
+          <div>
+            <SampleData loanType={loanType} />
+          </div>
+        </Card>
       </div>
     </PageLayerSection>
   );

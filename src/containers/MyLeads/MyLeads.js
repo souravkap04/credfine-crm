@@ -21,11 +21,12 @@ import Button from "@material-ui/core/Button";
 import {
   haloocomNoidaDialerApi,
   haloocomMumbaiDialerApi,
+  cloudDialerApi,
+  dialerToken
 } from "../../global/callApi";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import CallIcon from "@material-ui/icons/Call";
-import CallerDialogBox from "../Leads/CallerDialog/CallerDialogBox";
 import PageLayerSection from "../PageLayerSection/PageLayerSection";
 import { useHistory } from "react-router-dom";
 import clsx from "clsx";
@@ -178,7 +179,6 @@ export default function MyLeads(props) {
   const [rowsPerPage, setRowsPerPage] = useState(100);
   const [totalDataPerPage, settotalDataPerPage] = useState(0);
   const [dialerCall, setDialerCall] = useState(false);
-  const [disableHangupBtn, setDisableHangupBtn] = useState(true);
   const [state, setState] = useState(false);
   const [manualState, setmanualState] = useState(false);
   const [status, setStatus] = useState("");
@@ -194,7 +194,6 @@ export default function MyLeads(props) {
   const [isLoading, setisLoading] = useState(false);
   const [dialerMobileNumber, setdialerMobileNumber] = useState("");
   const [callHangUpState, setCallHangUpState] = useState(true);
-  const [hangUpSnacks, sethangUpSnacks] = useState(false);
   const [myLeadSearchData, setMyLeadSearchData] = useState([]);
   const [isMyLeadsSearchData, setisMyLeadsSearchData] = useState(false);
   const [responseStatus, setResponseStatus] = useState("");
@@ -428,37 +427,50 @@ export default function MyLeads(props) {
   const clickToCall = async (encryptData, leadID) => {
     const customerNo = decodeURIComponent(window.atob(encryptData));
     if (profileData.dialer === "HALOOCOM-Noida") {
-      await axios
-        .post(
-          `${haloocomNoidaDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`
-        )
+      await axios.post(`${haloocomNoidaDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`)
         .then((response) => {
           setDialerCall(true);
-          setDisableHangupBtn(false);
           if (response.status === 200) {
             localStorage.setItem("callHangUp", true);
           }
         })
         .catch((error) => {
-          console.log("error");
+          console.log(error);
         });
       setTimeout(() => {
         history.push(`/dashboards/myleads/edit/${leadID}`);
       }, 1500);
     } else if (profileData.dialer === "HALOOCOM-Mumbai") {
-      await axios
-        .post(
-          `${haloocomMumbaiDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`
-        )
+      await axios.post(`${haloocomMumbaiDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`)
         .then((response) => {
           setDialerCall(true);
-          setDisableHangupBtn(false);
           if (response.status === 200) {
             localStorage.setItem("callHangUp", true);
           }
         })
         .catch((error) => {
-          console.log("error");
+          console.log(error);
+        });
+      setTimeout(() => {
+        history.push(`/dashboards/myleads/edit/${leadID}`);
+      }, 1500);
+    } else if (profileData.dialer === "CLOUD-DIALER") {
+      await axios.post(`${cloudDialerApi}/slashRtc/callingApis/clicktoDial?agenTptId=${profileData.slashrtc_id}&customerNumber=${customerNo}&tokenId=${dialerToken}`)
+        .then((response) => {
+          setDialerCall(true);
+          if (response.status === 200) {
+            if (response.data.LOG === 'ERROR') {
+              setAlertMessage(response.data.OUTPUT);
+              setisError(true);
+            } else if (response.data.LOG === 'SUCCESS') {
+              setDialerCall(true);
+              localStorage.setItem('callRefId', response.data.JSON_INFO)
+              localStorage.setItem('callHangUp', true)
+            }
+          }
+        })
+        .catch((error) => {
+          console.log(error);
         });
       setTimeout(() => {
         history.push(`/dashboards/myleads/edit/${leadID}`);
@@ -467,7 +479,6 @@ export default function MyLeads(props) {
   };
   const disableDialerPopUp = () => {
     setDialerCall(false);
-    setDisableHangupBtn(false);
     setisError(false);
     setIsSuccess(false);
   };
@@ -484,9 +495,6 @@ export default function MyLeads(props) {
       setisError(true);
       return;
     }
-    history.push(
-      `/dashboards/myleads/?datetype=${dateType}&status=${status}&start_date=${startdate}&end_date=${enddate}&sub_status=${subStatus}&campaign_category=${campaign}&user_id=${users_id}`
-    );
     fetchFilteredMyLeads();
     closeDrawer();
   };
@@ -498,43 +506,48 @@ export default function MyLeads(props) {
   };
   const clickToManualCall = async () => {
     if (profileData.dialer === "HALOOCOM-Noida") {
-      await axios
-        .post(
-          `${haloocomNoidaDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${dialerMobileNumber}`
-        )
+      await axios.post(`${haloocomNoidaDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${dialerMobileNumber}`)
         .then((response) => {
           setDialerCall(true);
-          setDisableHangupBtn(false);
           if (response.status === 200) {
             localStorage.setItem("callHangUp", true);
           }
-        })
-        .catch((error) => {
-          console.log("error");
+        }).catch((error) => {
+          console.log(error);
         });
     } else if (profileData.dialer === "HALOOCOM-Mumbai") {
-      await axios
-        .post(
-          `${haloocomMumbaiDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${dialerMobileNumber}`
-        )
+      await axios.post(`${haloocomMumbaiDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${dialerMobileNumber}`)
         .then((response) => {
           setDialerCall(true);
-          setDisableHangupBtn(false);
           if (response.status === 200) {
             localStorage.setItem("callHangUp", true);
           }
+        }).catch((error) => {
+          console.log(error);
+        });
+    } else if (profileData.dialer === "CLOUD-DIALER") {
+      await axios.post(`${cloudDialerApi}/slashRtc/callingApis/clicktoDial?agenTptId=${profileData.slashrtc_id}&customerNumber=${dialerMobileNumber}&tokenId=${dialerToken}`)
+        .then((response) => {
+          setDialerCall(true);
+          if (response.status === 200) {
+            if (response.data.LOG === 'ERROR') {
+              setAlertMessage(response.data.OUTPUT);
+              setisError(true);
+            } else if (response.data.LOG === 'SUCCESS') {
+              setDialerCall(true);
+              localStorage.setItem('callRefId', response.data.JSON_INFO)
+              localStorage.setItem('callHangUp', true)
+            }
+          }
         })
         .catch((error) => {
-          console.log("error");
+          console.log(error);
         });
     }
   };
   const hangupCallHandler = async () => {
     if (profileData.dialer === "HALOOCOM-Noida") {
-      await axios
-        .post(
-          `${haloocomNoidaDialerApi}/action.php?user=${profileData.vertage_id}&type=Hangup&disposition`
-        )
+      await axios.post(`${haloocomNoidaDialerApi}/action.php?user=${profileData.vertage_id}&type=Hangup&disposition`)
         .then((response) => {
           // setDisableDisposeBtn(false);
           setCallHangUpState(false);
@@ -549,10 +562,7 @@ export default function MyLeads(props) {
           console.log(error);
         });
     } else if (profileData.dialer === "HALOOCOM-Mumbai") {
-      await axios
-        .post(
-          `${haloocomMumbaiDialerApi}/action.php?user=${profileData.vertage_id}&type=Hangup&disposition`
-        )
+      await axios.post(`${haloocomMumbaiDialerApi}/action.php?user=${profileData.vertage_id}&type=Hangup&disposition`)
         .then((response) => {
           // setDisableDisposeBtn(false);
           setCallHangUpState(false);
@@ -566,10 +576,21 @@ export default function MyLeads(props) {
         .catch((error) => {
           console.log(error);
         });
+    } else if (profileData.dialer === "CLOUD-DIALER") {
+      await axios.post(`${cloudDialerApi}/slashRtc/chatServer/externalCallDisposeByCrmId?crmId=${profileData.slashrtc_id}&referenceUuid=${localStorage.getItem('callRefId')}&disposeName=Test Call&callbackFlag=0`)
+        .then((response) => {
+          setCallHangUpState(false);
+          if (response.data.LOG === 'SUCCESS') {
+            localStorage.removeItem('callHangUp')
+            localStorage.removeItem('callRefId')
+            return disposeCallHandler()
+          }
+        }).catch((error) => {
+          console.log(error)
+        })
     }
   };
   const disposeCallHandler = () => {
-    sethangUpSnacks(true);
     setCallHangUpState(true);
   };
   const getAssignedAgent = (agentName) => {
@@ -593,9 +614,12 @@ export default function MyLeads(props) {
   const closeEligibility = () => {
     setCheckEligibility(false);
   }
-
   return (
-    <PageLayerSection isDisplaySearchBar={true} isMyLeadsSearch={true} ActualEmiCalculate={openCalculator} ActualEligibilityCalculate={openEligibility}>
+    <PageLayerSection
+      isDisplaySearchBar={true}
+      isMyLeadsSearch={true}
+      ActualEmiCalculate={openCalculator}
+      ActualEligibilityCalculate={openEligibility}>
       <EligibilityCalculator isOpenEligibilityCalculator={checkEligibility} isCloseEligibilityCalculator={closeEligibility} />
       <EmiCalculator isOpenCalculator={openCalculate} isCloseCalculator={closeCalculator} />
       <Snackbar
@@ -857,8 +881,10 @@ export default function MyLeads(props) {
                   if (event.which == "13") {
                     event.preventDefault();
                   }
-                  if (event.key === "Enter") {
-                    clickToManualCall();
+                  if (dialerMobileNumber.length === 10) {
+                    if (event.key === "Enter") {
+                      clickToManualCall();
+                    }
                   }
                 }}
                 inputProps={{
@@ -873,6 +899,10 @@ export default function MyLeads(props) {
                 variant="contained"
                 startIcon={<CallIcon className="callIcon" />}
                 onClick={() => clickToManualCall()}
+                disabled={(dialerMobileNumber.length < 10 || localStorage.getItem("callHangUp") &&
+                  localStorage.getItem("callHangUp") !== null)
+                  ? callHangUpState
+                  : false}
               >
                 Call
               </Button>
@@ -899,7 +929,6 @@ export default function MyLeads(props) {
         <h3>My Leads ({totalLeads})</h3>
         <div style={{ display: "flex", alignItems: "center" }}>
           <Button
-            className="addBtn"
             color="primary"
             variant="contained"
             style={{ marginRight: "15px" }}
@@ -926,7 +955,8 @@ export default function MyLeads(props) {
                   onChange={(e) => childCheckBoxHandler(e, myLeads)} />
               </TableCell>
               <TableCell className={classes.tableheading}>Lead ID</TableCell>
-              <TableCell className={classes.tableheading}>Name</TableCell>
+              <TableCell className={classes.tableheading}>First Name</TableCell>
+              <TableCell className={classes.tableheading}>Last Name</TableCell>
               <TableCell className={classes.tableheading}>Campaign</TableCell>
               <TableCell className={classes.tableheading}>Created Date</TableCell>
               <TableCell className={classes.tableheading}>
@@ -973,7 +1003,7 @@ export default function MyLeads(props) {
                     <TableRow className={classes.oddEvenRow} key={index}>
                       <TableCell className={classes.tabledata}>
                         <Checkbox color="primary"
-                          name={search.name}
+                          name={search.first_name}
                           checked={selectedLeads.some((item) => item?.id === search?.id)}
                           onChange={(e) => childCheckBoxHandler(e, search)} />
                       </TableCell>
@@ -984,7 +1014,10 @@ export default function MyLeads(props) {
                         {search.lead_crm_id}
                       </TableCell>
                       <TableCell className={classes.tabledata}>
-                        {search.name ? search.name : "NA"}
+                        {search.first_name ? search.first_name : "NA"}
+                      </TableCell>
+                      <TableCell className={classes.tabledata}>
+                        {search.last_name ? search.last_name : "NA"}
                       </TableCell>
                       <TableCell className={classes.tabledata}>
                         {search.campaign_category
@@ -1053,7 +1086,7 @@ export default function MyLeads(props) {
                   <TableRow className={classes.oddEvenRow} key={index}>
                     <TableCell className={classes.tabledata}>
                       <Checkbox color="primary"
-                        name={my_leads.lead.name}
+                        name={my_leads.lead.first_name}
                         checked={selectedLeads.some((item) => item?.id === my_leads?.id)}
                         onChange={(e) => childCheckBoxHandler(e, my_leads)} />
                     </TableCell>
@@ -1066,7 +1099,10 @@ export default function MyLeads(props) {
                       {my_leads.lead.lead_crm_id}
                     </TableCell>
                     <TableCell className={classes.tabledata}>
-                      {my_leads.lead.name ? my_leads.lead.name : "NA"}
+                      {my_leads.lead.first_name ? my_leads.lead.first_name : "NA"}
+                    </TableCell>
+                    <TableCell className={classes.tabledata}>
+                      {my_leads.lead.last_name ? my_leads.lead.last_name : "NA"}
                     </TableCell>
                     <TableCell className={classes.tabledata}>
                       {my_leads.lead.campaign_category

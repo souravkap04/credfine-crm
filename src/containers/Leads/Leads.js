@@ -15,22 +15,21 @@ import baseUrl from "../../global/api";
 import {
   haloocomNoidaDialerApi,
   haloocomMumbaiDialerApi,
+  cloudDialerApi,
+  dialerToken
 } from "../../global/callApi";
 import { getProfileData } from "../../global/leadsGlobalData";
 import { useQueryy } from "../../global/query";
-import CallerDialogBox from "./CallerDialog/CallerDialogBox";
 import PageLayerSection from "../PageLayerSection/PageLayerSection";
 import { Drawer } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { Button } from "@material-ui/core";
-import { useForm } from "react-hook-form";
 import "./leadDetailsAdjust.css";
 import clsx from "clsx";
 import MuiAlert from "@material-ui/lab/Alert";
 import Snackbar from "@material-ui/core/Snackbar";
-import { findAllByTestId } from "@testing-library/react";
 import EmiCalculator from '../Emicalculator/EmiCalculator';
 import EligibilityCalculator from "../EligibilityCalculator/EligibilityCalculator";
 function Alert(props) {
@@ -44,8 +43,6 @@ const useStyles = makeStyles({
     width: "100%",
   },
   tableheading: {
-    // padding: '0 8px',
-    // textAlign: 'center',
     backgroundColor: "#8f9bb3",
     color: "#ffffff",
     fontSize: "14px",
@@ -57,7 +54,6 @@ const useStyles = makeStyles({
     color: "#ffffff",
   },
   tabledata: {
-    // padding: '0 8px',
     fontSize: "12px",
   },
   emptydata: {
@@ -116,7 +112,6 @@ const useStyles = makeStyles({
 });
 export default function Leads() {
   const classes = useStyles();
-  // const CancelToken = axios.CancelToken;
   const queryy = useQueryy();
   const leadQuery = queryy.get("query") || "";
   let history = useHistory();
@@ -125,7 +120,6 @@ export default function Leads() {
   const [searchData, setSearchData] = useState([]);
   const [isSearchData, setisSearchData] = useState(false);
   const [dialerCall, setDialerCall] = useState(false);
-  const [disableHangupBtn, setDisableHangupBtn] = useState(true);
   const [state, setState] = useState(false);
   const [loanAmount, setLoanAmount] = useState("");
   const [employmentType, setEmploymentType] = useState("");
@@ -134,13 +128,13 @@ export default function Leads() {
   const [companyName, setCompanyName] = useState("");
   const [currentCompany, setCurrentCompany] = useState("");
   const [campaign, setCampaign] = useState("");
-  const [validated, setValidated] = useState(false);
   const [isDisplay, setIsDisplay] = useState(false);
   const [isError, setIsError] = useState(false);
   const [isAutoDialerStart, setIsAutoDialerStart] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [isLoading, setisLoading] = useState(false);
-  const [fullName, setfullName] = useState("");
+  const [firstName, setFirstName] = useState("")
+  const [lastName, setLastName] = useState("");
   const [mobileNo, setmobileNo] = useState("");
   const [monthlyIncome, setmonthlyIncome] = useState("");
   const [formError, setformError] = useState([false, false, false]);
@@ -217,37 +211,50 @@ export default function Leads() {
   const clickToCall = async (encryptData, leadID) => {
     const customerNo = decodeURIComponent(window.atob(encryptData));
     if (profileData.dialer === "HALOOCOM-Noida") {
-      await axios
-        .post(
-          `${haloocomNoidaDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`
-        )
+      await axios.post(`${haloocomNoidaDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`)
         .then((response) => {
           setDialerCall(true);
-          setDisableHangupBtn(false);
           if (response.status === 200) {
             localStorage.setItem("callHangUp", true);
           }
         })
         .catch((error) => {
-          console.log("error");
+          console.log(error);
         });
       setTimeout(() => {
         history.push(`/dashboards/leads/edit/${leadID}`);
       }, 1500);
     } else if (profileData.dialer === "HALOOCOM-Mumbai") {
-      await axios
-        .post(
-          `${haloocomMumbaiDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`
-        )
+      await axios.post(`${haloocomMumbaiDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`)
         .then((response) => {
           setDialerCall(true);
-          setDisableHangupBtn(false);
           if (response.status === 200) {
             localStorage.setItem("callHangUp", true);
           }
         })
         .catch((error) => {
-          console.log("error");
+          console.log(error);
+        });
+      setTimeout(() => {
+        history.push(`/dashboards/leads/edit/${leadID}`);
+      }, 1500);
+    } else if (profileData.dialer === "CLOUD-DIALER") {
+      await axios.post(`${cloudDialerApi}/slashRtc/callingApis/clicktoDial?agenTptId=${profileData.slashrtc_id}&customerNumber=${customerNo}&tokenId=${dialerToken}`)
+        .then((response) => {
+          setDialerCall(true);
+          if (response.status === 200) {
+            if (response.data.LOG === 'ERROR') {
+              setAlertMessage(response.data.OUTPUT);
+              setIsError(true);
+            } else if (response.data.LOG === 'SUCCESS') {
+              setDialerCall(true);
+              localStorage.setItem('callRefId', response.data.JSON_INFO)
+              localStorage.setItem('callHangUp', true)
+            }
+          }
+        })
+        .catch((error) => {
+          console.log(error);
         });
       setTimeout(() => {
         history.push(`/dashboards/leads/edit/${leadID}`);
@@ -275,14 +282,14 @@ export default function Leads() {
   };
   const disableDialerPopUp = () => {
     setDialerCall(false);
-    setDisableHangupBtn(false);
   };
   const personalLoanSubmitHandler = async () => {
     let formErrorData = [...formError];
-    if (fullName === "") formErrorData[0] = true;
+    if (firstName === "") formErrorData[0] = true;
+    if (lastName === "") formErrorData[2] = true;
     if (mobileNo === "" || mobileNo.length !== 10) formErrorData[1] = true;
 
-    if (fullName == "" || mobileNo == "" || mobileNo.length !== 10) {
+    if (firstName == "" || lastName === "" || (mobileNo == "" || mobileNo.length !== 10)) {
       setformError(formErrorData);
       return;
     }
@@ -293,9 +300,9 @@ export default function Leads() {
       phone_no: mobileNo,
       residential_pincode: pincode,
       current_company_name: companyName,
-      name: fullName,
-      loan_type:
-        profileData.user_roles[0].allowed_products[0] === "PL" ? "PL" : "BL",
+      first_name: firstName,
+      last_name: lastName,
+      loan_type: profileData.user_roles[0].allowed_products[0] === "PL" ? "PL" : "BL",
       current_company: currentCompany,
       employment_type: employmentType,
       campaign_category: campaign,
@@ -336,7 +343,8 @@ export default function Leads() {
   };
   const closeDrawer = () => {
     setState(false);
-    setfullName("");
+    setFirstName("");
+    setLastName("");
     setmobileNo("");
     setmonthlyIncome("");
     setCampaign("");
@@ -419,7 +427,7 @@ export default function Leads() {
                 className="textField"
                 type="text"
                 id="outlined-full-width"
-                label="Full Name As Per Pancard"
+                label="First Name"
                 style={{ margin: 8 }}
                 margin="normal"
                 InputLabelProps={{
@@ -428,8 +436,8 @@ export default function Leads() {
                 }}
                 variant="outlined"
                 size="small"
-                value={fullName}
-                onChange={(e) => setfullName(e.target.value)}
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
                 onFocus={() => {
                   let formErrorData = [...formError];
                   formErrorData[0] = false;
@@ -437,7 +445,34 @@ export default function Leads() {
                 }}
                 error={formError[0]}
                 helperText={
-                  formError[0] ? "Please enter a valid full name" : ""
+                  formError[0] ? "Please Enter a Valid First Name" : ""
+                }
+              />
+            </Grid>
+            <Grid>
+              <TextField
+                className="textField"
+                type="text"
+                id="outlined-full-width"
+                label="Last Name"
+                style={{ margin: 8 }}
+                margin="normal"
+                InputLabelProps={{
+                  shrink: true,
+                  required: true,
+                }}
+                variant="outlined"
+                size="small"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                onFocus={() => {
+                  let formErrorData = [...formError];
+                  formErrorData[2] = false;
+                  setformError(formErrorData);
+                }}
+                error={formError[2]}
+                helperText={
+                  formError[2] ? "Please Enter a Valid Last Name" : ""
                 }
               />
             </Grid>
@@ -485,7 +520,7 @@ export default function Leads() {
                   required: false,
                 }}
                 inputProps={{
-                  maxLength: 7,
+                  maxLength: 8,
                 }}
                 variant="outlined"
                 size="small"
@@ -519,13 +554,7 @@ export default function Leads() {
                 onChange={(e) => setCampaign(e.target.value)}
               >
                 <option value="">Select</option>
-                <option value="FRESH_PL_OD">FRESH_PL_OD</option>
-                <option value="BT_PL_OD">BT_PL_OD</option>
-                <option value="PL_OD_TOP_UP">PL_OD_TOP_UP</option>
-                <option value="PRE_APPROVED">PRE_APPROVED</option>
-                <option value="HOT_LEAD">HOT_LEAD</option>
-                <option value="WEBSITE">WEBSITE</option>
-                <option value="OTHER">OTHER</option>
+                <option value="OWN_LEAD">OWN LEAD</option>
               </TextField>
             </Grid>
             <Grid>
@@ -546,7 +575,8 @@ export default function Leads() {
           <TableHead className={classes.tableheading}>
             <TableRow>
               <TableCell className={classes.tableheading}>Lead ID</TableCell>
-              <TableCell className={classes.tableheading}>Name</TableCell>
+              <TableCell className={classes.tableheading}>First Name</TableCell>
+              <TableCell className={classes.tableheading}>Last Name</TableCell>
               <TableCell className={classes.tableheading}>Mobile</TableCell>
               <TableCell className={classes.tableheading}>Loan Amt</TableCell>
               <TableCell className={classes.tableheading}>Income</TableCell>
@@ -580,7 +610,10 @@ export default function Leads() {
                         {search.lead_crm_id}
                       </TableCell>
                       <TableCell className={classes.tabledata}>
-                        {search.name ? search.name : "NA"}
+                        {search.first_name ? search.first_name : "NA"}
+                      </TableCell>
+                      <TableCell className={classes.tabledata}>
+                        {search.last_name ? search.last_name : "NA"}
                       </TableCell>
                       <TableCell className={classes.tabledata}>
                         {leadPhoneNo ? leadPhoneNo : "NA"}
@@ -646,7 +679,10 @@ export default function Leads() {
                   {leadData.lead_crm_id}{" "}
                 </TableCell>
                 <TableCell className={classes.tabledata}>
-                  {leadData.name ? leadData.name : "NA"}
+                  {leadData.first_name ? leadData.first_name : "NA"}
+                </TableCell>
+                <TableCell className={classes.tabledata}>
+                  {leadData.last_name ? leadData.last_name : "NA"}
                 </TableCell>
                 <TableCell className={classes.tabledata}>
                   {maskPhoneNo(leadData.phone_no_encrypt)

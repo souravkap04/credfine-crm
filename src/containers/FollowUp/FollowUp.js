@@ -13,7 +13,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import CallIcon from '@material-ui/icons/Call';
 import axios from 'axios';
 import baseUrl from '../../global/api';
-import { haloocomNoidaDialerApi, haloocomMumbaiDialerApi } from '../../global/callApi'
+import { haloocomNoidaDialerApi, haloocomMumbaiDialerApi, cloudDialerApi, dialerToken } from '../../global/callApi'
 import { getProfileData } from '../../global/leadsGlobalData';
 import CallerDialogBox from '../Leads/CallerDialog/CallerDialogBox';
 import PageLayerSection from '../PageLayerSection/PageLayerSection';
@@ -107,7 +107,6 @@ const useStyles = makeStyles({
 });
 export default function FollowUp(props) {
     const classes = useStyles();
-    const CancelToken = axios.CancelToken;
     let history = useHistory();
     const profileData = getProfileData();
     const [leadData, setLeadData] = useState({});
@@ -117,12 +116,13 @@ export default function FollowUp(props) {
     const [onGoingCall, setOnGoingCall] = useState(false);
     const [isCallNotConnected, setIsCallNotConnected] = useState(false)
     const [dialerCall, setDialerCall] = useState(false);
-    const [disableHangupBtn, setDisableHangupBtn] = useState(true);
     const [isLoading, setisLoading] = useState(false);
     const [currentDateTime, setcurrentDateTime] = useState('');
     const [isAutoDialerStart, setIsAutoDialerStart] = useState(false);
     const [openCalculate, setopenCalculate] = useState(false);
     const [checkEligibility, setCheckEligibility] = useState(false);
+    const [isError, setIsError] = useState(false);
+    const [alertMessage, setAlertMessage] = useState("");
     const fetchLeadsData = async () => {
         setisLoading(true);
         const headers = {
@@ -160,12 +160,11 @@ export default function FollowUp(props) {
             await axios.post(`${haloocomNoidaDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`)
                 .then((response) => {
                     setDialerCall(true);
-                    setDisableHangupBtn(false);
                     if (response.status === 200) {
                         localStorage.setItem('callHangUp', true)
                     }
                 }).catch((error) => {
-                    console.log('error');
+                    console.log(error);
                 })
             setTimeout(() => {
                 history.push(`/dashboards/followup/edit/${leadID}`)
@@ -174,16 +173,36 @@ export default function FollowUp(props) {
             await axios.post(`${haloocomMumbaiDialerApi}/click2dial.php?user=${profileData.vertage_id}&number=${customerNo}`)
                 .then((response) => {
                     setDialerCall(true);
-                    setDisableHangupBtn(false);
                     if (response.status === 200) {
                         localStorage.setItem('callHangUp', true)
                     }
                 }).catch((error) => {
-                    console.log('error');
+                    console.log(error);
                 })
             setTimeout(() => {
                 history.push(`/dashboards/followup/edit/${leadID}`)
             }, 1500)
+        } else if (profileData.dialer === "CLOUD-DIALER") {
+            await axios.post(`${cloudDialerApi}/slashRtc/callingApis/clicktoDial?agenTptId=${profileData.slashrtc_id}&customerNumber=${customerNo}&tokenId=${dialerToken}`)
+                .then((response) => {
+                    setDialerCall(true);
+                    if (response.status === 200) {
+                        if (response.data.LOG === 'ERROR') {
+                            setAlertMessage(response.data.OUTPUT);
+                            setIsError(true);
+                        } else if (response.data.LOG === 'SUCCESS') {
+                            setDialerCall(true);
+                            localStorage.setItem('callRefId', response.data.JSON_INFO)
+                            localStorage.setItem('callHangUp', true)
+                        }
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+            setTimeout(() => {
+                history.push(`/dashboards/followup/edit/${leadID}`)
+            }, 1500);
         }
     }
     const disablePopup = () => {
@@ -218,8 +237,8 @@ export default function FollowUp(props) {
     }
     const disableDialerPopUp = () => {
         setDialerCall(false)
-        setDisableHangupBtn(false)
         setIsAutoDialerStart(false);
+        setIsError(false)
     }
     const autoDialerHandler = () => {
         localStorage.setItem("auto_dialer", true);
@@ -231,7 +250,7 @@ export default function FollowUp(props) {
             clickToCall(leadData.lead.phone_no, leadData.lead.lead_crm_id)
         }
     }, [leadData]);
-    
+
     const openEligibility = () => {
         setCheckEligibility(true);
     }
@@ -269,7 +288,8 @@ export default function FollowUp(props) {
                     <TableHead className={classes.tableheading}>
                         <TableRow>
                             <TableCell className={classes.tableheading}>Lead ID</TableCell>
-                            <TableCell className={classes.tableheading} >Name</TableCell>
+                            <TableCell className={classes.tableheading} >First Name</TableCell>
+                            <TableCell className={classes.tableheading} >Last Name</TableCell>
                             <TableCell className={classes.tableheading} >Mobile</TableCell>
                             <TableCell className={classes.tableheading} >Loan Amt</TableCell>
                             <TableCell className={classes.tableheading} >Company</TableCell>
@@ -291,7 +311,8 @@ export default function FollowUp(props) {
                                 <TableCell className={clsx(classes.tabledata, classes.click)}
                                     onClick={() => routeChangeHAndler(leadData.lead.lead_crm_id)}
                                 >{leadData.lead.lead_crm_id} </TableCell>
-                                <TableCell className={classes.tabledata}>{leadData.lead.name ? leadData.lead.name : 'NA'}</TableCell>
+                                <TableCell className={classes.tabledata}>{leadData.lead.first_name ? leadData.lead.first_name : 'NA'}</TableCell>
+                                <TableCell className={classes.tabledata}>{leadData.lead.last_name ? leadData.lead.last_name : 'NA'}</TableCell>
                                 <TableCell className={classes.tabledata}>{maskPhoneNo(leadData.lead.phone_no) ? maskPhoneNo(leadData.lead.phone_no) : 'NA'}</TableCell>
                                 <TableCell className={classes.tabledata}>{leadData.lead.loan_amount ? leadData.lead.loan_amount : 'NA'}</TableCell>
                                 <TableCell className={classes.tabledata}>{leadData.lead.data['current_company_name'] ? leadData.lead.data['current_company_name'] : 'NA'}</TableCell>
@@ -335,6 +356,16 @@ export default function FollowUp(props) {
                             <Snackbar anchorOrigin={{ vertical: "top", horizontal: "center" }} open={isAutoDialerStart} autoHideDuration={3000} onClose={disableDialerPopUp}>
                                 <Alert onClose={disableDialerPopUp} severity="info">
                                     Auto dial mode is on
+                                </Alert>
+                            </Snackbar>
+                            <Snackbar
+                                anchorOrigin={{ vertical: "top", horizontal: "right" }}
+                                open={isError}
+                                autoHideDuration={1500}
+                                onClose={disableDialerPopUp}
+                            >
+                                <Alert onClose={disableDialerPopUp} severity="error">
+                                    {alertMessage}
                                 </Alert>
                             </Snackbar>
                         </div>

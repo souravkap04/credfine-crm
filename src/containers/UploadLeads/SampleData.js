@@ -14,12 +14,13 @@ const PLData = [
     dob: "18-11-1991",
     mobileNo: 9999999999,
     pincode: 122001,
-    name: "Naveen",
+    firstName: "Naveen",
+    lastName: "Agarwal",
     companyName: "TCS",
     campaignCategory: "Low_credit",
     vendor: "Dummy Vendor",
-    panNumber:"BCDPXXXXXC",
-    roi:23
+    panNumber: "BCDPXXXXXC",
+    roi: 23
   },
 ];
 
@@ -32,7 +33,8 @@ var BLData = [
     mobileNo: 7042359090,
     employmentType: "Business",
     dob: "18-11-1991",
-    name: "Naveen",
+    firstName: "Naveen",
+    lastName: "Agarwal",
     pincode: 122001,
     campaignCategory: "Low_credit",
     vendor: "Dummy Vendor",
@@ -45,7 +47,8 @@ export default function SampleData(props) {
       element={<button disabled={!props.loanType}>Download_Sample </button>}>
       {props.loanType === 'personal loan' ?
         <ExcelSheet data={PLData} name="Personal Loan">
-          <ExcelColumn label="Name" value="name" />
+          <ExcelColumn label="First Name" value="firstName" />
+          <ExcelColumn label="Last Name" value="lastName" />
           <ExcelColumn label="Loan Amount" value="loanAmount" />
           <ExcelColumn label="Phone No" value="mobileNo" />
           <ExcelColumn label="Loan Type" value="loanType" />
@@ -60,7 +63,8 @@ export default function SampleData(props) {
           <ExcelColumn label="ROI" value="roi" />
         </ExcelSheet> :
         <ExcelSheet data={BLData} name="Business Loan">
-          <ExcelColumn label="Full Name" value="name" />
+          <ExcelColumn label="First Name" value="firstName" />
+          <ExcelColumn label="Last Name" value="lastName" />
           <ExcelColumn label="Loan Amount" value="loanAmount" />
           <ExcelColumn label="Phone no" value="mobileNo" />
           <ExcelColumn label="Loan Type" value="loanType" />

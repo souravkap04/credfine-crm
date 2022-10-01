@@ -476,7 +476,8 @@ export default function FreshLead() {
             <TableRow>
               <TableCell className={classes.tableheading}>SL NO</TableCell>
               <TableCell className={classes.tableheading}>Lead ID</TableCell>
-              <TableCell className={classes.tableheading}>Name</TableCell>
+              <TableCell className={classes.tableheading}>First Name</TableCell>
+              <TableCell className={classes.tableheading}>Last Name</TableCell>
               <TableCell className={classes.tableheading}>Mobile</TableCell>
               <TableCell className={classes.tableheading}>Loan Amt</TableCell>
               <TableCell className={classes.tableheading}>Income</TableCell>
@@ -497,7 +498,8 @@ export default function FreshLead() {
                   <TableRow className={classes.oddEvenRow} key={index}>
                     <TableCell className={classes.tabledata}>{index + 1}</TableCell>
                     <TableCell className={classes.tabledata}>{lead.lead_crm_id}</TableCell>
-                    <TableCell className={classes.tabledata}>{lead.name ? lead.name : 'NA'}</TableCell>
+                    <TableCell className={classes.tabledata}>{lead.first_name ? lead.first_name : 'NA'}</TableCell>
+                    <TableCell className={classes.tabledata}>{lead.last_name ? lead.last_name : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>{lead.phone_no_encrypt ? decryptedData(lead.phone_no_encrypt) : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>{lead.loan_amount ? lead.loan_amount : 'NA'}</TableCell>
                     <TableCell className={classes.tabledata}>{lead.data.monthly_income ? lead.data.monthly_income : 'NA'}</TableCell>
