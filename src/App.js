@@ -132,8 +132,8 @@ function App() {
           userSelect: 'none',
           backgroundColor: '#14cc9e',
           paddingTop: '50px',
-          width: '230px',
-          height: '350px',
+          width: '300px',
+          height: '380px',
           position: 'absolute',
           left: 0,
           bottom: 0,
@@ -145,7 +145,7 @@ function App() {
           frameBorder='0'
           allow="microphone"
           width='100%'
-          height='350'
+          height='100%'
         ></iframe>
       </animated.div> : ''}
       <Switch>
